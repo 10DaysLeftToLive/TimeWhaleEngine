@@ -26,7 +26,7 @@ public class ScreenSetup : MonoBehaviour {
 	public static ScreenSetup instance{
 		get {
             if (ssm_instance == null) {
-                //  FindObjectOfType(...) returns the first ScreenSettingsManager object in the scene.
+                //  FindObjectOfType(...) returns the first ScreenSetup object in the scene.
                 ssm_instance =  FindObjectOfType(typeof (ScreenSetup)) as ScreenSetup;
             }
  
@@ -34,7 +34,7 @@ public class ScreenSetup : MonoBehaviour {
             if (ssm_instance == null) {
                 GameObject obj = new GameObject("ScreenSetup");
                 ssm_instance = obj.AddComponent(typeof (ScreenSetup)) as ScreenSetup;
-                Debug.Log("Could not locate an ScreenSetup object. ScreenSettingsManager was Generated Automaticly.");
+                Debug.Log("Could not locate an ScreenSetup object. ScreenSetup was Generated Automaticly.");
             }
  
             return ssm_instance;
