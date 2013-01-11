@@ -1,15 +1,16 @@
 fileFormatVersion: 2
-guid: 43d873823a9d8ae4ea116e09d391ecfb
+guid: 04c500d6ebb8403459ad4e44d4a35328
 ModelImporter:
   fileIDToRecycleName:
     4300000: Orc Bracer
+    100100000: DataTemplate __Singleton__
   serializedVersion: 10
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:
-    generateAnimations: 3
+    generateAnimations: 0
     bakeSimulation: 0
     splitAnimations: 1
     animationCompression: 1
@@ -20,7 +21,7 @@ ModelImporter:
     clipAnimations: []
   meshes:
     lODScreenPercentages: []
-    globalScale: .00999999978
+    globalScale: .100000001
     meshCompression: 0
     addColliders: 0
     swapUVChannels: 0
@@ -50,6 +51,3 @@ ModelImporter:
       data:
         first: 33
         second: a05a3200
-      data:
-        first: 111
-        second: 605fa900

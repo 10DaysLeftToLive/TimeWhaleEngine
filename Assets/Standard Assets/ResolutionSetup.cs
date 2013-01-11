@@ -67,7 +67,7 @@ public class ResolutionSetup : MonoBehaviour {
 	        scaleWidth = 1.0f / scaleHeight;
 			scaleHeight = 1;
 	
-	        Rect rect = camera.rect;
+	       /* Rect rect = camera.rect;
 	
 	        rect.width = scaleWidth;
 	        rect.height = 1.0f;
@@ -76,7 +76,7 @@ public class ResolutionSetup : MonoBehaviour {
 			
 			widthShift = rect.x;
 	
-	        camera.rect = rect;
+	        camera.rect = rect;*/
 	    }
 	}
 }
