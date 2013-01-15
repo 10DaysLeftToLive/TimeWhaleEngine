@@ -3,28 +3,27 @@ using System.Collections;
 
 public class LevelManager : MonoBehaviour {
 	
-	public Transform playerCharacter;
+	public PlayerController playerCharacter;
 	
-	public enum CharacterAgeState{
-		YOUNG,
-		MIDDLE,
-		OLD,
-	}
-	public CharacterAgeState characterAgeState;
+	
 	
 	//Make these private later: Also assign these targets based off interactionManager
 	public Transform youngSectionTarget;
 	public Transform middleSectionTarget;
 	public Transform oldSectionTarget;
+	
+	void Awake(){
+		if(playerCharacter == null){
+				Debug.LogWarning("WARNING NO PLAYER CHARACTER ATTACHED");
+			}
+			
+			//Put Section targetting / starting age here
+			playerCharacter.SetAge(PlayerController.CharacterAgeState.YOUNG, youngSectionTarget.position);	
+	}
 
 	// Use this for initialization
 	void Start () {
-		if(playerCharacter == null){
-			Debug.LogWarning("WARNING NO PLAYER CHARACTER ATTACHED");
-		}
 		
-		//Put Section targetting / starting age here
-		characterAgeState = CharacterAgeState.YOUNG;
 	}
 	
 	// Update is called once per frame
@@ -35,36 +34,25 @@ public class LevelManager : MonoBehaviour {
 	void HandleInput(){
 		if(Input.GetButtonDown(Strings.ButtonYoungAge)){
 			SwitchPlayerAge(youngSectionTarget.position);
-			characterAgeState = CharacterAgeState.YOUNG;
+			playerCharacter.SetAge(PlayerController.CharacterAgeState.YOUNG, youngSectionTarget.position);
 		}
 		else if (Input.GetButtonDown(Strings.ButtonMiddleAge)){
 			SwitchPlayerAge(middleSectionTarget.position);
-			characterAgeState = CharacterAgeState.MIDDLE;
+			playerCharacter.SetAge(PlayerController.CharacterAgeState.MIDDLE, middleSectionTarget.position);
 		}
 		else if(Input.GetButtonDown(Strings.ButtonOldAge)){
 			SwitchPlayerAge(oldSectionTarget.position);
-			characterAgeState = CharacterAgeState.OLD;
+			playerCharacter.SetAge(PlayerController.CharacterAgeState.OLD, oldSectionTarget.position);
 		}
 		
 		
 	}
 	
 	void SwitchPlayerAge(Vector3 sectionPosRelativeToWorld){
-		Vector3 currentFramePosition = new Vector3(0,0,0);
 		
-		if(characterAgeState == CharacterAgeState.YOUNG){
-			currentFramePosition = youngSectionTarget.position;
-		}
-		else if (characterAgeState == CharacterAgeState.MIDDLE){
-			currentFramePosition = middleSectionTarget.position;
-		}
-		else if (characterAgeState == CharacterAgeState.OLD){
-			currentFramePosition = oldSectionTarget.position;
-		}
+		Vector3 deltaPlayerToCurrentFrame = playerCharacter.transform.position - playerCharacter.currentFrameOriginPos;
 		
-		Vector3 deltaPlayerToCurrentFrame = playerCharacter.position - currentFramePosition;
-		
-		playerCharacter.position = new Vector3(sectionPosRelativeToWorld.x + deltaPlayerToCurrentFrame.x,
+		playerCharacter.transform.position = new Vector3(sectionPosRelativeToWorld.x + deltaPlayerToCurrentFrame.x,
 											sectionPosRelativeToWorld.y + deltaPlayerToCurrentFrame.y,
 											sectionPosRelativeToWorld.z);
 	}
