@@ -9,7 +9,6 @@ function Start () {
 
 function OnGUI(){
 	GUI.DrawTexture(ScreenRectangle.NewRect(0,0,1,1),background); 
-	Button.Create(ScreenRectangle.NewRect(0,0),"Quit",quit);
 }
 
 function Update () {
