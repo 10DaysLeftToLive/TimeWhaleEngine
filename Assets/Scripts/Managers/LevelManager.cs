@@ -33,18 +33,22 @@ public class LevelManager : MonoBehaviour {
 	
 	void HandleInput(){
 		if(Input.GetButtonDown(Strings.ButtonYoungAge)){
-			SwitchPlayerAge(youngSectionTarget.position);
-			playerCharacter.SetAge(PlayerController.CharacterAgeState.YOUNG, youngSectionTarget.position);
+			ShiftToAge(PlayerController.CharacterAgeState.YOUNG, youngSectionTarget.position);
 		}
 		else if (Input.GetButtonDown(Strings.ButtonMiddleAge)){
-			SwitchPlayerAge(middleSectionTarget.position);
-			playerCharacter.SetAge(PlayerController.CharacterAgeState.MIDDLE, middleSectionTarget.position);
+			ShiftToAge(PlayerController.CharacterAgeState.MIDDLE, middleSectionTarget.position);
 		}
 		else if(Input.GetButtonDown(Strings.ButtonOldAge)){
-			SwitchPlayerAge(oldSectionTarget.position);
-			playerCharacter.SetAge(PlayerController.CharacterAgeState.OLD, oldSectionTarget.position);
+			ShiftToAge(PlayerController.CharacterAgeState.OLD, oldSectionTarget.position);
 		}
+	}
+	
+	void ShiftToAge(PlayerController.CharacterAgeState age, Vector3 frameOriginRelativeToWorld){
+		//Handle Player Character
+		SwitchPlayerAge(frameOriginRelativeToWorld);
+		playerCharacter.SetAge(age, frameOriginRelativeToWorld);	
 		
+		//Handle Objects
 		
 	}
 	

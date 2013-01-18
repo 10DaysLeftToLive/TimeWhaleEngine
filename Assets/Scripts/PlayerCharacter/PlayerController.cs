@@ -28,10 +28,14 @@ public class PlayerController : MonoBehaviour {
 	}
 	public Vector3 currentFrameOriginPos; 
 	
+	public bool isControllable = true;
+	public bool isAffectedByGravity = true;
+	//public bool isClimbingLadder = false;
 	
 	public BoneAnimation youngBoneAnimation;
 	public BoneAnimation middleBoneAnimation;
 	public BoneAnimation oldBoneAnimation;
+	
 
 	// Use this for initialization
 	void Start () {
@@ -40,9 +44,16 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		UpdateMovementControls();
+		if(isControllable){
+			UpdateMovementControls();
 			
-		ApplyGravity();
+			if(isAffectedByGravity){
+			ApplyGravity();
+			}
+			
+		}
+			
+		
 		
 		MoveCharacter();
 	}
@@ -52,6 +63,33 @@ public class PlayerController : MonoBehaviour {
 		float horizontalMovement = Input.GetAxisRaw("Horizontal");	
 		
 		currentHorizontalSpeed = walkSpeed * horizontalMovement;
+		
+		if(!isAffectedByGravity){
+			currentVerticalSpeed = walkSpeed * verticalMovement;	
+		}
+		
+		
+	}
+	
+	void OnTriggerEnter(Collider trigger){
+		if(trigger.tag == Strings.tag_Ladder){
+			isAffectedByGravity = false;
+			youngBoneAnimation.animation.Play("Climb");
+		}
+	}
+	
+	void OnTriggerStay(Collider trigger){
+		if(trigger.tag == Strings.tag_Ladder){
+			isAffectedByGravity = false;
+			youngBoneAnimation.animation.Play("Climb");
+		}
+	}
+	
+	void OnTriggerExit(Collider trigger){
+		if(trigger.tag == Strings.tag_Ladder){
+			isAffectedByGravity = true;
+			youngBoneAnimation.animation.Play("Walk");
+		}
 	}
 	
 	void MoveCharacter(){
