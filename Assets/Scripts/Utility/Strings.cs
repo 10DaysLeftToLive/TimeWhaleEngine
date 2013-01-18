@@ -5,5 +5,6 @@ public static class Strings{
 	public static string ButtonOldAge = "Age Old";
 	
 	
-	public static string tag_Ladder = "Ladder";
+	public static string tag_Climbable = "Climbable";
+	public static string tag_Pushable = "Pushable";
 }

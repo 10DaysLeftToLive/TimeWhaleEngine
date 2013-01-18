@@ -7,7 +7,34 @@ public class InteractionManager : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		TurnAttachedInteractionsIntoDictionary();
+		//TurnAttachedInteractionsIntoDictionary();
+	}
+	
+	/// <summary>
+	/// Initilizes the NPC disposition dict. Should be called from LevelManager
+	/// </summary>
+	/// <param name='npcDispositionDict'>
+	/// Npc disposition dict. Dictionary<string NPCName, float disposition>
+	/// </param>
+	public void InitilizeNPCDispositionDict(Dictionary<string,float> npcDispositionDict){
+		LoadInteractionItemTable();	
+		
+		foreach(string npcName in npcDispositionDict.Keys){
+			SetNPCInteractionItemTable();
+			SetNPCDisposition();
+		}
+	}
+	
+	private void LoadInteractionItemTable(){
+		
+	}
+	
+	private void SetNPCInteractionItemTable(){
+		//Should take in an NPC script to call function on
+	}
+	
+	private void SetNPCDisposition(){
+		//Should take in an NPC script to call function on
 	}
 	
 	public void PerformInteraction(GameObject targetNPC, GameObject interactableObject){
@@ -49,4 +76,6 @@ public class InteractionManager : MonoBehaviour {
 			}
 		}
 	}
+	
+	
 }
