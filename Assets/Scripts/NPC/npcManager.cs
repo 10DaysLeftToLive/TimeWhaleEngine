@@ -3,33 +3,34 @@ using System.Collections;
 
 public class npcManager : MonoBehaviour {
 	
-	public npcClass character;
+	public Component[] npcs;
 	
 	// Use this for initialization
 	void Start () {
-		/*if (character.npcName == "Susan"){
-			//character.UpdateText("Susan");
-			character.SetDisposition(4);
-		}else if (character.npcName == "Charlie"){
-			//character.UpdateText("Charlie");	
-			character.SetDisposition(1);
-		}*/
-		
-		
-		
-		
-		
+		npcs = GetComponentsInChildren<npcClass>();
+		foreach(npcClass npc in npcs){
+			if (npc.npcName == "Susan"){
+				npc.SetDisposition(4);
+			}else if (npc.npcName == "Charlie"){
+				npc.SetDisposition(1);
+			}
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		/*if(Input.GetKey("b")){
-			character.UpdateText("yes");
-		}else{
-		
-		character.UpdateText(character.npcName);
-		}*/
-		
-		
+		foreach(npcClass npc in npcs){
+			if(Input.GetKey("b")){
+				npc.UpdateText("" + npc.GetDisposition());
+			}else{
+				npc.UpdateText(npc.npcName);
+			}
+			
+			if (npc.npcName == "Charlie" && npc.GetState() != 1  && Input.GetKeyDown("v")){
+				npc.ChangeState(1);	
+				print("here");
+			}
+				
+		}	
 	}
 }
