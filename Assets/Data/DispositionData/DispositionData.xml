@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<NPC_DispostitionData>
+	<NumberNPCs>2</NumberNPCs>
+	<NPC id = "0"> 
+		<Name>Bob</Name>
+		<Disposition>35</Disposition>
+	</NPC>
+	<NPC id = "1"> 
+		<Name>John</Name>
+		<Disposition>67</Disposition>
+	</NPC>
+</NPC_DispostitionData>

@@ -8,5 +8,7 @@ public static class Strings{
 	public static string tag_Climbable = "Climbable";
 	public static string tag_Pushable = "Pushable";
 	
+	public static string DispositionFile = "DispositionData";
+	
 	public static string NoItem = "NoItem";
 }
