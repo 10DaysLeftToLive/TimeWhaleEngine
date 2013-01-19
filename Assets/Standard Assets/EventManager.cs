@@ -6,13 +6,13 @@ public class EventManager : MonoBehaviour {
 	public EventArgs e = null;
  
     //EVENT: OnClick
-    public delegate void mOnClickDelegate(EventManager EM, EventArgs e);
+    public delegate void mOnClickDelegate(EventManager EM, ClickPositionArgs e);
     //Event
     public event mOnClickDelegate mOnClickEvent;
 	
     //Riser
-    public void RiseOnClickEvent(){
-        if(mOnClickEvent != null)  mOnClickEvent(this,e);
+    public void RiseOnClickEvent(ClickPositionArgs clickPosition){
+        if(mOnClickEvent != null)  mOnClickEvent(this,clickPosition);
     }
 	
 	private static EventManager em_instance = null;
@@ -37,4 +37,11 @@ public class EventManager : MonoBehaviour {
 	void OnApplicationQuit() {
         em_instance = null;
     }
+}
+
+public class ClickPositionArgs : EventArgs {
+    public Vector3 position;
+	public ClickPositionArgs(Vector2 _position){
+		position = new Vector3(_position.x, _position.y, 0);
+	}
 }

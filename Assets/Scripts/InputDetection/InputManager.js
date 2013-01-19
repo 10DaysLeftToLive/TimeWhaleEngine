@@ -56,7 +56,7 @@ function singleClickEvent(inputScreenPos: Vector2){
 	// we need to check if the point overlaps with a gui element
 	// if it does then we do nothing and let the gui handle it, otherwise
 	// we let the builing interaction manager handle it
-	EventManager.instance.RiseOnClickEvent();
+	EventManager.instance.RiseOnClickEvent(new ClickPositionArgs(inputScreenPos));
 }
 
 // calculates the distance between touches to determine if the gesture is to zoom in or out
