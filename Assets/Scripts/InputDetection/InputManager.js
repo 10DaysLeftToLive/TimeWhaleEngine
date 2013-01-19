@@ -1,7 +1,7 @@
 #pragma strict
 
 /*
-	InputController.js
+	InputManager.js
 	----------------------------------------------
 	Respnsible for detecting all input and feeding to LevelManager
 */
@@ -17,14 +17,16 @@ enum ControlState {
 }
 
 // General input system settings to be altered as seen fit
-var minimumTimeUntilMove = .25; // the time in seconds that we will wait for the user to move before we interprate as a tap
-var minimumMovementDistance: float = 5; // the amount of posisiton change in a single touch gesture/click before it is considered a drag
-var zoomEnabled: boolean = true; 
-var zoomEpsilon: float = 10;
+public var minimumTimeUntilMove = .25; // the time in seconds that we will wait for the user to move before we interprate as a tap
+public var minimumMovementDistance: float = 5; // the amount of posisiton change in a single touch gesture/click before it is considered a drag
+public var zoomEnabled: boolean = true; 
+public var zoomEpsilon: float = 10;
+public var levelManager : GameObject;
+private var levelManagerScript : LevelManager;
 
 // some variables to represent zooming in/out
-var zoomIn: boolean = true;
-var zoomOut: boolean = false;
+private var zoomIn: boolean = true;
+private var zoomOut: boolean = false;
 
 private var state = ControlState.WaitingForFirstInput;
 
@@ -37,8 +39,7 @@ private var firstTouchTime : float;
 // used for mouse
 private var firstClickTime: float;
 private var clickPosition: Vector2;
-
-var touchCount : int;
+private var touchCount : int;
 
 // this will point to the funciton that will perform input checking based on the device
 private var typeOfInput: function();
@@ -50,11 +51,12 @@ function DragEvent(inputChangeSinceLastTick: Vector2){
 }
 
 // called when a click/tap occurs
-function singleClickEvent(inputPos: Vector2){	
+function singleClickEvent(inputScreenPos: Vector2){	
 	// At this point the user has indicated a tap on a point on the screen
 	// we need to check if the point overlaps with a gui element
 	// if it does then we do nothing and let the gui handle it, otherwise
 	// we let the builing interaction manager handle it
+	EventManager.instance.RiseOnClickEvent();
 }
 
 // calculates the distance between touches to determine if the gesture is to zoom in or out
@@ -128,7 +130,7 @@ function HandleMobileInput(){
                 touch = theseTouches[ i ];
 
                 if (touch.phase != TouchPhase.Ended &&
-                     touch.phase != TouchPhase.Canceled ){
+                    touch.phase != TouchPhase.Canceled ){
                      // now that we have a tap we need to be sure to check if it is on the gui or not
                      if (NotOnGui(touch.position)){
 	                    state = ControlState.WaitingForSecondTouch;
