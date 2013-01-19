@@ -7,6 +7,10 @@ public class MetricsRecorder : MonoBehaviour {
 		SetupClickListening();
 	}
 	
+	public static void RecordInteraction(string NPC, string item, float dispositionChange){
+		Debug.Log("Recorded interaction with " + NPC + " using " + item + ". DispositionChange: " + dispositionChange);
+	}
+	
 	private void RecordClick(EventManager EM, ClickPositionArgs e){
 		Debug.Log("Recorded click at " + e.position);
 	}

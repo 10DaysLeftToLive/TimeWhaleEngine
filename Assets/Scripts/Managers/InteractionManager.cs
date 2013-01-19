@@ -53,7 +53,8 @@ public class InteractionManager : MonoBehaviour {
 		
 		if (FindDispositionChange(targetNPC, interactableObject, out dispositionChange)){
 			//Do disposition changing
-		}		
+		}
+		MetricsRecorder.RecordInteraction(targetNPC.name, interactableObject, dispositionChange);
 	}
 	
 	private bool FindDispositionChange(GameObject targetNPC, string interactableObject, out float dispositionChange){
@@ -62,7 +63,7 @@ public class InteractionManager : MonoBehaviour {
 		
 		if (convertedInteractionToDispositionChange.ContainsKey(key)){
 			convertedInteractionToDispositionChange.TryGetValue(key, out dispositionChange);
-			return true;
+			return (true);
 		} else {
 			Debug.Log("There was no interaction set for " + key);
 			return (false);
