@@ -21,6 +21,15 @@ public class EventManager : MonoBehaviour {
         if(mOnClickObjectEvent != null)  mOnClickObjectEvent(this,clickObject);
     }
 	
+	//EVENT: OnClickOnObject
+    public delegate void mOnPauseToggleDelegate(EventManager EM, PauseStateArg e);
+    //Event
+    public event mOnPauseToggleDelegate mOnPauseToggleEvent;
+    //Riser
+    public void RiseOnPauseToggleEvent(PauseStateArg pauseState){
+        if(mOnPauseToggleEvent != null)  mOnPauseToggleEvent(this,pauseState);
+    }
+	
 	private static EventManager em_instance = null;
 	
 	public static EventManager instance{
@@ -56,5 +65,12 @@ public class ClickedObjectArgs : EventArgs {
 	public GameObject clickedObject;
 	public ClickedObjectArgs(GameObject _clickedObject){
 		clickedObject = _clickedObject;
+	}
+}
+
+public class PauseStateArg : EventArgs {
+	public bool IsPaused;
+	public PauseStateArg(bool _IsPaused){
+		IsPaused = _IsPaused;
 	}
 }
