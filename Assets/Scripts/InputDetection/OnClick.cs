@@ -4,7 +4,7 @@ using System;
 
 public class OnClick : MonoBehaviour {	
 	void Start () {
-		EventManager.instance.mOnClickEvent += new EventManager.mOnClickDelegate (OnClickEvent);
+		InitEvent();
 	}
 	
 	protected virtual void DoClick(){}
@@ -16,4 +16,8 @@ public class OnClick : MonoBehaviour {
 			DoClick();
 		}
     }
+	
+	protected void InitEvent(){
+		EventManager.instance.mOnClickEvent += new EventManager.mOnClickDelegate (OnClickEvent);
+	}
 }

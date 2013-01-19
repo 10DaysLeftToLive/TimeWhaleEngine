@@ -4,7 +4,6 @@ using SmoothMoves;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour {
-	
 	public float walkSpeed = 2.0f;
 	public float gravity = 20.0f;
 	public float pushPower = 2.0f;
@@ -13,6 +12,7 @@ public class PlayerController : MonoBehaviour {
 	private float currentHorizontalSpeed = 0.0f;
 	
 	private CollisionFlags lastReturnedCollisionFlags;
+	private GameObject pickedUpObject = null;
 	
 	public enum CharacterAgeState{
 		YOUNG,
@@ -157,8 +157,15 @@ public class PlayerController : MonoBehaviour {
 				oldBoneAnimation.gameObject.SetActiveRecursively(true);
 				break;
 		}
-		
 	}
 	
-	
+	public void PickupObject(GameObject toPickUp){
+		pickedUpObject = toPickUp;
+		
+		// This is just to make it go above his head, should go into one of the character's hands
+		Vector3 playerPos = transform.position;
+		toPickUp.transform.position = new Vector3(playerPos.x, playerPos.y+.5f, playerPos.z);
+		
+		toPickUp.transform.parent = transform;
+	}
 }
