@@ -1,14 +1,17 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Xml;
 
 public class InteractionManager : MonoBehaviour {
 	public PlayerController playerCharacter;
-	private Dictionary<string, float> convertedInteractionToDispositionChange;
+	private Dictionary<string, Dictionary<string, float>> convertedInteractionToDispositionChange;
 	
 	// Use this for initialization
 	void Start () {
-		convertedInteractionToDispositionChange = new Dictionary<string, float>();
+		convertedInteractionToDispositionChange = new Dictionary<string, Dictionary<string, float>>();
+		
 	}
 	
 	/// <summary>
@@ -17,17 +20,17 @@ public class InteractionManager : MonoBehaviour {
 	/// <param name='npcDispositionDict'>
 	/// Npc disposition dict. Dictionary<string NPCName, float disposition>
 	/// </param>
-	public void InitilizeNPCDispositionDict(Dictionary<string,float> npcDispositionDict){
-		LoadInteractionItemTable();	
-		
+	public void InitilizeNPCDispositionDict(Dictionary<string, Dictionary<string, float>> npcDispositionDict, string levelData){
+		LoadInteractionItemTable(levelData);	
+		/*
 		foreach(string npcName in npcDispositionDict.Keys){
 			SetNPCInteractionItemTable();
 			SetNPCDisposition();
-		}
+		}*/
 	}
 	
-	private void LoadInteractionItemTable(){
-		convertedInteractionToDispositionChange = new Dictionary<string, float>();
+	private void LoadInteractionItemTable(string levelData){
+		convertedInteractionToDispositionChange = ReadNPCData.ReadNPCItemsDispositonFromFile(levelData);
 	}
 	
 	private void SetNPCInteractionItemTable(){
@@ -58,35 +61,33 @@ public class InteractionManager : MonoBehaviour {
 	}
 	
 	private bool FindDispositionChange(GameObject targetNPC, string interactableObject, out float dispositionChange){
-		string key = targetNPC.name + " to " + interactableObject;
+		string npcName = targetNPC.name;
+		string objectName = interactableObject;
 		dispositionChange = 0;
+		Dictionary<string, float> itemsToDispostions;
 		
-		if (convertedInteractionToDispositionChange.ContainsKey(key)){
-			convertedInteractionToDispositionChange.TryGetValue(key, out dispositionChange);
-			return (true);
+		if (ContainsNPC(npcName)){
+			itemsToDispostions = convertedInteractionToDispositionChange[npcName];
+			
+			if (NPCHasItemRelation(itemsToDispostions, objectName)){
+				dispositionChange = itemsToDispostions[objectName];
+				Debug.Log("Disposition Change = " + dispositionChange);
+				return (true);
+			} else {
+				Debug.Log("No item data was given between " + npcName + " and " + objectName);
+			}
 		} else {
-			Debug.Log("There was no interaction set for " + key);
-			return (false);
+			Debug.Log("No npc data was given for " + npcName);
 		}
+		return (false);
 	}
 	
-	private void TurnAttachedInteractionsIntoDictionary(){
-		convertedInteractionToDispositionChange = new Dictionary<string, float>();
-		
-		Component[] allInteractions;
-		allInteractions = (Component[])this.GetComponents(typeof(Interaction));
-		foreach (Interaction interaction in allInteractions) {
-			if (interaction.targetNPC == null){
-				Debug.LogError("Warning - Interaction Target NPC not set");
-			} else if (interaction.targetInteractableObject == null){
-				Debug.LogError("Warning - Interaction Target Object not set");
-			} else {
-				string combinedKey = interaction.targetNPC.name + " to " + interaction.targetInteractableObject.name;
-				float dispositionChange = interaction.dispositionChange;
-				
-				convertedInteractionToDispositionChange.Add(combinedKey, dispositionChange);
-			}
-		}
+	private bool ContainsNPC(string name){
+		return (convertedInteractionToDispositionChange.ContainsKey(name));
+	}
+	
+	private bool NPCHasItemRelation(Dictionary<string, float> itemsToDispostionsForNPC, string item){
+		return (itemsToDispostionsForNPC.ContainsKey(item));
 	}
 	
 	private static InteractionManager im_instance = null;

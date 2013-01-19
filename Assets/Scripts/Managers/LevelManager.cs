@@ -12,7 +12,9 @@ public class LevelManager : MonoBehaviour {
 	public Transform middleSectionTarget;
 	public Transform oldSectionTarget;
 	
-	Dictionary<string, float> npcDispositionDict;
+	public string levelDataName;
+	
+	Dictionary<string, Dictionary<string, float>> npcDispositionDict;
 	
 	void Awake(){
 		if(playerCharacter == null){
@@ -29,9 +31,8 @@ public class LevelManager : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		LoadDispositionTable();
-		interactionManager.InitilizeNPCDispositionDict(npcDispositionDict);
 		
+		LoadDispositionTable();
 	}
 	
 	// Update is called once per frame
@@ -40,10 +41,8 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	void LoadDispositionTable(){
-		npcDispositionDict = new Dictionary<string, float>();
-		
-		//Load stuff here
-		
+		string fileWithPath =  Application.dataPath + "/LevelData/" + levelDataName + ".xml";
+		interactionManager.InitilizeNPCDispositionDict(npcDispositionDict, fileWithPath);
 	}
 	
 	void HandleInput(){
