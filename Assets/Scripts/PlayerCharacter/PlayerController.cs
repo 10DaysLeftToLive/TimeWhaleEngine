@@ -160,12 +160,25 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	public void PickupObject(GameObject toPickUp){
-		pickedUpObject = toPickUp;
-		
-		// This is just to make it go above his head, should go into one of the character's hands
-		Vector3 playerPos = transform.position;
-		toPickUp.transform.position = new Vector3(playerPos.x, playerPos.y+.5f, playerPos.z);
-		
-		toPickUp.transform.parent = transform;
+		if (HasItem()){
+			Debug.Log("Already Have an item");
+			// Play can't do that animation
+		} else {
+			pickedUpObject = toPickUp;
+			
+			// This is just to make it go above his head, should go into one of the character's hands
+			Vector3 playerPos = transform.position;
+			toPickUp.transform.position = new Vector3(playerPos.x, playerPos.y+.5f, playerPos.z);
+			
+			toPickUp.transform.parent = transform;
+		}
+	}
+	
+	public bool HasItem(){
+		return (pickedUpObject != null);
+	}
+	
+	public GameObject GetItem(){
+		return (pickedUpObject);
 	}
 }

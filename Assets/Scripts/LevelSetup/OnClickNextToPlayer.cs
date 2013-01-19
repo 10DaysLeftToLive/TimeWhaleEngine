@@ -3,7 +3,7 @@ using System.Collections;
 
 public class OnClickNextToPlayer : OnClick {
 	public PlayerController playerCharacter;
-	public float pickupDistance = 1.5f;
+	public float minimumDistance = 1.5f;
 
 	void Start(){
 		base.InitEvent();
@@ -13,7 +13,7 @@ public class OnClickNextToPlayer : OnClick {
 	protected virtual void DoClickNextToPlayer(){}
 	
 	protected override void DoClick(){
-		if (Vector3.Distance(playerCharacter.transform.position, transform.position) < pickupDistance){		
+		if (Vector3.Distance(playerCharacter.transform.position, transform.position) < minimumDistance){		
 			DoClickNextToPlayer();
 		}
 	}

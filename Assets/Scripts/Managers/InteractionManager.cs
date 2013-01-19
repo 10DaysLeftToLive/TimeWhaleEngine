@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class InteractionManager : MonoBehaviour {
+	public PlayerController playerCharacter;
 	private Dictionary<string, float> convertedInteractionToDispositionChange;
 	
 	// Use this for initialization
 	void Start () {
-		//TurnAttachedInteractionsIntoDictionary();
+		convertedInteractionToDispositionChange = new Dictionary<string, float>();
 	}
 	
 	/// <summary>
@@ -26,7 +27,7 @@ public class InteractionManager : MonoBehaviour {
 	}
 	
 	private void LoadInteractionItemTable(){
-		
+		convertedInteractionToDispositionChange = new Dictionary<string, float>();
 	}
 	
 	private void SetNPCInteractionItemTable(){
@@ -37,7 +38,17 @@ public class InteractionManager : MonoBehaviour {
 		//Should take in an NPC script to call function on
 	}
 	
-	public void PerformInteraction(GameObject targetNPC, GameObject interactableObject){
+	public void PerformInteraction(GameObject targetNPC){
+		if (playerCharacter.HasItem()){
+			GameObject playerItem = playerCharacter.GetItem();
+			FindAndChangeDisposition(targetNPC, playerItem.name);
+			//Give item to NPC
+		} else {
+			FindAndChangeDisposition(targetNPC, Strings.NoItem);
+		}
+	}
+	
+	private void FindAndChangeDisposition(GameObject targetNPC, string interactableObject){
 		float dispositionChange = 0;
 		
 		if (FindDispositionChange(targetNPC, interactableObject, out dispositionChange)){
@@ -45,8 +56,8 @@ public class InteractionManager : MonoBehaviour {
 		}		
 	}
 	
-	private bool FindDispositionChange(GameObject targetNPC, GameObject interactableObject, out float dispositionChange){
-		string key = targetNPC.name + " to " + interactableObject.name;
+	private bool FindDispositionChange(GameObject targetNPC, string interactableObject, out float dispositionChange){
+		string key = targetNPC.name + " to " + interactableObject;
 		dispositionChange = 0;
 		
 		if (convertedInteractionToDispositionChange.ContainsKey(key)){
@@ -77,5 +88,22 @@ public class InteractionManager : MonoBehaviour {
 		}
 	}
 	
+	private static InteractionManager im_instance = null;
 	
+	public static InteractionManager instance{
+		get {
+            if (im_instance == null) {
+                //  FindObjectOfType(...) returns the first ScreenSetup object in the scene.
+                im_instance =  FindObjectOfType(typeof (InteractionManager)) as InteractionManager;
+            }
+ 
+            // If it is still null, create a new instance
+            if (im_instance == null) {
+                GameObject obj = new GameObject("InteractionManager");
+                im_instance = obj.AddComponent(typeof (InteractionManager)) as InteractionManager;
+            }
+ 
+            return im_instance;
+        }
+	}
 }
