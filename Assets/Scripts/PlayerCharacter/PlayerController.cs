@@ -96,20 +96,26 @@ public class PlayerController : MonoBehaviour {
 	
 	void OnControllerColliderHit(ControllerColliderHit hit){
 		if(hit.transform.tag == Strings.tag_Pushable){
-			//NOTE THIS IS POOR PUSHABLE CODE!
-		    Rigidbody body = hit.collider.attachedRigidbody;
+			PushPushableObject(hit);
+		}
+	
+	}
+	
+	void PushPushableObject(ControllerColliderHit pushableObject){
+		//NOTE THIS IS POOR PUSHABLE CODE!
+		if(currentCharacterAge == CharacterAgeState.MIDDLE){
+		    Rigidbody body = pushableObject.collider.attachedRigidbody;
 		
 		    // no rigidbody
 		    if (body == null || body.isKinematic) { return; }
 		
 		    // We dont want to push objects below us
-		    if (hit.moveDirection.y < -0.3) { return; }
+		    if (pushableObject.moveDirection.y < -0.3) { return; }
 			
-		    Vector3 pushDir = new Vector3 (hit.moveDirection.x, 0, 0); //Can only push along x-axis
+		    Vector3 pushDir = new Vector3 (pushableObject.moveDirection.x, 0, 0); //Can only push along x-axis
 		
 		    body.velocity = pushDir * pushPower;
 		}
-	
 	}
 	
 	void MoveCharacter(){
