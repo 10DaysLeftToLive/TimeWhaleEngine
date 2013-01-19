@@ -14,8 +14,13 @@ public class OnClick : MonoBehaviour {
     	RaycastHit hit;
 		if(this.collider.Raycast(ray, out hit, 10)) {
 			DoClick();
+			NotifyObjectClickedOn();
 		}
     }
+	
+	private void NotifyObjectClickedOn(){
+		EventManager.instance.RiseOnClickedObjectEvent(new ClickedObjectArgs(this.gameObject));
+	}
 	
 	protected void InitEvent(){
 		EventManager.instance.mOnClickEvent += new EventManager.mOnClickDelegate (OnClickEvent);
