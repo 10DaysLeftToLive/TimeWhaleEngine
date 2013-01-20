@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class LevelManager : MonoBehaviour {
-	
 	public PlayerController playerCharacter;
 	public InteractionManager interactionManager;
 	
@@ -47,8 +46,12 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	void LoadDispositionTable(){
-		string fileWithPath =  Application.dataPath + "/LevelData/" + levelDataName + ".xml";
-		interactionManager.InitilizeNPCDispositionDict(npcDispositionDict, fileWithPath);
+		Debug.Log("----------Starting to Read from files--------------------");
+		string npcToItemPath =  Application.dataPath + "/Data/LevelData/" + levelDataName + ".xml";
+		string npcDispositionPath = Application.dataPath + "/Data/DispositionData/" + Strings.DispositionFile + ".xml";
+		interactionManager.InitilizeNPCDispositionDict(npcDispositionDict, npcToItemPath);
+		ReadNPCDispostion.ReadNPCItemsDispositonFromFile(npcDispositionPath);
+		Debug.Log("----------Done Reading from files--------------------");
 	}
 	
 	void HandleInput(){

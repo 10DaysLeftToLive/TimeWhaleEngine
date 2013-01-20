@@ -16,6 +16,8 @@ public static class Strings{
 	public static string tag_CarriableItem = "CarriableItem";
 	public static string tag_Interactable = "Interactable";
 	
+	public static string DispositionFile = "DispositionData";
+	
 	public static string NoItem = "NoItem";
 	public static string item_treeSeed = "TreeSeed";
 }

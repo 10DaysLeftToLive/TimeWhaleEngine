@@ -21,7 +21,16 @@ public class EventManager : MonoBehaviour {
         if(mOnClickObjectEvent != null)  mOnClickObjectEvent(this,clickObject);
     }
 	
-	//EVENT: OnClickOnObject
+	//EVENT: OnClickOnNoObject
+    public delegate void mOnClickedNoObjectDelegate(EventManager EM, ClickPositionArgs e);
+    //Event
+    public event mOnClickedNoObjectDelegate mOnClickNoObjectEvent;
+    //Riser
+    public void RiseOnClickedNoObjectEvent(ClickPositionArgs clickPosition){
+        if(mOnClickNoObjectEvent != null)  mOnClickNoObjectEvent(this,clickPosition);
+    }
+	
+	//EVENT: OnPauseToggle
     public delegate void mOnPauseToggleDelegate(EventManager EM, PauseStateArg e);
     //Event
     public event mOnPauseToggleDelegate mOnPauseToggleEvent;
@@ -29,6 +38,8 @@ public class EventManager : MonoBehaviour {
     public void RiseOnPauseToggleEvent(PauseStateArg pauseState){
         if(mOnPauseToggleEvent != null)  mOnPauseToggleEvent(this,pauseState);
     }
+	
+	
 	
 	private static EventManager em_instance = null;
 	
@@ -58,6 +69,9 @@ public class ClickPositionArgs : EventArgs {
     public Vector3 position;
 	public ClickPositionArgs(Vector2 _position){
 		position = new Vector3(_position.x, _position.y, 0);
+	}
+	public ClickPositionArgs(Vector3 _position){
+		position = _position;
 	}
 }
 
