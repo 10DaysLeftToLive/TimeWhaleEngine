@@ -15,11 +15,18 @@ public class OnClick : MonoBehaviour {
 		if(this.collider.Raycast(ray, out hit, 10)) {
 			DoClick();
 			NotifyObjectClickedOn();
+		} else if (!Physics.Raycast(ray,10)) {
+			NotifyNoObjectClickedOn(e.position);
 		}
     }
 	
 	private void NotifyObjectClickedOn(){
 		EventManager.instance.RiseOnClickedObjectEvent(new ClickedObjectArgs(this.gameObject));
+	}
+	
+	private void NotifyNoObjectClickedOn(Vector3 position){
+		Debug.Log("No Object was clicked on");
+		EventManager.instance.RiseOnClickedNoObjectEvent(new ClickPositionArgs(position));
 	}
 	
 	protected void InitEvent(){
