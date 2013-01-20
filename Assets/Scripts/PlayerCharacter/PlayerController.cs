@@ -61,8 +61,8 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	void UpdateMovementControls(){
-		float verticalMovement = Input.GetAxisRaw("Vertical");
-		float horizontalMovement = Input.GetAxisRaw("Horizontal");	
+		float verticalMovement = Input.GetAxisRaw(Strings.ButtonVertical);
+		float horizontalMovement = Input.GetAxisRaw(Strings.ButtonHorizontal);	
 		
 		currentHorizontalSpeed = walkSpeed * horizontalMovement;
 		
@@ -165,7 +165,7 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 	
-	public void PickupObject(GameObject toPickUp){
+	public void PickUpObject(GameObject toPickUp){
 		if (HasItem()){
 			Debug.Log("Already Have an item");
 			// Play can't do that animation
@@ -177,6 +177,17 @@ public class PlayerController : MonoBehaviour {
 			toPickUp.transform.position = new Vector3(playerPos.x, playerPos.y+.5f, playerPos.z);
 			
 			toPickUp.transform.parent = transform;
+		}
+	}
+	
+	public void InteractWithObject(GameObject toInteractWith){
+		if(toInteractWith.tag.Equals(Strings.tag_CarriableItem)){
+			PickUpObject(toInteractWith);	
+		}
+		else if (toInteractWith.tag.Equals(Strings.tag_Interactable)){
+			if(pickedUpObject != null){
+				toInteractWith.GetComponent<InteractableObject>().Interact(pickedUpObject);
+			}
 		}
 	}
 	

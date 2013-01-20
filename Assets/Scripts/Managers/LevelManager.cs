@@ -9,6 +9,10 @@ public class LevelManager : MonoBehaviour {
 	
 	public TimeSwitchObject[] timeSwitchObjects;
 	
+	public PlayerController.CharacterAgeState CurrentTimePlaying{
+		get{return playerCharacter.currentCharacterAge;}
+	}
+	
 	//Make these private later: Also assign these targets based off prior choices / dispositions
 	public Transform youngSectionTarget;
 	public Transform middleSectionTarget;
@@ -119,9 +123,6 @@ public class LevelManager : MonoBehaviour {
 	
 	void ShiftToYoung(){
 		ShiftToAge(PlayerController.CharacterAgeState.YOUNG, youngSectionTarget.position);
-		foreach(TimeSwitchObject tsObject in timeSwitchObjects){
-			
-		}
 	}
 	
 	void ShiftToMiddle(){

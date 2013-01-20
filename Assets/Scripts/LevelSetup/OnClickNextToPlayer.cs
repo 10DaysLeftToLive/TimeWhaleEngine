@@ -7,7 +7,6 @@ public class OnClickNextToPlayer : OnClick {
 
 	void Start(){
 		base.InitEvent();
-		Physics.IgnoreCollision(collider, playerCharacter.collider);
 	}
 	
 	protected virtual void DoClickNextToPlayer(){}
