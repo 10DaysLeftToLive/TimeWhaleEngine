@@ -11,7 +11,4 @@ public class TimeSwitchObject{
 	public bool staticInMiddle = false;
 	public bool staticInOld = false;
 	
-	public Vector3 YoungPosition{
-		get{return youngTimeObject.transform.localPosition;}
-	}
 }

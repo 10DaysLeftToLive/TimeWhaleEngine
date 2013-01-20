@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour {
 	
 	public bool isControllable = true;
 	public bool isAffectedByGravity = true;
-	//public bool isClimbingLadder = false;
+	public bool isTouchingGrowableUp = false;
 	
 	public BoneAnimation youngBoneAnimation;
 	public BoneAnimation middleBoneAnimation;
@@ -78,6 +78,9 @@ public class PlayerController : MonoBehaviour {
 			isAffectedByGravity = false;
 			youngBoneAnimation.animation.Play("Climb");
 		}
+		else if(trigger.tag == Strings.tag_GrowableUp){
+			isTouchingGrowableUp = true;	
+		}
 	}
 	
 	void OnTriggerStay(Collider trigger){
@@ -85,12 +88,18 @@ public class PlayerController : MonoBehaviour {
 			isAffectedByGravity = false;
 			youngBoneAnimation.animation.Play("Climb");
 		}
+		else if(trigger.tag == Strings.tag_GrowableUp){
+			isTouchingGrowableUp = true;	
+		}
 	}
 	
 	void OnTriggerExit(Collider trigger){
 		if(trigger.tag == Strings.tag_Climbable){
 			isAffectedByGravity = true;
 			youngBoneAnimation.animation.Play("Walk");
+		}
+		else if(trigger.tag == Strings.tag_GrowableUp){
+			isTouchingGrowableUp = false;	
 		}
 	}
 	
@@ -197,5 +206,15 @@ public class PlayerController : MonoBehaviour {
 	
 	public GameObject GetItem(){
 		return (pickedUpObject);
+	}
+	
+	public void DropItem(){
+		pickedUpObject.transform.parent = null;
+		pickedUpObject = null;	
+	}
+	
+	public void DisableHeldItem(){
+		pickedUpObject.SetActiveRecursively(false);
+		pickedUpObject = null;	
 	}
 }

@@ -3,6 +3,9 @@ using System.Collections;
 using System;
 
 public class OnClick : MonoBehaviour {	
+	
+	EventManager.mOnClickDelegate delagate;
+	
 	void Start () {
 		InitEvent();
 	}
@@ -20,6 +23,10 @@ public class OnClick : MonoBehaviour {
 		}
     }
 	
+	private void OnDestroy(){
+		EventManager.instance.mOnClickEvent -= 	delagate;
+	}
+	
 	private void NotifyObjectClickedOn(){
 		EventManager.instance.RiseOnClickedObjectEvent(new ClickedObjectArgs(this.gameObject));
 	}
@@ -30,6 +37,7 @@ public class OnClick : MonoBehaviour {
 	}
 	
 	protected void InitEvent(){
-		EventManager.instance.mOnClickEvent += new EventManager.mOnClickDelegate (OnClickEvent);
+		delagate = new EventManager.mOnClickDelegate (OnClickEvent);
+		EventManager.instance.mOnClickEvent += delagate;
 	}
 }

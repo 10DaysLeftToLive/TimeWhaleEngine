@@ -15,6 +15,7 @@ public static class Strings{
 	public static string tag_Pushable = "Pushable";
 	public static string tag_CarriableItem = "CarriableItem";
 	public static string tag_Interactable = "Interactable";
+	public static string tag_GrowableUp = "GrowableUp";
 	
 	public static string DispositionFile = "DispositionData";
 	

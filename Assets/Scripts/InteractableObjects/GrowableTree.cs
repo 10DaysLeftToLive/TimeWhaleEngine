@@ -10,11 +10,13 @@ public class GrowableTree: InteractableObject {
 	public override void Interact(GameObject toInteractWith){
 		Debug.Log("WE IN HERE " + toInteractWith.name);
 		if(toInteractWith.name.Equals(Strings.item_treeSeed)){
-			treeMound.active = false;
-			tree.youngTimeObject.active = true;
-			tree.middleTimeObject.active = true;
-			tree.oldTimeObject.active = true;
-			Destroy(toInteractWith);
+			treeMound.SetActiveRecursively(false);
+			tree.youngTimeObject.SetActiveRecursively(true);
+			tree.middleTimeObject.SetActiveRecursively(true);
+			tree.oldTimeObject.SetActiveRecursively(true);
+			playerCharacter.DisableHeldItem();
+			
 		}
 	}
 }
+	
