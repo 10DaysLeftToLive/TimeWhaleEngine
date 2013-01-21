@@ -18,7 +18,7 @@ public class OnClick : MonoBehaviour {
 		if(this.collider.Raycast(ray, out hit, 10)) {
 			DoClick();
 			NotifyObjectClickedOn();
-		} else if (!Physics.Raycast(ray,10)) {
+		} else if (!Physics.Raycast(ray,15)) {
 			NotifyNoObjectClickedOn(e.position);
 		}
     }
