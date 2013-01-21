@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <NPCToItemCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Npcs>
-    <Npcs name="Adam">
+    <Npcs name="Sister">
       <items>
         <Item name="Apple">
           <dispositionChange>5</dispositionChange>
@@ -9,9 +9,12 @@
         <Item name="Hat">
           <dispositionChange>32</dispositionChange>
         </Item>
+		<Item name="NoItem">
+          <dispositionChange>-1</dispositionChange>
+        </Item>
       </items>
     </Npcs>
-    <Npcs name="Brian">
+    <Npcs name="Mom">
       <items>
         <Item name="Laptop">
           <dispositionChange>500</dispositionChange>
@@ -21,7 +24,7 @@
         </Item>
       </items>
     </Npcs>
-    <Npcs name="Jared">
+    <Npcs name="ShopKeeper">
       <items>
         <Item name="Pie">
           <dispositionChange>9001</dispositionChange>

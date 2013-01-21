@@ -43,6 +43,7 @@ public class EventManager : MonoBehaviour {
 	
 	public static EventManager instance{
 		get {
+			Debug.Log("Looking for EventManager");
             if (em_instance == null) {
                 //  FindObjectOfType(...) returns the first ScreenSetup object in the scene.
                 em_instance = FindObjectOfType(typeof (EventManager)) as EventManager;
@@ -50,6 +51,7 @@ public class EventManager : MonoBehaviour {
  
             // If it is still null, create a new instance
             if (em_instance == null) {
+				Debug.Log("No event manager making a new one");
                 GameObject obj = new GameObject("EventManager");
                 em_instance = obj.AddComponent(typeof (EventManager)) as EventManager;
             }
@@ -57,10 +59,6 @@ public class EventManager : MonoBehaviour {
             return em_instance;
         }
 	}
-	
-	void OnApplicationQuit() {
-        em_instance = null;
-    }
 }
 
 public class ClickPositionArgs : EventArgs {
