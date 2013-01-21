@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <NPCCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Npcs>
-    <Npcs name="Brian">
-      <disposition>258</disposition>
-    </Npcs>
     <Npcs name="Jared">
-      <disposition>853</disposition>
+      <disposition>594</disposition>
     </Npcs>
   </Npcs>
 </NPCCollection>

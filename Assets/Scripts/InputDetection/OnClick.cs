@@ -12,7 +12,7 @@ public class OnClick : MonoBehaviour {
 	
 	protected virtual void DoClick(){}
 	
-	private void OnClickEvent (EventManager EM, ClickPositionArgs e){		
+	private void OnClickEvent (EventManager EM, ClickPositionArgs e){	
 		Ray ray = Camera.main.ScreenPointToRay (e.position);
     	RaycastHit hit;
 		if(this.collider.Raycast(ray, out hit, 10)) {

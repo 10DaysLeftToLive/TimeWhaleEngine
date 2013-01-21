@@ -122,7 +122,6 @@ public class npcClass : MonoBehaviour {
 	public void ReactTo(string itemToReactTo){
 		foreach (Item item in itemReactions){
 			if (item.name == itemToReactTo){
-				Debug.Log(name + " reacted to " + item.name);
 				UpdateDisposition(item.dispositionChange);
 				MetricsRecorder.RecordInteraction(name, item.name, item.dispositionChange);
 			}

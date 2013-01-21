@@ -39,15 +39,13 @@ public class EventManager : MonoBehaviour {
         if(mOnPauseToggleEvent != null)  mOnPauseToggleEvent(this,pauseState);
     }
 	
-	
-	
 	private static EventManager em_instance = null;
 	
 	public static EventManager instance{
 		get {
             if (em_instance == null) {
                 //  FindObjectOfType(...) returns the first ScreenSetup object in the scene.
-                em_instance =  FindObjectOfType(typeof (EventManager)) as EventManager;
+                em_instance = FindObjectOfType(typeof (EventManager)) as EventManager;
             }
  
             // If it is still null, create a new instance
