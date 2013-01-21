@@ -34,7 +34,7 @@ public class npcClass : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		actionTimer -= Time.deltaTime;
-		playerPos = player.transform.position;/*
+		playerPos = player.transform.position;
 		npcPos = this.transform.position;
 		distanceFromPlayer = Mathf.Abs(playerPos.x - npcPos.x);
 		if (distanceFromPlayer < 5){
@@ -51,7 +51,7 @@ public class npcClass : MonoBehaviour {
 			case State.Idle: NpcIdle(); break;
 			case State.Patrol: NpcPatrol(4); break;
 			case State.Moving: NpcMove(); break;
-		}*/
+		}
 	}
 	
 	public void UpdateText(string message){
