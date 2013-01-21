@@ -50,10 +50,20 @@ function DragEvent(inputChangeSinceLastTick: Vector2){
 
 // called when a click/tap occurs
 function singleClickEvent(inputScreenPos: Vector2){	
-	// At this point the user has indicated a tap on a point on the screen
-	// we need to check if the point overlaps with a gui element
-	// if it does then we do nothing and let the gui handle it, otherwise
-	// we let the builing interaction manager handle it
+	var ray : Ray = Camera.main.ScreenPointToRay (inputScreenPos);
+
+	if (Physics.Raycast(ray,15)) {
+		NotifyObjectClickedOn(inputScreenPos);
+	} else {
+		NotifyNoObjectClickedOn(inputScreenPos);
+	}
+}
+
+function NotifyNoObjectClickedOn(inputScreenPos: Vector2){
+	EventManager.instance.RiseOnClickedNoObjectEvent(new ClickPositionArgs(inputScreenPos));
+}
+
+function NotifyObjectClickedOn(inputScreenPos: Vector2){
 	EventManager.instance.RiseOnClickEvent(new ClickPositionArgs(inputScreenPos));
 }
 

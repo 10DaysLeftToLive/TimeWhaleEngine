@@ -18,7 +18,7 @@ public class OnClickNextToPlayer : OnClick {
 		Vector2 flatPlayerPos = new Vector2(player.x, player.y);
 		Vector2 flatPos = new Vector2(position.x, position.y);
 		
-		if (Vector2.Distance(flatPlayerPos, flatPos) < minimumDistance){		
+		if (Vector2.Distance(flatPlayerPos, flatPos) < minimumDistance){
 			DoClickNextToPlayer();
 		}
 	}
