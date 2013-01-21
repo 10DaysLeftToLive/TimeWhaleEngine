@@ -21,8 +21,6 @@ public var minimumTimeUntilMove = .25; // the time in seconds that we will wait 
 public var minimumMovementDistance: float = 5; // the amount of posisiton change in a single touch gesture/click before it is considered a drag
 public var zoomEnabled: boolean = true; 
 public var zoomEpsilon: float = 10;
-public var levelManager : GameObject;
-private var levelManagerScript : LevelManager;
 
 // some variables to represent zooming in/out
 private var zoomIn: boolean = true;

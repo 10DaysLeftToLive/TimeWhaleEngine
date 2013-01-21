@@ -56,7 +56,6 @@ public class LevelManager : MonoBehaviour {
 		} else if (!System.IO.File.Exists(dispositionDataFile)){
 			Debug.LogError("Error: " + dispositionDataFile + " was not found.");
 		}
-		
 	}
 	
 	// Update is called once per frame
