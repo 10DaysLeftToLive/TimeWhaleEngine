@@ -22,6 +22,9 @@
         <Item name="Tablet">
           <dispositionChange>400</dispositionChange>
         </Item>
+		<Item name="NoItem">
+          <dispositionChange>-1</dispositionChange>
+        </Item>
       </items>
     </Npcs>
     <Npcs name="ShopKeeper">

@@ -20,7 +20,6 @@ public class OnClick : MonoBehaviour {
     }
 	
 	private void OnApplicationQuit (){
-		Debug.Log("click ondestroy");
 		EventManager.instance.mOnClickEvent -= 	delagate;
 	}
 	
