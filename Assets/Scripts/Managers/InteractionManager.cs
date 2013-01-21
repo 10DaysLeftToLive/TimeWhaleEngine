@@ -6,12 +6,26 @@ using System.Xml;
 
 public class InteractionManager : MonoBehaviour {
 	public PlayerController playerCharacter;
-	private Dictionary<string, Dictionary<string, float>> convertedInteractionToDispositionChange;
 	
 	// Use this for initialization
 	void Start () {
-		convertedInteractionToDispositionChange = new Dictionary<string, Dictionary<string, float>>();
+	}
+	
+	public void SaveNPCDispositions(string disposiitonData){
+		NPCCollection npcCollection = new NPCCollection();
 		
+		GameObject[] npcs = GetNPCs();
+		npcClass npc_Class;
+		
+		foreach (GameObject npc in npcs){
+			NPCData dataForNPC = new NPCData();
+			npc_Class = npc.GetComponent<npcClass>();
+			dataForNPC.disposition = npc_Class.GetDisposition();
+			dataForNPC.name = npc.name;
+			npcCollection.Add(dataForNPC);
+		}
+		
+		npcCollection.Save(disposiitonData);
 	}
 	
 	/// <summary>
@@ -20,74 +34,46 @@ public class InteractionManager : MonoBehaviour {
 	/// <param name='npcDispositionDict'>
 	/// Npc disposition dict. Dictionary<string NPCName, float disposition>
 	/// </param>
-	public void InitilizeNPCDispositionDict(Dictionary<string, Dictionary<string, float>> npcDispositionDict, string levelData){
-		LoadInteractionItemTable(levelData);	
-		/*
-		foreach(string npcName in npcDispositionDict.Keys){
-			SetNPCInteractionItemTable();
-			SetNPCDisposition();
-		}*/
+	public void InitilizeNPCs(string dispositionData, string levelData){
+		NPCCollection npcCollection = NPCCollection.Load(dispositionData);
+		NPCToItemCollection npcToItems = NPCToItemCollection.Load(levelData);
+		
+		GameObject[] npcs = GetNPCs();
+		npcClass npc_Class;
+		NPCData currentData = new NPCData();
+		NPCItemsReactions currentNPCReactions = new NPCItemsReactions();
+		
+		foreach (GameObject npc in npcs){
+			currentData = npcCollection.GetNPC(npc.name);
+			npc_Class = npc.GetComponent<npcClass>();
+			
+			currentNPCReactions = npcToItems.GetNPC(npc.name);
+			
+			SetNPCDisposition(npc_Class, currentData);
+			SetNPCInteractions(npc_Class, currentNPCReactions);
+		}
 	}
 	
-	private void LoadInteractionItemTable(string levelData){
-		convertedInteractionToDispositionChange = ReadNPCData.ReadNPCItemsDispositonFromFile(levelData);
+	private GameObject[] GetNPCs(){
+		return (GameObject.FindGameObjectsWithTag(Strings.tag_NPC)); 
 	}
 	
-	private void SetNPCInteractionItemTable(){
-		//Should take in an NPC script to call function on
+	private void SetNPCInteractions(npcClass npcClass, NPCItemsReactions data){		
+		npcClass.SetInteractions(data.items);
 	}
 	
-	private void SetNPCDisposition(){
-		//Should take in an NPC script to call function on
+	private void SetNPCDisposition(npcClass npcClass, NPCData data){
+		npcClass.SetDisposition(data.disposition);
 	}
 	
 	public void PerformInteraction(GameObject targetNPC){
 		if (playerCharacter.HasItem()){
 			GameObject playerItem = playerCharacter.GetItem();
-			FindAndChangeDisposition(targetNPC, playerItem.name);
+			targetNPC.GetComponent<npcClass>().ReactTo(playerItem.name);
 			//Give item to NPC
 		} else {
-			FindAndChangeDisposition(targetNPC, Strings.NoItem);
+			targetNPC.GetComponent<npcClass>().ReactTo(Strings.NoItem);
 		}
-	}
-	
-	private void FindAndChangeDisposition(GameObject targetNPC, string interactableObject){
-		float dispositionChange = 0;
-		
-		if (FindDispositionChange(targetNPC, interactableObject, out dispositionChange)){
-			//Do disposition changing
-		}
-		MetricsRecorder.RecordInteraction(targetNPC.name, interactableObject, dispositionChange);
-	}
-	
-	private bool FindDispositionChange(GameObject targetNPC, string interactableObject, out float dispositionChange){
-		string npcName = targetNPC.name;
-		string objectName = interactableObject;
-		dispositionChange = 0;
-		Dictionary<string, float> itemsToDispostions;
-		
-		if (ContainsNPC(npcName)){
-			itemsToDispostions = convertedInteractionToDispositionChange[npcName];
-			
-			if (NPCHasItemRelation(itemsToDispostions, objectName)){
-				dispositionChange = itemsToDispostions[objectName];
-				Debug.Log("Disposition Change = " + dispositionChange);
-				return (true);
-			} else {
-				Debug.Log("No item data was given between " + npcName + " and " + objectName);
-			}
-		} else {
-			Debug.Log("No npc data was given for " + npcName);
-		}
-		return (false);
-	}
-	
-	private bool ContainsNPC(string name){
-		return (convertedInteractionToDispositionChange.ContainsKey(name));
-	}
-	
-	private bool NPCHasItemRelation(Dictionary<string, float> itemsToDispostionsForNPC, string item){
-		return (itemsToDispostionsForNPC.ContainsKey(item));
 	}
 	
 	private static InteractionManager im_instance = null;

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class npcClass : MonoBehaviour {
 	
@@ -7,8 +8,10 @@ public class npcClass : MonoBehaviour {
 	public TextMesh chat;
 	public GameObject symbol;
 	public GameObject player;
+	public float npcDisposition;
 	
-	private int npcDisposition, randomVariable;
+	private List<Item> itemReactions;
+	private int randomVariable;
 	private float speed = .01f;
 	private float symbolDuration = 3;
 	private float timer = 6;
@@ -31,7 +34,7 @@ public class npcClass : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		actionTimer -= Time.deltaTime;
-		playerPos = player.transform.position;
+		playerPos = player.transform.position;/*
 		npcPos = this.transform.position;
 		distanceFromPlayer = Mathf.Abs(playerPos.x - npcPos.x);
 		if (distanceFromPlayer < 5){
@@ -48,7 +51,7 @@ public class npcClass : MonoBehaviour {
 			case State.Idle: NpcIdle(); break;
 			case State.Patrol: NpcPatrol(4); break;
 			case State.Moving: NpcMove(); break;
-		}
+		}*/
 	}
 	
 	public void UpdateText(string message){
@@ -95,17 +98,35 @@ public class npcClass : MonoBehaviour {
 	}
 	
 	#region disposition
-	public void SetDisposition(int disp) {
+	public void SetDisposition(float disp) {
 		npcDisposition = disp;
 	}
 	
-	public int GetDisposition(){
+	public float GetDisposition(){
 		return npcDisposition;	
 	}
 	
-	public int UpdateDisposition(int disp) {
+	public float UpdateDisposition(float disp) {
 		npcDisposition += disp;
 		return npcDisposition;
+	}
+	#endregion
+	
+	#region item interactions
+	public void SetInteractions(List<Item> items){
+		itemReactions = items;
+	}
+	#endregion
+	
+	#region item reaction
+	public void ReactTo(string itemToReactTo){
+		foreach (Item item in itemReactions){
+			if (item.name == itemToReactTo){
+				Debug.Log(name + " reacted to " + item.name);
+				UpdateDisposition(item.dispositionChange);
+				MetricsRecorder.RecordInteraction(name, item.name, item.dispositionChange);
+			}
+		}
 	}
 	#endregion
 	

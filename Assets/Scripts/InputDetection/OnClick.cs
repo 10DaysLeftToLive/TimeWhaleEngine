@@ -32,7 +32,6 @@ public class OnClick : MonoBehaviour {
 	}
 	
 	private void NotifyNoObjectClickedOn(Vector3 position){
-		Debug.Log("No Object was clicked on");
 		EventManager.instance.RiseOnClickedNoObjectEvent(new ClickPositionArgs(position));
 	}
 	

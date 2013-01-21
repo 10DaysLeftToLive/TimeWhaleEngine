@@ -31,24 +31,13 @@ public class PlayerController : MonoBehaviour {
 	
 	public bool isControllable = true;
 	public bool isAffectedByGravity = true;
-	
-	public bool IsTouchingGrowableUp{
-		get{return isTouchingGrowableUp;}
-	}
 	public bool isTouchingGrowableUp = false;
-	
-	public GameObject CurrentTouchedGrowableUp{
-		get{return currentTouchedGrowableUp;}
-	}
-	private GameObject currentTouchedGrowableUp;
-	
-	public bool isTouchingTrigger = false;
 	
 	public BoneAnimation youngBoneAnimation;
 	public BoneAnimation middleBoneAnimation;
 	public BoneAnimation oldBoneAnimation;
 	
-	private static readonly float TELEPORT_ABOVE_GROWABLE_DISTANCE = .750f;
+	
 
 	// Use this for initialization
 	void Start () {
@@ -61,10 +50,12 @@ public class PlayerController : MonoBehaviour {
 			UpdateMovementControls();
 			
 			if(isAffectedByGravity){
-				ApplyGravity();
+			ApplyGravity();
 			}
 			
 		}
+			
+		
 		
 		MoveCharacter();
 	}
@@ -83,26 +74,23 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	void OnTriggerEnter(Collider trigger){
-		isTouchingTrigger = CheckTriggers(trigger);
-	}
-	
-
-	void OnTriggerStay(Collider trigger){
-		isTouchingTrigger = CheckTriggers(trigger);
-	}
-	
-	bool CheckTriggers(Collider trigger){
 		if(trigger.tag == Strings.tag_Climbable){
 			isAffectedByGravity = false;
 			youngBoneAnimation.animation.Play("Climb");
-			return true;
 		}
 		else if(trigger.tag == Strings.tag_GrowableUp){
-			Debug.Log("TOUCHING A BRANCH YO");
-			SetTouchingGrowableUp(true, trigger.gameObject);	
-			return true;
+			isTouchingGrowableUp = true;	
 		}
-		return false;
+	}
+	
+	void OnTriggerStay(Collider trigger){
+		if(trigger.tag == Strings.tag_Climbable){
+			isAffectedByGravity = false;
+			youngBoneAnimation.animation.Play("Climb");
+		}
+		else if(trigger.tag == Strings.tag_GrowableUp){
+			isTouchingGrowableUp = true;	
+		}
 	}
 	
 	void OnTriggerExit(Collider trigger){
@@ -111,23 +99,15 @@ public class PlayerController : MonoBehaviour {
 			youngBoneAnimation.animation.Play("Walk");
 		}
 		else if(trigger.tag == Strings.tag_GrowableUp){
-			Debug.Log("EXITING THIS SHIT");
-			SetTouchingGrowableUp(false, null);	
+			isTouchingGrowableUp = false;	
 		}
-		isTouchingTrigger = false;
 	}
-	
 	
 	void OnControllerColliderHit(ControllerColliderHit hit){
 		if(hit.transform.tag == Strings.tag_Pushable){
 			PushPushableObject(hit);
 		}
-		
-	}
 	
-	void SetTouchingGrowableUp(bool flag, GameObject growableUpTransform){
-		isTouchingGrowableUp = flag;
-		currentTouchedGrowableUp = growableUpTransform;
 	}
 	
 	void PushPushableObject(ControllerColliderHit pushableObject){
@@ -236,9 +216,5 @@ public class PlayerController : MonoBehaviour {
 	public void DisableHeldItem(){
 		pickedUpObject.SetActiveRecursively(false);
 		pickedUpObject = null;	
-	}
-	
-	public void TeleportCharacterAbove(GameObject toTeleportAbove){
-		transform.position = toTeleportAbove.transform.position + new Vector3(0,TELEPORT_ABOVE_GROWABLE_DISTANCE,0);
 	}
 }

@@ -9,7 +9,6 @@ public class ReadNPCDispostion : MonoBehaviour {
 	
 	public static Dictionary<string, float> ReadNPCItemsDispositonFromFile(string file){
 		XmlDocument xmlFile = new XmlDocument();
-		Debug.Log("opening " + file);
 		xmlFile.Load(file);
 		
 		int numberNPCs = FindNumberNPCs(xmlFile);

@@ -1,22 +1,41 @@
-<?xml version="1.0"?>
-<NPC_LevelData>
-	<NumberNPCs>1</NumberNPCs>
-	<NPC id = "0"> 
-		<Name>Bob</Name>
-		<Items>
-			<NumberItems>3</NumberItems>
-			<Item id = "0">
-				<Name>Ball</Name>
-				<DispositionChange>5</DispositionChange>
-			</Item>
-			<Item id = "1">
-				<Name>Hat</Name>
-				<DispositionChange>-5</DispositionChange>
-			</Item>
-			<Item id = "2">
-				<Name>NoItem</Name>
-				<DispositionChange>-3</DispositionChange>
-			</Item>
-		</Items>
-	</NPC>
-</NPC_LevelData>
+<?xml version="1.0" encoding="Windows-1252"?>
+<NPCToItemCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Npcs>
+    <Npcs name="Adam">
+      <items>
+        <Item name="Apple">
+          <dispositionChange>5</dispositionChange>
+        </Item>
+        <Item name="Hat">
+          <dispositionChange>32</dispositionChange>
+        </Item>
+      </items>
+    </Npcs>
+    <Npcs name="Brian">
+      <items>
+        <Item name="Laptop">
+          <dispositionChange>500</dispositionChange>
+        </Item>
+        <Item name="Tablet">
+          <dispositionChange>400</dispositionChange>
+        </Item>
+      </items>
+    </Npcs>
+    <Npcs name="Jared">
+      <items>
+        <Item name="Pie">
+          <dispositionChange>9001</dispositionChange>
+        </Item>
+        <Item name="Money">
+          <dispositionChange>438945.384</dispositionChange>
+        </Item>
+        <Item name="Axe to face">
+          <dispositionChange>-58476588</dispositionChange>
+        </Item>
+		<Item name="NoItem">
+          <dispositionChange>99</dispositionChange>
+        </Item>
+      </items>
+    </Npcs>
+  </Npcs>
+</NPCToItemCollection>

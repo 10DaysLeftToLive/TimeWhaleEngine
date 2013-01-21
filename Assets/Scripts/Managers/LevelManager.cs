@@ -1,5 +1,4 @@
 using UnityEngine;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -20,13 +19,15 @@ public class LevelManager : MonoBehaviour {
 	
 	public string levelDataName;
 	
+	private string dispositionDataFile;
+	private string levelInteractionFile;
+	
 	Dictionary<string, Dictionary<string, float>> npcDispositionDict;
 	
 	void Awake(){
 		if(playerCharacter == null){
 			Debug.LogWarning("Warning: No PlayerCharacter attached to LevelManager");
 		}
-	
 		
 		if(interactionManager == null){
 			Debug.LogWarning("Warning: No InteractionManager attached to LevelManager");	
@@ -38,8 +39,13 @@ public class LevelManager : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		
-		LoadDispositionTable();
+		SetFiles();		
+		SetNPCData();
+	}
+	
+	private void SetFiles(){
+		levelInteractionFile = Application.dataPath + "/Data/LevelData/" + levelDataName + ".xml";
+		dispositionDataFile = Application.dataPath + "/Data/DispositionData/" + Strings.DispositionFile + ".xml";
 	}
 	
 	// Update is called once per frame
@@ -47,14 +53,14 @@ public class LevelManager : MonoBehaviour {
 		HandleInput();
 	}
 	
-	void LoadDispositionTable(){
-		Debug.Log("----------Starting to Read from files--------------------");
-		string npcToItemPath =  Application.dataPath + "/Data/LevelData/" + levelDataName + ".xml";
-		string npcDispositionPath = Application.dataPath + "/Data/DispositionData/" + Strings.DispositionFile + ".xml";
-		interactionManager.InitilizeNPCDispositionDict(npcDispositionDict, npcToItemPath);
-		ReadNPCDispostion.ReadNPCItemsDispositonFromFile(npcDispositionPath);
-		Debug.Log("----------Done Reading from files--------------------");
+	void SetNPCData(){		
+		InteractionManager.instance.InitilizeNPCs(dispositionDataFile, levelInteractionFile);
+	}	
+	
+	void SaveDispositions(){
+		InteractionManager.instance.SaveNPCDispositions(dispositionDataFile);
 	}
+	
 	
 	void HandleInput(){
 		/*
@@ -78,12 +84,6 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	void ShiftUpAge(){
-		bool isTouchingGrowableUp = playerCharacter.IsTouchingGrowableUp;
-		TimeSwitchObject growableUpTSO = null;
-		if(isTouchingGrowableUp){
-			growableUpTSO = FindGrowableUp(playerCharacter.CurrentTouchedGrowableUp);
-		}
-		
 		switch(playerCharacter.currentCharacterAge){
 			case PlayerController.CharacterAgeState.YOUNG:
 				//Switch to middle
@@ -92,10 +92,6 @@ public class LevelManager : MonoBehaviour {
 					if(!tsObject.staticInYoung){
 						tsObject.middleTimeObject.transform.localPosition = tsObject.youngTimeObject.transform.localPosition;
 					}
-				}
-			
-				if(isTouchingGrowableUp){
-					playerCharacter.TeleportCharacterAbove(growableUpTSO.middleTimeObject);
 				}
 				break;
 			case PlayerController.CharacterAgeState.MIDDLE:
@@ -106,29 +102,15 @@ public class LevelManager : MonoBehaviour {
 						tsObject.oldTimeObject.transform.localPosition = tsObject.middleTimeObject.transform.localPosition;
 					}
 				}
-			
-				if(isTouchingGrowableUp){
-					playerCharacter.TeleportCharacterAbove(growableUpTSO.oldTimeObject);
-				}
 				break;
 			case PlayerController.CharacterAgeState.OLD:
 				//Switch to Young
 				ShiftToAge(PlayerController.CharacterAgeState.YOUNG, youngSectionTarget.position);
-			
-				if(isTouchingGrowableUp){
-					playerCharacter.TeleportCharacterAbove(growableUpTSO.youngTimeObject);
-				}
 				break;
 		}
 	}
 	
 	void ShiftDownAge(){
-		bool isTouchingGrowableUp = playerCharacter.IsTouchingGrowableUp;
-		TimeSwitchObject growableUpTSO = null;
-		if(isTouchingGrowableUp){
-			growableUpTSO = FindGrowableUp(playerCharacter.CurrentTouchedGrowableUp);
-		}
-		
 		switch(playerCharacter.currentCharacterAge){
 			case PlayerController.CharacterAgeState.YOUNG:
 				//Switch to Old
@@ -138,29 +120,14 @@ public class LevelManager : MonoBehaviour {
 						tsObject.oldTimeObject.transform.localPosition = tsObject.middleTimeObject.transform.localPosition;
 					}
 				}
-			
-				if(isTouchingGrowableUp){
-					playerCharacter.TeleportCharacterAbove(growableUpTSO.oldTimeObject);
-				}
-			
 				break;
 			case PlayerController.CharacterAgeState.MIDDLE:
 				//Switch to Young
 				ShiftToAge(PlayerController.CharacterAgeState.YOUNG, youngSectionTarget.position);
-			
-				if(isTouchingGrowableUp){
-					playerCharacter.TeleportCharacterAbove(growableUpTSO.youngTimeObject);
-				}
-				
 				break;
 			case PlayerController.CharacterAgeState.OLD:
 				//Switch to Middle
 				ShiftToAge(PlayerController.CharacterAgeState.MIDDLE, middleSectionTarget.position);
-			
-			
-				if(isTouchingGrowableUp){
-					playerCharacter.TeleportCharacterAbove(growableUpTSO.middleTimeObject);
-				}
 				break;
 		}
 	}
@@ -180,23 +147,12 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	void ShiftToAge(PlayerController.CharacterAgeState age, Vector3 frameOriginRelativeToWorld){
-		//Handle Objects
-		
 		//Handle Player Character
 		SwitchPlayerAge(frameOriginRelativeToWorld);
 		playerCharacter.SetAge(age, frameOriginRelativeToWorld);	
 		
+		//Handle Objects
 		
-	}
-					
-	TimeSwitchObject FindGrowableUp(GameObject currentlyTouchingGrowableUp){
-		foreach(TimeSwitchObject tso in timeSwitchObjects){
-			if(tso.objectLabel == currentlyTouchingGrowableUp.name){
-				Debug.Log("Found growable up");
-				return tso;	
-			}
-		}
-		return null;
 	}
 	
 	void SwitchPlayerAge(Vector3 sectionPosRelativeToWorld){
@@ -206,10 +162,13 @@ public class LevelManager : MonoBehaviour {
 		playerCharacter.transform.position = new Vector3(sectionPosRelativeToWorld.x + deltaPlayerToCurrentFrame.x,
 											sectionPosRelativeToWorld.y + deltaPlayerToCurrentFrame.y,
 											sectionPosRelativeToWorld.z);
-		
 	}
 	
 	void GetTimeSwitchedPosition(Vector3 newSectionPosRelativeToWorld, Vector3 objectCurrentLocalPosition){
 		
+	}
+	
+	void OnApplicationQuit(){
+		SaveDispositions();
 	}
 }
