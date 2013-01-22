@@ -22,4 +22,6 @@ public static class Strings{
 	
 	public static string NoItem = "NoItem";
 	public static string item_treeSeed = "TreeSeed";
+	
+	public static string Player = "PlayerController";
 }

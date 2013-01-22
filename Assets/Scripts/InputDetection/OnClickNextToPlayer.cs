@@ -2,8 +2,12 @@ using UnityEngine;
 using System.Collections;
 
 public class OnClickNextToPlayer : OnClick {
-	public PlayerController playerCharacter;
+	protected PlayerController playerCharacter;
 	public float minimumDistance = 1.5f;
+	
+	void Awake(){
+		playerCharacter = FindObjectOfType(typeof(PlayerController)) as PlayerController;		
+	}
 
 	void Start(){
 		base.InitEvent();

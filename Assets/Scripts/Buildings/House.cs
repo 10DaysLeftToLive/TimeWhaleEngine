@@ -1,9 +1,11 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class House : MonoBehaviour {
 	private bool interiorIsShowing = false;
 	public GameObject interior;
+	public GameObject door;
 	private Transform[] interiorObjects;
 	
 	public void Start(){
@@ -26,7 +28,7 @@ public class House : MonoBehaviour {
 			transform.renderer.enabled = false;
 			transform.collider.isTrigger = true;
 		}
-		this.transform.renderer.enabled = true;
+		this.transform.renderer.enabled = true;	
 	}
 	
 	private void ShowInterior(){

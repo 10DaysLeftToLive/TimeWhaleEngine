@@ -5,10 +5,11 @@ using System.IO;
 using System.Xml;
 
 public class InteractionManager : MonoBehaviour {
-	public PlayerController playerCharacter;
+	private PlayerController playerCharacter;
 	
 	// Use this for initialization
 	void Start () {
+		playerCharacter = FindObjectOfType(typeof(PlayerController)) as PlayerController;		
 	}
 	
 	public void SaveNPCDispositions(string disposiitonData){
