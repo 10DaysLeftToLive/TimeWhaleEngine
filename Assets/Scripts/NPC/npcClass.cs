@@ -115,19 +115,23 @@ public class npcClass : MonoBehaviour {
 	
 	#region item interactions
 	public void SetInteractions(List<Item> items){
-		Debug.Log("seting interactions for " + name);
 		itemReactions = items;
 	}
 	#endregion
 	
 	#region item reaction
 	public void ReactTo(string itemToReactTo){
+		bool hasReacted = false;
+		
 		foreach (Item item in itemReactions){
 			if (item.name == itemToReactTo){
 				UpdateDisposition(item.dispositionChange);
 				MetricsRecorder.RecordInteraction(name, item.name, item.dispositionChange);
+				hasReacted = true;
 			}
 		}
+		
+		if (!hasReacted) Debug.Log("No Interaction was set between " + name + " and " + itemToReactTo);
 	}
 	#endregion
 	
