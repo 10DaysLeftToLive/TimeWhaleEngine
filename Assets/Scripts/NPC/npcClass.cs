@@ -7,7 +7,6 @@ public class npcClass : MonoBehaviour {
 	public string npcName;
 	public TextMesh chat;
 	public GameObject symbol;
-	public GameObject player;
 	public float npcDisposition;
 	
 	private List<Item> itemReactions;
@@ -23,12 +22,14 @@ public class npcClass : MonoBehaviour {
 	private Vector3 npcPos, startPos;
 	private GameObject newImg;
 	private enum State {Idle, Patrol, Moving};
+	private GameObject player;
 	private State npcState, previousState;
 	
 	// Use this for initialization
 	void Start () {
 		npcState = State.Idle;
 		actionTimer = timer;
+		player = GameObject.Find(Strings.Player);	
 	}
 	
 	// Update is called once per frame
@@ -114,6 +115,7 @@ public class npcClass : MonoBehaviour {
 	
 	#region item interactions
 	public void SetInteractions(List<Item> items){
+		Debug.Log("seting interactions for " + name);
 		itemReactions = items;
 	}
 	#endregion

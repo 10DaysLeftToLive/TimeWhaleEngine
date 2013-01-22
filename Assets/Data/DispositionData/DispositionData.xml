@@ -4,11 +4,11 @@
     <Npcs name="ShopKeeper">
       <disposition>99</disposition>
     </Npcs>
-    <Npcs name="Sister">
-      <disposition>-3</disposition>
-    </Npcs>
     <Npcs name="Mom">
       <disposition>-1</disposition>
+    </Npcs>
+    <Npcs name="Sister">
+      <disposition>-3</disposition>
     </Npcs>
   </Npcs>
 </NPCCollection>
