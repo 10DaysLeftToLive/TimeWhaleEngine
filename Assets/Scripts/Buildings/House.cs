@@ -2,21 +2,36 @@ using UnityEngine;
 using System.Collections;
 
 public class House : MonoBehaviour {
-	private bool houseIsShowing = true;
+	private bool interiorIsShowing = false;
+	public GameObject interior;
+	private Transform[] interiorObjects;
+	
+	public void Start(){
+		interiorObjects = interior.GetComponentsInChildren<Transform>();
+		HideInterior();
+	}
 	
 	public void ToggleHouse(){
-		if (houseIsShowing){
-			HideHouse();
+		Debug.Log("Toggle House interiorIsShowing = " + interiorIsShowing);
+		if (interiorIsShowing){
+			HideInterior();
 		} else {
-			
+			ShowInterior();
+		}
+		interiorIsShowing = !interiorIsShowing;
+	}
+	
+	private void HideInterior(){
+		foreach (Transform transform in interiorObjects){
+			transform.renderer.enabled = false;
+			transform.collider.isTrigger = true;
 		}
 	}
 	
-	private static void HideHouse(){
-		Debug.Log("Hidding");
-	}
-	
-	private static void ShowHouse(){
-		Debug.Log("Showing");
+	private void ShowInterior(){
+		foreach (Transform transform in interiorObjects){
+			transform.renderer.enabled = true;
+			transform.collider.isTrigger = false;
+		}
 	}
 }
