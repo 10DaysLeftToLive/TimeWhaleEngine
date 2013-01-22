@@ -14,7 +14,6 @@ public class House : MonoBehaviour {
 	}
 	
 	public void ToggleHouse(){
-		Debug.Log("Toggle House interiorIsShowing = " + interiorIsShowing);
 		if (interiorIsShowing){
 			HideInterior();
 		} else {
@@ -26,7 +25,9 @@ public class House : MonoBehaviour {
 	private void HideInterior(){
 		foreach (Transform transform in interiorObjects){
 			transform.renderer.enabled = false;
-			transform.collider.isTrigger = true;
+			if (transform.tag == "Untagged") {
+				transform.collider.isTrigger = true;
+			}
 		}
 		this.transform.renderer.enabled = true;	
 	}
@@ -34,7 +35,9 @@ public class House : MonoBehaviour {
 	private void ShowInterior(){
 		foreach (Transform transform in interiorObjects){
 			transform.renderer.enabled = true;
-			transform.collider.isTrigger = false;
+			if (transform.tag == "Untagged") {
+				transform.collider.isTrigger = false;
+			}
 		}
 		this.transform.renderer.enabled = false;
 	}
