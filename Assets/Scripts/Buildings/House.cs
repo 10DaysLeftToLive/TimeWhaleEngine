@@ -26,6 +26,7 @@ public class House : MonoBehaviour {
 			transform.renderer.enabled = false;
 			transform.collider.isTrigger = true;
 		}
+		this.transform.renderer.enabled = true;
 	}
 	
 	private void ShowInterior(){
@@ -33,5 +34,6 @@ public class House : MonoBehaviour {
 			transform.renderer.enabled = true;
 			transform.collider.isTrigger = false;
 		}
+		this.transform.renderer.enabled = false;
 	}
 }
