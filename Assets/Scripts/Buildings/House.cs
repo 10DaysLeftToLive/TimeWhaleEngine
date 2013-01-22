@@ -11,12 +11,17 @@ public class House : MonoBehaviour {
 	private Transform[] exteriorObjects;
 	
 	public void Start(){
-		interiorObjects = interior.GetComponentsInChildren<Transform>();
-		exteriorObjects = exterior.GetComponentsInChildren<Transform>();
+		UpdateObjectArrays();
 		Hide(interiorObjects);
 	}
 	
+	private void UpdateObjectArrays(){
+		interiorObjects = interior.GetComponentsInChildren<Transform>();
+		exteriorObjects = exterior.GetComponentsInChildren<Transform>();
+	}
+	
 	public void ToggleHouse(){
+		UpdateObjectArrays();
 		if (interiorIsShowing){
 			Hide (interiorObjects);
 			Show (exteriorObjects);
