@@ -25,7 +25,7 @@ public class House : MonoBehaviour {
 	private void HideInterior(){
 		foreach (Transform transform in interiorObjects){
 			transform.renderer.enabled = false;
-			if (transform.tag == "Untagged") {
+			if (transform.CompareTag("Untagged")) {
 				transform.collider.isTrigger = true;
 			}
 		}
@@ -35,7 +35,7 @@ public class House : MonoBehaviour {
 	private void ShowInterior(){
 		foreach (Transform transform in interiorObjects){
 			transform.renderer.enabled = true;
-			if (transform.tag == "Untagged") {
+			if (transform.CompareTag("Untagged")) {
 				transform.collider.isTrigger = false;
 			}
 		}

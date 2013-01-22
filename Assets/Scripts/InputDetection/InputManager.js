@@ -51,8 +51,10 @@ function DragEvent(inputChangeSinceLastTick: Vector2){
 // called when a click/tap occurs
 function singleClickEvent(inputScreenPos: Vector2){	
 	var ray : Ray = Camera.main.ScreenPointToRay (inputScreenPos);
-
-	if (Physics.Raycast(ray,15)) {
+	
+	var hit : RaycastHit;
+	
+	if (Physics.Raycast(ray, hit, 15) && !hit.transform.CompareTag("Untagged")) {
 		NotifyObjectClickedOn(inputScreenPos);
 	} else {
 		NotifyNoObjectClickedOn(inputScreenPos);
