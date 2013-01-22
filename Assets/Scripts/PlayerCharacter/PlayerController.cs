@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	void OnTriggerEnter(Collider trigger){
-		if(trigger.tag == Strings.tag_Climbable){
+		if(IsClimbable(trigger)){
 			isAffectedByGravity = false;
 			youngBoneAnimation.animation.Play("Climb");
 		}
@@ -84,7 +84,7 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	void OnTriggerStay(Collider trigger){
-		if(trigger.tag == Strings.tag_Climbable){
+		if(IsClimbable(trigger)){
 			isAffectedByGravity = false;
 			youngBoneAnimation.animation.Play("Climb");
 		}
@@ -94,13 +94,17 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	void OnTriggerExit(Collider trigger){
-		if(trigger.tag == Strings.tag_Climbable){
+		if(IsClimbable(trigger)){
 			isAffectedByGravity = true;
 			youngBoneAnimation.animation.Play("Walk");
 		}
 		else if(trigger.tag == Strings.tag_GrowableUp){
 			isTouchingGrowableUp = false;	
 		}
+	}
+	
+	private bool IsClimbable(Collider trigger){
+		return (trigger.CompareTag(Strings.tag_Climbable) && trigger.renderer.enabled);
 	}
 	
 	void OnControllerColliderHit(ControllerColliderHit hit){

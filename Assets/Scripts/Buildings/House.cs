@@ -4,41 +4,44 @@ using System.Collections.Generic;
 
 public class House : MonoBehaviour {
 	private bool interiorIsShowing = false;
-	public GameObject interior;
 	public GameObject door;
+	public GameObject interior;
+	public GameObject exterior;
 	private Transform[] interiorObjects;
+	private Transform[] exteriorObjects;
 	
 	public void Start(){
 		interiorObjects = interior.GetComponentsInChildren<Transform>();
-		HideInterior();
+		exteriorObjects = exterior.GetComponentsInChildren<Transform>();
+		Hide(interiorObjects);
 	}
 	
 	public void ToggleHouse(){
 		if (interiorIsShowing){
-			HideInterior();
+			Hide (interiorObjects);
+			Show (exteriorObjects);
 		} else {
-			ShowInterior();
+			Hide (exteriorObjects);
+			Show (interiorObjects);
 		}
 		interiorIsShowing = !interiorIsShowing;
 	}
 	
-	private void HideInterior(){
-		foreach (Transform transform in interiorObjects){
+	private void Hide(Transform[] objects){
+		foreach (Transform transform in objects){
 			transform.renderer.enabled = false;
-			if (transform.CompareTag("Untagged")) {
+			if (transform.CompareTag("Untagged") && transform.collider != null) {
 				transform.collider.isTrigger = true;
 			}
 		}
-		this.transform.renderer.enabled = true;	
 	}
 	
-	private void ShowInterior(){
-		foreach (Transform transform in interiorObjects){
+	private void Show(Transform[] objects){
+		foreach (Transform transform in objects){
 			transform.renderer.enabled = true;
-			if (transform.CompareTag("Untagged")) {
+			if (transform.CompareTag("Untagged") && transform.collider != null) {
 				transform.collider.isTrigger = false;
 			}
 		}
-		this.transform.renderer.enabled = false;
 	}
 }
