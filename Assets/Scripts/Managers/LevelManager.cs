@@ -72,18 +72,7 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	
-	void HandleInput(){
-		/*
-		if(Input.GetButtonDown(Strings.ButtonYoungAge)){
-			ShiftToAge(PlayerController.CharacterAgeState.YOUNG, youngSectionTarget.position);
-		}
-		else if (Input.GetButtonDown(Strings.ButtonMiddleAge)){
-			ShiftToAge(PlayerController.CharacterAgeState.MIDDLE, middleSectionTarget.position);
-		}
-		else if(Input.GetButtonDown(Strings.ButtonOldAge)){
-			ShiftToAge(PlayerController.CharacterAgeState.OLD, oldSectionTarget.position);
-		}*/
-		
+	void HandleInput(){	
 		if(Input.GetButtonDown(Strings.ButtonAgeShiftDown)){
 			ShiftDownAge();
 		}
@@ -94,6 +83,12 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	void ShiftUpAge(){
+		bool isTouchingGrowableUp = playerCharacter.IsTouchingGrowableUp;
+		TimeSwitchObject growableUpTSO = null;
+		if(isTouchingGrowableUp){
+			growableUpTSO = FindGrowableUp(playerCharacter.CurrentTouchedGrowableUp);
+		}
+		
 		switch(playerCharacter.currentCharacterAge){
 			case PlayerController.CharacterAgeState.YOUNG:
 				//Switch to middle
@@ -102,6 +97,10 @@ public class LevelManager : MonoBehaviour {
 					if(!tsObject.staticInYoung){
 						tsObject.middleTimeObject.transform.localPosition = tsObject.youngTimeObject.transform.localPosition;
 					}
+				}
+			
+				if(isTouchingGrowableUp){
+					playerCharacter.TeleportCharacterAbove(growableUpTSO.middleTimeObject);
 				}
 				break;
 			case PlayerController.CharacterAgeState.MIDDLE:
@@ -112,15 +111,29 @@ public class LevelManager : MonoBehaviour {
 						tsObject.oldTimeObject.transform.localPosition = tsObject.middleTimeObject.transform.localPosition;
 					}
 				}
+			
+				if(isTouchingGrowableUp){
+					playerCharacter.TeleportCharacterAbove(growableUpTSO.oldTimeObject);
+				}
 				break;
 			case PlayerController.CharacterAgeState.OLD:
 				//Switch to Young
 				ShiftToAge(PlayerController.CharacterAgeState.YOUNG, youngSectionTarget.position);
+			
+				if(isTouchingGrowableUp){
+					playerCharacter.TeleportCharacterAbove(growableUpTSO.youngTimeObject);
+				}
 				break;
 		}
 	}
 	
 	void ShiftDownAge(){
+		bool isTouchingGrowableUp = playerCharacter.IsTouchingGrowableUp;
+		TimeSwitchObject growableUpTSO = null;
+		if(isTouchingGrowableUp){
+			growableUpTSO = FindGrowableUp(playerCharacter.CurrentTouchedGrowableUp);
+		}
+		
 		switch(playerCharacter.currentCharacterAge){
 			case PlayerController.CharacterAgeState.YOUNG:
 				//Switch to Old
@@ -130,30 +143,31 @@ public class LevelManager : MonoBehaviour {
 						tsObject.oldTimeObject.transform.localPosition = tsObject.middleTimeObject.transform.localPosition;
 					}
 				}
+			
+				if(isTouchingGrowableUp){
+					playerCharacter.TeleportCharacterAbove(growableUpTSO.oldTimeObject);
+				}
+			
 				break;
 			case PlayerController.CharacterAgeState.MIDDLE:
 				//Switch to Young
 				ShiftToAge(PlayerController.CharacterAgeState.YOUNG, youngSectionTarget.position);
+			
+				if(isTouchingGrowableUp){
+					playerCharacter.TeleportCharacterAbove(growableUpTSO.youngTimeObject);
+				}
+				
 				break;
 			case PlayerController.CharacterAgeState.OLD:
 				//Switch to Middle
 				ShiftToAge(PlayerController.CharacterAgeState.MIDDLE, middleSectionTarget.position);
+			
+			
+				if(isTouchingGrowableUp){
+					playerCharacter.TeleportCharacterAbove(growableUpTSO.middleTimeObject);
+				}
 				break;
 		}
-	}
-	
-	void ShiftToYoung(){
-		ShiftToAge(PlayerController.CharacterAgeState.YOUNG, youngSectionTarget.position);
-	}
-	
-	void ShiftToMiddle(){
-		ShiftToAge(PlayerController.CharacterAgeState.MIDDLE, middleSectionTarget.position);
-		
-	}
-	
-	void ShiftToOld(){
-		ShiftToAge(PlayerController.CharacterAgeState.OLD, oldSectionTarget.position);
-		
 	}
 	
 	void ShiftToAge(PlayerController.CharacterAgeState age, Vector3 frameOriginRelativeToWorld){
@@ -174,8 +188,14 @@ public class LevelManager : MonoBehaviour {
 											sectionPosRelativeToWorld.z);
 	}
 	
-	void GetTimeSwitchedPosition(Vector3 newSectionPosRelativeToWorld, Vector3 objectCurrentLocalPosition){
-		
+	TimeSwitchObject FindGrowableUp(GameObject currentlyTouchingGrowableUp){
+		foreach(TimeSwitchObject tso in timeSwitchObjects){
+			if(tso.objectLabel == currentlyTouchingGrowableUp.name){
+				Debug.Log("Found growable up");
+				return tso;	
+			}
+		}
+		return null;
 	}
 	
 	void OnApplicationQuit(){

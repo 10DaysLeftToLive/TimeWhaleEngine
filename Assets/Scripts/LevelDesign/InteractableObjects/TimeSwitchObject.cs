@@ -3,6 +3,8 @@ using System.Collections;
 
 [System.Serializable]
 public class TimeSwitchObject{
+	public string objectLabel;
+	
 	public GameObject youngTimeObject;
 	public GameObject middleTimeObject;
 	public GameObject oldTimeObject;

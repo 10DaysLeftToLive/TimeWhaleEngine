@@ -31,13 +31,25 @@ public class PlayerController : MonoBehaviour {
 	
 	public bool isControllable = true;
 	public bool isAffectedByGravity = true;
+	
+	public bool IsTouchingGrowableUp{
+		get{return isTouchingGrowableUp;}
+	}
 	public bool isTouchingGrowableUp = false;
+	
+	public GameObject CurrentTouchedGrowableUp{
+		get{return currentTouchedGrowableUp;}
+	}
+	private GameObject currentTouchedGrowableUp;
+	
+	public bool isTouchingTrigger = false;
+	
 	
 	public BoneAnimation youngBoneAnimation;
 	public BoneAnimation middleBoneAnimation;
 	public BoneAnimation oldBoneAnimation;
 	
-	
+	private static readonly float TELEPORT_ABOVE_GROWABLE_DISTANCE = .750f;
 
 	// Use this for initialization
 	void Start () {
@@ -50,7 +62,7 @@ public class PlayerController : MonoBehaviour {
 			UpdateMovementControls();
 			
 			if(isAffectedByGravity){
-			ApplyGravity();
+				ApplyGravity();
 			}
 			
 		}
@@ -73,24 +85,26 @@ public class PlayerController : MonoBehaviour {
 		
 	}
 	
-	void OnTriggerEnter(Collider trigger){
-		if(IsClimbable(trigger)){
-			isAffectedByGravity = false;
-			youngBoneAnimation.animation.Play("Climb");
-		}
-		else if(trigger.tag == Strings.tag_GrowableUp){
-			isTouchingGrowableUp = true;	
-		}
+	void OnTriggerEnter(Collider trigger){		
+		isTouchingTrigger = CheckTriggers(trigger);
 	}
 	
 	void OnTriggerStay(Collider trigger){
+		isTouchingTrigger = CheckTriggers(trigger);
+	}
+	
+	bool CheckTriggers(Collider trigger){
 		if(IsClimbable(trigger)){
 			isAffectedByGravity = false;
 			youngBoneAnimation.animation.Play("Climb");
+			return true;
 		}
 		else if(trigger.tag == Strings.tag_GrowableUp){
-			isTouchingGrowableUp = true;	
+			Debug.Log("TOUCHING A BRANCH YO");
+			SetTouchingGrowableUp(true, trigger.gameObject);	
+			return true;
 		}
+		return false;
 	}
 	
 	void OnTriggerExit(Collider trigger){
@@ -159,6 +173,11 @@ public class PlayerController : MonoBehaviour {
 		oldBoneAnimation.gameObject.SetActiveRecursively(false);
 	}
 	
+	void SetTouchingGrowableUp(bool flag, GameObject growableUpTransform){
+		isTouchingGrowableUp = flag;
+		currentTouchedGrowableUp = growableUpTransform;
+	}
+	
 	public void SetAge(CharacterAgeState age, Vector3 frameOriginPos){
 		currentCharacterAge = age;
 		currentFrameOriginPos = frameOriginPos;
@@ -221,4 +240,10 @@ public class PlayerController : MonoBehaviour {
 		pickedUpObject.SetActiveRecursively(false);
 		pickedUpObject = null;	
 	}
+	
+	public void TeleportCharacterAbove(GameObject toTeleportAbove){
+		transform.position = toTeleportAbove.transform.position + new Vector3(0,TELEPORT_ABOVE_GROWABLE_DISTANCE,0);
+	}
+	
+	
 }
