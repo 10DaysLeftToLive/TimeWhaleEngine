@@ -24,4 +24,7 @@ public static class Strings{
 	public static string item_treeSeed = "TreeSeed";
 	
 	public static string Player = "PlayerCharacter";
+	
+	public static string animation_walk = "Walk";
+	public static string animation_climb = "Climb";
 }

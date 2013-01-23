@@ -9,7 +9,7 @@ public class LevelManager : MonoBehaviour {
 	public TimeSwitchObject[] timeSwitchObjects;
 	
 	public PlayerController.CharacterAgeState CurrentTimePlaying{
-		get{return playerCharacter.currentCharacterAge;}
+		get{return playerCharacter.CurrentCharacterAge;}
 	}
 	
 	//Make these private later: Also assign these targets based off prior choices / dispositions
@@ -89,7 +89,7 @@ public class LevelManager : MonoBehaviour {
 			growableUpTSO = FindGrowableUp(playerCharacter.CurrentTouchedGrowableUp);
 		}
 		
-		switch(playerCharacter.currentCharacterAge){
+		switch(playerCharacter.CurrentCharacterAge){
 			case PlayerController.CharacterAgeState.YOUNG:
 				//Switch to middle
 				ShiftToAge(PlayerController.CharacterAgeState.MIDDLE, middleSectionTarget.position);
@@ -134,7 +134,7 @@ public class LevelManager : MonoBehaviour {
 			growableUpTSO = FindGrowableUp(playerCharacter.CurrentTouchedGrowableUp);
 		}
 		
-		switch(playerCharacter.currentCharacterAge){
+		switch(playerCharacter.CurrentCharacterAge){
 			case PlayerController.CharacterAgeState.YOUNG:
 				//Switch to Old
 				ShiftToAge(PlayerController.CharacterAgeState.OLD, oldSectionTarget.position);
@@ -181,7 +181,7 @@ public class LevelManager : MonoBehaviour {
 	
 	void SwitchPlayerAge(Vector3 sectionPosRelativeToWorld){
 		
-		Vector3 deltaPlayerToCurrentFrame = playerCharacter.transform.position - playerCharacter.currentFrameOriginPos;
+		Vector3 deltaPlayerToCurrentFrame = playerCharacter.transform.position - playerCharacter.CurrentFrameOriginPos;
 		
 		playerCharacter.transform.position = new Vector3(sectionPosRelativeToWorld.x + deltaPlayerToCurrentFrame.x,
 											sectionPosRelativeToWorld.y + deltaPlayerToCurrentFrame.y,

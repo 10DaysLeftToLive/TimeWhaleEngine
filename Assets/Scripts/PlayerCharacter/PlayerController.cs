@@ -19,15 +19,31 @@ public class PlayerController : MonoBehaviour {
 		MIDDLE,
 		OLD,
 	}
+	
 	public CharacterAgeState CurrentCharacterAge{
 		get {return currentCharacterAge;}
 	}
-	public CharacterAgeState currentCharacterAge;
+	private CharacterAgeState currentCharacterAge;
+	
+	
+	public enum CharacterGender{
+		MALE = 0,
+		FEMALE = 1,
+	}
+	
+	public CharacterGender PlayerGender{
+		get{return playerGender;}
+	}
+	public CharacterGender playerGender = CharacterGender.MALE;
+	
+	private PlayerAnimationContainer genderAnimationInUse;
+	
+	public PlayerAnimationContainer[] genderAnimations;
 	
 	public Vector3 CurrentFrameOriginPos{
 		get {return currentFrameOriginPos;}
 	}
-	public Vector3 currentFrameOriginPos; 
+	private Vector3 currentFrameOriginPos; 
 	
 	public bool isControllable = true;
 	public bool isAffectedByGravity = true;
@@ -45,11 +61,18 @@ public class PlayerController : MonoBehaviour {
 	public bool isTouchingTrigger = false;
 	
 	
-	public BoneAnimation youngBoneAnimation;
-	public BoneAnimation middleBoneAnimation;
-	public BoneAnimation oldBoneAnimation;
-	
 	private static readonly float TELEPORT_ABOVE_GROWABLE_DISTANCE = .750f;
+	
+	void Awake(){
+		switch(playerGender){
+		case CharacterGender.MALE:
+			SetGender(CharacterGender.MALE);
+			break;
+		case CharacterGender.FEMALE:
+			SetGender(CharacterGender.FEMALE);
+			break;
+		}
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -96,11 +119,10 @@ public class PlayerController : MonoBehaviour {
 	bool CheckTriggers(Collider trigger){
 		if(IsClimbable(trigger)){
 			isAffectedByGravity = false;
-			youngBoneAnimation.animation.Play("Climb");
+			genderAnimationInUse.PlayAnimation(Strings.animation_climb);
 			return true;
 		}
 		else if(trigger.tag == Strings.tag_GrowableUp){
-			Debug.Log("TOUCHING A BRANCH YO");
 			SetTouchingGrowableUp(true, trigger.gameObject);	
 			return true;
 		}
@@ -110,7 +132,7 @@ public class PlayerController : MonoBehaviour {
 	void OnTriggerExit(Collider trigger){
 		if(IsClimbable(trigger)){
 			isAffectedByGravity = true;
-			youngBoneAnimation.animation.Play("Walk");
+			genderAnimationInUse.PlayAnimation(Strings.animation_walk);
 		}
 		else if(trigger.tag == Strings.tag_GrowableUp){
 			isTouchingGrowableUp = false;	
@@ -168,9 +190,9 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	void DisableAllBoneAnimations(){
-		youngBoneAnimation.gameObject.SetActiveRecursively(false);
-		middleBoneAnimation.gameObject.SetActiveRecursively(false);
-		oldBoneAnimation.gameObject.SetActiveRecursively(false);
+		genderAnimationInUse.youngBoneAnimation.gameObject.SetActiveRecursively(false);
+		genderAnimationInUse.middleBoneAnimation.gameObject.SetActiveRecursively(false);
+		genderAnimationInUse.oldBoneAnimation.gameObject.SetActiveRecursively(false);
 	}
 	
 	void SetTouchingGrowableUp(bool flag, GameObject growableUpTransform){
@@ -186,13 +208,13 @@ public class PlayerController : MonoBehaviour {
 		
 		switch(age){
 			case CharacterAgeState.YOUNG:
-				youngBoneAnimation.gameObject.SetActiveRecursively(true);
+				genderAnimationInUse.youngBoneAnimation.gameObject.SetActiveRecursively(true);
 				break;
 			case CharacterAgeState.MIDDLE:
-				middleBoneAnimation.gameObject.SetActiveRecursively(true);
+				genderAnimationInUse.middleBoneAnimation.gameObject.SetActiveRecursively(true);
 				break;
 			case CharacterAgeState.OLD:
-				oldBoneAnimation.gameObject.SetActiveRecursively(true);
+				genderAnimationInUse.oldBoneAnimation.gameObject.SetActiveRecursively(true);
 				break;
 		}
 	}
@@ -245,5 +267,17 @@ public class PlayerController : MonoBehaviour {
 		transform.position = toTeleportAbove.transform.position + new Vector3(0,TELEPORT_ABOVE_GROWABLE_DISTANCE,0);
 	}
 	
+	public void SetGender(CharacterGender gender){
+		playerGender = gender;
+		switch(gender){
+		case CharacterGender.MALE:
+			genderAnimationInUse = genderAnimations[(int)CharacterGender.MALE];
+			break;
+		case CharacterGender.FEMALE:
+			genderAnimationInUse = genderAnimations[(int)CharacterGender.FEMALE];
+			break;		
+		}
+			
+	}
 	
 }
