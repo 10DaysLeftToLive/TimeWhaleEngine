@@ -221,8 +221,7 @@ public class PlayerController : MonoBehaviour {
 	
 	public void PickUpObject(GameObject toPickUp){
 		if (HasItem()){
-			Debug.Log("Already Have an item");
-			// Play can't do that animation
+			SwapItems(toPickUp);
 		} else {
 			pickedUpObject = toPickUp;
 			
@@ -231,7 +230,15 @@ public class PlayerController : MonoBehaviour {
 			toPickUp.transform.position = new Vector3(playerPos.x, playerPos.y+.5f, playerPos.z);
 			
 			toPickUp.transform.parent = transform;
+			pickedUpObject.GetComponent<InteractableOnClick>().Disable();
 		}
+	}
+	
+	private void SwapItems(GameObject toSwapIn){
+		Vector3 positionToPlace = toSwapIn.transform.position;
+		
+		DropItem(positionToPlace);
+		PickUpObject(toSwapIn);
 	}
 	
 	public void InteractWithObject(GameObject toInteractWith){
@@ -253,7 +260,9 @@ public class PlayerController : MonoBehaviour {
 		return (pickedUpObject);
 	}
 	
-	public void DropItem(){
+	public void DropItem(Vector3 toPlace){
+		pickedUpObject.GetComponent<InteractableOnClick>().Enable();
+		pickedUpObject.transform.position = toPlace;
 		pickedUpObject.transform.parent = null;
 		pickedUpObject = null;	
 	}

@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 
 public class OnClick : MonoBehaviour {	
-	EventManager.mOnClickDelegate delagate;
+	protected EventManager.mOnClickDelegate delagate;
 	
 	void Start () {
 		InitEvent();
