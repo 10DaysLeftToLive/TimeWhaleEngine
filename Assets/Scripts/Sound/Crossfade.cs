@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using System.Collections;
 
@@ -34,6 +35,9 @@ public class Crossfade: MonoBehaviour {
 	void Awake()
 	{
 		Crossfade.CrossfadeInstance = this;
+		/*youngBGM.velocityUpdateMode = AudioVelocityUpdateMode.Fixed;
+		middleBGM.velocityUpdateMode = AudioVelocityUpdateMode.Fixed;
+		oldBGM.velocityUpdateMode = AudioVelocityUpdateMode.Fixed;*/
 	}
 	
 	public static void YoungToMiddle()
@@ -123,7 +127,7 @@ public class Crossfade: MonoBehaviour {
 		
 		oldBGM.Stop();
 		
-    	StopCoroutine("CoroutineOldToMiddle");
+    	StopCoroutine("CoroutineOldToYoung");
 	}
 	
 	public IEnumerator CoroutineOldToMiddle()
@@ -183,6 +187,6 @@ public class Crossfade: MonoBehaviour {
 		
 		youngBGM.Stop();
 		
-    	StopCoroutine("CoroutineYoungToMiddle");
+    	StopCoroutine("CoroutineYoungToOld");
 	}
 }

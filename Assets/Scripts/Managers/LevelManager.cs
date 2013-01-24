@@ -119,7 +119,7 @@ public class LevelManager : MonoBehaviour {
 					playerCharacter.TeleportCharacterAbove(growableUpTSO.oldTimeObject);
 				}
 				
-				//Crossfade.MiddleToOld();
+				Crossfade.MiddleToOld();
 			
 				break;
 			case PlayerController.CharacterAgeState.OLD:
@@ -130,7 +130,7 @@ public class LevelManager : MonoBehaviour {
 					playerCharacter.TeleportCharacterAbove(growableUpTSO.youngTimeObject);
 				}
 				
-				//Crossfade.OldToYoung();
+				Crossfade.OldToYoung();
 			
 				break;
 		}
@@ -157,7 +157,7 @@ public class LevelManager : MonoBehaviour {
 					playerCharacter.TeleportCharacterAbove(growableUpTSO.oldTimeObject);
 				}
 			
-				//Crossfade.YoungToOld();
+				Crossfade.YoungToOld();
 			
 				break;
 			case PlayerController.CharacterAgeState.MIDDLE:
@@ -180,7 +180,7 @@ public class LevelManager : MonoBehaviour {
 					playerCharacter.TeleportCharacterAbove(growableUpTSO.middleTimeObject);
 				}
 			
-				//Crossfade.OldToMiddle();
+				Crossfade.OldToMiddle();
 			
 				break;
 		}
