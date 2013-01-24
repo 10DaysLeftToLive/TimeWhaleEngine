@@ -102,6 +102,9 @@ public class LevelManager : MonoBehaviour {
 				if(isTouchingGrowableUp){
 					playerCharacter.TeleportCharacterAbove(growableUpTSO.middleTimeObject);
 				}
+			
+				Crossfade.YoungToMiddle();
+			
 				break;
 			case PlayerController.CharacterAgeState.MIDDLE:
 				//Switch to Old
@@ -115,6 +118,9 @@ public class LevelManager : MonoBehaviour {
 				if(isTouchingGrowableUp){
 					playerCharacter.TeleportCharacterAbove(growableUpTSO.oldTimeObject);
 				}
+				
+				//Crossfade.MiddleToOld();
+			
 				break;
 			case PlayerController.CharacterAgeState.OLD:
 				//Switch to Young
@@ -123,6 +129,9 @@ public class LevelManager : MonoBehaviour {
 				if(isTouchingGrowableUp){
 					playerCharacter.TeleportCharacterAbove(growableUpTSO.youngTimeObject);
 				}
+				
+				//Crossfade.OldToYoung();
+			
 				break;
 		}
 	}
@@ -148,6 +157,8 @@ public class LevelManager : MonoBehaviour {
 					playerCharacter.TeleportCharacterAbove(growableUpTSO.oldTimeObject);
 				}
 			
+				//Crossfade.YoungToOld();
+			
 				break;
 			case PlayerController.CharacterAgeState.MIDDLE:
 				//Switch to Young
@@ -156,6 +167,8 @@ public class LevelManager : MonoBehaviour {
 				if(isTouchingGrowableUp){
 					playerCharacter.TeleportCharacterAbove(growableUpTSO.youngTimeObject);
 				}
+			
+				Crossfade.MiddleToYoung();
 				
 				break;
 			case PlayerController.CharacterAgeState.OLD:
@@ -166,6 +179,9 @@ public class LevelManager : MonoBehaviour {
 				if(isTouchingGrowableUp){
 					playerCharacter.TeleportCharacterAbove(growableUpTSO.middleTimeObject);
 				}
+			
+				//Crossfade.OldToMiddle();
+			
 				break;
 		}
 	}
