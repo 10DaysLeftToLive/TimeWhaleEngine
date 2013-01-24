@@ -1,14 +1,4 @@
-<?xml version="1.0" encoding="shift_jis"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <NPCCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Npcs>
-    <Npcs name="Mom">
-      <disposition>-7</disposition>
-    </Npcs>
-    <Npcs name="ShopKeeper">
-      <disposition>198</disposition>
-    </Npcs>
-    <Npcs name="Sister">
-      <disposition>-3</disposition>
-    </Npcs>
-  </Npcs>
+  <Npcs />
 </NPCCollection>
