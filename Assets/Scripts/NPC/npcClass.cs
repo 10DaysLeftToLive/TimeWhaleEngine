@@ -11,7 +11,7 @@ public class npcClass : MonoBehaviour {
 	
 	private List<Item> itemReactions;
 	private int randomVariable;
-	private float speed = .01f;
+	private float speed = 5f;
 	private float symbolDuration = 3;
 	private float timer = 6;
 	private float actionTimer;
@@ -19,14 +19,17 @@ public class npcClass : MonoBehaviour {
 	private string message;
 	private string outOfRangeMessage = "!";
 	private Vector3 playerPos;
-	private Vector3 npcPos, startPos;
+	private Vector3 npcPos;
 	private GameObject newImg;
 	private enum State {Idle, Patrol, Moving};
 	private GameObject player;
 	private State npcState, previousState;
+	private Vector3[] path;
+	private int pathIndex;
 	
 	// Use this for initialization
 	void Start () {
+		speed *= Time.deltaTime;
 		npcState = State.Idle;
 		actionTimer = timer;
 		player = GameObject.Find(Strings.Player);	
@@ -36,7 +39,7 @@ public class npcClass : MonoBehaviour {
 	void Update () {
 		actionTimer -= Time.deltaTime;
 		playerPos = player.transform.position;
-		npcPos = this.transform.position;/*
+		npcPos = this.transform.position;
 		distanceFromPlayer = Mathf.Abs(playerPos.x - npcPos.x);
 		if (distanceFromPlayer < 5){
 			chat.text = message;
@@ -47,12 +50,14 @@ public class npcClass : MonoBehaviour {
 		if(Input.GetKeyDown("c") && distanceFromPlayer < 2){
 			DisplayImage();
 		}
+		if ( npcState == State.Moving && pathIndex >= path.Length)
+			npcState = State.Idle;
 		
 		switch(npcState){
 			case State.Idle: NpcIdle(); break;
-			case State.Patrol: NpcPatrol(4); break;
-			case State.Moving: NpcMove(); break;
-		}*/
+			//case State.Patrol: NpcPatrol(4); break;
+			case State.Moving: Move(path[pathIndex]); break;
+		}
 	}
 	
 	public void UpdateText(string message){
@@ -74,8 +79,6 @@ public class npcClass : MonoBehaviour {
 			}else if (npcName == "Susan"){
 				newImg.renderer.material.mainTextureOffset =  new Vector2(.5f,.5f);	//sad
 			}
-			
-			newImg.transform.Rotate(new Vector3(0,0,180));
 			StartCoroutine(Delay());
 			
 		}
@@ -85,17 +88,6 @@ public class npcClass : MonoBehaviour {
 		yield return new WaitForSeconds(symbolDuration);
 		DestroyObject(newImg);
 		npcState = previousState;
-	}
-	
-	IEnumerator Actions(){
-		yield return new WaitForSeconds(2);
-		int ran = Random.Range(1,4);
-		print (ran);
-		switch (ran){
-		case 1: Move(0); break;
-		case 2: Move(1); break;
-		case 3: Move(-1); break;
-		}
 	}
 	
 	#region disposition
@@ -138,7 +130,7 @@ public class npcClass : MonoBehaviour {
 	public void ChangeState(int num){
 		switch(num){
 		case 0: npcState = State.Idle; break;
-		case 1: npcState = State.Patrol; startPos = this.transform.position; break;
+		case 1: npcState = State.Patrol; break;
 		case 2: npcState = State.Moving; break;
 		}
 	}
@@ -151,37 +143,48 @@ public class npcClass : MonoBehaviour {
 		//do some idle animation	
 	}
 	
-	private void NpcPatrol(int distance){
-		if (actionTimer <= 0){
-			randomVariable = Random.Range(1,4);
-			actionTimer  = timer;
-			print(randomVariable);
-		}else if (actionTimer <= timer/2 && randomVariable > 1){
-			randomVariable = 1;
+	
+	public void NpcMove(Vector3[] dest){
+		npcState = State.Moving;
+		path = dest;
+		pathIndex = 1;
+	}
+	
+	private void Move(Vector3 dest){
+		if (npcPos.x < dest.x){
+			npcPos.x += speed;
+		}else if (npcPos.x > dest.x){
+			npcPos.x -= speed;	
 		}
-			switch (randomVariable){
-				case 1: 
-				Move(0);
-				break;
-				case 2:
-				if (Mathf.Abs(startPos.x - npcPos.x) < distance || npcPos.x < startPos.x){
-					Move(1);
-				}
-				break;
-				case 3:
-				if (Mathf.Abs(startPos.x - npcPos.x) < distance || npcPos.x > startPos.x){
-					Move(-1);
-				}
-				break;
-			}
-	}
-	
-	private void NpcMove(){
-		//move to some position	
-	}
-	
-	private void Move(int direction){
-		npcPos.x += speed*direction;
+		if (npcPos.y < dest.y){
+			npcPos.y += speed;
+		}else if (npcPos.y > dest.y){
+			npcPos.y -= speed;	
+		}
+		
+		if (npcPos.x < dest.x && npcPos.x + speed*1.5 > dest.x)
+			npcPos.x = dest.x;
+		if (npcPos.y < dest.y && npcPos.y + speed*1.5 > dest.y)
+			npcPos.y = dest.y;
 		transform.position = npcPos;
+		
+		if (NearPoint(dest)){
+			pathIndex++;
+			if (pathIndex >= path.Length)
+				return;
+		}
+	}
+	
+	private bool NearPoint(Vector3 point){
+		float difference = .1f;
+		if (npcPos.x  < point.x + difference && npcPos.x > point.x - difference){
+			if (npcPos.y  < point.y + difference && npcPos.y > point.y - difference)
+				return true;
+		}
+	return false;
+	}
+	
+	public Vector3 GetPos(){
+		return npcPos;	
 	}
 }

@@ -3,7 +3,13 @@ using System.Collections;
 
 public class npcManager : MonoBehaviour {
 	
-	public Component[] npcs;
+	public GameObject destination;
+	public Camera camera;
+	public PathFinding pathFinding;
+	
+	private Component[] npcs;
+	private GameObject finish;
+	private bool findingPath = false;
 	
 	// Use this for initialization
 	void Start () {
@@ -19,6 +25,24 @@ public class npcManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (pathFinding != null && findingPath){
+			pathFinding.Update();
+			
+			if (pathFinding.foundPath == 2){
+				foreach(npcClass npc in npcs){
+					Debug.Log("Manager recieved path");
+					npc.NpcMove(pathFinding.FoundPath());
+				}
+				Destroy(finish);
+				pathFinding = null;
+				findingPath = false;
+			}else if (pathFinding.foundPath == 1){
+				Debug.Log("no path found");
+				Destroy(finish);
+				pathFinding = null;
+				findingPath = false;
+			}
+		}
 		foreach(npcClass npc in npcs){
 			if(Input.GetKey("b")){
 				npc.UpdateText("" + npc.GetDisposition());
@@ -26,11 +50,18 @@ public class npcManager : MonoBehaviour {
 				npc.UpdateText(npc.npcName);
 			}
 			
-			if (npc.npcName == "Charlie" && npc.GetState() != 1  && Input.GetKeyDown("v")){
-				npc.ChangeState(1);	
-				print("here");
+			if (Input.GetKeyDown("m")){
+				Vector3 pos = camera.ScreenToWorldPoint(Input.mousePosition);
+				int mask = (1 << 9);
+				RaycastHit hit;
+				if (Physics.Raycast(new Vector3(pos.x, pos.y, camera.transform.position.z+10.5f), Vector3.down, out hit,mask)) {
+					Vector3 hitPos = hit.transform.position;
+					finish = (GameObject)Instantiate(destination,new Vector3(pos.x, hitPos.y +1.5f, camera.transform.position.z+10f),this.transform.rotation);
+					pathFinding = new PathFinding();
+					pathFinding.StartPath(npc.GetPos() ,new Vector3(pos.x, hitPos.y -.5f, .5f));
+					findingPath = true;
+				}
 			}
-				
 		}	
 	}
 }

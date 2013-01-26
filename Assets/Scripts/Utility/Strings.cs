@@ -17,6 +17,10 @@ public static class Strings{
 	public static string tag_CarriableItem = "CarriableItem";
 	public static string tag_Interactable = "Interactable";
 	public static string tag_GrowableUp = "GrowableUp";
+	public static string tag_Ground = "Ground";
+	public static string tag_Block = "Block";
+	public static string tag_Destination = "Destination";
+	public static string tag_Player = "Player";
 	
 	public static string DispositionFile = "DispositionData";
 	
