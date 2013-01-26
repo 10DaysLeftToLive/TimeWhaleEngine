@@ -1,0 +1,35 @@
+For this particular sprite, the order in which she is assembled is a bit different.
+
+She lacks a neck so some of the layering is a bit scrambled. It should be:
+
+1. Head
+
+2. barmR
+
+3. tarmR
+
+4. handR
+
+5. torso
+
+6. barmL
+
+7. tarmL
+
+8. handL
+
+9. neck (this is so the neck won't overlap with the shirt)
+
+10. speedo
+
+11. shoeR (this is to make up for the fact that her ankle is not visible, so the shoe must cover it)
+
+12. blegR
+
+13. tlegR
+
+14. shoeL
+
+15. blegL
+
+16. tlegL
