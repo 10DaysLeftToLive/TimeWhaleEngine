@@ -13,7 +13,16 @@ public class PlayerController : MonoBehaviour {
 	
 	private CollisionFlags lastReturnedCollisionFlags;
 	private GameObject pickedUpObject = null;
-
+	
+	public Camera camera;
+	public GameObject destination;
+	
+	private GameObject finish;
+	private PathFinding pathFinding;
+	private Vector3[] path;
+	private int pathIndex;
+	private float speed = 5f;
+	
 	public bool isControllable = true;
 	public bool isAffectedByGravity = true;
 	
@@ -42,7 +51,19 @@ public class PlayerController : MonoBehaviour {
 	private void OnClickToMove (EventManager EM, ClickPositionArgs e){	
 		// you now have the position of a click that is either on an object and too far from the player
 		// or on no object
-		Debug.Log("Got an on click to move at " + e.position);
+		Vector3 pos = camera.ScreenToWorldPoint(e.position);
+		Debug.Log("Clicked to Move to " + pos);
+		pathFinding = null;
+		if (finish != null) Destroy(finish);
+		int mask = (1 << 9);
+		RaycastHit hit;
+		if (Physics.Raycast(new Vector3(pos.x, pos.y, e.position.z), Vector3.down , out hit, Mathf.Infinity, mask)) {
+			Debug.Log("hit " + hit.transform.tag);
+			Vector3 hitPos = hit.transform.position;
+			finish = (GameObject)Instantiate(destination,new Vector3(pos.x, hitPos.y +1.5f, e.position.z),this.transform.rotation);
+			pathFinding = new PathFinding();
+			pathFinding.StartPath(this.transform.position ,new Vector3(pos.x, hitPos.y -.5f, .5f));
+		}
     }
 	
 	// Update is called once per frame
@@ -54,7 +75,22 @@ public class PlayerController : MonoBehaviour {
 			}	
 		}
 		
-		MoveCharacter();
+		if (pathFinding != null){
+			pathFinding.Update();
+			if (pathFinding.foundPath == 2){
+				path = pathFinding.FoundPath();
+				pathIndex = 1;
+				Destroy(finish);
+				pathFinding = null;
+			}else if (pathFinding.foundPath == 1){
+				Debug.Log("no path found");
+				Destroy(finish);
+				pathFinding = null;
+			}
+		}
+		
+		if (path != null)
+			MoveCharacter(path[pathIndex]);
 	}
 	
 	void UpdateMovementControls(){
@@ -126,12 +162,43 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 	
-	void MoveCharacter(){
+	void MoveCharacter(Vector3 dest){
 		// Calculate actual motion
-		Vector3 movement = new Vector3(currentHorizontalSpeed, currentVerticalSpeed, 0 );
+		//Vector3 movement = new Vector3(currentHorizontalSpeed, currentVerticalSpeed, 0 );
+		//movement *= Time.deltaTime;
+		
+		Vector3 pos = this.transform.position;
+		Vector3 movement = new Vector3(0,0,0);
+		
+		if (pos.x < dest.x){
+			movement.x += speed;
+		}else if (pos.x > dest.x){
+			movement.x -= speed;	
+		}
+		if (pos.y < dest.y){
+			movement.y += speed;
+		}else if (pos.y > dest.y){
+			movement.y -= speed;	
+		}
 		movement *= Time.deltaTime;
+
+		if (NearPoint(dest)){
+			pathIndex++;
+			if (pathIndex >= path.Length)
+				path = null;
+		}
 		
 		Move(movement);
+	}
+	
+	bool NearPoint(Vector3 point){
+		Vector3 pos = this.transform.position;
+		float difference = .1f;
+		if (pos.x  < point.x + difference && pos.x > point.x - difference){
+			if (pos.y  < point.y + difference && pos.y > point.y - difference)
+				return true;
+		}
+	return false;
 	}
 	
 	void ApplyGravity(){

@@ -127,24 +127,23 @@ public class PathFinding{
 			case Direction.up: heading = Vector3.down; mask = (1 << 8) | (1 << 10); break;	
 			case Direction.down: heading = Vector3.down; mask = (1 << 9) | (1 << 10); break;	
 		}
-		
+		//mask = ~(1 << 11);
 		
 		Debug.Log ("Testing Path to " + currentDirection + " from pos " + currentPos);
 		if (currentDirection != Direction.up){ 
-			if (Physics.Raycast(new Vector3(x,y,z), heading, out hit1,mask)) {
-				//Debug.Log("hit1 " +  hit1.transform.tag + "   " + hit1.transform.position);
+			if (Physics.Raycast(new Vector3(x,y,z), heading, out hit1, Mathf.Infinity, mask)) {
+				Debug.Log("hit1 " +  hit1.transform.tag + "   " + hit1.transform.position);
 				hit1Test = true;
-				//Debug.Log(hit1.point);
 				if (hit1.transform.tag == Strings.tag_Player){ hit1Test = false; Debug.Log("HIT PLAYER");}
 			}
 			
-			if (Physics.Raycast(new Vector3(x,y,z+zOffset), heading, out hit2,mask)) {
-				//Debug.Log("hit2 " +  hit2.transform.tag + "  " + hit2.transform.position);
+			if (Physics.Raycast(new Vector3(x,y,z+zOffset), heading, out hit2, Mathf.Infinity, mask)) {
+				Debug.Log("hit2 " +  hit2.transform.tag + "  " + hit2.transform.position);
 				hit2Test = true;
 			}
 			
-			if (Physics.Raycast(new Vector3(x,y,z-zOffset), heading, out hit3,mask)) {
-				//Debug.Log("hit3 " +  hit3.transform.tag + "  " + hit3.transform.position);
+			if (Physics.Raycast(new Vector3(x,y,z-zOffset), heading, out hit3, Mathf.Infinity, mask)) {
+				Debug.Log("hit3 " +  hit3.transform.tag + "  " + hit3.transform.position);
 				hit3Test = true;
 			}
 				
