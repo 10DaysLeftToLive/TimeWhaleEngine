@@ -46,6 +46,10 @@ public class LevelManager : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		Init ();
+	}
+	
+	private void Init(){
 		SetGender(playerGender);
 		SetFiles();		
 		SetNPCData();
