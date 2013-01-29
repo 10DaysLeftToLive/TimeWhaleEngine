@@ -8,8 +8,8 @@ public class PauseObject : MonoBehaviour {
 		EventManager.instance.mOnPauseToggleEvent += new EventManager.mOnPauseToggleDelegate (TogglePauseEvent);
 	}
 	
-	private void TogglePauseEvent(EventManager EM, PauseStateArg e){
-		gamePaused = e.IsPaused;
+	private void TogglePauseEvent(EventManager EM, PauseStateArgs e){
+		gamePaused = e.isPaused;
 	}
 	
 	protected virtual void UpdateObject(){}

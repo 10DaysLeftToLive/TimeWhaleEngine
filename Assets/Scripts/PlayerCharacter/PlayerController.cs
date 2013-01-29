@@ -13,38 +13,7 @@ public class PlayerController : MonoBehaviour {
 	
 	private CollisionFlags lastReturnedCollisionFlags;
 	private GameObject pickedUpObject = null;
-	
-	public enum CharacterAgeState{
-		YOUNG,
-		MIDDLE,
-		OLD,
-	}
-	
-	public CharacterAgeState CurrentCharacterAge{
-		get {return currentCharacterAge;}
-	}
-	private CharacterAgeState currentCharacterAge;
-	
-	
-	public enum CharacterGender{
-		MALE = 0,
-		FEMALE = 1,
-	}
-	
-	public CharacterGender PlayerGender{
-		get{return playerGender;}
-	}
-	public CharacterGender playerGender = CharacterGender.MALE;
-	
-	private PlayerAnimationContainer genderAnimationInUse;
-	
-	public PlayerAnimationContainer[] genderAnimations;
-	
-	public Vector3 CurrentFrameOriginPos{
-		get {return currentFrameOriginPos;}
-	}
-	private Vector3 currentFrameOriginPos; 
-	
+
 	public bool isControllable = true;
 	public bool isAffectedByGravity = true;
 	
@@ -60,37 +29,22 @@ public class PlayerController : MonoBehaviour {
 	
 	public bool isTouchingTrigger = false;
 	
-	
 	private static readonly float TELEPORT_ABOVE_GROWABLE_DISTANCE = .750f;
 	
-	void Awake(){
-		switch(playerGender){
-		case CharacterGender.MALE:
-			SetGender(CharacterGender.MALE);
-			break;
-		case CharacterGender.FEMALE:
-			SetGender(CharacterGender.FEMALE);
-			break;
-		}
-	}
-
+	private BoneAnimation currentAnimation = null;
+	
 	// Use this for initialization
 	void Start () {
-		
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if(isControllable){
 			UpdateMovementControls();
-			
 			if(isAffectedByGravity){
 				ApplyGravity();
-			}
-			
+			}	
 		}
-			
-		
 		
 		MoveCharacter();
 	}
@@ -104,8 +58,6 @@ public class PlayerController : MonoBehaviour {
 		if(!isAffectedByGravity){
 			currentVerticalSpeed = walkSpeed * verticalMovement;	
 		}
-		
-		
 	}
 	
 	void OnTriggerEnter(Collider trigger){		
@@ -119,7 +71,7 @@ public class PlayerController : MonoBehaviour {
 	bool CheckTriggers(Collider trigger){
 		if(IsClimbable(trigger)){
 			isAffectedByGravity = false;
-			genderAnimationInUse.PlayAnimation(Strings.animation_climb);
+			currentAnimation.Play(Strings.animation_climb);
 			return true;
 		}
 		else if(trigger.tag == Strings.tag_GrowableUp){
@@ -132,7 +84,7 @@ public class PlayerController : MonoBehaviour {
 	void OnTriggerExit(Collider trigger){
 		if(IsClimbable(trigger)){
 			isAffectedByGravity = true;
-			genderAnimationInUse.PlayAnimation(Strings.animation_walk);
+			currentAnimation.Play(Strings.animation_walk);
 		}
 		else if(trigger.tag == Strings.tag_GrowableUp){
 			isTouchingGrowableUp = false;	
@@ -147,12 +99,11 @@ public class PlayerController : MonoBehaviour {
 		if(hit.transform.tag == Strings.tag_Pushable){
 			PushPushableObject(hit);
 		}
-	
 	}
 	
 	void PushPushableObject(ControllerColliderHit pushableObject){
 		//NOTE THIS IS POOR PUSHABLE CODE!
-		if(currentCharacterAge == CharacterAgeState.MIDDLE){
+		if(CharacterAgeManager.GetCurrentAgeState() == CharacterAgeState.MIDDLE){
 		    Rigidbody body = pushableObject.collider.attachedRigidbody;
 		
 		    // no rigidbody
@@ -172,8 +123,7 @@ public class PlayerController : MonoBehaviour {
 		Vector3 movement = new Vector3(currentHorizontalSpeed, currentVerticalSpeed, 0 );
 		movement *= Time.deltaTime;
 		
-		CharacterController controller = GetComponent<CharacterController>();
-		lastReturnedCollisionFlags = controller.Move(movement);
+		Move(movement);
 	}
 	
 	void ApplyGravity(){
@@ -189,35 +139,33 @@ public class PlayerController : MonoBehaviour {
 		return (lastReturnedCollisionFlags & CollisionFlags.CollidedBelow) != 0;
 	}
 	
-	void DisableAllBoneAnimations(){
-		genderAnimationInUse.youngBoneAnimation.gameObject.SetActiveRecursively(false);
-		genderAnimationInUse.middleBoneAnimation.gameObject.SetActiveRecursively(false);
-		genderAnimationInUse.oldBoneAnimation.gameObject.SetActiveRecursively(false);
-	}
-	
 	void SetTouchingGrowableUp(bool flag, GameObject growableUpTransform){
 		isTouchingGrowableUp = flag;
 		currentTouchedGrowableUp = growableUpTransform;
 	}
 	
-	public void SetAge(CharacterAgeState age, Vector3 frameOriginPos){
-		currentCharacterAge = age;
-		currentFrameOriginPos = frameOriginPos;
-		
-		DisableAllBoneAnimations();
-		
-		switch(age){
-			case CharacterAgeState.YOUNG:
-				genderAnimationInUse.youngBoneAnimation.gameObject.SetActiveRecursively(true);
-				break;
-			case CharacterAgeState.MIDDLE:
-				genderAnimationInUse.middleBoneAnimation.gameObject.SetActiveRecursively(true);
-				break;
-			case CharacterAgeState.OLD:
-				genderAnimationInUse.oldBoneAnimation.gameObject.SetActiveRecursively(true);
-				break;
+	public void ChangeAge(CharacterAge newAge){
+		if (isTouchingGrowableUp){
+			// Need to fill this out after working on growupable
+			//TimeSwitchObject growableUpTSO = FindGrowableUp(currentTouchedGrowableUp);
+			//TeleportCharacterAbove(growableUpTSO.GetTimeObjectAt(newAge.stateName));
+		} else {
+			ChangeAgePosition(newAge.sectionTarget);
 		}
+		
+		ChangeAnimation(newAge.boneAnimation);
 	}
+	/*
+	TimeSwitchObject FindGrowableUp(GameObject currentlyTouchingGrowableUp){
+		GameObject[] timeSwitchObjects = GameObject.FindObjectsOfType(TimeSwitchObject);
+		
+		foreach(TimeSwitchObject timeSwitchObject in timeSwitchObjects){
+			if(timeSwitchObject.objectLabel == currentlyTouchingGrowableUp.name){
+				return timeSwitchObject;
+			}
+		}
+		return null;
+	}*/
 	
 	public void PickUpObject(GameObject toPickUp){
 		if (HasItem()){
@@ -274,19 +222,28 @@ public class PlayerController : MonoBehaviour {
 	
 	public void TeleportCharacterAbove(GameObject toTeleportAbove){
 		transform.position = toTeleportAbove.transform.position + new Vector3(0,TELEPORT_ABOVE_GROWABLE_DISTANCE,0);
+	}	
+	
+	public void ChangeAgePosition(Transform newSectrionTarget){
+		Vector3 newTargetPos = newSectrionTarget.position;
+		Vector3 deltaPlayerToCurrentFrame = transform.position - newTargetPos;
+		
+		transform.position = new Vector3(newTargetPos.x + deltaPlayerToCurrentFrame.x,
+										 newTargetPos.y + deltaPlayerToCurrentFrame.y,
+										 newTargetPos.z);
 	}
 	
-	public void SetGender(CharacterGender gender){
-		playerGender = gender;
-		switch(gender){
-		case CharacterGender.MALE:
-			genderAnimationInUse = genderAnimations[(int)CharacterGender.MALE];
-			break;
-		case CharacterGender.FEMALE:
-			genderAnimationInUse = genderAnimations[(int)CharacterGender.FEMALE];
-			break;		
+	public void ChangeAnimation(BoneAnimation newAnimation){
+		if (currentAnimation != null){
+			currentAnimation.gameObject.SetActiveRecursively(false);
 		}
-			
+		
+		currentAnimation = newAnimation;
+		currentAnimation.gameObject.SetActiveRecursively(true);
 	}
 	
+	public void Move(Vector3 toMove){
+		CharacterController controller = GetComponent<CharacterController>();
+		lastReturnedCollisionFlags = controller.Move(toMove);
+	}
 }

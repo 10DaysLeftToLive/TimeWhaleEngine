@@ -4,7 +4,6 @@ using System.Collections;
 public class MouseInput : InputType {
 	private float firstClickTime;
 	private Vector3 clickPosition;
-	private int touchCount;
 	private Vector3 deltaSinceDown;
 	
 	public MouseInput() : base(){}

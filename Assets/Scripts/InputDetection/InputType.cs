@@ -23,7 +23,6 @@ public abstract class InputType  {
 	// some variables to represent zooming in/out
 	protected bool ZOOM_IN  = true;
 	protected bool ZOOM_OUT = false;
-	
 	protected ControlState state;
 	
 	public InputType(){

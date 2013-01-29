@@ -28,13 +28,7 @@ public class InteractionManager : MonoBehaviour {
 		
 		npcCollection.Save(disposiitonData);
 	}
-	
-	/// <summary>
-	/// Initilizes the NPC disposition dict. Should be called from LevelManager
-	/// </summary>
-	/// <param name='npcDispositionDict'>
-	/// Npc disposition dict. Dictionary<string NPCName, float disposition>
-	/// </param>
+
 	public void InitilizeNPCs(string dispositionData, string levelData){
 		NPCCollection npcCollection = NPCCollection.Load(dispositionData);
 		NPCToItemCollection npcToItems = NPCToItemCollection.Load(levelData);

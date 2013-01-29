@@ -23,14 +23,6 @@ public class OnClick : MonoBehaviour {
 		EventManager.instance.mOnClickEvent -= 	delagate;
 	}
 	
-	private void NotifyObjectClickedOn(){
-		EventManager.instance.RiseOnClickedObjectEvent(new ClickedObjectArgs(this.gameObject));
-	}
-	
-	private void NotifyNoObjectClickedOn(Vector3 position){
-		EventManager.instance.RiseOnClickedNoObjectEvent(new ClickPositionArgs(position));
-	}
-	
 	protected void InitEvent(){
 		delagate = new EventManager.mOnClickDelegate (OnClickEvent);
 		EventManager.instance.mOnClickEvent += delagate;
