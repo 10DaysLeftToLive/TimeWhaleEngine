@@ -91,7 +91,7 @@ public class LevelManager : MonoBehaviour {
 		}
 		else if(Input.GetButtonDown(Strings.ButtonAgeShiftUp)){
 			ShiftUpAge();
-		}
+		} 
 	}
 	
 	private void ShiftUpAge(){		
