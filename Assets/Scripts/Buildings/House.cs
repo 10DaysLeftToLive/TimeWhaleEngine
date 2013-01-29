@@ -37,6 +37,9 @@ public class House : MonoBehaviour {
 			transform.renderer.enabled = false;
 			if (transform.CompareTag("Untagged") && transform.collider != null) {
 				transform.collider.isTrigger = true;
+			} else if (transform.CompareTag("Pushable")){
+				transform.rigidbody.useGravity = false;
+				transform.collider.isTrigger = true;
 			}
 		}
 	}
@@ -45,6 +48,9 @@ public class House : MonoBehaviour {
 		foreach (Transform transform in objects){
 			transform.renderer.enabled = true;
 			if (transform.CompareTag("Untagged") && transform.collider != null) {
+				transform.collider.isTrigger = false;
+			} else if (transform.CompareTag("Pushable")){
+				transform.rigidbody.useGravity = true;
 				transform.collider.isTrigger = false;
 			}
 		}

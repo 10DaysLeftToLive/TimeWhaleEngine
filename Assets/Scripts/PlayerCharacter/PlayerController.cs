@@ -104,7 +104,7 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	void OnControllerColliderHit(ControllerColliderHit hit){
-		if(hit.transform.tag == Strings.tag_Pushable){
+		if(hit.transform.tag == Strings.tag_Pushable && hit.transform.renderer.enabled == true){
 			PushPushableObject(hit);
 		}
 	}
