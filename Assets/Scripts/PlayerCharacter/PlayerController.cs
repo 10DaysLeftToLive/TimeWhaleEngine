@@ -35,7 +35,15 @@ public class PlayerController : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		EventManager.instance.mOnClickOnObjectAwayFromPlayerEvent += new EventManager.mOnClickOnObjectAwayFromPlayerDelegate (OnClickToMove);
+		EventManager.instance.mOnClickNoObjectEvent += new EventManager.mOnClickedNoObjectDelegate (OnClickToMove);
 	}
+	
+	private void OnClickToMove (EventManager EM, ClickPositionArgs e){	
+		// you now have the position of a click that is either on an object and too far from the player
+		// or on no object
+		Debug.Log("Got an on click to move at " + e.position);
+    }
 	
 	// Update is called once per frame
 	void Update () {

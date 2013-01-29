@@ -24,6 +24,8 @@ public class OnClickNextToPlayer : OnClick {
 		
 		if (Vector2.Distance(flatPlayerPos, flatPos) < minimumDistance){
 			DoClickNextToPlayer();
+		} else {
+			EventManager.instance.RiseOnClickOnObjectAwayFromPlayerEvent(new ClickPositionArgs(position));
 		}
 	}
 }

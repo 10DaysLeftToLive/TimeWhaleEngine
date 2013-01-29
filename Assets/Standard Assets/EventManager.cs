@@ -39,6 +39,15 @@ public class EventManager : MonoBehaviour {
         if(mOnPauseToggleEvent != null)  mOnPauseToggleEvent(this,pauseState);
     }
 	
+	//EVENT: OnPauseToggle
+    public delegate void mOnClickOnObjectAwayFromPlayerDelegate(EventManager EM, ClickPositionArgs e);
+    //Event
+    public event mOnClickOnObjectAwayFromPlayerDelegate mOnClickOnObjectAwayFromPlayerEvent;
+    //Riser
+    public void RiseOnClickOnObjectAwayFromPlayerEvent(ClickPositionArgs e){
+        if(mOnClickOnObjectAwayFromPlayerEvent != null)  mOnClickOnObjectAwayFromPlayerEvent(this,e);
+    }
+	
 	private static EventManager em_instance = null;
 	
 	public static EventManager instance{
