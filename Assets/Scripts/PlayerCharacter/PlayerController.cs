@@ -154,26 +154,25 @@ public class PlayerController : MonoBehaviour {
 	
 	public void ChangeAge(CharacterAge newAge){
 		if (isTouchingGrowableUp){
-			// Need to fill this out after working on growupable
-			//TimeSwitchObject growableUpTSO = FindGrowableUp(currentTouchedGrowableUp);
-			//TeleportCharacterAbove(growableUpTSO.GetTimeObjectAt(newAge.stateName));
+			Transform growableUpTSO = FindGrowableUp(currentTouchedGrowableUp);
+			TeleportCharacterAbove(growableUpTSO);
 		} else {
 			ChangeAgePosition(newAge.sectionTarget);
 		}
 		
 		ChangeAnimation(newAge.boneAnimation);
 	}
-	/*
-	TimeSwitchObject FindGrowableUp(GameObject currentlyTouchingGrowableUp){
-		GameObject[] timeSwitchObjects = GameObject.FindObjectsOfType(TimeSwitchObject);
+	
+	Transform FindGrowableUp(GameObject currentlyTouchingGrowableUp){
+		GrowableTree[] treeBaseObjects = (GrowableTree[]) GameObject.FindObjectsOfType(typeof(GrowableTree));
 		
-		foreach(TimeSwitchObject timeSwitchObject in timeSwitchObjects){
-			if(timeSwitchObject.objectLabel == currentlyTouchingGrowableUp.name){
-				return timeSwitchObject;
+		foreach(GrowableTree treeBase in treeBaseObjects){
+			if(treeBase.tree.objectLabel == currentlyTouchingGrowableUp.name){
+				return treeBase.tree.GetTimeObjectAt(CharacterAgeManager.GetCurrentAgeState()).transform.GetChild(0);
 			}
 		}
 		return null;
-	}*/
+	}
 	
 	public void PickUpObject(GameObject toPickUp){
 		if (HasItem()){
@@ -228,8 +227,8 @@ public class PlayerController : MonoBehaviour {
 		pickedUpObject = null;	
 	}
 	
-	public void TeleportCharacterAbove(GameObject toTeleportAbove){
-		transform.position = toTeleportAbove.transform.position + new Vector3(0,TELEPORT_ABOVE_GROWABLE_DISTANCE,0);
+	public void TeleportCharacterAbove(Transform toTeleportAbove){
+		transform.position = toTeleportAbove.position + new Vector3(0,TELEPORT_ABOVE_GROWABLE_DISTANCE,0);
 	}	
 	
 	public void ChangeAgePosition(Transform newSectrionTarget){

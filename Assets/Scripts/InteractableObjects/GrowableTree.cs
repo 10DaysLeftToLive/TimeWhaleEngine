@@ -8,7 +8,6 @@ public class GrowableTree: InteractableObject {
 
 	
 	public override void Interact(GameObject toInteractWith){
-		Debug.Log("WE IN HERE " + toInteractWith.name);
 		if(toInteractWith.name.Equals(Strings.item_treeSeed)){
 			treeMound.SetActiveRecursively(false);
 			tree.youngTimeObject.SetActiveRecursively(true);
