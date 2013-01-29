@@ -4,7 +4,6 @@ using System.Collections;
 public class npcManager : MonoBehaviour {
 	
 	public GameObject destination;
-	public Camera camera;
 	public PathFinding pathFinding;
 	
 	private Component[] npcs;
@@ -52,7 +51,7 @@ public class npcManager : MonoBehaviour {
 			}
 			
 			if (Input.GetKeyDown("m")){
-				Vector3 pos = camera.ScreenToWorldPoint(Input.mousePosition);
+				Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 				pathFinding = null;
 				if (finish != null) Destroy(finish);
 				int mask = (1 << 9);

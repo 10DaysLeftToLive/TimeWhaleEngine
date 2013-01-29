@@ -14,7 +14,6 @@ public class PlayerController : MonoBehaviour {
 	private CollisionFlags lastReturnedCollisionFlags;
 	private GameObject pickedUpObject = null;
 	
-	public Camera camera;
 	public GameObject destination;
 	
 	private GameObject finish;
@@ -51,7 +50,7 @@ public class PlayerController : MonoBehaviour {
 	private void OnClickToMove (EventManager EM, ClickPositionArgs e){	
 		// you now have the position of a click that is either on an object and too far from the player
 		// or on no object
-		Vector3 pos = camera.ScreenToWorldPoint(e.position);
+		Vector3 pos = Camera.main.ScreenToWorldPoint(e.position);
 		Debug.Log("Clicked to Move to " + pos);
 		pathFinding = null;
 		if (finish != null) Destroy(finish);
