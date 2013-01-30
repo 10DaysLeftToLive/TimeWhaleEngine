@@ -5,7 +5,7 @@ public class PathFinding{
 	
 	public int foundPath = 0; // 0 - finding path, 1 - no path, 2 - path found
 	
-	private enum Direction {left, right, up, down, none}; // 0,1,2,3,4
+	private enum Direction {left, right, up, down, none, fall}; // 0,1,2,3,4
 	private Direction currentDirection;
 	private float testTimer;
 	private Vector3 currentPos, destination;
@@ -38,7 +38,14 @@ public class PathFinding{
 		this. destination = destination;
 		currentPos = startPos;
 		nodeIndex = 0;
+		int mask = (1 << 8);
 		CreateCube(startPos);
+		if (Physics.Raycast(new Vector3(startPos.x, startPos.y, startPos.z-2), Vector3.forward, out testHit, Mathf.Infinity, mask)){
+			if (testHit.transform.tag == Strings.tag_Climbable) {
+				nodeHistory[0].hitClimbable = true;
+				Debug.Log(testHit.transform.tag);
+			}
+		}
 		currentDirection = (Direction)nodeHistory[nodeIndex-1].NewDirection();
 		testTimer = 0;
 		FindAPath();
@@ -62,7 +69,6 @@ public class PathFinding{
 				}else if (testHit.transform.tag == Strings.tag_Ground){ // Ground
 					Debug.Log("hit ground  " + currentDirection + " at " + testHit.point + "  node = " + nodeIndex);
 					CreateCube(new Vector3 (currentPos.x, hitPos.y + 1f, currentPos.z));
-					//Debug.Log("pos recorded is " + testHit.point);
 					currentDirection = (Direction)nodeHistory[nodeIndex-1].NewDirection();
 				}else if (testHit.transform.tag == Strings.tag_Block){ // Block
 					Debug.Log("hit wall at " + testHit.point + "  node = " + nodeIndex);
@@ -97,7 +103,7 @@ public class PathFinding{
 		
 		if (nodeIndex > 7){
 			nodeIndex = 0;	
-			currentDirection = (Direction)nodeHistory[nodeIndex-1].NewDirection();
+			currentDirection = (Direction)nodeHistory[nodeIndex].NewDirection();
 		}
 		
 		if (nodeIndex < 0){
@@ -127,23 +133,21 @@ public class PathFinding{
 			case Direction.up: heading = Vector3.down; mask = (1 << 8) | (1 << 10); break;	
 			case Direction.down: heading = Vector3.down; mask = (1 << 9) | (1 << 10); break;	
 		}
-		//mask = ~(1 << 11);
 		
-		Debug.Log ("Testing Path to " + currentDirection + " from pos " + currentPos);
+		//Debug.Log ("Testing Path to " + currentDirection + " from pos " + currentPos);
 		if (currentDirection != Direction.up){ 
 			if (Physics.Raycast(new Vector3(x,y,z), heading, out hit1, Mathf.Infinity, mask)) {
-				Debug.Log("hit1 " +  hit1.transform.tag + "   " + hit1.transform.position);
+				//Debug.Log("hit1 " +  hit1.transform.tag + "   " + hit1.transform.position);
 				hit1Test = true;
-				if (hit1.transform.tag == Strings.tag_Player){ hit1Test = false; Debug.Log("HIT PLAYER");}
 			}
 			
 			if (Physics.Raycast(new Vector3(x,y,z+zOffset), heading, out hit2, Mathf.Infinity, mask)) {
-				Debug.Log("hit2 " +  hit2.transform.tag + "  " + hit2.transform.position);
+				//Debug.Log("hit2 " +  hit2.transform.tag + "  " + hit2.transform.position);
 				hit2Test = true;
 			}
 			
 			if (Physics.Raycast(new Vector3(x,y,z-zOffset), heading, out hit3, Mathf.Infinity, mask)) {
-				Debug.Log("hit3 " +  hit3.transform.tag + "  " + hit3.transform.position);
+				//Debug.Log("hit3 " +  hit3.transform.tag + "  " + hit3.transform.position);
 				hit3Test = true;
 			}
 				
@@ -152,13 +156,32 @@ public class PathFinding{
 				distance = hit1.distance; 
 				testHit = hit1;
 			}
-			if (hit2Test && hit2.distance < distance){
+			if (hit2Test && hit2.distance < distance || distance == 9999){
 				distance = hit2.distance;
 				testHit = hit2;
 			}
-			if (hit3Test && hit3.distance < distance){
+			if (hit3Test && hit3.distance < distance || distance == 9999){
 				distance = hit3.distance;
 				testHit = hit3;
+			}
+			
+			// check for pitfalls
+			if ((currentDirection == Direction.right || currentDirection == Direction.left) && distance != 9999){
+				mask = (1 << 9);
+				for (int i = 1; i < distance; i++){
+					if (Physics.Raycast(new Vector3(x,y,z)+heading*i, Vector3.down, out hit1, Mathf.Infinity)) {
+						//Debug.Log("hit1 " +  hit1.transform.tag + "   " + hit1.point);
+						if (hit1.distance > 1){ 
+							//Debug.Log("traveled far " + hit1.distance);
+							currentDirection = Direction.fall;
+							//Debug.Log("hit pit " + currentDirection + " at " + new Vector3 (hit1.point.x, currentPos.y, currentPos.z) + "  node = " + nodeIndex);
+							CreateCube(new Vector3 (hit1.point.x, currentPos.y, currentPos.z));
+							currentDirection = (Direction)nodeHistory[nodeIndex-1].NewDirection();
+							hit = false;
+							return;
+						}
+					}
+				}
 			}
 			if ((!hit1Test && !hit2Test && !hit3Test)){
 				Debug.Log("no hit going " + currentDirection);
@@ -169,9 +192,10 @@ public class PathFinding{
 			}
 			if (testHit.transform.tag == Strings.tag_Climbable) 
 				hitClimbable = true;
-		}else {
+		}else if (currentDirection == Direction.up){
 			y+= 7;
 			if (Physics.Raycast(new Vector3(x,y,z), heading, out testHit, mask)) {
+				Debug.Log("hit " +  testHit.transform.tag + "  " + testHit.point);
 				if (testHit.point.y > currentPos.y){
 				upTest = true;
 				hit = false;
@@ -221,7 +245,7 @@ public class PathFinding{
 		nodePoints = new Vector3[nodeIndex];
 		for (int i = 0; i < nodeIndex; i++){
 			nodePoints[i] = nodeHistory[i].curr;
-			Debug.Log("point[" + i + "] at " + nodePoints[i]);
+			//Debug.Log("point[" + i + "] at " + nodePoints[i]);
 		}
 		foundPath = 2;
 	}
@@ -247,7 +271,11 @@ public class NodeDirections{
 			case 1: goneLeft = true; break; //cur dir = right
 			case 2: goneDown = true; break; //cur dir = up
 			case 3: goneUp = true; break; //cur dir = down
-			case 4: break; 
+			case 4: break;	
+			case 5: goneRight = true;
+					goneLeft = true;
+					goneUp = true;
+					break; 
 		}
 	}
 	

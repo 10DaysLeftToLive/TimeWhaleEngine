@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour {
 		int mask = (1 << 9);
 		RaycastHit hit;
 		if (Physics.Raycast(new Vector3(pos.x, pos.y, e.position.z), Vector3.down , out hit, Mathf.Infinity, mask)) {
-			Debug.Log("hit " + hit.transform.tag);
+			//Debug.Log("hit " + hit.transform.tag);
 			Vector3 hitPos = hit.transform.position;
 			finish = (GameObject)Instantiate(destination,new Vector3(pos.x, hitPos.y +1.5f, e.position.z),this.transform.rotation);
 			pathFinding = new PathFinding();

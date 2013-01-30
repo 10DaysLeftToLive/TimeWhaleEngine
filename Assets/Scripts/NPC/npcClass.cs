@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public abstract class npcClass : MonoBehaviour {
+public class npcClass : MonoBehaviour {
 	public string npcName;
 	public TextMesh chat;
 	public GameObject symbol;

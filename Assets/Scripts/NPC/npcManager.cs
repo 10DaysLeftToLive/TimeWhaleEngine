@@ -56,9 +56,9 @@ public class npcManager : MonoBehaviour {
 				if (finish != null) Destroy(finish);
 				int mask = (1 << 9);
 				RaycastHit hit;
-				if (Physics.Raycast(new Vector3(pos.x, pos.y, camera.transform.position.z+zCameraOffset+.5f), Vector3.down, out hit,mask)) {
+				if (Physics.Raycast(new Vector3(pos.x, pos.y, Camera.main.transform.position.z+zCameraOffset+.5f), Vector3.down, out hit,mask)) {
 					Vector3 hitPos = hit.transform.position;
-					finish = (GameObject)Instantiate(destination,new Vector3(pos.x, hitPos.y +1.5f, camera.transform.position.z+zCameraOffset),this.transform.rotation);
+					finish = (GameObject)Instantiate(destination,new Vector3(pos.x, hitPos.y +1.5f, Camera.main.transform.position.z+zCameraOffset),this.transform.rotation);
 					pathFinding = new PathFinding();
 					pathFinding.StartPath(npc.GetPos() ,new Vector3(pos.x, hitPos.y -.5f, .5f));
 					findingPath = true;
