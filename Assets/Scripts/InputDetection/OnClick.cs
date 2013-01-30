@@ -9,13 +9,13 @@ public class OnClick : MonoBehaviour {
 		InitEvent();
 	}
 	
-	protected virtual void DoClick(){}
+	protected virtual void DoClick(ClickPositionArgs e){}
 	
 	private void OnClickEvent (EventManager EM, ClickPositionArgs e){	
 		Ray ray = Camera.main.ScreenPointToRay (e.position);
     	RaycastHit hit;
 		if(this.collider.Raycast(ray, out hit, 10)) {
-			DoClick();
+			DoClick(e);
 		}
     }
 	
