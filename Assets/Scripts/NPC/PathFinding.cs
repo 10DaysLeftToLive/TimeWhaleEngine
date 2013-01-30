@@ -170,9 +170,7 @@ public class PathFinding{
 				mask = (1 << 9);
 				for (int i = 1; i < distance; i++){
 					if (Physics.Raycast(new Vector3(x,y,z)+heading*i, Vector3.down, out hit1, Mathf.Infinity)) {
-						//Debug.Log("hit1 " +  hit1.transform.tag + "   " + hit1.point);
 						if (hit1.distance > 1){ 
-							//Debug.Log("traveled far " + hit1.distance);
 							currentDirection = Direction.fall;
 							//Debug.Log("hit pit " + currentDirection + " at " + new Vector3 (hit1.point.x, currentPos.y, currentPos.z) + "  node = " + nodeIndex);
 							CreateCube(new Vector3 (hit1.point.x, currentPos.y, currentPos.z));
@@ -193,14 +191,16 @@ public class PathFinding{
 			if (testHit.transform.tag == Strings.tag_Climbable) 
 				hitClimbable = true;
 		}else if (currentDirection == Direction.up){
-			y+= 7;
-			if (Physics.Raycast(new Vector3(x,y,z), heading, out testHit, mask)) {
-				Debug.Log("hit " +  testHit.transform.tag + "  " + testHit.point);
-				if (testHit.point.y > currentPos.y){
-				upTest = true;
-				hit = false;
-				distance = 5;
+			mask = (1 << 8);
+			for (int i = 0; i < 12; i++){
+				if (Physics.Raycast(new Vector3(x,y+i,z-2), Vector3.forward, out hit1, mask)) {
+					testHit = hit1;
+					Debug.Log(testHit.transform.tag + "  at pos " + hit1.point);
+					upTest = true;
+					hit = false;
+					distance = 5;
 				}
+				else break;
 			}
 		}
 		if (currentDirection == Direction.none && nodeIndex > 1){
