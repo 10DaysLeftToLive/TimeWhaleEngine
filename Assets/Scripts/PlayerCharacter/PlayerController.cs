@@ -88,6 +88,8 @@ public class PlayerController : MonoBehaviour {
 			}
 		}
 		
+		MoveCharacter();
+		
 		if (path != null)
 			MoveCharacter(path[pathIndex]);
 	}
@@ -114,7 +116,7 @@ public class PlayerController : MonoBehaviour {
 	bool CheckTriggers(Collider trigger){
 		if(IsClimbable(trigger)){
 			isAffectedByGravity = false;
-			currentAnimation.Play(Strings.animation_climb);
+			//currentAnimation.Play(Strings.animation_climb);
 			return true;
 		}
 		else if(trigger.tag == Strings.tag_GrowableUp){
@@ -160,6 +162,14 @@ public class PlayerController : MonoBehaviour {
 		    body.velocity = pushDir * pushPower;
 		}
 	}
+	
+		void MoveCharacter(){
+			// Calculate actual motion
+			Vector3 movement = new Vector3(currentHorizontalSpeed, currentVerticalSpeed, 0 );
+			movement *= Time.deltaTime;
+			
+			Move(movement);
+		}
 	
 	void MoveCharacter(Vector3 dest){
 		// Calculate actual motion
