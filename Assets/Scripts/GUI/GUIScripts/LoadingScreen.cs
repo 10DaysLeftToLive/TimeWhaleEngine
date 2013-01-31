@@ -2,14 +2,8 @@ using UnityEngine;
 using System.Collections;
 
 public class LoadingScreen : MonoBehaviour {
-
-	// Use this for initialization
 	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+		string levelToLoad = PlayerPrefs.GetString(Strings.NextLevel);
+		Application.LoadLevel(levelToLoad);	
 	}
 }
