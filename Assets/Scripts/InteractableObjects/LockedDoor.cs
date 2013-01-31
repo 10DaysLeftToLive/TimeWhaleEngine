@@ -2,12 +2,14 @@ using UnityEngine;
 using System.Collections;
 
 public class LockedDoor : InteractableObject {
-	public GameObject keyThatUnlocks;
+	public GameObject[] keysThatUnlock;
 	
 	public override void Interact(GameObject toInteractWith){
-		if(toInteractWith == keyThatUnlocks){
-			transform.renderer.enabled = false;
-			playerCharacter.DisableHeldItem();
+		foreach (GameObject keyUnlock in keysThatUnlock){
+			if(toInteractWith == keyUnlock){
+				transform.renderer.enabled = false;
+				playerCharacter.DisableHeldItem();
+			}
 		}
 	}
 }
