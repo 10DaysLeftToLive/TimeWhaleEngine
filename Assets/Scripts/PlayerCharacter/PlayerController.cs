@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour {
 	public bool isControllable = true;
 	public bool isAffectedByGravity = true;
 	
+	public CharacterAge currentAge;
+	
 	public bool IsTouchingGrowableUp{
 		get{return isTouchingGrowableUp;}
 	}
@@ -309,11 +311,15 @@ public class PlayerController : MonoBehaviour {
 	
 	public void ChangeAgePosition(Transform newSectrionTarget){
 		Vector3 newTargetPos = newSectrionTarget.position;
-		Vector3 deltaPlayerToCurrentFrame = transform.position - newTargetPos;
+		Vector3 deltaPlayerToCurrentFrame = transform.position - currentAge.sectionTarget.position;
 		
-		transform.position = new Vector3(newTargetPos.x + deltaPlayerToCurrentFrame.x,
+		Debug.Log("newTargetPos = " + newTargetPos + "  deltaPlayerToCurrentFrame " + deltaPlayerToCurrentFrame);
+		
+		Vector3 newPos = new Vector3(newTargetPos.x + deltaPlayerToCurrentFrame.x,
 										 newTargetPos.y + deltaPlayerToCurrentFrame.y,
-										 newTargetPos.z);
+										 newTargetPos.z + deltaPlayerToCurrentFrame.z);
+		Debug.Log("newPos = " + newPos);
+		transform.position = newPos;
 	}
 	
 	public void ChangeAnimation(BoneAnimation newAnimation){

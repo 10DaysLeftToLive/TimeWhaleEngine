@@ -41,6 +41,7 @@ public class CharacterAgeManager {
 	}
 	
 	private static void Transition(CharacterAge previousAge, CharacterAge newAge){
+		playerCharacter.currentAge = previousAge;
 		UpdatePlayer(newAge);
 		Crossfade.FadeBetween(previousAge, newAge);
 	}
