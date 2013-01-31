@@ -313,12 +313,10 @@ public class PlayerController : MonoBehaviour {
 		Vector3 newTargetPos = newSectrionTarget.position;
 		Vector3 deltaPlayerToCurrentFrame = transform.position - currentAge.sectionTarget.position;
 		
-		Debug.Log("newTargetPos = " + newTargetPos + "  deltaPlayerToCurrentFrame " + deltaPlayerToCurrentFrame);
 		
 		Vector3 newPos = new Vector3(newTargetPos.x + deltaPlayerToCurrentFrame.x,
 										 newTargetPos.y + deltaPlayerToCurrentFrame.y,
 										 newTargetPos.z + deltaPlayerToCurrentFrame.z);
-		Debug.Log("newPos = " + newPos);
 		transform.position = newPos;
 	}
 	
