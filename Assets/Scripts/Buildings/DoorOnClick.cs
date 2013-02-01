@@ -2,11 +2,11 @@ using UnityEngine;
 using System.Collections;
 
 public class DoorOnClick : OnClickNextToPlayer {
-	public House house;
+	public Building building;
 	
 	protected override void DoClickNextToPlayer(){
-		house = this.transform.parent.GetComponent<House>();
+		building = this.transform.parent.GetComponent<Building>();
 		
-		house.ToggleHouse();
+		building.ToggleBuilding();
 	}
 }

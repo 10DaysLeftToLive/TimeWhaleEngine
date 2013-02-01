@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class House : MonoBehaviour {
+public class Building : MonoBehaviour {
 	private bool interiorIsShowing = false;
 	public GameObject door;
 	public GameObject interior;
@@ -20,7 +20,7 @@ public class House : MonoBehaviour {
 		exteriorObjects = exterior.GetComponentsInChildren<Transform>();
 	}
 	
-	public void ToggleHouse(){
+	public void ToggleBuilding(){
 		UpdateObjectArrays();
 		if (interiorIsShowing){
 			Hide (interiorObjects);
