@@ -8,6 +8,7 @@ public class LockedDoor : InteractableObject {
 		foreach (GameObject keyUnlock in keysThatUnlock){
 			if(toInteractWith == keyUnlock){
 				transform.renderer.enabled = false;
+				transform.collider.enabled = false;
 				playerCharacter.DisableHeldItem();
 			}
 		}

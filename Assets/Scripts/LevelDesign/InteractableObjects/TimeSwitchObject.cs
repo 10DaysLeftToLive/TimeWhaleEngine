@@ -14,8 +14,8 @@ public class TimeSwitchObject{
 	public bool staticInOld = false;
 	
 	public void ChangeAge(CharacterAgeState newAge){
-		if (!IsStaticIn(newAge)){
-			middleTimeObject.transform.localPosition = youngTimeObject.transform.localPosition;
+		if (!IsStaticIn(newAge) && newAge != CharacterAgeState.YOUNG && GetTimeObjectAt(newAge) != null){
+			GetTimeObjectAt(newAge).transform.localPosition = GetTimeObjectAt(CharacterAgeState.MIDDLE).transform.localPosition;
 		}
 	}
 	
