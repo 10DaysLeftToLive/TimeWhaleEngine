@@ -23,6 +23,7 @@ public static class Strings{
 	public static string tag_Block = "Block";
 	public static string tag_Destination = "Destination";
 	public static string tag_Player = "Player";
+	public static string tag_LadderTop = "LadderTop";
 	
 	public static string DispositionFile = "DispositionData";
 	

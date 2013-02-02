@@ -55,7 +55,7 @@ public class PathFinding{
 			HitTest();
 			
 			if (upTest){
-				Vector3 hitPos = new Vector3(testHit.point.x, testHit.point.y -.3f, testHit.point.z);
+				Vector3 hitPos = testHit.point;
 				Debug.Log("hit up  " + currentDirection + " at " + testHit.point + "  node = " + nodeIndex);
 				CreateCube(hitPos);
 				nodeHistory[nodeIndex-1].goneUp = true;
@@ -68,6 +68,10 @@ public class PathFinding{
 					currentDirection = (Direction)nodeHistory[nodeIndex-1].NewDirection();
 				}else if (testHit.transform.tag == Strings.tag_Ground){ // Ground
 					Debug.Log("hit ground  " + currentDirection + " at " + testHit.point + "  node = " + nodeIndex);
+					CreateCube(new Vector3 (currentPos.x, hitPos.y + 1f, currentPos.z));
+					currentDirection = (Direction)nodeHistory[nodeIndex-1].NewDirection();
+				}else if (testHit.transform.tag == Strings.tag_LadderTop){
+					Debug.Log("hit ladderTop  " + currentDirection + " at " + testHit.point + "  node = " + nodeIndex);
 					CreateCube(new Vector3 (currentPos.x, hitPos.y + 1f, currentPos.z));
 					currentDirection = (Direction)nodeHistory[nodeIndex-1].NewDirection();
 				}else if (testHit.transform.tag == Strings.tag_Block){ // Block
@@ -119,7 +123,7 @@ public class PathFinding{
 		hit = true;
 		Vector3 heading = Vector3.right;
 		bool hit1Test = false, hit2Test = false, hit3Test = false;
-		int mask = (1 << 8) | (1 << 9) | (1 << 10); // Ladder, Ground, Impassable
+		int mask = (1 << 8) | (1 << 9) | (1 << 10) | (1 << 13); // Ladder, Ground, Impassable, LadderTop
 		RaycastHit hit1, hit2, hit3;
 		float distance = 9999;
 		float x, y, z;
@@ -130,24 +134,24 @@ public class PathFinding{
 		switch(currentDirection){
 			case Direction.left: heading = Vector3.left; mask = (1 << 8) | (1 << 10); break;	
 			case Direction.right: heading = Vector3.right; mask = (1 << 8) | (1 << 10); break;	
-			case Direction.up: heading = Vector3.down; mask = (1 << 8) | (1 << 10); break;	
+			case Direction.up: heading = Vector3.up; mask = (1 << 13); break;	
 			case Direction.down: heading = Vector3.down; mask = (1 << 9) | (1 << 10); break;	
 		}
 		
 		//Debug.Log ("Testing Path to " + currentDirection + " from pos " + currentPos);
-		if (currentDirection != Direction.up){ 
+		//if (currentDirection != Direction.up){ 
 			if (Physics.Raycast(new Vector3(x,y,z), heading, out hit1, Mathf.Infinity, mask)) {
-				//Debug.Log("hit1 " +  hit1.transform.tag + "   " + hit1.transform.position);
+				Debug.Log("hit1 " +  hit1.transform.tag + "   " + hit1.point);
 				hit1Test = true;
 			}
 			
 			if (Physics.Raycast(new Vector3(x,y,z+zOffset), heading, out hit2, Mathf.Infinity, mask)) {
-				//Debug.Log("hit2 " +  hit2.transform.tag + "  " + hit2.transform.position);
+				Debug.Log("hit2 " +  hit2.transform.tag + "  " + hit2.point);
 				hit2Test = true;
 			}
 			
 			if (Physics.Raycast(new Vector3(x,y,z-zOffset), heading, out hit3, Mathf.Infinity, mask)) {
-				//Debug.Log("hit3 " +  hit3.transform.tag + "  " + hit3.transform.position);
+				Debug.Log("hit3 " +  hit3.transform.tag + "  " + hit3.point);
 				hit3Test = true;
 			}
 				
@@ -182,7 +186,7 @@ public class PathFinding{
 				}
 			}
 			if ((!hit1Test && !hit2Test && !hit3Test)){
-				Debug.Log("no hit going " + currentDirection);
+				Debug.Log("no hit from " + nodeHistory[nodeIndex-1].curr + " going " + currentDirection);
 				if (nodeIndex > 0)
 				currentDirection = (Direction)nodeHistory[nodeIndex-1].NewDirection();
 				hit = false;
@@ -190,19 +194,20 @@ public class PathFinding{
 			}
 			if (testHit.transform.tag == Strings.tag_Climbable) 
 				hitClimbable = true;
-		}else if (currentDirection == Direction.up){
+		//}
+	/*else if (currentDirection == Direction.up){
 			mask = (1 << 8);
 			for (int i = 0; i < 12; i++){
 				if (Physics.Raycast(new Vector3(x,y+i,z-2), Vector3.forward, out hit1, mask)) {
 					testHit = hit1;
-					Debug.Log(testHit.transform.tag + "  at pos " + hit1.point);
+					//Debug.Log(testHit.transform.tag + "  at pos " + hit1.point);
 					upTest = true;
 					hit = false;
 					distance = 5;
 				}
 				else break;
 			}
-		}
+		}*/
 		if (currentDirection == Direction.none && nodeIndex > 1){
 			RemoveNode();
 		}
@@ -245,7 +250,7 @@ public class PathFinding{
 		nodePoints = new Vector3[nodeIndex];
 		for (int i = 0; i < nodeIndex; i++){
 			nodePoints[i] = nodeHistory[i].curr;
-			//Debug.Log("point[" + i + "] at " + nodePoints[i]);
+			Debug.Log("point[" + i + "] at " + nodePoints[i]);
 		}
 		foundPath = 2;
 	}

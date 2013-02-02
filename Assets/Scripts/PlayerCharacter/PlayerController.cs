@@ -97,6 +97,7 @@ public class PlayerController : MonoBehaviour {
 		
 		if (path != null)
 			MoveCharacter(path[pathIndex]);
+
 	}
 	
 	void UpdateMovementControls(){
