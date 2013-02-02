@@ -31,12 +31,21 @@ public class EventManager : MonoBehaviour {
     }
 	
 	//EVENT: OnPauseToggle
-    public delegate void mOnPauseToggleDelegate(EventManager EM, PauseStateArg e);
+    public delegate void mOnPauseToggleDelegate(EventManager EM, PauseStateArgs e);
     //Event
     public event mOnPauseToggleDelegate mOnPauseToggleEvent;
     //Riser
-    public void RiseOnPauseToggleEvent(PauseStateArg pauseState){
+    public void RiseOnPauseToggleEvent(PauseStateArgs pauseState){
         if(mOnPauseToggleEvent != null)  mOnPauseToggleEvent(this,pauseState);
+    }
+	
+	//EVENT: OnClickOnObjectAwayFromPlayer
+    public delegate void mOnClickOnObjectAwayFromPlayerDelegate(EventManager EM, ClickPositionArgs e);
+    //Event
+    public event mOnClickOnObjectAwayFromPlayerDelegate mOnClickOnObjectAwayFromPlayerEvent;
+    //Riser
+    public void RiseOnClickOnObjectAwayFromPlayerEvent(ClickPositionArgs e){
+        if(mOnClickOnObjectAwayFromPlayerEvent != null)  mOnClickOnObjectAwayFromPlayerEvent(this,e);
     }
 	
 	private static EventManager em_instance = null;
@@ -76,9 +85,9 @@ public class ClickedObjectArgs : EventArgs {
 	}
 }
 
-public class PauseStateArg : EventArgs {
-	public bool IsPaused;
-	public PauseStateArg(bool _IsPaused){
-		IsPaused = _IsPaused;
+public class PauseStateArgs : EventArgs {
+	public bool isPaused;
+	public PauseStateArgs(bool _isPaused){
+		isPaused = _isPaused;
 	}
 }

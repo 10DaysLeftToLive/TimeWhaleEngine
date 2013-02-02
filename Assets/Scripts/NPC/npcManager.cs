@@ -4,12 +4,12 @@ using System.Collections;
 public class npcManager : MonoBehaviour {
 	
 	public GameObject destination;
-	public Camera camera;
 	public PathFinding pathFinding;
 	
 	private Component[] npcs;
 	private GameObject finish;
 	private bool findingPath = false;
+	private int zCameraOffset = 10;
 	
 	// Use this for initialization
 	void Start () {
@@ -51,12 +51,14 @@ public class npcManager : MonoBehaviour {
 			}
 			
 			if (Input.GetKeyDown("m")){
-				Vector3 pos = camera.ScreenToWorldPoint(Input.mousePosition);
+				Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+				pathFinding = null;
+				if (finish != null) Destroy(finish);
 				int mask = (1 << 9);
 				RaycastHit hit;
-				if (Physics.Raycast(new Vector3(pos.x, pos.y, camera.transform.position.z+10.5f), Vector3.down, out hit,mask)) {
+				if (Physics.Raycast(new Vector3(pos.x, pos.y, Camera.main.transform.position.z+zCameraOffset+.5f), Vector3.down, out hit,mask)) {
 					Vector3 hitPos = hit.transform.position;
-					finish = (GameObject)Instantiate(destination,new Vector3(pos.x, hitPos.y +1.5f, camera.transform.position.z+10f),this.transform.rotation);
+					finish = (GameObject)Instantiate(destination,new Vector3(pos.x, hitPos.y +1.5f, Camera.main.transform.position.z+zCameraOffset),this.transform.rotation);
 					pathFinding = new PathFinding();
 					pathFinding.StartPath(npc.GetPos() ,new Vector3(pos.x, hitPos.y -.5f, .5f));
 					findingPath = true;

@@ -9,26 +9,18 @@ public class OnClick : MonoBehaviour {
 		InitEvent();
 	}
 	
-	protected virtual void DoClick(){}
+	protected virtual void DoClick(ClickPositionArgs e){}
 	
 	private void OnClickEvent (EventManager EM, ClickPositionArgs e){	
 		Ray ray = Camera.main.ScreenPointToRay (e.position);
     	RaycastHit hit;
 		if(this.collider.Raycast(ray, out hit, 10)) {
-			DoClick();
+			DoClick(e);
 		}
     }
 	
 	private void OnApplicationQuit (){
 		EventManager.instance.mOnClickEvent -= 	delagate;
-	}
-	
-	private void NotifyObjectClickedOn(){
-		EventManager.instance.RiseOnClickedObjectEvent(new ClickedObjectArgs(this.gameObject));
-	}
-	
-	private void NotifyNoObjectClickedOn(Vector3 position){
-		EventManager.instance.RiseOnClickedNoObjectEvent(new ClickPositionArgs(position));
 	}
 	
 	protected void InitEvent(){

@@ -14,39 +14,18 @@ public class PlayerController : MonoBehaviour {
 	private CollisionFlags lastReturnedCollisionFlags;
 	private GameObject pickedUpObject = null;
 	
-	public enum CharacterAgeState{
-		YOUNG,
-		MIDDLE,
-		OLD,
-	}
+	public GameObject destination;
 	
-	public CharacterAgeState CurrentCharacterAge{
-		get {return currentCharacterAge;}
-	}
-	private CharacterAgeState currentCharacterAge;
-	
-	
-	public enum CharacterGender{
-		MALE = 0,
-		FEMALE = 1,
-	}
-	
-	public CharacterGender PlayerGender{
-		get{return playerGender;}
-	}
-	public CharacterGender playerGender = CharacterGender.MALE;
-	
-	private PlayerAnimationContainer genderAnimationInUse;
-	
-	public PlayerAnimationContainer[] genderAnimations;
-	
-	public Vector3 CurrentFrameOriginPos{
-		get {return currentFrameOriginPos;}
-	}
-	private Vector3 currentFrameOriginPos; 
+	private GameObject finish;
+	private PathFinding pathFinding;
+	private Vector3[] path;
+	private int pathIndex;
+	private float speed = 5f;
 	
 	public bool isControllable = true;
 	public bool isAffectedByGravity = true;
+	
+	public CharacterAge currentAge;
 	
 	public bool IsTouchingGrowableUp{
 		get{return isTouchingGrowableUp;}
@@ -60,39 +39,61 @@ public class PlayerController : MonoBehaviour {
 	
 	public bool isTouchingTrigger = false;
 	
-	
 	private static readonly float TELEPORT_ABOVE_GROWABLE_DISTANCE = .750f;
 	
-	void Awake(){
-		switch(playerGender){
-		case CharacterGender.MALE:
-			SetGender(CharacterGender.MALE);
-			break;
-		case CharacterGender.FEMALE:
-			SetGender(CharacterGender.FEMALE);
-			break;
-		}
-	}
-
+	private BoneAnimation currentAnimation = null;
+	
 	// Use this for initialization
 	void Start () {
-		
+		EventManager.instance.mOnClickOnObjectAwayFromPlayerEvent += new EventManager.mOnClickOnObjectAwayFromPlayerDelegate (OnClickToMove);
+		EventManager.instance.mOnClickNoObjectEvent += new EventManager.mOnClickedNoObjectDelegate (OnClickToMove);
 	}
+	
+	private void OnClickToMove (EventManager EM, ClickPositionArgs e){	
+		// you now have the position of a click that is either on an object and too far from the player
+		// or on no object
+		Vector3 pos = Camera.main.ScreenToWorldPoint(e.position);
+		Debug.Log("Clicked to Move to " + pos);
+		pathFinding = null;
+		if (finish != null) Destroy(finish);
+		int mask = (1 << 9);
+		RaycastHit hit;
+		if (Physics.Raycast(new Vector3(pos.x, pos.y, e.position.z), Vector3.down , out hit, Mathf.Infinity, mask)) {
+			//Debug.Log("hit " + hit.transform.tag);
+			Vector3 hitPos = hit.transform.position;
+			finish = (GameObject)Instantiate(destination,new Vector3(pos.x, hitPos.y +1.5f, e.position.z),this.transform.rotation);
+			pathFinding = new PathFinding();
+			pathFinding.StartPath(this.transform.position ,new Vector3(pos.x, hitPos.y -.5f, .5f));
+		}
+    }
 	
 	// Update is called once per frame
 	void Update () {
 		if(isControllable){
 			UpdateMovementControls();
-			
 			if(isAffectedByGravity){
 				ApplyGravity();
-			}
-			
+			}	
 		}
-			
 		
+		if (pathFinding != null){
+			pathFinding.Update();
+			if (pathFinding.foundPath == 2){
+				path = pathFinding.FoundPath();
+				pathIndex = 1;
+				Destroy(finish);
+				pathFinding = null;
+			}else if (pathFinding.foundPath == 1){
+				Debug.Log("no path found");
+				Destroy(finish);
+				pathFinding = null;
+			}
+		}
 		
 		MoveCharacter();
+		
+		if (path != null)
+			MoveCharacter(path[pathIndex]);
 	}
 	
 	void UpdateMovementControls(){
@@ -104,8 +105,6 @@ public class PlayerController : MonoBehaviour {
 		if(!isAffectedByGravity){
 			currentVerticalSpeed = walkSpeed * verticalMovement;	
 		}
-		
-		
 	}
 	
 	void OnTriggerEnter(Collider trigger){		
@@ -119,7 +118,7 @@ public class PlayerController : MonoBehaviour {
 	bool CheckTriggers(Collider trigger){
 		if(IsClimbable(trigger)){
 			isAffectedByGravity = false;
-			genderAnimationInUse.PlayAnimation(Strings.animation_climb);
+			//currentAnimation.Play(Strings.animation_climb);
 			return true;
 		}
 		else if(trigger.tag == Strings.tag_GrowableUp){
@@ -132,7 +131,7 @@ public class PlayerController : MonoBehaviour {
 	void OnTriggerExit(Collider trigger){
 		if(IsClimbable(trigger)){
 			isAffectedByGravity = true;
-			genderAnimationInUse.PlayAnimation(Strings.animation_walk);
+			currentAnimation.Play(Strings.animation_walk);
 		}
 		else if(trigger.tag == Strings.tag_GrowableUp){
 			isTouchingGrowableUp = false;	
@@ -144,15 +143,14 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	void OnControllerColliderHit(ControllerColliderHit hit){
-		if(hit.transform.tag == Strings.tag_Pushable){
+		if(hit.transform.tag == Strings.tag_Pushable && hit.transform.renderer.enabled == true){
 			PushPushableObject(hit);
 		}
-	
 	}
 	
 	void PushPushableObject(ControllerColliderHit pushableObject){
 		//NOTE THIS IS POOR PUSHABLE CODE!
-		if(currentCharacterAge == CharacterAgeState.MIDDLE){
+		if(CharacterAgeManager.GetCurrentAgeState() == CharacterAgeState.MIDDLE){
 		    Rigidbody body = pushableObject.collider.attachedRigidbody;
 		
 		    // no rigidbody
@@ -167,13 +165,51 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 	
-	void MoveCharacter(){
+		void MoveCharacter(){
+			// Calculate actual motion
+			Vector3 movement = new Vector3(currentHorizontalSpeed, currentVerticalSpeed, 0 );
+			movement *= Time.deltaTime;
+			
+			Move(movement);
+		}
+	
+	void MoveCharacter(Vector3 dest){
 		// Calculate actual motion
-		Vector3 movement = new Vector3(currentHorizontalSpeed, currentVerticalSpeed, 0 );
-		movement *= Time.deltaTime;
+		//Vector3 movement = new Vector3(currentHorizontalSpeed, currentVerticalSpeed, 0 );
+		//movement *= Time.deltaTime;
 		
-		CharacterController controller = GetComponent<CharacterController>();
-		lastReturnedCollisionFlags = controller.Move(movement);
+		Vector3 pos = this.transform.position;
+		Vector3 movement = new Vector3(0,0,0);
+		
+		if (pos.x < dest.x){
+			movement.x += speed;
+		}else if (pos.x > dest.x){
+			movement.x -= speed;	
+		}
+		if (pos.y < dest.y){
+			movement.y += speed;
+		}else if (pos.y > dest.y){
+			movement.y -= speed;	
+		}
+		movement *= Time.deltaTime;
+
+		if (NearPoint(dest)){
+			pathIndex++;
+			if (pathIndex >= path.Length)
+				path = null;
+		}
+		
+		Move(movement);
+	}
+	
+	bool NearPoint(Vector3 point){
+		Vector3 pos = this.transform.position;
+		float difference = .1f;
+		if (pos.x  < point.x + difference && pos.x > point.x - difference){
+			if (pos.y  < point.y + difference && pos.y > point.y - difference)
+				return true;
+		}
+	return false;
 	}
 	
 	void ApplyGravity(){
@@ -189,34 +225,31 @@ public class PlayerController : MonoBehaviour {
 		return (lastReturnedCollisionFlags & CollisionFlags.CollidedBelow) != 0;
 	}
 	
-	void DisableAllBoneAnimations(){
-		genderAnimationInUse.youngBoneAnimation.gameObject.SetActiveRecursively(false);
-		genderAnimationInUse.middleBoneAnimation.gameObject.SetActiveRecursively(false);
-		genderAnimationInUse.oldBoneAnimation.gameObject.SetActiveRecursively(false);
-	}
-	
 	void SetTouchingGrowableUp(bool flag, GameObject growableUpTransform){
 		isTouchingGrowableUp = flag;
 		currentTouchedGrowableUp = growableUpTransform;
 	}
 	
-	public void SetAge(CharacterAgeState age, Vector3 frameOriginPos){
-		currentCharacterAge = age;
-		currentFrameOriginPos = frameOriginPos;
-		
-		DisableAllBoneAnimations();
-		
-		switch(age){
-			case CharacterAgeState.YOUNG:
-				genderAnimationInUse.youngBoneAnimation.gameObject.SetActiveRecursively(true);
-				break;
-			case CharacterAgeState.MIDDLE:
-				genderAnimationInUse.middleBoneAnimation.gameObject.SetActiveRecursively(true);
-				break;
-			case CharacterAgeState.OLD:
-				genderAnimationInUse.oldBoneAnimation.gameObject.SetActiveRecursively(true);
-				break;
+	public void ChangeAge(CharacterAge newAge){
+		if (isTouchingGrowableUp){
+			Transform growableUpTSO = FindGrowableUp(currentTouchedGrowableUp);
+			TeleportCharacterAbove(growableUpTSO);
+		} else {
+			ChangeAgePosition(newAge.sectionTarget);
 		}
+		
+		ChangeAnimation(newAge.boneAnimation);
+	}
+	
+	Transform FindGrowableUp(GameObject currentlyTouchingGrowableUp){
+		GrowableTree[] treeBaseObjects = (GrowableTree[]) GameObject.FindObjectsOfType(typeof(GrowableTree));
+		
+		foreach(GrowableTree treeBase in treeBaseObjects){
+			if(treeBase.tree.objectLabel == currentlyTouchingGrowableUp.name){
+				return treeBase.tree.GetTimeObjectAt(CharacterAgeManager.GetCurrentAgeState()).transform.GetChild(0);
+			}
+		}
+		return null;
 	}
 	
 	public void PickUpObject(GameObject toPickUp){
@@ -272,21 +305,32 @@ public class PlayerController : MonoBehaviour {
 		pickedUpObject = null;	
 	}
 	
-	public void TeleportCharacterAbove(GameObject toTeleportAbove){
-		transform.position = toTeleportAbove.transform.position + new Vector3(0,TELEPORT_ABOVE_GROWABLE_DISTANCE,0);
+	public void TeleportCharacterAbove(Transform toTeleportAbove){
+		transform.position = toTeleportAbove.position + new Vector3(0,TELEPORT_ABOVE_GROWABLE_DISTANCE,0);
+	}	
+	
+	public void ChangeAgePosition(Transform newSectrionTarget){
+		Vector3 newTargetPos = newSectrionTarget.position;
+		Vector3 deltaPlayerToCurrentFrame = transform.position - currentAge.sectionTarget.position;
+		
+		
+		Vector3 newPos = new Vector3(newTargetPos.x + deltaPlayerToCurrentFrame.x,
+										 newTargetPos.y + deltaPlayerToCurrentFrame.y,
+										 newTargetPos.z + deltaPlayerToCurrentFrame.z);
+		transform.position = newPos;
 	}
 	
-	public void SetGender(CharacterGender gender){
-		playerGender = gender;
-		switch(gender){
-		case CharacterGender.MALE:
-			genderAnimationInUse = genderAnimations[(int)CharacterGender.MALE];
-			break;
-		case CharacterGender.FEMALE:
-			genderAnimationInUse = genderAnimations[(int)CharacterGender.FEMALE];
-			break;		
+	public void ChangeAnimation(BoneAnimation newAnimation){
+		if (currentAnimation != null){
+			currentAnimation.gameObject.SetActiveRecursively(false);
 		}
-			
+		
+		currentAnimation = newAnimation;
+		currentAnimation.gameObject.SetActiveRecursively(true);
 	}
 	
+	public void Move(Vector3 toMove){
+		CharacterController controller = GetComponent<CharacterController>();
+		lastReturnedCollisionFlags = controller.Move(toMove);
+	}
 }

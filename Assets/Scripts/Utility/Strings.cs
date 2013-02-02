@@ -9,6 +9,8 @@ public static class Strings{
 	
 	public static string ButtonAgeShiftUp = "Age Shift Up";
 	public static string ButtonAgeShiftDown = "Age Shift Down";
+	public static string ButtonFly = "Fly";
+	
 	
 	
 	public static string tag_Climbable = "Climbable";
@@ -31,4 +33,8 @@ public static class Strings{
 	
 	public static string animation_walk = "Walk";
 	public static string animation_climb = "Climb";
+	
+	public static string NextLevel = "NextLevelToLoad";
+	public static string LoadingScreen = "LoadingScreen";
+	public static string Level1 = "Level1";
 }

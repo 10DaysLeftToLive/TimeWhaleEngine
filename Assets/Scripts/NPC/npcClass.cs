@@ -2,12 +2,11 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class npcClass : MonoBehaviour {
-	
+public abstract class npcClass : MonoBehaviour {
 	public string npcName;
 	public TextMesh chat;
 	public GameObject symbol;
-	public float npcDisposition;
+	protected float npcDisposition;
 	
 	private List<Item> itemReactions;
 	private int randomVariable;
@@ -120,11 +119,15 @@ public class npcClass : MonoBehaviour {
 				UpdateDisposition(item.dispositionChange);
 				MetricsRecorder.RecordInteraction(name, item.name, item.dispositionChange);
 				hasReacted = true;
+				DoReaction(item.name);
+				break;
 			}
 		}
 		
 		if (!hasReacted) Debug.Log("No Interaction was set between " + name + " and " + itemToReactTo);
 	}
+	
+	protected virtual void DoReaction(string itemToReactTo){}
 	#endregion
 	
 	public void ChangeState(int num){
@@ -142,7 +145,6 @@ public class npcClass : MonoBehaviour {
 	private void NpcIdle(){
 		//do some idle animation	
 	}
-	
 	
 	public void NpcMove(Vector3[] dest){
 		npcState = State.Moving;
