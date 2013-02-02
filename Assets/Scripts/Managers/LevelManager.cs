@@ -59,6 +59,18 @@ public class LevelManager : MonoBehaviour {
 		
 		CharacterAgeManager.PlayCurrentSong();		
 		playerCharacter.ChangeAnimation(genderAnimationInUse.youngBoneAnimation);
+		
+		InitBuildings();
+	}
+	
+	private void InitBuildings(){
+		Transform buildingRootYoung = youngSectionTarget.FindChild("Buildings");
+		Transform buildingRootMiddle = middleSectionTarget.FindChild("Buildings");
+		Transform buildingRootOld = oldSectionTarget.FindChild("Buildings");
+		
+		BuildingManager.instance.LoadInBuildings(buildingRootYoung, CharacterAgeState.YOUNG);
+		BuildingManager.instance.LoadInBuildings(buildingRootMiddle, CharacterAgeState.MIDDLE);
+		BuildingManager.instance.LoadInBuildings(buildingRootOld, CharacterAgeState.OLD);
 	}
 	
 	private void SetFiles(){
