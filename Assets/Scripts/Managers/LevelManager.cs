@@ -107,15 +107,20 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	private void ShiftUpAge(){		
-		CharacterAgeManager.TransistionUp();
-		
-		UpdateTimeSwitchObjects(CharacterAgeManager.GetCurrentAgeState());
+		if (CharacterAgeManager.GetCurrentAgeState() != CharacterAgeState.OLD){
+			CharacterAgeManager.TransistionUp();
+			
+			UpdateTimeSwitchObjects(CharacterAgeManager.GetCurrentAgeState());
+		}
 	}
 	
 	private void ShiftDownAge(){
-		CharacterAgeManager.TransistionDown();
-		
-		UpdateTimeSwitchObjects(CharacterAgeManager.GetCurrentAgeState());
+		if (CharacterAgeManager.GetCurrentAgeState() != CharacterAgeState.YOUNG){
+
+			CharacterAgeManager.TransistionDown();
+			
+			UpdateTimeSwitchObjects(CharacterAgeManager.GetCurrentAgeState());
+		}
 	}
 	
 	private void UpdateTimeSwitchObjects(CharacterAgeState newAge){

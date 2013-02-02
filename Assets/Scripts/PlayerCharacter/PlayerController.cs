@@ -43,6 +43,9 @@ public class PlayerController : MonoBehaviour {
 	
 	private BoneAnimation currentAnimation = null;
 	
+	private static float RIGHT = 1;
+	private static float LEFT = -1;
+	
 	// Use this for initialization
 	void Start () {
 		EventManager.instance.mOnClickOnObjectAwayFromPlayerEvent += new EventManager.mOnClickOnObjectAwayFromPlayerDelegate (OnClickToMove);
@@ -58,10 +61,10 @@ public class PlayerController : MonoBehaviour {
 		if (finish != null) Destroy(finish);
 		int mask = (1 << 9);
 		RaycastHit hit;
-		if (Physics.Raycast(new Vector3(pos.x, pos.y, e.position.z), Vector3.down , out hit, Mathf.Infinity, mask)) {
-			//Debug.Log("hit " + hit.transform.tag);
+		if (Physics.Raycast(new Vector3(pos.x, pos.y, this.transform.position.z), Vector3.down , out hit, Mathf.Infinity, mask)) {
+			Debug.Log("hit " + hit.transform.tag + "  " + hit.transform.position);
 			Vector3 hitPos = hit.transform.position;
-			finish = (GameObject)Instantiate(destination,new Vector3(pos.x, hitPos.y +1.5f, e.position.z),this.transform.rotation);
+			finish = (GameObject)Instantiate(destination,new Vector3(pos.x, hitPos.y +1.5f, this.transform.position.z),this.transform.rotation);
 			pathFinding = new PathFinding();
 			pathFinding.StartPath(this.transform.position ,new Vector3(pos.x, hitPos.y -.5f, .5f));
 		}
@@ -183,9 +186,12 @@ public class PlayerController : MonoBehaviour {
 		
 		if (pos.x < dest.x){
 			movement.x += speed;
+			LookRight();
 		}else if (pos.x > dest.x){
 			movement.x -= speed;	
+			LookLeft();
 		}
+		
 		if (pos.y < dest.y){
 			movement.y += speed;
 		}else if (pos.y > dest.y){
@@ -200,6 +206,14 @@ public class PlayerController : MonoBehaviour {
 		}
 		
 		Move(movement);
+	}
+	
+	private void LookRight(){
+		this.transform.localScale = new Vector3(RIGHT, 1, 1);
+	}
+	
+	private void LookLeft(){
+		this.transform.localScale = new Vector3(LEFT, 1, 1);
 	}
 	
 	bool NearPoint(Vector3 point){
