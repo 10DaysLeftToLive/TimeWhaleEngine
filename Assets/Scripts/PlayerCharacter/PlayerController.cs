@@ -25,8 +25,6 @@ public class PlayerController : MonoBehaviour {
 	public bool isControllable = true;
 	public bool isAffectedByGravity = true;
 	
-	public CharacterAge currentAge;
-	
 	public bool IsTouchingGrowableUp{
 		get{return isTouchingGrowableUp;}
 	}
@@ -45,6 +43,11 @@ public class PlayerController : MonoBehaviour {
 	
 	private static float RIGHT = 1;
 	private static float LEFT = -1;
+	
+	private static float RAYCAST_Z_OFFSET = -2;
+	
+	public Capsule smallHitBox;
+	public Capsule bigHitbox;
 	
 	// Use this for initialization
 	void Start () {
@@ -244,15 +247,30 @@ public class PlayerController : MonoBehaviour {
 		currentTouchedGrowableUp = growableUpTransform;
 	}
 	
-	public void ChangeAge(CharacterAge newAge){
+	public void ChangeAge(CharacterAge newAge, CharacterAge previousAge){
 		if (isTouchingGrowableUp){
 			Transform growableUpTSO = FindGrowableUp(currentTouchedGrowableUp);
 			TeleportCharacterAbove(growableUpTSO);
 		} else {
-			ChangeAgePosition(newAge.sectionTarget);
+			ChangeAgePosition(newAge, previousAge);
 		}
 		
+		ChangeHitBox(newAge, previousAge);
 		ChangeAnimation(newAge.boneAnimation);
+	}
+	
+	private void ChangeHitBox(CharacterAge newAge, CharacterAge previousAge){
+		CharacterController charControl = GetComponent<CharacterController>();	
+		charControl.radius = newAge.capsule.radius;
+		charControl.height = newAge.capsule.height;
+		charControl.center = newAge.capsule.center;
+		
+		if(previousAge.stateName == CharacterAgeState.YOUNG){
+			if(newAge.stateName == CharacterAgeState.MIDDLE || newAge.stateName == CharacterAgeState.OLD){
+				transform.position = new Vector3(transform.position.x, transform.position.y + newAge.capsule.height/2, + transform.position.z);
+			}
+		}
+		
 	}
 	
 	Transform FindGrowableUp(GameObject currentlyTouchingGrowableUp){
@@ -323,15 +341,57 @@ public class PlayerController : MonoBehaviour {
 		transform.position = toTeleportAbove.position + new Vector3(0,TELEPORT_ABOVE_GROWABLE_DISTANCE,0);
 	}	
 	
-	public void ChangeAgePosition(Transform newSectrionTarget){
-		Vector3 newTargetPos = newSectrionTarget.position;
-		Vector3 deltaPlayerToCurrentFrame = transform.position - currentAge.sectionTarget.position;
+	public bool CheckTransitionPositionSuccess(CharacterAge newAge, CharacterAge previousAge){
+		Vector3 playerCenter = GetNewAgeWorldPosition(newAge, previousAge);
+		
+		CharacterController charControl = GetComponent<CharacterController>();
+		
+		Vector3 linecastTopLeftStart = new Vector3(playerCenter.x - charControl.radius, playerCenter.y + (charControl.height * 0.5f),playerCenter.z - charControl.radius + RAYCAST_Z_OFFSET);
+		Vector3 linecastTopLeftEnd = new Vector3(playerCenter.x - charControl.radius, playerCenter.y + (charControl.height * 0.5f), playerCenter.z + charControl.radius);
+		
+		Vector3 linecastTopRightStart = new Vector3(playerCenter.x + charControl.radius, playerCenter.y + (charControl.height * 0.5f),playerCenter.z - charControl.radius + RAYCAST_Z_OFFSET);
+		Vector3 linecastTopRightEnd = new Vector3(playerCenter.x + charControl.radius, playerCenter.y + (charControl.height * 0.5f), playerCenter.z + charControl.radius);
+		
+		Vector3 linecastBottomLeftStart = new Vector3(playerCenter.x - charControl.radius, playerCenter.y - (charControl.height * 0.5f),playerCenter.z - charControl.radius + RAYCAST_Z_OFFSET);
+		Vector3 linecastBottonLeftEnd = new Vector3(playerCenter.x - charControl.radius, playerCenter.y - (charControl.height * 0.5f), playerCenter.z + charControl.radius);
+		
+		Vector3 linecastBottomRightStart = new Vector3(playerCenter.x + charControl.radius, playerCenter.y - (charControl.height * 0.5f),playerCenter.z - charControl.radius + RAYCAST_Z_OFFSET);
+		Vector3 linecastBottomRightEnd = new Vector3(playerCenter.x + charControl.radius, playerCenter.y - (charControl.height * 0.5f), playerCenter.z + charControl.radius);
+		
+		RaycastHit hit = new RaycastHit();
+		/*
+		Debug.DrawLine(linecastTopLeftStart, linecastTopLeftEnd,Color.red, 100);
+		Debug.DrawLine(linecastTopRightStart, linecastTopRightEnd,Color.red, 100);
+		Debug.DrawLine(linecastBottomLeftStart, linecastBottonLeftEnd,Color.red, 100);
+		Debug.DrawLine(linecastBottomRightStart, linecastBottomRightEnd,Color.red, 100);
+		*/
+		if(Physics.Linecast(linecastTopLeftStart, linecastTopLeftEnd, out hit) ||
+			Physics.Linecast(linecastTopRightStart, linecastTopRightEnd, out hit) ||
+			Physics.Linecast(linecastBottomLeftStart, linecastBottonLeftEnd, out hit) ||
+			Physics.Linecast(linecastBottomRightStart, linecastBottomRightEnd, out hit)){
+			Debug.Log ("PHASERS TARGETED: " + hit.transform.name);
+			if(hit.transform.tag == Strings.tag_Pushable ||
+				hit.transform.tag == Strings.tag_Block){
+				return false;	
+			}
+		}
+		
+		return true;	
+		
+	}
+	
+	public void ChangeAgePosition(CharacterAge newAge, CharacterAge previousAge){
+		transform.position = GetNewAgeWorldPosition(newAge, previousAge);
+	}
+	
+	private Vector3 GetNewAgeWorldPosition(CharacterAge newAge, CharacterAge previousAge){
+		Vector3 deltaPlayerToCurrentFrame = transform.position - previousAge.sectionTarget.position;
 		
 		
-		Vector3 newPos = new Vector3(newTargetPos.x + deltaPlayerToCurrentFrame.x,
-										 newTargetPos.y + deltaPlayerToCurrentFrame.y,
-										 newTargetPos.z + deltaPlayerToCurrentFrame.z);
-		transform.position = newPos;
+		return new Vector3(newAge.sectionTarget.position.x + deltaPlayerToCurrentFrame.x,
+										 newAge.sectionTarget.position.y + deltaPlayerToCurrentFrame.y,
+										 newAge.sectionTarget.position.z + deltaPlayerToCurrentFrame.z);
+		
 	}
 	
 	public void ChangeAnimation(BoneAnimation newAnimation){
