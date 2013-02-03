@@ -71,6 +71,10 @@ public class LevelManager : MonoBehaviour {
 		BuildingManager.instance.LoadInBuildings(buildingRootYoung, CharacterAgeState.YOUNG);
 		BuildingManager.instance.LoadInBuildings(buildingRootMiddle, CharacterAgeState.MIDDLE);
 		BuildingManager.instance.LoadInBuildings(buildingRootOld, CharacterAgeState.OLD);
+		
+		LockedDoorManager.instance.LoadInDoors(youngSectionTarget, CharacterAgeState.YOUNG);
+		LockedDoorManager.instance.LoadInDoors(middleSectionTarget, CharacterAgeState.MIDDLE);
+		LockedDoorManager.instance.LoadInDoors(oldSectionTarget, CharacterAgeState.OLD);
 	}
 	
 	private void SetFiles(){

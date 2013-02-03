@@ -2,10 +2,10 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class LinkObject<T> {
+public abstract class LinkObjectContainer<T> {
 	protected Dictionary<CharacterAgeState, T> linkedObjects;
 	
-	public LinkObject(){
+	public LinkObjectContainer(){
 		linkedObjects = new Dictionary<CharacterAgeState, T>();
 	}
 	
@@ -20,4 +20,12 @@ public class LinkObject<T> {
 	public void Add(T toAdd, CharacterAgeState age){
 		linkedObjects.Add(age, toAdd);
 	}
+	/*
+	protected void ExecuteOnAll(){
+		foreach(CharacterAgeState state in linkedObjects.Keys){
+			Perform(Get (state));
+		}
+	}
+	
+	protected virtual void Perform(T toPerformOn){}*/
 }

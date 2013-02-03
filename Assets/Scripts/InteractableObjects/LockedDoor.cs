@@ -3,15 +3,20 @@ using System.Collections;
 
 public class LockedDoor : InteractableObject {
 	public GameObject[] keysThatUnlock;
+	public int id;
 	
 	public override void Interact(GameObject toInteractWith){
 		foreach (GameObject keyUnlock in keysThatUnlock){
 			if(toInteractWith == keyUnlock){
-				transform.renderer.enabled = false;
-				transform.collider.enabled = false;
+				LockedDoorManager.instance.UnlockeWithId(id);
 				playerCharacter.DisableHeldItem();
 			}
 		}
+	}
+	
+	public void Unlock(){
+		transform.renderer.enabled = false;
+		transform.collider.enabled = false;
 	}
 }
 

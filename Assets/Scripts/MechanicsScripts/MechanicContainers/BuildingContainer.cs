@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class BuildingContainer : LinkObject<Building> {
+public class BuildingContainer : LinkObjectContainer<Building> {
 	public void Toggle(bool interiorIsShowing){
 		Set(CharacterAgeState.YOUNG, interiorIsShowing);
 		Set(CharacterAgeState.MIDDLE, interiorIsShowing);
