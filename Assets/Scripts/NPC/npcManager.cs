@@ -60,7 +60,7 @@ public class npcManager : MonoBehaviour {
 					Vector3 hitPos = hit.transform.position;
 					finish = (GameObject)Instantiate(destination,new Vector3(pos.x, hitPos.y +1.5f, Camera.main.transform.position.z+zCameraOffset),this.transform.rotation);
 					pathFinding = new PathFinding();
-					pathFinding.StartPath(npc.GetPos() ,new Vector3(pos.x, hitPos.y -.5f, .5f));
+					pathFinding.StartPath(npc.GetPos() ,new Vector3(pos.x, hitPos.y -.5f, .5f), .5f);
 					findingPath = true;
 				}
 			}
