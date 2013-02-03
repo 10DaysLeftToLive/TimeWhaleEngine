@@ -3,43 +3,41 @@
   <Npcs>
     <Npcs name="CatLady">
       <items>
-        <Item name="Apple">
-          <dispositionChange>5</dispositionChange>
-        </Item>
-        <Item name="Hat">
-          <dispositionChange>32</dispositionChange>
-        </Item>
 		<Item name="NoItem">
-          <dispositionChange>-1</dispositionChange>
+          <dispositionChange>0</dispositionChange>
         </Item>
       </items>
     </Npcs>
     <Npcs name="Mom">
       <items>
-        <Item name="Laptop">
-          <dispositionChange>500</dispositionChange>
-        </Item>
-        <Item name="Tablet">
-          <dispositionChange>400</dispositionChange>
+        <Item name="GoldenGear">
+          <dispositionChange>4</dispositionChange>
         </Item>
 		<Item name="NoItem">
           <dispositionChange>-1</dispositionChange>
         </Item>
       </items>
     </Npcs>
-    <Npcs name="ShopKeeper">
+    <Npcs name="Sister">
       <items>
-        <Item name="Pie">
-          <dispositionChange>9001</dispositionChange>
+        <Item name="Plushie">
+          <dispositionChange>3</dispositionChange>
         </Item>
-        <Item name="Money">
-          <dispositionChange>438945.384</dispositionChange>
-        </Item>
-        <Item name="Axe to face">
-          <dispositionChange>-58476588</dispositionChange>
+        <Item name="Flower">
+          <dispositionChange>2</dispositionChange>
         </Item>
 		<Item name="NoItem">
-          <dispositionChange>99</dispositionChange>
+          <dispositionChange>0</dispositionChange>
+        </Item>
+      </items>
+    </Npcs>
+	<Npcs name="PaperBoy">
+      <items>
+        <Item name="Flower">
+          <dispositionChange>1</dispositionChange>
+        </Item>
+		<Item name="NoItem">
+          <dispositionChange>0</dispositionChange>
         </Item>
       </items>
     </Npcs>
