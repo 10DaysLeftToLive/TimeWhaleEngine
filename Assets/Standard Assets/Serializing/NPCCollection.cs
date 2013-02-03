@@ -31,7 +31,6 @@ public class NPCCollection {
 				return (npc);
 			}
 		}
-		Debug.LogError("Could not find data for npc with name " + npcName + " in the file");
 		return (null);
 	}
     

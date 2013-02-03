@@ -18,7 +18,11 @@ public abstract class LinkObjectContainer<T> {
 	}
 	
 	public void Add(T toAdd, CharacterAgeState age){
-		linkedObjects.Add(age, toAdd);
+		if (Get(age) != null){
+			linkedObjects[age] = toAdd;
+		} else {
+			linkedObjects.Add(age, toAdd);
+		}
 	}
 	/*
 	protected void ExecuteOnAll(){
