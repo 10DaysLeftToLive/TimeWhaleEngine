@@ -6,7 +6,9 @@ public abstract class npcClass : MonoBehaviour {
 	public string npcName;
 	public TextMesh chat;
 	public GameObject symbol;
-	protected float npcDisposition;
+	public float npcDisposition;
+	
+	public int id = 0;
 	
 	private List<Item> itemReactions;
 	private int randomVariable;
@@ -35,7 +37,7 @@ public abstract class npcClass : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () {/*
 		actionTimer -= Time.deltaTime;
 		playerPos = player.transform.position;
 		npcPos = this.transform.position;
@@ -56,7 +58,7 @@ public abstract class npcClass : MonoBehaviour {
 			case State.Idle: NpcIdle(); break;
 			//case State.Patrol: NpcPatrol(4); break;
 			case State.Moving: Move(path[pathIndex]); break;
-		}
+		}*/
 	}
 	
 	public void UpdateText(string message){
@@ -117,6 +119,7 @@ public abstract class npcClass : MonoBehaviour {
 		foreach (Item item in itemReactions){
 			if (item.name == itemToReactTo){
 				UpdateDisposition(item.dispositionChange);
+				NPCDispositionManager.instance.UpdateWithId(id, GetDisposition());
 				MetricsRecorder.RecordInteraction(name, item.name, item.dispositionChange);
 				hasReacted = true;
 				DoReaction(item.name);
