@@ -370,9 +370,11 @@ public class PlayerController : MonoBehaviour {
 			Physics.Linecast(linecastBottomLeftStart, linecastBottonLeftEnd, out hit) ||
 			Physics.Linecast(linecastBottomRightStart, linecastBottomRightEnd, out hit)){
 			Debug.Log ("PHASERS TARGETED: " + hit.transform.name);
-			if(hit.transform.tag == Strings.tag_Pushable ||
-				hit.transform.tag == Strings.tag_Block){
-				return false;	
+			if(hit.transform.GetComponent<MeshRenderer>().enabled == true){
+				if(hit.transform.tag == Strings.tag_Pushable ||
+					hit.transform.tag == Strings.tag_Block ){
+					return false;	
+				}
 			}
 		}
 		
