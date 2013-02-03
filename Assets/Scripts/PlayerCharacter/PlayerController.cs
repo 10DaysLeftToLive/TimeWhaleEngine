@@ -86,6 +86,7 @@ public class PlayerController : MonoBehaviour {
 		if (pathFinding != null){
 			path = null;
 			pathFinding.Update();
+			currentAnimation.Play("Walk");
 			if (pathFinding.foundPath == 2){
 				path = pathFinding.FoundPath();
 				pathIndex = 1;
@@ -102,6 +103,8 @@ public class PlayerController : MonoBehaviour {
 		
 		if (path != null){
 			MoveCharacter(path[pathIndex]);
+		} else {
+			currentAnimation.Play("Stand");
 		}
 	}
 	
