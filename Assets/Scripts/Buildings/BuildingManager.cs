@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class BuildingManager : MonoBehaviour {
-	Dictionary<int, BuildingContainer> buildings; 
+	Dictionary<int, BuildingContainer> buildings;
 	
 	void Awake(){
-		buildings = new Dictionary<int, BuildingContainer>();
+		buildings = new Dictionary<int, BuildingContainer >();
 	}
 	
 	public void LoadInBuildings(Transform buildingsRoot, CharacterAgeState age){
@@ -15,7 +15,7 @@ public class BuildingManager : MonoBehaviour {
 			if (!buildings.ContainsKey(building.id)){
 				buildings.Add(building.id, new BuildingContainer());
 			}
-			buildings[building.id].SetBuilding(building, age);
+			buildings[building.id].Add(building, age);
 		}
 	}
 	
@@ -28,9 +28,10 @@ public class BuildingManager : MonoBehaviour {
 	}
 	
 	public void Add(Building toAdd, CharacterAgeState age){		
-		buildings[toAdd.id].SetBuilding(toAdd, age);
+		buildings[toAdd.id].Add(toAdd, age);
 	}
 	
+	#region Singleton
 	private static BuildingManager bm_instance = null;
 	
 	public static BuildingManager instance{
@@ -48,4 +49,5 @@ public class BuildingManager : MonoBehaviour {
             return bm_instance;
         }
 	}
+	#endregion
 }
