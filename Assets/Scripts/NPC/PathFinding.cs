@@ -63,11 +63,11 @@ public class PathFinding{
 				nodeHistory[nodeIndex-1].goneUp = true;
 				currentDirection = (Direction)nodeHistory[nodeIndex-1].NewDirection();
 			}else*/ if (hit){
-				Vector3 hitPos = testHit.transform.position;
+				Vector3 hitPos = testHit.point;
 				if (testHit.transform.tag == Strings.tag_Climbable){ // Ladder
 					Debug.Log("hit ladder  " + currentDirection + " at " + testHit.point + "  node = " + nodeIndex);
 					hitClimbable = true;	
-					CreateCube(new Vector3 (hitPos.x, currentPos.y, currentPos.z));
+					CreateCube(new Vector3 (testHit.transform.position.x, currentPos.y, currentPos.z));
 					currentDirection = (Direction)nodeHistory[nodeIndex-1].NewDirection();
 				}else if (testHit.transform.tag == Strings.tag_Ground){ // Ground
 					Debug.Log("hit ground  " + currentDirection + " at " + testHit.point + "  node = " + nodeIndex);
@@ -96,7 +96,7 @@ public class PathFinding{
 				}else if (testHit.transform.tag == Strings.tag_Destination){ // Destination
 					Debug.Log("found a path!");
 					findPath = false;
-					CreateCube(new Vector3 (hitPos.x, hitPos.y-.4f, currentPos.z));
+					CreateCube(new Vector3 (hitPos.x, hitPos.y, currentPos.z));
 				}else if (nodeIndex == 0) {
 					findPath = false;
 					foundPath = 1;
@@ -110,7 +110,7 @@ public class PathFinding{
 			
 		
 		if (nodeIndex > 7){
-			nodeIndex = 0;	
+			nodeIndex = 1;	
 			currentDirection = (Direction)nodeHistory[nodeIndex].NewDirection();
 		}
 		
@@ -268,12 +268,14 @@ public class PathFinding{
 public class NodeDirections{
 	public bool goneLeft, goneRight, goneUp, goneDown, hitClimbable;
 	public Vector3 curr, dest;
+	public int past;
 	public NodeDirections(int past, Vector3 curr, Vector3 dest, bool hit){
 		goneLeft = false;
 		goneRight = false;
 		goneUp = false;
 		goneDown = false;
 		hitClimbable = hit;
+		this.past = past;
 		this.curr = curr;
 		this.dest = dest;
 		switch(past){
@@ -318,6 +320,9 @@ public class NodeDirections{
 			goneUp = true;
 			return 2;
 		}else if (!goneDown && hitClimbable){
+			goneDown = true;
+			return 3;
+		}else if (past == 5 && !goneDown){
 			goneDown = true;
 			return 3;
 		}else{	
