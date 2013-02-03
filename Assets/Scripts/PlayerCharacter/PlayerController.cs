@@ -48,6 +48,7 @@ public class PlayerController : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		Debug.Log(GetComponent<CharacterController>().height);
 		EventManager.instance.mOnClickOnObjectAwayFromPlayerEvent += new EventManager.mOnClickOnObjectAwayFromPlayerDelegate (OnClickToMove);
 		EventManager.instance.mOnClickNoObjectEvent += new EventManager.mOnClickedNoObjectDelegate (OnClickToMove);
 	}
@@ -62,11 +63,11 @@ public class PlayerController : MonoBehaviour {
 		int mask = (1 << 9);
 		RaycastHit hit;
 		if (Physics.Raycast(new Vector3(pos.x, pos.y, this.transform.position.z), Vector3.down , out hit, Mathf.Infinity, mask)) {
-			Debug.Log("hit " + hit.transform.tag + "  " + hit.transform.position);
-			Vector3 hitPos = hit.transform.position;
+			Debug.Log("hit Starting " + hit.point);
+			Vector3 hitPos = hit.point;
 			finish = (GameObject)Instantiate(destination,new Vector3(pos.x, hitPos.y +1.5f, this.transform.position.z),this.transform.rotation);
 			pathFinding = new PathFinding();
-			pathFinding.StartPath(this.transform.position ,new Vector3(pos.x, hitPos.y -.5f, .5f));
+			pathFinding.StartPath(this.transform.position, new Vector3(pos.x, hitPos.y -.5f, .5f), GetComponent<CharacterController>().height);
 		}
     }
 	
@@ -143,7 +144,7 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	private bool IsClimbable(Collider trigger){
-		return (trigger.CompareTag(Strings.tag_Climbable) && trigger.renderer.enabled);
+		return ((trigger.CompareTag(Strings.tag_Climbable) || trigger.CompareTag(Strings.tag_LadderTop)) && trigger.renderer.enabled);
 	}
 	
 	void OnControllerColliderHit(ControllerColliderHit hit){
@@ -178,13 +179,9 @@ public class PlayerController : MonoBehaviour {
 		}
 	
 	void MoveCharacter(Vector3 dest){
-		// Calculate actual motion
-		//Vector3 movement = new Vector3(currentHorizontalSpeed, currentVerticalSpeed, 0 );
-		//movement *= Time.deltaTime;
-		
 		Vector3 pos = this.transform.position;
 		Vector3 movement = new Vector3(0,0,0);
-		
+		//Debug.Log("Moving towards " + dest + "  Current Pos " + pos);
 		if (pos.x < dest.x){
 			movement.x += speed;
 			LookRight();
@@ -219,11 +216,12 @@ public class PlayerController : MonoBehaviour {
 	
 	bool NearPoint(Vector3 point){
 		Vector3 pos = this.transform.position;
-		float difference = .1f;
+		float difference = .3f;
 		if (pos.x  < point.x + difference && pos.x > point.x - difference){
 			if (pos.y  < point.y + difference && pos.y > point.y - difference)
 				return true;
 		}
+		//Debug.Log("Distance " + Vector3.Distance(point, pos) + "  from  " + pos + "  to " + point);
 	return false;
 	}
 	
