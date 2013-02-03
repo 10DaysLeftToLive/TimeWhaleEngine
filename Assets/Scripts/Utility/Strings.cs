@@ -34,6 +34,7 @@ public static class Strings{
 	
 	public static string animation_walk = "Walk";
 	public static string animation_climb = "Climb";
+	public static string animation_stand = "Stand";
 	
 	public static string NextLevel = "NextLevelToLoad";
 	public static string LoadingScreen = "LoadingScreen";

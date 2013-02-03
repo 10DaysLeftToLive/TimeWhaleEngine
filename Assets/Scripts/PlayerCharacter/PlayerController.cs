@@ -71,6 +71,7 @@ public class PlayerController : MonoBehaviour {
 			finish = (GameObject)Instantiate(destination,new Vector3(pos.x, hitPos.y +1.5f, this.transform.position.z),this.transform.rotation);
 			pathFinding = new PathFinding();
 			pathFinding.StartPath(this.transform.position, new Vector3(pos.x, hitPos.y -1f, .5f), GetComponent<CharacterController>().height);
+			currentAnimation.Play(Strings.animation_walk);
 		}
     }
 	
@@ -81,6 +82,14 @@ public class PlayerController : MonoBehaviour {
 			if(isAffectedByGravity){
 				ApplyGravity();
 			}	
+		}
+		
+		if(currentHorizontalSpeed == 0 && currentVerticalSpeed == 0  && !isTouchingTrigger){
+			currentAnimation.Play(Strings.animation_stand);
+		}
+		
+		if(currentHorizontalSpeed != 0 && !isTouchingTrigger){
+			currentAnimation.Play(Strings.animation_walk);	
 		}
 		
 		if (pathFinding != null){
@@ -145,6 +154,8 @@ public class PlayerController : MonoBehaviour {
 		else if(trigger.tag == Strings.tag_GrowableUp){
 			isTouchingGrowableUp = false;	
 		}
+		
+		isTouchingTrigger = false;
 	}
 	
 	private bool IsClimbable(Collider trigger){
@@ -178,6 +189,14 @@ public class PlayerController : MonoBehaviour {
 			// Calculate actual motion
 			Vector3 movement = new Vector3(currentHorizontalSpeed, currentVerticalSpeed, 0 );
 			movement *= Time.deltaTime;
+		
+			if(movement.x != 0){
+				if(movement.x < 0){
+					LookLeft();
+				}else{
+					LookRight();
+				}
+			}
 			
 			Move(movement);
 		}
