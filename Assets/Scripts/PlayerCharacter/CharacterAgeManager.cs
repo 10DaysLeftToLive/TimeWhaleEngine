@@ -12,6 +12,30 @@ public class CharacterAgeManager {
 		currentAge = CharacterAgeState.YOUNG;
 	}
 	
+	public static CharacterAge GetAgeTransitionUp(){
+		CharacterAgeState tempAge = currentAge;
+		
+		if (currentAge < CharacterAgeState.OLD){
+			tempAge++;
+		} else {
+			tempAge = CharacterAgeState.YOUNG;
+		}
+		CharacterAge tempcas = GetAgeOf(tempAge);
+		return GetAgeOf(tempAge);
+	}
+	
+	public static CharacterAge GetAgeTransitionDown(){	
+		CharacterAgeState tempAge = currentAge;
+			
+		if (currentAge > CharacterAgeState.YOUNG){
+			tempAge--;
+		} else {
+			tempAge = CharacterAgeState.OLD;
+		}
+		
+		return GetAgeOf(tempAge);
+	}
+	
 	public static void TransistionUp(){
 		CharacterAge previousAge = GetCurrentAge();
 		
@@ -41,8 +65,7 @@ public class CharacterAgeManager {
 	}
 	
 	private static void Transition(CharacterAge previousAge, CharacterAge newAge){
-		playerCharacter.currentAge = previousAge;
-		UpdatePlayer(newAge);
+		UpdatePlayer(previousAge);
 		Crossfade.FadeBetween(previousAge, newAge);
 	}
 	
@@ -50,20 +73,20 @@ public class CharacterAgeManager {
 		GetCurrentAge().backgroundMusic.Play();
 	}
 	
-	public static void UpdatePlayer(CharacterAge newAge){
-		playerCharacter.ChangeAge(GetCurrentAge());
+	public static void UpdatePlayer(CharacterAge previousAge){
+		playerCharacter.ChangeAge(GetCurrentAge(), previousAge);
 	}
 	
 	public static void SetupYoung(BoneAnimation _boneAnimation, Transform _sectionTarget, AudioSource _backgroundMusic){
-		characterAges[(int)CharacterAgeState.YOUNG] = new CharacterAge(CharacterAgeState.YOUNG, _boneAnimation, _sectionTarget, _backgroundMusic);
+		characterAges[(int)CharacterAgeState.YOUNG] = new CharacterAge(CharacterAgeState.YOUNG, _boneAnimation, _sectionTarget, _backgroundMusic, playerCharacter.smallHitBox);
 	}
 	
 	public static void SetupMiddle(BoneAnimation _boneAnimation, Transform _sectionTarget, AudioSource _backgroundMusic){
-		characterAges[(int)CharacterAgeState.MIDDLE] = new CharacterAge(CharacterAgeState.MIDDLE, _boneAnimation, _sectionTarget, _backgroundMusic);
+		characterAges[(int)CharacterAgeState.MIDDLE] = new CharacterAge(CharacterAgeState.MIDDLE, _boneAnimation, _sectionTarget, _backgroundMusic, playerCharacter.bigHitbox);
 	}
 	
 	public static void SetupOld(BoneAnimation _boneAnimation, Transform _sectionTarget, AudioSource _backgroundMusic){
-		characterAges[(int)CharacterAgeState.OLD] = new CharacterAge(CharacterAgeState.OLD, _boneAnimation, _sectionTarget, _backgroundMusic);
+		characterAges[(int)CharacterAgeState.OLD] = new CharacterAge(CharacterAgeState.OLD, _boneAnimation, _sectionTarget, _backgroundMusic, playerCharacter.bigHitbox);
 	}
 	
 	public static CharacterAgeState GetCurrentAgeState(){
@@ -74,8 +97,12 @@ public class CharacterAgeManager {
 		currentAge = startingAge;
 	}
 	
-	private static CharacterAge GetCurrentAge(){
+	public static CharacterAge GetCurrentAge(){
 		return (characterAges[(int)currentAge]);
+	}
+	
+	private static CharacterAge GetAgeOf(CharacterAgeState age){
+		return (characterAges[(int) age]);
 	}
 }
 

@@ -25,8 +25,6 @@ public class PlayerController : MonoBehaviour {
 	public bool isControllable = true;
 	public bool isAffectedByGravity = true;
 	
-	public CharacterAge currentAge;
-	
 	public bool IsTouchingGrowableUp{
 		get{return isTouchingGrowableUp;}
 	}
@@ -46,9 +44,13 @@ public class PlayerController : MonoBehaviour {
 	private static float RIGHT = 1;
 	private static float LEFT = -1;
 	
+	private static float RAYCAST_Z_OFFSET = -2;
+	
+	public Capsule smallHitBox;
+	public Capsule bigHitbox;
+	
 	// Use this for initialization
 	void Start () {
-		Debug.Log(GetComponent<CharacterController>().height);
 		EventManager.instance.mOnClickOnObjectAwayFromPlayerEvent += new EventManager.mOnClickOnObjectAwayFromPlayerDelegate (OnClickToMove);
 		EventManager.instance.mOnClickNoObjectEvent += new EventManager.mOnClickedNoObjectDelegate (OnClickToMove);
 	}
@@ -57,17 +59,16 @@ public class PlayerController : MonoBehaviour {
 		// you now have the position of a click that is either on an object and too far from the player
 		// or on no object
 		Vector3 pos = Camera.main.ScreenToWorldPoint(e.position);
-		Debug.Log("Clicked to Move to " + pos);
 		pathFinding = null;
 		if (finish != null) Destroy(finish);
 		int mask = (1 << 9);
 		RaycastHit hit;
 		if (Physics.Raycast(new Vector3(pos.x, pos.y, this.transform.position.z), Vector3.down , out hit, Mathf.Infinity, mask)) {
-			Debug.Log("hit Starting " + hit.point);
 			Vector3 hitPos = hit.point;
 			finish = (GameObject)Instantiate(destination,new Vector3(pos.x, hitPos.y +1.5f, this.transform.position.z),this.transform.rotation);
 			pathFinding = new PathFinding();
 			pathFinding.StartPath(this.transform.position, new Vector3(pos.x, hitPos.y -1f, .5f), GetComponent<CharacterController>().height);
+			currentAnimation.Play(Strings.animation_walk);
 		}
     }
 	
@@ -80,9 +81,18 @@ public class PlayerController : MonoBehaviour {
 			}	
 		}
 		
+		if(currentHorizontalSpeed == 0 && currentVerticalSpeed == 0  && !isTouchingTrigger){
+			//currentAnimation.Play(Strings.animation_stand);
+		}
+		
+		if(currentHorizontalSpeed != 0 && !isTouchingTrigger){
+			//currentAnimation.Play(Strings.animation_walk);	
+		}
+		
 		if (pathFinding != null){
 			path = null;
 			pathFinding.Update();
+			currentAnimation.Play("Walk");
 			if (pathFinding.foundPath == 2){
 				path = pathFinding.FoundPath();
 				pathIndex = 1;
@@ -99,6 +109,8 @@ public class PlayerController : MonoBehaviour {
 		
 		if (path != null){
 			MoveCharacter(path[pathIndex]);
+		} else {
+			currentAnimation.Play("Stand");
 		}
 	}
 	
@@ -142,6 +154,8 @@ public class PlayerController : MonoBehaviour {
 		else if(trigger.tag == Strings.tag_GrowableUp){
 			isTouchingGrowableUp = false;	
 		}
+		
+		isTouchingTrigger = false;
 	}
 	
 	private bool IsClimbable(Collider trigger){
@@ -175,6 +189,14 @@ public class PlayerController : MonoBehaviour {
 			// Calculate actual motion
 			Vector3 movement = new Vector3(currentHorizontalSpeed, currentVerticalSpeed, 0 );
 			movement *= Time.deltaTime;
+		
+			if(movement.x != 0){
+				if(movement.x < 0){
+					LookLeft();
+				}else{
+					LookRight();
+				}
+			}
 			
 			Move(movement);
 		}
@@ -244,15 +266,30 @@ public class PlayerController : MonoBehaviour {
 		currentTouchedGrowableUp = growableUpTransform;
 	}
 	
-	public void ChangeAge(CharacterAge newAge){
+	public void ChangeAge(CharacterAge newAge, CharacterAge previousAge){
 		if (isTouchingGrowableUp){
 			Transform growableUpTSO = FindGrowableUp(currentTouchedGrowableUp);
 			TeleportCharacterAbove(growableUpTSO);
 		} else {
-			ChangeAgePosition(newAge.sectionTarget);
+			ChangeAgePosition(newAge, previousAge);
 		}
 		
+		ChangeHitBox(newAge, previousAge);
 		ChangeAnimation(newAge.boneAnimation);
+	}
+	
+	private void ChangeHitBox(CharacterAge newAge, CharacterAge previousAge){
+		CharacterController charControl = GetComponent<CharacterController>();	
+		charControl.radius = newAge.capsule.radius;
+		charControl.height = newAge.capsule.height;
+		charControl.center = newAge.capsule.center;
+		
+		if(previousAge.stateName == CharacterAgeState.YOUNG){
+			if(newAge.stateName == CharacterAgeState.MIDDLE || newAge.stateName == CharacterAgeState.OLD){
+				transform.position = new Vector3(transform.position.x, transform.position.y + newAge.capsule.height/2, + transform.position.z);
+			}
+		}
+		
 	}
 	
 	Transform FindGrowableUp(GameObject currentlyTouchingGrowableUp){
@@ -323,15 +360,59 @@ public class PlayerController : MonoBehaviour {
 		transform.position = toTeleportAbove.position + new Vector3(0,TELEPORT_ABOVE_GROWABLE_DISTANCE,0);
 	}	
 	
-	public void ChangeAgePosition(Transform newSectrionTarget){
-		Vector3 newTargetPos = newSectrionTarget.position;
-		Vector3 deltaPlayerToCurrentFrame = transform.position - currentAge.sectionTarget.position;
+	public bool CheckTransitionPositionSuccess(CharacterAge newAge, CharacterAge previousAge){
+		Vector3 playerCenter = GetNewAgeWorldPosition(newAge, previousAge);
+		
+		CharacterController charControl = GetComponent<CharacterController>();
+		
+		Vector3 linecastTopLeftStart = new Vector3(playerCenter.x - charControl.radius, playerCenter.y + (charControl.height * 0.5f),playerCenter.z - charControl.radius + RAYCAST_Z_OFFSET);
+		Vector3 linecastTopLeftEnd = new Vector3(playerCenter.x - charControl.radius, playerCenter.y + (charControl.height * 0.5f), playerCenter.z + charControl.radius);
+		
+		Vector3 linecastTopRightStart = new Vector3(playerCenter.x + charControl.radius, playerCenter.y + (charControl.height * 0.5f),playerCenter.z - charControl.radius + RAYCAST_Z_OFFSET);
+		Vector3 linecastTopRightEnd = new Vector3(playerCenter.x + charControl.radius, playerCenter.y + (charControl.height * 0.5f), playerCenter.z + charControl.radius);
+		
+		Vector3 linecastBottomLeftStart = new Vector3(playerCenter.x - charControl.radius, playerCenter.y - (charControl.height * 0.5f),playerCenter.z - charControl.radius + RAYCAST_Z_OFFSET);
+		Vector3 linecastBottonLeftEnd = new Vector3(playerCenter.x - charControl.radius, playerCenter.y - (charControl.height * 0.5f), playerCenter.z + charControl.radius);
+		
+		Vector3 linecastBottomRightStart = new Vector3(playerCenter.x + charControl.radius, playerCenter.y - (charControl.height * 0.5f),playerCenter.z - charControl.radius + RAYCAST_Z_OFFSET);
+		Vector3 linecastBottomRightEnd = new Vector3(playerCenter.x + charControl.radius, playerCenter.y - (charControl.height * 0.5f), playerCenter.z + charControl.radius);
+		
+		RaycastHit hit = new RaycastHit();
+		/*
+		Debug.DrawLine(linecastTopLeftStart, linecastTopLeftEnd,Color.red, 100);
+		Debug.DrawLine(linecastTopRightStart, linecastTopRightEnd,Color.red, 100);
+		Debug.DrawLine(linecastBottomLeftStart, linecastBottonLeftEnd,Color.red, 100);
+		Debug.DrawLine(linecastBottomRightStart, linecastBottomRightEnd,Color.red, 100);
+		*/
+		if(Physics.Linecast(linecastTopLeftStart, linecastTopLeftEnd, out hit) ||
+			Physics.Linecast(linecastTopRightStart, linecastTopRightEnd, out hit) ||
+			Physics.Linecast(linecastBottomLeftStart, linecastBottonLeftEnd, out hit) ||
+			Physics.Linecast(linecastBottomRightStart, linecastBottomRightEnd, out hit)){
+			Debug.Log ("PHASERS TARGETED: " + hit.transform.name);
+			if(hit.transform.GetComponent<MeshRenderer>().enabled == true){
+				if(hit.transform.tag == Strings.tag_Pushable ||
+					hit.transform.tag == Strings.tag_Block ){
+					return false;	
+				}
+			}
+		}
+		
+		return true;	
+		
+	}
+	
+	public void ChangeAgePosition(CharacterAge newAge, CharacterAge previousAge){
+		transform.position = GetNewAgeWorldPosition(newAge, previousAge);
+	}
+	
+	private Vector3 GetNewAgeWorldPosition(CharacterAge newAge, CharacterAge previousAge){
+		Vector3 deltaPlayerToCurrentFrame = transform.position - previousAge.sectionTarget.position;
 		
 		
-		Vector3 newPos = new Vector3(newTargetPos.x + deltaPlayerToCurrentFrame.x,
-										 newTargetPos.y + deltaPlayerToCurrentFrame.y,
-										 newTargetPos.z + deltaPlayerToCurrentFrame.z);
-		transform.position = newPos;
+		return new Vector3(newAge.sectionTarget.position.x + deltaPlayerToCurrentFrame.x,
+										 newAge.sectionTarget.position.y + deltaPlayerToCurrentFrame.y,
+										 newAge.sectionTarget.position.z + deltaPlayerToCurrentFrame.z);
+		
 	}
 	
 	public void ChangeAnimation(BoneAnimation newAnimation){

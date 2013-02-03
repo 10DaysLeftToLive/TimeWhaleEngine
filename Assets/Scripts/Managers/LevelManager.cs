@@ -116,18 +116,25 @@ public class LevelManager : MonoBehaviour {
 	
 	private void ShiftUpAge(){		
 		if (CharacterAgeManager.GetCurrentAgeState() != CharacterAgeState.OLD){
-			CharacterAgeManager.TransistionUp();
-			
-			UpdateTimeSwitchObjects(CharacterAgeManager.GetCurrentAgeState());
+			if(playerCharacter.CheckTransitionPositionSuccess(CharacterAgeManager.GetAgeTransitionUp(), CharacterAgeManager.GetCurrentAge())){
+				CharacterAgeManager.TransistionUp();
+				UpdateTimeSwitchObjects(CharacterAgeManager.GetCurrentAgeState());
+			}
+			else{
+				Debug.Log("CAN'T TELEPORT THERE!");	
+			}
 		}
 	}
 	
 	private void ShiftDownAge(){
 		if (CharacterAgeManager.GetCurrentAgeState() != CharacterAgeState.YOUNG){
-
-			CharacterAgeManager.TransistionDown();
-			
-			UpdateTimeSwitchObjects(CharacterAgeManager.GetCurrentAgeState());
+			if(playerCharacter.CheckTransitionPositionSuccess(CharacterAgeManager.GetAgeTransitionDown(), CharacterAgeManager.GetCurrentAge())){
+				CharacterAgeManager.TransistionDown();
+				UpdateTimeSwitchObjects(CharacterAgeManager.GetCurrentAgeState());
+			}
+			else{
+				Debug.Log("CAN'T TELEPORT THERE!");	
+			}
 		}
 	}
 	
