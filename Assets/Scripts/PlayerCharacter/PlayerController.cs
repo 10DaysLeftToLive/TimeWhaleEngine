@@ -82,11 +82,11 @@ public class PlayerController : MonoBehaviour {
 		}
 		
 		if(currentHorizontalSpeed == 0 && currentVerticalSpeed == 0  && !isTouchingTrigger){
-			currentAnimation.Play(Strings.animation_stand);
+			//currentAnimation.Play(Strings.animation_stand);
 		}
 		
 		if(currentHorizontalSpeed != 0 && !isTouchingTrigger){
-			currentAnimation.Play(Strings.animation_walk);	
+			//currentAnimation.Play(Strings.animation_walk);	
 		}
 		
 		if (pathFinding != null){
