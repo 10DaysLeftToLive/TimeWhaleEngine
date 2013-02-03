@@ -15,7 +15,9 @@ public class NPCCollection {
 	}
 	
 	public void Add(NPCData npcData){
-		npcs.Add(npcData);
+		if (GetNPC(npcData.name) == null){
+			npcs.Add(npcData);
+		}
 	}
 	
 	public float GetDisposition(string npcName){
