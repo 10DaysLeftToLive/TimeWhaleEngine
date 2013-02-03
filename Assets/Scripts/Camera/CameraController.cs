@@ -10,7 +10,7 @@ Attach this script to the camera.
 public class CameraController : MonoBehaviour {
 	// Variables for altering the camera's movement
 	static public float speedOfZoom = 100f;	
-	static public float closestZoomDistance = 4f;	
+	static public float closestZoomDistance = 1f;	
 	static public float farthestZoomDistnace = 15f;
 	static public float zoomingIncrement = .5f;
 	
