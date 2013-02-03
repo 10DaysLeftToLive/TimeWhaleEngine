@@ -5,7 +5,8 @@ public class FollowCamera : MonoBehaviour {
 	
 	public Transform cameraTarget;
 	
-	public float zOffsetRelativeToPlayer = - 10;
+	public float yOffsetRelativeToTarget = 3;
+	public float zOffsetRelativeToTarget = - 10;
 	
 	// Use this for initialization
 	void Start () {
@@ -19,7 +20,8 @@ public class FollowCamera : MonoBehaviour {
 	
 	void MoveCameraToTarget(){
 		Vector3 newCameraPosition = cameraTarget.position;
-		newCameraPosition.z += zOffsetRelativeToPlayer;
+		newCameraPosition.y += yOffsetRelativeToTarget;
+		newCameraPosition.z += zOffsetRelativeToTarget;
 		transform.position = newCameraPosition;
 	}
 }

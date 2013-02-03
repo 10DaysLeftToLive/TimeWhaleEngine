@@ -67,7 +67,7 @@ public class PlayerController : MonoBehaviour {
 			Vector3 hitPos = hit.point;
 			finish = (GameObject)Instantiate(destination,new Vector3(pos.x, hitPos.y +1.5f, this.transform.position.z),this.transform.rotation);
 			pathFinding = new PathFinding();
-			pathFinding.StartPath(this.transform.position, new Vector3(pos.x, hitPos.y -.5f, .5f), GetComponent<CharacterController>().height);
+			pathFinding.StartPath(this.transform.position, new Vector3(pos.x, hitPos.y -1f, .5f), GetComponent<CharacterController>().height);
 		}
     }
 	
@@ -81,6 +81,7 @@ public class PlayerController : MonoBehaviour {
 		}
 		
 		if (pathFinding != null){
+			path = null;
 			pathFinding.Update();
 			if (pathFinding.foundPath == 2){
 				path = pathFinding.FoundPath();
@@ -96,9 +97,9 @@ public class PlayerController : MonoBehaviour {
 		
 		MoveCharacter();
 		
-		if (path != null)
+		if (path != null){
 			MoveCharacter(path[pathIndex]);
-
+		}
 	}
 	
 	void UpdateMovementControls(){
@@ -216,7 +217,7 @@ public class PlayerController : MonoBehaviour {
 	
 	bool NearPoint(Vector3 point){
 		Vector3 pos = this.transform.position;
-		float difference = .3f;
+		float difference = .5f;
 		if (pos.x  < point.x + difference && pos.x > point.x - difference){
 			if (pos.y  < point.y + difference && pos.y > point.y - difference)
 				return true;
