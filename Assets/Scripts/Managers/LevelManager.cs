@@ -75,6 +75,10 @@ public class LevelManager : MonoBehaviour {
 		LockedDoorManager.instance.LoadInDoors(youngSectionTarget, CharacterAgeState.YOUNG);
 		LockedDoorManager.instance.LoadInDoors(middleSectionTarget, CharacterAgeState.MIDDLE);
 		LockedDoorManager.instance.LoadInDoors(oldSectionTarget, CharacterAgeState.OLD);
+		
+		NPCDispositionManager.instance.LoadInNPCs(youngSectionTarget, CharacterAgeState.YOUNG);
+		NPCDispositionManager.instance.LoadInNPCs(middleSectionTarget, CharacterAgeState.MIDDLE);
+		NPCDispositionManager.instance.LoadInNPCs(oldSectionTarget, CharacterAgeState.OLD);
 	}
 	
 	private void SetFiles(){
