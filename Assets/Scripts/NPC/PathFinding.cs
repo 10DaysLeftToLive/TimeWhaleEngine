@@ -65,21 +65,17 @@ public class PathFinding{
 			}else*/ if (hit){
 				Vector3 hitPos = testHit.point;
 				if (testHit.transform.tag == Strings.tag_Climbable){ // Ladder
-					Debug.Log("hit ladder  " + currentDirection + " at " + testHit.point + "  node = " + nodeIndex);
 					hitClimbable = true;	
 					CreateCube(new Vector3 (testHit.transform.position.x, currentPos.y, currentPos.z));
 					currentDirection = (Direction)nodeHistory[nodeIndex-1].NewDirection();
 				}else if (testHit.transform.tag == Strings.tag_Ground){ // Ground
-					Debug.Log("hit ground  " + currentDirection + " at " + testHit.point + "  node = " + nodeIndex);
 					CreateCube(new Vector3 (currentPos.x, hitPos.y + 1f, currentPos.z));
 					currentDirection = (Direction)nodeHistory[nodeIndex-1].NewDirection();
 				}else if (testHit.transform.tag == Strings.tag_LadderTop){
-					Debug.Log("hit ladderTop  " + currentDirection + " at " + testHit.point + "  node = " + nodeIndex);
 					hitClimbable = true;
 					CreateCube(new Vector3 (currentPos.x, hitPos.y + 1.5f, currentPos.z));
 					currentDirection = (Direction)nodeHistory[nodeIndex-1].NewDirection();
 				}else if (testHit.transform.tag == Strings.tag_Block){ // Block
-					Debug.Log("hit wall at " + testHit.point + "  node = " + nodeIndex);
 					if (nodeIndex > 0){
 						currentDirection = (Direction)nodeHistory[nodeIndex-1].NewDirection();
 					}
@@ -94,13 +90,11 @@ public class PathFinding{
 						Debug.Log("no path found");
 					}		
 				}else if (testHit.transform.tag == Strings.tag_Destination){ // Destination
-					Debug.Log("found a path!");
 					findPath = false;
 					CreateCube(new Vector3 (hitPos.x, hitPos.y, currentPos.z));
 				}else if (nodeIndex == 0) {
 					findPath = false;
 					foundPath = 1;
-					Debug.Log ("nothing found");
 				}
 				
 			}
@@ -145,17 +139,14 @@ public class PathFinding{
 		//Debug.Log ("Testing Path to " + currentDirection + " from pos " + currentPos);
 		//if (currentDirection != Direction.up){ 
 			if (Physics.Raycast(new Vector3(x,y,z), heading, out hit1, Mathf.Infinity, mask)) {
-				Debug.Log("hit1 " +  hit1.transform.tag + "   " + hit1.point);
 				hit1Test = true;
 			}
 			
 			if (Physics.Raycast(new Vector3(x,y,z+zOffset), heading, out hit2, Mathf.Infinity, mask)) {
-				Debug.Log("hit2 " +  hit2.transform.tag + "  " + hit2.point);
 				hit2Test = true;
 			}
 			
 			if (Physics.Raycast(new Vector3(x,y,z-zOffset), heading, out hit3, Mathf.Infinity, mask)) {
-				Debug.Log("hit3 " +  hit3.transform.tag + "  " + hit3.point);
 				hit3Test = true;
 			}
 				
@@ -179,7 +170,6 @@ public class PathFinding{
 				if (distance == 9999)
 					distance = 20;
 				for (int i = 1; i < distance; i++){
-				Debug.Log("pit check");
 					if (Physics.Raycast(new Vector3(x,y,z)+heading*i, Vector3.down, out hit1, Mathf.Infinity)) {
 						if (hit1.distance > 1.5f){ 
 							currentDirection = Direction.fall;
@@ -226,7 +216,6 @@ public class PathFinding{
 	
 	private void CreateCube(Vector3 pos){
 		if (nodeIndex > 1 && Vector3.Distance(pos, nodeHistory[nodeIndex-1].GetPos()) <= .5f && testHit.transform.tag != Strings.tag_Destination){
-			Debug.Log("SAME POS");
 			currentDirection = (Direction)nodeHistory[nodeIndex-1].NewDirection();
 		}else {
 			currentPos = pos;
@@ -245,7 +234,6 @@ public class PathFinding{
 			nodeIndex--;
 			currentPos = nodeHistory[nodeIndex-1].GetPos();
 			currentDirection = (Direction)nodeHistory[nodeIndex-1].NewDirection();
-			Debug.Log("Back a node");
 		}else{
 			findPath = false;
 		}
@@ -255,7 +243,6 @@ public class PathFinding{
 		nodePoints = new Vector3[nodeIndex];
 		for (int i = 0; i < nodeIndex; i++){
 			nodePoints[i] = nodeHistory[i].curr;
-			Debug.Log("point[" + i + "] at " + nodePoints[i]);
 		}
 		foundPath = 2;
 	}

@@ -51,7 +51,6 @@ public class PlayerController : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		Debug.Log(GetComponent<CharacterController>().height);
 		EventManager.instance.mOnClickOnObjectAwayFromPlayerEvent += new EventManager.mOnClickOnObjectAwayFromPlayerDelegate (OnClickToMove);
 		EventManager.instance.mOnClickNoObjectEvent += new EventManager.mOnClickedNoObjectDelegate (OnClickToMove);
 	}
@@ -60,13 +59,11 @@ public class PlayerController : MonoBehaviour {
 		// you now have the position of a click that is either on an object and too far from the player
 		// or on no object
 		Vector3 pos = Camera.main.ScreenToWorldPoint(e.position);
-		Debug.Log("Clicked to Move to " + pos);
 		pathFinding = null;
 		if (finish != null) Destroy(finish);
 		int mask = (1 << 9);
 		RaycastHit hit;
 		if (Physics.Raycast(new Vector3(pos.x, pos.y, this.transform.position.z), Vector3.down , out hit, Mathf.Infinity, mask)) {
-			Debug.Log("hit Starting " + hit.point);
 			Vector3 hitPos = hit.point;
 			finish = (GameObject)Instantiate(destination,new Vector3(pos.x, hitPos.y +1.5f, this.transform.position.z),this.transform.rotation);
 			pathFinding = new PathFinding();
