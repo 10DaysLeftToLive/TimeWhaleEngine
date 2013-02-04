@@ -20,10 +20,10 @@ public abstract class npcClass : MonoBehaviour {
 	private string message;
 	private string outOfRangeMessage = "!";
 	private Vector3 playerPos;
-	private Vector3 npcPos;
+	public Vector3 npcPos;
 	private GameObject newImg;
-	private enum State {Idle, Patrol, Moving};
-	private GameObject player;
+	protected enum State {Idle, Patrol, Moving};
+	protected GameObject player;
 	private State npcState, previousState;
 	private Vector3[] path;
 	private int pathIndex;

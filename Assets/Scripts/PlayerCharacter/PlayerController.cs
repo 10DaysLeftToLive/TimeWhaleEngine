@@ -310,10 +310,15 @@ public class PlayerController : MonoBehaviour {
 			pickedUpObject = toPickUp;
 			
 			// This is just to make it go above his head, should go into one of the character's hands
-			Vector3 playerPos = transform.position;
-			toPickUp.transform.position = new Vector3(playerPos.x, playerPos.y+.5f, playerPos.z);
 			
-			toPickUp.transform.parent = transform;
+			
+			Vector3 playerPos = transform.position;
+			
+			Transform rightHandTransform = currentAnimation.GetSpriteTransform("Right Hand");
+			toPickUp.transform.position = new Vector3(rightHandTransform.position.x, 
+				rightHandTransform.position.y, rightHandTransform.position.z);
+			
+			toPickUp.transform.parent = rightHandTransform;
 			pickedUpObject.GetComponent<InteractableOnClick>().Disable();
 		}
 	}
@@ -344,7 +349,8 @@ public class PlayerController : MonoBehaviour {
 		return (pickedUpObject);
 	}
 	
-	public void DropItem(Vector3 toPlace){
+	public void DropItem(Vector3 toPlace) {
+		Debug.Log ("To Place: " + toPlace);
 		pickedUpObject.GetComponent<InteractableOnClick>().Enable();
 		pickedUpObject.transform.position = toPlace;
 		pickedUpObject.transform.parent = null;
