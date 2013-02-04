@@ -174,7 +174,6 @@ public class PlayerController : MonoBehaviour {
 	void OnTriggerExit(Collider trigger){
 		if(IsClimbable(trigger)){
 			isAffectedByGravity = true;
-			currentAnimation.Play(Strings.animation_walk);
 		}
 		else if(trigger.tag == Strings.tag_GrowableUp){
 			isTouchingGrowableUp = false;	
@@ -301,6 +300,7 @@ public class PlayerController : MonoBehaviour {
 		
 		ChangeHitBox(newAge, previousAge);
 		ChangeAnimation(newAge.boneAnimation);
+		isAffectedByGravity = true;
 	}
 	
 	private void ChangeHitBox(CharacterAge newAge, CharacterAge previousAge){
