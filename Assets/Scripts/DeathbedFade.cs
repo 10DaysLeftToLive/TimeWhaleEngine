@@ -1,12 +1,8 @@
 using UnityEngine;
 using System.Collections;
 
-public class DeathbedFade : MonoBehaviour
-{
-	//
+public class DeathbedFade : MonoBehaviour {
 	float timer = 5.0F;
-	//
-
 	Texture2D fadeTexture;
 	float fadeSpeed = 0.2F;
 	int drawDepth = -1000;
@@ -24,7 +20,6 @@ public class DeathbedFade : MonoBehaviour
 	private TweenAlpha panelScript;
 
 	void Start() {
-		Debug.Log("rtjgkbr");
 		if (panelToFade == null){
 			Debug.Log("panelToFade was not set");
 		} else {
@@ -34,7 +29,6 @@ public class DeathbedFade : MonoBehaviour
 	}
 	
 	void Update(){
-		Debug.Log("Alpha = " + panelScript.alpha + " faded in = " + fadedIn);
 		if (panelScript.alpha < .01 && fadedIn){
 			NextScene();
 		} else if (panelScript.alpha > .98){
