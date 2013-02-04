@@ -9,18 +9,11 @@ public class Sister : npcClass {
 	public GameObject paperBoy;
 	
 	protected override void DoReaction(string itemToReactTo) {
-		Debug.Log("Doing reaction between " + name + " and " + itemToReactTo);
 		
-		if (itemToReactTo == Strings.tag_Player) {
-			PlayerController playerController = player.GetComponent<PlayerController>();
-			if (playerController.HasItem()) {
-				GameObject playersItem = playerController.GetItem();
-				Debug.Log ("Player gives this to sister: " + playersItem.tag);
-				if (playersItem.tag == "Flower") {
-					inLove = true;
-				}
-			}
+		if (itemToReactTo == "Flower") {
+			inLove = true;
 		}
+		FallInLove();
 		
 		
 		if (npcDisposition > 5){
@@ -29,14 +22,10 @@ public class Sister : npcClass {
 	}
 	
 	
-	void fallInLove() {
-		//if (paperBoy.inLove && inLove) {
-			//Show emoticon
-		//}
-	}
-	
-	void onTriggerEnter(Collider collide) {
-		DoReaction(collide.tag);
+	void FallInLove() {
+		if ((paperBoy.GetComponent<PaperBoy>() as PaperBoy).inLove && inLove) {
+			Debug.Log ("Sister says: The Paper Boy and the Sister are in Love");
+		}
 	}
 	
 	

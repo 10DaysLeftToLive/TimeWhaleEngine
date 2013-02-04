@@ -374,6 +374,11 @@ public class PlayerController : MonoBehaviour {
 		pickedUpObject = null;	
 	}
 	
+	public void DestroyHeldItem() {
+		Debug.Log ("Destoying item");
+		Destroy(pickedUpObject);
+	}
+	
 	public void TeleportCharacterAbove(Transform toTeleportAbove){
 		transform.position = toTeleportAbove.position + new Vector3(0,TELEPORT_ABOVE_GROWABLE_DISTANCE,0);
 	}	
