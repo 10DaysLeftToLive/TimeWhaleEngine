@@ -64,6 +64,7 @@ public class PlayerController : MonoBehaviour {
 	private void OnClickToMove (EventManager EM, ClickPositionArgs e){	
 		// you now have the position of a click that is either on an object and too far from the player
 		// or on no object
+		/*
 		Vector3 pos = Camera.main.ScreenToWorldPoint(e.position);
 		pathFinding = null;
 		if (finish != null) Destroy(finish);
@@ -75,7 +76,7 @@ public class PlayerController : MonoBehaviour {
 			pathFinding = new PathFinding();
 			pathFinding.StartPath(this.transform.position, new Vector3(pos.x, hitPos.y -1f, .5f), GetComponent<CharacterController>().height);
 			currentAnimation.Play(Strings.animation_walk);
-		}
+		}*/
     }
 	
 	// Update is called once per frame
