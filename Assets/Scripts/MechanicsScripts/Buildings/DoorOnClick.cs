@@ -8,5 +8,7 @@ public class DoorOnClick : OnClickNextToPlayer {
 		building = this.transform.parent.GetComponent<Building>();
 		
 		building.ToggleBuilding();
+
+        playerCharacter.DoorCloseSFX.Play();
 	}
 }
