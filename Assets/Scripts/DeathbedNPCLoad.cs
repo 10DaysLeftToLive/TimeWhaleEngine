@@ -2,8 +2,11 @@ using UnityEngine;
 using System.Collections;
 
 public class DeathbedNPCLoad : MonoBehaviour {
-	//Object npc;
-	//Vector3 pos;
+	public GameObject paperBoy;
+	public GameObject sister;
+	
+	private static bool ENABLED = false;
+	private static bool DISABLED = true;
 
 	// Use this for initialization
 	void Start () {
@@ -23,19 +26,27 @@ public class DeathbedNPCLoad : MonoBehaviour {
 		
 		// Load npcs into positions to be displayed
 		dispositionSister = npcCollection.GetDisposition("Sister");
-		dispositionPaperboy = npcCollection.GetDisposition("Paperboy");
+		dispositionPaperboy = npcCollection.GetDisposition("PaperBoy");
+		
 		if (dispositionSister != null && dispositionPaperboy != null){
 			if (dispositionSister > likesEnough || dispositionPaperboy > likesEnough) {
-				guiTexture.enabled = true;
+				DisableNPCs();
 			} else {
-				guiTexture.enabled = false;
+				EnableNpcs();
 			}
 		}
-
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	private void DisableNPCs(){
+		SetStatusNpcs(DISABLED);
+	}
 	
+	private void EnableNpcs(){
+		SetStatusNpcs(ENABLED);
+	}
+	
+	private void SetStatusNpcs(bool status){
+		paperBoy.SetActiveRecursively(status);
+		sister.SetActiveRecursively(status);
 	}
 }
