@@ -1,17 +1,40 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using SmoothMoves;
 
 public abstract class npcClass : MonoBehaviour {
 	public string npcName;
 	public TextMesh chat;
 	public GameObject symbol;
+	public string currentEmotionState;
+	protected List<string> _standardEmotions;
+//	public GameObject standardEmoticons {
+//		set {
+//			_standardEmotions = (value as SmoothMoves.Sprite).atlas.textureNames;
+//			
+//		}
+//	}; 
+	//Going to need a manager for standard emoticons
+	protected List<string> questEmoticonsNames;
+	//protected 
+	protected GameObject _questEmoticons;
+//	public GameObject questEmoticons { 
+//		set {
+//			questEmoticonsNames = (value as SmoothMoves.Sprite).atlas.textureNames;
+//			this._questEmoticons = value;
+//		}
+//		get { 
+//			return _questEmoticons; 
+//		}
+//	}
+	protected string emoticonState;
 	public float npcDisposition;
 	
 	public int id = 0;
 	
 	private List<Item> itemReactions;
-	
+	private GameObject emoticon;
 	private int randomVariable;
 	private float speed = 5f;
 	private float symbolDuration = 3;
@@ -40,16 +63,16 @@ public abstract class npcClass : MonoBehaviour {
 	
 	
 	// Update is called once per frame
-	/*void Update () {
+	void Update () {
 		actionTimer -= Time.deltaTime;
 		playerPos = player.transform.position;
 		npcPos = this.transform.position;
 		distanceFromPlayer = Mathf.Abs(playerPos.x - npcPos.x);
-		if (distanceFromPlayer < 5){
+		/*if (distanceFromPlayer < 5){
 			chat.text = message;
 		}else {
 			chat.text = outOfRangeMessage;
-		}
+		}*/
 		
 		if(distanceFromPlayer < 2){
 			DisplayImage();
@@ -57,12 +80,12 @@ public abstract class npcClass : MonoBehaviour {
 		//if ( npcState == State.Moving && pathIndex >= path.Length)
 		//	npcState = State.Idle;
 		
-		switch(npcState){
+		/*switch(npcState){
 			case State.Idle: NpcIdle(); break;
 			//case State.Patrol: NpcPatrol(4); break;
 			case State.Moving: Move(path[pathIndex]); break;
-		}
-	}*/
+		}*/
+	}
 	
 	public void UpdateText(string message){
 		this.message = message;
@@ -76,13 +99,13 @@ public abstract class npcClass : MonoBehaviour {
 		if (newImg == null){
 			previousState = npcState;
 			npcState = State.Idle;
-			newImg = (GameObject)Instantiate(symbol,new Vector3(npcPos.x, npcPos.y + 2, npcPos.z),this.transform.rotation);
-			
-			if (npcName == "Charlie"){
+			newImg = (GameObject)Instantiate(symbol,new Vector3(npcPos.x+0.5f, npcPos.y+1f, npcPos.z - 0.1f),this.transform.rotation);
+			//emoticon = (GameObject)Instantiate(
+			/*if (npcName == "Charlie"){
 				newImg.renderer.material.mainTextureOffset =  new Vector2(0,.5f); //happy
 			}else if (npcName == "Susan"){
 				newImg.renderer.material.mainTextureOffset =  new Vector2(.5f,.5f);	//sad
-			}
+			}*/
 			StartCoroutine(Delay());
 			
 		}
@@ -140,6 +163,25 @@ public abstract class npcClass : MonoBehaviour {
 	
 	protected virtual void DoReaction(string itemToReactTo){}
 	#endregion
+	
+	protected virtual void ShowEmoticon(string emoticonName) {
+		SetStandardMoodEmoticon(emoticonName);
+	}
+	
+	protected void SetStandardMoodEmoticon(int emoticonName) {
+		switch(emoticonName) {
+			case 0: emoticonState = "Happy"; break;
+			case 1: emoticonState = "Sad"; break;
+			case 2: emoticonState = "Moody"; break;
+			case 3: emoticonState = "Stressed"; break;
+		}
+	}
+	
+	protected void SetStandardMoodEmoticon(string emoticonName) {
+		emoticonState = emoticonName;
+	}
+	
+	//protected virtual void SetStandardMoodEmotion
 	
 	public void ChangeState(int num){
 		switch(num){
@@ -203,3 +245,12 @@ public abstract class npcClass : MonoBehaviour {
 		return npcPos;	
 	}
 }
+
+public enum EmoticonStates {
+	HAPPY = 0,
+	SAD = 1,
+	STRESSED = 2,
+	MOODY = 3,
+}
+
+
