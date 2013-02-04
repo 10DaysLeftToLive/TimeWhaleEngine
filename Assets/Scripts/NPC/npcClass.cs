@@ -33,7 +33,7 @@ public abstract class npcClass : MonoBehaviour {
 		speed *= Time.deltaTime;
 		npcState = State.Idle;
 		actionTimer = timer;
-		player = GameObject.Find(Strings.Player);	
+		player = GameObject.Find(Strings.Player);
 	}
 	
 	// Update is called once per frame
@@ -122,6 +122,7 @@ public abstract class npcClass : MonoBehaviour {
 				NPCDispositionManager.instance.UpdateWithId(id, GetDisposition());
 				MetricsRecorder.RecordInteraction(name, item.name, item.dispositionChange);
 				hasReacted = true;
+				(player.GetComponent<PlayerController>() as PlayerController).DestroyHeldItem();
 				DoReaction(item.name);
 				break;
 			}
