@@ -3,40 +3,40 @@
   <Npcs>
     <Npcs name="CatLady">
       <items>
-		<Item name="NoItem">
+		<Item name="NoItem" emotionImage="Status">
           <dispositionChange>0</dispositionChange>
         </Item>
       </items>
     </Npcs>
     <Npcs name="Mom">
       <items>
-        <Item name="GoldenGear">
+        <Item name="GoldenGear" emotionImage="Status">
           <dispositionChange>4</dispositionChange>
         </Item>
-		<Item name="NoItem">
+		<Item name="NoItem" emotionImage="Status">
           <dispositionChange>-1</dispositionChange>
         </Item>
       </items>
     </Npcs>
     <Npcs name="Sister">
       <items>
-        <Item name="Plushie">
+        <Item name="Plushie" emotionImage="Status">
           <dispositionChange>3</dispositionChange>
         </Item>
-        <Item name="Flower">
+        <Item name="Flower" emotionImage="Status">
           <dispositionChange>2</dispositionChange>
         </Item>
-		<Item name="NoItem">
+		<Item name="NoItem" emotionImage="Status">
           <dispositionChange>0</dispositionChange>
         </Item>
       </items>
     </Npcs>
-	<Npcs name="PaperBoy">
+	<Npcs name="PaperBoy" emotionImage="Status">
       <items>
-        <Item name="Flower">
+        <Item name="Flower" emotionImage="Status">
           <dispositionChange>1</dispositionChange>
         </Item>
-		<Item name="NoItem">
+		<Item name="NoItem" emotionImage="Status">
           <dispositionChange>0</dispositionChange>
         </Item>
       </items>
