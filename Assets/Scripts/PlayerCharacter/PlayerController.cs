@@ -55,13 +55,20 @@ public class PlayerController : MonoBehaviour {
     public AudioSource PickUpItemSFX;
     public AudioSource PutDownItemSFX;
 	
+	CharacterController controller;
+	
+	private static Vector3 ZEROVELOCITY = new Vector3(0f,0f,0f);
+	
 	// Use this for initialization
 	void Start () {
 		EventManager.instance.mOnClickOnObjectAwayFromPlayerEvent += new EventManager.mOnClickOnObjectAwayFromPlayerDelegate (OnClickToMove);
 		EventManager.instance.mOnClickNoObjectEvent += new EventManager.mOnClickedNoObjectDelegate (OnClickToMove);
+		controller = this.GetComponent<CharacterController>();
 	}
 	
 	private void OnClickToMove (EventManager EM, ClickPositionArgs e){	
+		//currentAnimation.Play(Strings.animation_walk);
+		
 		// you now have the position of a click that is either on an object and too far from the player
 		// or on no object
 		/*
@@ -80,7 +87,14 @@ public class PlayerController : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () {		
+		Debug.Log("Velocity = " + controller.velocity + " zero = " + ZEROVELOCITY + " compared = " + controller.velocity.Equals(ZEROVELOCITY));
+		if (controller.velocity.Equals(ZEROVELOCITY)){
+			currentAnimation.Play(Strings.animation_stand);
+		} else {
+			currentAnimation.Play(Strings.animation_walk);
+		}
+		
 		if(isControllable){
 			UpdateMovementControls();
 			if(isAffectedByGravity){
@@ -95,7 +109,7 @@ public class PlayerController : MonoBehaviour {
 		if(currentHorizontalSpeed != 0 && !isTouchingTrigger){
 			//currentAnimation.Play(Strings.animation_walk);	
 		}
-		
+		/*
 		if (pathFinding != null){
 			path = null;
 			pathFinding.Update();
@@ -110,15 +124,15 @@ public class PlayerController : MonoBehaviour {
 				Destroy(finish);
 				pathFinding = null;
 			}
-		}
+		}*/
 		
 		MoveCharacter();
-		
+		/*
 		if (path != null){
 			MoveCharacter(path[pathIndex]);
 		} else {
 			currentAnimation.Play("Stand");
-		}
+		}*/
 	}
 	
 	void UpdateMovementControls(){
@@ -449,7 +463,7 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	public void Move(Vector3 toMove){
-		CharacterController controller = GetComponent<CharacterController>();
+		
 		lastReturnedCollisionFlags = controller.Move(toMove);
 	}
 }
