@@ -3,11 +3,12 @@ using System.Collections;
 
 public class Sister : npcClass {
 	
-	protected bool inLove = { public get; protected set; }
+	//TODO: This line needs a better getter/setter
+	public bool inLove;
 	
 	public GameObject paperBoy;
 	
-	protected override void DoReaction(string itemToReactTo){
+	protected override void DoReaction(string itemToReactTo) {
 		Debug.Log("Doing reaction between " + name + " and " + itemToReactTo);
 		
 		if (itemToReactTo == Strings.tag_Player) {
@@ -29,9 +30,9 @@ public class Sister : npcClass {
 	
 	
 	void fallInLove() {
-		if (paperBoy.inLove && inLove) {
+		//if (paperBoy.inLove && inLove) {
 			//Show emoticon
-		}
+		//}
 	}
 	
 	void onTriggerEnter(Collider collide) {

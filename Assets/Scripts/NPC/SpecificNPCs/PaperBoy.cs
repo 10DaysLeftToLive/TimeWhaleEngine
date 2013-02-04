@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PaperBoy : npcClass {
 	
-	protected bool inLove = { public get; protected set; }
+	public bool inLove;//TODO: Need to make a better getter/setter system.
 	
 	public GameObject playerSister;
 	
@@ -27,9 +27,9 @@ public class PaperBoy : npcClass {
 	}
 	
 	void fallInLove() {
-		if (playerSister.inLove && inLove) {
+		//if (playerSister.inLove && inLove) {
 			//Show emoticon
-		}
+		//}
 	}
 	
 	void onTriggerEnter(Collider collide) {
