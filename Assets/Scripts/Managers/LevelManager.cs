@@ -42,6 +42,14 @@ public class LevelManager : MonoBehaviour {
 		if (levelDataName == ""){
 			Debug.LogError("Error: No Level data file given to LevelManager.");
 		}
+		
+		float genderAsFloat = PlayerPrefs.GetFloat(Strings.Gender);
+		
+		if (genderAsFloat == 0f){
+			playerGender = CharacterGender.MALE;
+		} else {
+			playerGender = CharacterGender.FEMALE;
+		}
 	}
 	
 	// Use this for initialization
