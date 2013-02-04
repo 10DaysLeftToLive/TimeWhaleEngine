@@ -157,8 +157,7 @@ public class LevelManager : MonoBehaviour {
 	
 	private void SetUpAges(){
 		CharacterAgeManager.SetupYoung(genderAnimationInUse.youngBoneAnimation, 
-						youngSectionTarget, 
-			youngBGM);
+						youngSectionTarget, youngBGM);
 		CharacterAgeManager.SetupMiddle(genderAnimationInUse.middleBoneAnimation, middleSectionTarget, middleBGM);
 		CharacterAgeManager.SetupOld(genderAnimationInUse.oldBoneAnimation, oldSectionTarget, oldBGM);
 	}

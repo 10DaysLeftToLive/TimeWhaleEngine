@@ -48,6 +48,12 @@ public class PlayerController : MonoBehaviour {
 	
 	public Capsule smallHitBox;
 	public Capsule bigHitbox;
+
+    public AudioSource ClimbLadderSFX;
+    public AudioSource DoorCloseSFX;
+    public AudioSource GiveItemSFX;
+    public AudioSource PickUpItemSFX;
+    public AudioSource PutDownItemSFX;
 	
 	// Use this for initialization
 	void Start () {
@@ -137,6 +143,10 @@ public class PlayerController : MonoBehaviour {
 		if(IsClimbable(trigger)){
 			isAffectedByGravity = false;
 			//currentAnimation.Play(Strings.animation_climb);
+
+            if(ClimbLadderSFX.timeSamples == 0){
+                ClimbLadderSFX.Play();
+            }
 			return true;
 		}
 		else if(trigger.tag == Strings.tag_GrowableUp){
@@ -316,6 +326,7 @@ public class PlayerController : MonoBehaviour {
 			toPickUp.transform.parent = transform;
 			pickedUpObject.GetComponent<InteractableOnClick>().Disable();
 		}
+        PickUpItemSFX.Play();
 	}
 	
 	private void SwapItems(GameObject toSwapIn){
@@ -348,7 +359,8 @@ public class PlayerController : MonoBehaviour {
 		pickedUpObject.GetComponent<InteractableOnClick>().Enable();
 		pickedUpObject.transform.position = toPlace;
 		pickedUpObject.transform.parent = null;
-		pickedUpObject = null;	
+		pickedUpObject = null;
+        PutDownItemSFX.Play();
 	}
 	
 	public void DisableHeldItem(){
