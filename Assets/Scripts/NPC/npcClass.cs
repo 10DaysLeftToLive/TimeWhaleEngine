@@ -11,6 +11,7 @@ public abstract class npcClass : MonoBehaviour {
 	public int id = 0;
 	
 	private List<Item> itemReactions;
+	
 	private int randomVariable;
 	private float speed = 5f;
 	private float symbolDuration = 3;
@@ -28,6 +29,7 @@ public abstract class npcClass : MonoBehaviour {
 	private Vector3[] path;
 	private int pathIndex;
 	
+	
 	// Use this for initialization
 	void Start () {
 		speed *= Time.deltaTime;
@@ -36,8 +38,9 @@ public abstract class npcClass : MonoBehaviour {
 		player = GameObject.Find(Strings.Player);
 	}
 	
+	
 	// Update is called once per frame
-	void Update () {/*
+	/*void Update () {
 		actionTimer -= Time.deltaTime;
 		playerPos = player.transform.position;
 		npcPos = this.transform.position;
@@ -48,18 +51,18 @@ public abstract class npcClass : MonoBehaviour {
 			chat.text = outOfRangeMessage;
 		}
 		
-		if(Input.GetKeyDown("c") && distanceFromPlayer < 2){
+		if(distanceFromPlayer < 2){
 			DisplayImage();
 		}
-		if ( npcState == State.Moving && pathIndex >= path.Length)
-			npcState = State.Idle;
+		//if ( npcState == State.Moving && pathIndex >= path.Length)
+		//	npcState = State.Idle;
 		
 		switch(npcState){
 			case State.Idle: NpcIdle(); break;
 			//case State.Patrol: NpcPatrol(4); break;
 			case State.Moving: Move(path[pathIndex]); break;
-		}*/
-	}
+		}
+	}*/
 	
 	public void UpdateText(string message){
 		this.message = message;
@@ -116,8 +119,12 @@ public abstract class npcClass : MonoBehaviour {
 	public void ReactTo(string itemToReactTo){
 		bool hasReacted = false;
 		
-		foreach (Item item in itemReactions){
-			if (item.name == itemToReactTo){
+		foreach (Item item in itemReactions) {
+			
+			if (item.name == "No Item") {
+				//showEmotion(item.emotionImage);
+			}
+			else if (item.name == itemToReactTo) {
 				UpdateDisposition(item.dispositionChange);
 				NPCDispositionManager.instance.UpdateWithId(id, GetDisposition());
 				MetricsRecorder.RecordInteraction(name, item.name, item.dispositionChange);
@@ -180,6 +187,8 @@ public abstract class npcClass : MonoBehaviour {
 				return;
 		}
 	}
+	
+	
 	
 	private bool NearPoint(Vector3 point){
 		float difference = .1f;
