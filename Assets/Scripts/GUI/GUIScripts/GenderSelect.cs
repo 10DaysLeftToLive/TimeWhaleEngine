@@ -13,6 +13,7 @@ public class GenderSelect : MonoBehaviour {
 	}
 	
 	private void StartMainMenu(){
+		Game.Reset();
 		Application.LoadLevel(Strings.Level1);
 	}
 }

@@ -33,6 +33,12 @@ public class NPCCollection {
 		}
 		return (null);
 	}
+	
+	public void ResetDispositions(){
+		foreach (NPCData npc in npcs){
+			npc.disposition = 0;
+		}
+	}
     
     public void Save(string path) {
         var serializer = new XmlSerializer(typeof(NPCCollection));
