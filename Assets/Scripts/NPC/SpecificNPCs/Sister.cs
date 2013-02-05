@@ -8,12 +8,24 @@ public class Sister : npcClass {
 	
 	public GameObject paperBoy;
 	
-	public SmoothMoves.TextureAtlas standardEmoticons;
-	public SmoothMoves.TextureAtlas questEmoticons;
-	public GameObject emoticon;
-	private GameObject emoticonDisplay;
 	
 	protected override void DoReaction(string itemToReactTo) {
+		switch (itemToReactTo){
+			case "Flower":
+				inLove = true;
+				npcDisposition += 10;
+				(player.GetComponent<PlayerController>() as PlayerController).DestroyHeldItem();
+				break;
+			case "Plushie":
+				npcDisposition += 10;
+				(player.GetComponent<PlayerController>() as PlayerController).DestroyHeldItem();
+				break;
+			case "NoItem":
+				break;
+			default:
+				break;
+		}
+		
 		
 		if (itemToReactTo == "Flower") {
 			inLove = true;
