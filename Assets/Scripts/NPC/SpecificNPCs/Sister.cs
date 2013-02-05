@@ -16,9 +16,14 @@ public class Sister : npcClass {
 		FallInLove();
 		
 		
-		if (npcDisposition > 5){
+		if (npcDisposition > 5) {
 			// blah
 		}
+	}
+	
+	protected override void ShowEmoticon(string emoticon) {
+		base.ShowEmoticon(emoticon);
+		
 	}
 	
 	

@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using SmoothMoves;
+//using SmoothMoves.Sprite;
 
 public abstract class npcClass : MonoBehaviour {
 	public string npcName;
@@ -11,21 +12,20 @@ public abstract class npcClass : MonoBehaviour {
 	protected List<string> _standardEmotions;
 //	public GameObject standardEmoticons {
 //		set {
-//			_standardEmotions = (value as SmoothMoves.Sprite).atlas.textureNames;
-//			
+//			_standardEmotions = (value as SmoothMoves.Sprite).atlas.textureNames;	
 //		}
-//	}; 
-	//Going to need a manager for standard emoticons
-	protected List<string> questEmoticonsNames;
-	//protected 
-	protected GameObject _questEmoticons;
-//	public GameObject questEmoticons { 
+//	}
+//	//Going to need a manager for standard emoticons
+//	protected List<string> questEmoticonsNames;
+//	//protected 
+//	protected GameObject _questEmoticons;
+//	public GameObject questEmoticons {
 //		set {
-//			questEmoticonsNames = (value as SmoothMoves.Sprite).atlas.textureNames;
+//			questEmoticonsNames = (List<string>)((value as SmoothMoves.Sprite).atlas.textureNames);
 //			this._questEmoticons = value;
 //		}
-//		get { 
-//			return _questEmoticons; 
+//		get {
+//			return _questEmoticons;
 //		}
 //	}
 	protected string emoticonState;
@@ -100,7 +100,7 @@ public abstract class npcClass : MonoBehaviour {
 			previousState = npcState;
 			npcState = State.Idle;
 			newImg = (GameObject)Instantiate(symbol,new Vector3(npcPos.x+0.5f, npcPos.y+1f, npcPos.z - 0.1f),this.transform.rotation);
-			//emoticon = (GameObject)Instantiate(
+			//emoticon = (GameObject)Instantiate(emoticon, 
 			/*if (npcName == "Charlie"){
 				newImg.renderer.material.mainTextureOffset =  new Vector2(0,.5f); //happy
 			}else if (npcName == "Susan"){
