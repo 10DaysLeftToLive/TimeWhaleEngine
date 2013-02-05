@@ -8,6 +8,21 @@ public class PaperBoy : npcClass {
 	public GameObject playerSister;
 	
 	protected override void DoReaction(string itemToReactTo) {
+		switch (itemToReactTo){
+			case "Flower":
+				inLove = true;
+				npcDisposition += 10;
+				(player.GetComponent<PlayerController>() as PlayerController).DestroyHeldItem();
+				break;
+			case "NoItem":
+				break;
+			default:
+				break;
+		}
+		
+		PlayerPrefs.SetInt("PaperBoy", npcDisposition);
+		
+		
 		if (itemToReactTo == "Flower") {
 			inLove = true;
 		}

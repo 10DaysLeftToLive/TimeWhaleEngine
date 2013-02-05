@@ -5,8 +5,6 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 
-
-
 public class InteractionManager : MonoBehaviour {
 	private PlayerController playerCharacter;
 	
@@ -42,6 +40,7 @@ public class InteractionManager : MonoBehaviour {
 
 	public void InitilizeNPCs(string dispositionData, string levelData){
 		// THIS NEEDS TO BE CHANGED TO USE RESOURCES AND BE LESS REPEATING
+		/*
 		XmlSerializer serializer = new XmlSerializer(typeof(NPCCollection));
 		MemoryStream assetStream = new MemoryStream(disData.bytes);
 		NPCCollection npcCollection = (NPCCollection)serializer.Deserialize(assetStream);
@@ -50,7 +49,7 @@ public class InteractionManager : MonoBehaviour {
 		XmlSerializer serializer2 = new XmlSerializer(typeof(NPCToItemCollection));
 		MemoryStream assetStream2 = new MemoryStream(interactionData.bytes);
 		NPCToItemCollection npcToItems = (NPCToItemCollection)serializer2.Deserialize(assetStream2);
-		assetStream2.Close();
+		assetStream2.Close();*/
 		
 		GameObject[] npcs = GetNPCs();
 		npcClass npc_Class;
@@ -59,7 +58,7 @@ public class InteractionManager : MonoBehaviour {
 		
 		foreach (GameObject npc in npcs){
 			PlayerPrefs.SetInt(npc.name, 0);
-			
+			/*
 			currentData = npcCollection.GetNPC(npc.name);
 			npc_Class = npc.GetComponent<npcClass>();
 			
@@ -69,7 +68,7 @@ public class InteractionManager : MonoBehaviour {
 			currentNPCReactions = npcToItems.GetNPC(npc.name);
 			
 			SetNPCDisposition(npc_Class, currentData);
-			SetNPCInteractions(npc_Class, currentNPCReactions);
+			SetNPCInteractions(npc_Class, currentNPCReactions);*/
 			
 		}
 	}

@@ -146,6 +146,9 @@ public abstract class npcClass : MonoBehaviour {
 	public void ReactTo(string itemToReactTo){
 		bool hasReacted = false;
 		
+		DoReaction(itemToReactTo);
+		/*
+		
 		foreach (Item item in itemReactions) {
 			
 			if (item.name == "No Item") {
@@ -165,7 +168,7 @@ public abstract class npcClass : MonoBehaviour {
 			}
 		}
 		
-		if (!hasReacted) Debug.Log("No Interaction was set between " + name + " and " + itemToReactTo);
+		if (!hasReacted) Debug.Log("No Interaction was set between " + name + " and " + itemToReactTo);*/
 	}
 	
 	protected virtual void DoReaction(string itemToReactTo){}
