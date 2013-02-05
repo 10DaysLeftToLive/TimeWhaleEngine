@@ -20,6 +20,8 @@ public class PaperBoy : npcClass {
 				break;
 		}
 		
+		PlayerPrefs.SetInt("PaperBoy", npcDisposition);
+		
 		
 		if (itemToReactTo == "Flower") {
 			inLove = true;

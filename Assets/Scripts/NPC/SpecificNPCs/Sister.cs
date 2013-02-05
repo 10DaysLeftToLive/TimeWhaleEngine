@@ -26,6 +26,8 @@ public class Sister : npcClass {
 				break;
 		}
 		
+		PlayerPrefs.SetInt("Sister", npcDisposition);
+		
 		
 		if (itemToReactTo == "Flower") {
 			inLove = true;
