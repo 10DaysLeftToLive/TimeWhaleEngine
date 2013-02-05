@@ -7,17 +7,12 @@ public class Mom : npcClass {
 			case "GoldenGear":
 				npcDisposition += 10;
 				(player.GetComponent<PlayerController>() as PlayerController).DestroyHeldItem();
+				questDone = true;
 				break;
 			case "NoItem":
 				break;
 			default:
 				break;
-		Debug.Log("Doing reaction between " + name + " and " + itemToReactTo);
-		if (itemToReactTo == "GoldenGear") {
-			questDone = true;
-		}
-		if (npcDisposition > 5){
-			// blah
 		}
 	}
 }

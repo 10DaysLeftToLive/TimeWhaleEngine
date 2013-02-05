@@ -6,13 +6,12 @@ public abstract class npcClass : MonoBehaviour {
 	public string npcName;
 	public TextMesh chat;
 	public GameObject symbol;
-	public string currentEmotionState;
 	
 	//Temporary for the prototype!
 	protected bool questDone = false;
 	
-	public SmoothMoves.TextureAtlas standardEmoticons;
-	public SmoothMoves.TextureAtlas questEmoticons;
+	public GameObject emoticonOne;
+	public GameObject emoticonTwo;
 	public GameObject emoticon;
 	private GameObject emoticonDisplay;
 	
@@ -44,6 +43,9 @@ public abstract class npcClass : MonoBehaviour {
 	private State npcState, previousState;
 	private Vector3[] path;
 	private int pathIndex;
+	
+	int threshold = 50;
+	int counter = 1;
 	
 	
 	// Use this for initialization
@@ -95,14 +97,22 @@ public abstract class npcClass : MonoBehaviour {
 			npcState = State.Idle;
 			newImg = (GameObject)Instantiate(symbol,new Vector3(npcPos.x+0.5f, npcPos.y+1f, npcPos.z - 0.1f),this.transform.rotation);
 			
-			if (!questDone) {
-				emoticon.GetComponent<SmoothMoves.Sprite>().SetAtlas(questEmoticons);
-			}
-			else {
-				emoticon.GetComponent<SmoothMoves.Sprite>().SetAtlas(standardEmoticons);
-			}
+//			if (!questDone) {
+//				Debug.Log (emoticon);
+//				emoticon = emoticonOne;
+//			}
+//			else {
+//				Debug.Log (emoticon);
+//				emoticon = emoticonTwo;
+//			}
+
 			
-			emoticonDisplay = (GameObject)Instantiate(emoticon, new Vector3(npcPos.x+0.5f, npcPos.y+1f, npcPos.z - 0.1f), this.transform.rotation);
+//			if (!questDone) {
+//				emoticonDisplay = (GameObject)Instantiate(emoticonOne, new Vector3(npcPos.x+0.5f, npcPos.y+1f, npcPos.z - 0.1f), this.transform.rotation);
+//			}
+//			else {
+//				emoticonDisplay = (GameObject)Instantiate(emoticonTwo, new Vector3(npcPos.x+0.5f, npcPos.y+1f, npcPos.z - 0.1f), this.transform.rotation);
+//			}
 			
 			/*if (npcName == "Charlie"){
 				newImg.renderer.material.mainTextureOffset =  new Vector2(0,.5f); //happy
@@ -119,6 +129,15 @@ public abstract class npcClass : MonoBehaviour {
 		DestroyObject(newImg);
 		DestroyObject(emoticonDisplay);
 		npcState = previousState;
+	}
+	
+	public void toggleTo(bool emotionOne) {
+		DestroyObject(emoticonDisplay);
+		if (!emotionOne) {
+		emoticonDisplay = (GameObject)Instantiate(emoticonTwo, new Vector3(npcPos.x+0.5f, npcPos.y+1f, npcPos.z - 0.1f), this.transform.rotation);
+		}else{
+		emoticonDisplay = (GameObject)Instantiate(emoticonOne, new Vector3(npcPos.x+0.5f, npcPos.y+1f, npcPos.z - 0.1f), this.transform.rotation);
+		}
 	}
 	
 	#region disposition

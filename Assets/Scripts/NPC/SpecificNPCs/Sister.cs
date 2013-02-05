@@ -19,6 +19,7 @@ public class Sister : npcClass {
 			case "Plushie":
 				npcDisposition += 10;
 				(player.GetComponent<PlayerController>() as PlayerController).DestroyHeldItem();
+				toggleTo(true);
 				break;
 			case "NoItem":
 				break;
@@ -28,11 +29,6 @@ public class Sister : npcClass {
 		
 		PlayerPrefs.SetInt("Sister", npcDisposition);
 		
-		
-		if (itemToReactTo == "Flower") {
-			inLove = true;
-			questDone = true;
-		}
 		FallInLove();
 		print ("Seeing what I got from SmoothMoves");
 		
