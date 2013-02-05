@@ -299,6 +299,8 @@ public class PlayerController : MonoBehaviour {
 		
 		ChangeHitBox(newAge, previousAge);
 		ChangeAnimation(newAge.boneAnimation);
+		SwapItemWithCurrentAge();
+		
 		isAffectedByGravity = true;
 	}
 	
@@ -355,6 +357,21 @@ public class PlayerController : MonoBehaviour {
 		PickUpObject(toSwapIn);
 	}
 	
+	
+	//TODO: Make sure we can't carry items with us to the past, only to the future.
+	protected void SwapItemWithCurrentAge() {
+		if (pickedUpObject != null) {
+			Vector3 oldScale = pickedUpObject.transform.localScale;
+			pickedUpObject.transform.parent = null;
+			Transform rightHand = currentAnimation.GetSpriteTransform("Right Hand");
+			pickedUpObject.SetActiveRecursively(true);
+			pickedUpObject.transform.position = rightHand.position;
+			pickedUpObject.transform.parent = rightHand;
+			pickedUpObject.transform.localScale = oldScale;
+		}
+		Debug.Log("Carrying item with us through age: " + pickedUpObject);
+	}
+	
 	public void InteractWithObject(GameObject toInteractWith){
 		if(toInteractWith.tag.Equals(Strings.tag_CarriableItem)){
 			PickUpObject(toInteractWith);	
@@ -375,10 +392,9 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	public void DropItem(Vector3 toPlace) {
-		Debug.Log ("To Place: " + toPlace);
 		pickedUpObject.GetComponent<InteractableOnClick>().Enable();
-		pickedUpObject.transform.position = toPlace;
 		pickedUpObject.transform.parent = null;
+		pickedUpObject.transform.position = toPlace;
 		pickedUpObject = null;
         PutDownItemSFX.Play();
 	}
@@ -389,7 +405,6 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	public void DestroyHeldItem() {
-		Debug.Log ("Destoying item");
 		Destroy(pickedUpObject);
 	}
 	
