@@ -290,6 +290,8 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	public void ChangeAge(CharacterAge newAge, CharacterAge previousAge){
+		CheckItemSwapWithAge(newAge);
+		
 		if (isTouchingGrowableUp){
 			Transform growableUpTSO = FindGrowableUp(currentTouchedGrowableUp);
 			TeleportCharacterAbove(growableUpTSO);
@@ -335,6 +337,8 @@ public class PlayerController : MonoBehaviour {
 		} else {
 			pickedUpObject = toPickUp;
 			
+			ItemManager item = new ItemManager();
+			Debug.Log(item.FirstAppearance(toPickUp));
 			// This is just to make it go above his head, should go into one of the character's hands
 			
 			
@@ -358,7 +362,17 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	
-	//TODO: Make sure we can't carry items with us to the past, only to the future.
+	private void CheckItemSwapWithAge(CharacterAge newAge){
+		if (pickedUpObject != null) {
+			ItemManager item = new ItemManager();
+			if (item.FirstAppearance(pickedUpObject) > (int)newAge.stateName){
+				DropItem(new Vector3(this.transform.position.x, this.transform.position.y - 
+						(GetComponent<CharacterController>().height/2),this.transform.position.z));
+					Debug.Log("Dropped at " + this.transform.position);
+			}
+		}
+	}
+	
 	protected void SwapItemWithCurrentAge() {
 		if (pickedUpObject != null) {
 			Vector3 oldScale = pickedUpObject.transform.localScale;
@@ -368,8 +382,8 @@ public class PlayerController : MonoBehaviour {
 			pickedUpObject.transform.position = rightHand.position;
 			pickedUpObject.transform.parent = rightHand;
 			pickedUpObject.transform.localScale = oldScale;
+			Debug.Log("Carrying item with us through age: " + pickedUpObject);
 		}
-		Debug.Log("Carrying item with us through age: " + pickedUpObject);
 	}
 	
 	public void InteractWithObject(GameObject toInteractWith){
