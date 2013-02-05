@@ -1,40 +1,33 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using SmoothMoves;
-//using SmoothMoves.Sprite;
 
 public abstract class npcClass : MonoBehaviour {
 	public string npcName;
 	public TextMesh chat;
 	public GameObject symbol;
 	public string currentEmotionState;
-	protected List<string> _standardEmotions;
-//	public GameObject standardEmoticons {
-//		set {
-//			_standardEmotions = (value as SmoothMoves.Sprite).atlas.textureNames;	
-//		}
-//	}
-//	//Going to need a manager for standard emoticons
-//	protected List<string> questEmoticonsNames;
-//	//protected 
-//	protected GameObject _questEmoticons;
-//	public GameObject questEmoticons {
-//		set {
-//			questEmoticonsNames = (List<string>)((value as SmoothMoves.Sprite).atlas.textureNames);
-//			this._questEmoticons = value;
-//		}
-//		get {
-//			return _questEmoticons;
-//		}
-//	}
+	
+	//Temporary for the prototype!
+	protected bool questDone = false;
+	
+	public SmoothMoves.TextureAtlas standardEmoticons;
+	public SmoothMoves.TextureAtlas questEmoticons;
+	public GameObject emoticon;
+	private GameObject emoticonDisplay;
+	
+	//Going to need a manager for standard emoticons
+	protected List<string> questEmoticonsNames;
+	protected List<string> standEmoticonNames;
+	//protected 
+	
 	protected string emoticonState;
 	public float npcDisposition;
 	
 	public int id = 0;
 	
 	private List<Item> itemReactions;
-	private GameObject emoticon;
+	
 	private int randomVariable;
 	private float speed = 5f;
 	private float symbolDuration = 3;
@@ -59,6 +52,7 @@ public abstract class npcClass : MonoBehaviour {
 		npcState = State.Idle;
 		actionTimer = timer;
 		player = GameObject.Find(Strings.Player);
+		
 	}
 	
 	
@@ -100,7 +94,16 @@ public abstract class npcClass : MonoBehaviour {
 			previousState = npcState;
 			npcState = State.Idle;
 			newImg = (GameObject)Instantiate(symbol,new Vector3(npcPos.x+0.5f, npcPos.y+1f, npcPos.z - 0.1f),this.transform.rotation);
-			//emoticon = (GameObject)Instantiate(emoticon, 
+			
+			if (!questDone) {
+				emoticon.GetComponent<SmoothMoves.Sprite>().SetAtlas(questEmoticons);
+			}
+			else {
+				emoticon.GetComponent<SmoothMoves.Sprite>().SetAtlas(standardEmoticons);
+			}
+			
+			emoticonDisplay = (GameObject)Instantiate(emoticon, new Vector3(npcPos.x+0.5f, npcPos.y+1f, npcPos.z - 0.1f), this.transform.rotation);
+			
 			/*if (npcName == "Charlie"){
 				newImg.renderer.material.mainTextureOffset =  new Vector2(0,.5f); //happy
 			}else if (npcName == "Susan"){
@@ -114,6 +117,7 @@ public abstract class npcClass : MonoBehaviour {
 	IEnumerator Delay(){
 		yield return new WaitForSeconds(symbolDuration);
 		DestroyObject(newImg);
+		DestroyObject(emoticonDisplay);
 		npcState = previousState;
 	}
 	
@@ -154,6 +158,9 @@ public abstract class npcClass : MonoBehaviour {
 				hasReacted = true;
 				(player.GetComponent<PlayerController>() as PlayerController).DestroyHeldItem();
 				DoReaction(item.name);
+				
+				
+				
 				break;
 			}
 		}

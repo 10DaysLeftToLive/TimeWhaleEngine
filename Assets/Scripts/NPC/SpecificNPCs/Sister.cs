@@ -8,13 +8,18 @@ public class Sister : npcClass {
 	
 	public GameObject paperBoy;
 	
+	public SmoothMoves.TextureAtlas standardEmoticons;
+	public SmoothMoves.TextureAtlas questEmoticons;
+	public GameObject emoticon;
+	private GameObject emoticonDisplay;
+	
 	protected override void DoReaction(string itemToReactTo) {
 		
 		if (itemToReactTo == "Flower") {
 			inLove = true;
 		}
 		FallInLove();
-		
+		print ("Seeing what I got from SmoothMoves");
 		
 		if (npcDisposition > 5) {
 			// blah

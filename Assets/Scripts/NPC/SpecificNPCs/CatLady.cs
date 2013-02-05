@@ -11,7 +11,7 @@ public class CatLady : npcClass {
 	protected override void DoReaction(string itemToReactTo){
 		Debug.Log("Doing reaction between " + name + " and " + itemToReactTo);
 		
-		if (itemToReactTo == Strings.tag_Player && !hasKeyBeenPickedUp) {
+		if (itemToReactTo == "Interactable" && !hasKeyBeenPickedUp) {
 			key.transform.position = new Vector3(this.transform.position.x - 1, this.transform.position.y - 1.1f, 0f);
 			hasKeyBeenPickedUp = true;
 		}
@@ -22,6 +22,6 @@ public class CatLady : npcClass {
 	}
 	
 	void OnTriggerEnter(Collider trigger) {	
-		DoReaction(trigger.tag);
+		DoReaction(trigger.gameObject.tag);
 	}
 }
