@@ -9,7 +9,7 @@ public class LockedDoor : InteractableObject {
 		foreach (GameObject keyUnlock in keysThatUnlock){
 			if(toInteractWith == keyUnlock){
 				LockedDoorManager.instance.UnlockeWithId(id);
-				playerCharacter.DisableHeldItem();
+				playerCharacter.DestroyHeldItem();
 			}
 		}
 	}
