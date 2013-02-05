@@ -16,7 +16,7 @@ public class CatLady : npcClass {
 		if (itemToReactTo == "Interactable" && !hasKeyBeenPickedUp) {
 			key.transform.position = new Vector3(this.transform.position.x - 1, this.transform.position.y - 1.1f, 0f);
 			hasKeyBeenPickedUp = true;
-			toggleTo(true);
+			questDone = true;
 		}
 		
 		if (npcDisposition > 5){

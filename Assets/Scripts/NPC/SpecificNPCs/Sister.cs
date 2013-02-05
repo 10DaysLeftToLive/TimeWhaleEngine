@@ -19,7 +19,7 @@ public class Sister : npcClass {
 			case "Plushie":
 				npcDisposition += 10;
 				(player.GetComponent<PlayerController>() as PlayerController).DestroyHeldItem();
-				toggleTo(true);
+				questDone = true;
 				break;
 			case "NoItem":
 				break;
