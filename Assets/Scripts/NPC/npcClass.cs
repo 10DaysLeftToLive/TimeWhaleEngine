@@ -22,7 +22,7 @@ public abstract class npcClass : MonoBehaviour {
 	//protected 
 	
 	protected string emoticonState;
-	public float npcDisposition;
+	public int npcDisposition;
 	
 	public int id = 0;
 	
@@ -122,15 +122,15 @@ public abstract class npcClass : MonoBehaviour {
 	}
 	
 	#region disposition
-	public void SetDisposition(float disp) {
+	public void SetDisposition(int disp) {
 		npcDisposition = disp;
 	}
 	
-	public float GetDisposition(){
+	public int GetDisposition(){
 		return npcDisposition;	
 	}
 	
-	public float UpdateDisposition(float disp) {
+	public int UpdateDisposition(int disp) {
 		npcDisposition += disp;
 		return npcDisposition;
 	}
