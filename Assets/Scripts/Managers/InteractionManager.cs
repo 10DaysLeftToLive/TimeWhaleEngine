@@ -5,6 +5,8 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 
+
+
 public class InteractionManager : MonoBehaviour {
 	private PlayerController playerCharacter;
 	
@@ -26,11 +28,15 @@ public class InteractionManager : MonoBehaviour {
 		foreach (GameObject npc in npcs){
 			NPCData dataForNPC = new NPCData();
 			npc_Class = npc.GetComponent<npcClass>();
-			dataForNPC.disposition = npc_Class.GetDisposition();
+			dataForNPC.disposition = npc_Class.GetDisposition() + 2;
 			dataForNPC.name = npc.name;
+			
+			//THIS ALSO NEEDS TO BE CHANGED
+			PlayerPrefs.SetInt(npc.name, dataForNPC.disposition);
+			
+			
 			npcCollection.Add(dataForNPC);
 		}
-		
 		npcCollection.Save(disposiitonData);
 	}
 
@@ -52,13 +58,19 @@ public class InteractionManager : MonoBehaviour {
 		NPCItemsReactions currentNPCReactions = new NPCItemsReactions();
 		
 		foreach (GameObject npc in npcs){
+			PlayerPrefs.SetInt(npc.name, 0);
+			
 			currentData = npcCollection.GetNPC(npc.name);
 			npc_Class = npc.GetComponent<npcClass>();
+			
+			Debug.Log(npc.name + " = " + npc_Class.npcDisposition);
+			
 			
 			currentNPCReactions = npcToItems.GetNPC(npc.name);
 			
 			SetNPCDisposition(npc_Class, currentData);
 			SetNPCInteractions(npc_Class, currentNPCReactions);
+			
 		}
 	}
 	

@@ -9,8 +9,8 @@ public class DeathbedNPCLoad : MonoBehaviour {
 	public GameObject paperBoy;
 	public GameObject sister;
 	
-	private static bool ENABLED = false;
-	private static bool DISABLED = true;
+	private static bool ENABLED = true;
+	private static bool DISABLED = false;
 	
 	public TextAsset disData;
 	
@@ -20,23 +20,28 @@ public class DeathbedNPCLoad : MonoBehaviour {
 		float likesEnough = 7;
 		float dispositionSister;
 		float dispositionPaperboy;
-		
+		/*
 		XmlSerializer serializer = new XmlSerializer(typeof(NPCCollection));
 		MemoryStream assetStream = new MemoryStream(disData.bytes);
 		NPCCollection npcCollection = (NPCCollection)serializer.Deserialize(assetStream);
-		assetStream.Close();
+		assetStream.Close();*/
 		
 		// Load npcs into positions to be displayed
-		dispositionSister = npcCollection.GetDisposition("Sister");
-		dispositionPaperboy = npcCollection.GetDisposition("PaperBoy");
+		dispositionSister = PlayerPrefs.GetInt("Sister", 0);// npcCollection.GetDisposition("Sister");
+		dispositionPaperboy = PlayerPrefs.GetInt("PaperBoy", 0);//npcCollection.GetDisposition("PaperBoy");
+		
+		Debug.Log("dis sis = " + dispositionSister);
+		Debug.Log("dis paperboy = " + dispositionPaperboy);
 		
 		if (dispositionSister != null && dispositionPaperboy != null){
 			if (dispositionSister > likesEnough || dispositionPaperboy > likesEnough) {
-				DisableNPCs();
-			} else {
 				EnableNpcs();
+			} else {
+				DisableNPCs();
 			}
-		}
+		} else {
+			DisableNPCs();
+		}		
 	}
 	
 	private void DisableNPCs(){

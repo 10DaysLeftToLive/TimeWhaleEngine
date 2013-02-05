@@ -20,7 +20,7 @@ public class NPCDispositionManager : MonoBehaviour {
 		}
 	}
 	
-	public void UpdateWithId(int id, float newDisposition){
+	public void UpdateWithId(int id, int newDisposition){
 		if (npcs.ContainsKey(id)){
 			npcs[id].UpdateDisposition(newDisposition);
 		} else {
@@ -31,6 +31,7 @@ public class NPCDispositionManager : MonoBehaviour {
 	public void Add(npcClass toAdd, CharacterAgeState age){		
 		npcs[toAdd.id].Add(toAdd, age);
 	}
+	
 	
 	#region Singleton
 	private static NPCDispositionManager npcm_instance = null;

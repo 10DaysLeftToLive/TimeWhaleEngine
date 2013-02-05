@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Item {
 	[XmlAttribute("name")]
     public string name;
-    public float dispositionChange;
+    public int dispositionChange;
 	[XmlAttribute("emotionImage")]
 	public string emotionImage;
 	
@@ -13,7 +13,7 @@ public class Item {
 		
 	}
 	
-	public Item(string _name, float _dispositionChange, string _emotionImage){
+	public Item(string _name, int _dispositionChange, string _emotionImage){
 		name = _name;
 		dispositionChange = _dispositionChange;
 		emotionImage = _emotionImage;

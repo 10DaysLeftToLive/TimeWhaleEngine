@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class NPCClassContainer : LinkObjectContainer<npcClass> {
-	public void UpdateDisposition(float newDisposition){
+	public void UpdateDisposition(int newDisposition){
 		npcClass young = Get (CharacterAgeState.YOUNG);
 		npcClass middle = Get (CharacterAgeState.MIDDLE);
 		npcClass old = Get (CharacterAgeState.OLD);

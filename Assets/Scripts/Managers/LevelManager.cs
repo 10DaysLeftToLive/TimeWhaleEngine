@@ -92,12 +92,12 @@ public class LevelManager : MonoBehaviour {
 	private void SetFiles(){
 		levelInteractionFile = Application.dataPath + "/Data/LevelData/" + levelDataName + ".xml";
 		dispositionDataFile = Application.dataPath + "/Data/DispositionData/" + Strings.DispositionFile + ".xml";
-		
+		/*
 		if (!System.IO.File.Exists(levelInteractionFile)){
 			Debug.LogError("Error: " + levelInteractionFile + " was not found.");
 		} else if (!System.IO.File.Exists(dispositionDataFile)){
 			Debug.LogError("Error: " + dispositionDataFile + " was not found.");
-		}
+		}*/
 	}
 	
 	// Update is called once per frame

@@ -38,6 +38,6 @@ public class DeathbedFade : MonoBehaviour {
 
 	public void NextScene(){
 		Debug.Log("Done");
-		Application.LoadLevel(Strings.MainMenu);
+		Application.LoadLevel(Strings.GenderSelect);
 	}
 }
