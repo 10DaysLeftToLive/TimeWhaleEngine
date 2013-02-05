@@ -363,14 +363,14 @@ public class PlayerController : MonoBehaviour {
 	
 	
 	private void CheckItemSwapWithAge(CharacterAge newAge){
-		if (pickedUpObject != null) {
+		/*if (pickedUpObject != null) {
 			ItemManager item = new ItemManager();
 			if (item.FirstAppearance(pickedUpObject) > (int)newAge.stateName){
 				DropItem(new Vector3(this.transform.position.x, this.transform.position.y - 
 						(GetComponent<CharacterController>().height/2),this.transform.position.z));
 					Debug.Log("Dropped at " + this.transform.position);
 			}
-		}
+		}*/
 	}
 	
 	protected void SwapItemWithCurrentAge() {
