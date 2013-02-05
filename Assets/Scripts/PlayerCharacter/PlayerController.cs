@@ -88,7 +88,6 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {		
-		Debug.Log("Velocity = " + controller.velocity + " zero = " + ZEROVELOCITY + " compared = " + controller.velocity.Equals(ZEROVELOCITY));
 		if (controller.velocity.Equals(ZEROVELOCITY)){
 			currentAnimation.Play(Strings.animation_stand);
 		} else {

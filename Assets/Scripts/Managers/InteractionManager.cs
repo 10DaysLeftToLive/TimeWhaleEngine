@@ -3,9 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using System.Xml.Serialization;
 
 public class InteractionManager : MonoBehaviour {
 	private PlayerController playerCharacter;
+	
+	public TextAsset disData;
+	public TextAsset interactionData;
+	
 	
 	// Use this for initialization
 	void Start () {
@@ -30,8 +35,16 @@ public class InteractionManager : MonoBehaviour {
 	}
 
 	public void InitilizeNPCs(string dispositionData, string levelData){
-		NPCCollection npcCollection = NPCCollection.Load(dispositionData);
-		NPCToItemCollection npcToItems = NPCToItemCollection.Load(levelData);
+		// THIS NEEDS TO BE CHANGED TO USE RESOURCES AND BE LESS REPEATING
+		XmlSerializer serializer = new XmlSerializer(typeof(NPCCollection));
+		MemoryStream assetStream = new MemoryStream(disData.bytes);
+		NPCCollection npcCollection = (NPCCollection)serializer.Deserialize(assetStream);
+		assetStream.Close();
+		
+		XmlSerializer serializer2 = new XmlSerializer(typeof(NPCToItemCollection));
+		MemoryStream assetStream2 = new MemoryStream(interactionData.bytes);
+		NPCToItemCollection npcToItems = (NPCToItemCollection)serializer2.Deserialize(assetStream2);
+		assetStream2.Close();
 		
 		GameObject[] npcs = GetNPCs();
 		npcClass npc_Class;
