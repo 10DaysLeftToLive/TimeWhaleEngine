@@ -42,7 +42,9 @@ public class Building : MonoBehaviour {
 	
 	private void Hide(Transform[] objects){
 		foreach (Transform transform in objects){
-			transform.renderer.enabled = false;
+			if (transform.renderer != null){
+				transform.renderer.enabled = false;
+			}
 			if (transform.CompareTag("Untagged") && transform.collider != null) {
 				transform.collider.isTrigger = true;
 			} else if (transform.CompareTag("Pushable")){
@@ -54,7 +56,9 @@ public class Building : MonoBehaviour {
 	
 	private void Show(Transform[] objects){
 		foreach (Transform transform in objects){
-			transform.renderer.enabled = true;
+			if (transform.renderer != null){
+				transform.renderer.enabled = true;
+			}
 			if (transform.CompareTag("Untagged") && transform.collider != null) {
 				transform.collider.isTrigger = false;
 			} else if (transform.CompareTag("Pushable")){
