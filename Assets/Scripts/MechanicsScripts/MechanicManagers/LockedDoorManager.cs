@@ -22,7 +22,7 @@ public class LockedDoorManager : MonoBehaviour {
 	
 	public void UnlockeWithId(int id){
 		if (lockedDoors.ContainsKey(id)){
-			lockedDoors[id].UnlockLinked();
+			lockedDoors[id].UnlockAll();
 		} else {
 			Debug.LogWarning("LockedDoorManager does not contain a building with id " + id);
 		}

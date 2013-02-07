@@ -24,12 +24,4 @@ public abstract class LinkObjectContainer<T> {
 			linkedObjects.Add(age, toAdd);
 		}
 	}
-	/*
-	protected void ExecuteOnAll(){
-		foreach(CharacterAgeState state in linkedObjects.Keys){
-			Perform(Get (state));
-		}
-	}
-	
-	protected virtual void Perform(T toPerformOn){}*/
 }

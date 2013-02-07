@@ -22,7 +22,7 @@ public class NPCDispositionManager : MonoBehaviour {
 	
 	public void UpdateWithId(int id, int newDisposition){
 		if (npcs.ContainsKey(id)){
-			npcs[id].UpdateDisposition(newDisposition);
+			npcs[id].UpdateAll(newDisposition);
 		} else {
 			Debug.LogWarning("NPCDispositionManager does not contain a building with id " + id);
 		}
@@ -31,7 +31,6 @@ public class NPCDispositionManager : MonoBehaviour {
 	public void Add(npcClass toAdd, CharacterAgeState age){		
 		npcs[toAdd.id].Add(toAdd, age);
 	}
-	
 	
 	#region Singleton
 	private static NPCDispositionManager npcm_instance = null;

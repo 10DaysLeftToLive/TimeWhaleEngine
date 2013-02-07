@@ -28,7 +28,7 @@ public class Building : MonoBehaviour {
 		BuildingManager.instance.ToggleWithId(!interiorIsShowing, id);
 	}
 	
-	public void ToggleTo(bool _interiorIsShowing){
+	public void Toggle(){
 		UpdateObjectArrays();
 		if (interiorIsShowing){
 			Hide (interiorObjects);
@@ -37,7 +37,7 @@ public class Building : MonoBehaviour {
 			Hide (exteriorObjects);
 			Show (interiorObjects);
 		}
-		interiorIsShowing = _interiorIsShowing;
+		interiorIsShowing = !interiorIsShowing;
 	}
 	
 	private void Hide(Transform[] objects){

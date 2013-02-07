@@ -21,7 +21,7 @@ public class BuildingManager : MonoBehaviour {
 	
 	public void ToggleWithId(bool interiorIsShowing, int id){
 		if (buildings.ContainsKey(id)){
-			buildings[id].Toggle(interiorIsShowing);
+			buildings[id].ToggleAll();
 		} else {
 			Debug.LogWarning("BuildingManager does not contain a building with id " + id);
 		}
