@@ -1,6 +1,12 @@
 using UnityEngine;
 using System.Collections;
 
+/*
+ * TouchInput.cs
+ * 	Responible for reading touch input and calling correct events in parent class
+ * 
+ */
+
 public class TouchInput : InputType {
 	#region Fields
 	private int[] fingerDown = new int[ 2 ];
