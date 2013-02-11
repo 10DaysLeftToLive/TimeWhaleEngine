@@ -1,25 +1,34 @@
 using UnityEngine;
 using System.Collections;
 
-	/*
-CameraController.js
-This script allows for panning the camera via drag and zooming
+/*
+CameraController.cs
+This script allows for panning the camera via drag and zooming. It will also follow the player character.
+
 Attach this script to the camera.
 */
 
 public class CameraController : MonoBehaviour {
+	#region Fields
 	// Variables for altering the camera's movement
-	static public float speedOfZoom = 100f;	
-	static public float closestZoomDistance = 1f;	
-	static public float farthestZoomDistnace = 15f;
-	static public float zoomingIncrement = .5f;
+	static private float closestZoomDistance = 1f;	
+	static private float farthestZoomDistnace = 15f;
+	static private float zoomingIncrement = .5f;
+	
+	static private float yOffsetRelativeToTarget = 1;
+	static private float zOffsetRelativeToPlayer = - 10;
 	
 	static private Camera thisCamera;
+	static private PlayerController player;
+	#endregion
 	
-	static public float zOffsetRelativeToPlayer = - 10;
-		
-	void Start () {
+	public void Start () {
 		thisCamera = Camera.main;
+		player = FindObjectOfType(typeof(PlayerController)) as PlayerController;	
+	}
+	
+	public void Update () {
+		MoveCameraToTarget();
 	}
 	
 	// The function uses the difference in the mouse's position between frames
@@ -52,5 +61,12 @@ public class CameraController : MonoBehaviour {
 	
 	static private void ZoomOut(){
 		thisCamera.orthographicSize += zoomingIncrement;
+	}
+	
+	static private void MoveCameraToTarget(){
+		Vector3 newCameraPosition = player.transform.position;
+		newCameraPosition.y += yOffsetRelativeToTarget;
+		newCameraPosition.z += zOffsetRelativeToPlayer;
+		thisCamera.transform.position = newCameraPosition;
 	}
 }
