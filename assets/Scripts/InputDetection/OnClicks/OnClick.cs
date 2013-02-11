@@ -2,14 +2,21 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-public class OnClick : MonoBehaviour {	
+/*
+ * OnClick.cs
+ * 	Base class for all other OnClick event types
+ * 	Whenever an objet is clicked on, this script will activate and will determine if the attached object was the
+ * 	one clicked on. If it is then DoClick() will be called in the child script.
+ */
+
+public abstract class OnClick : MonoBehaviour {	
 	protected EventManager.mOnClickDelegate delagate;
 	
 	void Start () {
 		InitEvent();
 	}
 	
-	protected virtual void DoClick(ClickPositionArgs e){}
+	protected abstract void DoClick(ClickPositionArgs e);
 	
 	private void OnClickEvent (EventManager EM, ClickPositionArgs e){	
 		Ray ray = Camera.main.ScreenPointToRay (e.position);
