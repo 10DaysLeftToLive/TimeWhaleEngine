@@ -1,8 +1,16 @@
 using UnityEngine;
 using System.Collections;
 
+/*
+ *  InputManager.cs
+ * 		Will detect what type of input we should use and will continuously run it.
+ * 
+ */
+
 public class InputManager : MonoBehaviour {
+	#region Fields
 	private InputType typeOfInput;
+	#endregion
 	
 	void Start () {
 		typeOfInput = DetermineTypeOfInput();

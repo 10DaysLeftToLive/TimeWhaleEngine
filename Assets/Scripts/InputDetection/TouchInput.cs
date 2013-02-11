@@ -2,12 +2,14 @@ using UnityEngine;
 using System.Collections;
 
 public class TouchInput : InputType {
+	#region Fields
 	private int[] fingerDown = new int[ 2 ];
 	private Vector2[] fingerDownPosition = new Vector2[ 2 ];
 	private int[] fingerDownFrame = new int[ 2 ];
 	private float firstTouchTime;
 	private int touchCount;
 	private Vector3 deltaSinceDown;
+	#endregion
 	
 	public TouchInput() : base(){}
 	
@@ -26,13 +28,13 @@ public class TouchInput : InputType {
 	        bool gotTouch1 = false;          
 	        
 	        // Check if we got the first finger down
-	        if (state == ControlState.WaitingForFirstInput){
+	        if (currentState == ControlState.WaitingForFirstInput){
 	            for (i = 0; i < touchCount; i++){
 	                touch = theseTouches[ i ];
 	
 	                if (touch.phase != TouchPhase.Ended &&
 	                    touch.phase != TouchPhase.Canceled ){
-	                    state = ControlState.WaitingForSecondTouch;
+	                    currentState = ControlState.WaitingForSecondTouch;
 	                    firstTouchTime = Time.time;
 	                    fingerDown[ 0 ] = touch.fingerId;
 	                    fingerDownPosition[ 0 ] = touch.position;
@@ -44,7 +46,7 @@ public class TouchInput : InputType {
 	        
 	        // Wait to see if a second finger touches down. Otherwise, we will
 	        // register this as a tap                                   
-	        if ( state == ControlState.WaitingForSecondTouch ){
+	        if ( currentState == ControlState.WaitingForSecondTouch ){
 	            for ( i = 0; i < touchCount; i++ ){
 	                touch = theseTouches[ i ];
 	
@@ -52,7 +54,7 @@ public class TouchInput : InputType {
 	                    if ( touchCount >= 2 && touch.fingerId != fingerDown[ 0 ] ){
 	                        // If we got a second finger, then let's see what kind of 
 	                        // movement occurs
-	                        state = ControlState.WaitingForMovement;
+	                        currentState = ControlState.WaitingForMovement;
 	                        fingerDown[ 1 ] = touch.fingerId;
 	                        fingerDownPosition[ 1 ] = touch.position;
 	                        fingerDownFrame[ 1 ] = Time.frameCount;                                         
@@ -67,10 +69,10 @@ public class TouchInput : InputType {
 		                        if (Time.time > firstTouchTime + minimumTimeUntilMove || 
 		                            touch.phase == TouchPhase.Ended){
 		                            SingleClickEvent(deltaSinceDown);
-		                            state = ControlState.WaitingForNoInput;
+		                            currentState = ControlState.WaitingForNoInput;
 		                            break;
 		                        } else if (DragMovementDetected(deltaSinceDown)){ // else if the single touch has moved more than the minimum amount we take it to be a drag
-		                        	state = ControlState.DragingCamera;
+		                        	currentState = ControlState.DragingCamera;
 		                        	break;
 		                        }
 		                    }                                           
@@ -80,7 +82,7 @@ public class TouchInput : InputType {
 	        }
 	        
 	        // Now that we have two fingers down, let's see what kind of gesture is made                    
-	        if ( state == ControlState.WaitingForMovement ) { 
+	        if ( currentState == ControlState.WaitingForMovement ) { 
 	            // See if we still have both fingers    
 	            for ( i = 0; i < touchCount; i++ ) {
 	                touch = theseTouches[ i ];
@@ -121,26 +123,26 @@ public class TouchInput : InputType {
 		                Vector3 currentVector = touch1.position - touch0.position;
 		                
 		                // If we are zooming
-		                if ( state == ControlState.WaitingForMovement ){
+		                if ( currentState == ControlState.WaitingForMovement ){
 		                    var deltaDistance = originalVector.magnitude - currentVector.magnitude;
 		                    if ( Mathf.Abs( deltaDistance ) > zoomEpsilon ){
 		                        // The distance between fingers has changed enough
-		                        state = ControlState.ZoomingCamera;
+		                        currentState = ControlState.ZoomingCamera;
 		                    }
 		                }               
 		            }
 		        } else {
 		            // A finger was lifted, so let's just wait until we have no fingers
 		            // before we reset to the origin state
-		            state = ControlState.WaitingForNoInput;
+		            currentState = ControlState.WaitingForNoInput;
 		        }
 	        }
 	        
-	        if (state == ControlState.DragingCamera){
+	        if (currentState == ControlState.DragingCamera){
 	        	touch = theseTouches[ 0 ];
 	        	
 	        	if (touch.phase == TouchPhase.Ended){
-	        		state = ControlState.WaitingForFirstInput;
+	        		currentState = ControlState.WaitingForFirstInput;
 	        	} else {
 		       		deltaSinceDown = touch.position - fingerDownPosition[ 0 ];
 		       		fingerDownPosition[ 0 ] = touch.position;
@@ -151,7 +153,7 @@ public class TouchInput : InputType {
 	        
 	        // Now that we are zooming the camera, let's keep
 		    // feeding those changes until we no longer have two fingers
-		    if ( state == ControlState.ZoomingCamera ){
+		    if ( currentState == ControlState.ZoomingCamera ){
 		        for ( i = 0; i < touchCount; i++ ){
 		            touch = theseTouches[ i ];
 		
@@ -175,14 +177,14 @@ public class TouchInput : InputType {
 		        } else {
 		            // A finger was lifted, so let's just wait until we have no fingers
 		            // before we reset to the origin state
-		            state = ControlState.WaitingForNoInput;
+		            currentState = ControlState.WaitingForNoInput;
 		        }
 		    } 
     	}    
 	}
 	
 	public override void ResetControlState() {
-		state = ControlState.WaitingForFirstInput;	
+		currentState = ControlState.WaitingForFirstInput;	
 		fingerDown[ 0 ] = -1;
 		fingerDown[ 1 ] = -1;
 	}

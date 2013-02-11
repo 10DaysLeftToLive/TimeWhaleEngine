@@ -1,6 +1,12 @@
 using UnityEngine;
 using System.Collections;
 
+/*
+ * InputType.cs
+ * Base class for input into game. These functions will be called at the appropriat time be a derived class.
+ */
+
+
 public abstract class InputType  {
 	// The input detection is based off of these states
 	protected enum ControlState {
@@ -23,7 +29,8 @@ public abstract class InputType  {
 	// some variables to represent zooming in/out
 	protected bool ZOOM_IN  = true;
 	protected bool ZOOM_OUT = false;
-	protected ControlState state;
+	
+	protected ControlState currentState;
 	
 	public InputType(){
 		camera = Camera.main.GetComponent<CameraController>();
@@ -39,11 +46,32 @@ public abstract class InputType  {
 	#region InputEvents
 	// ------------ These functions will be called when the given event occurs, put any code to be perform on the event in here 
 	protected void DragEvent(Vector2 inputChangeSinceLastTick){
+		// Tell the camera to drag in the opposite directiong to give the feel of sliding the camera
 		CameraController.Drag(-inputChangeSinceLastTick);
 	}
 	
 	// called when a click/tap occurs
 	protected void SingleClickEvent(Vector2 inputScreenPos){	
+		DelegateClickForObjects(inputScreenPos);
+	}
+	
+	// Tell the camera to zoom in or out
+	protected void ZoomEvent(bool isZoomingIn){
+		CameraController.Zoom(isZoomingIn);
+	}	
+	#endregion	
+	
+	#region Notifications
+	protected void NotifyNoObjectClickedOn(Vector2 inputScreenPos){
+		EventManager.instance.RiseOnClickedNoObjectEvent(new ClickPositionArgs(inputScreenPos));
+	}
+	
+	protected void NotifyObjectClickedOn(Vector2 inputScreenPos){
+		EventManager.instance.RiseOnClickEvent(new ClickPositionArgs(inputScreenPos));
+	}
+	#endregion
+	
+	private void DelegateClickForObjects(Vector2 inputScreenPos){
 		Ray ray = Camera.main.ScreenPointToRay (inputScreenPos);
 		
 		RaycastHit hit;
@@ -55,12 +83,6 @@ public abstract class InputType  {
 		}
 	}
 	
-	// Tell the camera to zoom in or out
-	protected void ZoomEvent(bool isZoomingIn){
-		CameraController.Zoom(isZoomingIn);
-	}	
-	#endregion	
-	
 	// will detect if the change in input position since the last tick is enough to be accepted as a drag
 	protected bool DragMovementDetected(Vector2 movementChange){
 		// if the x or y is greater than the minimum amount to be considered a drag then return true
@@ -69,13 +91,5 @@ public abstract class InputType  {
 		} else {
 			return (false);
 		}
-	}
-	
-	protected void NotifyNoObjectClickedOn(Vector2 inputScreenPos){
-		EventManager.instance.RiseOnClickedNoObjectEvent(new ClickPositionArgs(inputScreenPos));
-	}
-	
-	protected void NotifyObjectClickedOn(Vector2 inputScreenPos){
-		EventManager.instance.RiseOnClickEvent(new ClickPositionArgs(inputScreenPos));
 	}
 }
