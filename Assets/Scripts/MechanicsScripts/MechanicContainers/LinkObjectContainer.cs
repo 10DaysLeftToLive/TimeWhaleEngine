@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public abstract class LinkObjectContainer<T> {
+public class LinkObjectContainer<T> /*where T : LinkedObject */{
 	protected Dictionary<CharacterAgeState, T> linkedObjects;
 	
 	public LinkObjectContainer(){
