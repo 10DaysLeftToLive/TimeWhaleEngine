@@ -476,7 +476,7 @@ public class PlayerController : MonoBehaviour {
 		
 		
 		return new Vector3(newAge.sectionTarget.position.x + deltaPlayerToCurrentFrame.x,
-										 newAge.sectionTarget.position.y + deltaPlayerToCurrentFrame.y,
+										 newAge.sectionTarget.position.y + deltaPlayerToCurrentFrame.y - Mathf.Abs(previousAge.capsule.height/2 - newAge.capsule.height/2),
 										 newAge.sectionTarget.position.z + deltaPlayerToCurrentFrame.z);
 		
 	}
