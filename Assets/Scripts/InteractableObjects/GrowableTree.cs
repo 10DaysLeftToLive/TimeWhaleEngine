@@ -11,8 +11,7 @@ public class GrowableTree: InteractableObject {
 			tree.youngTimeObject.SetActiveRecursively(true);
 			tree.middleTimeObject.SetActiveRecursively(true);
 			tree.oldTimeObject.SetActiveRecursively(true);
-			playerCharacter.DisableHeldItem();
-			
+			playerCharacter.DisableHeldItem();	
 		}
 	}
 }

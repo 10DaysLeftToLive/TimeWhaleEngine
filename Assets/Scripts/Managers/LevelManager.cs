@@ -76,13 +76,13 @@ public class LevelManager : MonoBehaviour {
 		Transform buildingRootMiddle = middleSectionTarget.FindChild("Buildings");
 		Transform buildingRootOld = oldSectionTarget.FindChild("Buildings");
 		
-		BuildingManager.instance.LoadInBuildings(buildingRootYoung, CharacterAgeState.YOUNG);
-		BuildingManager.instance.LoadInBuildings(buildingRootMiddle, CharacterAgeState.MIDDLE);
-		BuildingManager.instance.LoadInBuildings(buildingRootOld, CharacterAgeState.OLD);
+		BuildingManager.instance.LoadInObjectsToManage(youngSectionTarget, CharacterAgeState.YOUNG);
+		BuildingManager.instance.LoadInObjectsToManage(middleSectionTarget, CharacterAgeState.MIDDLE);
+		BuildingManager.instance.LoadInObjectsToManage(oldSectionTarget, CharacterAgeState.OLD);
 		
-		LockedDoorManager.instance.LoadInDoors(youngSectionTarget, CharacterAgeState.YOUNG);
-		LockedDoorManager.instance.LoadInDoors(middleSectionTarget, CharacterAgeState.MIDDLE);
-		LockedDoorManager.instance.LoadInDoors(oldSectionTarget, CharacterAgeState.OLD);
+		LockedDoorManager.instance.LoadInObjectsToManage(youngSectionTarget, CharacterAgeState.YOUNG);
+		LockedDoorManager.instance.LoadInObjectsToManage(middleSectionTarget, CharacterAgeState.MIDDLE);
+		LockedDoorManager.instance.LoadInObjectsToManage(oldSectionTarget, CharacterAgeState.OLD);
 		
 		NPCDispositionManager.instance.LoadInNPCs(youngSectionTarget, CharacterAgeState.YOUNG);
 		NPCDispositionManager.instance.LoadInNPCs(middleSectionTarget, CharacterAgeState.MIDDLE);
