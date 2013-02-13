@@ -2,10 +2,10 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class NPCDispositionManager : MonoBehaviour {
+public class NPCDispositionManager : ManagerSingleton<NPCDispositionManager> {
 	Dictionary<int, NPCClassContainer> npcs;
 	
-	void Awake(){
+	public override void Init(){
 		npcs = new Dictionary<int, NPCClassContainer >();
 	}
 	
@@ -31,24 +31,4 @@ public class NPCDispositionManager : MonoBehaviour {
 	public void Add(npcClass toAdd, CharacterAgeState age){		
 		npcs[toAdd.id].Add(toAdd, age);
 	}
-	
-	#region Singleton
-	private static NPCDispositionManager npcm_instance = null;
-	
-	public static NPCDispositionManager instance{
-		get {
-            if (npcm_instance == null) {
-                npcm_instance = FindObjectOfType(typeof (NPCDispositionManager)) as NPCDispositionManager;
-            }
- 
-            // If it is still null, create a new instance
-            if (npcm_instance == null) {
-                GameObject obj = new GameObject("NPCDispositionManager");
-                npcm_instance = obj.AddComponent(typeof (NPCDispositionManager)) as NPCDispositionManager;
-            }
- 
-            return npcm_instance;
-        }
-	}
-	#endregion
 }
