@@ -12,6 +12,10 @@ public class OnClickNextToPlayer : OnClick {
 	public float minimumDistance = 1.5f;
 	
 	void Awake(){
+		FindPlayer ();
+	}
+	
+	public void FindPlayer(){
 		playerCharacter = FindObjectOfType(typeof(PlayerController)) as PlayerController;		
 	}
 

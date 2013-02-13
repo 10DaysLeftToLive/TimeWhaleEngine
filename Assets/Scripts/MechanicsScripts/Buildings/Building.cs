@@ -2,8 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Building : MonoBehaviour {
-	public int id = -1;
+public class Building : LinkedObject {
 	private bool interiorIsShowing = false;
 	public GameObject door;
 	public GameObject interior;
@@ -12,9 +11,6 @@ public class Building : MonoBehaviour {
 	private Transform[] exteriorObjects;
 	
 	public void Start(){
-		if (id == -1){
-			Debug.LogWarning("Building " + name + " has not had id set.");
-		}
 		UpdateObjectArrays();
 		Hide(interiorObjects);
 	}
@@ -25,7 +21,7 @@ public class Building : MonoBehaviour {
 	}
 	
 	public void ToggleBuilding(){
-		BuildingManager.instance.ToggleWithId(!interiorIsShowing, id);
+		BuildingManager.instance.ToggleWithId(id);
 	}
 	
 	public void Toggle(){

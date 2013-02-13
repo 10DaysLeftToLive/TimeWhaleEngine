@@ -17,6 +17,8 @@ public class LinkObjectContainer<T> /*where T : LinkedObject */{
 		}
 	}
 	
+	public virtual void Perform(){}
+	
 	public void Add(T toAdd, CharacterAgeState age){
 		if (Get(age) != null){
 			linkedObjects[age] = toAdd;

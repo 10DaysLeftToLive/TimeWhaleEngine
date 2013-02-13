@@ -8,16 +8,10 @@ using System.Collections;
  * other ages that you want linked.
  */
 public class LinkedObject : MonoBehaviour {
-	private int _id = -1;
-	
-	public int id{
-		get {
-			return (_id);
-		}
-	}
+	public int id = -1;
 	
 	private void OnAwake(){
-		if (_id == -1){
+		if (id == -1){
 			Debug.LogWarning(gameObject.name + " : Has no id set");
 		}
 	}
