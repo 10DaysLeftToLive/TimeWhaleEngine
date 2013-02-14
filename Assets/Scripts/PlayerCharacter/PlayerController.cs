@@ -14,13 +14,9 @@ public class PlayerController : MonoBehaviour {
 	private CollisionFlags lastReturnedCollisionFlags;
 	private GameObject pickedUpObject = null;
 	
-	public GameObject destination;
-	
-	private GameObject finish;
-	private PathFinding pathFinding;
-	private Vector3[] path;
-	private int pathIndex;
+	private Path path;
 	private float speed = 5f;
+	private bool moving = false;
 	
 	public bool isControllable = true;
 	public bool isAffectedByGravity = true;
@@ -69,21 +65,22 @@ public class PlayerController : MonoBehaviour {
 	private void OnClickToMove (EventManager EM, ClickPositionArgs e){	
 		//currentAnimation.Play(Strings.animation_walk);
 		
-		// you now have the position of a click that is either on an object and too far from the player
-		// or on no object
-		/*
+		Debug.Log("Click!");
 		Vector3 pos = Camera.main.ScreenToWorldPoint(e.position);
-		pathFinding = null;
-		if (finish != null) Destroy(finish);
+		pos.z = this.transform.position.z;
 		int mask = (1 << 9);
 		RaycastHit hit;
-		if (Physics.Raycast(new Vector3(pos.x, pos.y, this.transform.position.z), Vector3.down , out hit, Mathf.Infinity, mask)) {
+		if (Physics.Raycast(pos, Vector3.down , out hit, Mathf.Infinity, mask)) {
 			Vector3 hitPos = hit.point;
-			finish = (GameObject)Instantiate(destination,new Vector3(pos.x, hitPos.y +1.5f, this.transform.position.z),this.transform.rotation);
-			pathFinding = new PathFinding();
-			pathFinding.StartPath(this.transform.position, new Vector3(pos.x, hitPos.y -1f, .5f), GetComponent<CharacterController>().height);
-			currentAnimation.Play(Strings.animation_walk);
-		}*/
+			hitPos.y += controller.height/2;
+			path = new Path();
+			moving = false;
+			if (PathFinding.StartPath(this.transform.position, hitPos, controller.height/2)){
+				path = PathFinding.GetPath();
+				path.Print();
+				moving = true;
+			}
+		}
     }
 	
 	// Update is called once per frame
@@ -108,30 +105,9 @@ public class PlayerController : MonoBehaviour {
 		if(currentHorizontalSpeed != 0 && !isTouchingTrigger){
 			//currentAnimation.Play(Strings.animation_walk);	
 		}
-		/*
-		if (pathFinding != null){
-			path = null;
-			pathFinding.Update();
-			currentAnimation.Play("Walk");
-			if (pathFinding.foundPath == 2){
-				path = pathFinding.FoundPath();
-				pathIndex = 1;
-				Destroy(finish);
-				pathFinding = null;
-			}else if (pathFinding.foundPath == 1){
-				Debug.Log("no path found");
-				Destroy(finish);
-				pathFinding = null;
-			}
-		}*/
 		
 		MoveCharacter();
-		/*
-		if (path != null){
-			MoveCharacter(path[pathIndex]);
-		} else {
-			currentAnimation.Play("Stand");
-		}*/
+		if (moving) MoveCharacter(1);
 	}
 	
 	void UpdateMovementControls(){
@@ -224,31 +200,31 @@ public class PlayerController : MonoBehaviour {
 			Move(movement);
 		}
 	
-	void MoveCharacter(Vector3 dest){
+	void MoveCharacter(int a){
 		Vector3 pos = this.transform.position;
 		Vector3 movement = new Vector3(0,0,0);
-		//Debug.Log("Moving towards " + dest + "  Current Pos " + pos);
-		if (pos.x < dest.x){
+		if (path.GetDirection() == 0){
+			if (pos.x < path.GetPoint().x){
 			movement.x += speed;
 			LookRight();
-		}else if (pos.x > dest.x){
+			}else if (pos.x > path.GetPoint().x){
 			movement.x -= speed;	
 			LookLeft();
-		}
-		
-		if (pos.y < dest.y){
-			movement.y += speed;
-		}else if (pos.y > dest.y){
-			movement.y -= speed;	
+			}
+		}else {
+			if (pos.y < path.GetPoint().y){
+				movement.y += speed;
+			}else if (pos.y > path.GetPoint().y){
+				movement.y -= speed;	
+			}
 		}
 		movement *= Time.deltaTime;
-
-		if (NearPoint(dest)){
-			pathIndex++;
-			if (pathIndex >= path.Length)
-				path = null;
+		if (NearPoint(path.GetPoint(), path.GetDirection())){
+			if (!path.NextNode()){
+				moving = false;
+				Debug.Log("Stop Moving");
+			}
 		}
-		
 		Move(movement);
 	}
 	
@@ -260,14 +236,13 @@ public class PlayerController : MonoBehaviour {
 		this.transform.localScale = new Vector3(LEFT, 1, 1);
 	}
 	
-	bool NearPoint(Vector3 point){
+	bool NearPoint(Vector3 point, int dir){
 		Vector3 pos = this.transform.position;
-		float difference = .5f;
-		if (pos.x  < point.x + difference && pos.x > point.x - difference){
-			if (pos.y  < point.y + difference && pos.y > point.y - difference)
-				return true;
-		}
-		//Debug.Log("Distance " + Vector3.Distance(point, pos) + "  from  " + pos + "  to " + point);
+		float difference = speed*Time.deltaTime;
+		if ((dir == 0 || dir == 1) && (pos.x  < point.x + difference && pos.x > point.x - difference))
+			return true;
+		if ((dir == 2 || dir == 3) && (pos.y  < point.y + difference && pos.y > point.y - difference))
+			return true;
 	return false;
 	}
 	
