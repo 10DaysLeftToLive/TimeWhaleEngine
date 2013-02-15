@@ -12,8 +12,8 @@ public class Path {
 	
 	public Path(int size, Vector3[] paths, int[] dir){
 		index = 0;
-		path = new Vector3[size+1];
-		direction = new int[size+1];
+		path = new Vector3[size];
+		direction = new int[size];
 		for (int i = 0; i < size; i++){
 			this.path[i] = paths[i];
 			direction[i] = dir[i];
@@ -23,7 +23,7 @@ public class Path {
 	
 	public void Print(){
 
-		for (int i = 0; i < path.Length-1; i++){
+		for (int i = 0; i < path.Length; i++){
 			Debug.Log("Point " + i + " at " + path[i] + " heading " + direction[i]);
 			//Debug.Log(i + "  " + path.Length);
 		}
@@ -39,6 +39,7 @@ public class Path {
 	
 	public bool NextNode(){
 		index++;
-		return index < path.Length-1;	
+		Debug.Log(index < path.Length);
+		return index < path.Length;	
 	}
 }

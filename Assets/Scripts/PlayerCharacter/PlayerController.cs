@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour {
 	
 	private Path path;
 	private float speed = 5f;
+	private float stuckTimer;
 	private bool moving = false;
 	
 	public bool isControllable = true;
@@ -107,7 +108,7 @@ public class PlayerController : MonoBehaviour {
 		}
 		
 		MoveCharacter();
-		if (moving) MoveCharacter(1);
+		if (moving) MoveCharacter(this.transform.position);
 	}
 	
 	void UpdateMovementControls(){
@@ -200,7 +201,7 @@ public class PlayerController : MonoBehaviour {
 			Move(movement);
 		}
 	
-	void MoveCharacter(int a){
+	void MoveCharacter(Vector3 pastPosition){
 		Vector3 pos = this.transform.position;
 		Vector3 movement = new Vector3(0,0,0);
 		if (path.GetDirection() == 0){
@@ -226,6 +227,16 @@ public class PlayerController : MonoBehaviour {
 			}
 		}
 		Move(movement);
+		
+		if (pastPosition == this.transform.position){
+			stuckTimer += Time.deltaTime;
+			//Debug.Log("Stuck");	
+		}else{
+			stuckTimer = 0;	
+		}
+		
+		if (stuckTimer > .5f)
+			moving = false;
 	}
 	
 	private void LookRight(){

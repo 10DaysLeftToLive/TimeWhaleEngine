@@ -43,8 +43,9 @@ public static class PathFinding {
 	}
 	
 	private static bool FindAPath(Node[] nodes, Vector3 destination, float height){
-		int mask = (1 << 9) | (1 << 10); // Ladder, Ground, Impassable, LadderTop
-		if (foundPath || !Physics.Linecast(nodes[index].curr, destination, mask)){
+		RaycastHit debugHit;
+		int mask = (1 << 9) | (1 << 10); // Ground, Impassable
+		if (foundPath || !Physics.Linecast(nodes[index].curr, destination, out debugHit, mask)){
 			if (currentDirection == Direction.down || currentDirection == Direction.up || currentDirection == Direction.none){
 				currentDirection = Direction.left;
 			}else{
@@ -55,6 +56,8 @@ public static class PathFinding {
 			foundPath = true;
 			Debug.Log("Found Path betweem " + nodes[index].curr + "  and  " + destination);
 			return foundPath;
+		}else {
+			Debug.Log(debugHit.collider.gameObject + "    " + debugHit.point);
 		}
 			
 		currentDirection = (Direction)nodes[index].NewDirection();
@@ -78,7 +81,7 @@ public static class PathFinding {
 			case Direction.left: heading = Vector3.left; mask = (1 << 8) | (1 << 10); break;	
 			case Direction.right: heading = Vector3.right; mask = (1 << 8) | (1 << 10); break;	
 			case Direction.up: heading = Vector3.up; mask = (1 << 13); y += height; break;	
-			case Direction.down: heading = Vector3.down; mask = (1 << 9) | (1 << 13); y-= height; break;	
+			case Direction.down: heading = Vector3.down; mask = (1 << 9) | (1 << 13); y-= height*2; break;	
 		}
 		
 		Debug.Log ("Testing Path to " + currentDirection + "  from  " + nodes[index].curr);

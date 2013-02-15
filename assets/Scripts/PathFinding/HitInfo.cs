@@ -23,7 +23,10 @@ public static class HitInfo {
 			return nodes;
 		}else if (hit.transform.tag == Strings.tag_Ground){
 			if (dir == 3 && lastNode.hitClimbable) { // down
+				Debug.Log("point.y is " + hitPos.y + " height is " + height/2);
+				hitPos.y += height;
 				Node nodes = new Node(dir, hitPos, dest);
+				return nodes;
 			}
 		}
 		
