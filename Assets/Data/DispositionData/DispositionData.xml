@@ -2,16 +2,7 @@
 <NPCCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Npcs>
     <Npcs name="Sister">
-      <disposition>182</disposition>
-    </Npcs>
-    <Npcs name="Mom">
-      <disposition>152</disposition>
-    </Npcs>
-    <Npcs name="CatLady">
-      <disposition>152</disposition>
-    </Npcs>
-    <Npcs name="PaperBoy">
-      <disposition>152</disposition>
+      <disposition>206</disposition>
     </Npcs>
   </Npcs>
 </NPCCollection>
