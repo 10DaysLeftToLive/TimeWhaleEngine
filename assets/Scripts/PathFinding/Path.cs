@@ -39,7 +39,6 @@ public class Path {
 	
 	public bool NextNode(){
 		index++;
-		Debug.Log(index < path.Length);
 		return index < path.Length;	
 	}
 }

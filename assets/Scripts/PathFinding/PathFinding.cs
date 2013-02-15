@@ -43,22 +43,9 @@ public static class PathFinding {
 	}
 	
 	private static bool FindAPath(Node[] nodes, Vector3 destination, float height){
-		RaycastHit debugHit;
-		int mask = (1 << 9) | (1 << 10); // Ground, Impassable
-		if (foundPath || !Physics.Linecast(nodes[index].curr, destination, out debugHit, mask)){
-			if (currentDirection == Direction.down || currentDirection == Direction.up || currentDirection == Direction.none){
-				currentDirection = Direction.left;
-			}else{
-				currentDirection = Direction.up;
-			}
-			index++;
-			nodes[index] = new Node((int)currentDirection, destination, destination);
-			foundPath = true;
-			Debug.Log("Found Path betweem " + nodes[index].curr + "  and  " + destination);
+		Vector3 heading = Vector3.right;
+		if (CheckDestination(destination, heading, height))
 			return foundPath;
-		}else {
-			Debug.Log(debugHit.collider.gameObject + "    " + debugHit.point);
-		}
 			
 		currentDirection = (Direction)nodes[index].NewDirection();
 		if (currentDirection == Direction.none || index > 7){
@@ -67,10 +54,10 @@ public static class PathFinding {
 			return foundPath;
 		}
 		
-		Vector3 heading = Vector3.right;
 		bool hitClimbable = false;
 		bool hit1Test = false, hit2Test = false, hit3Test = false;
 		RaycastHit hit, hit2, hit3;
+		int mask = (1 << 8);
 		float distance = 9999;
 		float x, y, z;
 		float zOffset = .4f;
@@ -117,12 +104,60 @@ public static class PathFinding {
 			Debug.Log("Hit nothing");
 			FindAPath(nodes, destination, height);
 		} else{
+			if (currentDirection == Direction.left || currentDirection == Direction.right){
+				Debug.Log("look down");
+				if (CheckGround(nodes[index].curr, hit.point, heading, height))
+					return foundPath;
+			}
 			Debug.Log("keep searching");
 			index++;
 			nodes[index] = HitInfo.CheckHit((int)currentDirection, hit, destination, nodes[index-1], height);
 			FindAPath(nodes, destination, height);
 		}
 		return foundPath;
+	}
+	
+	private static bool CheckGround(Vector3 start, Vector3 end, Vector3 heading, float height){
+		int mask = (1 << 8);
+		float distance = Mathf.Abs(start.x - end.x);
+		RaycastHit hit;
+		if (nodes[index].hitClimbable)
+			start += heading;
+		Debug.DrawLine(new Vector3(start.x,start.y-height,start.z), new Vector3(start.x + distance,start.y-height,start.z), Color.red, 20);
+		if (Physics.Raycast(new Vector3(start.x,start.y-height,start.z), heading, out hit, distance)){//, mask)){
+			Debug.Log("Lack of ground at " + hit.point);
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private static bool CheckDestination(Vector3 destination, Vector3 heading, float height){
+		if (nodes[index].curr.y + height < destination.y || nodes[index].curr.y - height > destination.y)
+			return false;
+		
+		RaycastHit debugHit;
+		int mask = (1 << 9) | (1 << 10); // Ground, Impassable
+		if (foundPath || !Physics.Linecast(nodes[index].curr, destination, out debugHit, mask)){
+			if (currentDirection == Direction.down || currentDirection == Direction.up || currentDirection == Direction.none){
+				currentDirection = Direction.left;
+				
+				if (nodes[index].curr.x > destination.x)
+					heading = Vector3.left;
+				if (CheckGround(nodes[index].curr, destination, heading, height))
+					return false;
+			}else{
+				currentDirection = Direction.up;
+			}
+			Debug.Log("Found Path betweem " + nodes[index].curr + "  and  " + destination);
+			index++;
+			nodes[index] = new Node((int)currentDirection, destination, destination);
+			foundPath = true;
+			return foundPath;
+		}else {
+			Debug.Log(debugHit.collider.gameObject + "    " + debugHit.point);
+		}
+		return false;
 	}
 	
 }
