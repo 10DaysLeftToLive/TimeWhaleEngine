@@ -27,8 +27,8 @@ public class ManagerLoader {
 	}
 	
 	private static void LoadNPCDispositionManager(){
-		NPCDispositionManager.instance.LoadInNPCs(_youngRoot, CharacterAgeState.YOUNG);
-		NPCDispositionManager.instance.LoadInNPCs(_middleRoot, CharacterAgeState.MIDDLE);
-		NPCDispositionManager.instance.LoadInNPCs(_oldRoot, CharacterAgeState.OLD);
+		NPCDispositionManager.instance.LoadInObjectsToManage(_youngRoot, CharacterAgeState.YOUNG);
+		NPCDispositionManager.instance.LoadInObjectsToManage(_middleRoot, CharacterAgeState.MIDDLE);
+		NPCDispositionManager.instance.LoadInObjectsToManage(_oldRoot, CharacterAgeState.OLD);
 	}
 }
