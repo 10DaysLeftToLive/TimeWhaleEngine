@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public abstract class npcClass : MonoBehaviour {
+public abstract class npcClass : LinkedObject {
 	public string npcName;
 	public TextMesh chat;
 	public GameObject symbol;
@@ -22,8 +22,6 @@ public abstract class npcClass : MonoBehaviour {
 	
 	protected string emoticonState;
 	public int npcDisposition;
-	
-	public int id = 0;
 	
 	private List<Item> itemReactions;
 	
