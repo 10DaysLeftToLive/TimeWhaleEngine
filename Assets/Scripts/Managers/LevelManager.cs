@@ -68,25 +68,7 @@ public class LevelManager : MonoBehaviour {
 		CharacterAgeManager.PlayCurrentSong();		
 		playerCharacter.ChangeAnimation(genderAnimationInUse.youngBoneAnimation);
 		
-		InitBuildings();
-	}
-	
-	private void InitBuildings(){
-		Transform buildingRootYoung = youngSectionTarget.FindChild("Buildings");
-		Transform buildingRootMiddle = middleSectionTarget.FindChild("Buildings");
-		Transform buildingRootOld = oldSectionTarget.FindChild("Buildings");
-		
-		BuildingManager.instance.LoadInObjectsToManage(youngSectionTarget, CharacterAgeState.YOUNG);
-		BuildingManager.instance.LoadInObjectsToManage(middleSectionTarget, CharacterAgeState.MIDDLE);
-		BuildingManager.instance.LoadInObjectsToManage(oldSectionTarget, CharacterAgeState.OLD);
-		
-		LockedDoorManager.instance.LoadInObjectsToManage(youngSectionTarget, CharacterAgeState.YOUNG);
-		LockedDoorManager.instance.LoadInObjectsToManage(middleSectionTarget, CharacterAgeState.MIDDLE);
-		LockedDoorManager.instance.LoadInObjectsToManage(oldSectionTarget, CharacterAgeState.OLD);
-		
-		NPCDispositionManager.instance.LoadInNPCs(youngSectionTarget, CharacterAgeState.YOUNG);
-		NPCDispositionManager.instance.LoadInNPCs(middleSectionTarget, CharacterAgeState.MIDDLE);
-		NPCDispositionManager.instance.LoadInNPCs(oldSectionTarget, CharacterAgeState.OLD);
+		ManagerLoader.LoadManagers(youngSectionTarget, middleSectionTarget, oldSectionTarget);
 	}
 	
 	private void SetFiles(){
