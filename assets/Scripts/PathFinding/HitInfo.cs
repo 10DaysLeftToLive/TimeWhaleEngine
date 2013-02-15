@@ -17,8 +17,9 @@ public static class HitInfo {
 			Node nodes = new Node(dir, hitPos, dest, true);
 			return nodes;
 		}else if (hit.transform.tag == Strings.tag_LadderTop){
+			float objHeight = Mathf.Abs(hit.point.y - hit.transform.position.y)*2;
 			hitPos.x = hit.transform.position.x;
-			hitPos.y += height;
+			hitPos.y += height + objHeight;
 			Node nodes = new Node(dir, hitPos, dest, true);
 			return nodes;
 		}else if (hit.transform.tag == Strings.tag_Ground){

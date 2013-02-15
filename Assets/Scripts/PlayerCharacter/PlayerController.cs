@@ -235,8 +235,10 @@ public class PlayerController : MonoBehaviour {
 			stuckTimer = 0;	
 		}
 		
-		if (stuckTimer > .5f)
+		if (stuckTimer > .5f){
+			Debug.Log("Stop Moving");
 			moving = false;
+		}
 	}
 	
 	private void LookRight(){
