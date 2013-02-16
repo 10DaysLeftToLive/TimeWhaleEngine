@@ -16,12 +16,12 @@ public class LevelLoader : MonoBehaviour{
 		StartCoroutine (LoadAge(youngeAge));
 		StartCoroutine (LoadAge(middleAge));
 		StartCoroutine (LoadAge(oldAge));
-		yield return null;
+		yield return null; // wait for a tick because unity is dumb
 		_hasLoaded = true;		
 	}
 	
 	private IEnumerator LoadAge(string age){
-		yield return null; 
+		yield return null; // wait for a tick because unity is dumb
 		Application.LoadLevelAdditive(age);		
 	}
 }

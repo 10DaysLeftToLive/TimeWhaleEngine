@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class LevelManager : MonoBehaviour {
 	public PlayerController playerCharacter;
-	public InteractionManager interactionManager;
 	
 	public TimeSwitchObject[] timeSwitchObjects;
 	
@@ -33,10 +32,6 @@ public class LevelManager : MonoBehaviour {
 	void Awake(){
 		if(playerCharacter == null){
 			Debug.LogWarning("Warning: No PlayerCharacter attached to LevelManager");
-		}
-		
-		if(interactionManager == null){
-			Debug.LogWarning("Warning: No InteractionManager attached to LevelManager");	
 		}
 		
 		if (levelDataName == ""){

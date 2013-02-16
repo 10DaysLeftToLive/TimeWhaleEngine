@@ -5,16 +5,11 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 
-public class InteractionManager : MonoBehaviour {
+public class InteractionManager : ManagerSingleton<InteractionManager> {
 	private PlayerController playerCharacter;
-	
-	public TextAsset disData;
-	public TextAsset interactionData;
-	
-	
-	// Use this for initialization
-	void Start () {
-		playerCharacter = FindObjectOfType(typeof(PlayerController)) as PlayerController;		
+
+	public override void Init(){
+		playerCharacter = GameObject.FindObjectOfType(typeof(PlayerController)) as PlayerController;		
 	}
 	
 	public void SaveNPCDispositions(string disposiitonData){
@@ -73,24 +68,5 @@ public class InteractionManager : MonoBehaviour {
 		} else {
 			targetNPC.GetComponent<npcClass>().ReactTo(Strings.NoItem);
 		}
-	}
-	
-	private static InteractionManager im_instance = null;
-	
-	public static InteractionManager instance{
-		get {
-            if (im_instance == null) {
-                //  FindObjectOfType(...) returns the first ScreenSetup object in the scene.
-                im_instance =  FindObjectOfType(typeof (InteractionManager)) as InteractionManager;
-            }
- 
-            // If it is still null, create a new instance
-            if (im_instance == null) {
-                GameObject obj = new GameObject("InteractionManager");
-                im_instance = obj.AddComponent(typeof (InteractionManager)) as InteractionManager;
-            }
- 
-            return im_instance;
-        }
 	}
 }
