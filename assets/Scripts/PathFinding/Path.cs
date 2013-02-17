@@ -25,7 +25,6 @@ public class Path {
 
 		for (int i = 0; i < path.Length; i++){
 			Debug.Log("Point " + i + " at " + path[i] + " heading " + direction[i]);
-			//Debug.Log(i + "  " + path.Length);
 		}
 	}
 	

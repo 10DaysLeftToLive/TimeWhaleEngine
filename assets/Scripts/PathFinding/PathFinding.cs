@@ -71,7 +71,6 @@ public static class PathFinding {
 			case Direction.down: heading = Vector3.down; mask = (1 << 9) | (1 << 13); y-= height*2; break;	
 		}
 		
-		Debug.Log ("Testing Path to " + currentDirection + "  from  " + nodes[index].curr);
 		if (Physics.Raycast(new Vector3(x,y,z), heading, out hit, Mathf.Infinity, mask)) {
 			Debug.Log("Hit1 " + hit.transform.tag);
 			hit1Test = true;
@@ -83,7 +82,6 @@ public static class PathFinding {
 		}
 		
 		if (Physics.Raycast(new Vector3(x,y,z-zOffset), heading, out hit3, Mathf.Infinity, mask)) {
-			Debug.Log("Hit3 " + hit3.transform.tag);
 			hit3Test = true;
 		}
 			
@@ -101,15 +99,12 @@ public static class PathFinding {
 		}
 		
 		if ((!hit1Test && !hit2Test && !hit3Test)){
-			Debug.Log("Hit nothing");
 			FindAPath(nodes, destination, height);
 		} else{
 			if (currentDirection == Direction.left || currentDirection == Direction.right){
-				Debug.Log("look down");
 				if (CheckGround(nodes[index].curr, hit.point, heading, height))
 					return foundPath;
 			}
-			Debug.Log("keep searching");
 			index++;
 			nodes[index] = HitInfo.CheckHit((int)currentDirection, hit, destination, nodes[index-1], height);
 			FindAPath(nodes, destination, height);
@@ -125,7 +120,6 @@ public static class PathFinding {
 			start += heading;
 		Debug.DrawLine(new Vector3(start.x,start.y-height,start.z), new Vector3(start.x + distance,start.y-height,start.z), Color.red, 20);
 		if (Physics.Raycast(new Vector3(start.x,start.y-height,start.z), heading, out hit, distance)){//, mask)){
-			Debug.Log("Lack of ground at " + hit.point);
 			return true;
 		}
 		
@@ -149,13 +143,11 @@ public static class PathFinding {
 			}else{
 				currentDirection = Direction.up;
 			}
-			Debug.Log("Found Path betweem " + nodes[index].curr + "  and  " + destination);
 			index++;
 			nodes[index] = new Node((int)currentDirection, destination, destination);
 			foundPath = true;
 			return foundPath;
 		}else {
-			Debug.Log(debugHit.collider.gameObject + "    " + debugHit.point);
 		}
 		return false;
 	}

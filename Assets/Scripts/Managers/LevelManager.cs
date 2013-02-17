@@ -64,12 +64,10 @@ public class LevelManager : MonoBehaviour {
 	private IEnumerator Init(){		
 		playerCharacter.gravity = 0; // The player will fall through the unloaded floor if gravit exsists at the start
 		
-		Debug.Log("Awake" + Time.time);
 		StartCoroutine(levelLoader.Load("LevelYoung", "LevelMiddle", "LevelOld"));
 		while (!levelLoader.HasLoaded()){ // wait untill the outside scenes have been loaded in.
 			yield return new WaitForSeconds(.1f);
 		}
-		Debug.Log("Done "+ Time.time);
 		FindSections();
 		SpreadSections();
 		SetUpAges();		
@@ -90,7 +88,6 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	private void FindSections(){
-		Debug.Log("FindSections "+ Time.time);
 		youngSectionTarget = GameObject.Find(Strings.YoungAge).transform;
 		middleSectionTarget = GameObject.Find(Strings.MiddleAge).transform;
 		oldSectionTarget = GameObject.Find(Strings.OldAge).transform;

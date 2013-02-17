@@ -66,7 +66,6 @@ public class PlayerController : MonoBehaviour {
 	private void OnClickToMove (EventManager EM, ClickPositionArgs e){	
 		//currentAnimation.Play(Strings.animation_walk);
 		
-		Debug.Log("Click!");
 		Vector3 pos = Camera.main.ScreenToWorldPoint(e.position);
 		pos.z = this.transform.position.z;
 		int mask = (1 << 9);
@@ -78,7 +77,6 @@ public class PlayerController : MonoBehaviour {
 			moving = false;
 			if (PathFinding.StartPath(this.transform.position, hitPos, controller.height/2)){
 				path = PathFinding.GetPath();
-				path.Print();
 				moving = true;
 			}
 		}
@@ -223,7 +221,6 @@ public class PlayerController : MonoBehaviour {
 		if (NearPoint(path.GetPoint(), path.GetDirection())){
 			if (!path.NextNode()){
 				moving = false;
-				Debug.Log("Stop Moving");
 			}
 		}
 		Move(movement);
@@ -236,7 +233,6 @@ public class PlayerController : MonoBehaviour {
 		}
 		
 		if (stuckTimer > .5f){
-			Debug.Log("Stop Moving");
 			moving = false;
 		}
 	}
@@ -475,7 +471,6 @@ public class PlayerController : MonoBehaviour {
 		}
 		
 		currentAnimation = newAnimation;
-		if (newAnimation == null) Debug.Log("Test");
 		currentAnimation.gameObject.SetActiveRecursively(true);
 	}
 	
