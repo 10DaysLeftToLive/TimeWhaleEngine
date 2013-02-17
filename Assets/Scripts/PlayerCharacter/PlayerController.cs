@@ -85,12 +85,12 @@ public class PlayerController : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {		
+	void Update () {/*		
 		if (controller.velocity.Equals(ZEROVELOCITY)){
 			currentAnimation.Play(Strings.animation_stand);
 		} else {
 			currentAnimation.Play(Strings.animation_walk);
-		}
+		}*/
 		
 		if(isControllable){
 			UpdateMovementControls();
@@ -475,11 +475,11 @@ public class PlayerController : MonoBehaviour {
 		}
 		
 		currentAnimation = newAnimation;
+		if (newAnimation == null) Debug.Log("Test");
 		currentAnimation.gameObject.SetActiveRecursively(true);
 	}
 	
 	public void Move(Vector3 toMove){
-		
 		lastReturnedCollisionFlags = controller.Move(toMove);
 	}
 }

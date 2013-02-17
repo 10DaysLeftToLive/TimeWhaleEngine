@@ -4,8 +4,8 @@ using System.Collections;
 public class LevelLoader : MonoBehaviour{
 	private bool _hasLoaded = false;
 	
-	public void Load(string youngeAge, string middleAge, string oldAge){
-		StartCoroutine(LoadAges(youngeAge, middleAge, oldAge));
+	public IEnumerator Load(string youngeAge, string middleAge, string oldAge){
+		yield return StartCoroutine(LoadAges(youngeAge, middleAge, oldAge));
 	}
 	
 	public bool HasLoaded(){

@@ -21,7 +21,7 @@ public class InteractionManager : ManagerSingleton<InteractionManager> {
 		foreach (GameObject npc in npcs){
 			NPCData dataForNPC = new NPCData();
 			npc_Class = npc.GetComponent<npcClass>();
-			dataForNPC.disposition = npc_Class.GetDisposition() + 2;
+			dataForNPC.disposition = npc_Class.GetDisposition();
 			dataForNPC.name = npc.name;			
 			npcCollection.Add(dataForNPC);
 		}
