@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class PauseObject : MonoBehaviour {
+public abstract class PauseObject : MonoBehaviour {
 	private bool gamePaused = false;
 	
 	void Awake() {
@@ -12,7 +12,7 @@ public class PauseObject : MonoBehaviour {
 		gamePaused = e.isPaused;
 	}
 	
-	protected virtual void UpdateObject(){}
+	protected abstract void UpdateObject();
 	
 	void Update () {
 		if (!gamePaused){
