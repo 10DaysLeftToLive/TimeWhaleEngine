@@ -13,21 +13,49 @@ public class CheatListener : MonoBehaviour {
 	protected LevelManager levelManager;
 	protected CharacterController characterController;
 	
-	// Use this for initialization
+	private float currentHorizontalSpeed = 0.0f;
+	
 	void Start() {
-		playerController = gameObject.GetComponent<PlayerController>();
-		levelManager = gameObject.GetComponent<LevelManager>();
-		characterController = gameObject.GetComponent<CharacterController>();
+		playerController = GameObject.Find("PlayerCharacter").GetComponent<PlayerController>();
+		levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+		characterController = GameObject.Find("PlayerCharacter").GetComponent<CharacterController>();
 	}
 	
-	// Update is called once per frame
 	void Update() {
 		Fly();
 		MoveFast();
 		ToggleSound();
+		KeyboardMovement();
 	}
 	
-	// Toggle flying
+	void KeyboardMovement(){
+		float verticalMovement = Input.GetAxisRaw(Strings.ButtonVertical);
+		float horizontalMovement = Input.GetAxisRaw(Strings.ButtonHorizontal);	
+		
+		currentHorizontalSpeed = playerController.walkSpeed * horizontalMovement;
+		
+		if(!playerController.isAffectedByGravity){
+			playerController.currentVerticalSpeed = playerController.walkSpeed * verticalMovement;	
+		}
+		
+		MovePlayer();
+	}
+	void MovePlayer(){
+		// Calculate actual motion
+		Vector3 movement = new Vector3(currentHorizontalSpeed, playerController.currentVerticalSpeed, 0 );
+		movement *= Time.deltaTime;
+	
+		if(movement.x != 0){
+			if(movement.x < 0){
+				playerController.LookLeft();
+			}else{
+				playerController.LookRight();
+			}
+		}
+		
+		playerController.lastReturnedCollisionFlags = characterController.Move(movement);
+	}
+	
 	void Fly() {
 		if (isFlying){
 			playerController.isAffectedByGravity = false;
@@ -42,7 +70,6 @@ public class CheatListener : MonoBehaviour {
 		}
 	}
 	
-	// Toggle moving twice as fast
 	void MoveFast() {		
 		if (Input.GetKeyDown(KeyCode.M)) {
 			isFastMovement = !isFastMovement;
@@ -55,8 +82,7 @@ public class CheatListener : MonoBehaviour {
 		}	
 	}
 	
-	// Toggle noClip *Seems to be impossible unless all possible collisions are turned off for the player's character controller*
-	void NoClip() {		
+	void NoClip() {		// NOTE DOES NOT WORK
 		if (Input.GetKeyDown(KeyCode.N)) {
 			isNoClip = !isNoClip;
 			
@@ -68,7 +94,6 @@ public class CheatListener : MonoBehaviour {
 		}	
 	}
 	
-	// Toggle sound
 	void ToggleSound() {		
 		if (Input.GetKeyDown(KeyCode.A)) {
 			isSoundOff = !isSoundOff;

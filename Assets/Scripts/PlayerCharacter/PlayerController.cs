@@ -8,10 +8,7 @@ public class PlayerController : MonoBehaviour {
 	public float gravity = 20.0f;
 	public float pushPower = 2.0f;
 	
-	private float currentVerticalSpeed = 0.0f;
-	private float currentHorizontalSpeed = 0.0f;
-	
-	private CollisionFlags lastReturnedCollisionFlags;
+	public CollisionFlags lastReturnedCollisionFlags;
 	private GameObject pickedUpObject = null;
 	
 	public bool isControllable = true;
@@ -41,6 +38,8 @@ public class PlayerController : MonoBehaviour {
 	
 	CharacterController controller;
 	
+	public float currentVerticalSpeed = 0.0f;
+	
 	// Use this for initialization
 	void Start () {
 		controller = this.GetComponent<CharacterController>();
@@ -49,31 +48,9 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {		
 		if(isControllable){
-			UpdateMovementControls();
 			if(isAffectedByGravity){
 				ApplyGravity();
 			}	
-		}
-		
-		if(currentHorizontalSpeed == 0 && currentVerticalSpeed == 0  && !isTouchingTrigger){
-			//currentAnimation.Play(Strings.animation_stand);
-		}
-		
-		if(currentHorizontalSpeed != 0 && !isTouchingTrigger){
-			//currentAnimation.Play(Strings.animation_walk);	
-		}
-		
-		MoveCharacter();
-	}
-	
-	void UpdateMovementControls(){
-		float verticalMovement = Input.GetAxisRaw(Strings.ButtonVertical);
-		float horizontalMovement = Input.GetAxisRaw(Strings.ButtonHorizontal);	
-		
-		currentHorizontalSpeed = walkSpeed * horizontalMovement;
-		
-		if(!isAffectedByGravity){
-			currentVerticalSpeed = walkSpeed * verticalMovement;	
 		}
 	}
 	
@@ -140,27 +117,11 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 	
-	void MoveCharacter(){
-		// Calculate actual motion
-		Vector3 movement = new Vector3(currentHorizontalSpeed, currentVerticalSpeed, 0 );
-		movement *= Time.deltaTime;
-	
-		if(movement.x != 0){
-			if(movement.x < 0){
-				LookLeft();
-			}else{
-				LookRight();
-			}
-		}
-		
-		Move(movement);
-	}
-	
-	private void LookRight(){
+	public void LookRight(){
 		this.transform.localScale = new Vector3(RIGHT, 1, 1);
 	}
 	
-	private void LookLeft(){
+	public void LookLeft(){
 		this.transform.localScale = new Vector3(LEFT, 1, 1);
 	}
 
@@ -348,9 +309,5 @@ public class PlayerController : MonoBehaviour {
 		
 		currentAnimation = newAnimation;
 		currentAnimation.gameObject.SetActiveRecursively(true);
-	}
-	
-	public void Move(Vector3 toMove){
-		lastReturnedCollisionFlags = controller.Move(toMove);
 	}
 }
