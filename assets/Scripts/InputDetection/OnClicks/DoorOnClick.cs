@@ -14,6 +14,6 @@ public class DoorOnClick : OnClickNextToPlayer {
 		
 		building.ToggleBuilding();
 
-        playerCharacter.DoorCloseSFX.Play();
+        SoundManager.instance.DoorCloseSFX.Play();
 	}
 }
