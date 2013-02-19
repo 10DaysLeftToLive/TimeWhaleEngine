@@ -14,11 +14,6 @@ public class PlayerController : MonoBehaviour {
 	private CollisionFlags lastReturnedCollisionFlags;
 	private GameObject pickedUpObject = null;
 	
-	private Path path;
-	private float speed = 5f;
-	private float stuckTimer;
-	private bool moving = false;
-	
 	public bool isControllable = true;
 	public bool isAffectedByGravity = true;
 	
@@ -48,43 +43,13 @@ public class PlayerController : MonoBehaviour {
 	
 	CharacterController controller;
 	
-	private static Vector3 ZEROVELOCITY = new Vector3(0f,0f,0f);
-	
 	// Use this for initialization
 	void Start () {
-		EventManager.instance.mOnClickOnObjectAwayFromPlayerEvent += new EventManager.mOnClickOnObjectAwayFromPlayerDelegate (OnClickToMove);
-		EventManager.instance.mOnClickNoObjectEvent += new EventManager.mOnClickedNoObjectDelegate (OnClickToMove);
 		controller = this.GetComponent<CharacterController>();
 	}
 	
-	private void OnClickToMove (EventManager EM, ClickPositionArgs e){	
-		//currentAnimation.Play(Strings.animation_walk);
-		
-		Vector3 pos = Camera.main.ScreenToWorldPoint(e.position);
-		pos.z = this.transform.position.z;
-		int mask = (1 << 9);
-		RaycastHit hit;
-		// Get the first node in the path by looking down at the floor
-		if (Physics.Raycast(pos, Vector3.down , out hit, Mathf.Infinity, mask)) {
-			Vector3 hitPos = hit.point;
-			hitPos.y += controller.height/2;
-			path = new Path();
-			moving = false;
-			if (PathFinding.StartPath(this.transform.position, hitPos, controller.height/2)){
-				path = PathFinding.GetPath();
-				moving = true;
-			}
-		}
-    }
-	
 	// Update is called once per frame
-	void Update () {/*		
-		if (controller.velocity.Equals(ZEROVELOCITY)){
-			currentAnimation.Play(Strings.animation_stand);
-		} else {
-			currentAnimation.Play(Strings.animation_walk);
-		}*/
-		
+	void Update () {		
 		if(isControllable){
 			UpdateMovementControls();
 			if(isAffectedByGravity){
@@ -101,7 +66,6 @@ public class PlayerController : MonoBehaviour {
 		}
 		
 		MoveCharacter();
-		if (moving) MoveCharacter(this.transform.position);
 	}
 	
 	void UpdateMovementControls(){
@@ -178,58 +142,20 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 	
-		void MoveCharacter(){
-			// Calculate actual motion
-			Vector3 movement = new Vector3(currentHorizontalSpeed, currentVerticalSpeed, 0 );
-			movement *= Time.deltaTime;
-		
-			if(movement.x != 0){
-				if(movement.x < 0){
-					LookLeft();
-				}else{
-					LookRight();
-				}
-			}
-			
-			Move(movement);
-		}
-	
-	void MoveCharacter(Vector3 pastPosition){
-		Vector3 pos = this.transform.position;
-		Vector3 movement = new Vector3(0,0,0);
-		if (path.GetDirection() == 0){
-			if (pos.x < path.GetPoint().x){
-				movement.x += speed;
-				LookRight();
-			}else if (pos.x > path.GetPoint().x){
-				movement.x -= speed;	
-				LookLeft();
-			}
-		}else {
-			if (pos.y < path.GetPoint().y){
-				movement.y += speed;
-			}else if (pos.y > path.GetPoint().y){
-				movement.y -= speed;	
-			}
-		}
+	void MoveCharacter(){
+		// Calculate actual motion
+		Vector3 movement = new Vector3(currentHorizontalSpeed, currentVerticalSpeed, 0 );
 		movement *= Time.deltaTime;
-		if (NearPoint(path.GetPoint(), path.GetDirection())){
-			if (!path.NextNode()){
-				moving = false;
+	
+		if(movement.x != 0){
+			if(movement.x < 0){
+				LookLeft();
+			}else{
+				LookRight();
 			}
 		}
+		
 		Move(movement);
-		
-		if (pastPosition == this.transform.position){
-			stuckTimer += Time.deltaTime;
-			//Debug.Log("Stuck");	
-		}else{
-			stuckTimer = 0;	
-		}
-		
-		if (stuckTimer > .5f){
-			moving = false;
-		}
 	}
 	
 	private void LookRight(){
@@ -239,17 +165,7 @@ public class PlayerController : MonoBehaviour {
 	private void LookLeft(){
 		this.transform.localScale = new Vector3(LEFT, 1, 1);
 	}
-	
-	bool NearPoint(Vector3 point, int dir){
-		Vector3 pos = this.transform.position;
-		float difference = speed*Time.deltaTime;
-		if ((dir == 0 || dir == 1) && (pos.x  < point.x + difference && pos.x > point.x - difference))
-			return true;
-		if ((dir == 2 || dir == 3) && (pos.y  < point.y + difference && pos.y > point.y - difference))
-			return true;
-		return false;
-	}
-	
+
 	void ApplyGravity(){
 		if (IsGrounded ()){
 			currentVerticalSpeed = 0.0f;
