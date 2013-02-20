@@ -14,8 +14,11 @@ public abstract class AbstractGoToState : GoToState {
 		character = toControl;
 	}
 	
-	void Update();
-	abstract void OnGoalReached();
+	public void Update(){
+		
+	}
+	
+	protected abstract void OnGoalReached();
 	void OnStuck(){
 		// This will happen when a path has been found and the character is moving on it,
 		// but something has gotten in the way.

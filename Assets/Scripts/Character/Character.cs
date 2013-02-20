@@ -22,4 +22,13 @@ public abstract class Character : PauseObject {
 		newState.OnEnter(); // Enter the new state
 		currentState = newState; // Update the current state
 	}
+	
+	public bool AnimationPlaying(){
+		return (true); //TODO
+	}
+	
+	public void ChangeAnimation(string newAnimation){
+		Debug.Log("Chaning animation to " + newAnimation);
+		// TODO
+	}
 }
