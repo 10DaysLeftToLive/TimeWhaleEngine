@@ -1,15 +1,6 @@
 using UnityEngine;
 using System.Collections;
 
-public class GrabIdle : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+public class GrabIdle : IdleState {
+	public GrabIdle(Character character) : base(character){}
 }

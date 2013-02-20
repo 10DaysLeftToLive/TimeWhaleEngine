@@ -2,5 +2,6 @@ using UnityEngine;
 using System.Collections;
 
 public interface GoToState {
-	void Update();
+	void Move(Vector3 moveDelta);
+	void OnGoalReached();
 }

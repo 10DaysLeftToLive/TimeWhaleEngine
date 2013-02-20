@@ -2,10 +2,10 @@ using UnityEngine;
 using System.Collections;
 
 public class ClimbToState : AbstractGoToState {
-	public ClimbToState(Character toControl, Vector3 goal) : base(toControl, goal){}
+	public ClimbToState(Character toControl) : base(toControl){}
 	
 	// If we are climbing and we reach our goal then we should go to idle while climbing
-	protected override void OnGoalReached(){
+	public override void OnGoalReached(){
 		Debug.Log("While climbing " + character.name + " reached goal. Returning to climb idle");
 		character.EnterState(new ClimbIdleState(character));
 	}

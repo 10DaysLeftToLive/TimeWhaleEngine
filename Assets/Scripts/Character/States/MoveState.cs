@@ -5,6 +5,7 @@ public class MoveState : AbstractState {
 	private Vector3 _goal;
 	private Path _pathFollowing;
 	private float speed = 5f;
+	private GoToState currentMovementState = null;
 	
 	public MoveState(Character toControl, Vector3 goal) : base(toControl){
 		_goal = goal;
@@ -43,6 +44,7 @@ public class MoveState : AbstractState {
 		Debug.Log(character.name + ": MoveState Enter");
 		
 		CalculatePath();
+		currentMovementState = GetGoToStateToPoint(_pathFollowing.GetPoint());
 	}
 	
 	public override void OnExit(){
@@ -50,9 +52,7 @@ public class MoveState : AbstractState {
 	}
 	
 	private void Move(Vector3 moveDelta){
-		Debug.Log("Moving with delta " + moveDelta);
-		Vector3 curentPosisiton = character.transform.position;
-		character.transform.position = curentPosisiton + moveDelta;
+		currentMovementState.Move(moveDelta);
 	}
 	
 	private bool NearPoint(Vector3 point, int dir){
@@ -81,6 +81,11 @@ public class MoveState : AbstractState {
 		}
 	}
 	
+	// Draw a line from the current position to the point and determine if we should walk or climb there
+	private GoToState GetGoToStateToPoint(Vector3 point){
+		return (new WalkToState(character)); //TODO
+	}
+	
 	private void OnNoPath(){
 		// TODO make a state for "can't do that"
 		Debug.Log(character.name + " could not find a path. Returning to idle");
@@ -88,7 +93,7 @@ public class MoveState : AbstractState {
 	}
 	
 	private void OnGoalReached(){
-		Debug.Log(character.name + " has reached the goal. Returning to idle");
-		character.EnterState(new IdleState(character));
+		// We have reached our goal, let the current movement state determine what to do now
+		currentMovementState.OnGoalReached();
 	}
 }
