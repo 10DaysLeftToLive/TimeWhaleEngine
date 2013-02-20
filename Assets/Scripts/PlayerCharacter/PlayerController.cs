@@ -171,7 +171,6 @@ public class PlayerController : MonoBehaviour {
 				transform.position = new Vector3(transform.position.x, transform.position.y + newAge.capsule.height/2, + transform.position.z);
 			}
 		}
-		
 	}
 	
 	Transform FindGrowableUp(GameObject currentlyTouchingGrowableUp){

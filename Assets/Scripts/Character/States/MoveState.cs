@@ -76,12 +76,15 @@ public class MoveState : AbstractState {
 			if (PathFinding.StartPath(character.transform.position, hitPos, character.transform.localScale.y/2)){
 				_pathFollowing = PathFinding.GetPath();
 			} else {
-				// The path was not found
-				// TODO make a state for "can't do that"
-				Debug.Log(character.name + " could not find a path. Returning to idle");
-				character.EnterState(new IdleState(character));
+				OnNoPath();
 			}
 		}
+	}
+	
+	private void OnNoPath(){
+		// TODO make a state for "can't do that"
+		Debug.Log(character.name + " could not find a path. Returning to idle");
+		character.EnterState(new IdleState(character));
 	}
 	
 	private void OnGoalReached(){
