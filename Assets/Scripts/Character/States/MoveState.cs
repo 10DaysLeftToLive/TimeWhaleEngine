@@ -7,6 +7,9 @@ public class MoveState : AbstractState {
 	private float speed = 5f;
 	private GoToState currentMovementState = null;
 	
+	private Vector3 currentGoal;
+	private int currentDirection;
+	
 	public MoveState(Character toControl, Vector3 goal) : base(toControl){
 		_goal = goal;
 	}
@@ -24,7 +27,7 @@ public class MoveState : AbstractState {
 				movement.x -= speed;	
 				//LookLeft();
 			}
-		}else {
+		} else {
 			if (pos.y < _pathFollowing.GetPoint().y){
 				movement.y += speed;
 			}else if (pos.y > _pathFollowing.GetPoint().y){
@@ -32,19 +35,33 @@ public class MoveState : AbstractState {
 			}
 		}
 		movement *= Time.deltaTime;
+		
 		if (NearPoint(_pathFollowing.GetPoint(), _pathFollowing.GetDirection())){
 			if (!_pathFollowing.NextNode()){
 				OnGoalReached();
+			} else {
+				currentGoal = _pathFollowing.GetPoint();
+				currentDirection = _pathFollowing.GetDirection();
+				
+				if (currentGoal.y > pos.y || currentGoal.y < pos.y){
+					Debug.Log("The point was different vertically switching to climbing");
+					currentMovementState = new ClimbToState(character);
+				} else {
+					Debug.Log("The point was the same vertically switching to walking");
+					currentMovementState = new WalkToState(character);
+				}
 			}
+		} else {
+			Move(movement);
 		}
-		Move(movement);
 	}
 	
 	public override void OnEnter(){
 		Debug.Log(character.name + ": MoveState Enter");
 		
 		CalculatePath();
-		currentMovementState = GetGoToStateToPoint(_pathFollowing.GetPoint());
+		currentGoal = _pathFollowing.GetPoint();
+		currentMovementState = GetGoToStateToPoint(currentGoal);
 	}
 	
 	public override void OnExit(){

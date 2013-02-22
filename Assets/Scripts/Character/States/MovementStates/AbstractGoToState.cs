@@ -15,7 +15,6 @@ public abstract class AbstractGoToState : GoToState {
 	}
 	
 	public void Move(Vector3 moveDelta){
-		Debug.Log("Moving with delta " + moveDelta);
 		Vector3 curentPosisiton = character.transform.position;
 		character.transform.position = curentPosisiton + moveDelta;
 	}
