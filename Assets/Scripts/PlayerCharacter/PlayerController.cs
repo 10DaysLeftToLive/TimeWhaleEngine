@@ -30,8 +30,7 @@ public class PlayerController : MonoBehaviour {
 	
 	private BoneAnimation currentAnimation = null;
 	
-	private static float RIGHT = 1;
-	private static float LEFT = -1;
+	
 	
 	public Capsule smallHitBox;
 	public Capsule bigHitbox;
@@ -115,14 +114,6 @@ public class PlayerController : MonoBehaviour {
 		
 		    body.velocity = pushDir * pushPower;
 		}
-	}
-	
-	public void LookRight(){
-		this.transform.localScale = new Vector3(RIGHT, 1, 1);
-	}
-	
-	public void LookLeft(){
-		this.transform.localScale = new Vector3(LEFT, 1, 1);
 	}
 
 	void ApplyGravity(){

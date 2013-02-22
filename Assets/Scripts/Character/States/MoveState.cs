@@ -22,10 +22,10 @@ public class MoveState : AbstractState {
 		if (_pathFollowing.GetDirection() == 0){
 			if (pos.x < _pathFollowing.GetPoint().x){
 				movement.x += speed;
-				//LookRight();
+				character.LookRight();
 			}else if (pos.x > _pathFollowing.GetPoint().x){
 				movement.x -= speed;	
-				//LookLeft();
+				character.LookLeft();
 			}
 		} else {
 			if (pos.y < _pathFollowing.GetPoint().y){

@@ -4,6 +4,8 @@ using SmoothMoves;
 
 public abstract class Character : PauseObject {
 	private State currentState;
+	private static float RIGHT = 1;
+	private static float LEFT = -1;
 	
 	void Start () {
 		currentState = new IdleState(this);
@@ -30,5 +32,13 @@ public abstract class Character : PauseObject {
 	public void ChangeAnimation(string newAnimation){
 		Debug.Log("Chaning animation to " + newAnimation);
 		// TODO
+	}
+	
+	public void LookRight(){
+		this.transform.localScale = new Vector3(RIGHT, 1, 1);
+	}
+	
+	public void LookLeft(){
+		this.transform.localScale = new Vector3(LEFT, 1, 1);
 	}
 }

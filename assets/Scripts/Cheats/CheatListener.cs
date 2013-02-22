@@ -44,14 +44,6 @@ public class CheatListener : MonoBehaviour {
 		// Calculate actual motion
 		Vector3 movement = new Vector3(currentHorizontalSpeed, playerController.currentVerticalSpeed, 0 );
 		movement *= Time.deltaTime;
-	
-		if(movement.x != 0){
-			if(movement.x < 0){
-				playerController.LookLeft();
-			}else{
-				playerController.LookRight();
-			}
-		}
 		
 		playerController.lastReturnedCollisionFlags = characterController.Move(movement);
 	}
