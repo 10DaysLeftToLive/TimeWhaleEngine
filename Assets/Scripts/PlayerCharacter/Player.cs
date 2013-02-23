@@ -8,12 +8,19 @@ public class Player : Character {
 	}
 	
 	// We want to be able to switch to move at any state when the player clicks
-	// Sudden transisitions will be handled by the state's OnExit()
 	private void OnClickToMove (EventManager EM, ClickPositionArgs e){
-		Debug.Log("OnClickToMove");
 		Vector3 pos = Camera.main.ScreenToWorldPoint(e.position);
 		pos.z = this.transform.position.z;
 		
-		EnterState(new MoveState(this, pos));
+		// Will need to be changed with later refactoring
+		if (currentState.GetType() == typeof(IdleState) || currentState.GetType() == typeof(ClimbIdleState)){ // if we are idled or climbing idled
+			EnterState(new MoveState(this, pos)); // move normaly
+		} else if (currentState.GetType() == typeof(GrabIdleState)){ // if we are attached to an object 
+			EnterState(new GrabMoveState(this, pos));
+		} else if (currentState.GetType() == typeof(MoveState)){
+			EnterState(new MoveState(this, pos));
+		} else if (currentState.GetType() == typeof(GrabMoveState)){
+			EnterState(new GrabMoveState(this, pos));
+		}
     }
 }

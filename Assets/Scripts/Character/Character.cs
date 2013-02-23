@@ -3,7 +3,7 @@ using System.Collections;
 using SmoothMoves;
 
 public abstract class Character : PauseObject {
-	private State currentState;
+	protected State currentState;
 	private static float RIGHT = 1;
 	private static float LEFT = -1;
 	
@@ -40,5 +40,10 @@ public abstract class Character : PauseObject {
 	
 	public void LookLeft(){
 		this.transform.localScale = new Vector3(LEFT, 1, 1);
+	}
+	
+	public void ForceChangeToState(State newState){
+		// TODO need to enter the correct idle state the change to the new one.
+		//EnterState 
 	}
 }
