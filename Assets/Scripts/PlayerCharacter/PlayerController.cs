@@ -30,8 +30,6 @@ public class PlayerController : MonoBehaviour {
 	
 	private BoneAnimation currentAnimation = null;
 	
-	
-	
 	public Capsule smallHitBox;
 	public Capsule bigHitbox;
 	
@@ -39,9 +37,13 @@ public class PlayerController : MonoBehaviour {
 	
 	public float currentVerticalSpeed = 0.0f;
 	
+	private Inventory inventory; 
+	
 	// Use this for initialization
 	void Start () {
 		controller = this.GetComponent<CharacterController>();
+		Transform rightHandTransform = currentAnimation.GetSpriteTransform("Right Hand");
+		inventory = new Inventory(rightHandTransform);
 	}
 	
 	// Update is called once per frame
@@ -176,35 +178,8 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	public void PickUpObject(GameObject toPickUp){
-		if (HasItem()){
-			SwapItems(toPickUp);
-		} else {
-			pickedUpObject = toPickUp;
-			
-			ItemManager item = new ItemManager();
-			Debug.Log(item.FirstAppearance(toPickUp));
-			// This is just to make it go above his head, should go into one of the character's hands
-			
-			
-			Vector3 playerPos = transform.position;
-			
-			Transform rightHandTransform = currentAnimation.GetSpriteTransform("Right Hand");
-			toPickUp.transform.position = new Vector3(rightHandTransform.position.x, 
-				rightHandTransform.position.y, rightHandTransform.position.z);
-			
-			toPickUp.transform.parent = rightHandTransform;
-			pickedUpObject.GetComponent<InteractableOnClick>().Disable();
-		}
-        SoundManager.instance.PickUpItemSFX.Play();
+		inventory.PickUpObject(toPickUp);
 	}
-	
-	private void SwapItems(GameObject toSwapIn){
-		Vector3 positionToPlace = toSwapIn.transform.position;
-		
-		DropItem(positionToPlace);
-		PickUpObject(toSwapIn);
-	}
-	
 	
 	private void CheckItemSwapWithAge(CharacterAge newAge){
 		/*if (pickedUpObject != null) {
@@ -242,28 +217,19 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	public bool HasItem(){
-		return (pickedUpObject != null);
+		return (inventory.HasItem());
 	}
 	
 	public GameObject GetItem(){
-		return (pickedUpObject);
+		return (inventory.GetItem());
 	}
 	
 	public void DropItem(Vector3 toPlace) {
-		pickedUpObject.GetComponent<InteractableOnClick>().Enable();
-		pickedUpObject.transform.parent = null;
-		pickedUpObject.transform.position = toPlace;
-		pickedUpObject = null;
-        SoundManager.instance.PutDownItemSFX.Play();
+		inventory.DropItem(toPlace);
 	}
 	
 	public void DisableHeldItem(){
-		pickedUpObject.SetActiveRecursively(false);
-		pickedUpObject = null;	
-	}
-	
-	public void DestroyHeldItem() {
-		Destroy(pickedUpObject);
+		inventory.DisableHeldItem();
 	}
 	
 	public void TeleportCharacterAbove(Transform toTeleportAbove){

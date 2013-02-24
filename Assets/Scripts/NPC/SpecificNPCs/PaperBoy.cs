@@ -12,7 +12,7 @@ public class PaperBoy : npcClass {
 			case "Flower":
 				inLove = true;
 				npcDisposition += 10;
-				(player.GetComponent<PlayerController>() as PlayerController).DestroyHeldItem();
+				(player.GetComponent<PlayerController>() as PlayerController).DisableHeldItem();
 				break;
 			case "NoItem":
 				break;

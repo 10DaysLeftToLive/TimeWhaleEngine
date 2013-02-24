@@ -8,7 +8,7 @@ public class LockedDoorOnClick : InteractableObject  {
 		foreach (GameObject keyUnlock in door.keysThatUnlock){
 			if(toInteractWith == keyUnlock){
 				LockedDoorManager.instance.UnlockWithId(door.id);
-				playerCharacter.DestroyHeldItem();
+				playerCharacter.DisableHeldItem();
 				break;
 			}
 		}
