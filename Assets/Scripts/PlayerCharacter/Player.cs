@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Player : Character {
 	protected override void Init(){
-		EventManager.instance.mOnClickOnObjectAwayFromPlayerEvent += new EventManager.mOnClickOnObjectAwayFromPlayerDelegate (OnClickToMove);
+		EventManager.instance.mOnClickOnObjectAwayFromPlayerEvent += new EventManager.mOnClickOnObjectAwayFromPlayerDelegate (OnClickToInteract);
 		EventManager.instance.mOnClickNoObjectEvent += new EventManager.mOnClickedNoObjectDelegate (OnClickToMove);
 	}
 	
@@ -23,4 +23,8 @@ public class Player : Character {
 			EnterState(new GrabMoveState(this, pos));
 		}
     }
+	
+	private void OnClickToInteract(EventManager EM, ClickPositionArgs e){
+		
+	}
 }

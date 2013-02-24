@@ -70,7 +70,7 @@ public class LevelManager : MonoBehaviour {
 		}
 		FindSections();
 		SpreadSections();
-		SetUpAges();		
+		SetUpAges();
 		ManagerLoader.LoadManagers(youngSectionTarget, middleSectionTarget, oldSectionTarget);
 		
 		playerCharacter.gravity = 50;
