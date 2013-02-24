@@ -40,11 +40,11 @@ public class EventManager : ManagerSingleton<EventManager> {
     }
 	
 	//EVENT: OnClickOnObjectAwayFromPlayer
-    public delegate void mOnClickOnObjectAwayFromPlayerDelegate(EventManager EM, ClickPositionArgs e);
+    public delegate void mOnClickOnObjectAwayFromPlayerDelegate(EventManager EM, ClickedObjectArgs e);
     //Event
     public event mOnClickOnObjectAwayFromPlayerDelegate mOnClickOnObjectAwayFromPlayerEvent;
     //Riser
-    public void RiseOnClickOnObjectAwayFromPlayerEvent(ClickPositionArgs e){
+    public void RiseOnClickOnObjectAwayFromPlayerEvent(ClickedObjectArgs e){
         if(mOnClickOnObjectAwayFromPlayerEvent != null)  mOnClickOnObjectAwayFromPlayerEvent(this,e);
     }
 }

@@ -24,7 +24,13 @@ public class Player : Character {
 		}
     }
 	
-	private void OnClickToInteract(EventManager EM, ClickPositionArgs e){
+	private void OnClickToInteract(EventManager EM, ClickedObjectArgs e){
+		Debug.Log("Click on " + e.clickedObject.name + " with tag " + e.clickedObject.tag);
 		
+		string tag = e.clickedObject.tag;
+		
+		if (tag == Strings.tag_CarriableItem){
+			EnterState(new MoveThenDoState(this, e.clickedObject.transform.position, new PickUpItemState(this, e.clickedObject)));
+		}
 	}
 }

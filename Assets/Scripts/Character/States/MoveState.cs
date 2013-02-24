@@ -109,7 +109,7 @@ public class MoveState : AbstractState {
 		character.EnterState(new IdleState(character));
 	}
 	
-	private void OnGoalReached(){
+	protected virtual void OnGoalReached(){
 		// We have reached our goal, let the current movement state determine what to do now
 		currentMovementState.OnGoalReached();
 	}

@@ -12,7 +12,16 @@ public class MoveThenDoState : MoveState {
 		_toDoWhenDone = toDoWhenDone;
 	}
 	
-	public void OnGoalReached(){
+	public override void OnEnter(){
+		Debug.Log(character.name + ": MoveThenDoState Enter");
+		base.OnEnter();
+	}
+	
+	public override void OnExit(){
+		Debug.Log(character.name + ": MoveThenDoState Exit");
+	}
+	
+	protected override void OnGoalReached(){
 		Debug.Log(character.name + " has reached the goal. Swithcing to what to do when done.");
 		character.EnterState(_toDoWhenDone);
 	}
