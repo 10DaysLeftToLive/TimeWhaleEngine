@@ -6,10 +6,16 @@ public abstract class Character : PauseObject {
 	protected State currentState;
 	private static float RIGHT = 1;
 	private static float LEFT = -1;
+	private Inventory invenory;
+	
+	public Inventory Inventory{
+		get { return invenory; }
+	}
 	
 	void Start () {
 		currentState = new IdleState(this);
 		EnterState(new IdleState(this));
+		invenory = new Inventory(this.transform);// should give the right hand of the bone animation
 		Init();
 	}
 	

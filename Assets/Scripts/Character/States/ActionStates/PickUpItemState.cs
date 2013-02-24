@@ -10,6 +10,9 @@ public class PickUpItemState : AbstractState {
 	
 	public override void Update(){
 		Debug.Log(character.name + ": PickUpItemState Update");
+		
+		character.Inventory.PickUpObject(_toPickUp);
+		
 		character.EnterState(new IdleState(character));
 	}
 	
