@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class LevelManager : MonoBehaviour {
 	public PlayerController playerCharacter;
-	public InteractionManager interactionManager;
 	
 	public TimeSwitchObject[] timeSwitchObjects;
 	
@@ -16,6 +15,8 @@ public class LevelManager : MonoBehaviour {
 	public AudioSource youngBGM;
 	public AudioSource middleBGM;
 	public AudioSource oldBGM;
+	
+	public LevelLoader levelLoader;
 	
 	public enum CharacterGender{
 		MALE = 0,
@@ -35,10 +36,6 @@ public class LevelManager : MonoBehaviour {
 			Debug.LogWarning("Warning: No PlayerCharacter attached to LevelManager");
 		}
 		
-		if(interactionManager == null){
-			Debug.LogWarning("Warning: No InteractionManager attached to LevelManager");	
-		}
-		
 		if (levelDataName == ""){
 			Debug.LogError("Error: No Level data file given to LevelManager.");
 		}
@@ -50,54 +47,56 @@ public class LevelManager : MonoBehaviour {
 		} else {
 			playerGender = CharacterGender.FEMALE;
 		}
+		
+		SetFiles();		
+		SetGender(playerGender);
+		CharacterAgeManager.SetAgeStart(CharacterAgeState.YOUNG);
+		CharacterAgeManager.SetPlayer(playerCharacter);
+		playerCharacter.ChangeAnimation(genderAnimationInUse.youngBoneAnimation);
+		SetNPCData();	
 	}
 	
 	// Use this for initialization
 	void Start () {
-		Init ();
+		StartCoroutine(Init());
 	}
 	
-	private void Init(){
-		SetGender(playerGender);
-		SetFiles();		
-		SetNPCData();
-		CharacterAgeManager.SetPlayer(playerCharacter);
+	private IEnumerator Init(){		
+		playerCharacter.gravity = 0; // The player will fall through the unloaded floor if gravit exsists at the start
+		
+		StartCoroutine(levelLoader.Load("LevelYoung", "LevelMiddle", "LevelOld"));
+		while (!levelLoader.HasLoaded()){ // wait untill the outside scenes have been loaded in.
+			yield return new WaitForSeconds(.1f);
+		}
+		FindSections();
+		SpreadSections();
 		SetUpAges();
-		CharacterAgeManager.SetAgeStart(CharacterAgeState.YOUNG);
+		ManagerLoader.LoadManagers(youngSectionTarget, middleSectionTarget, oldSectionTarget);
 		
-		CharacterAgeManager.PlayCurrentSong();		
-		playerCharacter.ChangeAnimation(genderAnimationInUse.youngBoneAnimation);
-		
-		InitBuildings();
-	}
-	
-	private void InitBuildings(){
-		Transform buildingRootYoung = youngSectionTarget.FindChild("Buildings");
-		Transform buildingRootMiddle = middleSectionTarget.FindChild("Buildings");
-		Transform buildingRootOld = oldSectionTarget.FindChild("Buildings");
-		
-		BuildingManager.instance.LoadInBuildings(buildingRootYoung, CharacterAgeState.YOUNG);
-		BuildingManager.instance.LoadInBuildings(buildingRootMiddle, CharacterAgeState.MIDDLE);
-		BuildingManager.instance.LoadInBuildings(buildingRootOld, CharacterAgeState.OLD);
-		
-		LockedDoorManager.instance.LoadInDoors(youngSectionTarget, CharacterAgeState.YOUNG);
-		LockedDoorManager.instance.LoadInDoors(middleSectionTarget, CharacterAgeState.MIDDLE);
-		LockedDoorManager.instance.LoadInDoors(oldSectionTarget, CharacterAgeState.OLD);
-		
-		NPCDispositionManager.instance.LoadInNPCs(youngSectionTarget, CharacterAgeState.YOUNG);
-		NPCDispositionManager.instance.LoadInNPCs(middleSectionTarget, CharacterAgeState.MIDDLE);
-		NPCDispositionManager.instance.LoadInNPCs(oldSectionTarget, CharacterAgeState.OLD);
+		playerCharacter.gravity = 50;
 	}
 	
 	private void SetFiles(){
 		levelInteractionFile = Application.dataPath + "/Data/LevelData/" + levelDataName + ".xml";
 		dispositionDataFile = Application.dataPath + "/Data/DispositionData/" + Strings.DispositionFile + ".xml";
-		/*
+		
 		if (!System.IO.File.Exists(levelInteractionFile)){
 			Debug.LogError("Error: " + levelInteractionFile + " was not found.");
 		} else if (!System.IO.File.Exists(dispositionDataFile)){
 			Debug.LogError("Error: " + dispositionDataFile + " was not found.");
-		}*/
+		}
+	}
+	
+	private void FindSections(){
+		youngSectionTarget = GameObject.Find(Strings.YoungAge).transform;
+		middleSectionTarget = GameObject.Find(Strings.MiddleAge).transform;
+		oldSectionTarget = GameObject.Find(Strings.OldAge).transform;
+	}
+	
+	// After being loaded in they are all at 0,0,0 so move them apart along the y axis
+	private void SpreadSections(){
+		middleSectionTarget.transform.position = new Vector3(0,50,0);
+		oldSectionTarget.transform.position = new Vector3(0,100,0);
 	}
 	
 	// Update is called once per frame
@@ -164,8 +163,7 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	private void SetUpAges(){
-		CharacterAgeManager.SetupYoung(genderAnimationInUse.youngBoneAnimation, 
-						youngSectionTarget, youngBGM);
+		CharacterAgeManager.SetupYoung(genderAnimationInUse.youngBoneAnimation, youngSectionTarget, youngBGM);
 		CharacterAgeManager.SetupMiddle(genderAnimationInUse.middleBoneAnimation, middleSectionTarget, middleBGM);
 		CharacterAgeManager.SetupOld(genderAnimationInUse.oldBoneAnimation, oldSectionTarget, oldBGM);
 	}

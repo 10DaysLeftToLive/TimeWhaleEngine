@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public abstract class LinkObjectContainer<T> {
+public class LinkObjectContainer<T> /*where T : LinkedObject */{
 	protected Dictionary<CharacterAgeState, T> linkedObjects;
 	
 	public LinkObjectContainer(){
@@ -17,6 +17,8 @@ public abstract class LinkObjectContainer<T> {
 		}
 	}
 	
+	public virtual void Perform(){}
+	
 	public void Add(T toAdd, CharacterAgeState age){
 		if (Get(age) != null){
 			linkedObjects[age] = toAdd;
@@ -24,12 +26,4 @@ public abstract class LinkObjectContainer<T> {
 			linkedObjects.Add(age, toAdd);
 		}
 	}
-	/*
-	protected void ExecuteOnAll(){
-		foreach(CharacterAgeState state in linkedObjects.Keys){
-			Perform(Get (state));
-		}
-	}
-	
-	protected virtual void Perform(T toPerformOn){}*/
 }

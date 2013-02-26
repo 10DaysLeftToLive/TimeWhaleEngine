@@ -2,8 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Building : MonoBehaviour {
-	public int id = -1;
+public class Building : LinkedObject {
 	private bool interiorIsShowing = false;
 	public GameObject door;
 	public GameObject interior;
@@ -12,9 +11,6 @@ public class Building : MonoBehaviour {
 	private Transform[] exteriorObjects;
 	
 	public void Start(){
-		if (id == -1){
-			Debug.LogWarning("Building " + name + " has not had id set.");
-		}
 		UpdateObjectArrays();
 		Hide(interiorObjects);
 	}
@@ -25,10 +21,10 @@ public class Building : MonoBehaviour {
 	}
 	
 	public void ToggleBuilding(){
-		BuildingManager.instance.ToggleWithId(!interiorIsShowing, id);
+		BuildingManager.instance.ToggleWithId(id);
 	}
 	
-	public void ToggleTo(bool _interiorIsShowing){
+	public void Toggle(){
 		UpdateObjectArrays();
 		if (interiorIsShowing){
 			Hide (interiorObjects);
@@ -37,12 +33,14 @@ public class Building : MonoBehaviour {
 			Hide (exteriorObjects);
 			Show (interiorObjects);
 		}
-		interiorIsShowing = _interiorIsShowing;
+		interiorIsShowing = !interiorIsShowing;
 	}
 	
 	private void Hide(Transform[] objects){
 		foreach (Transform transform in objects){
-			transform.renderer.enabled = false;
+			if (transform.renderer != null){
+				transform.renderer.enabled = false;
+			}
 			if (transform.CompareTag("Untagged") && transform.collider != null) {
 				transform.collider.isTrigger = true;
 			} else if (transform.CompareTag("Pushable")){
@@ -54,7 +52,9 @@ public class Building : MonoBehaviour {
 	
 	private void Show(Transform[] objects){
 		foreach (Transform transform in objects){
-			transform.renderer.enabled = true;
+			if (transform.renderer != null){
+				transform.renderer.enabled = true;
+			}
 			if (transform.CompareTag("Untagged") && transform.collider != null) {
 				transform.collider.isTrigger = false;
 			} else if (transform.CompareTag("Pushable")){

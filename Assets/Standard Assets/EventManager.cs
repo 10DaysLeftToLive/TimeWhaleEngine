@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-public class EventManager : MonoBehaviour {
+public class EventManager : ManagerSingleton<EventManager> {
     //EVENT: OnClick
     public delegate void mOnClickDelegate(EventManager EM, ClickPositionArgs e);
     //Event
@@ -40,32 +40,13 @@ public class EventManager : MonoBehaviour {
     }
 	
 	//EVENT: OnClickOnObjectAwayFromPlayer
-    public delegate void mOnClickOnObjectAwayFromPlayerDelegate(EventManager EM, ClickPositionArgs e);
+    public delegate void mOnClickOnObjectAwayFromPlayerDelegate(EventManager EM, ClickedObjectArgs e);
     //Event
     public event mOnClickOnObjectAwayFromPlayerDelegate mOnClickOnObjectAwayFromPlayerEvent;
     //Riser
-    public void RiseOnClickOnObjectAwayFromPlayerEvent(ClickPositionArgs e){
+    public void RiseOnClickOnObjectAwayFromPlayerEvent(ClickedObjectArgs e){
         if(mOnClickOnObjectAwayFromPlayerEvent != null)  mOnClickOnObjectAwayFromPlayerEvent(this,e);
     }
-	
-	private static EventManager em_instance = null;
-	
-	public static EventManager instance{
-		get {
-            if (em_instance == null) {
-                //  FindObjectOfType(...) returns the first ScreenSetup object in the scene.
-                em_instance = FindObjectOfType(typeof (EventManager)) as EventManager;
-            }
- 
-            // If it is still null, create a new instance
-            if (em_instance == null) {
-                GameObject obj = new GameObject("EventManager");
-                em_instance = obj.AddComponent(typeof (EventManager)) as EventManager;
-            }
- 
-            return em_instance;
-        }
-	}
 }
 
 public class ClickPositionArgs : EventArgs {
