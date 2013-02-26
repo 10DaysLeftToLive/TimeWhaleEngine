@@ -75,6 +75,7 @@ public class MoveState : AbstractState {
 	private bool NearPoint(Vector3 point, int dir){
 		Vector3 pos = character.transform.position;
 		float difference = speed*Time.deltaTime;
+		Debug.Log("Nearpoint(" + point +", " + dir + ")");
 		if ((dir == 0 || dir == 1) && (pos.x  < point.x + difference && pos.x > point.x - difference))
 			return true;
 		if ((dir == 2 || dir == 3) && (pos.y  < point.y + difference && pos.y > point.y - difference))
@@ -92,6 +93,7 @@ public class MoveState : AbstractState {
 			_pathFollowing = new Path();
 			if (PathFinding.StartPath(character.transform.position, hitPos, character.transform.localScale.y/2)){
 				_pathFollowing = PathFinding.GetPath();
+				Debug.Log("Got a path to the initial point " + _pathFollowing.GetPoint());
 			} else {
 				OnNoPath();
 			}

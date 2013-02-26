@@ -12,6 +12,9 @@ public class Player : Character {
 		Vector3 pos = Camera.main.ScreenToWorldPoint(e.position);
 		pos.z = this.transform.position.z;
 		
+		
+		Debug.Log("Click on no object  at point " + pos);
+		
 		// Will need to be changed with later refactoring
 		if (currentState.GetType() == typeof(IdleState) || currentState.GetType() == typeof(ClimbIdleState)){ // if we are idled or climbing idled
 			EnterState(new MoveState(this, pos)); // move normaly
@@ -25,12 +28,14 @@ public class Player : Character {
     }
 	
 	private void OnClickToInteract(EventManager EM, ClickedObjectArgs e){
-		Debug.Log("Click on " + e.clickedObject.name + " with tag " + e.clickedObject.tag);
+		Debug.Log("Click on " + e.clickedObject.name + " with tag " + e.clickedObject.tag + " at point " + e.clickedObject.transform.position);
 		
 		string tag = e.clickedObject.tag;
 		
 		if (tag == Strings.tag_CarriableItem){
 			EnterState(new MoveThenDoState(this, e.clickedObject.transform.position, new PickUpItemState(this, e.clickedObject)));
+		} else if (tag == Strings.tag_Pushable){
+			EnterState(new MoveThenDoState(this, e.clickedObject.transform.position, new GrabOntoState(this, e.clickedObject)));
 		}
 	}
 }

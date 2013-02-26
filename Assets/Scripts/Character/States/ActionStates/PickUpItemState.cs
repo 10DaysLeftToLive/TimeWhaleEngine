@@ -18,7 +18,6 @@ public class PickUpItemState : AbstractState {
 	
 	public override void OnEnter(){
 		Debug.Log(character.name + ": PickUpItemState Enter to pickup " + _toPickUp.name);
-		//TODO Grab item
 	}
 	
 	public override void OnExit(){

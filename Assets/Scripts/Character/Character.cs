@@ -48,6 +48,10 @@ public abstract class Character : PauseObject {
 		this.transform.localScale = new Vector3(LEFT, 1, 1);
 	}
 	
+	public void GrabOnto(GameObject toGrabOnto){
+		toGrabOnto.transform.parent = this.transform; // need to give the right hand
+	}
+	
 	public void ForceChangeToState(State newState){
 		// TODO need to enter the correct idle state the change to the new one.
 		//EnterState 
