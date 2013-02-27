@@ -5,14 +5,27 @@ using System.Collections.Generic;
 public static class PathFinding {
 	#region Layers
 	private static int ClimbableLayer = 8;
+	private static int GroundLayer = 9;
+	private static int ImpassableLayer = 10;
+	private static int LadderTopLayer = 13;
 	#endregion
 	
 	#region Mashs
 	private static int ClimbableMask = (1 << ClimbableLayer);
+	private static int GroundMask = (1 << GroundLayer);
+	private static int ImpassableMask = (1 << ImpassableLayer);
+	private static int LadderTopMask = (1 << LadderTopLayer);
 	#endregion
 	
+	private enum Direction {
+		left = 0, 
+		right = 1, 
+		up = 2, 
+		down = 3, 
+		none = 4, 
+		fall = 5
+	};
 	
-	private enum Direction {left, right, up, down, none, fall}; // 0,1,2,3,4
 	private static Direction currentDirection;
 	private static float testTimer;
 	private static int index;
@@ -25,7 +38,7 @@ public static class PathFinding {
 		currentDirection = Direction.none;
 		foundPath = false;
 		nodes.Add(new Node((int)currentDirection, startPos, destination));
-		int mask = (1 << 8);
+		int mask = ClimbableMask;
 		RaycastHit hit;
 		if (Physics.Raycast(new Vector3(startPos.x, startPos.y, startPos.z-2), Vector3.forward, out hit, Mathf.Infinity, mask)){
 			if (hit.transform.tag == Strings.tag_Climbable) {
@@ -63,10 +76,9 @@ public static class PathFinding {
 			return foundPath;
 		}
 		
-		bool hitClimbable = false;
 		bool hit1Test = false, hit2Test = false, hit3Test = false;
 		RaycastHit hit, hit2, hit3;
-		int mask = (1 << 8);
+		int mask = ClimbableMask;
 		float distance = 9999;
 		float x, y, z;
 		float zOffset = .4f;
@@ -74,10 +86,10 @@ public static class PathFinding {
 		y = nodes[index].curr.y;
 		z = nodes[index].curr.z;
 		switch(currentDirection){
-			case Direction.left: heading = Vector3.left; mask = (1 << 8) | (1 << 10); break;	
-			case Direction.right: heading = Vector3.right; mask = (1 << 8) | (1 << 10); break;	
-			case Direction.up: heading = Vector3.up; mask = (1 << 13); y += height; break;	
-			case Direction.down: heading = Vector3.down; mask = (1 << 9) | (1 << 13); y-= height*2; break;	
+			case Direction.left: heading = Vector3.left; mask = ClimbableMask | ImpassableMask; break;	
+			case Direction.right: heading = Vector3.right; mask = ClimbableMask | ImpassableMask; break;	
+			case Direction.up: heading = Vector3.up; mask = LadderTopMask; y += height; break;	
+			case Direction.down: heading = Vector3.down; mask = GroundMask | LadderTopMask; y-= height*2; break;	
 		}
 		
 		if (Physics.Raycast(new Vector3(x,y,z), heading, out hit, Mathf.Infinity, mask)) {
@@ -122,7 +134,6 @@ public static class PathFinding {
 	}
 	
 	private static bool CheckGround(Vector3 start, Vector3 end, Vector3 heading, float height){
-		int mask = (1 << 8);
 		float distance = Mathf.Abs(start.x - end.x);
 		RaycastHit hit;
 		if (nodes[index].hitClimbable)
@@ -140,7 +151,7 @@ public static class PathFinding {
 			return false;
 		
 		RaycastHit debugHit;
-		int mask = (1 << 9) | (1 << 10); // Ground, Impassable
+		int mask = GroundMask | ImpassableMask;
 		if (foundPath || !Physics.Linecast(nodes[index].curr, destination, out debugHit, mask)){
 			if (currentDirection == Direction.down || currentDirection == Direction.up || currentDirection == Direction.none){
 				currentDirection = Direction.left;
@@ -156,7 +167,6 @@ public static class PathFinding {
 			nodes.Add(new Node((int)currentDirection, destination, destination));
 			foundPath = true;
 			return foundPath;
-		}else {
 		}
 		return false;
 	}
