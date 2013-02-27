@@ -1,21 +1,30 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public static class PathFinding {
+	#region Layers
+	private static int ClimbableLayer = 8;
+	#endregion
+	
+	#region Mashs
+	private static int ClimbableMask = (1 << ClimbableLayer);
+	#endregion
+	
 	
 	private enum Direction {left, right, up, down, none, fall}; // 0,1,2,3,4
 	private static Direction currentDirection;
 	private static float testTimer;
 	private static int index;
 	private static bool foundPath;
-	private static Node[] nodes;
+	private static List<Node> nodes;
 	
 	public static bool StartPath(Vector3 startPos, Vector3 destination, float height){
-		nodes = new Node[15];
+		nodes = new List<Node>();
 		index = 0;
 		currentDirection = Direction.none;
 		foundPath = false;
-		nodes[0] = new Node((int)currentDirection, startPos, destination);
+		nodes.Add(new Node((int)currentDirection, startPos, destination));
 		int mask = (1 << 8);
 		RaycastHit hit;
 		if (Physics.Raycast(new Vector3(startPos.x, startPos.y, startPos.z-2), Vector3.forward, out hit, Mathf.Infinity, mask)){
@@ -36,13 +45,13 @@ public static class PathFinding {
 		for (int i = 0; i <= index; i++){
 			points[i] = nodes[i].curr;
 			dir[i] = nodes[i].past;
-			//Debug.Log("Point " + i + " at " + points[i] + " heading " + dir[i]);
+			Debug.Log("Point " + i + " at " + points[i] + " heading " + dir[i]);
 		}
 		Path path = new Path(index + 1, points, dir);
 		return path;
 	}
 	
-	private static bool FindAPath(Node[] nodes, Vector3 destination, float height){
+	private static bool FindAPath(List<Node> nodes, Vector3 destination, float height){
 		Vector3 heading = Vector3.right;
 		if (CheckDestination(destination, heading, height))
 			return foundPath;
@@ -144,12 +153,11 @@ public static class PathFinding {
 				currentDirection = Direction.up;
 			}
 			index++;
-			nodes[index] = new Node((int)currentDirection, destination, destination);
+			nodes.Add(new Node((int)currentDirection, destination, destination));
 			foundPath = true;
 			return foundPath;
 		}else {
 		}
 		return false;
 	}
-	
 }

@@ -86,7 +86,6 @@ public class MoveState : AbstractState {
 	private void CalculatePath(){
 		int mask = (1 << 9);
 		RaycastHit hit;
-		// Get the first node in the path by looking down at the floor
 		if (Physics.Raycast(_goal, Vector3.down , out hit, Mathf.Infinity, mask)) {
 			Vector3 hitPos = hit.point;
 			hitPos.y += character.transform.localScale.y/2;
