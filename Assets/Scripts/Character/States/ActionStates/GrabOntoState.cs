@@ -11,7 +11,7 @@ public class GrabOntoState : AbstractState {
 	public override void Update(){
 		Debug.Log(character.name + ": GrabOntoState Update");
 		
-		character.GrabOnto(_toGrabOn);
+		character.AttachTo(_toGrabOn);
 		
 		character.EnterState(new GrabIdleState(character));
 	}

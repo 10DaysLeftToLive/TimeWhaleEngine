@@ -38,9 +38,7 @@ public class Player : Character {
 		if (tag == Strings.tag_CarriableItem){
 			EnterState(new MoveThenDoState(this, goal, new PickUpItemState(this, e.clickedObject)));
 		} else if (tag == Strings.tag_Pushable){
-			EnterState(new MoveThenDoState(this, goal, new IdleState(this)));//new GrabOntoState(this, e.clickedObject)));
-		}else if (tag == Strings.tag_Climbable){
-			EnterState(new MoveThenDoState(this, goal, new IdleState(this)));//new GrabOntoState(this, e.clickedObject)));
+			EnterState(new MoveThenDoState(this, goal, new GrabOntoState(this, e.clickedObject)));
 		}
 	}
 }
