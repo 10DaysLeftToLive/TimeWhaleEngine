@@ -10,6 +10,8 @@ public class MoveState : AbstractState {
 	private Vector3 currentGoal;
 	private int currentDirection;
 	
+	private float stuckTimer;
+	
 	public MoveState(Character toControl, Vector3 goal) : base(toControl){
 		_goal = goal;
 	}
@@ -54,14 +56,27 @@ public class MoveState : AbstractState {
 		} else {
 			Move(movement);
 		}
+		
+		if (pos.Equals(character.transform.position)){
+			stuckTimer += Time.deltaTime;
+		}else{
+			stuckTimer = 0;	
+		}
+		
+		if (stuckTimer > .5f){
+			OnStuck();
+		}
 	}
 	
 	public override void OnEnter(){
 		Debug.Log(character.name + ": MoveState Enter");
 		
-		CalculatePath();
-		currentGoal = _pathFollowing.GetPoint();
-		currentMovementState = GetGoToStateToPoint(currentGoal);
+		if (CalculatePath()){
+			currentGoal = _pathFollowing.GetPoint();
+			currentMovementState = GetGoToStateToPoint(currentGoal);
+		} else {
+			OnNoPath();
+		}
 	}
 	
 	public override void OnExit(){
@@ -75,7 +90,6 @@ public class MoveState : AbstractState {
 	private bool NearPoint(Vector3 point, int dir){
 		Vector3 pos = character.transform.position;
 		float difference = speed*Time.deltaTime;
-		Debug.Log("Nearpoint(" + point +", " + dir + ")");
 		if ((dir == 0 || dir == 1) && (pos.x  < point.x + difference && pos.x > point.x - difference))
 			return true;
 		if ((dir == 2 || dir == 3) && (pos.y  < point.y + difference && pos.y > point.y - difference))
@@ -83,25 +97,32 @@ public class MoveState : AbstractState {
 		return false;
 	}
 	
-	private void CalculatePath(){
+	private bool CalculatePath(){
 		int mask = (1 << 9);
 		RaycastHit hit;
+		
 		if (Physics.Raycast(_goal, Vector3.down , out hit, Mathf.Infinity, mask)) {
 			Vector3 hitPos = hit.point;
 			hitPos.y += character.transform.localScale.y/2;
+			
 			_pathFollowing = new Path();
 			if (PathFinding.StartPath(character.transform.position, hitPos, character.transform.localScale.y/2)){
 				_pathFollowing = PathFinding.GetPath();
-				Debug.Log("Got a path to the initial point " + _pathFollowing.GetPoint());
+				return (true);
 			} else {
-				OnNoPath();
+				return (false);
 			}
-		}
+		} return (false);
 	}
 	
 	// Draw a line from the current position to the point and determine if we should walk or climb there
 	private GoToState GetGoToStateToPoint(Vector3 point){
 		return (new WalkToState(character)); //TODO
+	}
+	
+	public virtual void OnStuck(){
+		Debug.Log(character.name + " got stuck.");
+		currentMovementState.OnStuck();
 	}
 	
 	private void OnNoPath(){

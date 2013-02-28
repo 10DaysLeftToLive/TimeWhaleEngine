@@ -14,13 +14,17 @@ public static class HitInfo {
 			hitPos.x = hit.transform.position.x;
 			Node nodes = new Node(dir, hitPos, dest, true);
 			return nodes;
-		}else if (hit.transform.tag == Strings.tag_LadderTop){
+		} else if (hit.transform.tag == Strings.tag_Mechanics){
+			hitPos.x = hit.transform.position.x;
+			Node nodes = new Node(dir, hitPos, dest, true);
+			return nodes;			
+		} else if (hit.transform.tag == Strings.tag_LadderTop){
 			float objHeight = Mathf.Abs(hit.point.y - hit.transform.position.y)*2;
 			hitPos.x = hit.transform.position.x;
 			hitPos.y += height + objHeight;
 			Node nodes = new Node(dir, hitPos, dest, true);
 			return nodes;
-		}else if (hit.transform.tag == Strings.tag_Ground){
+		} else if (hit.transform.tag == Strings.tag_Ground){
 			if (dir == 3 && lastNode.hitClimbable) { // down
 				Debug.Log("point.y is " + hitPos.y + " height is " + height/2);
 				hitPos.y += height;

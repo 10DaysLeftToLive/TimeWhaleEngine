@@ -9,4 +9,8 @@ public class ClimbToState : AbstractGoToState {
 		Debug.Log("While climbing " + character.name + " reached goal. Returning to climb idle");
 		character.EnterState(new ClimbIdleState(character));
 	}
+	
+	public override void OnStuck(){
+		character.EnterState(new ClimbIdleState(character));
+	}
 }

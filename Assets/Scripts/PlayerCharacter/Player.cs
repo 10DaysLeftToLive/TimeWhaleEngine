@@ -32,10 +32,15 @@ public class Player : Character {
 		
 		string tag = e.clickedObject.tag;
 		
+		Vector3 goal = e.clickedObject.transform.position;
+		goal.z = this.transform.position.z;
+		
 		if (tag == Strings.tag_CarriableItem){
-			EnterState(new MoveThenDoState(this, e.clickedObject.transform.position, new PickUpItemState(this, e.clickedObject)));
+			EnterState(new MoveThenDoState(this, goal, new PickUpItemState(this, e.clickedObject)));
 		} else if (tag == Strings.tag_Pushable){
-			EnterState(new MoveThenDoState(this, e.clickedObject.transform.position, new GrabOntoState(this, e.clickedObject)));
+			EnterState(new MoveThenDoState(this, goal, new IdleState(this)));//new GrabOntoState(this, e.clickedObject)));
+		}else if (tag == Strings.tag_Climbable){
+			EnterState(new MoveThenDoState(this, goal, new IdleState(this)));//new GrabOntoState(this, e.clickedObject)));
 		}
 	}
 }

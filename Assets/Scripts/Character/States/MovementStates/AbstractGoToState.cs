@@ -20,9 +20,5 @@ public abstract class AbstractGoToState : GoToState {
 	}
 	
 	public abstract void OnGoalReached();
-	void OnStuck(){
-		// This will happen when a path has been found and the character is moving on it,
-		// but something has gotten in the way.
-		Debug.Log("Something got in the way when moving.");
-	}
+	public abstract void OnStuck();
 }

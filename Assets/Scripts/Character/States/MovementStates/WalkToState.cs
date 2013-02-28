@@ -9,4 +9,8 @@ public class WalkToState : AbstractGoToState {
 		Debug.Log("While walking " + character.name + " reached goal. Returning to idle");
 		character.EnterState(new IdleState(character));
 	}
+	
+	public override void OnStuck(){
+		character.EnterState(new IdleState(character));
+	}
 }

@@ -8,6 +8,7 @@ public static class PathFinding {
 	private static int GroundLayer = 9;
 	private static int ImpassableLayer = 10;
 	private static int LadderTopLayer = 13;
+	private static int MechanicsLayer = 14;
 	#endregion
 	
 	#region Mashs
@@ -15,6 +16,7 @@ public static class PathFinding {
 	private static int GroundMask = (1 << GroundLayer);
 	private static int ImpassableMask = (1 << ImpassableLayer);
 	private static int LadderTopMask = (1 << LadderTopLayer);
+	private static int MechanicsMask = (1 << MechanicsLayer);
 	#endregion
 	
 	private enum Direction {
@@ -32,13 +34,15 @@ public static class PathFinding {
 	private static bool foundPath;
 	private static List<Node> nodes;
 	
+	private static float MECHANICSBUFFER = .4f;
+	
 	public static bool StartPath(Vector3 startPos, Vector3 destination, float height){
 		nodes = new List<Node>();
 		index = 0;
 		currentDirection = Direction.none;
 		foundPath = false;
 		nodes.Add(new Node((int)currentDirection, startPos, destination));
-		int mask = ClimbableMask;
+		int mask = ClimbableMask | MechanicsMask;
 		RaycastHit hit;
 		if (Physics.Raycast(new Vector3(startPos.x, startPos.y, startPos.z-2), Vector3.forward, out hit, Mathf.Infinity, mask)){
 			if (hit.transform.tag == Strings.tag_Climbable) {
@@ -48,7 +52,6 @@ public static class PathFinding {
 		if (FindAPath(nodes, destination, height)){
 			return true;
 		}
-		Debug.Log("No Path was Found");
 		return false;
 	}
 	
@@ -58,7 +61,6 @@ public static class PathFinding {
 		for (int i = 0; i <= index; i++){
 			points[i] = nodes[i].curr;
 			dir[i] = nodes[i].past;
-			Debug.Log("Point " + i + " at " + points[i] + " heading " + dir[i]);
 		}
 		Path path = new Path(index + 1, points, dir);
 		return path;
@@ -71,34 +73,45 @@ public static class PathFinding {
 			
 		currentDirection = (Direction)nodes[index].NewDirection();
 		if (currentDirection == Direction.none || index > 7){
-			Debug.Log("Current Direction " + currentDirection);
 			index--;
 			return foundPath;
 		}
 		
 		bool hit1Test = false, hit2Test = false, hit3Test = false;
 		RaycastHit hit, hit2, hit3;
-		int mask = ClimbableMask;
+		int mask = ClimbableMask | MechanicsMask;
 		float distance = 9999;
 		float x, y, z;
 		float zOffset = .4f;
 		x = nodes[index].curr.x;
 		y = nodes[index].curr.y;
 		z = nodes[index].curr.z;
+		
 		switch(currentDirection){
-			case Direction.left: heading = Vector3.left; mask = ClimbableMask | ImpassableMask; break;	
-			case Direction.right: heading = Vector3.right; mask = ClimbableMask | ImpassableMask; break;	
-			case Direction.up: heading = Vector3.up; mask = LadderTopMask; y += height; break;	
-			case Direction.down: heading = Vector3.down; mask = GroundMask | LadderTopMask; y-= height*2; break;	
+			case Direction.left: 
+				heading = Vector3.left; 
+				mask = ClimbableMask | ImpassableMask; 
+				break;	
+			case Direction.right: 
+				heading = Vector3.right; 
+				mask = ClimbableMask | ImpassableMask; 
+				break;	
+			case Direction.up: 
+				heading = Vector3.up; 
+				mask = LadderTopMask; y += height; 
+				break;	
+			case Direction.down: 
+				heading = Vector3.down; 
+				mask = GroundMask | LadderTopMask; 
+				y-= height*2; 
+				break;	
 		}
 		
 		if (Physics.Raycast(new Vector3(x,y,z), heading, out hit, Mathf.Infinity, mask)) {
-			Debug.Log("Hit1 " + hit.transform.tag);
 			hit1Test = true;
 		}
 		
 		if (Physics.Raycast(new Vector3(x,y,z+zOffset), heading, out hit2, Mathf.Infinity, mask)) {
-			Debug.Log("Hit2 " + hit2.transform.tag);
 			hit2Test = true;
 		}
 		
@@ -119,7 +132,7 @@ public static class PathFinding {
 			hit = hit3;
 		}
 		
-		if ((!hit1Test && !hit2Test && !hit3Test)){
+		if (!hit1Test && !hit2Test && !hit3Test){
 			FindAPath(nodes, destination, height);
 		} else{
 			if (currentDirection == Direction.left || currentDirection == Direction.right){
@@ -138,11 +151,9 @@ public static class PathFinding {
 		RaycastHit hit;
 		if (nodes[index].hitClimbable)
 			start += heading;
-		Debug.DrawLine(new Vector3(start.x,start.y-height,start.z), new Vector3(start.x + distance,start.y-height,start.z), Color.red, 20);
 		if (Physics.Raycast(new Vector3(start.x,start.y-height,start.z), heading, out hit, distance)){//, mask)){
 			return true;
 		}
-		
 		return false;
 	}
 	
@@ -152,15 +163,31 @@ public static class PathFinding {
 		
 		RaycastHit debugHit;
 		int mask = GroundMask | ImpassableMask;
-		if (foundPath || !Physics.Linecast(nodes[index].curr, destination, out debugHit, mask)){
+		if (foundPath || !Physics.Linecast(nodes[index].curr, destination, out debugHit, mask)){ // if we can draw a line to the goal without a barrier
+			mask = MechanicsMask;
+			
+			if (Physics.Linecast(nodes[index].curr, destination, out debugHit, mask)){ // if we intersect with a mechanics object
+				if (debugHit.collider.bounds.Contains(destination)){ // if that mechanic object contains our destination
+					if (debugHit.transform.position.x < nodes[index].curr.x){ // if the current node is to the right of the object
+						destination.x = destination.x + debugHit.collider.bounds.size.x/2 + MECHANICSBUFFER;
+					} else {
+						destination.x = destination.x - debugHit.collider.bounds.size.x/2 - MECHANICSBUFFER;
+					}
+				} else { // if we have a path to the goal but there is a mechanic object in the way then we cannot reach the goal
+					// then we should just move on
+					return (false); //TODO remember that we saw this and move the player to a point next to this instead of moving on
+				}
+			} 
+			
 			if (currentDirection == Direction.down || currentDirection == Direction.up || currentDirection == Direction.none){
 				currentDirection = Direction.left;
 				
-				if (nodes[index].curr.x > destination.x)
+				if (nodes[index].curr.x > destination.x){
 					heading = Vector3.left;
-				if (CheckGround(nodes[index].curr, destination, heading, height))
+				} else if (CheckGround(nodes[index].curr, destination, heading, height)){
 					return false;
-			}else{
+				}
+			} else {
 				currentDirection = Direction.up;
 			}
 			index++;

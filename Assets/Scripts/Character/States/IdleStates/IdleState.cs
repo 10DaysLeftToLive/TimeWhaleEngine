@@ -5,7 +5,6 @@ public class IdleState : AbstractState {
 	public IdleState(Character toControl) : base(toControl){}
 	
 	public override void Update(){
-		Debug.Log(character.name + ": IdleState Update");
 	}
 	
 	public override void OnEnter(){
