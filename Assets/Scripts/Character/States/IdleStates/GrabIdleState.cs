@@ -5,7 +5,6 @@ public class GrabIdleState : IdleState {
 	public GrabIdleState(Character character) : base(character){}
 	
 	public override void Update(){
-		Debug.Log(character.name + ": GrabIdleState Update");
 	}
 	
 	public override void OnEnter(){

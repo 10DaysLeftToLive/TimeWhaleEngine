@@ -7,6 +7,10 @@ public class GrabableObject : MonoBehaviour {
 	private float xDifToPlayer;
 	private float initialY;
 	
+	public bool AttachedToPlayer {
+		get {return (_attachedToPlayer);}
+	}
+	
 	void Update () {
 		if (_attachedToPlayer){
 			Vector3 newPos = _player.transform.position;
