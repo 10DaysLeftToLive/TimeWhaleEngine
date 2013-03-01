@@ -4,7 +4,7 @@ using System.Collections;
 public class MoveState : AbstractState {
 	private Vector3 _goal;
 	private Path _pathFollowing;
-	private float speed = 5f;
+	protected float speed = 5f;
 	private GoToState currentMovementState = null;
 	
 	private Vector3 currentGoal;
@@ -70,6 +70,7 @@ public class MoveState : AbstractState {
 	
 	public override void OnEnter(){
 		Debug.Log(character.name + ": MoveState Enter");
+		speed = 5f;
 		
 		if (CalculatePath()){
 			currentGoal = _pathFollowing.GetPoint();

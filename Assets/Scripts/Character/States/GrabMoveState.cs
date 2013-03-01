@@ -5,6 +5,11 @@ public class GrabMoveState : MoveState {
 	
 	public GrabMoveState(Character toControl, Vector3 goal) : base(toControl, goal) {}
 	
+	public override void OnEnter(){
+		base.OnEnter();
+		speed = 3f;
+	}
+	
 	public override void OnStuck(){
 		Debug.Log("Got stuck while pushing.");
 		character.EnterState(new GrabIdleState(character));
