@@ -8,7 +8,7 @@ public class GrabableOnClick : OnClickNextToPlayer {
 		
 		if (attachedGrabable.AttachedToPlayer){
 			//TODO use DetachFrom in character.
-			attachedGrabable.DetachFromPlayer();
+			player.DetachFrom(this.gameObject);
 		}
 	}
 }
