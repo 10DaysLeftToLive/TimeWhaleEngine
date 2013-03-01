@@ -53,8 +53,8 @@ public static class PathFinding {
 				nodes[0].hitClimbable = true;
 			}
 		}
-		if (FindAPath(nodes, destination, height)){
-			return true;
+		if (FindPath(nodes[0].curr, destination, height)){// FindAPath(nodes, destination, height)){
+			return false;//true;
 		}
 		return false;
 	}
@@ -158,6 +158,7 @@ public static class PathFinding {
 	private static bool FindPath(Vector3 currentPos, Vector3 goal, float height){
 		if (OnSameLevel(currentPos, goal) && CanWalkToGoal(currentPos, goal)){
 			//DONE
+			Debug.Log("I found a way to the goal.");
 		} else {
 			// If we cannot reach the goal on the current level we need to look at shifting up or down
 			RaycastHit objectHit; 
@@ -178,7 +179,8 @@ public static class PathFinding {
 	}
 	
 	private static bool CanWalkToGoal(Vector3 currentPos, Vector3 goal){
-		return true; // TODO
+		int mask = GroundMask | ImpassableMask;
+		return (!Physics.Linecast(currentPos, goal, mask));
 	}
 	
 	private static bool HitClimbableInDirection(Vector3 currentPos, Direction directionToCheck, out RaycastHit objectHit){
