@@ -12,7 +12,6 @@ public class Player : Character {
 		Vector3 pos = Camera.main.ScreenToWorldPoint(e.position);
 		pos.z = this.transform.position.z;
 		
-		
 		Debug.Log("Click on no object  at point " + pos);
 		
 		// Will need to be changed with later refactoring

@@ -33,6 +33,7 @@ public static class PathFinding {
 	private static int index;
 	private static bool foundPath;
 	private static List<Node> nodes;
+	private static GameObject grabableToMoveThrough = null; // only set if we are grabing an object
 	
 	private static float MECHANICSBUFFER = .4f;
 	
@@ -53,6 +54,11 @@ public static class PathFinding {
 			return true;
 		}
 		return false;
+	}
+	
+	public static bool StartPathWithGrabable(Vector3 startPos, Vector3 destination, float height, GameObject grabable){
+		grabableToMoveThrough = grabable;
+		return (StartPath(startPos, destination, height));
 	}
 	
 	public static Path GetPath(){
@@ -174,8 +180,12 @@ public static class PathFinding {
 						destination.x = destination.x - debugHit.collider.bounds.size.x/2 - MECHANICSBUFFER;
 					}
 				} else { // if we have a path to the goal but there is a mechanic object in the way then we cannot reach the goal
-					// then we should just move on
-					return (false); //TODO remember that we saw this and move the player to a point next to this instead of moving on
+					if (grabableToMoveThrough != null && debugHit.transform.gameObject == grabableToMoveThrough){ // if it is the pushable object
+						// we can go through it
+					} else {
+						// then we should just move on
+						return (false); //TODO remember that we saw this and move the player to a point next to this instead of moving on
+					}
 				}
 			} 
 			

@@ -7,6 +7,11 @@ public abstract class Character : PauseObject {
 	private static float RIGHT = 1;
 	private static float LEFT = -1;
 	private Inventory invenory;
+	private GrabableObject attachedObject = null;
+	
+	public GrabableObject AttachedObject {
+		get {return (attachedObject);}
+	}
 	
 	public Inventory Inventory{
 		get { return invenory; }
@@ -49,10 +54,12 @@ public abstract class Character : PauseObject {
 	}
 	
 	public void AttachTo(GameObject toAttachTo){
-		toAttachTo.GetComponent<GrabableObject>().AttachToPlayer(this.gameObject);
+		attachedObject = toAttachTo.GetComponent<GrabableObject>();
+		attachedObject.AttachToPlayer(this.gameObject);
 	}
 	
 	public void DetachFrom(GameObject toDetachFrom){
+		attachedObject = null;
 		toDetachFrom.GetComponent<GrabableObject>().DetachFromPlayer();
 	}
 	

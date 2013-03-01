@@ -107,13 +107,15 @@ public class MoveState : AbstractState {
 			hitPos.y += character.transform.localScale.y/2;
 			
 			_pathFollowing = new Path();
-			if (PathFinding.StartPath(character.transform.position, hitPos, character.transform.localScale.y/2)){
+			if (PathSearch(character.transform.position, hitPos, character.transform.localScale.y/2)){
 				_pathFollowing = PathFinding.GetPath();
 				return (true);
-			} else {
-				return (false);
 			}
 		} return (false);
+	}
+	
+	protected virtual bool PathSearch(Vector3 pos, Vector3 hitPos, float height){
+		return (PathFinding.StartPath(pos, hitPos, height));
 	}
 	
 	// Draw a line from the current position to the point and determine if we should walk or climb there
