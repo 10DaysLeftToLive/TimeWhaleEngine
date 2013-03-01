@@ -37,6 +37,9 @@ public static class PathFinding {
 	
 	private static float MECHANICSBUFFER = .4f;
 	
+	private static float levelDifferenceMax = .25f;
+	private static float distanceToLook = 100f;
+	
 	public static bool StartPath(Vector3 startPos, Vector3 destination, float height){
 		nodes = new List<Node>();
 		index = 0;
@@ -150,6 +153,63 @@ public static class PathFinding {
 			FindAPath(nodes, destination, height);
 		}
 		return foundPath;
+	}
+	
+	private static bool FindPath(Vector3 currentPos, Vector3 goal, float height){
+		if (OnSameLevel(currentPos, goal) && CanWalkToGoal(currentPos, goal)){
+			//DONE
+		} else {
+			// If we cannot reach the goal on the current level we need to look at shifting up or down
+			RaycastHit objectHit; 
+			
+			Direction nextDirection = GetNextDirection(currentPos, goal);
+			Direction otherDirection = (nextDirection == Direction.left ? Direction.right : Direction.left);
+			
+			if (HitClimbableInDirection(currentPos, nextDirection, out objectHit)){
+				Debug.Log("I looked " + nextDirection + " and I hit " + objectHit.transform.gameObject.name);
+			} else if (HitClimbableInDirection(currentPos, otherDirection, out objectHit)){
+				Debug.Log("I looked " + otherDirection + " and I hit " + objectHit.transform.gameObject.name);
+			} else {
+				Debug.Log("I looked both " + nextDirection + " and " + otherDirection + ". I was not able to find a climbable.");
+				// TODO look to fall off nearby floor
+			}
+		}
+		return (true);
+	}
+	
+	private static bool CanWalkToGoal(Vector3 currentPos, Vector3 goal){
+		return true; // TODO
+	}
+	
+	private static bool HitClimbableInDirection(Vector3 currentPos, Direction directionToCheck, out RaycastHit objectHit){
+		int mask = ClimbableMask;
+		
+		Vector3 heading;
+		
+		switch(directionToCheck){
+			case Direction.left: 
+				heading = Vector3.left; 
+				break;	
+			case Direction.right: 
+				heading = Vector3.right; 
+				break;	
+			case Direction.up: 
+				heading = Vector3.up; 
+				break;	
+			default:
+				heading = Vector3.down; 
+				break;	
+		}
+			
+		return (Physics.Raycast(currentPos, heading, out objectHit, distanceToLook, mask));
+	}
+	
+	private static bool OnSameLevel(Vector3 currentPoint, Vector3 goal){
+		return (Utils.CalcDistance(currentPoint.y, goal.y) < levelDifferenceMax); 
+	}
+
+	private static Direction GetNextDirection(Vector3 currentPoint, Vector3 goal){
+		return (currentPoint.x > goal.x ? Direction.left : Direction.right);
 	}
 	
 	private static bool CheckGround(Vector3 start, Vector3 end, Vector3 heading, float height){
