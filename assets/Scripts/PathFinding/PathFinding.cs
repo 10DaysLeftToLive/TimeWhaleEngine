@@ -2,23 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public static class PathFinding {
-	#region Layers
-	private static int ClimbableLayer = 8;
-	private static int GroundLayer = 9;
-	private static int ImpassableLayer = 10;
-	private static int LadderTopLayer = 13;
-	private static int MechanicsLayer = 14;
-	#endregion
-	
-	#region Mashs
-	private static int ClimbableMask = (1 << ClimbableLayer);
-	private static int GroundMask = (1 << GroundLayer);
-	private static int ImpassableMask = (1 << ImpassableLayer);
-	private static int LadderTopMask = (1 << LadderTopLayer);
-	private static int MechanicsMask = (1 << MechanicsLayer);
-	#endregion
-	
+public static class PathFinding {	
 	private enum Direction {
 		left = 0, 
 		right = 1, 
@@ -46,7 +30,7 @@ public static class PathFinding {
 		currentDirection = Direction.none;
 		foundPath = false;
 		nodes.Add(new Node((int)currentDirection, startPos, destination));
-		int mask = ClimbableMask | MechanicsMask;
+		int mask = LevelMasks.ClimbableMask | LevelMasks.MechanicsMask;
 		RaycastHit hit;
 		if (Physics.Raycast(new Vector3(startPos.x, startPos.y, startPos.z-2), Vector3.forward, out hit, Mathf.Infinity, mask)){
 			if (hit.transform.tag == Strings.tag_Climbable) {
@@ -88,7 +72,7 @@ public static class PathFinding {
 		
 		bool hit1Test = false, hit2Test = false, hit3Test = false;
 		RaycastHit hit, hit2, hit3;
-		int mask = ClimbableMask | MechanicsMask;
+		int mask = LevelMasks.ClimbableMask | LevelMasks.MechanicsMask;
 		float distance = 9999;
 		float x, y, z;
 		float zOffset = .4f;
@@ -99,19 +83,19 @@ public static class PathFinding {
 		switch(currentDirection){
 			case Direction.left: 
 				heading = Vector3.left; 
-				mask = ClimbableMask | ImpassableMask; 
+				mask = LevelMasks.ClimbableMask | LevelMasks.ImpassableMask; 
 				break;	
 			case Direction.right: 
 				heading = Vector3.right; 
-				mask = ClimbableMask | ImpassableMask; 
+				mask = LevelMasks.ClimbableMask | LevelMasks.ImpassableMask; 
 				break;	
 			case Direction.up: 
 				heading = Vector3.up; 
-				mask = LadderTopMask; y += height; 
+				mask = LevelMasks.LadderTopMask; y += height; 
 				break;	
 			case Direction.down: 
 				heading = Vector3.down; 
-				mask = GroundMask | LadderTopMask; 
+				mask = LevelMasks.GroundMask | LevelMasks.LadderTopMask; 
 				y-= height*2; 
 				break;	
 		}
@@ -181,6 +165,26 @@ public static class PathFinding {
 	
 	private static void MoveOverALevel(GameObject climbable){
 		//TODO
+		AddNodeAtCurrentPoint();
+		MarkWhereGoingOnNode();
+		Vector3 nextPoint = CalculateNextNode(climbable);
+		AddNextPoint(nextPoint);
+	}
+	
+	private static void AddNodeAtCurrentPoint(){
+		
+	}
+	
+	private static void MarkWhereGoingOnNode(){
+		
+	}
+	
+	private static Vector3 CalculateNextNode(GameObject climbable){
+		return (GetTopOfLadder(climbable));
+	}
+	
+	private static void AddNextPoint(Vector3 nextPoint){
+		
 	}
 	
 	private static Vector3 GetTopOfLadder(GameObject ladder){
@@ -188,12 +192,12 @@ public static class PathFinding {
 	}
 	
 	private static bool CanWalkToGoal(Vector3 currentPos, Vector3 goal){
-		int mask = GroundMask | ImpassableMask;
+		int mask = LevelMasks.GroundMask | LevelMasks.ImpassableMask;
 		return (!Physics.Linecast(currentPos, goal, mask));
 	}
 	
 	private static bool HitClimbableInDirection(Vector3 currentPos, Direction directionToCheck, out RaycastHit objectHit){
-		int mask = ClimbableMask;
+		int mask = LevelMasks.ClimbableMask;
 		
 		Vector3 heading;
 		
@@ -241,9 +245,9 @@ public static class PathFinding {
 			return false;
 		
 		RaycastHit debugHit;
-		int mask = GroundMask | ImpassableMask;
+		int mask = LevelMasks.GroundMask | LevelMasks.ImpassableMask;
 		if (foundPath || !Physics.Linecast(nodes[index].curr, destination, out debugHit, mask)){ // if we can draw a line to the goal without a barrier
-			mask = MechanicsMask;
+			mask = LevelMasks.MechanicsMask;
 			
 			if (Physics.Linecast(nodes[index].curr, destination, out debugHit, mask)){ // if we intersect with a mechanics object
 				if (debugHit.collider.bounds.Contains(destination)){ // if that mechanic object contains our destination
