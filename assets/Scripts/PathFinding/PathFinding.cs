@@ -38,7 +38,7 @@ public static class PathFinding {
 	private static float MECHANICSBUFFER = .4f;
 	
 	private static float levelDifferenceMax = .25f;
-	private static float distanceToLook = 100f;
+	private static float distanceToLook = 9999f;
 	
 	public static bool StartPath(Vector3 startPos, Vector3 destination, float height){
 		nodes = new List<Node>();
@@ -168,6 +168,7 @@ public static class PathFinding {
 			
 			if (HitClimbableInDirection(currentPos, nextDirection, out objectHit)){
 				Debug.Log("I looked " + nextDirection + " and I hit " + objectHit.transform.gameObject.name);
+				Debug.Log("Moving to " + GetTopOfLadder(objectHit.transform.gameObject));
 			} else if (HitClimbableInDirection(currentPos, otherDirection, out objectHit)){
 				Debug.Log("I looked " + otherDirection + " and I hit " + objectHit.transform.gameObject.name);
 			} else {
@@ -176,6 +177,14 @@ public static class PathFinding {
 			}
 		}
 		return (true);
+	}
+	
+	private static void MoveOverALevel(GameObject climbable){
+		//TODO
+	}
+	
+	private static Vector3 GetTopOfLadder(GameObject ladder){
+		return (new Vector3(ladder.transform.position.x, ladder.transform.position.y + ladder.collider.bounds.size.y/2, ladder.transform.position.z));
 	}
 	
 	private static bool CanWalkToGoal(Vector3 currentPos, Vector3 goal){
@@ -202,8 +211,10 @@ public static class PathFinding {
 				heading = Vector3.down; 
 				break;	
 		}
+		
+		Debug.Log("HitClimbableInDirection" + currentPos + ", " + directionToCheck);
 			
-		return (Physics.Raycast(currentPos, heading, out objectHit, distanceToLook, mask));
+		return (Physics.Raycast(currentPos, heading, out objectHit, distanceToLook));//, mask));
 	}
 	
 	private static bool OnSameLevel(Vector3 currentPoint, Vector3 goal){
