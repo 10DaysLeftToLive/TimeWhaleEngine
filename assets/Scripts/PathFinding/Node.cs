@@ -1,12 +1,107 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Node {
-	
 	public bool goneLeft, goneRight, goneUp, goneDown, hitClimbable;
 	public Vector3 curr, dest;
 	public int past, lastDir;
+	
+	public Vector3 _position;
+	private Node toLeftNode, toRightNode, aboveNode, belowNode; // *Note that when using stairs the above or down will be diagonally different
+	private bool deadEnd = false; // marks that there is no way to goal from this node
+	private Type type;
+	
+	private Dictionary<PathFinding.Direction, NodeDirection> links = new Dictionary<PathFinding.Direction, NodeDirection>();
+	
+	public enum Type{
+		WalkTo,
+		ClimbTo,
+		StairClimbTo,
+		UnSet
+	}
+	
+	private class NodeDirection{
+		Type _type;
+		bool _hasTraveledOn;
+		
+		public NodeDirection(){
+			_type = Type.UnSet;
+			_hasTraveledOn = false;
+		}
+		
+		public NodeDirection(Type type){
+			_type = type;
+			_hasTraveledOn = true;
+		}
+		
+		public void Mark(){
+			_hasTraveledOn = true;
+		}
+		
+		public bool HasTraveled(){
+			return (_hasTraveledOn);
+		}
+		
+		public void SetType(Type type){
+			_type = type;
+		}
+		
+		public override string ToString(){
+			return (_type + ": " + _hasTraveledOn);
+		}
+	}
+	
 	public Node(){
+	}
+	
+	public Node(Vector3 position){
+		_position = position;
+	}
+	
+	public Node(Vector3 position, PathFinding.Direction previousDirection, Type wayToGoTo){
+		_position = position;
+		MarkAndSet(previousDirection, wayToGoTo);
+	}
+	
+	public void MarkAndSet(PathFinding.Direction direction, Type movementType){
+		links[direction].Mark();
+		links[direction].SetType(movementType);
+	}
+	
+	public bool HasGoneIn(PathFinding.Direction direction){
+		return (links[direction].HasTraveled());
+	}
+	
+	private void SetPositionOfNode(Node node){
+		if (IsAbove(node)){
+			if (IsToLeft(node) || IsToRight(node)){
+				
+			}
+		}
+	}
+	
+	private bool IsToLeft(Node node){
+		return (node._position.x < _position.x);
+	}
+	
+	private bool IsToRight(Node node){
+		return (node._position.x > _position.x);
+	}
+	
+	private bool IsAbove(Node node){
+		return (node._position.y > _position.y);
+	}
+	
+	private bool IsBelow(Node node){
+		return (node._position.y < _position.y);
+	}
+	
+	private void SetLinks(){
+		links[PathFinding.Direction.left] = new NodeDirection();
+		links[PathFinding.Direction.right] = new NodeDirection();
+		links[PathFinding.Direction.up] = new NodeDirection();
+		links[PathFinding.Direction.down] = new NodeDirection();
 	}
 	
 	public Node(int past, Vector3 curr, Vector3 dest){
@@ -90,5 +185,15 @@ public class Node {
 	
 	public Vector3 GetPos(){
 		return curr;	
+	}
+	
+	public override string ToString(){
+		string result = "";
+		result += "L" + links[PathFinding.Direction.left];
+		result += "R" + links[PathFinding.Direction.right];
+		result += "U" + links[PathFinding.Direction.up];
+		result += "D" + links[PathFinding.Direction.down];
+		
+		return (_position + result);
 	}
 }

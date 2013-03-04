@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public static class PathFinding {	
-	private enum Direction {
+	public enum Direction {
 		left = 0, 
 		right = 1, 
 		up = 2, 
@@ -17,6 +17,9 @@ public static class PathFinding {
 	private static int index;
 	private static bool foundPath;
 	private static List<Node> nodes;
+	
+	private static Queue<Node> nodeQueue;
+	
 	private static GameObject grabableToMoveThrough = null; // only set if we are grabing an object
 	
 	private static float MECHANICSBUFFER = .4f;
@@ -26,23 +29,19 @@ public static class PathFinding {
 	
 	public static bool StartPath(Vector3 startPos, Vector3 destination, float height){
 		nodes = new List<Node>();
-		index = 0;
-		currentDirection = Direction.none;
-		foundPath = false;
-		nodes.Add(new Node((int)currentDirection, startPos, destination));
-		int mask = LevelMasks.ClimbableMask | LevelMasks.MechanicsMask;
-		RaycastHit hit;
-		if (Physics.Raycast(new Vector3(startPos.x, startPos.y, startPos.z-2), Vector3.forward, out hit, Mathf.Infinity, mask)){
-			if (hit.transform.tag == Strings.tag_Climbable) {
-				nodes[0].hitClimbable = true;
-			}
-		}
-		if (FindPath(nodes[0].curr, destination, height)){// FindAPath(nodes, destination, height)){
+		nodeQueue = new Queue<Node>();
+		
+		Node start = CreateNodeAt(startPos);
+		Node goal = CreateNodeAt(destination);
+		
+		nodeQueue.Enqueue(start);
+		
+		if (FindPath(nodeQueue, goal, height)){// FindAPath(nodes, destination, height)){
 			return false;//true;
 		}
 		return false;
 	}
-	
+
 	public static bool StartPathWithGrabable(Vector3 startPos, Vector3 destination, float height, GameObject grabable){
 		grabableToMoveThrough = grabable;
 		return (StartPath(startPos, destination, height));
@@ -139,21 +138,23 @@ public static class PathFinding {
 		return foundPath;
 	}
 	
-	private static bool FindPath(Vector3 currentPos, Vector3 goal, float height){
-		if (OnSameLevel(currentPos, goal) && CanWalkToGoal(currentPos, goal)){
+	private static bool FindPath(Queue<Node> nodeQueue, Node goalNode, float height){
+		Node currentNode = nodeQueue.Peek();
+		
+		if (OnSameLevel(currentNode, goalNode) && CanWalkToGoal(currentNode, goalNode)){
 			//DONE
 			Debug.Log("I found a way to the goal.");
 		} else {
 			// If we cannot reach the goal on the current level we need to look at shifting up or down
 			RaycastHit objectHit; 
 			
-			Direction nextDirection = GetNextDirection(currentPos, goal);
+			Direction nextDirection = GetNextDirection(currentNode, goalNode);
 			Direction otherDirection = (nextDirection == Direction.left ? Direction.right : Direction.left);
 			
-			if (HitClimbableInDirection(currentPos, nextDirection, out objectHit)){
+			if (HitClimbableInDirection(currentNode, nextDirection, out objectHit)){
 				Debug.Log("I looked " + nextDirection + " and I hit " + objectHit.transform.gameObject.name);
 				Debug.Log("Moving to " + GetTopOfLadder(objectHit.transform.gameObject));
-			} else if (HitClimbableInDirection(currentPos, otherDirection, out objectHit)){
+			} else if (HitClimbableInDirection(currentNode, otherDirection, out objectHit)){
 				Debug.Log("I looked " + otherDirection + " and I hit " + objectHit.transform.gameObject.name);
 			} else {
 				Debug.Log("I looked both " + nextDirection + " and " + otherDirection + ". I was not able to find a climbable.");
@@ -165,13 +166,18 @@ public static class PathFinding {
 	
 	private static void MoveOverALevel(GameObject climbable){
 		//TODO
-		AddNodeAtCurrentPoint();
+		Node currentNode = AddNodeAtCurrentPoint();
 		MarkWhereGoingOnNode();
 		Vector3 nextPoint = CalculateNextNode(climbable);
 		AddNextPoint(nextPoint);
 	}
 	
-	private static void AddNodeAtCurrentPoint(){
+	private static Node AddNodeAtCurrentPoint(){
+		return new Node();
+	}
+	
+	private static Node AddNodeAtPoint(Vector3 position){
+		return new Node();
 		
 	}
 	
@@ -187,16 +193,21 @@ public static class PathFinding {
 		
 	}
 	
+	private static Node CreateNodeAt(Vector3 position){
+		Node newNode = new Node();
+		return (newNode);
+	}
+	
 	private static Vector3 GetTopOfLadder(GameObject ladder){
 		return (new Vector3(ladder.transform.position.x, ladder.transform.position.y + ladder.collider.bounds.size.y/2, ladder.transform.position.z));
 	}
 	
-	private static bool CanWalkToGoal(Vector3 currentPos, Vector3 goal){
+	private static bool CanWalkToGoal(Node currentNode, Node goalNode){
 		int mask = LevelMasks.GroundMask | LevelMasks.ImpassableMask;
-		return (!Physics.Linecast(currentPos, goal, mask));
+		return (!Physics.Linecast(currentNode.curr, goalNode.curr, mask));
 	}
 	
-	private static bool HitClimbableInDirection(Vector3 currentPos, Direction directionToCheck, out RaycastHit objectHit){
+	private static bool HitClimbableInDirection(Node currentNode, Direction directionToCheck, out RaycastHit objectHit){
 		int mask = LevelMasks.ClimbableMask;
 		
 		Vector3 heading;
@@ -216,17 +227,21 @@ public static class PathFinding {
 				break;	
 		}
 		
-		Debug.Log("HitClimbableInDirection" + currentPos + ", " + directionToCheck);
+		Debug.Log("HitClimbableInDirection" + currentNode.curr + ", " + directionToCheck);
 			
-		return (Physics.Raycast(currentPos, heading, out objectHit, distanceToLook));//, mask));
+		return (Physics.Raycast(currentNode.curr, heading, out objectHit, distanceToLook));//, mask));
 	}
 	
-	private static bool OnSameLevel(Vector3 currentPoint, Vector3 goal){
-		return (Utils.CalcDistance(currentPoint.y, goal.y) < levelDifferenceMax); 
+	private static bool OnSameLevel(Node currentNode, Node goalNode){
+		return (Utils.CalcDistance(currentNode.curr.y, goalNode.curr.y) < levelDifferenceMax); 
 	}
 
-	private static Direction GetNextDirection(Vector3 currentPoint, Vector3 goal){
-		return (currentPoint.x > goal.x ? Direction.left : Direction.right);
+	private static Direction GetNextDirection(Node currentNode, Node goalNode){
+		return (currentNode.curr.x > goalNode.curr.x ? Direction.left : Direction.right);
+	}
+	
+	private static bool NoNodes(){
+		return (nodes.Count == 0);
 	}
 	
 	private static bool CheckGround(Vector3 start, Vector3 end, Vector3 heading, float height){
