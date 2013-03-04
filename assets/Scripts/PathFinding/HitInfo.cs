@@ -5,7 +5,7 @@ public static class HitInfo {
 	public static int FirstNode(){
 		return 0;
 	}
-	
+	/*
 	public static Node CheckHit(int dir, RaycastHit hit, Vector3 dest, Node lastNode, float height){
 		Node node = new Node();
 		Vector3 hitPos = hit.point;
@@ -34,5 +34,5 @@ public static class HitInfo {
 		}
 		
 		return node;
-	}
+	}*/
 }

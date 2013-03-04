@@ -58,6 +58,7 @@ public static class PathFinding {
 		return path;
 	}
 	
+	/*
 	private static bool FindAPath(List<Node> nodes, Vector3 destination, float height){
 		Vector3 heading = Vector3.right;
 		if (CheckDestination(destination, heading, height))
@@ -132,23 +133,32 @@ public static class PathFinding {
 					return foundPath;
 			}
 			index++;
-			nodes[index] = HitInfo.CheckHit((int)currentDirection, hit, destination, nodes[index-1], height);
+			//nodes[index] = HitInfo.CheckHit((int)currentDirection, hit, destination, nodes[index-1], height);
 			FindAPath(nodes, destination, height);
 		}
 		return foundPath;
-	}
+	}*/
 	
 	private static bool FindPath(Queue<Node> nodeQueue, Node goalNode, float height){
+		if (nodeQueue.Count == 0) return false;
 		Node currentNode = nodeQueue.Peek();
 		
 		if (OnSameLevel(currentNode, goalNode) && CanWalkToGoal(currentNode, goalNode)){
 			//DONE
 			Debug.Log("I found a way to the goal.");
+			nodeQueue.Enqueue(goalNode);
+			return (true);
 		} else {
-			// If we cannot reach the goal on the current level we need to look at shifting up or down
+			// If we cannot reach the goal on the current level we need to look at shifting up or down from the current node
+			
+			if (currentNode.IsDeadEnd()){
+				nodeQueue.Dequeue();
+				// todo continue
+			}
+			
 			RaycastHit objectHit; 
 			
-			Direction nextDirection = GetNextDirection(currentNode, goalNode);
+			Direction nextDirection = GetNextDirection(currentNode, goalNode);			
 			Direction otherDirection = (nextDirection == Direction.left ? Direction.right : Direction.left);
 			
 			if (HitClimbableInDirection(currentNode, nextDirection, out objectHit)){

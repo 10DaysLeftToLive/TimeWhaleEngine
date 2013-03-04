@@ -7,11 +7,7 @@ public class Node {
 	public Vector3 curr, dest;
 	public int past, lastDir;
 	
-	public Vector3 _position;
-	private Node toLeftNode, toRightNode, aboveNode, belowNode; // *Note that when using stairs the above or down will be diagonally different
-	private bool deadEnd = false; // marks that there is no way to goal from this node
-	private Type type;
-	
+	public Vector3 _position;	
 	private Dictionary<PathFinding.Direction, NodeDirection> links = new Dictionary<PathFinding.Direction, NodeDirection>();
 	
 	public enum Type{
@@ -52,21 +48,24 @@ public class Node {
 		}
 	}
 	
-	public Node(){
-	}
-	
-	public Node(Vector3 position){
-		_position = position;
-	}
+	public Node(){}
 	
 	public Node(Vector3 position, PathFinding.Direction previousDirection, Type wayToGoTo){
 		_position = position;
 		MarkAndSet(previousDirection, wayToGoTo);
+		SetLinks();
 	}
 	
 	public void MarkAndSet(PathFinding.Direction direction, Type movementType){
 		links[direction].Mark();
 		links[direction].SetType(movementType);
+	}
+	
+	public bool IsDeadEnd(){
+		return (HasGoneIn(PathFinding.Direction.left) &&
+			    HasGoneIn(PathFinding.Direction.right) &&
+				HasGoneIn(PathFinding.Direction.up) &&
+				HasGoneIn(PathFinding.Direction.down));
 	}
 	
 	public bool HasGoneIn(PathFinding.Direction direction){
