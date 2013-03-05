@@ -18,7 +18,7 @@ public class MoveState : AbstractState {
 	
 	public override void Update(){
 		Debug.Log(character.name + ": MoveState Update");
-		
+		/*
 		Vector3 pos = character.transform.position;
 		Vector3 movement = new Vector3(0,0,0);
 		if (_pathFollowing.GetDirection() == 0){
@@ -65,7 +65,7 @@ public class MoveState : AbstractState {
 		
 		if (stuckTimer > .5f){
 			OnStuck();
-		}
+		}*/
 	}
 	
 	public override void OnEnter(){
@@ -109,6 +109,9 @@ public class MoveState : AbstractState {
 			_pathFollowing = new Path();
 			if (PathSearch(character.transform.position, hitPos, character.transform.localScale.y/2)){
 				_pathFollowing = PathFinding.GetPath();
+				
+				
+				
 				return (true);
 			}
 		} return (false);

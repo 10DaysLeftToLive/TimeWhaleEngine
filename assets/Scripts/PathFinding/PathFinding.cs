@@ -36,9 +36,18 @@ public static class PathFinding {
 		
 		nodeQueue.Enqueue(start);
 		
-		if (FindPath(nodeQueue, goal, height)){// FindAPath(nodes, destination, height)){
-			return false;//true;
+		if (FindPath(goal, height)){// FindAPath(nodes, destination, height)){
+			//return false;//true;
 		}
+		
+		Debug.Log("--------------Path---------------");
+		
+		int i = 0;
+		
+		foreach (Node n in nodeQueue){
+			Debug.Log("Node[" + i++ + "] = " + n);
+		}
+		
 		return false;
 	}
 
@@ -139,36 +148,51 @@ public static class PathFinding {
 		return foundPath;
 	}*/
 	
-	private static bool FindPath(Queue<Node> nodeQueue, Node goalNode, float height){
-		if (nodeQueue.Count == 0) return false;
-		Node currentNode = nodeQueue.Peek();
+	private static bool FindPath(Node goalNode, float height){
+		Node currentNode;
+		Debug.Log("Looking for " + goalNode);
 		
-		if (OnSameLevel(currentNode, goalNode) && CanWalkToGoal(currentNode, goalNode)){
-			//DONE
-			Debug.Log("I found a way to the goal.");
-			nodeQueue.Enqueue(goalNode);
-			return (true);
-		} else {
-			// If we cannot reach the goal on the current level we need to look at shifting up or down from the current node
-			
-			if (currentNode.IsDeadEnd()){
-				nodeQueue.Dequeue();
-				// todo continue
+		while (true){
+			if (nodeQueue.Count == 0){
+				Debug.Log("Ran out of nodes to look at.");
+				return false;
+			} else if (nodeQueue.Count > 7) {
+				Debug.Log("I am up to 7 nodes doesn't look like I'm getting there.");
+				return false;
 			}
 			
-			RaycastHit objectHit; 
-			
-			Direction nextDirection = GetNextDirection(currentNode, goalNode);			
-			Direction otherDirection = (nextDirection == Direction.left ? Direction.right : Direction.left);
-			
-			if (HitClimbableInDirection(currentNode, nextDirection, out objectHit)){
-				Debug.Log("I looked " + nextDirection + " and I hit " + objectHit.transform.gameObject.name);
-				Debug.Log("Moving to " + GetTopOfLadder(objectHit.transform.gameObject));
-			} else if (HitClimbableInDirection(currentNode, otherDirection, out objectHit)){
-				Debug.Log("I looked " + otherDirection + " and I hit " + objectHit.transform.gameObject.name);
+			currentNode = nodeQueue.Peek();
+			Debug.Log("I am currently on: " + currentNode);
+						
+			if (OnSameLevel(currentNode, goalNode) && CanWalkToGoal(currentNode, goalNode)){
+				Debug.Log("I found a way to the goal.");
+				currentNode.LinkToNode(goalNode);
+				nodeQueue.Enqueue(goalNode);
+				return (true);
 			} else {
-				Debug.Log("I looked both " + nextDirection + " and " + otherDirection + ". I was not able to find a climbable.");
-				// TODO look to fall off nearby floor
+				Debug.Log("I need to look for a way to change levels.");
+				// If we cannot reach the goal on the current level we need to look at shifting up or down from the current node
+				if (currentNode.IsDeadEnd()){
+					Debug.Log("I was at a dead end.");
+					nodeQueue.Dequeue();
+					continue;
+				}
+				
+				RaycastHit objectHit; 
+				
+				Direction nextDirection = GetNextDirection(currentNode, goalNode);			
+				Direction otherDirection = (nextDirection == Direction.left ? Direction.right : Direction.left);
+				
+				if (HitClimbableInDirection(currentNode, nextDirection, out objectHit)){
+					Debug.Log("I looked " + nextDirection + " and I hit " + objectHit.transform.gameObject.name);
+					Debug.Log("Moving to " + GetTopOfLadder(objectHit.transform.gameObject));
+				} else if (HitClimbableInDirection(currentNode, otherDirection, out objectHit)){
+					Debug.Log("I looked " + otherDirection + " and I hit " + objectHit.transform.gameObject.name);
+				} else {
+					Debug.Log("I looked both " + nextDirection + " and " + otherDirection + ". I was not able to find a climbable.");
+					// TODO look to fall off nearby floor
+				}
+				return false;
 			}
 		}
 		return (true);
@@ -204,7 +228,7 @@ public static class PathFinding {
 	}
 	
 	private static Node CreateNodeAt(Vector3 position){
-		Node newNode = new Node();
+		Node newNode = new Node(position);
 		return (newNode);
 	}
 	
@@ -214,7 +238,7 @@ public static class PathFinding {
 	
 	private static bool CanWalkToGoal(Node currentNode, Node goalNode){
 		int mask = LevelMasks.GroundMask | LevelMasks.ImpassableMask;
-		return (!Physics.Linecast(currentNode.curr, goalNode.curr, mask));
+		return (!Physics.Linecast(currentNode._position, goalNode._position, mask));
 	}
 	
 	private static bool HitClimbableInDirection(Node currentNode, Direction directionToCheck, out RaycastHit objectHit){
@@ -237,9 +261,9 @@ public static class PathFinding {
 				break;	
 		}
 		
-		Debug.Log("HitClimbableInDirection" + currentNode.curr + ", " + directionToCheck);
+		Debug.Log("HitClimbableInDirection" + currentNode._position + ", " + directionToCheck);
 			
-		return (Physics.Raycast(currentNode.curr, heading, out objectHit, distanceToLook));//, mask));
+		return (Physics.Raycast(currentNode._position, heading, out objectHit, distanceToLook, mask));
 	}
 	
 	private static bool OnSameLevel(Node currentNode, Node goalNode){
