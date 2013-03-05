@@ -108,7 +108,7 @@ public class MoveState : AbstractState {
 			
 			_pathFollowing = new Path();
 			if (PathSearch(character.transform.position, hitPos, character.transform.localScale.y/2)){
-				_pathFollowing = PathFinding.GetPath();
+				//_pathFollowing = PathFinding.GetPath();
 				
 				
 				

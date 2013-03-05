@@ -23,6 +23,8 @@ public static class PathFinding {
 	private static GameObject grabableToMoveThrough = null; // only set if we are grabing an object
 	
 	private static float MECHANICSBUFFER = .4f;
+	private static bool UP = true;
+	private static bool DOWN = false;
 	
 	private static float levelDifferenceMax = .25f;
 	private static float distanceToLook = 9999f;
@@ -56,6 +58,7 @@ public static class PathFinding {
 		return (StartPath(startPos, destination, height));
 	}
 	
+	/*
 	public static Path GetPath(){
 		Vector3[] points = new Vector3[index+1]; 
 		int[] dir = new int[index+1];
@@ -65,7 +68,7 @@ public static class PathFinding {
 		}
 		Path path = new Path(index + 1, points, dir);
 		return path;
-	}
+	}*/
 	
 	/*
 	private static bool FindAPath(List<Node> nodes, Vector3 destination, float height){
@@ -183,11 +186,19 @@ public static class PathFinding {
 				Direction nextDirection = GetNextDirection(currentNode, goalNode);			
 				Direction otherDirection = (nextDirection == Direction.left ? Direction.right : Direction.left);
 				
+				if (currentNode.inClimbable){
+					Debug.Log("Current was inside a climable");
+				} else {
+					Debug.Log("Current was not inside a climable");
+				}
+				
+				
 				if (HitClimbableInDirection(currentNode, nextDirection, out objectHit)){
 					Debug.Log("I looked " + nextDirection + " and I hit " + objectHit.transform.gameObject.name);
-					Debug.Log("Moving to " + GetTopOfLadder(objectHit.transform.gameObject));
+					MoveOverALevel(objectHit.transform.gameObject, UP, height);
 				} else if (HitClimbableInDirection(currentNode, otherDirection, out objectHit)){
 					Debug.Log("I looked " + otherDirection + " and I hit " + objectHit.transform.gameObject.name);
+					MoveOverALevel(objectHit.transform.gameObject, DOWN, height);
 				} else {
 					Debug.Log("I looked both " + nextDirection + " and " + otherDirection + ". I was not able to find a climbable.");
 					// TODO look to fall off nearby floor
@@ -198,8 +209,8 @@ public static class PathFinding {
 		return (true);
 	}
 	
-	private static void MoveOverALevel(GameObject climbable){
-		//TODO
+	private static void MoveOverALevel(GameObject climbable, bool goUp, float height){
+		GetClimbablePositions(climbable, height, goUp);
 		Node currentNode = AddNodeAtCurrentPoint();
 		MarkWhereGoingOnNode();
 		Vector3 nextPoint = CalculateNextNode(climbable);
@@ -232,8 +243,75 @@ public static class PathFinding {
 		return (newNode);
 	}
 	
+	// Will find the bottom and top node positions of a given climbable. 
+	/*         ---
+	 *         |0|
+	 *         | |
+	 *         |0|
+	 *         ---
+	 */
+	private static Vector3[] GetClimbablePositions(GameObject climbable, float height, bool goingUp){		
+		Vector3 top = new Vector3();
+		Vector3 bottom = new Vector3();
+		if (climbable.transform.localRotation.z == 0){ // TODO better detection
+			// if it has no rotation it is a ladder
+			top = GetTopOfLadder(climbable);
+			bottom = GetBottomOfLadder(climbable);
+		} else {			
+			float sizeX = climbable.transform.localScale.x;
+			float sizeY = climbable.transform.localScale.y;//climbable.transform.renderer.bounds.size.z;
+			
+			Debug.Log("x size = " + sizeX + "  y size = " + sizeY);
+			
+	        float x = sizeX*.5f;
+	        float y = sizeY*.5f;
+	        Vector3 topRight = climbable.transform.TransformPoint(x/sizeX,y/sizeY,0);
+	        Vector3 bottomRight = climbable.transform.TransformPoint(x/sizeX,-y/sizeY,0);
+	        Vector3 bottomLeft = climbable.transform.TransformPoint(-x/sizeX,-y/sizeY,0);
+	        Vector3 topLeft = climbable.transform.TransformPoint(-x/sizeX,y/sizeY,0);
+			
+			Debug.Log("topLeft = " + topLeft);
+			Debug.Log("bottomRight = " + bottomRight);
+			Debug.Log("bottomLeft = " + bottomLeft);
+			Debug.Log("topRight = " + topRight);
+			
+			float theta = climbable.transform.localRotation.z;
+			Debug.Log("theta = " + theta);
+
+			if (theta < 90){
+				bottom = bottomRight;
+				top = topRight;
+			} else if (theta > 270){
+				bottom = bottomLeft;
+				top = topLeft;
+			} // TODO other angles
+			
+			if (!goingUp){ // if we are going down flip the top and bottom
+				Vector3 temp = top;
+				top = bottom;
+				bottom = temp;
+			}
+		}
+		
+		top.y += height; // add in the height where the player will goto
+		bottom.y += height;
+		
+		Debug.Log("bot = " + bottom);
+		Debug.Log("top = " + top);
+		
+		Vector3[] pair = new Vector3[2];
+		pair[0] = top;
+		pair[1] = bottom;
+		
+		return (pair);
+	}
+	
 	private static Vector3 GetTopOfLadder(GameObject ladder){
 		return (new Vector3(ladder.transform.position.x, ladder.transform.position.y + ladder.collider.bounds.size.y/2, ladder.transform.position.z));
+	}
+	
+	private static Vector3 GetBottomOfLadder(GameObject ladder){
+		return (new Vector3(ladder.transform.position.x, ladder.transform.position.y - ladder.collider.bounds.size.y/2, ladder.transform.position.z));
 	}
 	
 	private static bool CanWalkToGoal(Node currentNode, Node goalNode){
@@ -261,23 +339,23 @@ public static class PathFinding {
 				break;	
 		}
 		
-		Debug.Log("HitClimbableInDirection" + currentNode._position + ", " + directionToCheck);
-			
-		return (Physics.Raycast(currentNode._position, heading, out objectHit, distanceToLook, mask));
+		Debug.Log("HitClimbableInDirection" + currentNode.GetPos() + ", " + directionToCheck);
+		currentNode.MarkAndSet(directionToCheck, Node.Type.UnSet);	
+		return (Physics.Raycast(currentNode.GetPos(), heading, out objectHit, distanceToLook, mask));
 	}
 	
 	private static bool OnSameLevel(Node currentNode, Node goalNode){
-		return (Utils.CalcDistance(currentNode.curr.y, goalNode.curr.y) < levelDifferenceMax); 
+		return (Utils.CalcDistance(currentNode.GetPos().y, goalNode.GetPos().y) < levelDifferenceMax); 
 	}
 
 	private static Direction GetNextDirection(Node currentNode, Node goalNode){
-		return (currentNode.curr.x > goalNode.curr.x ? Direction.left : Direction.right);
+		return (currentNode.GetPos().x > goalNode.GetPos().x ? Direction.left : Direction.right);
 	}
 	
 	private static bool NoNodes(){
 		return (nodes.Count == 0);
 	}
-	
+	/*
 	private static bool CheckGround(Vector3 start, Vector3 end, Vector3 heading, float height){
 		float distance = Mathf.Abs(start.x - end.x);
 		RaycastHit hit;
@@ -287,8 +365,9 @@ public static class PathFinding {
 			return true;
 		}
 		return false;
-	}
+	}*/
 	
+	/*
 	private static bool CheckDestination(Vector3 destination, Vector3 heading, float height){
 		if (nodes[index].curr.y + height < destination.y || nodes[index].curr.y - height > destination.y)
 			return false;
@@ -332,5 +411,5 @@ public static class PathFinding {
 			return foundPath;
 		}
 		return false;
-	}
+	}*/
 }
