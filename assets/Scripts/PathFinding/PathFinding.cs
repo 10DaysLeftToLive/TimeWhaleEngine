@@ -55,7 +55,6 @@ public static class PathFinding {
 		Vector3[] points = new Vector3[index+1]; 
 		int[] dir = new int[index+1];
 		for (int i = 0; i <= index; i++){
-			Debug.Log("nodes of " + i + " = " + nodes[i]);
 			points[i] = nodes[i].curr;
 			dir[i] = nodes[i].past;
 		}
@@ -63,11 +62,7 @@ public static class PathFinding {
 		return path;
 	}
 	
-	private static bool FindAPath(Node[] nodes, Vector3 destination, float height){
-		Debug.Log("----------------------------");
-		GetPath();
-		Debug.Log("----------------------------");
-		
+	private static bool FindAPath(Node[] nodes, Vector3 destination, float height){		
 		Vector3 heading = Vector3.right;
 		if (CheckDestination(destination, heading, height)){
 			return foundPath;
@@ -109,13 +104,8 @@ public static class PathFinding {
 				y -= height*2; 
 				break;	
 		}
-		
-		Debug.Log("Currently heading " + currentDirection + " on " + nodes[index]);
-		
 		if (nodes[index].hitClimbable && (currentDirection == Direction.up || currentDirection == Direction.down)){
-			Debug.Log("I am in a climable");
 			Vector3 pointToClimbTo = GetClimbablePositionToGoto(nodes[index].climbableIn, height, currentDirection, nodes[index].GetPos());
-			Debug.Log("point to climb to = " + pointToClimbTo);
 			if (pointToClimbTo != Vector3.zero){
 				index++;
 				nodes[index] = new Node((int) currentDirection, pointToClimbTo, destination);
@@ -123,8 +113,6 @@ public static class PathFinding {
 			FindAPath(nodes, destination, height);
 			return (foundPath);
 		}
-		
-		Debug.Log("Heading in " + currentDirection + " x = " + x + " y = " + y + " z = " + z);
 		
 		if (Physics.Raycast(new Vector3(x,y,z), heading, out hit, Mathf.Infinity, mask)) {
 			hit1Test = true;
@@ -141,29 +129,21 @@ public static class PathFinding {
 		//get shortest hit distance
 		if (hit1Test){
 			distance = hit.distance; 
-			Debug.Log("hit1");
 		}
 		if (hit2Test && hit2.distance < distance || distance == 9999){
 			distance = hit2.distance;
 			hit = hit2;
-			Debug.Log("hit2");
 		}
 		if (hit3Test && hit3.distance < distance || distance == 9999){
 			distance = hit3.distance;
 			hit = hit3;
-			Debug.Log("hit3");
 		}
 		
-		Debug.Log("Hit1Test = " + hit1Test + "Hit2Test = " + hit2Test + " Hit3Test = " + hit3Test);
-		
 		if (!hit1Test && !hit2Test && !hit3Test){
-			Debug.Log("I hit nothing");
 			FindAPath(nodes, destination, height);
 		} else{	// if we hit either a climable or mechanics item
-			Debug.Log("I hit " + hit.transform.name);
 			if (currentDirection == Direction.left || currentDirection == Direction.right){
 				if (CheckGround(nodes[index].curr, hit.point, heading, height)){
-					Debug.Log("Check ground was false");
 					FindAPath(nodes, destination, height);
 					return foundPath;
 					// TODO maybe mark that we should go here
@@ -178,11 +158,6 @@ public static class PathFinding {
 	
 	// Will check if it is possible to walk to the end point from the start
 	private static bool CheckGround(Vector3 start, Vector3 end, Vector3 heading, float height){
-		Debug.Log("CheckGround");
-		Debug.Log("Start = " + start);
-		Debug.Log("End = " + end);
-		Debug.Log("Heading = " + heading);
-		
 		int mask = LevelMasks.GroundMask | LevelMasks.ImpassableMask;
 		
 		float distance = Mathf.Abs(start.x - end.x);
@@ -191,29 +166,22 @@ public static class PathFinding {
 			start += heading;
 		}
 		if (Physics.Raycast(new Vector3(start.x,start.y-height,start.z), heading, out hit, distance, mask)){
-			Debug.Log("Lack of ground at " + hit.point);
 			return true;
 		}
 		return false;
 	}
 	
 	private static bool CheckDestination(Vector3 destination, Vector3 heading, float height){
-		Debug.Log("CheckDestination goal y = " + destination.y + "cur y = " + nodes[index].curr.y);
 		if (nodes[index].curr.y + (height*2) < destination.y || nodes[index].curr.y - (height*2) > destination.y){
 			return false;
 		}
-		Debug.Log("CheckDestination was okay");
 		
 		RaycastHit debugHit;
 		int mask = LevelMasks.GroundMask | LevelMasks.ImpassableMask;
 		if (foundPath || !Physics.Linecast(nodes[index].curr, destination, out debugHit, mask)){ // if we found our path or we can walk to the goal
-			Debug.Log("can walk to the goal");
-			Debug.Log("currentDirection = " + currentDirection);
-			
 			mask = LevelMasks.MechanicsMask;
 			
 			if (Physics.Linecast(nodes[index].curr, destination, out debugHit, mask)){ // if we intersect with a mechanics object
-				Debug.Log("Hit a mechanics object");
 				if (debugHit.collider.bounds.Contains(destination)){ // if that mechanic object contains our destination
 					if (debugHit.transform.position.x < nodes[index].curr.x){ // if the current node is to the right of the object
 						destination.x = destination.x + debugHit.collider.bounds.size.x/2 + MECHANICSBUFFER;
@@ -247,7 +215,6 @@ public static class PathFinding {
 			foundPath = true;
 			return foundPath;
 		}
-		Debug.Log("Cannot reach goal");
 		return false;
 	}
 	
@@ -271,21 +238,15 @@ public static class PathFinding {
 		
 		Vector3 top = possiblePositions[0];
 		Vector3 bottom = possiblePositions[1];
-		Debug.Log("Top = " + top);
-		Debug.Log("bot = " + bottom);
-		Debug.Log("current = " + current);
-		
 		
 		if (direction == Direction.up){
 			if (Utils.CalcDistance(current.y, top.y) < levelDifferenceMax){ // if at top already
-				Debug.Log("Already at top");
 				return (Vector3.zero);
 			} else {
 				return (top);
 			}
 		} else {
 			if (Utils.CalcDistance(current.y, bottom.y) < levelDifferenceMax){ // if at top already
-				Debug.Log("Already at bottom");
 				return (Vector3.zero);
 			} else {
 				return (bottom);
