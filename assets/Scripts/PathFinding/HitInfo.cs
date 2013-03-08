@@ -10,13 +10,6 @@ public static class HitInfo {
 		Node node = new Node();
 		Vector3 hitPos = hit.point;
 		hitPos.z = lastNode.curr.z;
-		Debug.Log("CheckHit");
-		Debug.Log("hitPos = " + hitPos);
-		Debug.Log("hit = " + hit.transform.position);
-		Debug.Log("dest = " + dest);
-		Debug.Log("lastNode = " + lastNode);
-		Debug.Log("dir = " + dir);
-		Debug.Log("Tag = " + hit.transform.tag);
 		
 		if (hit.transform.tag == Strings.tag_Climbable){
 			hitPos.x = hit.transform.position.x;

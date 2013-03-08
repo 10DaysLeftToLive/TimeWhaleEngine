@@ -67,4 +67,10 @@ public abstract class Character : PauseObject {
 		// TODO need to enter the correct idle state the change to the new one.
 		//EnterState 
 	}
+	
+	public Vector3 GetFeet(){
+		Vector3 feetPos = this.transform.position;
+		feetPos.y = this.transform.position.y - this.collider.bounds.size.y/2;
+		return (feetPos);
+	}
 }

@@ -47,6 +47,15 @@ public class EventManager : ManagerSingleton<EventManager> {
     public void RiseOnClickOnObjectAwayFromPlayerEvent(ClickedObjectArgs e){
         if(mOnClickOnObjectAwayFromPlayerEvent != null)  mOnClickOnObjectAwayFromPlayerEvent(this,e);
     }
+	
+	//EVENT: onClickOnPlayer
+	public delegate void mOnClickOnPlayerDelegate(EventManager EM);
+    //Event
+    public event mOnClickOnPlayerDelegate mOnClickOnPlayerEvent;
+    //Riser
+    public void RiseOnClickOnPlayerEvent(){
+        if(mOnClickOnPlayerEvent != null)  mOnClickOnPlayerEvent(this);
+    }
 }
 
 public class ClickPositionArgs : EventArgs {

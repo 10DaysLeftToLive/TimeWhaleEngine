@@ -37,6 +37,9 @@ public static class PathFinding {
 				nodes[0].hitClimbable = true;
 			}
 		}
+		
+		Debug.Log("Looking for a path to " + destination);
+		
 		if (FindAPath(nodes, destination, height)){
 			return true;
 		}
@@ -140,12 +143,12 @@ public static class PathFinding {
 			distance = hit.distance; 
 			Debug.Log("hit1");
 		}
-		if (hit2Test && (hit2.distance < distance || distance == 9999)){
+		if (hit2Test && hit2.distance < distance || distance == 9999){
 			distance = hit2.distance;
 			hit = hit2;
 			Debug.Log("hit2");
 		}
-		if (hit3Test && (hit3.distance < distance || distance == 9999)){
+		if (hit3Test && hit3.distance < distance || distance == 9999){
 			distance = hit3.distance;
 			hit = hit3;
 			Debug.Log("hit3");
@@ -195,15 +198,15 @@ public static class PathFinding {
 	}
 	
 	private static bool CheckDestination(Vector3 destination, Vector3 heading, float height){
-		Debug.Log("CheckDestination");
-		if (nodes[index].curr.y + height < destination.y || nodes[index].curr.y - height > destination.y){
+		Debug.Log("CheckDestination goal y = " + destination.y + "cur y = " + nodes[index].curr.y);
+		if (nodes[index].curr.y + (height*2) < destination.y || nodes[index].curr.y - (height*2) > destination.y){
 			return false;
 		}
 		Debug.Log("CheckDestination was okay");
 		
 		RaycastHit debugHit;
 		int mask = LevelMasks.GroundMask | LevelMasks.ImpassableMask;
-		if (foundPath || !Physics.Linecast(nodes[index].curr, destination, out debugHit, mask)){ // if we found our path or we cannot walk to the goal
+		if (foundPath || !Physics.Linecast(nodes[index].curr, destination, out debugHit, mask)){ // if we found our path or we can walk to the goal
 			Debug.Log("can walk to the goal");
 			Debug.Log("currentDirection = " + currentDirection);
 			
@@ -226,7 +229,7 @@ public static class PathFinding {
 					}
 				}
 			}
-			/*
+			
 			if (currentDirection == Direction.down || currentDirection == Direction.up || currentDirection == Direction.none){
 				currentDirection = Direction.left;
 				
@@ -237,7 +240,7 @@ public static class PathFinding {
 				}
 			} else {
 				currentDirection = Direction.up;
-			}*/
+			}
 			Debug.Log("Found Path betweem " + nodes[index].curr + "  and  " + destination);
 			index++;
 			nodes[index] = new Node((int)currentDirection, destination, destination);
