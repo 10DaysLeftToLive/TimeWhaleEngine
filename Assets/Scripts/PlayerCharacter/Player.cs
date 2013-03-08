@@ -41,6 +41,9 @@ public class Player : Character {
 			if (currentState.GetType() == typeof(GrabIdleState)){
 				EnterState(new LetGoOfState(this, e.clickedObject));
 			} else {
+				if (Inventory.HasItem()){
+					Inventory.DropItem(GetFeet());
+				}
 				EnterState(new MoveThenDoState(this, goal, new GrabOntoState(this, e.clickedObject)));
 			}
 		} 
