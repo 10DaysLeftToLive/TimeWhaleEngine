@@ -5,7 +5,7 @@ public class Player : Character {
 	protected override void Init(){
 		EventManager.instance.mOnClickOnObjectAwayFromPlayerEvent += new EventManager.mOnClickOnObjectAwayFromPlayerDelegate (OnClickToInteract);
 		EventManager.instance.mOnClickNoObjectEvent += new EventManager.mOnClickedNoObjectDelegate (OnClickToMove);
-		EventManager.instance.mOnClickOnPlayerEvent += new EventManager.mOnClickOnPlayerDelegate (OnClickOnPLayer);
+		EventManager.instance.mOnClickOnPlayerEvent += new EventManager.mOnClickOnPlayerDelegate (OnClickOnPlayer);
 	}
 	
 	// We want to be able to switch to move at any state when the player clicks
@@ -46,10 +46,12 @@ public class Player : Character {
 				}
 				EnterState(new MoveThenDoState(this, goal, new GrabOntoState(this, e.clickedObject)));
 			}
-		} 
+		} else if (tag == Strings.tag_NPC){
+			EnterState(new MoveState(this, goal));
+		}
 	}
 	
-	private void OnClickOnPLayer(EventManager EM){
+	private void OnClickOnPlayer(EventManager EM){
 		if (Inventory.HasItem()){
 			Inventory.DropItem(GetFeet());
 		}

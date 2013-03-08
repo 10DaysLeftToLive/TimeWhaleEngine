@@ -7,11 +7,20 @@ using System.Collections;
  */
 
 public class NPC_Click : OnClickNextToPlayer {
+	Chat chat;
+	
 	void Start(){
+		chat = GameObject.Find("Chat").GetComponent<Chat>();
 		base.InitEvent();
 	}
 	
+	public void TestClick(){
+		
+	}
+	
 	protected override void DoClickNextToPlayer(){
-		InteractionManager.instance.PerformInteraction(this.gameObject);
+		chat.SetButtonCallbacks(TestClick);
+		chat.CreateChatBox(this.gameObject, "This is a test");
+		//InteractionManager.instance.PerformInteraction(this.gameObject);
 	}
 }
