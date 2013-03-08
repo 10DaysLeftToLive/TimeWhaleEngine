@@ -41,8 +41,10 @@ public static class PathFinding {
 		Debug.Log("Looking for a path to " + destination);
 		
 		if (FindAPath(nodes, destination, height)){
+			grabableToMoveThrough = null; // need to make sure that we can no longer move through grabables
 			return true;
 		}
+		grabableToMoveThrough = null;
 		return false;
 	}
 	
@@ -182,13 +184,13 @@ public static class PathFinding {
 			mask = LevelMasks.MechanicsMask;
 			
 			if (Physics.Linecast(nodes[index].curr, destination, out debugHit, mask)){ // if we intersect with a mechanics object
-				if (debugHit.collider.bounds.Contains(destination)){ // if that mechanic object contains our destination
+				if (debugHit.collider.bounds.Contains(destination)){ // if that mechanic object contains our destination then move next to it
 					if (debugHit.transform.position.x < nodes[index].curr.x){ // if the current node is to the right of the object
 						destination.x = destination.x + debugHit.collider.bounds.size.x/2 + MECHANICSBUFFER;
 					} else {
 						destination.x = destination.x - debugHit.collider.bounds.size.x/2 - MECHANICSBUFFER;
 					}
-				} else { // if we have a path to the goal but there is a mechanic object in the way then we cannot reach the goal
+				} else { // if we have a path to the goal but there is a mechanic object in the way
 					if (grabableToMoveThrough != null && debugHit.transform.gameObject == grabableToMoveThrough){ // if it is the pushable object
 						// we can go through it
 					} else {
