@@ -9,7 +9,7 @@ using System.Collections;
 
 public class InteractableOnClick : OnClickNextToPlayer {
 	protected override void DoClickNextToPlayer(){
-		playerCharacter.InteractWithObject(this.gameObject);
+		//playerCharacter.InteractWithObject(this.gameObject);
 	}
 	
 	public void Enable(){

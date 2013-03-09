@@ -16,11 +16,11 @@ public class InteractionManager : ManagerSingleton<InteractionManager> {
 		NPCCollection npcCollection = new NPCCollection();
 		
 		GameObject[] npcs = GetNPCs();
-		npcClass npc_Class;
+		NPC npc_Class;
 		
 		foreach (GameObject npc in npcs){
 			NPCData dataForNPC = new NPCData();
-			npc_Class = npc.GetComponent<npcClass>();
+			npc_Class = npc.GetComponent<NPC>();
 			dataForNPC.disposition = npc_Class.GetDisposition();
 			dataForNPC.name = npc.name;			
 			npcCollection.Add(dataForNPC);
@@ -33,13 +33,13 @@ public class InteractionManager : ManagerSingleton<InteractionManager> {
 		NPCToItemCollection npcToItems = NPCToItemCollection.Load(levelData);
 		
 		GameObject[] npcs = GetNPCs();
-		npcClass npc_Class;
+		NPC npc_Class;
 		NPCData currentData = new NPCData();
 		NPCItemsReactions currentNPCReactions = new NPCItemsReactions();
 		
 		foreach (GameObject npc in npcs){
 			currentData = npcCollection.GetNPC(npc.name);
-			npc_Class = npc.GetComponent<npcClass>();
+			npc_Class = npc.GetComponent<NPC>();
 			
 			currentNPCReactions = npcToItems.GetNPC(npc.name);
 			
@@ -52,11 +52,11 @@ public class InteractionManager : ManagerSingleton<InteractionManager> {
 		return (GameObject.FindGameObjectsWithTag(Strings.tag_NPC)); 
 	}
 	
-	private void SetNPCInteractions(npcClass npcClass, NPCItemsReactions data){		
+	private void SetNPCInteractions(NPC npcClass, NPCItemsReactions data){		
 		npcClass.SetInteractions(data.items);
 	}
 	
-	private void SetNPCDisposition(npcClass npcClass, NPCData data){
+	private void SetNPCDisposition(NPC npcClass, NPCData data){
 		npcClass.SetDisposition(data.disposition);
 	}
 	

@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class Inventory {
-	private GameObject pickedUpObject; // Can only hold one item in inventory
+	private GameObject pickedUpObject = null; // Can only hold one item in inventory
 	private Transform rightHandTransform;
 	
 	public Inventory(Transform rightHand){
@@ -11,6 +11,7 @@ public class Inventory {
 	
 	public void PickUpObject(GameObject toPickUp){
 		if (HasItem()){
+			Debug.Log("Swapping");
 			SwapItems(toPickUp);
 		} else {
 			pickedUpObject = toPickUp;
@@ -22,6 +23,8 @@ public class Inventory {
 			toPickUp.transform.parent = rightHandTransform;
 			pickedUpObject.GetComponent<InteractableOnClick>().Disable();
 		}
+		Debug.Log("PickUpObject does " + (HasItem() ? "" : "not ") + "have an item");
+		
         SoundManager.instance.PickUpItemSFX.Play();
 	}
 	

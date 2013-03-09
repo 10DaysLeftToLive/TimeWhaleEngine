@@ -7,11 +7,17 @@ using System.Collections;
  */
 
 public class NPC_Click : OnClickNextToPlayer {
+	NPC npcAttachedTo;
+	
 	void Start(){
+		npcAttachedTo = this.gameObject.GetComponent<NPC>();
+		if (npcAttachedTo == null){
+			Debug.LogError("Error: No npc script attached to " + this.name);
+		}
 		base.InitEvent();
 	}
 	
 	protected override void DoClickNextToPlayer(){
-		InteractionManager.instance.PerformInteraction(this.gameObject);
+		npcAttachedTo.OpenChat();
 	}
 }

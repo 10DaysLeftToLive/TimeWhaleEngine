@@ -13,6 +13,8 @@ public class PickUpItemState : AbstractState {
 		
 		character.Inventory.PickUpObject(_toPickUp);
 		
+		Debug.Log("PickupItem does " + (character.Inventory.HasItem() ? "" : "not") + "have an item");
+		
 		character.EnterState(new IdleState(character));
 	}
 	

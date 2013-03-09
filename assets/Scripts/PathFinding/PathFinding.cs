@@ -16,10 +16,7 @@ public static class PathFinding {
 	private static float testTimer;
 	private static int index;
 	private static bool foundPath;
-	private static List<Node> nodes;
-	
-	private static Queue<Node> nodeQueue;
-	
+	private static Node[] nodes;
 	private static GameObject grabableToMoveThrough = null; // only set if we are grabing an object
 	
 	private static float MECHANICSBUFFER = .4f;
@@ -28,20 +25,29 @@ public static class PathFinding {
 	private static float distanceToLook = 9999f;
 	
 	public static bool StartPath(Vector3 startPos, Vector3 destination, float height){
-		nodes = new List<Node>();
-		nodeQueue = new Queue<Node>();
-		
-		Node start = CreateNodeAt(startPos);
-		Node goal = CreateNodeAt(destination);
-		
-		nodeQueue.Enqueue(start);
-		
-		if (FindPath(nodeQueue, goal, height)){// FindAPath(nodes, destination, height)){
-			return false;//true;
+		nodes = new Node[15];
+		index = 0;
+		currentDirection = Direction.none;
+		foundPath = false;
+		nodes[0] = new Node((int)currentDirection, startPos, destination);
+		int mask = LevelMasks.ClimbableMask | LevelMasks.MechanicsMask;
+		RaycastHit hit;
+		if (Physics.Raycast(new Vector3(startPos.x, startPos.y, startPos.z-2), Vector3.forward, out hit, Mathf.Infinity, mask)){
+			if (hit.transform.tag == Strings.tag_Climbable) {
+				nodes[0].hitClimbable = true;
+			}
 		}
+		
+		Debug.Log("Looking for a path to " + destination);
+		
+		if (FindAPath(nodes, destination, height)){
+			grabableToMoveThrough = null; // need to make sure that we can no longer move through grabables
+			return true;
+		}
+		//grabableToMoveThrough = null;
 		return false;
 	}
-
+	
 	public static bool StartPathWithGrabable(Vector3 startPos, Vector3 destination, float height, GameObject grabable){
 		grabableToMoveThrough = grabable;
 		return (StartPath(startPos, destination, height));
@@ -58,11 +64,11 @@ public static class PathFinding {
 		return path;
 	}
 	
-	/*
-	private static bool FindAPath(List<Node> nodes, Vector3 destination, float height){
+	private static bool FindAPath(Node[] nodes, Vector3 destination, float height){		
 		Vector3 heading = Vector3.right;
-		if (CheckDestination(destination, heading, height))
+		if (CheckDestination(destination, heading, height)){
 			return foundPath;
+		}
 			
 		currentDirection = (Direction)nodes[index].NewDirection();
 		if (currentDirection == Direction.none || index > 7){
@@ -91,13 +97,23 @@ public static class PathFinding {
 				break;	
 			case Direction.up: 
 				heading = Vector3.up; 
-				mask = LevelMasks.LadderTopMask; y += height; 
+				mask = LevelMasks.LadderTopMask; 
+				y += height; 
 				break;	
 			case Direction.down: 
 				heading = Vector3.down; 
 				mask = LevelMasks.GroundMask | LevelMasks.LadderTopMask; 
-				y-= height*2; 
+				y -= height*2; 
 				break;	
+		}
+		if (nodes[index].hitClimbable && (currentDirection == Direction.up || currentDirection == Direction.down)){
+			Vector3 pointToClimbTo = GetClimbablePositionToGoto(nodes[index].climbableIn, height, currentDirection, nodes[index].GetPos());
+			if (pointToClimbTo != Vector3.zero){
+				index++;
+				nodes[index] = new Node((int) currentDirection, pointToClimbTo, destination);
+			}
+			FindAPath(nodes, destination, height);
+			return (foundPath);
 		}
 		
 		if (Physics.Raycast(new Vector3(x,y,z), heading, out hit, Mathf.Infinity, mask)) {
@@ -127,161 +143,54 @@ public static class PathFinding {
 		
 		if (!hit1Test && !hit2Test && !hit3Test){
 			FindAPath(nodes, destination, height);
-		} else{
+		} else{	// if we hit either a climable or mechanics item
 			if (currentDirection == Direction.left || currentDirection == Direction.right){
-				if (CheckGround(nodes[index].curr, hit.point, heading, height))
+				if (CheckGround(nodes[index].curr, hit.point, heading, height)){
+					FindAPath(nodes, destination, height);
 					return foundPath;
-			}
+					// TODO maybe mark that we should go here
+				}
+			} 
 			index++;
-			//nodes[index] = HitInfo.CheckHit((int)currentDirection, hit, destination, nodes[index-1], height);
+			nodes[index] = HitInfo.CheckHit((int)currentDirection, hit, destination, nodes[index-1], height);
 			FindAPath(nodes, destination, height);
 		}
 		return foundPath;
-	}*/
-	
-	private static bool FindPath(Queue<Node> nodeQueue, Node goalNode, float height){
-		if (nodeQueue.Count == 0) return false;
-		Node currentNode = nodeQueue.Peek();
-		
-		if (OnSameLevel(currentNode, goalNode) && CanWalkToGoal(currentNode, goalNode)){
-			//DONE
-			Debug.Log("I found a way to the goal.");
-			nodeQueue.Enqueue(goalNode);
-			return (true);
-		} else {
-			// If we cannot reach the goal on the current level we need to look at shifting up or down from the current node
-			
-			if (currentNode.IsDeadEnd()){
-				nodeQueue.Dequeue();
-				// todo continue
-			}
-			
-			RaycastHit objectHit; 
-			
-			Direction nextDirection = GetNextDirection(currentNode, goalNode);			
-			Direction otherDirection = (nextDirection == Direction.left ? Direction.right : Direction.left);
-			
-			if (HitClimbableInDirection(currentNode, nextDirection, out objectHit)){
-				Debug.Log("I looked " + nextDirection + " and I hit " + objectHit.transform.gameObject.name);
-				Debug.Log("Moving to " + GetTopOfLadder(objectHit.transform.gameObject));
-			} else if (HitClimbableInDirection(currentNode, otherDirection, out objectHit)){
-				Debug.Log("I looked " + otherDirection + " and I hit " + objectHit.transform.gameObject.name);
-			} else {
-				Debug.Log("I looked both " + nextDirection + " and " + otherDirection + ". I was not able to find a climbable.");
-				// TODO look to fall off nearby floor
-			}
-		}
-		return (true);
 	}
 	
-	private static void MoveOverALevel(GameObject climbable){
-		//TODO
-		Node currentNode = AddNodeAtCurrentPoint();
-		MarkWhereGoingOnNode();
-		Vector3 nextPoint = CalculateNextNode(climbable);
-		AddNextPoint(nextPoint);
-	}
-	
-	private static Node AddNodeAtCurrentPoint(){
-		return new Node();
-	}
-	
-	private static Node AddNodeAtPoint(Vector3 position){
-		return new Node();
-		
-	}
-	
-	private static void MarkWhereGoingOnNode(){
-		
-	}
-	
-	private static Vector3 CalculateNextNode(GameObject climbable){
-		return (GetTopOfLadder(climbable));
-	}
-	
-	private static void AddNextPoint(Vector3 nextPoint){
-		
-	}
-	
-	private static Node CreateNodeAt(Vector3 position){
-		Node newNode = new Node();
-		return (newNode);
-	}
-	
-	private static Vector3 GetTopOfLadder(GameObject ladder){
-		return (new Vector3(ladder.transform.position.x, ladder.transform.position.y + ladder.collider.bounds.size.y/2, ladder.transform.position.z));
-	}
-	
-	private static bool CanWalkToGoal(Node currentNode, Node goalNode){
-		int mask = LevelMasks.GroundMask | LevelMasks.ImpassableMask;
-		return (!Physics.Linecast(currentNode.curr, goalNode.curr, mask));
-	}
-	
-	private static bool HitClimbableInDirection(Node currentNode, Direction directionToCheck, out RaycastHit objectHit){
-		int mask = LevelMasks.ClimbableMask;
-		
-		Vector3 heading;
-		
-		switch(directionToCheck){
-			case Direction.left: 
-				heading = Vector3.left; 
-				break;	
-			case Direction.right: 
-				heading = Vector3.right; 
-				break;	
-			case Direction.up: 
-				heading = Vector3.up; 
-				break;	
-			default:
-				heading = Vector3.down; 
-				break;	
-		}
-		
-		Debug.Log("HitClimbableInDirection" + currentNode.curr + ", " + directionToCheck);
-			
-		return (Physics.Raycast(currentNode.curr, heading, out objectHit, distanceToLook));//, mask));
-	}
-	
-	private static bool OnSameLevel(Node currentNode, Node goalNode){
-		return (Utils.CalcDistance(currentNode.curr.y, goalNode.curr.y) < levelDifferenceMax); 
-	}
-
-	private static Direction GetNextDirection(Node currentNode, Node goalNode){
-		return (currentNode.curr.x > goalNode.curr.x ? Direction.left : Direction.right);
-	}
-	
-	private static bool NoNodes(){
-		return (nodes.Count == 0);
-	}
-	
+	// Will check if it is possible to walk to the end point from the start
 	private static bool CheckGround(Vector3 start, Vector3 end, Vector3 heading, float height){
+		int mask = LevelMasks.GroundMask | LevelMasks.ImpassableMask;
+		
 		float distance = Mathf.Abs(start.x - end.x);
 		RaycastHit hit;
-		if (nodes[index].hitClimbable)
+		if (nodes[index].hitClimbable){
 			start += heading;
-		if (Physics.Raycast(new Vector3(start.x,start.y-height,start.z), heading, out hit, distance)){//, mask)){
+		}
+		if (Physics.Raycast(new Vector3(start.x,start.y-height,start.z), heading, out hit, distance, mask)){
 			return true;
 		}
 		return false;
 	}
 	
 	private static bool CheckDestination(Vector3 destination, Vector3 heading, float height){
-		if (nodes[index].curr.y + height < destination.y || nodes[index].curr.y - height > destination.y)
+		if (nodes[index].curr.y + (height*2) < destination.y || nodes[index].curr.y - (height*2) > destination.y){
 			return false;
+		}
 		
 		RaycastHit debugHit;
 		int mask = LevelMasks.GroundMask | LevelMasks.ImpassableMask;
-		if (foundPath || !Physics.Linecast(nodes[index].curr, destination, out debugHit, mask)){ // if we can draw a line to the goal without a barrier
+		if (foundPath || !Physics.Linecast(nodes[index].curr, destination, out debugHit, mask)){ // if we found our path or we can walk to the goal
 			mask = LevelMasks.MechanicsMask;
 			
 			if (Physics.Linecast(nodes[index].curr, destination, out debugHit, mask)){ // if we intersect with a mechanics object
-				if (debugHit.collider.bounds.Contains(destination)){ // if that mechanic object contains our destination
+				if (debugHit.collider.bounds.Contains(destination)){ // if that mechanic object contains our destination then move next to it
 					if (debugHit.transform.position.x < nodes[index].curr.x){ // if the current node is to the right of the object
 						destination.x = destination.x + debugHit.collider.bounds.size.x/2 + MECHANICSBUFFER;
 					} else {
 						destination.x = destination.x - debugHit.collider.bounds.size.x/2 - MECHANICSBUFFER;
 					}
-				} else { // if we have a path to the goal but there is a mechanic object in the way then we cannot reach the goal
+				} else { // if we have a path to the goal but there is a mechanic object in the way
 					if (grabableToMoveThrough != null && debugHit.transform.gameObject == grabableToMoveThrough){ // if it is the pushable object
 						// we can go through it
 					} else {
@@ -289,7 +198,7 @@ public static class PathFinding {
 						return (false); //TODO remember that we saw this and move the player to a point next to this instead of moving on
 					}
 				}
-			} 
+			}
 			
 			if (currentDirection == Direction.down || currentDirection == Direction.up || currentDirection == Direction.none){
 				currentDirection = Direction.left;
@@ -302,11 +211,95 @@ public static class PathFinding {
 			} else {
 				currentDirection = Direction.up;
 			}
+			Debug.Log("Found Path betweem " + nodes[index].curr + "  and  " + destination);
 			index++;
-			nodes.Add(new Node((int)currentDirection, destination, destination));
+			nodes[index] = new Node((int)currentDirection, destination, destination);
 			foundPath = true;
 			return foundPath;
 		}
 		return false;
+	}
+	
+	private static void Print(){
+		for (int i = 0; i <= index; i++){
+			Debug.Log("nodes of " + i + " = " + nodes[i]);
+		}
+	}
+	
+	
+	private static Vector3 GetTopOfLadder(GameObject ladder){
+		return (new Vector3(ladder.transform.position.x, ladder.transform.position.y + ladder.collider.bounds.size.y/2, ladder.transform.position.z));
+	}
+	
+	private static Vector3 GetBottomOfLadder(GameObject ladder){
+		return (new Vector3(ladder.transform.position.x, ladder.transform.position.y - ladder.collider.bounds.size.y/2, ladder.transform.position.z));
+	}
+	
+	private static Vector3 GetClimbablePositionToGoto(GameObject climbable, float height, Direction direction, Vector3 current){
+		Vector3[] possiblePositions = GetPossibleClimbablePositionToGoto(climbable, height, direction);
+		
+		Vector3 top = possiblePositions[0];
+		Vector3 bottom = possiblePositions[1];
+		
+		if (direction == Direction.up){
+			if (Utils.CalcDistance(current.y, top.y) < levelDifferenceMax){ // if at top already
+				return (Vector3.zero);
+			} else {
+				return (top);
+			}
+		} else {
+			if (Utils.CalcDistance(current.y, bottom.y) < levelDifferenceMax){ // if at top already
+				return (Vector3.zero);
+			} else {
+				return (bottom);
+			}
+		}
+	}
+	
+	
+	// Will find the bottom and top node positions of a given climbable. 
+	// 0 entry will be the top, 1 entry is bottom
+	private static Vector3[] GetPossibleClimbablePositionToGoto(GameObject climbable, float height, Direction direction){		
+		Vector3 top = new Vector3();
+		Vector3 bottom = new Vector3();
+		if (climbable.transform.localRotation.z == 0){ // TODO better detection
+			// if it has no rotation it is a ladder
+			top = GetTopOfLadder(climbable);
+			bottom = GetBottomOfLadder(climbable);
+			
+			top.y -= height; // add in the height where the player will goto
+			bottom.y += height;
+		} else {			
+			float sizeX = climbable.transform.localScale.x;
+			float sizeY = climbable.transform.localScale.y;
+
+	        float x = sizeX*.5f;
+	        float y = sizeY*.5f;
+	        Vector3 topRight = climbable.transform.TransformPoint(x/sizeX,y/sizeY,0);
+	        Vector3 bottomRight = climbable.transform.TransformPoint(x/sizeX,-y/sizeY,0);
+	        Vector3 bottomLeft = climbable.transform.TransformPoint(-x/sizeX,-y/sizeY,0);
+	        Vector3 topLeft = climbable.transform.TransformPoint(-x/sizeX,y/sizeY,0);
+			
+			float theta = climbable.transform.localRotation.z;
+
+			if (theta < 90){
+				bottom = bottomRight;
+				top = topRight;
+			} else if (theta > 270){
+				bottom = bottomLeft;
+				top = topLeft;
+			} // TODO other angles
+			
+			top.y += height; // add in the height where the player will goto
+			bottom.y += height;
+		}
+		
+		
+		
+		Vector3[] pair = new Vector3[2]; // TODO do a union class
+		pair[0] = top;
+		pair[1] = bottom;
+		
+		return (pair);
 	}
 }

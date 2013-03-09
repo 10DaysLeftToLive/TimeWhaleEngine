@@ -7,7 +7,7 @@ public class NPCDispositionManager : AbstractContainerManager<npcClass, NPCDispo
 		if (containersInLevel.ContainsKey(id)){
 			((NPCClassContainer) containersInLevel[id]).UpdateAll(newDisposition);
 		} else {
-			Debug.LogWarning("NPCDispositionManager does not contain a building with id " + id);
+			Debug.LogWarning("NPCDispositionManager does not contain an NPC with id " + id);
 		}
 	}
 }

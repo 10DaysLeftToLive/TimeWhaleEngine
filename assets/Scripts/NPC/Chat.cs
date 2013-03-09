@@ -5,7 +5,7 @@ public class Chat : MonoBehaviour {
 	GameObject obj;
 	//GameObject sister;
 	//public Texture test;
-	Texture btn1, btn2;
+	public Texture btn1, btn2;
 	Vector3 pos, screenPos;
 	Vector2 size;
 	string msg;
@@ -13,6 +13,12 @@ public class Chat : MonoBehaviour {
 	Rect rect;
 	bool active, button;
 	Vector2 offset;
+	
+	public delegate void ButtonClickDelegate();
+	ButtonClickDelegate leftButtonClickDelegate;
+	ButtonClickDelegate rightButtonClickDelegate;
+	private bool showLeftButton = false;
+	private bool showRightButton = false;
 	
 	// Use this for initialization
 	void Start () {
@@ -34,14 +40,16 @@ public class Chat : MonoBehaviour {
 			screenPos = Camera.main.WorldToScreenPoint (obj.transform.position);
 			rect = new Rect(screenPos.x + offset.x/2, Screen.height - screenPos.y - offset.y*.75f, size.x, size.y);
 			GUI.Box (rect, msg);
-			if (button){
+			if (showLeftButton){
 				rect = new Rect(screenPos.x + offset.x/2, Screen.height - screenPos.y - offset.y*.75f+size.y, size.x/2, size.y/2);
-				if (GUI.Button(rect, btn1)){
-					Debug.Log("Button 1 clicked!");	
+				if (GUI.Button(rect, "Talk With[Not Implemented]")){
+					leftButtonClickDelegate();
 				}
+			}
+			if (showRightButton){
 				rect = new Rect(screenPos.x + offset.x/2+size.x/2, Screen.height - screenPos.y - offset.y*.75f+size.y, size.x/2, size.y/2);
-				if (GUI.Button(rect, btn2)){
-					Debug.Log("Button 2 clicked!");	
+				if (GUI.Button(rect, "Give Item")){
+					rightButtonClickDelegate();
 				}
 			}
 		}
@@ -77,12 +85,33 @@ public class Chat : MonoBehaviour {
 	
 	public void RemoveChatBox(){
 		active	= false;
-		button = false;
+		showRightButton = false;
+		showLeftButton = false;
 	}
 	
 	public void CreateChatButtons(Texture bt1, Texture bt2){
 		btn1 = bt1;
 		btn2 = bt2;
 		button = true;
+	}
+	
+	private void SetLeftButton(ButtonClickDelegate leftButtonClick){
+		leftButtonClickDelegate += leftButtonClick;
+		showLeftButton = true;
+	}
+	
+	private void SetRightButton(ButtonClickDelegate rightButtonClick){
+		rightButtonClickDelegate += rightButtonClick;
+		showRightButton = true;
+	}
+	
+	// We will have the single constructor set the right button as we will only need the right for items some of the time
+	public void SetButtonCallbacks(ButtonClickDelegate leftButtonClick){
+		SetLeftButton(leftButtonClick);
+	}
+	
+	public void SetButtonCallbacks(ButtonClickDelegate leftButtonClick, ButtonClickDelegate rightButtonClick){
+		SetLeftButton(leftButtonClick);
+		SetRightButton(rightButtonClick);
 	}
 }

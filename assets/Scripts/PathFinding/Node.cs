@@ -6,10 +6,8 @@ public class Node {
 	public bool goneLeft, goneRight, goneUp, goneDown, hitClimbable;
 	public Vector3 curr, dest;
 	public int past, lastDir;
-	
-	public Vector3 _position;	
-	private Dictionary<PathFinding.Direction, NodeDirection> links = new Dictionary<PathFinding.Direction, NodeDirection>();
-	
+	public GameObject climbableIn;
+
 	public enum Type{
 		WalkTo,
 		ClimbTo,
@@ -50,65 +48,13 @@ public class Node {
 	
 	public Node(){}
 	
-	public Node(Vector3 position, PathFinding.Direction previousDirection, Type wayToGoTo){
-		_position = position;
-		MarkAndSet(previousDirection, wayToGoTo);
-		SetLinks();
-	}
-	
-	public void MarkAndSet(PathFinding.Direction direction, Type movementType){
-		links[direction].Mark();
-		links[direction].SetType(movementType);
-	}
-	
-	public bool IsDeadEnd(){
-		return (HasGoneIn(PathFinding.Direction.left) &&
-			    HasGoneIn(PathFinding.Direction.right) &&
-				HasGoneIn(PathFinding.Direction.up) &&
-				HasGoneIn(PathFinding.Direction.down));
-	}
-	
-	public bool HasGoneIn(PathFinding.Direction direction){
-		return (links[direction].HasTraveled());
-	}
-	
-	private void SetPositionOfNode(Node node){
-		if (IsAbove(node)){
-			if (IsToLeft(node) || IsToRight(node)){
-				
-			}
-		}
-	}
-	
-	private bool IsToLeft(Node node){
-		return (node._position.x < _position.x);
-	}
-	
-	private bool IsToRight(Node node){
-		return (node._position.x > _position.x);
-	}
-	
-	private bool IsAbove(Node node){
-		return (node._position.y > _position.y);
-	}
-	
-	private bool IsBelow(Node node){
-		return (node._position.y < _position.y);
-	}
-	
-	private void SetLinks(){
-		links[PathFinding.Direction.left] = new NodeDirection();
-		links[PathFinding.Direction.right] = new NodeDirection();
-		links[PathFinding.Direction.up] = new NodeDirection();
-		links[PathFinding.Direction.down] = new NodeDirection();
-	}
-	
 	public Node(int past, Vector3 curr, Vector3 dest){
 		goneLeft = false;
 		goneRight = false;
 		goneUp = false;
 		goneDown = false;
 		hitClimbable = false;
+		climbableIn = null;
 		this.past = past;
 		this.curr = curr;
 		this.dest = dest;
@@ -126,6 +72,31 @@ public class Node {
 	}
 	
 	public Node(int past, Vector3 curr, Vector3 dest, bool hit){
+		goneLeft = false;
+		goneRight = false;
+		goneUp = false;
+		goneDown = false;
+		hitClimbable = hit;
+		climbableIn = climbableIn;
+		this.past = past;
+		this.curr = curr;
+		this.dest = dest;
+		switch(past){
+			case 0: goneRight = true; break; //cur dir = left
+			case 1: goneLeft = true; break; //cur dir = right
+			case 2: goneDown = true; break; //cur dir = up
+			case 3: goneUp = true; break; //cur dir = down
+			case 4: break;	
+			case 5: goneRight = true;
+					goneLeft = true;
+					goneUp = true;
+					break; 
+		}
+	}
+	
+	public Node(int past, Vector3 curr, Vector3 dest, bool hit, GameObject climbable){
+		climbableIn = climbable;
+		
 		goneLeft = false;
 		goneRight = false;
 		goneUp = false;
@@ -187,12 +158,6 @@ public class Node {
 	}
 	
 	public override string ToString(){
-		string result = "";
-		result += "L" + links[PathFinding.Direction.left];
-		result += "R" + links[PathFinding.Direction.right];
-		result += "U" + links[PathFinding.Direction.up];
-		result += "D" + links[PathFinding.Direction.down];
-		
-		return (_position + result);
+		return (curr.ToString() + " L = " + goneLeft + " R = " + goneRight + " U = " + goneUp + " D = " + goneDown + " hitClimbable = " + hitClimbable);
 	}
 }
