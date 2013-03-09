@@ -10,7 +10,7 @@ public class AgeTransitionShader : MonoBehaviour {
 	public Color fadeColor; 
 	
 	//Duration of the fade in and out in ticks
-	public float fadeSpeed; 
+	public float fadeDuration; 
 	
 	//Location of the FadePlane if it is not fading
 	public Vector2 idlePosition; 
@@ -119,7 +119,7 @@ public class AgeTransitionShader : MonoBehaviour {
 	protected void UpdateInterpolationFator() 
 	{
 		if (interpolationFactor < 1) {
-			interpolationFactor += Time.deltaTime / (fadeSpeed/2);
+			interpolationFactor += Time.deltaTime / (fadeDuration/2);
 		}
 		else {
 			interpolationFactor = 0;
