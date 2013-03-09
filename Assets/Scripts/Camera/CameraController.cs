@@ -20,14 +20,15 @@ public class CameraController : MonoBehaviour {
 	
 	static private Camera thisCamera;
 	static private PlayerController player;
+	
 	#endregion
 	
 	public void Start () {
 		thisCamera = Camera.main;
-		player = FindObjectOfType(typeof(PlayerController)) as PlayerController;	
+		player = FindObjectOfType(typeof(PlayerController)) as PlayerController;
 	}
 	
-	public void Update () {
+	void Update () {
 		MoveCameraToTarget();
 	}
 	
@@ -63,10 +64,11 @@ public class CameraController : MonoBehaviour {
 		thisCamera.orthographicSize += zoomingIncrement;
 	}
 	
-	static private void MoveCameraToTarget(){
+	static private void MoveCameraToTarget() {
 		Vector3 newCameraPosition = player.transform.position;
 		newCameraPosition.y += yOffsetRelativeToTarget;
 		newCameraPosition.z += zOffsetRelativeToPlayer;
 		thisCamera.transform.position = newCameraPosition;
 	}
+	
 }

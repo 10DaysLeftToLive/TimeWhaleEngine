@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class LevelManager : MonoBehaviour {
 	public PlayerController playerCharacter;
+	public AgeTransitionShader fadeShader;
 	
 	public TimeSwitchObject[] timeSwitchObjects;
 	
@@ -113,15 +114,18 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	void HandleInput(){	
-		if(Input.GetButtonDown(Strings.ButtonAgeShiftDown)){
-			ShiftDownAge();
+		if(Input.GetButtonDown(Strings.ButtonAgeShiftDown)
+			&& CanAgeTransition(Strings.ButtonAgeShiftDown)) {
+				fadeShader.DoFade(Strings.ButtonAgeShiftDown);
 		}
-		else if(Input.GetButtonDown(Strings.ButtonAgeShiftUp)){
-			ShiftUpAge();
+		else if(Input.GetButtonDown(Strings.ButtonAgeShiftUp) &&
+			CanAgeTransition(Strings.ButtonAgeShiftUp)) {
+				fadeShader.DoFade(Strings.ButtonAgeShiftUp);
 		} 
 	}
 	
-	private void ShiftUpAge(){		
+	
+	public void ShiftUpAge(){		
 		if (CharacterAgeManager.GetCurrentAgeState() != CharacterAgeState.OLD){
 			if(playerCharacter.CheckTransitionPositionSuccess(CharacterAgeManager.GetAgeTransitionUp(), CharacterAgeManager.GetCurrentAge())){
 				CharacterAgeManager.TransistionUp();
@@ -133,7 +137,7 @@ public class LevelManager : MonoBehaviour {
 		}
 	}
 	
-	private void ShiftDownAge(){
+	public void ShiftDownAge(){
 		if (CharacterAgeManager.GetCurrentAgeState() != CharacterAgeState.YOUNG){
 			if(playerCharacter.CheckTransitionPositionSuccess(CharacterAgeManager.GetAgeTransitionDown(), CharacterAgeManager.GetCurrentAge())){
 				CharacterAgeManager.TransistionDown();
@@ -149,6 +153,30 @@ public class LevelManager : MonoBehaviour {
 		foreach(TimeSwitchObject timeSwitchObject in timeSwitchObjects){
 			timeSwitchObject.ChangeAge(newAge);
 		}
+	}
+	
+	private bool CanAgeTransition(string buttonName) {
+		if (CharacterAgeManager.GetCurrentAgeState() != CharacterAgeState.OLD 
+			&& Strings.ButtonAgeShiftUp.Equals(buttonName)) {
+			if (playerCharacter.CheckTransitionPositionSuccess(CharacterAgeManager.GetAgeTransitionUp(),
+				CharacterAgeManager.GetCurrentAge())) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else if (CharacterAgeManager.GetCurrentAgeState() != CharacterAgeState.YOUNG 
+			&& Strings.ButtonAgeShiftDown.Equals(buttonName)) {
+			if (playerCharacter.CheckTransitionPositionSuccess(CharacterAgeManager.GetAgeTransitionDown(),
+				CharacterAgeManager.GetCurrentAge())) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		return false;
 	}
 	
 	public void SetGender(CharacterGender gender){
@@ -171,4 +199,5 @@ public class LevelManager : MonoBehaviour {
 	void OnApplicationQuit(){
 		SaveDispositions();
 	}
+	
 }

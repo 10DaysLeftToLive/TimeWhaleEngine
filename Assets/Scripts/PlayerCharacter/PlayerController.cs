@@ -145,7 +145,6 @@ public class PlayerController : MonoBehaviour {
 		} else {
 			ChangeAgePosition(newAge, previousAge);
 		}
-		
 		ChangeHitBox(newAge, previousAge);
 		ChangeAnimation(newAge.boneAnimation);
 		SwapItemWithCurrentAge();

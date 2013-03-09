@@ -63,6 +63,9 @@ public class UpdateManager : MonoBehaviour
 				mInst = go.AddComponent<UpdateManager>();
 			}
 		}
+		else {
+			print ("I'm sad");
+		}
 	}
 
 	/// <summary>
@@ -203,7 +206,6 @@ public class UpdateManager : MonoBehaviour
 			if (ent.func == func) return;
 		}
 #endif
-
 		UpdateEntry item = new UpdateEntry();
 		item.index = updateOrder;
 		item.func = func;
@@ -213,12 +215,30 @@ public class UpdateManager : MonoBehaviour
 		list.Add(item);
 		if (updateOrder != 0) list.Sort(Compare);
 	}
+	
+	void Remove (OnUpdate func, List<UpdateEntry> list) 
+	{
+		int updateOrder = 0;
+		MonoBehaviour mb = null;
+		for (int i = 0, imax = list.Count; i < imax; ++i)
+		{
+			UpdateEntry en = list[i];
+			updateOrder = en.index;
+			if (en.func.Equals(func)) {
+				en.mb = null;
+				break;
+			}
+		}
+		if (updateOrder != 0) list.Sort(Compare);
+	}
 
 	/// <summary>
 	/// Add a new update function with the specified update order.
 	/// </summary>
 
 	static public void AddUpdate (MonoBehaviour mb, int updateOrder, OnUpdate func) { CreateInstance(); mInst.Add(mb, updateOrder, func, mInst.mOnUpdate); }
+	
+	static public void RemoveUpdate(OnUpdate func) { mInst.Remove(func, mInst.mOnUpdate);}
 
 	/// <summary>
 	/// Add a new late update function with the specified update order.

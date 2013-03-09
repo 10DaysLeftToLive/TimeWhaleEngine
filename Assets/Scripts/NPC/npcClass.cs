@@ -104,12 +104,6 @@ public abstract class npcClass : LinkedObject {
 //				emoticon = emoticonTwo;
 //			}
 			
-			if (!questDone) {
-				emoticonDisplay = (GameObject)Instantiate(emoticonOne, new Vector3(npcPos.x+0.5f, npcPos.y+1f, npcPos.z - 0.1f), this.transform.rotation);
-			}
-			else {
-				emoticonDisplay = (GameObject)Instantiate(emoticonTwo, new Vector3(npcPos.x+0.5f, npcPos.y+1f, npcPos.z - 0.1f), this.transform.rotation);
-			}
 			
 			/*if (npcName == "Charlie"){
 				newImg.renderer.material.mainTextureOffset =  new Vector2(0,.5f); //happy
