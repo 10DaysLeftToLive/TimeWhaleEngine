@@ -255,7 +255,7 @@ public abstract class npcClass : LinkedObject {
 			if (npcPos.y  < point.y + difference && npcPos.y > point.y - difference)
 				return true;
 		}
-	return false;
+		return false;
 	}
 	
 	public Vector3 GetPos(){

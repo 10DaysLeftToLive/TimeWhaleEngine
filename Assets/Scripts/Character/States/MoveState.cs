@@ -17,8 +17,6 @@ public class MoveState : AbstractState {
 	}
 	
 	public override void Update(){
-		Debug.Log(character.name + ": MoveState Update");
-		
 		Vector3 pos = character.transform.position;
 		Vector3 movement = new Vector3(0,0,0);
 		if (_pathFollowing.GetDirection() == 0){

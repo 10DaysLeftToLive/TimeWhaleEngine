@@ -42,13 +42,13 @@ public class Chat : MonoBehaviour {
 			GUI.Box (rect, msg);
 			if (showLeftButton){
 				rect = new Rect(screenPos.x + offset.x/2, Screen.height - screenPos.y - offset.y*.75f+size.y, size.x/2, size.y/2);
-				if (GUI.Button(rect, "Left")){
+				if (GUI.Button(rect, "Talk With[Not Implemented]")){
 					leftButtonClickDelegate();
 				}
 			}
 			if (showRightButton){
 				rect = new Rect(screenPos.x + offset.x/2+size.x/2, Screen.height - screenPos.y - offset.y*.75f+size.y, size.x/2, size.y/2);
-				if (GUI.Button(rect, "Right")){
+				if (GUI.Button(rect, "Give Item")){
 					rightButtonClickDelegate();
 				}
 			}
@@ -85,7 +85,8 @@ public class Chat : MonoBehaviour {
 	
 	public void RemoveChatBox(){
 		active	= false;
-		button = false;
+		showRightButton = false;
+		showLeftButton = false;
 	}
 	
 	public void CreateChatButtons(Texture bt1, Texture bt2){

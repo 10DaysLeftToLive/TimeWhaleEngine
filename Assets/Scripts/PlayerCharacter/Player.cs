@@ -47,13 +47,21 @@ public class Player : Character {
 				EnterState(new MoveThenDoState(this, goal, new GrabOntoState(this, e.clickedObject)));
 			}
 		} else if (tag == Strings.tag_NPC){
-			EnterState(new MoveState(this, goal));
+			NPC toTalkWith = (NPC)e.clickedObject.gameObject.GetComponent<NPC>();
+			Vector3 currentPos = this.transform.position;
+			Vector3 goalPosInfront = Utils.GetPointInfrontOf(currentPos, toTalkWith.gameObject);
+			Debug.Log("Goal was " + toTalkWith.transform.position + " infront = " + goalPosInfront);
+			EnterState(new MoveThenDoState(this, goalPosInfront, new TalkState(this, toTalkWith)));
 		}
 	}
 	
 	private void OnClickOnPlayer(EventManager EM){
-		if (Inventory.HasItem()){
-			Inventory.DropItem(GetFeet());
+		if (currentState.GetType() == typeof(TalkState)){ // if we are talking exit before doing anything else.
+			EnterState(new IdleState(this));
+		} else {
+			if (Inventory.HasItem()){
+				Inventory.DropItem(GetFeet());
+			}
 		}
 	}
 }

@@ -44,7 +44,7 @@ public static class PathFinding {
 			grabableToMoveThrough = null; // need to make sure that we can no longer move through grabables
 			return true;
 		}
-		grabableToMoveThrough = null;
+		//grabableToMoveThrough = null;
 		return false;
 	}
 	

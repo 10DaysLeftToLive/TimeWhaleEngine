@@ -25,9 +25,11 @@ public abstract class Character : PauseObject {
 	}
 	
 	protected abstract void Init();
+	protected virtual void CharacterUpdate(){}
 	
 	protected override void UpdateObject(){
 		currentState.Update();
+		CharacterUpdate();
 	}
 	
 	public void EnterState(State newState){		
