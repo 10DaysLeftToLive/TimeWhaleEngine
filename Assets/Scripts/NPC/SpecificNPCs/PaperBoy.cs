@@ -1,42 +1,33 @@
 using UnityEngine;
 using System.Collections;
 
-public class PaperBoy : npcClass {
-	
-	public bool inLove;//TODO: Need to make a better getter/setter system.
-	
-	public GameObject playerSister;
-	
-	protected override void DoReaction(string itemToReactTo) {
-		switch (itemToReactTo){
-			case "Flower":
-				inLove = true;
-				npcDisposition += 10;
-				(player.GetComponent<PlayerController>() as PlayerController).DisableHeldItem();
-				break;
-			case "NoItem":
-				break;
-			default:
-				break;
-		}
-		
-		PlayerPrefs.SetInt("PaperBoy", npcDisposition);
-		
-		
-		if (itemToReactTo == "Flower") {
-			inLove = true;
-		}
-		FallInLove();
-		
-		if (npcDisposition > 5){
-			// blah
-		}
+public class PaperBoy : NPC {
+	protected override string GetWhatToSay(){
+		return (this.name + " says hai! I am feeling " + npcDisposition);
 	}
 	
-	void FallInLove() {
-		if ((playerSister.GetComponent<Sister>() as  Sister).inLove && inLove) {
-			Debug.Log ("Paper Boy says: The Paper Boy and the Sister are in Love");
-		}
+	protected override void LeftButtonCallback(){
+		Debug.Log(this.name + " left callback");
+		// TODO? this is for a chat dialoge
 	}
 	
+	protected override void RightButtonCallback(){
+		Debug.Log(this.name + " right callback");
+		GameObject item = player.Inventory.GetItem();
+		DoReaction(item);
+	}
+	
+	protected override void DoReaction(GameObject itemToReactTo){
+		if (itemToReactTo != null){
+			Debug.Log(name + " is reacting to: " + itemToReactTo.name);
+			switch (itemToReactTo.tag){
+				case "GoldenGear":
+					UpdateDisposition(10);
+					break;
+				default:
+					break;
+			}
+			player.Inventory.DisableHeldItem();
+		}
+	}
 }

@@ -1,30 +1,33 @@
 using UnityEngine;
 using System.Collections;
 
-public class CatLady : npcClass {
-	
-	public GameObject key;
-	
-	bool hasKeyBeenPickedUp = false;
-	
-	
-	protected override void DoReaction(string itemToReactTo){
-		Debug.Log("Doing reaction between " + name + " and " + itemToReactTo);
-		
-		
-		
-		if (itemToReactTo == "Interactable" && !hasKeyBeenPickedUp) {
-			key.transform.position = new Vector3(this.transform.position.x - 1, this.transform.position.y - 1.1f, 0f);
-			hasKeyBeenPickedUp = true;
-			questDone = true;
-		}
-		
-		if (npcDisposition > 5){
-			// blah
-		}
+public class CatLady : NPC {
+	protected override string GetWhatToSay(){
+		return (this.name + " says hai! I am feeling " + npcDisposition);
 	}
 	
-	void OnTriggerEnter(Collider trigger) {	
-		DoReaction(trigger.gameObject.tag);
+	protected override void LeftButtonCallback(){
+		Debug.Log(this.name + " left callback");
+		// TODO? this is for a chat dialoge
+	}
+	
+	protected override void RightButtonCallback(){
+		Debug.Log(this.name + " right callback");
+		GameObject item = player.Inventory.GetItem();
+		DoReaction(item);
+	}
+	
+	protected override void DoReaction(GameObject itemToReactTo){
+		if (itemToReactTo != null){
+			Debug.Log(name + " is reacting to: " + itemToReactTo.name);
+			switch (itemToReactTo.tag){
+				case "GoldenGear":
+					UpdateDisposition(10);
+					break;
+				default:
+					break;
+			}
+			player.Inventory.DisableHeldItem();
+		}
 	}
 }

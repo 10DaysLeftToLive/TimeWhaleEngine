@@ -2,7 +2,29 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class NPCDispositionManager : AbstractContainerManager<npcClass, NPCDispositionManager, NPCClassContainer>  {	
+public class NPCDispositionManager : ManagerSingleton<NPCDispositionManager> {
+	static protected Dictionary<int, NPCClassContainer > containersInLevel;
+	
+	public override void Init(){
+		containersInLevel = new Dictionary<int, NPCClassContainer >();
+	}
+	
+	public void Add(NPC objectToAdd, CharacterAgeState ageToAdd){
+		containersInLevel[objectToAdd.id].Add(objectToAdd, ageToAdd);
+	}
+	
+	// Load in all objects that this manager should handle from the given age root
+	public void LoadInObjectsToManage(Transform rootOfAge, CharacterAgeState ageRootIn){
+		Component[] componentsToManage = (Component[])rootOfAge.GetComponentsInChildren(typeof(NPC));
+		
+		foreach (NPC objectToManage in componentsToManage){
+			if (!containersInLevel.ContainsKey(objectToManage.id)){
+				containersInLevel.Add(objectToManage.id, new NPCClassContainer());
+			}
+			Add (objectToManage, ageRootIn);
+		}
+	}
+
 	public void UpdateWithId(int id, int newDisposition){
 		if (containersInLevel.ContainsKey(id)){
 			((NPCClassContainer) containersInLevel[id]).UpdateAll(newDisposition);

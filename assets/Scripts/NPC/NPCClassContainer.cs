@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class NPCClassContainer  : LinkObjectContainer<npcClass> {
+public class NPCClassContainer  : LinkObjectContainer<NPC> {
 	public override void Perform(){
 		
 	}

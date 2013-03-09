@@ -20,9 +20,9 @@ public class Mom : NPC {
 	protected override void DoReaction(GameObject itemToReactTo){
 		if (itemToReactTo != null){
 			Debug.Log(name + " is reacting to: " + itemToReactTo.name);
-			switch (itemToReactTo.tag){
-				case "GoldenGear":
-					npcDisposition += 10;
+			switch (itemToReactTo.name){
+				case "Plushie":
+					UpdateDisposition(10);
 					break;
 				default:
 					break;

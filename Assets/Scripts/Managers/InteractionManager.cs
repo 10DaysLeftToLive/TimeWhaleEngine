@@ -22,7 +22,8 @@ public class InteractionManager : ManagerSingleton<InteractionManager> {
 			NPCData dataForNPC = new NPCData();
 			npc_Class = npc.GetComponent<NPC>();
 			dataForNPC.disposition = npc_Class.GetDisposition();
-			dataForNPC.name = npc.name;			
+			dataForNPC.name = npc.name;		
+			Debug.Log("Disposition for " + dataForNPC.name + " = " + dataForNPC.disposition);;
 			npcCollection.Add(dataForNPC);
 		}
 		npcCollection.Save(disposiitonData);
@@ -63,10 +64,10 @@ public class InteractionManager : ManagerSingleton<InteractionManager> {
 	public void PerformInteraction(GameObject targetNPC){
 		if (playerCharacter.HasItem()){
 			GameObject playerItem = playerCharacter.GetItem();
-			targetNPC.GetComponent<npcClass>().ReactTo(playerItem.name);
+			//targetNPC.GetComponent<NPC>().ReactTo(playerItem.name);
 			//Give item to NPC
 		} else {
-			targetNPC.GetComponent<npcClass>().ReactTo(Strings.NoItem);
+			//targetNPC.GetComponent<NPC>().ReactTo(Strings.NoItem);
 		}
 	}
 }

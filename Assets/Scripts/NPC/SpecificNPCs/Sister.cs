@@ -1,53 +1,33 @@
 using UnityEngine;
 using System.Collections;
 
-public class Sister : npcClass {
-	
-	//TODO: This line needs a better getter/setter
-	public bool inLove;
-	
-	public GameObject paperBoy;
-	
-	
-	protected override void DoReaction(string itemToReactTo) {
-		switch (itemToReactTo){
-			case "Flower":
-				inLove = true;
-				npcDisposition += 10;
-				(player.GetComponent<PlayerController>() as PlayerController).DisableHeldItem();
-				break;
-			case "Plushie":
-				npcDisposition += 10;
-				(player.GetComponent<PlayerController>() as PlayerController).DisableHeldItem();
-				questDone = true;
-				break;
-			case "NoItem":
-				break;
-			default:
-				break;
-		}
-		
-		PlayerPrefs.SetInt("Sister", npcDisposition);
-		
-		FallInLove();
-		print ("Seeing what I got from SmoothMoves");
-		
-		if (npcDisposition > 5) {
-			// blah
-		}
+public class Sister : NPC {
+	protected override string GetWhatToSay(){
+		return (this.name + " says hai! I am feeling " + npcDisposition);
 	}
 	
-	protected override void ShowEmoticon(string emoticon) {
-		base.ShowEmoticon(emoticon);
-		
+	protected override void LeftButtonCallback(){
+		Debug.Log(this.name + " left callback");
+		// TODO? this is for a chat dialoge
 	}
 	
+	protected override void RightButtonCallback(){
+		Debug.Log(this.name + " right callback");
+		GameObject item = player.Inventory.GetItem();
+		DoReaction(item);
+	}
 	
-	void FallInLove() {
-		if ((paperBoy.GetComponent<PaperBoy>() as PaperBoy).inLove && inLove) {
-			Debug.Log ("Sister says: The Paper Boy and the Sister are in Love");
+	protected override void DoReaction(GameObject itemToReactTo){
+		if (itemToReactTo != null){
+			Debug.Log(name + " is reacting to: " + itemToReactTo.name);
+			switch (itemToReactTo.tag){
+				case "GoldenGear":
+					UpdateDisposition(10);
+					break;
+				default:
+					break;
+			}
+			player.Inventory.DisableHeldItem();
 		}
 	}
-	
-	
 }

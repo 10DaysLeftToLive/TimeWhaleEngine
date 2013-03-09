@@ -5,10 +5,11 @@ using System.Collections.Generic;
 public abstract class NPC : Character {
 	protected Player player;
 	Chat chatObject;
-	protected int npcDisposition;
+	public int npcDisposition; // NOTE should not be public but this makes testing easier
 	private List<Item> itemReactions;
 	private bool chating = false;
 	private static int DISTANCE_TO_CHAT = 2;
+	public int id;
 	
 	protected override void Init(){
 		chatObject = GameObject.Find("Chat").GetComponent<Chat>();
@@ -65,9 +66,8 @@ public abstract class NPC : Character {
 		return npcDisposition;	
 	}
 	
-	public int UpdateDisposition(int disp) {
-		npcDisposition += disp;
-		return npcDisposition;
+	public void UpdateDisposition(int disp) {
+		NPCDispositionManager.instance.UpdateWithId(id, disp);
 	}
 	#endregion
 	
