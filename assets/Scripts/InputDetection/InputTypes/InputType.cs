@@ -46,8 +46,6 @@ public abstract class InputType  {
 	#region InputEvents
 	// ------------ These functions will be called when the given event occurs, put any code to be perform on the event in here 
 	protected void DragEvent(Vector2 inputChangeSinceLastTick){
-		// Tell the camera to drag in the opposite directiong to give the feel of sliding the camera
-		CameraController.Drag(-inputChangeSinceLastTick);
 	}
 	
 	// called when a click/tap occurs

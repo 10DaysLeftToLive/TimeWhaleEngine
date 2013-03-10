@@ -31,12 +31,6 @@ public class CameraController : MonoBehaviour {
 		MoveCameraToTarget();
 	}
 	
-	// The function uses the difference in the mouse's position between frames
-	// to determine which way to drag the camera, and moves the camera in that direction.
-	static public void Drag(Vector2 currentInputPos){
-		thisCamera.transform.Translate(new Vector3(currentInputPos.x, currentInputPos.y, zOffsetRelativeToPlayer), Space.World);
-	}
-	
 	// This function is used to zoom the camera in and out.
 	// Assumes the camera is at a 45 degree angle towards the terrain.
 	static public void Zoom(bool isZoomingIn){

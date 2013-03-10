@@ -13,8 +13,8 @@ public abstract class PauseObject : MonoBehaviour {
 		EventManager.instance.mOnPauseToggleEvent += new EventManager.mOnPauseToggleDelegate (TogglePauseEvent);
 	}
 	
-	private void TogglePauseEvent(EventManager EM, PauseStateArgs e){
-		gamePaused = e.isPaused;
+	private void TogglePauseEvent(EventManager EM, PauseStateArgs pauseState){
+		gamePaused = pauseState.isPaused;
 	}
 	
 	// To be implemented by child

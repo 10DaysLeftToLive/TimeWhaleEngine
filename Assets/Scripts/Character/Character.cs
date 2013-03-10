@@ -5,7 +5,7 @@ using SmoothMoves;
 /*
  *  Character.cs
  * 		The base class for both player and NPC
- * 		This should not be edited, put any specific code in the children classes.
+ * 		This should not be edited for specific characters put any specific code in the children classes.
  */
 public abstract class Character : PauseObject {
 	#region Static Fields
