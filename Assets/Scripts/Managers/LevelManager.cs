@@ -195,7 +195,11 @@ public class LevelManager : MonoBehaviour {
 		CharacterAgeManager.SetupMiddle(genderAnimationInUse.middleBoneAnimation, middleSectionTarget, middleBGM);
 		CharacterAgeManager.SetupOld(genderAnimationInUse.oldBoneAnimation, oldSectionTarget, oldBGM);
 	}
-	
+
+	private void AllInteractionsComplete() {
+		// To fill in with in with easter egg when the player has no more interactions left before time runs out
+	}
+
 	void OnApplicationQuit(){
 		SaveDispositions();
 	}

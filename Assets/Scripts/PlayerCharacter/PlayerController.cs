@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour {
 		controller = this.GetComponent<CharacterController>();
 		Transform rightHandTransform = currentAnimation.GetSpriteTransform("Right Hand");
 		inventory = new Inventory(rightHandTransform);
+		AgeSwapMover.instance.SetPlayer(this);
 	}
 	
 	// Update is called once per frame
@@ -138,13 +139,9 @@ public class PlayerController : MonoBehaviour {
 	
 	public void ChangeAge(CharacterAge newAge, CharacterAge previousAge){
 		CheckItemSwapWithAge(newAge);
-		
-		if (isTouchingGrowableUp){
-			Transform growableUpTSO = FindGrowableUp(currentTouchedGrowableUp);
-			TeleportCharacterAbove(growableUpTSO);
-		} else {
-			ChangeAgePosition(newAge, previousAge);
-		}
+
+		AgeSwapMover.instance.ChangeAgePosition(newAge, previousAge);
+
 		ChangeHitBox(newAge, previousAge);
 		ChangeAnimation(newAge.boneAnimation);
 		SwapItemWithCurrentAge();
@@ -163,17 +160,6 @@ public class PlayerController : MonoBehaviour {
 				transform.position = new Vector3(transform.position.x, transform.position.y + newAge.capsule.height/2, + transform.position.z);
 			}
 		}
-	}
-	
-	Transform FindGrowableUp(GameObject currentlyTouchingGrowableUp){
-		GrowableTree[] treeBaseObjects = (GrowableTree[]) GameObject.FindObjectsOfType(typeof(GrowableTree));
-		
-		foreach(GrowableTree treeBase in treeBaseObjects){
-			if(treeBase.tree.objectLabel == currentlyTouchingGrowableUp.name){
-				return treeBase.tree.GetTimeObjectAt(CharacterAgeManager.GetCurrentAgeState()).transform.GetChild(0);
-			}
-		}
-		return null;
 	}
 	
 	public void PickUpObject(GameObject toPickUp){
@@ -231,30 +217,8 @@ public class PlayerController : MonoBehaviour {
 		inventory.DisableHeldItem();
 	}
 	
-	public void TeleportCharacterAbove(Transform toTeleportAbove){
-		transform.position = toTeleportAbove.position + new Vector3(0,TELEPORT_ABOVE_GROWABLE_DISTANCE,0);
-	}	
-	
 	public bool CheckTransitionPositionSuccess(CharacterAge newAge, CharacterAge previousAge){
-		Vector3 playerCenter = GetNewAgeWorldPosition(newAge, previousAge);
-		
-		CharacterController charControl = GetComponent<CharacterController>();
-		
-		return (AgeSwapDetector.CheckTransitionPositionSuccess(playerCenter, charControl));
-	}
-	
-	public void ChangeAgePosition(CharacterAge newAge, CharacterAge previousAge){
-		transform.position = GetNewAgeWorldPosition(newAge, previousAge);
-	}
-	
-	private Vector3 GetNewAgeWorldPosition(CharacterAge newAge, CharacterAge previousAge){
-		Vector3 deltaPlayerToCurrentFrame = transform.position - previousAge.sectionTarget.position;
-		
-		
-		return new Vector3(newAge.sectionTarget.position.x + deltaPlayerToCurrentFrame.x,
-										 newAge.sectionTarget.position.y + deltaPlayerToCurrentFrame.y - Mathf.Abs(previousAge.capsule.height/2 - newAge.capsule.height/2),
-										 newAge.sectionTarget.position.z + deltaPlayerToCurrentFrame.z);
-		
+		return AgeSwapMover.instance.CheckTransitionPositionSuccess(newAge, previousAge);
 	}
 	
 	public void ChangeAnimation(BoneAnimation newAnimation){
