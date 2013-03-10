@@ -11,7 +11,7 @@ public class Chat : MonoBehaviour {
 	string msg;
 	int charPerLine = 20;
 	Rect rect;
-	bool active, button;
+	bool isActive;
 	Vector2 offset;
 	
 	public delegate void ButtonClickDelegate();
@@ -36,7 +36,7 @@ public class Chat : MonoBehaviour {
 	}
 	
 	void OnGUI () {
-		if (active){
+		if (isActive){
 			screenPos = Camera.main.WorldToScreenPoint (obj.transform.position);
 			rect = new Rect(screenPos.x + offset.x/2, Screen.height - screenPos.y - offset.y*.75f, size.x, size.y);
 			GUI.Box (rect, msg);
@@ -80,11 +80,11 @@ public class Chat : MonoBehaviour {
 		
 		screenPos = Camera.main.WorldToScreenPoint (obj.transform.position);
 		rect = new Rect(screenPos.x + offset.x/2, Screen.height - screenPos.y - offset.y*.75f, size.x, size.y);
-		active = true;
+		isActive = true;
 	}
 	
 	public void RemoveChatBox(){
-		active	= false;
+		isActive	= false;
 		showRightButton = false;
 		showLeftButton = false;
 	}
@@ -92,7 +92,6 @@ public class Chat : MonoBehaviour {
 	public void CreateChatButtons(Texture bt1, Texture bt2){
 		btn1 = bt1;
 		btn2 = bt2;
-		button = true;
 	}
 	
 	private void SetLeftButton(ButtonClickDelegate leftButtonClick){

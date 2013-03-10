@@ -9,11 +9,8 @@ public class DeathbedFade : MonoBehaviour {
 
 	private float alpha = 1;
 	private float fadeDir = -1;
-	private Rect rect = new Rect(0, 0, Screen.width, Screen.height);
 	
 	bool fadedIn = false;
-	
-	
 	
 	public GameObject panelToFade;
 	

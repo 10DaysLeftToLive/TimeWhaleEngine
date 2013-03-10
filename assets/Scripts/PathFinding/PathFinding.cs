@@ -22,7 +22,6 @@ public static class PathFinding {
 	private static float MECHANICSBUFFER = .4f;
 	
 	private static float levelDifferenceMax = .25f;
-	private static float distanceToLook = 9999f;
 	
 	public static bool StartPath(Vector3 startPos, Vector3 destination, float height){
 		nodes = new Node[15];

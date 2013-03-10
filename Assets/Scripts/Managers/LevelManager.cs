@@ -198,6 +198,10 @@ public class LevelManager : MonoBehaviour {
 
 	private void AllInteractionsComplete() {
 		// To fill in with in with easter egg when the player has no more interactions left before time runs out
+		/* if (InputManager.UPUPDOWNDOWNLEFTRIGHTLEFTRIGHTABDETECTED())
+		 *     TimeWhaleEngine.Begin(); // Needs rewording as there is no begining to Time Whale the glory of Time Whale. It is eternal and does not require a cause
+		 */
+		
 	}
 
 	void OnApplicationQuit(){

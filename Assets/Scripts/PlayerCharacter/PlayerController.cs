@@ -26,14 +26,10 @@ public class PlayerController : MonoBehaviour {
 	
 	public bool isTouchingTrigger = false;
 	
-	private static readonly float TELEPORT_ABOVE_GROWABLE_DISTANCE = .750f;
-	
 	private BoneAnimation currentAnimation = null;
 	
 	public Capsule smallHitBox;
 	public Capsule bigHitbox;
-	
-	CharacterController controller;
 	
 	public float currentVerticalSpeed = 0.0f;
 	
@@ -41,7 +37,6 @@ public class PlayerController : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		controller = this.GetComponent<CharacterController>();
 		Transform rightHandTransform = currentAnimation.GetSpriteTransform("Right Hand");
 		inventory = new Inventory(rightHandTransform);
 		AgeSwapMover.instance.SetPlayer(this);
