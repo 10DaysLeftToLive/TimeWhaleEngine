@@ -219,7 +219,6 @@ public class UpdateManager : MonoBehaviour
 	void Remove (OnUpdate func, List<UpdateEntry> list) 
 	{
 		int updateOrder = 0;
-		MonoBehaviour mb = null;
 		for (int i = 0, imax = list.Count; i < imax; ++i)
 		{
 			UpdateEntry en = list[i];

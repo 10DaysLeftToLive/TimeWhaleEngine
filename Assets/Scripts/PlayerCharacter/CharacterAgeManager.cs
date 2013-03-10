@@ -20,7 +20,6 @@ public class CharacterAgeManager {
 		} else {
 			tempAge = CharacterAgeState.YOUNG;
 		}
-		CharacterAge tempcas = GetAgeOf(tempAge);
 		return GetAgeOf(tempAge);
 	}
 	

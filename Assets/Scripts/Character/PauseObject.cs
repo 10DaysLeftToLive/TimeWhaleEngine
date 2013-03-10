@@ -1,6 +1,11 @@
 using UnityEngine;
 using System.Collections;
 
+/*
+ * PauseObject.cs
+ * 		This object will listen for the pause event and will stop updating when paused
+ * 		If you want your object to pause then make it a child of this 
+ */
 public abstract class PauseObject : MonoBehaviour {
 	private bool gamePaused = false;
 	
@@ -12,6 +17,7 @@ public abstract class PauseObject : MonoBehaviour {
 		gamePaused = e.isPaused;
 	}
 	
+	// To be implemented by child
 	protected abstract void UpdateObject();
 	
 	void Update () {

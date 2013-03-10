@@ -5,6 +5,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 
+//TODO change this to be less hard coded.
 public class DeathbedNPCLoad : MonoBehaviour {
 	public GameObject paperBoy;
 	public GameObject sister;
@@ -17,6 +18,7 @@ public class DeathbedNPCLoad : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		/*
 		float likesEnough = 7;
 		float dispositionSister;
 		float dispositionPaperboy;
@@ -24,7 +26,7 @@ public class DeathbedNPCLoad : MonoBehaviour {
 		XmlSerializer serializer = new XmlSerializer(typeof(NPCCollection));
 		MemoryStream assetStream = new MemoryStream(disData.bytes);
 		NPCCollection npcCollection = (NPCCollection)serializer.Deserialize(assetStream);
-		assetStream.Close();*/
+		assetStream.Close();
 		
 		// Load npcs into positions to be displayed
 		dispositionSister = PlayerPrefs.GetInt("Sister", 0);// npcCollection.GetDisposition("Sister");
@@ -41,7 +43,7 @@ public class DeathbedNPCLoad : MonoBehaviour {
 			}
 		} else {
 			DisableNPCs();
-		}		
+		}		*/
 	}
 	
 	private void DisableNPCs(){

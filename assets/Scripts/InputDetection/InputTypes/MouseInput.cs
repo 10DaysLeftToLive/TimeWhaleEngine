@@ -9,7 +9,6 @@ using System.Collections;
 
 public class MouseInput : InputType {
 	#region Fields
-	private float firstClickTime;
 	private Vector3 clickPosition;
 	private Vector3 deltaSinceDown;
 	#endregion
@@ -28,7 +27,6 @@ public class MouseInput : InputType {
 			// if a click occurs then start waiting for movement
 			if (Input.GetKey(KeyCode.Mouse0)) {
 				currentState = ControlState.WaitingForNoInput;
-				firstClickTime = Time.time;
 				clickPosition = Input.mousePosition;
 			}
 		}

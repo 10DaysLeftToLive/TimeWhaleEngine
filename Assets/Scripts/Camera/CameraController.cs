@@ -20,7 +20,6 @@ public class CameraController : MonoBehaviour {
 	
 	static private Camera thisCamera;
 	static private PlayerController player;
-	
 	#endregion
 	
 	public void Start () {

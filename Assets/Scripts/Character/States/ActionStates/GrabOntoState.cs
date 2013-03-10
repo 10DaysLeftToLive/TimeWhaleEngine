@@ -1,6 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
+/*
+ * GrabOntoState.cs
+ * 	Called when the player should grab onto an object
+ */
 public class GrabOntoState : AbstractState {
 	private GameObject _toGrabOn;
 	
@@ -11,7 +15,7 @@ public class GrabOntoState : AbstractState {
 	public override void Update(){
 		Debug.Log(character.name + ": GrabOntoState Update");
 		
-		character.AttachTo(_toGrabOn);
+		character.AttachTo(_toGrabOn); // TODO better implementation
 		
 		character.EnterState(new GrabIdleState(character));
 	}

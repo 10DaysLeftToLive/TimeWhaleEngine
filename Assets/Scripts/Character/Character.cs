@@ -2,12 +2,22 @@ using UnityEngine;
 using System.Collections;
 using SmoothMoves;
 
+/*
+ *  Character.cs
+ * 		The base class for both player and NPC
+ * 		This should not be edited, put any specific code in the children classes.
+ */
 public abstract class Character : PauseObject {
-	protected State currentState;
+	#region Static Fields
 	private static float RIGHT = 1;
 	private static float LEFT = -1;
+	#endregion
+	
+	#region Fields
+	protected State currentState;
 	private Inventory invenory;
 	private GrabableObject attachedObject = null;
+	#endregion
 	
 	public GrabableObject AttachedObject {
 		get {return (attachedObject);}
@@ -36,15 +46,6 @@ public abstract class Character : PauseObject {
 		currentState.OnExit(); // Exit the current state
 		currentState = newState; // Update the current state
 		newState.OnEnter(); // Enter the new state
-	}
-	
-	public bool AnimationPlaying(){
-		return (true); //TODO
-	}
-	
-	public void ChangeAnimation(string newAnimation){
-		Debug.Log("Chaning animation to " + newAnimation);
-		// TODO
 	}
 	
 	public void LookRight(){

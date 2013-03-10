@@ -1,15 +1,17 @@
 using UnityEngine;
 using System.Collections;
 
+/*
+ * MoveState.cs
+ * 	The base for moving the layer around.
+ *  Will calculate the path to a point and will move over time to it changing between walking and climbing as necessary
+ */
 public class MoveState : AbstractState {
 	private Vector3 _goal;
 	private Path _pathFollowing;
 	protected float speed = 5f;
 	private GoToState currentMovementState = null;
-	
 	private Vector3 currentGoal;
-	private int currentDirection;
-	
 	private float stuckTimer;
 	
 	public MoveState(Character toControl, Vector3 goal) : base(toControl){
@@ -41,7 +43,6 @@ public class MoveState : AbstractState {
 				OnGoalReached();
 			} else {
 				currentGoal = _pathFollowing.GetPoint();
-				currentDirection = _pathFollowing.GetDirection();
 				
 				if (currentGoal.y > pos.y || currentGoal.y < pos.y){
 					Debug.Log("The point was different vertically switching to climbing");

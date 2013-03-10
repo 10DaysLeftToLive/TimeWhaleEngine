@@ -65,8 +65,6 @@ public class Chat : MonoBehaviour {
 		offset.y = Mathf.Abs(minBounds.y - maxBounds.y);
 		
 		if (msg.Length > charPerLine){
-			int lastIndex = 0;
-			
 			for (int i = 1; i <= msg.Length/charPerLine; i++){
 				int index = charPerLine*i;
 				do {

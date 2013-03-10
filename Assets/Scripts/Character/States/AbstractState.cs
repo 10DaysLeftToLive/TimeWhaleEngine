@@ -1,6 +1,11 @@
 using UnityEngine;
 using System.Collections;
 
+/*
+ * AbstractState.cs
+ * 	The abstract implementation of a state
+ * 	The children of this object will need to override the methods
+ */
 public abstract class AbstractState : State {
 	protected Character character; // The character that is in this state
 	

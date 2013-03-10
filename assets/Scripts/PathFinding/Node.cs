@@ -77,7 +77,6 @@ public class Node {
 		goneUp = false;
 		goneDown = false;
 		hitClimbable = hit;
-		climbableIn = climbableIn;
 		this.past = past;
 		this.curr = curr;
 		this.dest = dest;

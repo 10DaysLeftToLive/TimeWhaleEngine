@@ -1,15 +1,9 @@
 using UnityEngine;
 using System.Collections;
 
+// TODO change this to use shader
 public class DeathbedFade : MonoBehaviour {
-	float timer = 5.0F;
 	Texture2D fadeTexture;
-	float fadeSpeed = 0.2F;
-	int drawDepth = -1000;
-
-	private float alpha = 1;
-	private float fadeDir = -1;
-	
 	bool fadedIn = false;
 	
 	public GameObject panelToFade;

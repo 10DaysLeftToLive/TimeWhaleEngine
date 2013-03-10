@@ -5,13 +5,11 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 
+/*
+ * InteractionManager.cs
+ * 	Will loadup and save all NPCs' dispositions and item interactions
+ */
 public class InteractionManager : ManagerSingleton<InteractionManager> {
-	private PlayerController playerCharacter;
-
-	public override void Init(){
-		playerCharacter = GameObject.FindObjectOfType(typeof(PlayerController)) as PlayerController;		
-	}
-	
 	public void SaveNPCDispositions(string disposiitonData){
 		NPCCollection npcCollection = new NPCCollection();
 		
@@ -23,7 +21,6 @@ public class InteractionManager : ManagerSingleton<InteractionManager> {
 			npc_Class = npc.GetComponent<NPC>();
 			dataForNPC.disposition = npc_Class.GetDisposition();
 			dataForNPC.name = npc.name;		
-			Debug.Log("Disposition for " + dataForNPC.name + " = " + dataForNPC.disposition);;
 			npcCollection.Add(dataForNPC);
 		}
 		npcCollection.Save(disposiitonData);
@@ -59,15 +56,5 @@ public class InteractionManager : ManagerSingleton<InteractionManager> {
 	
 	private void SetNPCDisposition(NPC npcClass, NPCData data){
 		npcClass.SetDisposition(data.disposition);
-	}
-	
-	public void PerformInteraction(GameObject targetNPC){
-		if (playerCharacter.HasItem()){
-			GameObject playerItem = playerCharacter.GetItem();
-			//targetNPC.GetComponent<NPC>().ReactTo(playerItem.name);
-			//Give item to NPC
-		} else {
-			//targetNPC.GetComponent<NPC>().ReactTo(Strings.NoItem);
-		}
 	}
 }
