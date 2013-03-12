@@ -52,20 +52,27 @@ public class Chat : MonoBehaviour {
 		}
 	}
 	
-	public void CreateChatBox(GameObject npc, GameObject player, string text){
-		this.npc = npc;
-		msg = text;
-		
-		if (msg.Length > charPerLine){
-			for (int i = 1; i <= msg.Length/charPerLine; i++){
+	public void UpdateMessage(string newMessage){
+		msg = ParseMessage(newMessage);
+	}
+	
+	private string ParseMessage(string message){
+		if (message.Length > charPerLine){
+			for (int i = 1; i <= message.Length/charPerLine; i++){
 				int index = charPerLine*i;
 				do {
 					--index;
-				}while(msg[index] != ' ');
+				}while(message[index] != ' ');
 
-				msg = msg.Insert(index, "\n");
+				message = message.Insert(index, "\n");
 			}
 		}
+		return (message);
+	}
+	
+	public void CreateChatBox(GameObject npc, GameObject player, string text){
+		this.npc = npc;
+		msg = ParseMessage(text);
 		
 		bool playerIsToLeft = (Utils.CalcDifference(npc.transform.position.x, player.transform.position.x) >= 0);
 		
@@ -99,10 +106,14 @@ public class Chat : MonoBehaviour {
 	
 	// We will have the single constructor set the right button as we will only need the right for items some of the time
 	public void SetButtonCallbacks(ButtonClickDelegate leftButtonClick){
+		showRightButton = false;
+		showLeftButton = false;
 		SetLeftButton(leftButtonClick);
 	}
 	
 	public void SetButtonCallbacks(ButtonClickDelegate leftButtonClick, ButtonClickDelegate rightButtonClick){
+		showRightButton = false;
+		showLeftButton = false;
 		SetLeftButton(leftButtonClick);
 		SetRightButton(rightButtonClick);
 	}

@@ -23,6 +23,7 @@ public class Mom : NPC {
 			switch (itemToReactTo.name){
 				case "Plushie":
 					UpdateDisposition(10);
+					UpdateChat("Thanks kid.");
 					break;
 				default:
 					break;

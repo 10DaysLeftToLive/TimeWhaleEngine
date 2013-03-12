@@ -33,7 +33,9 @@ public abstract class NPC : Character {
 	private void RightButtonClick(){
 		RightButtonCallback();
 		Debug.Log("Right click");
-		player.EnterState(new IdleState(this));
+		Debug.Log("Player does " + (player.Inventory.HasItem() ? "" : "not") + "have an item");
+		UpdateChatButtons();
+		//player.EnterState(new IdleState(this));
 	}
 	
 	public void OpenChat(){
@@ -46,6 +48,19 @@ public abstract class NPC : Character {
 		
 		chating = true;
 		chatObject.CreateChatBox(this.gameObject, player.gameObject, GetWhatToSay());
+	}
+	
+	protected void UpdateChat(string newMessage){
+		chatObject.UpdateMessage(newMessage);
+	}
+	
+	protected void UpdateChatButtons(){
+		// TODO change words on buttons
+		if (player.Inventory.HasItem()){
+			chatObject.SetButtonCallbacks(LeftButtonClick, RightButtonClick);
+		} else {
+			chatObject.SetButtonCallbacks(LeftButtonClick);
+		}
 	}
 	
 	public void CloseChat(){
