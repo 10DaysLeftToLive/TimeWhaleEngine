@@ -21,8 +21,9 @@ public class Sister : NPC {
 		if (itemToReactTo != null){
 			Debug.Log(name + " is reacting to: " + itemToReactTo.name);
 			switch (itemToReactTo.tag){
-				case "GoldenGear":
-					UpdateDisposition(10);
+				case "Plushie":
+					break;
+				case "Frisbee":
 					break;
 				default:
 					break;

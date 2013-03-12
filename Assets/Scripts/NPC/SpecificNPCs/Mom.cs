@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Mom : NPC {
 	protected override string GetWhatToSay(){
-		return (this.name + " says hai! I am feeling " + npcDisposition);
+		return ("Can you go get apples for me to make this pie?");
 	}
 	
 	protected override void LeftButtonCallback(){
@@ -22,8 +22,10 @@ public class Mom : NPC {
 			Debug.Log(name + " is reacting to: " + itemToReactTo.name);
 			switch (itemToReactTo.name){
 				case "Plushie":
-					UpdateDisposition(10);
 					UpdateChat("Thanks kid.");
+					break;
+				case "Apple":
+					UpdateChat("Perfect! These will work wonderfully!");
 					break;
 				default:
 					break;
