@@ -17,6 +17,7 @@ public abstract class Character : PauseObject {
 	protected State currentState;
 	private Inventory invenory;
 	private GrabableObject attachedObject = null;
+	public BoneAnimation animationData;
 	#endregion
 	
 	public GrabableObject AttachedObject {
@@ -69,6 +70,10 @@ public abstract class Character : PauseObject {
 	public void ForceChangeToState(State newState){
 		// TODO need to enter the correct idle state the change to the new one.
 		//EnterState 
+	}
+	
+	public void PlayAnimation(string animation){
+		animationData.Play(animation);
 	}
 	
 	public Vector3 GetFeet(){

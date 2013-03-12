@@ -35,7 +35,6 @@ public abstract class NPC : Character {
 		Debug.Log("Right click");
 		Debug.Log("Player does " + (player.Inventory.HasItem() ? "" : "not") + "have an item");
 		UpdateChatButtons();
-		//player.EnterState(new IdleState(this));
 	}
 	
 	public void OpenChat(){
@@ -48,6 +47,17 @@ public abstract class NPC : Character {
 		
 		chating = true;
 		chatObject.CreateChatBox(this.gameObject, player.gameObject, GetWhatToSay());
+	}
+	
+	public void ToggleChat(){
+		if (chating){
+			player.EnterState(new IdleState(player));
+			CloseChat();
+		} else {
+			player.EnterState(new TalkState(player, this));
+			OpenChat();
+		}
+		chating = !chating;
 	}
 	
 	protected void UpdateChat(string newMessage){

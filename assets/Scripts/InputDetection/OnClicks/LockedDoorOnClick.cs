@@ -1,14 +1,20 @@
 using UnityEngine;
 using System.Collections;
 
-public class LockedDoorOnClick : InteractableObject  {
+public class LockedDoorOnClick : InteractableOnClick  {
 	public LockedDoor door;
 	
-	public override void Interact(GameObject toInteractWith){
+	protected override void InteractWithPlayer(){
+		if (door == null) door = this.gameObject.GetComponent<LockedDoor>();
+		
+		GameObject playerItem = player.Inventory.GetItem();
+		
+		if (playerItem == null) return;
+		
 		foreach (GameObject keyUnlock in door.keysThatUnlock){
-			if(toInteractWith == keyUnlock){
+			if(playerItem == keyUnlock){
 				LockedDoorManager.instance.UnlockWithId(door.id);
-				playerCharacter.DisableHeldItem();
+				player.Inventory.DisableHeldItem();
 				break;
 			}
 		}

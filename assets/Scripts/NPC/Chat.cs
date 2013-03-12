@@ -40,7 +40,7 @@ public class Chat : MonoBehaviour {
 		if (isActive){
 			GUI.Box (mainChatRect, msg);
 			if (showLeftButton){
-				if (GUI.Button(leftButtonRect, "[JMWasHere]")){
+				if (GUI.Button(leftButtonRect, "Talk To")){
 					leftButtonClickDelegate();
 				}
 			}
