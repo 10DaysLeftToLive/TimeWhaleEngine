@@ -11,9 +11,9 @@ Attach this script to the camera.
 public class CameraController : MonoBehaviour {
 	#region Fields
 	// Variables for altering the camera's movement
-	static private float closestZoomDistance = 1f;	
-	static private float farthestZoomDistnace = 15f;
-	static private float zoomingIncrement = .5f;
+	static private float closestZoomDistance = 1.5f;	
+	static private float farthestZoomDistnace = 2f;
+	static private float zoomingIncrement = .075f;
 	
 	static private float yOffsetRelativeToTarget = 1;
 	static private float zOffsetRelativeToPlayer = - 10;

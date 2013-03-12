@@ -45,7 +45,7 @@ public abstract class NPC : Character {
 		}
 		
 		chating = true;
-		chatObject.CreateChatBox(this.gameObject, GetWhatToSay());
+		chatObject.CreateChatBox(this.gameObject, player.gameObject, GetWhatToSay());
 	}
 	
 	public void CloseChat(){
