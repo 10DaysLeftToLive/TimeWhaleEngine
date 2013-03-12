@@ -15,6 +15,7 @@ public class ResolutionManager {
 	
 	// Use this for initialization
 	public static void InitializeResolutionSettings () {
+		/*
 	    // set the desired aspect ratio (the values in this example are
 	    // hard-coded for 16:9, but you could make them into public
 	    // variables instead so you can set them at design time)
@@ -58,6 +59,6 @@ public class ResolutionManager {
 			widthShift = rect.x;
 	
 	        camera.rect = rect;
-	    }
+	    }*/
 	}
 }
