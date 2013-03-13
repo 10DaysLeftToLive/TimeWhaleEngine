@@ -69,7 +69,7 @@ public abstract class Character : PauseObject {
 	
 	public void ForceChangeToState(State newState){
 		// TODO need to enter the correct idle state the change to the new one.
-		//EnterState 
+		EnterState(newState);
 	}
 	
 	public void PlayAnimation(string animation){

@@ -14,6 +14,16 @@ public class CatLady : NPC {
 		return (this.name + " says hai! I am feeling " + npcDisposition);
 	}
 	
+	protected override Schedule GetSchedule(){
+		Schedule schedule = new Schedule(this);
+		
+		Task standAround = new Task(new IdleState(this));
+		
+		schedule.Add(standAround);
+		
+		return (schedule);
+	}
+	
 	protected override void LeftButtonCallback(){
 		Debug.Log(this.name + " left callback");
 		// TODO? this is for a chat dialoge

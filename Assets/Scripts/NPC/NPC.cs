@@ -10,17 +10,20 @@ public abstract class NPC : Character {
 	private bool chating = false;
 	private static int DISTANCE_TO_CHAT = 2;
 	public int id;
+	private Schedule npcSchedule;
 	
 	protected override void Init(){
 		chatObject = GameObject.Find("Chat").GetComponent<Chat>();
 		player = GameObject.Find("PlayerCharacter").GetComponent<Player>();
 		EventManager.instance.mOnNPCInteractionEvent += new EventManager.mOnNPCInteractionDelegate(ReactToInteractionEvent);
+		npcSchedule = GetSchedule();
 	}
 	
 	protected override void CharacterUpdate(){
 		if (chating && !NearPlayer()){
 			CloseChat();
 		}
+		npcSchedule.Run(Time.deltaTime);
 	}
 	
 	// ONLY PUT SPECIFIC NPC THINGS IN THESE IN THE CHILDREN
@@ -30,6 +33,7 @@ public abstract class NPC : Character {
 	protected abstract void LeftButtonCallback();
 	protected abstract void RightButtonCallback();
 	protected abstract void DoReaction(GameObject itemToReactTo);
+	protected abstract Schedule GetSchedule(); // TODO read/set this from file
 	
 	private void ReactToInteractionEvent(EventManager EM, NPCInteraction otherInteraction){
 		Debug.Log(name + " is reacting to event with " + otherInteraction._npcReacting.name);

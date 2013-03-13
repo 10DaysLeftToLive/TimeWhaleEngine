@@ -1,7 +1,9 @@
 using UnityEngine;
 using System.Collections;
 
-public class Mom : NPC {	
+public class Mom : NPC {
+	string whatToSay;
+	
 	protected override void ReactToItemInteraction(string npc, string item){
 		Debug.Log(name + " is reacting to " + npc + " getting " + item);
 	}
@@ -11,7 +13,30 @@ public class Mom : NPC {
 	}
 	
 	protected override string GetWhatToSay(){
-		return ("Can you go get apples for me to make this pie?");
+		return (whatToSay); // TODO maybe a better way of this?
+	}
+	
+	protected override Schedule GetSchedule(){
+		Schedule schedule = new Schedule(this);
+		
+		// Note this is hard coded. This is an example of how scheduling works now
+		Vector3 currentPos = transform.position;
+		
+		currentPos.x = currentPos.x - 5;
+		
+		Task walkLeft = new Task(new MoveState(this, currentPos));
+		
+		currentPos.x = currentPos.x + 10;
+		
+		TimeTask walkRight = new TimeTask(6000, new MoveState(this, currentPos));
+		
+		Task standAround = new Task(new IdleState(this));
+		
+		schedule.Add(walkLeft);
+		schedule.Add(walkRight);
+		schedule.Add(standAround);
+		
+		return (schedule);
 	}
 	
 	protected override void LeftButtonCallback(){
