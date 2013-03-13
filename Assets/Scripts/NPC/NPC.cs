@@ -11,12 +11,14 @@ public abstract class NPC : Character {
 	private static int DISTANCE_TO_CHAT = 2;
 	public int id;
 	private Schedule npcSchedule;
+	protected EmotionState currentEmotion;
 	
 	protected override void Init(){
 		chatObject = GameObject.Find("Chat").GetComponent<Chat>();
 		player = GameObject.Find("PlayerCharacter").GetComponent<Player>();
 		EventManager.instance.mOnNPCInteractionEvent += new EventManager.mOnNPCInteractionDelegate(ReactToInteractionEvent);
 		npcSchedule = GetSchedule();
+		currentEmotion = GetInitEmotionState();
 	}
 	
 	protected override void CharacterUpdate(){
@@ -29,11 +31,11 @@ public abstract class NPC : Character {
 	// ONLY PUT SPECIFIC NPC THINGS IN THESE IN THE CHILDREN
 	protected abstract void ReactToItemInteraction(string npc, string item);
 	protected abstract void ReactToChoiceInteraction(string npc, string choice);
-	protected abstract string GetWhatToSay();
-	protected abstract void LeftButtonCallback();
+	protected abstract void LeftButtonCallback(string choice);
 	protected abstract void RightButtonCallback();
 	protected abstract void DoReaction(GameObject itemToReactTo);
-	protected abstract Schedule GetSchedule(); // TODO read/set this from file
+	protected abstract Schedule GetSchedule(); // TODO read/set this from file?
+	protected abstract EmotionState GetInitEmotionState();
 	
 	private void ReactToInteractionEvent(EventManager EM, NPCInteraction otherInteraction){
 		Debug.Log(name + " is reacting to event with " + otherInteraction._npcReacting.name);
@@ -48,8 +50,19 @@ public abstract class NPC : Character {
 		}
 	}
 	
-	private void LeftButtonClick(){
-		LeftButtonCallback();
+	private List<Choice> GetChoices(){
+		List<Choice> choices = new List<Choice>();//currentEmotion.GetChoices();
+		choices.Add(new Choice("Talk With", "This is a reaction."));
+		
+		return(choices);
+	}
+	
+	protected string GetWhatToSay(){
+		return (currentEmotion.GetWhatToSay());
+	}
+	
+	private void LeftButtonClick(string choice){
+		LeftButtonCallback(choice);
 	}
 	
 	private void RightButtonClick(){
@@ -63,8 +76,10 @@ public abstract class NPC : Character {
 		Debug.Log("Player does " + (player.Inventory.HasItem() ? "" : "not") + "have an item");
 		if (player.Inventory.HasItem()){
 			chatObject.SetButtonCallbacks(LeftButtonClick, RightButtonClick);
+			chatObject.SetButtonText(GetChoices(), player.Inventory.GetItem().name);
 		} else {
 			chatObject.SetButtonCallbacks(LeftButtonClick);
+			chatObject.SetButtonText(GetChoices());
 		}
 		
 		chating = true;

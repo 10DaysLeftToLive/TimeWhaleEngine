@@ -12,8 +12,9 @@ public class Mom : NPC {
 		Debug.Log(name + " is reacting to player making choice " + choice + " with " + npc);
 	}
 	
-	protected override string GetWhatToSay(){
-		return (whatToSay); // TODO maybe a better way of this?
+	protected override EmotionState GetInitEmotionState(){
+		EmotionState warningState = new EmotionState("Stay safe and remember, don't go into the forest!");
+		return (warningState);
 	}
 	
 	protected override Schedule GetSchedule(){
@@ -42,7 +43,7 @@ public class Mom : NPC {
 		return (schedule);
 	}
 	
-	protected override void LeftButtonCallback(){
+	protected override void LeftButtonCallback(string choice){
 		Debug.Log(this.name + " left callback");
 		// TODO? this is for a chat dialoge
 		EventManager.instance.RiseOnNPCInteractionEvent(new NPCChoiceInteraction(this.gameObject, "Default"));

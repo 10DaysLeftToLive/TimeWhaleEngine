@@ -10,8 +10,9 @@ public class CatLady : NPC {
 		Debug.Log(name + " is reacting to player making choice " + choice + " with " + npc);
 	}
 	
-	protected override string GetWhatToSay(){
-		return (this.name + " says hai! I am feeling " + npcDisposition);
+	protected override EmotionState GetInitEmotionState(){
+		EmotionState warningState = new EmotionState("Stay safe and remember, don't go into the forest!");
+		return (warningState);
 	}
 	
 	protected override Schedule GetSchedule(){
@@ -24,7 +25,7 @@ public class CatLady : NPC {
 		return (schedule);
 	}
 	
-	protected override void LeftButtonCallback(){
+	protected override void LeftButtonCallback(string choice){
 		Debug.Log(this.name + " left callback");
 		// TODO? this is for a chat dialoge
 		EventManager.instance.RiseOnNPCInteractionEvent(new NPCItemInteraction(this.gameObject, player.Inventory.GetItem().name));

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Chat : MonoBehaviour {
 	GameObject npc;
@@ -12,8 +13,12 @@ public class Chat : MonoBehaviour {
 	bool isActive;
 	Vector2 offset;
 	
+	private string leftButtonText;
+	private string rightButtonText;
+	
 	public delegate void ButtonClickDelegate();
-	ButtonClickDelegate leftButtonClickDelegate;
+	public delegate void ChoiceButtonClickDelegate(string choice);
+	ChoiceButtonClickDelegate leftButtonClickDelegate;
 	ButtonClickDelegate rightButtonClickDelegate;
 	private bool showLeftButton = false;
 	private bool showRightButton = false;
@@ -39,13 +44,14 @@ public class Chat : MonoBehaviour {
 	void OnGUI () {
 		if (isActive){
 			GUI.Box (mainChatRect, msg);
+		
 			if (showLeftButton){
-				if (GUI.Button(leftButtonRect, "Talk To")){
-					leftButtonClickDelegate();
+				if (GUI.Button(leftButtonRect, leftButtonText)){
+					leftButtonClickDelegate("Test");
 				}
 			}
 			if (showRightButton){
-				if (GUI.Button(rightButtonRect, "Give Item")){
+				if (GUI.Button(rightButtonRect, rightButtonText)){
 					rightButtonClickDelegate();
 				}
 			}
@@ -94,7 +100,7 @@ public class Chat : MonoBehaviour {
 		btn2 = bt2;
 	}
 	
-	private void SetLeftButton(ButtonClickDelegate leftButtonClick){
+	private void SetLeftButton(ChoiceButtonClickDelegate leftButtonClick){
 		leftButtonClickDelegate += leftButtonClick;
 		showLeftButton = true;
 	}
@@ -105,17 +111,26 @@ public class Chat : MonoBehaviour {
 	}
 	
 	// We will have the single constructor set the right button as we will only need the right for items some of the time
-	public void SetButtonCallbacks(ButtonClickDelegate leftButtonClick){
+	public void SetButtonCallbacks(ChoiceButtonClickDelegate leftButtonClick){
 		showRightButton = false;
 		showLeftButton = false;
 		SetLeftButton(leftButtonClick);
 	}
 	
-	public void SetButtonCallbacks(ButtonClickDelegate leftButtonClick, ButtonClickDelegate rightButtonClick){
+	public void SetButtonCallbacks(ChoiceButtonClickDelegate leftButtonClick, ButtonClickDelegate rightButtonClick){
 		showRightButton = false;
 		showLeftButton = false;
 		SetLeftButton(leftButtonClick);
 		SetRightButton(rightButtonClick);
+	}
+	
+	public void SetButtonText(List<Choice> choices){
+		leftButtonText = choices[0]._choiceName;
+	}
+	
+	public void SetButtonText(List<Choice> choices, string itemName){
+		leftButtonText = choices[0]._choiceName;
+		rightButtonText = "Give " + itemName;
 	}
 	
 	// Sets up the buttons and chat to the right sizes and locations relative to the top left given as a percent of screen
