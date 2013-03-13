@@ -2,6 +2,14 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+
+/*
+ * Schedule.cs
+ *  Used for creating a series of tasks for an NPC to do
+ *  For moving you need to use MoveThenDo(MarkTaskDone)
+ * 		So we know when the npc completed that task
+ *  See Task and TimeTask for the basics of what you can schedule
+ */
 public class Schedule {
 	Queue<Task> _tasksToDo;
 	NPC _toManage;
@@ -28,10 +36,14 @@ public class Schedule {
 				current = null;
 			}
 		} else {
-			current = _tasksToDo.Dequeue();
-			Debug.Log(_toManage.name + " is now switching to " + current.StatePerforming);
-			_toManage.ForceChangeToState(current.StatePerforming);
+			NextTask();
 		}
+	}
+	
+	public void NextTask(){
+		current = _tasksToDo.Dequeue();
+		Debug.Log(_toManage.name + " is now switching to " + current.StatePerforming);
+		_toManage.ForceChangeToState(current.StatePerforming);
 	}
 	
 	public void Add(Task task){

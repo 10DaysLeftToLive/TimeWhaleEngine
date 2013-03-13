@@ -24,14 +24,17 @@ public class Mom : NPC {
 		
 		currentPos.x = currentPos.x - 5;
 		
-		Task walkLeft = new Task(new MoveState(this, currentPos));
+		TimeTask standAroundForBit = new TimeTask(2, new IdleState(this));
+		
+		Task walkLeft = new Task(new MoveThenDoState(this, currentPos, new MarkTaskDone(this)));
 		
 		currentPos.x = currentPos.x + 10;
 		
-		TimeTask walkRight = new TimeTask(6000, new MoveState(this, currentPos));
+		Task walkRight = new Task(new MoveThenDoState(this, currentPos, new MarkTaskDone(this)));
 		
 		Task standAround = new Task(new IdleState(this));
 		
+		schedule.Add(standAroundForBit);
 		schedule.Add(walkLeft);
 		schedule.Add(walkRight);
 		schedule.Add(standAround);

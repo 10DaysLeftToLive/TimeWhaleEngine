@@ -104,6 +104,10 @@ public abstract class NPC : Character {
 		return (Utils.CalcDistance(player.transform.position.x, this.transform.position.x) < DISTANCE_TO_CHAT);
 	}
 	
+	public void NextTask(){
+		npcSchedule.NextTask();
+	}
+	
 	#region disposition
 	public void SetDisposition(int disp) {
 		npcDisposition = disp;
