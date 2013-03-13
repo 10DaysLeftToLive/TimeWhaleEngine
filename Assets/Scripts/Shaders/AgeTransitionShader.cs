@@ -16,7 +16,7 @@ public class AgeTransitionShader : MonoBehaviour {
 	public Vector2 idlePosition; 
 	
 	//Script for the camera
-	private CameraController cameraController;
+	private CameraController camera;
 	
 	//A flag that determines if our plane is fading in/out in front of the camera.
 	//NOTE:Will get rid of this only temporary until we optimize.
@@ -31,7 +31,7 @@ public class AgeTransitionShader : MonoBehaviour {
 		
 		public const float FADEPLANEOFFSET = 0.3f;
 		
-		public const float HIDE_Z_LOC = 1f;
+		public const float HIDE_Z_LOC = -1f;
 	}
 	
 	//Denotes the steps sizes for the fade.
@@ -53,8 +53,8 @@ public class AgeTransitionShader : MonoBehaviour {
 	/// </summary>
 	void Start () {
 		renderer.material.color = Color.clear;
-		cameraController = FindObjectOfType(typeof(CameraController)) as CameraController;
-		transform.position = new Vector3(idlePosition.x, idlePosition.y, FadeShaderConstants.HIDE_Z_LOC);
+		camera = FindObjectOfType(typeof(CameraController)) as CameraController;
+		transform.position = new Vector3(idlePosition.x, idlePosition.y, FadeShaderConstants.FADEPLANEOFFSET);
 		levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
 	}
 
