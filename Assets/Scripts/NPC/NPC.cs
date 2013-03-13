@@ -14,6 +14,7 @@ public abstract class NPC : Character {
 	protected override void Init(){
 		chatObject = GameObject.Find("Chat").GetComponent<Chat>();
 		player = GameObject.Find("PlayerCharacter").GetComponent<Player>();
+		EventManager.instance.mOnNPCInteractionEvent += new EventManager.mOnNPCInteractionDelegate(ReactToInteractionEvent);
 	}
 	
 	protected override void CharacterUpdate(){
@@ -22,18 +23,36 @@ public abstract class NPC : Character {
 		}
 	}
 	
+	// ONLY PUT SPECIFIC NPC THINGS IN THESE IN THE CHILDREN
+	protected abstract void ReactToItemInteraction(string npc, string item);
+	protected abstract void ReactToChoiceInteraction(string npc, string choice);
 	protected abstract string GetWhatToSay();
 	protected abstract void LeftButtonCallback();
 	protected abstract void RightButtonCallback();
+	protected abstract void DoReaction(GameObject itemToReactTo);
+	
+	private void ReactToInteractionEvent(EventManager EM, NPCInteraction otherInteraction){
+		Debug.Log(name + " is reacting to event with " + otherInteraction._npcReacting.name);
+		if (otherInteraction._npcReacting.name != this.gameObject.name){ // make sure we don't interact to our own interaction
+			if (otherInteraction.GetType().Equals(typeof(NPCChoiceInteraction))){
+				NPCChoiceInteraction choiceInteraction = (NPCChoiceInteraction) otherInteraction;
+				ReactToChoiceInteraction(choiceInteraction._npcReacting.name, choiceInteraction._choice);
+			} else {
+				NPCItemInteraction itemInteraction = (NPCItemInteraction) otherInteraction;
+				ReactToItemInteraction(itemInteraction._npcReacting.name, itemInteraction._itemName);
+			}
+		}
+	}
 	
 	private void LeftButtonClick(){
 		LeftButtonCallback();
 	}
 	
 	private void RightButtonClick(){
+		EventManager.instance.RiseOnNPCInteractionEvent(new NPCItemInteraction(this.gameObject, player.Inventory.GetItem().name));
 		RightButtonCallback();
 		Debug.Log("Right click");
-		player.EnterState(new IdleState(this));
+		UpdateChatButtons();
 	}
 	
 	public void OpenChat(){
@@ -45,7 +64,31 @@ public abstract class NPC : Character {
 		}
 		
 		chating = true;
-		chatObject.CreateChatBox(this.gameObject, GetWhatToSay());
+		chatObject.CreateChatBox(this.gameObject, player.gameObject, GetWhatToSay());
+	}
+	
+	public void ToggleChat(){
+		if (chating){
+			player.EnterState(new IdleState(player));
+			CloseChat();
+		} else {
+			player.EnterState(new TalkState(player, this));
+			OpenChat();
+		}
+		chating = !chating;
+	}
+	
+	protected void UpdateChat(string newMessage){
+		chatObject.UpdateMessage(newMessage);
+	}
+	
+	protected void UpdateChatButtons(){
+		// TODO change words on buttons
+		if (player.Inventory.HasItem()){
+			chatObject.SetButtonCallbacks(LeftButtonClick, RightButtonClick);
+		} else {
+			chatObject.SetButtonCallbacks(LeftButtonClick);
+		}
 	}
 	
 	public void CloseChat(){
@@ -75,14 +118,5 @@ public abstract class NPC : Character {
 	public void SetInteractions(List<Item> items){
 		itemReactions = items;
 	}
-	#endregion
-	
-	#region item reaction
-	public void ReactTo(GameObject itemToReactTo){
-		DoReaction(itemToReactTo);
-		CloseChat();
-	}
-	
-	protected abstract void DoReaction(GameObject itemToReactTo);
 	#endregion
 }

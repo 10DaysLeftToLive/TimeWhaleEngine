@@ -73,10 +73,10 @@ public static function NewRect(_topLeftXPercentage : float, _topLeftYPercentage 
 public static function NewRect(_topLeftXPercentage : float, _topLeftYPercentage : float, 
 							   _screenWidthPercent : float, _screenHeightPercent : float) : Rect{
 	// Retrieve Values from the screen settings manager
-	var screenWidth : float = ScreenSetup.instance.screenWidth;
-	var screenHeight : float = ScreenSetup.instance.screenHeight;
-	var horizontalBarHeight : float = ScreenSetup.instance.horizontalBarHeight;
-	var verticalBarWidth : float = ScreenSetup.instance.verticalBarWidth;						   
+	var screenWidth : float = ScreenSetup.screenWidth;
+	var screenHeight : float = ScreenSetup.screenHeight;
+	var horizontalBarHeight : float = ScreenSetup.horizontalBarHeight;
+	var verticalBarWidth : float = ScreenSetup.verticalBarWidth;						   
 	
 	// Set the top left point based off of the given percantage
 	var topLeftXPoint = screenWidth * _topLeftXPercentage;

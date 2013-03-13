@@ -9,7 +9,11 @@ using System.Collections;
 
 public class InteractableOnClick : OnClickNextToPlayer {
 	protected override void DoClickNextToPlayer(){
-		//playerCharacter.InteractWithObject(this.gameObject);
+		InteractWithPlayer();
+	}
+	
+	protected virtual void InteractWithPlayer(){
+		player.EnterState(new PickUpItemState(player, this.gameObject));
 	}
 	
 	public void Enable(){

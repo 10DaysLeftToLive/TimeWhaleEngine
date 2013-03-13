@@ -67,7 +67,7 @@ public class AgeTransitionShader : MonoBehaviour {
 	void Update () {
 		if (isFading) {
 			//Moves the FadePlane to the front of the screen.
-			Vector3 cameraPos = camera.transform.position;
+			Vector3 cameraPos = Camera.main.transform.position;
 			transform.position = new Vector3(cameraPos.x, cameraPos.y, cameraPos.z + FadeShaderConstants.FADEPLANEOFFSET);
 			
 			//Color fades in and out.

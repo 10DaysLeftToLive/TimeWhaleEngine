@@ -7,33 +7,15 @@ using System.Collections;
  * 
  */
 
-public class ResolutionSetup : MonoBehaviour {
+public class ResolutionManager {
 	public static float widthShift = 0; // records the width of any side bars added ot the screen.
 	public static float scaleWidth = 1; // record the percentage of the width available after adding side bars
 	public static float heightShift = 0; // records the height of any top bars added ot the screen.
 	public static float scaleHeight = 1; // record the percentage of the height available after adding top bars
 	
-	private static ResolutionSetup rm_instance = null;
-	
-	public static ResolutionSetup instance{
-		get {
-            if (rm_instance == null) {
-                //  FindObjectOfType(...) returns the first ResolutionSetup in the scene.
-                rm_instance =  FindObjectOfType(typeof (ResolutionSetup)) as ResolutionSetup;
-            }
- 
-            // If it is still null, create a new instance
-            if (rm_instance == null) {
-                GameObject obj = new GameObject("ResolutionSetup");
-                rm_instance = obj.AddComponent(typeof (ResolutionSetup)) as ResolutionSetup;
-            }
- 
-            return rm_instance;
-        }
-	}
-	
 	// Use this for initialization
-	public void InitializeResolutionSettings () {
+	public static void InitializeResolutionSettings () {
+		/*
 	    // set the desired aspect ratio (the values in this example are
 	    // hard-coded for 16:9, but you could make them into public
 	    // variables instead so you can set them at design time)
@@ -67,7 +49,7 @@ public class ResolutionSetup : MonoBehaviour {
 	        scaleWidth = 1.0f / scaleHeight;
 			scaleHeight = 1;
 	
-	       /* Rect rect = camera.rect;
+	        Rect rect = camera.rect;
 	
 	        rect.width = scaleWidth;
 	        rect.height = 1.0f;
@@ -76,7 +58,7 @@ public class ResolutionSetup : MonoBehaviour {
 			
 			widthShift = rect.x;
 	
-	        camera.rect = rect;*/
-	    }
+	        camera.rect = rect;
+	    }*/
 	}
 }
