@@ -56,6 +56,15 @@ public class EventManager : ManagerSingleton<EventManager> {
     public void RiseOnClickOnPlayerEvent(){
         if(mOnClickOnPlayerEvent != null)  mOnClickOnPlayerEvent(this);
     }
+	
+	//EVENT: onNPCInteraction
+	public delegate void mOnNPCInteractionDelegate(EventManager EM, NPCInteraction interaction);
+    //Event
+    public event mOnNPCInteractionDelegate mOnNPCInteractionEvent;
+    //Riser
+    public void RiseOnNPCInteractionEvent(NPCInteraction interaction){
+        if(mOnNPCInteractionEvent != null)  mOnNPCInteractionEvent(this, interaction);
+    }
 }
 
 public class ClickPositionArgs : EventArgs {

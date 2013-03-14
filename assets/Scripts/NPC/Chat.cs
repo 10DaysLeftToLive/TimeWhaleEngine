@@ -1,10 +1,9 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Chat : MonoBehaviour {
-	GameObject obj;
-	//GameObject sister;
-	//public Texture test;
+	GameObject npc;
 	public Texture btn1, btn2;
 	Vector3 pos, screenPos;
 	Vector2 size;
@@ -14,70 +13,79 @@ public class Chat : MonoBehaviour {
 	bool isActive;
 	Vector2 offset;
 	
+	private string leftButtonText;
+	private string rightButtonText;
+	
 	public delegate void ButtonClickDelegate();
-	ButtonClickDelegate leftButtonClickDelegate;
+	public delegate void ChoiceButtonClickDelegate(string choice);
+	ChoiceButtonClickDelegate leftButtonClickDelegate;
 	ButtonClickDelegate rightButtonClickDelegate;
 	private bool showLeftButton = false;
 	private bool showRightButton = false;
 	
+	private Vector2 bottomLeftChat;
+	
+	private Rect mainChatRect;
+	private Rect leftButtonRect;
+	private Rect rightButtonRect;
+	
+	private float[] topLeftPositionPercentages;
+	
+	private static float CHATHEIGHTPERCENTAGE = .7f;
+	private static float BUTTONHEIGHTPERCENTAGE = 1-CHATHEIGHTPERCENTAGE;
+	private static float CHATPADDING = .01f; // padding between chat and the screen in all directions
+	
 	// Use this for initialization
 	void Start () {
-		/*sister = GameObject.Find("Sister");
-		CreateChatBox(sister, "I'm a little teapot short and stout, here is my handle and here is my spout.");
-		CreateChatButtons(test, test);*/
-		
-		size.x = 150;
+		size.x = 150; //TODO change based off of screen and zoom size, use screen settings not unity ones
 		size.y = 100;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
 	}
 	
 	void OnGUI () {
 		if (isActive){
-			screenPos = Camera.main.WorldToScreenPoint (obj.transform.position);
-			rect = new Rect(screenPos.x + offset.x/2, Screen.height - screenPos.y - offset.y*.75f, size.x, size.y);
-			GUI.Box (rect, msg);
+			GUI.Box (mainChatRect, msg);
+		
 			if (showLeftButton){
-				rect = new Rect(screenPos.x + offset.x/2, Screen.height - screenPos.y - offset.y*.75f+size.y, size.x/2, size.y/2);
-				if (GUI.Button(rect, "Talk With[Not Implemented]")){
-					leftButtonClickDelegate();
+				if (GUI.Button(leftButtonRect, leftButtonText)){
+					leftButtonClickDelegate("Test");
 				}
 			}
 			if (showRightButton){
-				rect = new Rect(screenPos.x + offset.x/2+size.x/2, Screen.height - screenPos.y - offset.y*.75f+size.y, size.x/2, size.y/2);
-				if (GUI.Button(rect, "Give Item")){
+				if (GUI.Button(rightButtonRect, rightButtonText)){
 					rightButtonClickDelegate();
 				}
 			}
 		}
 	}
 	
-	public void CreateChatBox(GameObject obj, string text){
-		this.obj = obj;
-		msg = text;
-		
-		Vector3 minBounds = Camera.main.WorldToScreenPoint (obj.renderer.bounds.min);
-		Vector3 maxBounds = Camera.main.WorldToScreenPoint (obj.renderer.bounds.max);
-		offset.x = Mathf.Abs(minBounds.x - maxBounds.x);
-		offset.y = Mathf.Abs(minBounds.y - maxBounds.y);
-		
-		if (msg.Length > charPerLine){
-			for (int i = 1; i <= msg.Length/charPerLine; i++){
+	public void UpdateMessage(string newMessage){
+		msg = ParseMessage(newMessage);
+	}
+	
+	private string ParseMessage(string message){
+		if (message.Length > charPerLine){
+			for (int i = 1; i <= message.Length/charPerLine; i++){
 				int index = charPerLine*i;
 				do {
 					--index;
-				}while(msg[index] != ' ');
+				}while(message[index] != ' ');
 
-				msg = msg.Insert(index, "\n");
+				message = message.Insert(index, "\n");
 			}
-			
 		}
+		return (message);
+	}
+	
+	public void CreateChatBox(GameObject npc, GameObject player, string text){
+		this.npc = npc;
+		msg = ParseMessage(text);
 		
-		screenPos = Camera.main.WorldToScreenPoint (obj.transform.position);
-		rect = new Rect(screenPos.x + offset.x/2, Screen.height - screenPos.y - offset.y*.75f, size.x, size.y);
+		bool playerIsToLeft = (Utils.CalcDifference(npc.transform.position.x, player.transform.position.x) >= 0);
+		
+		topLeftPositionPercentages = CalculateRectangles(playerIsToLeft);
+		
+		Debug.Log("topLeftPosPer = " + topLeftPositionPercentages);
+		
 		isActive = true;
 	}
 	
@@ -92,7 +100,7 @@ public class Chat : MonoBehaviour {
 		btn2 = bt2;
 	}
 	
-	private void SetLeftButton(ButtonClickDelegate leftButtonClick){
+	private void SetLeftButton(ChoiceButtonClickDelegate leftButtonClick){
 		leftButtonClickDelegate += leftButtonClick;
 		showLeftButton = true;
 	}
@@ -103,12 +111,83 @@ public class Chat : MonoBehaviour {
 	}
 	
 	// We will have the single constructor set the right button as we will only need the right for items some of the time
-	public void SetButtonCallbacks(ButtonClickDelegate leftButtonClick){
+	public void SetButtonCallbacks(ChoiceButtonClickDelegate leftButtonClick){
+		showRightButton = false;
+		showLeftButton = false;
 		SetLeftButton(leftButtonClick);
 	}
 	
-	public void SetButtonCallbacks(ButtonClickDelegate leftButtonClick, ButtonClickDelegate rightButtonClick){
+	public void SetButtonCallbacks(ChoiceButtonClickDelegate leftButtonClick, ButtonClickDelegate rightButtonClick){
+		showRightButton = false;
+		showLeftButton = false;
 		SetLeftButton(leftButtonClick);
 		SetRightButton(rightButtonClick);
+	}
+	
+	public void SetButtonText(List<Choice> choices){
+		leftButtonText = choices[0]._choiceName;
+	}
+	
+	public void SetButtonText(List<Choice> choices, string itemName){
+		leftButtonText = choices[0]._choiceName;
+		rightButtonText = "Give " + itemName;
+	}
+	
+	// Sets up the buttons and chat to the right sizes and locations relative to the top left given as a percent of screen
+	private void SetUpRectangles(float[] topLeftPercentages, float width){
+		float chatWidth = width;
+		float buttonWidth = chatWidth/2;
+		float totalHeight = 1 - topLeftPercentages[1] - (CHATPADDING * 2);
+		float chatHeight = totalHeight * CHATHEIGHTPERCENTAGE;
+		float buttonHeight = totalHeight * BUTTONHEIGHTPERCENTAGE;
+		
+		mainChatRect = ScreenRectangle.NewRect(topLeftPercentages[0], topLeftPercentages[1], chatWidth, chatHeight);
+		leftButtonRect = ScreenRectangle.NewRect(topLeftPercentages[0], topLeftPercentages[1] + chatHeight, buttonWidth, buttonHeight);
+		rightButtonRect = ScreenRectangle.NewRect(topLeftPercentages[0] + buttonWidth, topLeftPercentages[1] + chatHeight, buttonWidth, buttonHeight);
+	}
+	
+	// Calculate the percentage of the screen that the width of the chat takes
+	private float CalculateRectangleXPercentage(float npcXPos, float npcXOffset){
+		float xPointOnWholeScreen = npcXPos + npcXOffset;
+		float xPointOnBarFilledScreen = xPointOnWholeScreen - ScreenSetup.verticalBarWidth;
+		float widthPercentage = (xPointOnBarFilledScreen) / ScreenSetup.screenWidth;
+		return (widthPercentage);
+	}
+	
+	private float[] CalculateRectangles(bool playerIsLeft){
+		float[] topLeftPositionPercentagesToReturn = new float[2];
+		
+		Vector3 minBounds = Camera.main.WorldToScreenPoint (npc.renderer.bounds.min);
+		Vector3 maxBounds = Camera.main.WorldToScreenPoint (npc.renderer.bounds.max);
+		
+		offset.x = Mathf.Abs(minBounds.x - maxBounds.x);
+		
+		screenPos = Camera.main.WorldToScreenPoint (npc.transform.position);
+		
+		float chatXPer;
+		float width;
+		
+		if (playerIsLeft){
+			chatXPer = CalculateRectangleXPercentage(screenPos.x, offset.x);
+			topLeftPositionPercentagesToReturn[0] = chatXPer;
+			width = 1 - chatXPer - CHATPADDING;
+		} else {
+			chatXPer = CalculateRectangleXPercentage(screenPos.x, -offset.x);
+			topLeftPositionPercentagesToReturn[0] = CHATPADDING;
+			width = chatXPer - CHATPADDING;
+		}
+		Debug.Log("left width = " + CalculateRectangleXPercentage(screenPos.x, -offset.x));
+		Debug.Log("right width = " + CalculateRectangleXPercentage(screenPos.x, offset.x));
+		
+		
+		Debug.Log("width = " + width);
+		
+		topLeftPositionPercentagesToReturn[1] = CHATPADDING; // top y is same no matter what side
+		
+		Debug.Log("topLeftPositionPercentagesToReturn = " + topLeftPositionPercentagesToReturn);
+		
+		SetUpRectangles(topLeftPositionPercentagesToReturn, width);
+		
+		return(topLeftPositionPercentagesToReturn);
 	}
 }

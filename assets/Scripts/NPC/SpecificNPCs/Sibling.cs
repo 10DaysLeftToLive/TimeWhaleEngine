@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class PaperBoy : NPC {
+public class Sister : NPC {
 	protected override void ReactToItemInteraction(string npc, string item){
 		Debug.Log(name + " is reacting to " + npc + " getting " + item);
 	}
@@ -41,8 +41,9 @@ public class PaperBoy : NPC {
 		if (itemToReactTo != null){
 			Debug.Log(name + " is reacting to: " + itemToReactTo.name);
 			switch (itemToReactTo.tag){
-				case "GoldenGear":
-					UpdateDisposition(10);
+				case "Plushie":
+					break;
+				case "Frisbee":
 					break;
 				default:
 					break;

@@ -22,7 +22,7 @@ public static class Utils{
 		if (Utils.CalcDifference(start.x, whereToMove.x) < 0) { // if the target is to the right
 			whereToMove.x = whereToMove.x - objectToMoveInfront.transform.localScale.x/2 - SPACEINFRONT;
 		} else {
-			whereToMove.x = whereToMove.x - objectToMoveInfront.transform.localScale.x/2 + SPACEINFRONT;
+			whereToMove.x = whereToMove.x + objectToMoveInfront.transform.localScale.x/2 + SPACEINFRONT;
 		}
 		Debug.Log("where to move = " + whereToMove);
 		

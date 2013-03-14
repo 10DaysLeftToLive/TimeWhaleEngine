@@ -12,7 +12,7 @@ using System.Collections;
  * 		-horizontalBarHeight
  */
 
-public class ScreenSetup : MonoBehaviour {
+public class ScreenSetup {
 	// the altered screen width and height according to changes with the resolution
 	public static float screenWidth = Screen.width;
 	public static float screenHeight = Screen.height;
@@ -20,30 +20,10 @@ public class ScreenSetup : MonoBehaviour {
 	// the size of each bar that may or may not have been added to accout for a different resolution
 	public static float verticalBarWidth = 0;
 	public static float horizontalBarHeight = 0;
-
-	private static ScreenSetup ssm_instance = null;
-	
-	public static ScreenSetup instance{
-		get {
-            if (ssm_instance == null) {
-                //  FindObjectOfType(...) returns the first ScreenSetup object in the scene.
-                ssm_instance =  FindObjectOfType(typeof (ScreenSetup)) as ScreenSetup;
-            }
- 
-            // If it is still null, create a new instance
-            if (ssm_instance == null) {
-                GameObject obj = new GameObject("ScreenSetup");
-                ssm_instance = obj.AddComponent(typeof (ScreenSetup)) as ScreenSetup;
-                Debug.Log("Could not locate an ScreenSetup object. ScreenSetup was Generated Automaticly.");
-            }
- 
-            return ssm_instance;
-        }
-	}
 	
 	// will call all apropriate functions to dynamically calculate the screen settings
 	public static void CalculateSettings(){
-		ResolutionSetup.instance.InitializeResolutionSettings();
+		ResolutionManager.InitializeResolutionSettings();
 		
 		CalulateScreenDimensions();
 		CalculateBarSizes();
@@ -51,12 +31,12 @@ public class ScreenSetup : MonoBehaviour {
 	
 	// will calulate the screen's width and height with respect to resolution changes
 	private static void CalulateScreenDimensions(){
-		screenWidth = Screen.width * ResolutionSetup.scaleWidth;
-		screenHeight = Screen.height * ResolutionSetup.scaleHeight;
+		screenWidth = Screen.width * ResolutionManager.scaleWidth;
+		screenHeight = Screen.height * ResolutionManager.scaleHeight;
 	}
 	
 	private static void CalculateBarSizes(){
-		verticalBarWidth = Screen.width * ResolutionSetup.widthShift;
-		horizontalBarHeight = Screen.height * ResolutionSetup.heightShift;
+		verticalBarWidth = Screen.width * ResolutionManager.widthShift;
+		horizontalBarHeight = Screen.height * ResolutionManager.heightShift;
 	}
 }

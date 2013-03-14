@@ -74,7 +74,7 @@ public class TouchInput : InputType {
 		                        // as a move or it is lifted, which is also a tap. 
 		                        if (Time.time > firstTouchTime + minimumTimeUntilMove || 
 		                            touch.phase == TouchPhase.Ended){
-		                            SingleClickEvent(deltaSinceDown);
+		                            SingleClickEvent(touch.position);
 		                            currentState = ControlState.WaitingForNoInput;
 		                            break;
 		                        } else if (DragMovementDetected(deltaSinceDown)){ // else if the single touch has moved more than the minimum amount we take it to be a drag

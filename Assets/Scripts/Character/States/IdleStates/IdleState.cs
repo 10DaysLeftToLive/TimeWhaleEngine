@@ -9,6 +9,7 @@ public class IdleState : AbstractState {
 	
 	public override void OnEnter(){
 		Debug.Log(character.name + ": IdleState Enter");
+		//character.PlayAnimation("Idle");
 	}
 	
 	public override void OnExit(){
