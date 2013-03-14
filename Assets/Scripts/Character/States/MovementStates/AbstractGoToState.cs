@@ -10,8 +10,9 @@ public abstract class AbstractGoToState : GoToState {
 	protected Character character; // The character that is in this state
 	protected float speed = 5f;
 	
-	public AbstractGoToState(Character toControl){
+	public AbstractGoToState(Character toControl, string animation){
 		character = toControl;
+		character.PlayAnimation(animation);
 	}
 	
 	public void Move(Vector3 moveDelta){
