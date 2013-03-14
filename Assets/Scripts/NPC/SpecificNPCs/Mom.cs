@@ -8,15 +8,6 @@ public class Mom : NPC {
 		base.Init();
 		animationData = GetComponent<SmoothMoves.BoneAnimation>();
 	}
-	
-	protected override void ReactToItemInteraction(string npc, string item){
-		Debug.Log(name + " is reacting to " + npc + " getting " + item);
-	}
-	
-	protected override void ReactToChoiceInteraction(string npc, string choice){
-		Debug.Log(name + " is reacting to player making choice " + choice + " with " + npc);
-	}
-	
 	protected override EmotionState GetInitEmotionState(){
 		EmotionState warningState = new EmotionState("Stay safe and remember, don't go into the forest!");
 		return (warningState);
@@ -77,3 +68,4 @@ public class Mom : NPC {
 		}
 	}
 }
+
