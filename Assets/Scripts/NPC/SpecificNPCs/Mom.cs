@@ -4,6 +4,11 @@ using System.Collections;
 public class Mom : NPC {
 	string whatToSay;
 	
+	protected override void Init() {
+		base.Init();
+		animationData = GetComponent<SmoothMoves.BoneAnimation>();
+	}
+	
 	protected override void ReactToItemInteraction(string npc, string item){
 		Debug.Log(name + " is reacting to " + npc + " getting " + item);
 	}

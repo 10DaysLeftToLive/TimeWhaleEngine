@@ -14,7 +14,6 @@ public class Player : Character {
 		pos.z = this.transform.position.z;
 		
 		Debug.Log("Click on no object  at point " + pos);
-		Debug.Log (animationData);
 		// Will need to be changed with later refactoring
 		if (currentState.GetType() == typeof(IdleState) || currentState.GetType() == typeof(ClimbIdleState)){ // if we are idled or climbing idled
 			EnterState(new MoveState(this, pos)); // move normaly

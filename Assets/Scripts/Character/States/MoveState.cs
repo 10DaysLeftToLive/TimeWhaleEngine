@@ -73,6 +73,7 @@ public class MoveState : AbstractState {
 		
 		if (CalculatePath()){
 			currentGoal = _pathFollowing.GetPoint();
+			Debug.Log (currentMovementState);
 			currentMovementState = GetGoToStateToPoint(currentGoal);
 		} else {
 			OnNoPath();
