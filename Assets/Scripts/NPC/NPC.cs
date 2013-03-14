@@ -29,8 +29,6 @@ public abstract class NPC : Character {
 	}
 	
 	// ONLY PUT SPECIFIC NPC THINGS IN THESE IN THE CHILDREN
-	protected abstract void ReactToItemInteraction(string npc, string item);
-	protected abstract void ReactToChoiceInteraction(string npc, string choice);
 	protected abstract void LeftButtonCallback(string choice);
 	protected abstract void RightButtonCallback();
 	protected abstract void DoReaction(GameObject itemToReactTo);
@@ -39,14 +37,15 @@ public abstract class NPC : Character {
 	
 	private void ReactToInteractionEvent(EventManager EM, NPCInteraction otherInteraction){
 		Debug.Log(name + " is reacting to event with " + otherInteraction._npcReacting.name);
-		if (otherInteraction._npcReacting.name != this.gameObject.name){ // make sure we don't interact to our own interaction
-			if (otherInteraction.GetType().Equals(typeof(NPCChoiceInteraction))){
-				NPCChoiceInteraction choiceInteraction = (NPCChoiceInteraction) otherInteraction;
-				ReactToChoiceInteraction(choiceInteraction._npcReacting.name, choiceInteraction._choice);
-			} else {
-				NPCItemInteraction itemInteraction = (NPCItemInteraction) otherInteraction;
-				ReactToItemInteraction(itemInteraction._npcReacting.name, itemInteraction._itemName);
-			}
+		if (otherInteraction.GetType().Equals(typeof(NPCChoiceInteraction))){
+			NPCChoiceInteraction choiceInteraction = (NPCChoiceInteraction) otherInteraction;
+			currentEmotion.ReactToChoiceInteraction(choiceInteraction._npcReacting.name, choiceInteraction._choice);
+		} else if (otherInteraction.GetType().Equals(typeof(NPCItemInteraction))) {
+			NPCItemInteraction itemInteraction = (NPCItemInteraction) otherInteraction;
+			currentEmotion.ReactToItemInteraction(itemInteraction._npcReacting.name, itemInteraction._itemName);
+		} else if (otherInteraction.GetType().Equals(typeof(NPCEnviromentInteraction))) {
+			NPCEnviromentInteraction enviromentInteraction = (NPCEnviromentInteraction) otherInteraction;
+			currentEmotion.ReactToItemInteraction(enviromentInteraction._npcReacting.name, enviromentInteraction._enviromentAction);			
 		}
 	}
 	
