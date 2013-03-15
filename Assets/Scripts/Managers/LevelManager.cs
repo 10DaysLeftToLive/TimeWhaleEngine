@@ -122,7 +122,7 @@ public class LevelManager : MonoBehaviour {
 		else if(Input.GetButtonDown(Strings.ButtonAgeShiftUp) &&
 			CanAgeTransition(Strings.ButtonAgeShiftUp)) {
 				fadeShader.DoFade(Strings.ButtonAgeShiftUp);
-		} 
+		}
 	}
 	
 	
@@ -156,7 +156,7 @@ public class LevelManager : MonoBehaviour {
 		}
 	}
 	
-	private bool CanAgeTransition(string buttonName) {
+	public bool CanAgeTransition(string buttonName) {
 		if (CharacterAgeManager.GetCurrentAgeState() != CharacterAgeState.OLD 
 			&& Strings.ButtonAgeShiftUp.Equals(buttonName)) {
 			if (playerCharacter.CheckTransitionPositionSuccess(CharacterAgeManager.GetAgeTransitionUp(),

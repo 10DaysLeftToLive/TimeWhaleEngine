@@ -48,4 +48,5 @@ public static class Strings{
 	public static string YoungAge = "YoungAge";
 	public static string MiddleAge = "MiddleAge";
 	public static string OldAge = "OldAge";
+	
 }

@@ -45,7 +45,8 @@ public abstract class InputType  {
 	
 	#region InputEvents
 	// ------------ These functions will be called when the given event occurs, put any code to be perform on the event in here 
-	protected void DragEvent(Vector2 inputChangeSinceLastTick){
+	protected virtual void DragEvent(Vector2 inputChangeSinceLastTick){
+		
 	}
 	
 	// called when a click/tap occurs
