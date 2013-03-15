@@ -50,12 +50,7 @@ public abstract class NPC : Character {
 	}
 	
 	private List<Choice> GetChoices(){
-		List<Choice> choices = new List<Choice>();//currentEmotion.GetChoices();
-		choices.Add(new Choice("Talk With", "This is a reaction for taling with."));
-		choices.Add(new Choice("Talk to", "This is a reaction for talking to."));
-		choices.Add(new Choice("Interact With", "This is a reaction for interacting with."));
-		
-		return(choices);
+		return(currentEmotion.GetChoices());
 	}
 	
 	protected string GetWhatToSay(){

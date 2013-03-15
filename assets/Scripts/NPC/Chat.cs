@@ -62,18 +62,17 @@ public class Chat : MonoBehaviour {
 			
 			if (_choices.Count >= 1){
 				if (GUI.Button(button1Rect, _choices[0]._choiceName)){
-					leftButtonClickDelegate(_choices[0]._choiceName);
-					
+					ClickChoice(_choices[0]);
 				}
 			}
 			if (_choices.Count >= 2){
 				if (GUI.Button(button2Rect, _choices[1]._choiceName)){
-					leftButtonClickDelegate(_choices[1]._choiceName);
+					ClickChoice(_choices[1]);
 				}
 			}
 			if (_choices.Count >= 3){
 				if (GUI.Button(button3Rect, _choices[2]._choiceName)){
-					leftButtonClickDelegate(_choices[2]._choiceName);
+					ClickChoice(_choices[2]);
 				}
 			}
 			if (showRightButton && GUI.Button(buttonGiveRect, "Give")){
@@ -158,8 +157,17 @@ public class Chat : MonoBehaviour {
 		SetRightButton(rightButtonClick);
 	}
 	
+	private void ClickChoice(Choice choice){
+		leftButtonClickDelegate(choice._choiceName);
+		UpdateMessage(choice._reactionDialog);
+	}
+	
 	public void SetGrabText(string itemName){
 		
+	}
+	
+	public void UpdateChoices(List<Choice> choices){
+		_choices = choices;
 	}
 	
 	private void SetChatRectangles(){

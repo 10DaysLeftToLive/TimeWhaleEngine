@@ -9,8 +9,7 @@ public class Mom : NPC {
 		animationData = GetComponent<SmoothMoves.BoneAnimation>();
 	}
 	protected override EmotionState GetInitEmotionState(){
-		EmotionState warningState = new EmotionState("Stay safe and remember, don't go into the forest!");
-		return (warningState);
+		return (new MomIntroEmotionState());
 	}
 	
 	protected override Schedule GetSchedule(){
@@ -35,7 +34,6 @@ public class Mom : NPC {
 		
 		*/
 		Task standAround = new Task(new IdleState(this));
-		
 		
 		schedule.Add(standAround);
 		
@@ -68,6 +66,23 @@ public class Mom : NPC {
 					break;
 			}
 			player.Inventory.DisableHeldItem();
+		}
+	}
+	
+	public class MomIntroEmotionState : EmotionState{
+		public MomIntroEmotionState() : base("Stay safe and remember, don't go into the forest!"){
+		}
+		
+		public override void ReactToItemInteraction(string npc, string item){
+			
+		}
+		
+		public override void ReactToChoiceInteraction(string npc, string choice){
+			
+		}
+		
+		public override void ReactToEnviromentInteraction(string npc, string enviromentAction){
+			
 		}
 	}
 }
