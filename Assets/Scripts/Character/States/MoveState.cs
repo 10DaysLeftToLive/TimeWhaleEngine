@@ -73,7 +73,6 @@ public class MoveState : AbstractState {
 		
 		if (CalculatePath()){
 			currentGoal = _pathFollowing.GetPoint();
-			Debug.Log (currentMovementState);
 			currentMovementState = GetGoToStateToPoint(currentGoal);
 		} else {
 			OnNoPath();
@@ -85,7 +84,6 @@ public class MoveState : AbstractState {
 	}
 	
 	private void Move(Vector3 moveDelta){
-		Debug.Log (currentMovementState);
 		currentMovementState.Move(moveDelta);
 	}
 	

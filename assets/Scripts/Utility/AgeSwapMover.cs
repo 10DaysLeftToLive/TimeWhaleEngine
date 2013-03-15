@@ -6,9 +6,9 @@ public class AgeSwapMover : ManagerSingleton<AgeSwapMover> {
 
 	private float growableCheckDistance = 7.0f;
 
-	private PlayerController playerCharacter;
+	private Player playerCharacter;
 
-	public void SetPlayer(PlayerController _playerCharacter) { 
+	public void SetPlayer(Player _playerCharacter) { 
 		playerCharacter = _playerCharacter;
 	}
 
