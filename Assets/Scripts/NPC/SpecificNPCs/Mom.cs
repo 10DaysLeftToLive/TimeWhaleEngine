@@ -9,14 +9,13 @@ public class Mom : NPC {
 		animationData = GetComponent<SmoothMoves.BoneAnimation>();
 	}
 	protected override EmotionState GetInitEmotionState(){
-		EmotionState warningState = new EmotionState("Stay safe and remember, don't go into the forest!");
-		return (warningState);
+		return (new MomIntroEmotionState());
 	}
 	
 	protected override Schedule GetSchedule(){
 		Schedule schedule = new Schedule(this);
 		
-		// Note this is hard coded. This is an example of how scheduling works now
+		/* Note this is hard coded. This is an example of how scheduling works now
 		Vector3 currentPos = transform.position;
 		
 		currentPos.x = currentPos.x - 5;
@@ -29,18 +28,20 @@ public class Mom : NPC {
 		
 		Task walkRight = new Task(new MoveThenDoState(this, currentPos, new MarkTaskDone(this)));
 		
-		Task standAround = new Task(new IdleState(this));
-		
 		schedule.Add(standAroundForBit);
 		schedule.Add(walkLeft);
 		schedule.Add(walkRight);
+		
+		*/
+		Task standAround = new Task(new IdleState(this));
+		
 		schedule.Add(standAround);
 		
 		return (schedule);
 	}
 	
 	protected override void LeftButtonCallback(string choice){
-		Debug.Log(this.name + " left callback");
+		Debug.Log(this.name + " left callback for choice " + choice);
 		// TODO? this is for a chat dialoge
 		EventManager.instance.RiseOnNPCInteractionEvent(new NPCChoiceInteraction(this.gameObject, "Default"));
 	}
@@ -65,6 +66,23 @@ public class Mom : NPC {
 					break;
 			}
 			player.Inventory.DisableHeldItem();
+		}
+	}
+	
+	public class MomIntroEmotionState : EmotionState{
+		public MomIntroEmotionState() : base("Stay safe and remember, don't go into the forest!"){
+		}
+		
+		public override void ReactToItemInteraction(string npc, string item){
+			
+		}
+		
+		public override void ReactToChoiceInteraction(string npc, string choice){
+			
+		}
+		
+		public override void ReactToEnviromentInteraction(string npc, string enviromentAction){
+			
 		}
 	}
 }

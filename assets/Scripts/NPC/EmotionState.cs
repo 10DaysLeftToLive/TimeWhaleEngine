@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class EmotionState {
 	string _textToSay;
-	List<Choice> _choices;
-	List<string> _acceptableItems;
+	protected List<Choice> _choices;
+	protected List<string> _acceptableItems;
 	
 	public List<Choice> ChoiceOptions{
 		get {return _choices;}
@@ -13,6 +13,8 @@ public class EmotionState {
 	
 	public EmotionState(string textToSay){
 		_textToSay = textToSay;
+		_choices = new List<Choice>();
+		_acceptableItems = new List<string>();
 	}
 	
 	public EmotionState(string textToSay, List<Choice> choices, List<string> acceptableItems) {
@@ -27,6 +29,10 @@ public class EmotionState {
 	
 	public List<Choice> GetChoices(){
 		return (_choices);
+	}
+	
+	public void AddChoice(Choice newChoice){
+		_choices.Add(newChoice);
 	}
 	
 	public bool ItemHasReaction(string itemName){

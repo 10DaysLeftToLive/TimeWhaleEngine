@@ -50,10 +50,7 @@ public abstract class NPC : Character {
 	}
 	
 	private List<Choice> GetChoices(){
-		List<Choice> choices = new List<Choice>();//currentEmotion.GetChoices();
-		choices.Add(new Choice("Talk With", "This is a reaction."));
-		
-		return(choices);
+		return(currentEmotion.GetChoices());
 	}
 	
 	protected string GetWhatToSay(){
@@ -75,14 +72,13 @@ public abstract class NPC : Character {
 		Debug.Log("Player does " + (player.Inventory.HasItem() ? "" : "not") + "have an item");
 		if (player.Inventory.HasItem()){
 			chatObject.SetButtonCallbacks(LeftButtonClick, RightButtonClick);
-			chatObject.SetButtonText(GetChoices(), player.Inventory.GetItem().name);
+			chatObject.SetGrabText(player.Inventory.GetItem().name);
 		} else {
 			chatObject.SetButtonCallbacks(LeftButtonClick);
-			chatObject.SetButtonText(GetChoices());
 		}
 		
 		chating = true;
-		chatObject.CreateChatBox(this.gameObject, player.gameObject, GetWhatToSay());
+		chatObject.CreateChatBox(GetChoices(), GetWhatToSay());
 	}
 	
 	public void ToggleChat(){
