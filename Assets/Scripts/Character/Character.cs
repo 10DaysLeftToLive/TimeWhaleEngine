@@ -15,8 +15,9 @@ public abstract class Character : PauseObject {
 	
 	#region Fields
 	protected State currentState;
-	private Inventory invenory;
+	private Inventory inventory;
 	private GrabableObject attachedObject = null;
+	
 	public BoneAnimation animationData;
 	#endregion
 	
@@ -25,13 +26,13 @@ public abstract class Character : PauseObject {
 	}
 	
 	public Inventory Inventory{
-		get { return invenory; }
+		get { return inventory; }
 	}
 	
 	void Start () {
 		currentState = new IdleState(this);
 		EnterState(new IdleState(this));
-		invenory = new Inventory(this.transform);// should give the right hand of the bone animation
+		inventory = new Inventory(this.transform);// should give the right hand of the bone animation
 		Init();
 	}
 	
@@ -50,10 +51,12 @@ public abstract class Character : PauseObject {
 	}
 	
 	public void LookRight(){
+		Debug.Log ("Look Right");
 		this.transform.localScale = new Vector3(RIGHT, 1, 1);
 	}
 	
 	public void LookLeft(){
+		Debug.Log ("Look Left");
 		this.transform.localScale = new Vector3(LEFT, 1, 1);
 	}
 	

@@ -19,12 +19,12 @@ public class CameraController : MonoBehaviour {
 	static private float zOffsetRelativeToPlayer = - 10;
 	
 	static private Camera thisCamera;
-	static private PlayerController player;
+	static private Player player;
 	#endregion
 	
 	public void Start () {
 		thisCamera = Camera.main;
-		player = FindObjectOfType(typeof(PlayerController)) as PlayerController;
+		player = FindObjectOfType(typeof(Player)) as Player;
 	}
 	
 	void Update () {

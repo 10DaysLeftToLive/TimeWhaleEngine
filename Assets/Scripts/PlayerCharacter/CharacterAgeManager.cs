@@ -3,11 +3,11 @@ using System.Collections;
 using SmoothMoves;
 
 public class CharacterAgeManager {
-	private static PlayerController playerCharacter;
+	private static Player playerCharacter;
 	private static CharacterAge[] characterAges = new CharacterAge[3];
 	private static CharacterAgeState currentAge;
 	
-	public static void SetPlayer (PlayerController _playerCharacter) {
+	public static void SetPlayer (Player _playerCharacter) {
 		playerCharacter = _playerCharacter;	
 		currentAge = CharacterAgeState.YOUNG;
 	}

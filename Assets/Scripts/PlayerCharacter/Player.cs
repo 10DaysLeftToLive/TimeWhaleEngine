@@ -1,11 +1,39 @@
 using UnityEngine;
 using System.Collections;
+using SmoothMoves;
 
+[RequireComponent(typeof(CharacterController))]
 public class Player : Character {
+	
+	public float walkSpeed = 2.0f;
+	public float gravity = 20.0f;
+	public float pushPower = 2.0f;
+	
+	public CollisionFlags lastReturnedCollisionFlags;
+	private GameObject pickedUpObject = null;
+	
+	public bool isAffectedByGravity = true;
+	
+	public bool isTouchingGrowableUp = false;
+	
+	public Capsule smallHitBox;
+	public Capsule bigHitbox;
+	
+	public GameObject CurrentTouchedGrowableUp{
+		get{return currentTouchedGrowableUp;}
+	}
+	private GameObject currentTouchedGrowableUp;
+	
+	public bool isTouchingTrigger = false;
+	
+	public float currentVerticalSpeed = 0.0f;
+	
+	// Use this for initialization
 	protected override void Init(){
 		EventManager.instance.mOnClickOnObjectAwayFromPlayerEvent += new EventManager.mOnClickOnObjectAwayFromPlayerDelegate (OnClickToInteract);
 		EventManager.instance.mOnClickNoObjectEvent += new EventManager.mOnClickedNoObjectDelegate (OnClickToMove);
 		EventManager.instance.mOnClickOnPlayerEvent += new EventManager.mOnClickOnPlayerDelegate (OnClickOnPlayer);
+		AgeSwapMover.instance.SetPlayer(this);
 	}
 	
 	// We want to be able to switch to move at any state when the player clicks
@@ -62,5 +90,152 @@ public class Player : Character {
 				Inventory.DropItem(GetFeet());
 			}
 		}
+	}
+	
+	// Update is called once per frame
+	protected override void UpdateObject () {		
+		if(isAffectedByGravity){
+			ApplyGravity();
+		}
+		base.UpdateObject();
+	}
+	
+	public void OnTriggerEnter(Collider trigger) {		
+		isTouchingTrigger = CheckTriggers(trigger);
+	}
+	
+	public void OnTriggerStay(Collider trigger){
+		isTouchingTrigger = CheckTriggers(trigger);
+	}
+	
+	protected bool CheckTriggers(Collider trigger){
+		if(IsClimbable(trigger)){
+			isAffectedByGravity = false;
+			//animationData.Play(Strings.animation_climb);
+
+            if(SoundManager.instance.ClimbLadderSFX.timeSamples == 0){
+                SoundManager.instance.ClimbLadderSFX.Play();
+            }
+			return true;
+		}
+		else if(trigger.tag == Strings.tag_GrowableUp){
+			SetTouchingGrowableUp(true, trigger.gameObject);	
+			return true;
+		}
+		return false;
+	}
+	
+	public void OnTriggerExit(Collider trigger){
+		if(IsClimbable(trigger)){
+			isAffectedByGravity = true;
+		}
+		else if(trigger.tag == Strings.tag_GrowableUp){
+			isTouchingGrowableUp = false;	
+		}
+		
+		isTouchingTrigger = false;
+	}
+	
+	private bool IsClimbable(Collider trigger){
+		return ((trigger.CompareTag(Strings.tag_Climbable) || trigger.CompareTag(Strings.tag_LadderTop)) && trigger.renderer.enabled);
+	}
+	
+	protected void OnControllerColliderHit(ControllerColliderHit hit){
+		if(hit.transform.tag == Strings.tag_Pushable && hit.transform.renderer.enabled == true){
+			PushPushableObject(hit);
+		}
+	}
+	
+	protected void PushPushableObject(ControllerColliderHit pushableObject){
+		//NOTE THIS IS POOR PUSHABLE CODE!
+		if(CharacterAgeManager.GetCurrentAgeState() == CharacterAgeState.MIDDLE){
+		    Rigidbody body = pushableObject.collider.attachedRigidbody;
+		
+		    // no rigidbody
+		    if (body == null || body.isKinematic) { return; }
+		
+		    // We dont want to push objects below us
+		    if (pushableObject.moveDirection.y < -0.3) { return; }
+			
+		    Vector3 pushDir = new Vector3 (pushableObject.moveDirection.x, 0, 0); //Can only push along x-axis
+		
+		    body.velocity = pushDir * pushPower;
+		}
+	}
+
+	protected void ApplyGravity(){
+		if (IsGrounded ()){
+			currentVerticalSpeed = 0.0f;
+		}
+		else{
+			currentVerticalSpeed -= gravity * Time.deltaTime;	
+		}
+	}
+	
+	public bool IsGrounded () {
+		return (lastReturnedCollisionFlags & CollisionFlags.CollidedBelow) != 0;
+	}
+	
+	void SetTouchingGrowableUp(bool flag, GameObject growableUpTransform){
+		isTouchingGrowableUp = flag;
+		currentTouchedGrowableUp = growableUpTransform;
+	}
+	
+	public void ChangeAge(CharacterAge newAge, CharacterAge previousAge){
+
+		AgeSwapMover.instance.ChangeAgePosition(newAge, previousAge);
+
+		ChangeHitBox(newAge, previousAge);
+		ChangeAnimation(newAge.boneAnimation);
+		SwapItemWithCurrentAge();
+		
+		isAffectedByGravity = true;
+	}
+	
+	private void ChangeHitBox(CharacterAge newAge, CharacterAge previousAge){
+		CharacterController charControl = GetComponent<CharacterController>();	
+		charControl.radius = newAge.capsule.radius;
+		charControl.height = newAge.capsule.height;
+		charControl.center = newAge.capsule.center;
+		
+		if(previousAge.stateName == CharacterAgeState.YOUNG){
+			if(newAge.stateName == CharacterAgeState.MIDDLE || newAge.stateName == CharacterAgeState.OLD){
+				transform.position = new Vector3(transform.position.x, transform.position.y + newAge.capsule.height/2, + transform.position.z);
+			}
+		}
+	}
+	
+	public void PickUpObject(GameObject toPickUp){
+		Inventory.PickUpObject(toPickUp);
+	}
+	
+	protected void SwapItemWithCurrentAge() {
+		if (pickedUpObject != null) {
+			Vector3 oldScale = pickedUpObject.transform.localScale;
+			pickedUpObject.transform.parent = null;
+			Transform rightHand = animationData.GetSpriteTransform("Right Hand");
+			pickedUpObject.SetActiveRecursively(true);
+			pickedUpObject.transform.position = rightHand.position;
+			pickedUpObject.transform.parent = rightHand;
+			pickedUpObject.transform.localScale = oldScale;
+			Debug.Log("Carrying item with us through age: " + pickedUpObject);
+		}
+	}
+	
+	public void DisableHeldItem(){
+		Inventory.DisableHeldItem();
+	}
+	
+	public bool CheckTransitionPositionSuccess(CharacterAge newAge, CharacterAge previousAge){
+		return AgeSwapMover.instance.CheckTransitionPositionSuccess(newAge, previousAge);
+	}
+	
+	public void ChangeAnimation(BoneAnimation newAnimation){
+		if (animationData != null){
+			animationData.gameObject.SetActiveRecursively(false);
+		}
+		
+		animationData = newAnimation;
+		animationData.gameObject.SetActiveRecursively(true);
 	}
 }

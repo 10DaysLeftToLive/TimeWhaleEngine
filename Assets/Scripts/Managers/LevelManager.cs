@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class LevelManager : MonoBehaviour {
-	public PlayerController playerCharacter;
+	public Player playerCharacter;
 	public AgeTransitionShader fadeShader;
 	
 	public TimeSwitchObject[] timeSwitchObjects;
@@ -33,7 +33,7 @@ public class LevelManager : MonoBehaviour {
 	private string levelInteractionFile;
 	
 	void Awake(){
-		if(playerCharacter == null){
+		if(playerCharacter == null) {
 			Debug.LogWarning("Warning: No PlayerCharacter attached to LevelManager");
 		}
 		
@@ -64,7 +64,7 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	private IEnumerator Init(){		
-		playerCharacter.gravity = 0; // The player will fall through the unloaded floor if gravit exsists at the start
+		playerCharacter.gravity = 0; // The player will fall through the unloaded floor if gravity exsists at the start
 		
 		StartCoroutine(levelLoader.Load("LevelYoung", "LevelMiddle", "LevelOld"));
 		while (!levelLoader.HasLoaded()){ // wait untill the outside scenes have been loaded in.
