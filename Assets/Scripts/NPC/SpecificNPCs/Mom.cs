@@ -43,7 +43,7 @@ public class Mom : NPC {
 	}
 	
 	protected override void LeftButtonCallback(string choice){
-		Debug.Log(this.name + " left callback");
+		Debug.Log(this.name + " left callback for choice " + choice);
 		// TODO? this is for a chat dialoge
 		EventManager.instance.RiseOnNPCInteractionEvent(new NPCChoiceInteraction(this.gameObject, "Default"));
 	}
