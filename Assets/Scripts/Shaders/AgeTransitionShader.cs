@@ -15,7 +15,7 @@ public class AgeTransitionShader : MonoBehaviour {
 	//Location of the FadePlane if it is not fading
 	public Vector2 idlePosition; 
 	
-	public int dragAmount;
+	private CameraController camera;
 	
 	//A flag that determines if our plane is fading in/out in front of the camera.
 	//NOTE:Will get rid of this only temporary until we optimize.
@@ -34,46 +34,8 @@ public class AgeTransitionShader : MonoBehaviour {
 		
 	}
 	
-	private class AgeTransitionTouchSensor : TouchInput {
-		private AgeTransitionShader owner;
-		
-		//Will get rid of this if Jared lets me refactor LevelManager a tiny bit.
-		private LevelManager levelManager;
-		
-		public AgeTransitionTouchSensor(AgeTransitionShader owner) : base() {
-			this.owner = owner;
-			levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
-		}
-		
-		protected override void DragEvent(Vector2 inputChangeSinceLastTick){
-			if (inputChangeSinceLastTick.magnitude > owner.dragAmount 
-				&& levelManager.CanAgeTransition(Strings.ButtonAgeShiftUp)) {
-				if (inputChangeSinceLastTick.y > 0) {
-					owner.DoFade(Strings.ButtonAgeShiftUp);
-				}
-				else if (inputChangeSinceLastTick.y < 0 
-					&& levelManager.CanAgeTransition(Strings.ButtonAgeShiftDown)) {
-					owner.DoFade (Strings.ButtonAgeShiftDown);
-				}
-			}
-		}
-		
-		/// <summary>
-		/// ShiftAge:
-		/// Shifts the player character's age up or down based on 
-		/// what the player used to trigger the fade.
-		/// </summary>
-		public void ShiftAge(string ageShiftAction) {
-			if (ageShiftAction.Equals(Strings.ButtonAgeShiftDown)) {
-				levelManager.ShiftDownAge();
-			}
-			else {
-				levelManager.ShiftUpAge();
-			}
-		}
-	}
-	
-	private AgeTransitionTouchSensor dragSensor;
+	//Will get rid of this if Jared lets me refactor LevelManager a tiny bit.
+	private LevelManager levelManager;
 	
 	//Denotes the steps sizes for the fade.
 	private int fadeCycle = 0;
@@ -91,7 +53,8 @@ public class AgeTransitionShader : MonoBehaviour {
 	/// moves the FadePlane offscreen.
 	/// </summary>
 	void Start () {
-		dragSensor = new AgeTransitionTouchSensor(this);
+		levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+		camera = Camera.main.GetComponent<CameraController>();
 		renderer.material.color = Color.clear;
 		transform.position = new Vector3(idlePosition.x, idlePosition.y, FadeShaderConstants.HIDE_Z_LOC);
 	}
@@ -105,7 +68,7 @@ public class AgeTransitionShader : MonoBehaviour {
 	void Update () {
 		if (isFading) {
 			//Moves the FadePlane to the front of the screen.
-			Vector3 cameraPos = dragSensor.camera.transform.position;
+			Vector3 cameraPos = camera.transform.position;
 			transform.position = new Vector3(cameraPos.x, cameraPos.y, cameraPos.z + FadeShaderConstants.FADEPLANEOFFSET);
 			
 			//Color fades in and out.
@@ -171,7 +134,7 @@ public class AgeTransitionShader : MonoBehaviour {
 			//We shift the age after the fade in is done.
 			//This way the change in age is completely hidden by the fade.
 			if (fadeCycle == 1) {
-				dragSensor.ShiftAge(ageShiftAction);
+				ShiftAge(ageShiftAction);
 			}
 		}
 	}
@@ -214,6 +177,15 @@ public class AgeTransitionShader : MonoBehaviour {
 		
 		//For optimization later
 		//UpdateManager.RemoveUpdate(FadeUpdate);
+	}
+	
+	public void ShiftAge(string ageShiftAction) {
+			if (ageShiftAction.Equals(Strings.ButtonAgeShiftDown)) {
+				levelManager.ShiftDownAge();
+			}
+			else {
+				levelManager.ShiftUpAge();
+			}
 	}
 
 }

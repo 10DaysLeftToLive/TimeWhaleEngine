@@ -9,14 +9,14 @@ public class CheatListener : MonoBehaviour {
 	
 	public float speedIncrease = 2;
 	
-	protected PlayerController playerController;
+	protected Player playerController;
 	protected LevelManager levelManager;
 	protected CharacterController characterController;
 	
 	private float currentHorizontalSpeed = 0.0f;
 	
 	void Start() {
-		playerController = GameObject.Find("PlayerCharacter").GetComponent<PlayerController>();
+		playerController = GameObject.Find("PlayerCharacter").GetComponent<Player>();
 		levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
 		characterController = GameObject.Find("PlayerCharacter").GetComponent<CharacterController>();
 	}

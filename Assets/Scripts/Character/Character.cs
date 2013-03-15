@@ -51,12 +51,12 @@ public abstract class Character : PauseObject {
 	}
 	
 	public void LookRight(){
-		Debug.Log ("Look Right");
+		//Debug.Log ("Look Right");
 		this.transform.localScale = new Vector3(RIGHT, 1, 1);
 	}
 	
 	public void LookLeft(){
-		Debug.Log ("Look Left");
+		//Debug.Log ("Look Left");
 		this.transform.localScale = new Vector3(LEFT, 1, 1);
 	}
 	
