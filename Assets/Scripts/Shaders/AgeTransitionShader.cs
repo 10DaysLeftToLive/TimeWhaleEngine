@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using SmoothMoves;
 
-public class AgeTransitionShader : MonoBehaviour {
+public class AgeTransitionShader : ShaderBase {
 	//TODO: Optimize the Update Function so that it is not called every tick
 	//Solution:? NGUI's UpdateManager
 	
@@ -11,10 +11,7 @@ public class AgeTransitionShader : MonoBehaviour {
 	
 	//Duration of the fade in and out in ticks
 	public float fadeDuration; 
-	
-	//Location of the FadePlane if it is not fading
-	public Vector2 idlePosition; 
-	
+
 	public int dragAmount;
 	
 	//A flag that determines if our plane is fading in/out in front of the camera.
@@ -74,13 +71,6 @@ public class AgeTransitionShader : MonoBehaviour {
 	}
 	
 	private AgeTransitionTouchSensor dragSensor;
-	
-	//Denotes the steps sizes for the fade.
-	private int fadeCycle = 0;
-	
-	//A variable that is used to interpolate a transparent color to the fade color
-	private float interpolationFactor = 0;
-	
 	
 	//Button pressed that we used to activate the fade
 	private string ageShiftAction;
