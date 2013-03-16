@@ -14,6 +14,9 @@ public abstract class NPC : Character {
 	protected EmotionState currentEmotion;
 	
 	protected override void Init(){
+		animationData = GetComponent<SmoothMoves.BoneAnimation>();
+		Debug.Log (name);
+		Debug.Log (animationData.name);
 		chatObject = GameObject.Find("Chat").GetComponent<Chat>();
 		player = GameObject.Find("PlayerCharacter").GetComponent<Player>();
 		EventManager.instance.mOnNPCInteractionEvent += new EventManager.mOnNPCInteractionDelegate(ReactToInteractionEvent);
@@ -129,8 +132,8 @@ public abstract class NPC : Character {
 		return npcDisposition;	
 	}
 	
-	public void UpdateDisposition(int disp) {
-		NPCDispositionManager.instance.UpdateWithId(id, disp);
+	public void UpdateDisposition(int deltaDisp) {
+		NPCDispositionManager.instance.UpdateWithId(id, deltaDisp);
 	}
 	#endregion
 	

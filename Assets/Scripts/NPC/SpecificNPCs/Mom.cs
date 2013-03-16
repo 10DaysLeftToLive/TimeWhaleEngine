@@ -4,10 +4,6 @@ using System.Collections;
 public class Mom : NPC {
 	string whatToSay;
 	
-	protected override void Init() {
-		base.Init();
-		animationData = GetComponent<SmoothMoves.BoneAnimation>();
-	}
 	protected override EmotionState GetInitEmotionState(){
 		return (new MomIntroEmotionState(this));
 	}

@@ -25,9 +25,9 @@ public class NPCDispositionManager : ManagerSingleton<NPCDispositionManager> {
 		}
 	}
 
-	public void UpdateWithId(int id, int newDisposition){
+	public void UpdateWithId(int id, int deltaDisposition){
 		if (containersInLevel.ContainsKey(id)){
-			((NPCClassContainer) containersInLevel[id]).UpdateAll(newDisposition);
+			((NPCClassContainer) containersInLevel[id]).UpdateAll(deltaDisposition);
 		} else {
 			Debug.LogWarning("NPCDispositionManager does not contain an NPC with id " + id);
 		}
