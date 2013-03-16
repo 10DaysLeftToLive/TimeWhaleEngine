@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CatLady : NPC {	
 	protected override EmotionState GetInitEmotionState(){
-		EmotionState warningState = new EmotionState("Stay safe and remember, don't go into the forest!");
+		EmotionState warningState = new EmotionState(this, "Stay safe and remember, don't go into the forest!");
 		return (warningState);
 	}
 	

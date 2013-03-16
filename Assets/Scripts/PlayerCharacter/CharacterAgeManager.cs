@@ -5,7 +5,7 @@ using SmoothMoves;
 public class CharacterAgeManager {
 	private static Player playerCharacter;
 	private static CharacterAge[] characterAges = new CharacterAge[3];
-	private static CharacterAgeState currentAge;
+	public static CharacterAgeState currentAge;
 	
 	public static void SetPlayer (Player _playerCharacter) {
 		playerCharacter = _playerCharacter;	

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Sister : NPC {	
 	protected override EmotionState GetInitEmotionState(){
-		EmotionState warningState = new EmotionState("Stay safe and remember, don't go into the forest!");
+		EmotionState warningState = new EmotionState(this, "Stay safe and remember, don't go into the forest!");
 		return (warningState);
 	}
 	
@@ -46,7 +46,7 @@ public class Sister : NPC {
 	}
 	
 	private class IntroEmotionState : EmotionState{
-		IntroEmotionState() : base("Help me push this rock, I want to see what is on the other side!"){
+		IntroEmotionState(NPC toControl) : base(toControl, "Help me push this rock, I want to see what is on the other side!"){
 			List<Choice> _choices = new List<Choice>(); // no choices for this state
 			List<string> _acceptableItems = new List<string>();
 			_acceptableItems.Add("Plushie");

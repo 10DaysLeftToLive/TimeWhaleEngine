@@ -57,8 +57,8 @@ public class Chat : MonoBehaviour {
 		if (isActive){
 			GUI.Box (mainChatRect, msg);
 			
-			if (GUI.Button(portraitRect, "Pic goes here")){
-			}
+			/*if (GUI.Button(portraitRect, "Pic goes here")){
+			}*/
 			
 			if (_choices.Count >= 1){
 				if (GUI.Button(button1Rect, _choices[0]._choiceName)){

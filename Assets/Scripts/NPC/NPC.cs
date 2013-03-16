@@ -115,6 +115,8 @@ public abstract class NPC : Character {
 	}
 	
 	public void NextTask(){
+		EventManager.instance.RiseOnNPCInteractionEvent(new NPCEnviromentInteraction(this.gameObject, player.Inventory.GetItem().name));
+		
 		npcSchedule.NextTask();
 	}
 	

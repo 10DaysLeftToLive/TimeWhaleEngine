@@ -7,7 +7,11 @@ public class GrabMoveState : MoveState {
 	
 	public override void OnEnter(){
 		base.OnEnter();
-		speed = 3f;
+		if (CharacterAgeManager.currentAge == CharacterAgeState.MIDDLE){
+			speed = 3f;
+		} else {
+			speed = 0f;
+		}
 	}
 	
 	protected override bool PathSearch(Vector3 pos, Vector3 hitPos, float height){

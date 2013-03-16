@@ -50,7 +50,7 @@ public class LevelManager : MonoBehaviour {
 		}
 		
 		SetFiles();		
-		SetGender(playerGender);
+		SetGender(CharacterGender.MALE);
 		CharacterAgeManager.SetAgeStart(CharacterAgeState.YOUNG);
 		CharacterAgeManager.SetPlayer(playerCharacter);
 		playerCharacter.ChangeAnimation(genderAnimationInUse.youngBoneAnimation);

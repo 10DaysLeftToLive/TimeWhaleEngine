@@ -9,7 +9,7 @@ public class Mom : NPC {
 		animationData = GetComponent<SmoothMoves.BoneAnimation>();
 	}
 	protected override EmotionState GetInitEmotionState(){
-		return (new MomIntroEmotionState());
+		return (new MomIntroEmotionState(this));
 	}
 	
 	protected override Schedule GetSchedule(){
@@ -70,7 +70,9 @@ public class Mom : NPC {
 	}
 	
 	public class MomIntroEmotionState : EmotionState{
-		public MomIntroEmotionState() : base("Stay safe and remember, don't go into the forest!"){
+		public MomIntroEmotionState(NPC toControl) : base(toControl, "Stay safe and remember, don't go into the forest!"){
+			_choices.Add(new Choice("Tell on", "I hate your sister now."));
+			_choices.Add(new Choice("Lie to", "Oh okay."));
 		}
 		
 		public override void ReactToItemInteraction(string npc, string item){
@@ -78,7 +80,7 @@ public class Mom : NPC {
 		}
 		
 		public override void ReactToChoiceInteraction(string npc, string choice){
-			
+			Debug.Log("mom is choice reacting to " + npc + " making choice " + choice);
 		}
 		
 		public override void ReactToEnviromentInteraction(string npc, string enviromentAction){

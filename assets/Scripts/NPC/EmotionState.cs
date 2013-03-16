@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class EmotionState {
+	protected NPC _npcInState;
 	string _textToSay;
 	protected List<Choice> _choices;
 	protected List<string> _acceptableItems;
@@ -11,13 +12,15 @@ public class EmotionState {
 		get {return _choices;}
 	}
 	
-	public EmotionState(string textToSay){
+	public EmotionState(NPC npcInState, string textToSay){
+		_npcInState = npcInState;
 		_textToSay = textToSay;
 		_choices = new List<Choice>();
 		_acceptableItems = new List<string>();
 	}
 	
-	public EmotionState(string textToSay, List<Choice> choices, List<string> acceptableItems) {
+	public EmotionState(NPC npcInState, string textToSay, List<Choice> choices, List<string> acceptableItems) {
+		_npcInState = npcInState;
 		_textToSay = textToSay;
 		_choices = choices;
 		_acceptableItems = acceptableItems;
