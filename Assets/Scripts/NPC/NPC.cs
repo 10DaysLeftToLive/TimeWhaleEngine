@@ -92,7 +92,7 @@ public abstract class NPC : Character {
 			player.EnterState(new TalkState(player, this));
 			OpenChat();
 		}
-		chating = !chating;
+		//chating = !chating;
 	}
 	
 	protected void UpdateChat(string newMessage){
@@ -132,8 +132,8 @@ public abstract class NPC : Character {
 		return npcDisposition;	
 	}
 	
-	public void UpdateDisposition(int deltaDisp) {
-		NPCDispositionManager.instance.UpdateWithId(id, deltaDisp);
+	public void UpdateDisposition(int disp) {
+		NPCDispositionManager.instance.UpdateWithId(id, disp);
 	}
 	#endregion
 	

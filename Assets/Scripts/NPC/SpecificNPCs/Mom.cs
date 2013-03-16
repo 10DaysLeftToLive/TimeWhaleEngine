@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class Mom : NPC {
-	string whatToSay;
+	string whatToSay = "Stay safe and remember, don't go into the forest!";
 	
 	protected override EmotionState GetInitEmotionState(){
 		return (new MomIntroEmotionState(this));
@@ -39,7 +39,7 @@ public class Mom : NPC {
 	protected override void LeftButtonCallback(string choice){
 		Debug.Log(this.name + " left callback for choice " + choice);
 		// TODO? this is for a chat dialoge
-		EventManager.instance.RiseOnNPCInteractionEvent(new NPCChoiceInteraction(this.gameObject, "Default"));
+		EventManager.instance.RiseOnNPCInteractionEvent(new NPCChoiceInteraction(this.gameObject, choice));
 	}
 	
 	protected override void RightButtonCallback(){
@@ -66,9 +66,9 @@ public class Mom : NPC {
 	}
 	
 	public class MomIntroEmotionState : EmotionState{
-		public MomIntroEmotionState(NPC toControl) : base(toControl, "Stay safe and remember, don't go into the forest!"){
-			_choices.Add(new Choice("Tell on", "I hate your sister now."));
-			_choices.Add(new Choice("Lie to", "Oh okay."));
+		public MomIntroEmotionState(NPC toControl) : base(toControl, "Where is your sister?"){
+			_choices.Add(new Choice("Tell on", "She's in big trouble! I'll deal with your sister..."));
+			_choices.Add(new Choice("Lie to", "Ok, well make sure she's okay..."));
 		}
 		
 		public override void ReactToItemInteraction(string npc, string item){
@@ -76,7 +76,20 @@ public class Mom : NPC {
 		}
 		
 		public override void ReactToChoiceInteraction(string npc, string choice){
+			if (npc == "Mom"){
 			Debug.Log("mom is choice reacting to " + npc + " making choice " + choice);
+				switch (choice){
+				case "Tell on": Debug.Log("Told on"); 
+					_choices.Clear();
+					this._textToSay = "Thank you for watching out for your sister!";
+					break;
+				case "Lie to": Debug.Log("Lied to"); 
+					_choices.Clear();
+					this._textToSay = "Keep an eye out on your sister!";
+					break;
+				default: break;
+				}
+			}
 		}
 		
 		public override void ReactToEnviromentInteraction(string npc, string enviromentAction){
