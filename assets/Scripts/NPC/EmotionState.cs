@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class EmotionState {
 	protected NPC _npcInState;
-	string _textToSay;
+	protected string _textToSay;
 	protected List<Choice> _choices;
 	protected List<string> _acceptableItems;
 	

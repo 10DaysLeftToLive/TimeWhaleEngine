@@ -89,7 +89,7 @@ public abstract class NPC : Character {
 			player.EnterState(new TalkState(player, this));
 			OpenChat();
 		}
-		chating = !chating;
+		//chating = !chating;
 	}
 	
 	protected void UpdateChat(string newMessage){
@@ -111,7 +111,8 @@ public abstract class NPC : Character {
 	}
 	
 	private bool NearPlayer(){
-		return (Utils.CalcDistance(player.transform.position.x, this.transform.position.x) < DISTANCE_TO_CHAT);
+		//return (Utils.CalcDistance(player.transform.position.x, this.transform.position.x) < DISTANCE_TO_CHAT);
+		return Vector3.Distance(player.transform.position, this.transform.position) < DISTANCE_TO_CHAT;
 	}
 	
 	public void NextTask(){
@@ -129,8 +130,8 @@ public abstract class NPC : Character {
 		return npcDisposition;	
 	}
 	
-	public void UpdateDisposition(int deltaDisp) {
-		NPCDispositionManager.instance.UpdateWithId(id, deltaDisp);
+	public void UpdateDisposition(int disp) {
+		NPCDispositionManager.instance.UpdateWithId(id, disp);
 	}
 	#endregion
 	
