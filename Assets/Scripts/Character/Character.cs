@@ -14,11 +14,12 @@ public abstract class Character : PauseObject {
 	#endregion
 	
 	#region Fields
+	public bool SpriteLookingRight;
 	protected State currentState;
 	private Inventory inventory;
 	private GrabableObject attachedObject = null;
 	
-	public BoneAnimation animationData;
+	protected BoneAnimation animationData;
 	#endregion
 	
 	public GrabableObject AttachedObject {
@@ -68,7 +69,7 @@ public abstract class Character : PauseObject {
 		toDetachFrom.GetComponent<GrabableObject>().DetachFromPlayer();
 	}
 	
-	public void ForceChangeToState(State newState){
+	public void ForceChangeToState(State newState) {
 		// TODO need to enter the correct idle state the change to the new one.
 		EnterState(newState);
 	}

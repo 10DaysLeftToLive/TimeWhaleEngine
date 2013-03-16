@@ -111,7 +111,7 @@ public abstract class NPC : Character {
 	}
 	
 	private bool NearPlayer(){
-		return (Utils.CalcDistance(player.transform.position.x, this.transform.position.x) < DISTANCE_TO_CHAT);
+		return Vector3.Distance(player.transform.position, this.transform.position) < DISTANCE_TO_CHAT;
 	}
 	
 	public void NextTask(){
@@ -125,7 +125,7 @@ public abstract class NPC : Character {
 		npcDisposition = disp;
 	}
 	
-	public int GetDisposition(){
+	public int GetDisposition() {
 		return npcDisposition;	
 	}
 	
