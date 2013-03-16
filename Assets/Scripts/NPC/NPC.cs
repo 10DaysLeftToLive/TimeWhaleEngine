@@ -129,8 +129,8 @@ public abstract class NPC : Character {
 		return npcDisposition;	
 	}
 	
-	public void UpdateDisposition(int disp) {
-		NPCDispositionManager.instance.UpdateWithId(id, disp);
+	public void UpdateDisposition(int deltaDisp) {
+		NPCDispositionManager.instance.UpdateWithId(id, deltaDisp);
 	}
 	#endregion
 	
