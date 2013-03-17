@@ -8,6 +8,8 @@ using System.Collections;
  */
 public class Task {
 	State _stateToPerform;
+	private float _timeLeft;
+	private bool _taskFinished = false;
 	
 	public State StatePerforming {
 		get {return _stateToPerform;}
@@ -18,10 +20,14 @@ public class Task {
 	}
 	
 	public virtual void Decrement(float amount){
+		_timeLeft -= amount;
+		if (_timeLeft <= 0){
+			_taskFinished = true;	
+		}
 		// timeleft = infinity - amount aka do nothing
 	}
 	
 	public virtual bool IsComplete(){
-		return (false); // this task will go on forever
+		return (_taskFinished); // this task will go on forever
 	}
 }
