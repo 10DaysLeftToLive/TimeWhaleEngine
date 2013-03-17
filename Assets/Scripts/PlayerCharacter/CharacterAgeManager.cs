@@ -65,7 +65,7 @@ public class CharacterAgeManager {
 	
 	private static void Transition(CharacterAge previousAge, CharacterAge newAge){
 		UpdatePlayer(previousAge);
-		Crossfade.FadeBetween(previousAge, newAge);
+		//Crossfade.FadeBetween(previousAge, newAge);
 	}
 	
 	public static void PlayCurrentSong(){
