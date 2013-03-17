@@ -14,9 +14,6 @@ public abstract class NPC : Character {
 	protected EmotionState currentEmotion;
 	
 	protected override void Init(){
-		animationData = GetComponent<SmoothMoves.BoneAnimation>();
-		Debug.Log (name);
-		Debug.Log (animationData.name);
 		chatObject = GameObject.Find("Chat").GetComponent<Chat>();
 		player = GameObject.Find("PlayerCharacter").GetComponent<Player>();
 		EventManager.instance.mOnNPCInteractionEvent += new EventManager.mOnNPCInteractionDelegate(ReactToInteractionEvent);

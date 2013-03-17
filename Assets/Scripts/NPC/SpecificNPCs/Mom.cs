@@ -11,7 +11,7 @@ public class Mom : NPC {
 	protected override Schedule GetSchedule(){
 		Schedule schedule = new Schedule(this);
 		
-		/* Note this is hard coded. This is an example of how scheduling works now
+
 		Vector3 currentPos = transform.position;
 		
 		currentPos.x = currentPos.x - 5;
@@ -28,7 +28,6 @@ public class Mom : NPC {
 		schedule.Add(walkLeft);
 		schedule.Add(walkRight);
 		
-		*/
 		Task standAround = new Task(new IdleState(this));
 		
 		schedule.Add(standAround);

@@ -34,6 +34,7 @@ public class Player : Character {
 		EventManager.instance.mOnClickNoObjectEvent += new EventManager.mOnClickedNoObjectDelegate (OnClickToMove);
 		EventManager.instance.mOnClickOnPlayerEvent += new EventManager.mOnClickOnPlayerDelegate (OnClickOnPlayer);
 		AgeSwapMover.instance.SetPlayer(this);
+		
 	}
 	
 	// We want to be able to switch to move at any state when the player clicks
@@ -63,6 +64,7 @@ public class Player : Character {
 		goal.z = this.transform.position.z;
 		
 		if (tag == Strings.tag_CarriableItem){
+			Debug.Log (name + "Picking up item " + e.clickedObject.name);
 			EnterState(new MoveThenDoState(this, goal, new PickUpItemState(this, e.clickedObject)));
 		} else if (tag == Strings.tag_Pushable){
 			if (currentState.GetType() == typeof(GrabIdleState)){
@@ -74,6 +76,7 @@ public class Player : Character {
 				EnterState(new MoveThenDoState(this, goal, new GrabOntoState(this, e.clickedObject)));
 			}
 		} else if (tag == Strings.tag_NPC){
+			
 			NPC toTalkWith = (NPC)e.clickedObject.gameObject.GetComponent<NPC>();
 			Vector3 currentPos = this.transform.position;
 			Vector3 goalPosInfront = Utils.GetPointInfrontOf(currentPos, toTalkWith.gameObject);

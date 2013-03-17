@@ -8,33 +8,41 @@ using SmoothMoves;
  * 		This should not be edited for specific characters put any specific code in the children classes.
  */
 public abstract class Character : PauseObject {
-	#region Static Fields
-	private static float RIGHT = 1;
-	private static float LEFT = -1;
-	#endregion
+	#region Fields	
+	private float LEFT = -1;
+	private float RIGHT = 1;
 	
-	#region Fields
-	public bool SpriteLookingRight;
+	public bool SpriteLookingLeft;
 	protected State currentState;
 	private Inventory inventory;
 	private GrabableObject attachedObject = null;
 	
-	protected BoneAnimation animationData;
+	public BoneAnimation animationData;
 	#endregion
 	
 	public GrabableObject AttachedObject {
 		get {return (attachedObject);}
 	}
 	
-	public Inventory Inventory{
+	public Inventory Inventory {
 		get { return inventory; }
 	}
 	
 	void Start () {
 		currentState = new IdleState(this);
 		EnterState(new IdleState(this));
-		inventory = new Inventory(this.transform);// should give the right hand of the bone animation
+		Debug.Log(name);
+		Transform rightHand = animationData.GetSpriteTransform("Right Hand");
+		inventory = new Inventory(rightHand);
+		InitializeSpriteLookDirections();
 		Init();
+	}
+	
+	protected void InitializeSpriteLookDirections() {
+		if (SpriteLookingLeft) {
+			LEFT = 1;
+			RIGHT = -1;
+		}
 	}
 	
 	protected abstract void Init();
