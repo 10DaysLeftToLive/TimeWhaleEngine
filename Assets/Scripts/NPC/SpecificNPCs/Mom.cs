@@ -11,7 +11,7 @@ public class Mom : NPC {
 	protected override Schedule GetSchedule(){
 		Schedule schedule = new Schedule(this);
 		
-
+		/*
 		Vector3 currentPos = transform.position;
 		
 		currentPos.x = currentPos.x - 5;
@@ -30,7 +30,7 @@ public class Mom : NPC {
 		
 		Task standAround = new Task(new IdleState(this));
 		
-		schedule.Add(standAround);
+		schedule.Add(standAround);*/
 		
 		return (schedule);
 	}
@@ -99,17 +99,17 @@ public class Mom : NPC {
 			Debug.Log("mom is choice reacting to " + npc + " making choice " + choice);
 				switch (choice){
 				case "Tell on": Debug.Log("Told on"); 
-					_choices.Clear();
 					this._textToSay = "Thank you for watching out for your sister!";
 					hasToldOn = true;
 					_acceptableItems.Add("Plushie");
-					_npcInState.OpenChat();
+					//_npcInState.OpenChat();
+					_choices.Clear();
 					break;
 				case "Lie to": Debug.Log("Lied to"); 
-					_choices.Clear();
 					this._textToSay = "Keep an eye out on your sister!";
 					_acceptableItems.Add("Plushie");
-					_npcInState.OpenChat();
+					//_npcInState.OpenChat();
+					_choices.Clear();
 					break;
 				default: break;
 				}

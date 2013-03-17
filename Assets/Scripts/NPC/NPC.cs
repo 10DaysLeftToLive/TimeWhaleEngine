@@ -17,7 +17,8 @@ public abstract class NPC : Character {
 		chatObject = GameObject.Find("Chat").GetComponent<Chat>();
 		player = GameObject.Find("PlayerCharacter").GetComponent<Player>();
 		EventManager.instance.mOnNPCInteractionEvent += new EventManager.mOnNPCInteractionDelegate(ReactToInteractionEvent);
-		npcSchedule = GetSchedule();
+		//npcSchedule = GetSchedule();
+		Debug.Log (name + ": Is player initialized: " + (player != null));
 		currentEmotion = GetInitEmotionState();
 	}
 	
@@ -25,7 +26,7 @@ public abstract class NPC : Character {
 		if (chating && !NearPlayer()){
 			CloseChat();
 		}
-		npcSchedule.Run(Time.deltaTime);
+		//npcSchedule.Run(Time.deltaTime);
 	}
 	
 	// ONLY PUT SPECIFIC NPC THINGS IN THESE IN THE CHILDREN
@@ -74,7 +75,8 @@ public abstract class NPC : Character {
 	}
 	
 	public void OpenChat(){
-		Debug.Log("Player does " + (player.Inventory.HasItem() ? "" : "not") + "have an item");
+		//Debug.Log("Player does " + (player.Inventory.HasItem() ? "" : "not") + "have an item");
+		Debug.Log(this.name + " What is player value: " + player);
 		if (player.Inventory.HasItem() && currentEmotion.ItemHasReaction(player.Inventory.GetItem().name)){
 			chatObject.SetButtonCallbacks(LeftButtonClick, RightButtonClick);
 			chatObject.SetGrabText(player.Inventory.GetItem().name);
@@ -91,6 +93,7 @@ public abstract class NPC : Character {
 			player.EnterState(new IdleState(player));
 			CloseChat();
 		} else {
+			Debug.Log(player);
 			player.EnterState(new TalkState(player, this));
 			OpenChat();
 		}
