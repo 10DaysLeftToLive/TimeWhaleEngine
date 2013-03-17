@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class Mom : NPC {
-	string whatToSay = "Stay safe and remember, don't go into the forest!";
+	string whatToSay;
 	
 	protected override void Init() {
 		base.Init();
@@ -53,7 +53,7 @@ public class Mom : NPC {
 	}
 	
 	protected override void DoReaction(GameObject itemToReactTo){
-		if (itemToReactTo != null){
+		/*if (itemToReactTo != null){
 			Debug.Log(name + " is reacting to: " + itemToReactTo.name);
 			switch (itemToReactTo.name){
 				case "Plushie":
@@ -66,17 +66,36 @@ public class Mom : NPC {
 					break;
 			}
 			player.Inventory.DisableHeldItem();
-		}
+		}*/
 	}
 	
 	public class MomIntroEmotionState : EmotionState{
 		public MomIntroEmotionState(NPC toControl) : base(toControl, "Where is your sister?"){
 			_choices.Add(new Choice("Tell on", "She's in big trouble! I'll deal with your sister..."));
 			_choices.Add(new Choice("Lie to", "Ok, well make sure she's okay..."));
+			_acceptableItems.Add("Apple");
 		}
+		public bool hasToldOn = false;
 		
-		public override void ReactToItemInteraction(string npc, string item){
-			
+		public override void ReactToItemInteraction(string npc, GameObject item){
+			if (item != null && npc == "Mom"){
+				Debug.Log(npc + " is reacting to: ");
+				switch (item.name){
+					case "Plushie":
+					if (hasToldOn){
+							_npcInState.UpdateChat("*sigh*  This stupid plushie again?  Its always causing trouble!");
+					}
+					else{
+						_npcInState.UpdateChat("Oh, your sister was looking for this, I'll give it to her.");
+					}
+							break;
+					case "Apple":
+						_npcInState.UpdateChat("Perfect! These will work wonderfully!");
+						break;
+					default:
+						break;
+				}
+			}
 		}
 		
 		public override void ReactToChoiceInteraction(string npc, string choice){
@@ -86,10 +105,15 @@ public class Mom : NPC {
 				case "Tell on": Debug.Log("Told on"); 
 					_choices.Clear();
 					this._textToSay = "Thank you for watching out for your sister!";
+					hasToldOn = true;
+					_acceptableItems.Add("Plushie");
+					_npcInState.OpenChat();
 					break;
 				case "Lie to": Debug.Log("Lied to"); 
 					_choices.Clear();
 					this._textToSay = "Keep an eye out on your sister!";
+					_acceptableItems.Add("Plushie");
+					_npcInState.OpenChat();
 					break;
 				default: break;
 				}

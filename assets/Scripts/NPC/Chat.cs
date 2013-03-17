@@ -76,6 +76,7 @@ public class Chat : MonoBehaviour {
 				}
 			}
 			if (showRightButton && GUI.Button(buttonGiveRect, "Give")){
+				rightButtonClickDelegate();
 			}
 			/*
 			if (showLeftButton){

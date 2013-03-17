@@ -2,10 +2,10 @@ using UnityEngine;
 using System.Collections;
 
 public class NPCItemInteraction : NPCInteraction {
-	public string _itemName;
+	public GameObject _item;
 	
-	public NPCItemInteraction(GameObject npcReacting, string itemName) {
+	public NPCItemInteraction(GameObject npcReacting, GameObject item) {
 		_npcReacting = npcReacting;
-		_itemName = itemName;
+		_item = item;
 	}
 }

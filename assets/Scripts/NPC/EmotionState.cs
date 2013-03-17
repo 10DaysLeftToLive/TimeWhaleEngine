@@ -43,7 +43,7 @@ public class EmotionState {
 	}
 	
 	//Virtual so children don't have to override
-	public virtual void ReactToItemInteraction(string npc, string item){}
+	public virtual void ReactToItemInteraction(string npc, GameObject item){}
 	public virtual void ReactToChoiceInteraction(string npc, string choice){}
 	public virtual void ReactToEnviromentInteraction(string npc, string enviromentAction){}
 }
