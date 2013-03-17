@@ -93,7 +93,7 @@ public class Sister : NPC {
 			if (item != null && npc == "Mom"){
 				switch(item.name){
 				case "Plushie":
-					if (toldOn = false){
+					if (toldOn == false){
 						this._textToSay = "Why'd you give the plushie to mom first?";
 					}
 					break;
