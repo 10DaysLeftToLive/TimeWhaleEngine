@@ -21,6 +21,9 @@ public class Task {
 	
 	public virtual void Decrement(float amount){
 		_timeLeft -= amount;
+		if (_timeLeft <= 0){
+			_taskFinished = true;	
+		}
 		// timeleft = infinity - amount aka do nothing
 	}
 	
