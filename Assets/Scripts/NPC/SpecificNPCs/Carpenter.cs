@@ -44,7 +44,7 @@ public class Carpenter : NPC {
 			_choices.Add(new Choice("Son", "He is going to be a great carpenter like his father and father's father one day."));
 			_acceptableItems.Add("Tools");
 			_acceptableItems.Add("FishingRod");
-			_acceptableItems.Add("Apple");
+			acceptableItems.Add("Apple[Carpenter]");
 		}
 		public bool hasStolenApple = false;
 		public bool hasReturnedApple = false;
@@ -70,13 +70,13 @@ public class Carpenter : NPC {
 						treeHouse.SetActiveRecursively(true);
 						_npcInState.UpdateChat("Ah, I guess there isn't too much harm in it. I'll take him fishing later, but the tree house comes first.");
 						break;
-					case "Apple":
+					case "Apple[Carpenter]":
 						if (hasStolenApple){
 							_npcInState.UpdateChat("Thanks.  I'm sure it was just a harmless mistake.");
 							// TODO - set disposition back
 						}
 						else{
-							_npcInState.UpdateChat("I already have apples.");
+							_npcInState.UpdateChat("It is yours to keep.");
 						}
 						break;
 					default:
