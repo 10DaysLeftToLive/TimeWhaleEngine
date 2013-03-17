@@ -59,8 +59,16 @@ public abstract class Character : PauseObject {
 	}
 	
 	public void AttachTo(GameObject toAttachTo){
+		
+		// toAttachTo [box]
+		// this.gameObject [person]
 		attachedObject = toAttachTo.GetComponent<GrabableObject>();
 		attachedObject.AttachToPlayer(this.gameObject);
+	}
+	
+	public void DetachObject() {
+		if (attachedObject != null)
+			DetachFrom(attachedObject.gameObject);
 	}
 	
 	public void DetachFrom(GameObject toDetachFrom){
