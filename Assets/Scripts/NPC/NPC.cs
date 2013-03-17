@@ -38,9 +38,11 @@ public abstract class NPC : Character {
 	private void ReactToInteractionEvent(EventManager EM, NPCInteraction otherInteraction){
 		Debug.Log(name + " is reacting to event with " + otherInteraction._npcReacting.name);
 		if (otherInteraction.GetType().Equals(typeof(NPCChoiceInteraction))){
+			Debug.Log("Calling Choice Interaction for " + otherInteraction._npcReacting.name);
 			NPCChoiceInteraction choiceInteraction = (NPCChoiceInteraction) otherInteraction;
 			currentEmotion.ReactToChoiceInteraction(choiceInteraction._npcReacting.name, choiceInteraction._choice);
 		} else if (otherInteraction.GetType().Equals(typeof(NPCItemInteraction))) {
+			Debug.Log("Calling Item Interaction for " + otherInteraction._npcReacting.name);
 			NPCItemInteraction itemInteraction = (NPCItemInteraction) otherInteraction;
 			currentEmotion.ReactToItemInteraction(itemInteraction._npcReacting.name, itemInteraction._item);
 		} else if (otherInteraction.GetType().Equals(typeof(NPCEnviromentInteraction))) {
@@ -92,7 +94,6 @@ public abstract class NPC : Character {
 			player.EnterState(new TalkState(player, this));
 			OpenChat();
 		}
-		//chating = !chating;
 	}
 	
 	public void UpdateChat(string newMessage){

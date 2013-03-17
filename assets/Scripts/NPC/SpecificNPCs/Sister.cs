@@ -11,16 +11,40 @@ public class Sister : NPC {
 	protected override Schedule GetSchedule(){
 		Schedule schedule = new Schedule(this);
 		
-		Task standAround = new Task(new IdleState(this));
+		/* Note this is hard coded. This is an example of how scheduling works now
+		Vector3 currentPos = transform.position;
 		
-		schedule.Add(standAround);
+		currentPos.x = currentPos.x - 5;
+		
+		TimeTask standAroundForBit = new TimeTask(2, new IdleState(this));
+		
+		Task walkLeft = new Task(new MoveThenDoState(this, currentPos, new MarkTaskDone(this)));
+		
+		currentPos.x = currentPos.x + 10;
+		
+		Task walkRight = new Task(new MoveThenDoState(this, currentPos, new MarkTaskDone(this)));
+		
+		schedule.Add(standAroundForBit);
+		schedule.Add(walkLeft);
+		schedule.Add(walkRight);
+		
+		*/
+		Vector3 currentPos = transform.position;
+		currentPos.x = currentPos.x + 50;
+		Task walkRight = new Task(new MoveThenDoState(this, currentPos, new MarkTaskDone(this)));
+		
+		TimeTask standAroundForBit = new TimeTask(2, new IdleState(this));
+		//Task standAround = new Task(new IdleState(this));
+		
+		schedule.Add(standAroundForBit);
+		schedule.Add(walkRight);
 		
 		return(schedule);
 	}
 	
 	protected override void LeftButtonCallback(string choice){
 		Debug.Log(this.name + " left callback(" + choice + ")");
-		EventManager.instance.RiseOnNPCInteractionEvent(new NPCItemInteraction(this.gameObject, player.Inventory.GetItem()));
+		EventManager.instance.RiseOnNPCInteractionEvent(new NPCChoiceInteraction(this.gameObject, choice));
 		// TODO? this is for a chat dialoge
 	}
 	
@@ -58,8 +82,9 @@ public class Sister : NPC {
 				Debug.Log(npc + " is reacting to: ");
 				switch (item.name){
 					case "Plushie":
+					Debug.Log("NPC: " +npc + " Item: " +item.name + "  in sister");
 						_npcInState.UpdateChat("Thanks, you're super cool! Hey lets play later!");
-					this._textToSay = "Let's play later!";
+						this._textToSay = "Let's play later!";
 						break;
 					default:
 						break;

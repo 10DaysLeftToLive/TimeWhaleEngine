@@ -82,6 +82,7 @@ public class Mom : NPC {
 				Debug.Log(npc + " is reacting to: ");
 				switch (item.name){
 					case "Plushie":
+					Debug.Log("NPC: " +npc + " Item: " +item.name + " in mom");
 					if (hasToldOn){
 							_npcInState.UpdateChat("*sigh*  This stupid plushie again?  Its always causing trouble!");
 					}
