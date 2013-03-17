@@ -8,6 +8,7 @@ public abstract class NPC : Character {
 	public int npcDisposition; // NOTE should not be public but this makes testing easier
 	private List<Item> itemReactions;
 	private bool chating = false;
+	private Texture charPortrait;
 	private static int DISTANCE_TO_CHAT = 2;
 	public int id;
 	private Schedule npcSchedule;
@@ -15,6 +16,8 @@ public abstract class NPC : Character {
 	
 	protected override void Init(){
 		chatObject = GameObject.Find("Chat").GetComponent<Chat>();
+		charPortrait = (Texture)Resources.Load("" + this.name, typeof(Texture));
+		Debug.Log ("TEXTURE LOADED IS CALLED: " + charPortrait.name);
 		player = GameObject.Find("PlayerCharacter").GetComponent<Player>();
 		EventManager.instance.mOnNPCInteractionEvent += new EventManager.mOnNPCInteractionDelegate(ReactToInteractionEvent);
 		//npcSchedule = GetSchedule();
@@ -85,6 +88,8 @@ public abstract class NPC : Character {
 		}
 		
 		chating = true;
+		Debug.Log ("INFRONT OF setCharPortrait: " + charPortrait.name);
+		chatObject.setCharPortrait(charPortrait);
 		chatObject.CreateChatBox(GetChoices(), GetWhatToSay());
 	}
 	
