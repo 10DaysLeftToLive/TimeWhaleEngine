@@ -44,7 +44,7 @@ public class Carpenter : NPC {
 			_choices.Add(new Choice("Son", "He is going to be a great carpenter like his father and father's father one day."));
 			_acceptableItems.Add("Tools");
 			_acceptableItems.Add("FishingRod");
-			acceptableItems.Add("Apple[Carpenter]");
+			_acceptableItems.Add("Apple[Carpenter]");
 		}
 		public bool hasStolenApple = false;
 		public bool hasReturnedApple = false;
