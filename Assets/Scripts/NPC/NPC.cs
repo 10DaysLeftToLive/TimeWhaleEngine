@@ -38,14 +38,16 @@ public abstract class NPC : Character {
 	private void ReactToInteractionEvent(EventManager EM, NPCInteraction otherInteraction){
 		Debug.Log(name + " is reacting to event with " + otherInteraction._npcReacting.name);
 		if (otherInteraction.GetType().Equals(typeof(NPCChoiceInteraction))){
+			Debug.Log("Calling Choice Interaction for " + otherInteraction._npcReacting.name);
 			NPCChoiceInteraction choiceInteraction = (NPCChoiceInteraction) otherInteraction;
 			currentEmotion.ReactToChoiceInteraction(choiceInteraction._npcReacting.name, choiceInteraction._choice);
 		} else if (otherInteraction.GetType().Equals(typeof(NPCItemInteraction))) {
+			Debug.Log("Calling Item Interaction for " + otherInteraction._npcReacting.name);
 			NPCItemInteraction itemInteraction = (NPCItemInteraction) otherInteraction;
-			currentEmotion.ReactToItemInteraction(itemInteraction._npcReacting.name, itemInteraction._itemName);
+			currentEmotion.ReactToItemInteraction(itemInteraction._npcReacting.name, itemInteraction._item);
 		} else if (otherInteraction.GetType().Equals(typeof(NPCEnviromentInteraction))) {
 			NPCEnviromentInteraction enviromentInteraction = (NPCEnviromentInteraction) otherInteraction;
-			currentEmotion.ReactToItemInteraction(enviromentInteraction._npcReacting.name, enviromentInteraction._enviromentAction);			
+			currentEmotion.ReactToEnviromentInteraction(enviromentInteraction._npcReacting.name, enviromentInteraction._enviromentAction);			
 		}
 	}
 	
@@ -62,15 +64,18 @@ public abstract class NPC : Character {
 	}
 	
 	private void RightButtonClick(){
-		EventManager.instance.RiseOnNPCInteractionEvent(new NPCItemInteraction(this.gameObject, player.Inventory.GetItem().name));
-		RightButtonCallback();
-		Debug.Log("Right click");
-		UpdateChatButtons();
+		if (player.Inventory.GetItem() != null && currentEmotion.ItemHasReaction(player.Inventory.GetItem().name)){
+			EventManager.instance.RiseOnNPCInteractionEvent(new NPCItemInteraction(this.gameObject, player.Inventory.GetItem()));
+			RightButtonCallback();
+			Debug.Log("Right click");
+			player.Inventory.DisableHeldItem();
+			UpdateChatButtons();
+		}
 	}
 	
 	public void OpenChat(){
 		Debug.Log("Player does " + (player.Inventory.HasItem() ? "" : "not") + "have an item");
-		if (player.Inventory.HasItem()){
+		if (player.Inventory.HasItem() && currentEmotion.ItemHasReaction(player.Inventory.GetItem().name)){
 			chatObject.SetButtonCallbacks(LeftButtonClick, RightButtonClick);
 			chatObject.SetGrabText(player.Inventory.GetItem().name);
 		} else {
@@ -89,10 +94,9 @@ public abstract class NPC : Character {
 			player.EnterState(new TalkState(player, this));
 			OpenChat();
 		}
-		//chating = !chating;
 	}
 	
-	protected void UpdateChat(string newMessage){
+	public void UpdateChat(string newMessage){
 		chatObject.UpdateMessage(newMessage);
 	}
 	

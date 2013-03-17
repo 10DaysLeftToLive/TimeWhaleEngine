@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Chat : MonoBehaviour {
-	GameObject npc;
 	public Texture btn1, btn2;
 	Vector3 pos, screenPos;
 	Vector2 size;
@@ -76,6 +75,7 @@ public class Chat : MonoBehaviour {
 				}
 			}
 			if (showRightButton && GUI.Button(buttonGiveRect, "Give")){
+				rightButtonClickDelegate();
 			}
 			/*
 			if (showLeftButton){
@@ -126,6 +126,8 @@ public class Chat : MonoBehaviour {
 		isActive	= false;
 		showRightButton = false;
 		showLeftButton = false;
+		rightButtonClickDelegate = null;
+		leftButtonClickDelegate = null;
 	}
 	
 	public void CreateChatButtons(Texture bt1, Texture bt2){

@@ -68,8 +68,16 @@ public abstract class Character : PauseObject {
 	}
 	
 	public void AttachTo(GameObject toAttachTo){
+		
+		// toAttachTo [box]
+		// this.gameObject [person]
 		attachedObject = toAttachTo.GetComponent<GrabableObject>();
 		attachedObject.AttachToPlayer(this.gameObject);
+	}
+	
+	public void DetachObject() {
+		if (attachedObject != null)
+			DetachFrom(attachedObject.gameObject);
 	}
 	
 	public void DetachFrom(GameObject toDetachFrom){
@@ -83,7 +91,10 @@ public abstract class Character : PauseObject {
 	}
 	
 	public void PlayAnimation(string animation){
-		animationData.Play(animation);
+		Debug.Log(animationData);
+		if (animationData.GetClipCount() > 0) {
+			animationData.Play(animation);
+		}
 	}
 	
 	public Vector3 GetFeet(){
