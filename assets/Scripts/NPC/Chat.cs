@@ -7,7 +7,7 @@ public class Chat : MonoBehaviour {
 	Vector3 pos, screenPos;
 	Vector2 size;
 	string msg;
-	int charPerLine = 20;
+	int charPerLine = 60;
 	Rect rect;
 	bool isActive;
 	Vector2 offset;
@@ -21,6 +21,14 @@ public class Chat : MonoBehaviour {
 	ButtonClickDelegate rightButtonClickDelegate;
 	private bool showLeftButton = false;
 	private bool showRightButton = false;
+	private bool textFieldInit = false;
+	private bool buttonInit = false;
+	
+	private GUIStyle textFieldStyle;
+	private GUIStyle buttonStyle;
+	private Font textFieldFont;
+	private Font buttonFont;
+	private Texture _charPortrait;
 	
 	private Vector2 bottomLeftChat;
 	
@@ -34,7 +42,6 @@ public class Chat : MonoBehaviour {
 	private Rect button2Rect;
 	private Rect button3Rect;
 	private Rect buttonGiveRect;
-	
 	
 	private float[] topLeftPositionPercentages;
 	
@@ -53,28 +60,62 @@ public class Chat : MonoBehaviour {
 	}
 	
 	void OnGUI () {
-		if (isActive){
-			GUI.Box (mainChatRect, msg);
+		//temporary loading statement for textFieldStyle
+		if (!textFieldInit) {
+			// Create style for a box
+			textFieldStyle = new GUIStyle(GUI.skin.textField);
+			textFieldStyle.fontSize = 24;
 			
+			// Load and set Font
+			textFieldFont = (Font)Resources.Load("century", typeof(Font));
+			textFieldStyle.font = textFieldFont;
+			
+			// Set color for selected and unselected buttons
+			//textFieldStyle.normal.textColor = Color.green;
+
+			textFieldInit = true;
+		}
+		
+		//temporary loading statement for buttonStyle
+		if (!buttonInit) {
+			buttonStyle = new GUIStyle(GUI.skin.button);
+			buttonStyle.fontSize = 24;
+			 
+			// Load and set Font
+			buttonFont = (Font)Resources.Load("century", typeof(Font));
+			buttonStyle.font = buttonFont;
+			
+			// Set color for selected and unselected buttons
+			//buttonStyle.normal.textColor = Color.green;	
+				
+			buttonInit = true;
+		}
+		
+		if (isActive) {
+			
+			GUI.Box (mainChatRect, "");
+			GUI.TextField (textBoxRect, msg, textFieldStyle);
+			Debug.Log("CHARACTER NAME IS: " + _charPortrait.name);
+			GUI.Box (portraitRect, _charPortrait);
 			/*if (GUI.Button(portraitRect, "Pic goes here")){
 			}*/
 			
 			if (_choices.Count >= 1){
-				if (GUI.Button(button1Rect, _choices[0]._choiceName)){
+				if (GUI.Button(button1Rect, _choices[0]._choiceName, buttonStyle)){
 					ClickChoice(_choices[0]);
 				}
 			}
 			if (_choices.Count >= 2){
-				if (GUI.Button(button2Rect, _choices[1]._choiceName)){
+				if (GUI.Button(button2Rect, _choices[1]._choiceName, buttonStyle)){
 					ClickChoice(_choices[1]);
 				}
 			}
 			if (_choices.Count >= 3){
-				if (GUI.Button(button3Rect, _choices[2]._choiceName)){
+				if (GUI.Button(button3Rect, _choices[2]._choiceName, buttonStyle)){
 					ClickChoice(_choices[2]);
 				}
 			}
-			if (showRightButton && GUI.Button(buttonGiveRect, "Give")){
+			if (showRightButton && GUI.Button(buttonGiveRect, "Give", buttonStyle)){
 				rightButtonClickDelegate();
 			}
 			/*
@@ -166,6 +207,11 @@ public class Chat : MonoBehaviour {
 	
 	public void SetGrabText(string itemName){
 		
+	}
+	
+	public void setCharPortrait (Texture charPortrait) {
+		Debug.Log ("INSIDE setCharPortrait: " + charPortrait.name);
+		_charPortrait = charPortrait;
 	}
 	
 	public void UpdateChoices(List<Choice> choices){
