@@ -44,10 +44,15 @@ public class Carpenter : NPC {
 			_choices.Add(new Choice("Son", "He is going to be a great carpenter like his father and father's father one day."));
 			_acceptableItems.Add("Tools");
 			_acceptableItems.Add("FishingRod");
+			_acceptableItems.Add("Apple");
 			_acceptableItems.Add("Apple[Carpenter]");
+			
+			//EventManager.instance.mOnPlayerPickupItemEvent += new EventManager.mOnPlayerPickupItemDelegate (OnPickedUpItem);
+			//EventManager.instance.mOnPlayerPickupItemEvent += new EventManager.mOnPlayerPickupItemDelegate (OnCarpenterApplePickedUp);
 		}
 		public bool hasStolenApple = false;
 		public bool hasReturnedApple = false;
+		public bool hasGivenTools = false;
 		public GameObject treeHouse;
 		
 		public override void ReactToItemInteraction(string npc, GameObject item){
@@ -59,19 +64,26 @@ public class Carpenter : NPC {
 						// Tree house to be built
 						treeHouse = GameObject.Find("Treehouse");
 						treeHouse.SetActiveRecursively(true);
-						// TODO - Update son's dialogue
+						hasGivenTools = true;
+						// Update son's dialogue
 						//CarpenterSon carpenterSonScript = GetComponent<CarpenterSon>();
-						//carpenterSonScript.FatherGivenTools();
+						//carpenterSonScript.currentEmotion._textToSay = "Why did you give him that?  Now, he's gonna make me build stuff instead of letting me go fishing!";
+					//carpenterSonScript.FatherGivenTools();
 						break;
 					case "Fishing Rod":
 						Debug.Log("NPC: " +npc + " Item: " +item.name + " in mom");
 						// Tree house to be built
 						treeHouse = GameObject.Find("Treehouse");
 						treeHouse.SetActiveRecursively(true);
+						// set new son dialogue
 						_npcInState.UpdateChat("Ah, I guess there isn't too much harm in it. I'll take him fishing later, but the tree house comes first.");
+						break;
+					case "Apple":
+						_npcInState.UpdateChat("I already have enough apples");
 						break;
 					case "Apple[Carpenter]":
 						if (hasStolenApple){
+							this._textToSay = "You can play with my son when he finishes building his treehouse. Now where did I place my old tools.";
 							_npcInState.UpdateChat("Thanks.  I'm sure it was just a harmless mistake.");
 							// TODO - set disposition back
 						}
@@ -91,6 +103,23 @@ public class Carpenter : NPC {
 		
 		public override void ReactToEnviromentInteraction(string npc, string enviromentAction){
 			
+		}
+		
+		public override void ReactToItemPickedUp(GameObject item){
+			if(item.name == "Apple[Carpenter]"){
+				// change chat to anger
+				//_npcInState.UpdateChat("That is my apple. Give it back!");
+				//this._textToSay = "That is my apple. Give it back!";
+				
+				//CarpenterSon carpenterSonScript = GetComponent<CarpenterSon>();
+				//carpenterSonScript.currentEmotion._textToSay = "My dad said you stole our apple! You're not my friend anymore!";
+					
+				// toggle chat
+				//_npcInState.ToggleChat();
+				_npcInState.OpenChat();
+				//_npcInState.UpdateChat("It is yours to keep.");
+				_npcInState.UpdateChat("That is my apple. Give it back!");
+			}
 		}
 	}
 }

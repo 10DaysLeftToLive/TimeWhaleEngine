@@ -50,6 +50,7 @@ public class CarpenterSon : NPC {
 			_acceptableItems.Add("FishingRod");
 		}
 		public GameObject treeHouse;
+		public bool hasGivenTools = false;
 		
 		public override void ReactToItemInteraction(string npc, GameObject item){
 			if (item != null && npc == "CarpenterSon"){
@@ -60,9 +61,10 @@ public class CarpenterSon : NPC {
 						// Tree house to be built
 						treeHouse = GameObject.Find("Treehouse");
 						treeHouse.SetActiveRecursively(true);
-						// TODO - Update father's dialogue
+						// Update father's dialogue
 						//Carpenter carpenterScript = GetComponent<Carpenter>();
-							break;
+						//carpenterScript.currentEmotion._textToSay = "Oh nice, you found my old tools. Now my son can start on that tree house. Have some apples as a reward.";
+						break;
 					case "FishingRod":
 						// Tree house to be built
 						treeHouse = GameObject.Find("Treehouse");
@@ -81,6 +83,19 @@ public class CarpenterSon : NPC {
 		
 		public override void ReactToEnviromentInteraction(string npc, string enviromentAction){
 			
+		}
+		
+		public override void ReactToItemPickedUp(GameObject item){
+			if(item.name == "Apple[Carpenter]"){
+				// change chat to anger
+				this._textToSay = "My dad said you stole our apple! You're not my friend anymore!";
+				
+				//CarpenterSon carpenterSonScript = GetComponent<CarpenterSon>();
+				//carpenterSonScript.currentEmotion._textToSay = "My dad said you stole our apple! You're not my friend anymore!";
+					
+				// toggle chat
+				//_npcInState.ToggleChat();
+			}
 		}
 	}
 }

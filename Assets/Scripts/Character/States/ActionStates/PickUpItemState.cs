@@ -24,5 +24,12 @@ public class PickUpItemState : AbstractState {
 	
 	public override void OnExit(){
 		Debug.Log(character.name + ": PickUpItemState Exit");
+		
+		// Shoot off event for having picked up item
+		EventManager.instance.RiseOnPlayerPickupEvent(new PickUpStateArgs(_toPickUp));
+	}
+	
+	private void OnPickUpItem(EventManager Em, PickUpItemState pickedUpItem){
+		
 	}
 }
