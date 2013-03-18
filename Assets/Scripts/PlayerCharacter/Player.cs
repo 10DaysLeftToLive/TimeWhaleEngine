@@ -189,7 +189,7 @@ public class Player : Character {
 
 		ChangeHitBox(newAge, previousAge);
 		ChangeAnimation(newAge.boneAnimation);
-		SwapItemWithCurrentAge();
+		Inventory.SwapItemWithCurrentAge(newAge.boneAnimation);
 		
 		isAffectedByGravity = true;
 	}
@@ -212,18 +212,7 @@ public class Player : Character {
 		Inventory.PickUpObject(toPickUp);
 	}
 	
-	protected void SwapItemWithCurrentAge() {
-		if (Inventory.HasItem()) {
-			Vector3 oldScale = Inventory.GetItem().transform.localScale;
-			Inventory.GetItem().transform.parent = null;
-			Transform rightHand = animationData.GetSpriteTransform("Right Hand");
-			SetActiveRecursively(Inventory.GetItem(), true);
-			Inventory.GetItem().transform.position = rightHand.position;
-			Inventory.GetItem().transform.parent = rightHand;
-			Inventory.GetItem().transform.localScale = oldScale;
-			Debug.Log("Carrying item with us through age: " + Inventory.GetItem());
-		}
-	}
+	
 	
 	public void DisableHeldItem(){
 		Inventory.DisableHeldItem();
@@ -235,17 +224,12 @@ public class Player : Character {
 	
 	public void ChangeAnimation(BoneAnimation newAnimation){
 		if (animationData != null){
-			SetActiveRecursively(animationData.gameObject, false);
+			Utils.SetActiveRecursively(animationData.gameObject, false);
 		}
 		
 		animationData = newAnimation;
-		SetActiveRecursively(animationData.gameObject, true);
+		Utils.SetActiveRecursively(animationData.gameObject, true);
 	}
 	
-	private void SetActiveRecursively(GameObject gameObject, bool active) {
-		gameObject.SetActive (active);
-    	foreach (Transform limb in gameObject.transform) {
-        	SetActiveRecursively (limb.gameObject, active);
-		}
-	}
+	
 }

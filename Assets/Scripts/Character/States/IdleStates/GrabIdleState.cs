@@ -8,6 +8,7 @@ public class GrabIdleState : IdleState {
 	}
 	
 	public override void OnEnter(){
+		character.PlayAnimation(Strings.animation_stand);
 		Debug.Log(character.name + ": GrabIdleState Enter");
 	}
 	

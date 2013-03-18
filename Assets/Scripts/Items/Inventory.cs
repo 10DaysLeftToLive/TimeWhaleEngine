@@ -48,14 +48,29 @@ public class Inventory {
 		pickedUpObject.GetComponent<InteractableOnClick>().Enable();
 		pickedUpObject.transform.parent = null;
 		pickedUpObject.transform.position = toPlace;
+		
 		//pickedUpObject.transform.localScale = originalLocalScale;
 		pickedUpObject = null;
         SoundManager.instance.PutDownItemSFX.Play();
 		Debug.Log ("After(" + oldPickedUpObject.name + "): Item to swap: " + oldPickedUpObject.transform.localScale);
 	}
 	
-	public void DisableHeldItem(){
-		pickedUpObject.SetActiveRecursively(false);
+	public void SwapItemWithCurrentAge(SmoothMoves.BoneAnimation animationData) {
+		if (HasItem()) {
+			Vector3 oldScale = pickedUpObject.transform.localScale;
+			pickedUpObject.transform.parent = null;
+			rightHandTransform = animationData.GetSpriteTransform("Right Hand");
+			Utils.SetActiveRecursively(pickedUpObject, true);
+			pickedUpObject.transform.position = rightHandTransform.position;
+			pickedUpObject.transform.parent = rightHandTransform;
+			pickedUpObject.transform.localScale = oldScale;
+			Debug.Log("Carrying item with us through age: " + pickedUpObject);
+		}
+	}
+	
+	public void DisableHeldItem() {
+		Utils.SetActiveRecursively(pickedUpObject, false);
+		pickedUpObject.transform.parent = null;
 		pickedUpObject = null;	
 	}
 	
