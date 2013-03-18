@@ -98,6 +98,15 @@ public abstract class NPC : Character {
 		chatObject.CreateChatBox(GetChoices(), GetWhatToSay());
 	}
 	
+	public void UpdateChatButton(){
+		if (player.Inventory.HasItem() && currentEmotion.ItemHasReaction(player.Inventory.GetItem().name)){
+			chatObject.SetButtonCallbacks(LeftButtonClick, RightButtonClick);
+			chatObject.SetGrabText(player.Inventory.GetItem().name);
+		} else {
+			chatObject.SetButtonCallbacks(LeftButtonClick);
+		}
+	}
+	
 	public void ToggleChat(){
 		if (chating){
 			player.EnterState(new IdleState(player));

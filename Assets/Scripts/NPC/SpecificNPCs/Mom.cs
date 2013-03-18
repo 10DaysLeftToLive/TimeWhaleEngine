@@ -106,13 +106,13 @@ public class Mom : NPC {
 					this._textToSay = "Thank you for watching out for your sister!";
 					hasToldOn = true;
 					_acceptableItems.Add("Plushie");
-					//_npcInState.OpenChat();
+					_npcInState.UpdateChatButton();
 					_choices.Clear();
 					break;
 				case "Lie to": Debug.Log("Lied to"); 
 					this._textToSay = "Keep an eye out on your sister!";
 					_acceptableItems.Add("Plushie");
-					//_npcInState.OpenChat();
+					_npcInState.UpdateChatButton();
 					_choices.Clear();
 					break;
 				default: break;
