@@ -10,7 +10,6 @@ public class Player : Character {
 	public float pushPower = 2.0f;
 	
 	public CollisionFlags lastReturnedCollisionFlags;
-	private GameObject pickedUpObject = null;
 	
 	public bool isAffectedByGravity = true;
 	
@@ -213,15 +212,15 @@ public class Player : Character {
 	}
 	
 	protected void SwapItemWithCurrentAge() {
-		if (pickedUpObject != null) {
-			Vector3 oldScale = pickedUpObject.transform.localScale;
-			pickedUpObject.transform.parent = null;
+		if (Inventory.HasItem()) {
+			Vector3 oldScale = Inventory.GetItem().transform.localScale;
+			Inventory.GetItem().transform.parent = null;
 			Transform rightHand = animationData.GetSpriteTransform("Right Hand");
-			pickedUpObject.SetActiveRecursively(true);
-			pickedUpObject.transform.position = rightHand.position;
-			pickedUpObject.transform.parent = rightHand;
-			pickedUpObject.transform.localScale = oldScale;
-			Debug.Log("Carrying item with us through age: " + pickedUpObject);
+			Inventory.GetItem().SetActiveRecursively(true);
+			Inventory.GetItem().transform.position = rightHand.position;
+			Inventory.GetItem().transform.parent = rightHand;
+			Inventory.GetItem().transform.localScale = oldScale;
+			Debug.Log("Carrying item with us through age: " + Inventory.GetItem());
 		}
 	}
 	
