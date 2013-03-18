@@ -19,7 +19,7 @@ public class Inventory {
 			
 			Debug.Log ("Before: Item in hand: " + pickedUpObject.transform.localScale);
 			
-			originalLocalScale = toPickUp.transform.localScale;
+			//originalLocalScale = toPickUp.transform.localScale;
 			toPickUp.transform.position = new Vector3(rightHandTransform.position.x, 
 													  rightHandTransform.position.y, 
 													  rightHandTransform.position.z);
@@ -48,7 +48,7 @@ public class Inventory {
 		pickedUpObject.GetComponent<InteractableOnClick>().Enable();
 		pickedUpObject.transform.parent = null;
 		pickedUpObject.transform.position = toPlace;
-		pickedUpObject.transform.localScale = originalLocalScale;
+		//pickedUpObject.transform.localScale = originalLocalScale;
 		pickedUpObject = null;
         SoundManager.instance.PutDownItemSFX.Play();
 		Debug.Log ("After(" + oldPickedUpObject.name + "): Item to swap: " + oldPickedUpObject.transform.localScale);
@@ -63,7 +63,6 @@ public class Inventory {
 		
 		Vector3 positionToPlace = toSwapIn.transform.position;
 		//Vector3 oldScale = pickedUpObject.transform.localScale;
-		;
 		
 		DropItem(positionToPlace);
 		//oldPickedUpObject.transform.localScale = oldScale;

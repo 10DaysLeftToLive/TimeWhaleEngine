@@ -217,7 +217,7 @@ public class Player : Character {
 			Vector3 oldScale = Inventory.GetItem().transform.localScale;
 			Inventory.GetItem().transform.parent = null;
 			Transform rightHand = animationData.GetSpriteTransform("Right Hand");
-			SetActiveRecursively(animationData.gameObject, false);
+			SetActiveRecursively(Inventory.GetItem(), true);
 			Inventory.GetItem().transform.position = rightHand.position;
 			Inventory.GetItem().transform.parent = rightHand;
 			Inventory.GetItem().transform.localScale = oldScale;
