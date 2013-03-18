@@ -69,6 +69,7 @@ public class Mom : NPC {
 			_choices.Add(new Choice("Tell on", "She's in big trouble! I'll deal with your sister..."));
 			_choices.Add(new Choice("Lie to", "Ok, well make sure she's okay..."));
 			_acceptableItems.Add("Apple");
+			_acceptableItems.Add("Apple[Carpenter]");
 		}
 		public bool hasToldOn = false;
 		
@@ -86,6 +87,9 @@ public class Mom : NPC {
 					}
 							break;
 					case "Apple":
+						_npcInState.UpdateChat("Perfect! These will work wonderfully!");
+						break;
+					case "Apple[Carpenter]":
 						_npcInState.UpdateChat("Perfect! These will work wonderfully!");
 						break;
 					default:
