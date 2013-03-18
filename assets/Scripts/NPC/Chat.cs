@@ -7,7 +7,7 @@ public class Chat : MonoBehaviour {
 	Vector3 pos, screenPos;
 	Vector2 size;
 	string msg;
-	int charPerLine = 60;
+	int charPerLine = 40;
 	Rect rect;
 	bool isActive;
 	Vector2 offset;
