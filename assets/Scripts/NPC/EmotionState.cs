@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class EmotionState {
 	protected NPC _npcInState;
-	protected string _textToSay;
+	public string _textToSay;
 	protected List<Choice> _choices;
 	protected List<string> _acceptableItems;
 	
@@ -46,4 +46,5 @@ public class EmotionState {
 	public virtual void ReactToItemInteraction(string npc, GameObject item){}
 	public virtual void ReactToChoiceInteraction(string npc, string choice){}
 	public virtual void ReactToEnviromentInteraction(string npc, string enviromentAction){}
+	public virtual void ReactToItemPickedUp(GameObject item){}
 }

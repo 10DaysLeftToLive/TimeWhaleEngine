@@ -65,6 +65,15 @@ public class EventManager : ManagerSingleton<EventManager> {
     public void RiseOnNPCInteractionEvent(NPCInteraction interaction){
         if(mOnNPCInteractionEvent != null)  mOnNPCInteractionEvent(this, interaction);
     }
+	
+	//EVENT: onPlayerPickupItem
+	public delegate void mOnPlayerPickupItemDelegate(EventManager EM, PickUpStateArgs pickedUpItem);
+    //Event
+    public event mOnPlayerPickupItemDelegate mOnPlayerPickupItemEvent;
+    //Riser
+    public void RiseOnPlayerPickupEvent(PickUpStateArgs interaction){
+        if(mOnPlayerPickupItemEvent != null)  mOnPlayerPickupItemEvent(this, interaction);
+    }
 }
 
 public class ClickPositionArgs : EventArgs {
@@ -88,5 +97,12 @@ public class PauseStateArgs : EventArgs {
 	public bool isPaused;
 	public PauseStateArgs(bool _isPaused){
 		isPaused = _isPaused;
+	}
+}
+
+public class PickUpStateArgs : EventArgs {
+	public GameObject itemPickedUp;
+	public PickUpStateArgs(GameObject _itemPickedUp){
+		itemPickedUp = _itemPickedUp;
 	}
 }

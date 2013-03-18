@@ -9,10 +9,10 @@ public abstract class NPC : Character {
 	private List<Item> itemReactions;
 	private bool chating = false;
 	private Texture charPortrait;
-	private static int DISTANCE_TO_CHAT = 2;
+	private static int DISTANCE_TO_CHAT = 20;
 	public int id;
 	private Schedule npcSchedule;
-	protected EmotionState currentEmotion;
+	public EmotionState currentEmotion;
 	
 	protected override void Init(){
 		chatObject = GameObject.Find("Chat").GetComponent<Chat>();
@@ -20,6 +20,7 @@ public abstract class NPC : Character {
 		Debug.Log ("TEXTURE LOADED IS CALLED: " + charPortrait.name);
 		player = GameObject.Find("PlayerCharacter").GetComponent<Player>();
 		EventManager.instance.mOnNPCInteractionEvent += new EventManager.mOnNPCInteractionDelegate(ReactToInteractionEvent);
+		EventManager.instance.mOnPlayerPickupItemEvent += new EventManager.mOnPlayerPickupItemDelegate(ReactToItemPickedUp);
 		//npcSchedule = GetSchedule();
 		Debug.Log (name + ": Is player initialized: " + (player != null));
 		currentEmotion = GetInitEmotionState();
@@ -53,6 +54,10 @@ public abstract class NPC : Character {
 			NPCEnviromentInteraction enviromentInteraction = (NPCEnviromentInteraction) otherInteraction;
 			currentEmotion.ReactToEnviromentInteraction(enviromentInteraction._npcReacting.name, enviromentInteraction._enviromentAction);			
 		}
+	}
+	
+	private void ReactToItemPickedUp(EventManager EM, PickUpStateArgs itemPickedUp){
+		currentEmotion.ReactToItemPickedUp(itemPickedUp.itemPickedUp);
 	}
 	
 	private List<Choice> GetChoices(){
