@@ -95,7 +95,6 @@ public class Chat : MonoBehaviour {
 			
 			GUI.Box (mainChatRect, "");
 			GUI.TextField (textBoxRect, msg, textFieldStyle);
-			Debug.Log("CHARACTER NAME IS: " + _charPortrait.name);
 			GUI.Box (portraitRect, _charPortrait);
 			/*if (GUI.Button(portraitRect, "Pic goes here")){
 			}*/
