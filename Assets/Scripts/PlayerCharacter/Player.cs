@@ -208,6 +208,7 @@ public class Player : Character {
 	}
 	
 	public void PickUpObject(GameObject toPickUp){
+		Debug.Log ("Player transform: " + animationData.mLocalTransform);
 		Inventory.PickUpObject(toPickUp);
 	}
 	
@@ -216,7 +217,7 @@ public class Player : Character {
 			Vector3 oldScale = Inventory.GetItem().transform.localScale;
 			Inventory.GetItem().transform.parent = null;
 			Transform rightHand = animationData.GetSpriteTransform("Right Hand");
-			Inventory.GetItem().SetActiveRecursively(true);
+			SetActiveRecursively(animationData.gameObject, false);
 			Inventory.GetItem().transform.position = rightHand.position;
 			Inventory.GetItem().transform.parent = rightHand;
 			Inventory.GetItem().transform.localScale = oldScale;
@@ -234,10 +235,17 @@ public class Player : Character {
 	
 	public void ChangeAnimation(BoneAnimation newAnimation){
 		if (animationData != null){
-			animationData.gameObject.SetActiveRecursively(false);
+			SetActiveRecursively(animationData.gameObject, false);
 		}
 		
 		animationData = newAnimation;
-		animationData.gameObject.SetActiveRecursively(true);
+		SetActiveRecursively(animationData.gameObject, true);
+	}
+	
+	private void SetActiveRecursively(GameObject gameObject, bool active) {
+		gameObject.SetActive (active);
+    	foreach (Transform limb in gameObject.transform) {
+        	SetActiveRecursively (limb.gameObject, active);
+		}
 	}
 }

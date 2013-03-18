@@ -18,7 +18,7 @@ public class Inventory {
 			pickedUpObject = toPickUp;
 			
 			Debug.Log ("Before: Item in hand: " + pickedUpObject.transform.localScale);
-
+			
 			originalLocalScale = toPickUp.transform.localScale;
 			toPickUp.transform.position = new Vector3(rightHandTransform.position.x, 
 													  rightHandTransform.position.y, 
@@ -44,13 +44,14 @@ public class Inventory {
 	
 	public void DropItem(Vector3 toPlace) {
 		Debug.Log ("Before: Item to swap: " + pickedUpObject.transform.localScale);
+		GameObject oldPickedUpObject = pickedUpObject;
 		pickedUpObject.GetComponent<InteractableOnClick>().Enable();
 		pickedUpObject.transform.parent = null;
 		pickedUpObject.transform.position = toPlace;
 		pickedUpObject.transform.localScale = originalLocalScale;
 		pickedUpObject = null;
         SoundManager.instance.PutDownItemSFX.Play();
-		Debug.Log ("After(" + pickedUpObject.name + "): Item to swap: " + pickedUpObject.transform.localScale);
+		Debug.Log ("After(" + oldPickedUpObject.name + "): Item to swap: " + oldPickedUpObject.transform.localScale);
 	}
 	
 	public void DisableHeldItem(){
@@ -62,7 +63,7 @@ public class Inventory {
 		
 		Vector3 positionToPlace = toSwapIn.transform.position;
 		//Vector3 oldScale = pickedUpObject.transform.localScale;
-		GameObject oldPickedUpObject = pickedUpObject;
+		;
 		
 		DropItem(positionToPlace);
 		//oldPickedUpObject.transform.localScale = oldScale;
