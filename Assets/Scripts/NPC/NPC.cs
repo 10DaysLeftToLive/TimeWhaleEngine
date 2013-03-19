@@ -9,7 +9,7 @@ public abstract class NPC : Character {
 	private List<Item> itemReactions;
 	private bool chating = false;
 	private Texture charPortrait;
-	private static int DISTANCE_TO_CHAT = 20;
+	private static int DISTANCE_TO_CHAT = 12;
 	public int id;
 	private Schedule npcSchedule;
 	public EmotionState currentEmotion;
