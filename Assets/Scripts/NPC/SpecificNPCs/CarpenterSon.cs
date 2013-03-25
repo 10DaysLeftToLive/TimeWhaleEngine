@@ -44,8 +44,8 @@ public class CarpenterSon : NPC {
 	
 	public class CarpenterSonIntroEmotionState : EmotionState{
 		public CarpenterSonIntroEmotionState(NPC toControl) : base(toControl, "I wish I had a fishing rod, so I can go fishing instead of building this treehouse."){
-			_choices.Add(new Choice("Fishing", "My dad says that I have to follow in our families footsteps and become a carpenter, but I just want to go fishing."));
-			_choices.Add(new Choice("Apples", "My dad is very protective of our property"));
+			_choices.Add(new Choice("Fishing", "My dad says that I have to follow in our family's footsteps and become a carpenter, but I just want to go fishing."));
+			_choices.Add(new Choice("Apples", "My dad is very protective of our property."));
 			_acceptableItems.Add("ToolBox");
 			_acceptableItems.Add("FishingRod");
 		}
@@ -83,8 +83,8 @@ public class CarpenterSon : NPC {
 						this._textToSay = "I wish I had a fishing rod, so I can go fishing instead of building this treehouse.";
 						_acceptableItems.Add("ToolBox");
 						_acceptableItems.Add("FishingRod");
-						_choices.Add(new Choice("Fishing", "My dad says that I have to follow in our families footsteps and become a carpenter, but I just want to go fishing."));
-						_choices.Add(new Choice("Apples", "My dad is very protective of our property"));
+						_choices.Add(new Choice("Fishing", "My dad says that I have to follow in our family's footsteps and become a carpenter, but I just want to go fishing."));
+						_choices.Add(new Choice("Apples", "My dad is very protective of our property."));
 						break;
 					case "ToolBox":
 						this._textToSay = "Why did you give my dad the tools. Now he will make me build stuff.";

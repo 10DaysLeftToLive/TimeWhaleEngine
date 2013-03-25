@@ -39,7 +39,7 @@ public class Carpenter : NPC {
 	}
 	
 	public class CarpenterIntroEmotionState : EmotionState{
-		public CarpenterIntroEmotionState(NPC toControl) : base(toControl, "You can play with my son when he finishes building his treehouse. Now where did I place my old tools."){
+		public CarpenterIntroEmotionState(NPC toControl) : base(toControl, "You can play with my son when he finishes building his treehouse. Now where did I place my old tools?"){
 			_choices.Add(new Choice("Apples", "I will give you some of our apples if you help me find my old tools."));
 			_choices.Add(new Choice("Son", "He is going to be a great carpenter like his father and father's father one day."));
 			_acceptableItems.Add("ToolBox");
@@ -90,7 +90,7 @@ public class Carpenter : NPC {
 							_npcInState.UpdateChat("It is yours to keep.");
 						}
 						else{
-							this._textToSay = "You can play with my son when he finishes building his treehouse. Now where did I place my old tools.";
+							this._textToSay = "You can play with my son when he finishes building his treehouse. Now where did I place my old tools?";
 							_npcInState.UpdateChat("Thanks.  I'm sure it was just a harmless mistake.");
 							_choices.Add(new Choice("Apples", "I will give you some of our apples if you help me find my old tools."));
 							_choices.Add(new Choice("Son", "He is going to be a great carpenter like his father and father's father one day."));

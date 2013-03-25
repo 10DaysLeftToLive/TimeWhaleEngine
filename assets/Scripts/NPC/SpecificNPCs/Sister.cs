@@ -94,7 +94,7 @@ public class Sister : NPC {
 				switch(item.name){
 				case "Plushie":
 					if (toldOn == false){
-						this._textToSay = "Why'd you give the plushie to mom first?";
+						this._textToSay = "Why'd you give the plushie to Mom first?";
 					}
 					break;
 				default:
@@ -108,7 +108,7 @@ public class Sister : NPC {
 			Debug.Log("sister is choice reacting to " + npc + " making choice " + choice);
 				switch (choice){
 				case "Tell on": Debug.Log("Told on"); 
-					this._textToSay = "Go away. You told mom, I don't talk to traitors!";
+					this._textToSay = "Go away! You told Mom, I don't talk to traitors!";
 					toldOn = true;
 					_acceptableItems.Clear();
 					break;
