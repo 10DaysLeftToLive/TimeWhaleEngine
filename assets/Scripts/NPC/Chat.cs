@@ -137,14 +137,19 @@ public class Chat : MonoBehaviour {
 	
 	private string ParseMessage(string message){
 		if (message.Length > charPerLine){
-			for (int i = 1; i <= message.Length/charPerLine; i++){
-				int index = charPerLine*i;
+			int index = 0;
+			do {
+				index = index + charPerLine;
+				if (index >= message.Length)
+					return (message);
 				do {
 					--index;
 				}while(message[index] != ' ');
 
 				message = message.Insert(index, "\n");
-			}
+				message = message.Remove(index+1, 1);
+			}while(true);
+			
 		}
 		return (message);
 	}
