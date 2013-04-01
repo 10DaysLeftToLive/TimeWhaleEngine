@@ -1,10 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class ShaderBase : PauseObject {
-	
-	//Location of the FadePlane if it is not fading
-	public Vector2 idlePosition; 
+public abstract class ShaderBase : PauseObject {
 	
 	//Denotes the steps sizes for the fade.
 	protected int fadeCycle = 0;
@@ -17,8 +14,11 @@ public class ShaderBase : PauseObject {
 	
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	protected abstract void FadeIn();
+	protected abstract void FadeOut();
 	
+	// Update is called once per frame
+	protected override void UpdateObject () {
+		
 	}
 }

@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 //This class will not work if the game has to pause!
+//STILL WORKING ON THIS!!! NO TOUCHY!!!
 public class SunriseSunsetTimer : ShaderBase {
 	
 	private Color[] vertexColors;
@@ -59,7 +60,7 @@ public class SunriseSunsetTimer : ShaderBase {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	protected override void UpdateObject () {
 		float currentTime = Time.time;
 		if (currentTime > sunriseStartTime && currentTime < sunriseEndTime) {
 			FadeOut();
@@ -82,19 +83,23 @@ public class SunriseSunsetTimer : ShaderBase {
 	}
 	
 	protected virtual float ChangeBrightness(bool isSunrise) {
+		return 0;
 	}
 	
-	protected virtual float ChangeSaturation() {
+	protected virtual float ChangeSaturation(bool isSunrise) {
+		return 0;
 	}
 	
-	protected void FadeIn() {
-		renderer.material.SetFloat("InterpolationFactor", ChangeHue());
-		renderer.material.SetFloat("Brightness", ChangeBrightness());
-		renderer.material.SetFloat("Saturation", ChangeSaturation());
+	protected override void FadeIn() {
+		renderer.material.SetFloat("Hue", ChangeHue(true));
+		renderer.material.SetFloat("Brightness", ChangeBrightness(true));
+		renderer.material.SetFloat("Saturation", ChangeSaturation(true));
 	}
 	
-	protected void FadeOut() {
-		renderer.material.SetFloat("InterpolationFactor", 1 - ((Time.time - AustonomicalTimes.SUNRISE_END) / (AustonomicalTimes.SUNRISE_END - AustronomicalTimes.SUNRISE_START)));
+	protected override void FadeOut() {
+		renderer.material.SetFloat("Hue", ChangeHue(false));
+		renderer.material.SetFloat("Brightness", ChangeBrightness(false));
+		renderer.material.SetFloat("Saturation", ChangeSaturation(false));
 	}
 	
 	private void SetVertexColors(Color color, int startIndex, int endIndex) {

@@ -2,18 +2,18 @@ using UnityEngine;
 using System.Collections;
 using SmoothMoves;
 
-public class AgeTransitionShader : MonoBehaviour {
+public class AgeTransitionShader : ShaderBase {
 	//TODO: Optimize the Update Function so that it is not called every tick
 	//Solution:? NGUI's UpdateManager
+	
+	//Location of the FadePlane if it is not fading
+	public Vector2 idlePosition; 
 	
 	//Denotes the color of the fade
 	public Color fadeColor; 
 	
 	//Duration of the fade in and out in ticks
 	public float fadeDuration; 
-	
-	//Location of the FadePlane if it is not fading
-	public Vector2 idlePosition; 
 	
 	private CameraController camera;
 	
@@ -94,7 +94,7 @@ public class AgeTransitionShader : MonoBehaviour {
 	/// FadeIn:
 	/// Fades in the denoted fade color. 
 	/// </summary>
-	protected void FadeIn() 
+	protected override void FadeIn() 
 	{
 		renderer.material.color = 
 			Color.Lerp(Color.clear, fadeColor, interpolationFactor);
@@ -104,7 +104,7 @@ public class AgeTransitionShader : MonoBehaviour {
 	/// FadeOut;
 	/// Fades out the denoted fade color to a transparent color.
 	/// </summary>		
-	protected void FadeOut()
+	protected override void FadeOut()
 	{
 		renderer.material.color = 
 			Color.Lerp(fadeColor, Color.clear, interpolationFactor);
