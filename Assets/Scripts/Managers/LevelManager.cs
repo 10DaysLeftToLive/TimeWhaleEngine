@@ -13,9 +13,9 @@ public class LevelManager : MonoBehaviour {
 	public Transform middleSectionTarget;
 	public Transform oldSectionTarget;
 	
-	public AudioSource youngBGM;
+	/*public AudioSource youngBGM;
 	public AudioSource middleBGM;
-	public AudioSource oldBGM;
+	public AudioSource oldBGM;*/
 	
 	public LevelLoader levelLoader;
 	
@@ -50,7 +50,7 @@ public class LevelManager : MonoBehaviour {
 		}
 		
 		SetFiles();		
-		SetGender(playerGender);
+		SetGender(CharacterGender.MALE);
 		CharacterAgeManager.SetAgeStart(CharacterAgeState.YOUNG);
 		CharacterAgeManager.SetPlayer(playerCharacter);
 		playerCharacter.ChangeAnimation(genderAnimationInUse.youngBoneAnimation);
@@ -192,9 +192,12 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	private void SetUpAges(){
-		CharacterAgeManager.SetupYoung(genderAnimationInUse.youngBoneAnimation, youngSectionTarget, youngBGM);
+		/*CharacterAgeManager.SetupYoung(genderAnimationInUse.youngBoneAnimation, youngSectionTarget, youngBGM);
 		CharacterAgeManager.SetupMiddle(genderAnimationInUse.middleBoneAnimation, middleSectionTarget, middleBGM);
-		CharacterAgeManager.SetupOld(genderAnimationInUse.oldBoneAnimation, oldSectionTarget, oldBGM);
+		CharacterAgeManager.SetupOld(genderAnimationInUse.oldBoneAnimation, oldSectionTarget, oldBGM);*/
+		CharacterAgeManager.SetupYoung(genderAnimationInUse.youngBoneAnimation, youngSectionTarget);
+		CharacterAgeManager.SetupMiddle(genderAnimationInUse.middleBoneAnimation, middleSectionTarget);
+		CharacterAgeManager.SetupOld(genderAnimationInUse.oldBoneAnimation, oldSectionTarget);
 	}
 
 	private void AllInteractionsComplete() {

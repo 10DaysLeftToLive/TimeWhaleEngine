@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PaperBoy : NPC {	
 	protected override EmotionState GetInitEmotionState(){
-		EmotionState warningState = new EmotionState("Stay safe and remember, don't go into the forest!");
+		EmotionState warningState = new EmotionState(this, "Stay safe and remember, don't go into the forest!");
 		return (warningState);
 	}
 	
@@ -19,7 +19,7 @@ public class PaperBoy : NPC {
 	
 	protected override void LeftButtonCallback(string choice){
 		Debug.Log(this.name + " left callback");
-		EventManager.instance.RiseOnNPCInteractionEvent(new NPCItemInteraction(this.gameObject, player.Inventory.GetItem().name));
+		EventManager.instance.RiseOnNPCInteractionEvent(new NPCItemInteraction(this.gameObject, player.Inventory.GetItem()));
 		// TODO? this is for a chat dialoge
 	}
 	

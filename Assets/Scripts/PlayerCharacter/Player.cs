@@ -10,7 +10,6 @@ public class Player : Character {
 	public float pushPower = 2.0f;
 	
 	public CollisionFlags lastReturnedCollisionFlags;
-	private GameObject pickedUpObject = null;
 	
 	public bool isAffectedByGravity = true;
 	
@@ -34,6 +33,7 @@ public class Player : Character {
 		EventManager.instance.mOnClickNoObjectEvent += new EventManager.mOnClickedNoObjectDelegate (OnClickToMove);
 		EventManager.instance.mOnClickOnPlayerEvent += new EventManager.mOnClickOnPlayerDelegate (OnClickOnPlayer);
 		AgeSwapMover.instance.SetPlayer(this);
+		
 	}
 	
 	// We want to be able to switch to move at any state when the player clicks
@@ -63,6 +63,7 @@ public class Player : Character {
 		goal.z = this.transform.position.z;
 		
 		if (tag == Strings.tag_CarriableItem){
+			Debug.Log (name + "Picking up item " + e.clickedObject.name);
 			EnterState(new MoveThenDoState(this, goal, new PickUpItemState(this, e.clickedObject)));
 		} else if (tag == Strings.tag_Pushable){
 			if (currentState.GetType() == typeof(GrabIdleState)){
@@ -74,6 +75,7 @@ public class Player : Character {
 				EnterState(new MoveThenDoState(this, goal, new GrabOntoState(this, e.clickedObject)));
 			}
 		} else if (tag == Strings.tag_NPC){
+			
 			NPC toTalkWith = (NPC)e.clickedObject.gameObject.GetComponent<NPC>();
 			Vector3 currentPos = this.transform.position;
 			Vector3 goalPosInfront = Utils.GetPointInfrontOf(currentPos, toTalkWith.gameObject);
@@ -187,7 +189,7 @@ public class Player : Character {
 
 		ChangeHitBox(newAge, previousAge);
 		ChangeAnimation(newAge.boneAnimation);
-		SwapItemWithCurrentAge();
+		Inventory.SwapItemWithCurrentAge(newAge.boneAnimation);
 		
 		isAffectedByGravity = true;
 	}
@@ -206,21 +208,11 @@ public class Player : Character {
 	}
 	
 	public void PickUpObject(GameObject toPickUp){
+		Debug.Log ("Player transform: " + animationData.mLocalTransform);
 		Inventory.PickUpObject(toPickUp);
 	}
 	
-	protected void SwapItemWithCurrentAge() {
-		if (pickedUpObject != null) {
-			Vector3 oldScale = pickedUpObject.transform.localScale;
-			pickedUpObject.transform.parent = null;
-			Transform rightHand = animationData.GetSpriteTransform("Right Hand");
-			pickedUpObject.SetActiveRecursively(true);
-			pickedUpObject.transform.position = rightHand.position;
-			pickedUpObject.transform.parent = rightHand;
-			pickedUpObject.transform.localScale = oldScale;
-			Debug.Log("Carrying item with us through age: " + pickedUpObject);
-		}
-	}
+	
 	
 	public void DisableHeldItem(){
 		Inventory.DisableHeldItem();
@@ -232,10 +224,12 @@ public class Player : Character {
 	
 	public void ChangeAnimation(BoneAnimation newAnimation){
 		if (animationData != null){
-			animationData.gameObject.SetActiveRecursively(false);
+			Utils.SetActiveRecursively(animationData.gameObject, false);
 		}
 		
 		animationData = newAnimation;
-		animationData.gameObject.SetActiveRecursively(true);
+		Utils.SetActiveRecursively(animationData.gameObject, true);
 	}
+	
+	
 }

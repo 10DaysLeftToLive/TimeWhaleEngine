@@ -31,9 +31,13 @@ public abstract class InputType  {
 	protected bool ZOOM_OUT = false;
 	
 	protected ControlState currentState;
+	protected AgeTransitionShader shader;
+	protected LevelManager levelManager;
 	
 	public InputType(){
 		camera = Camera.main.GetComponent<CameraController>();
+		shader = GameObject.Find("FadePlane").GetComponent<AgeTransitionShader>();
+		levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
 		ResetControlState();
 	}
 	
@@ -46,7 +50,18 @@ public abstract class InputType  {
 	#region InputEvents
 	// ------------ These functions will be called when the given event occurs, put any code to be perform on the event in here 
 	protected virtual void DragEvent(Vector2 inputChangeSinceLastTick){
-		
+		if (inputChangeSinceLastTick.y > 0 &&
+			inputChangeSinceLastTick.x == 0 && inputChangeSinceLastTick.magnitude > 3) {
+			if (levelManager.CanAgeTransition(Strings.ButtonAgeShiftUp)) {
+				shader.DoFade(Strings.ButtonAgeShiftUp);
+			}
+		}
+		else if (inputChangeSinceLastTick.y < 0 &&
+			inputChangeSinceLastTick.x == 0 && inputChangeSinceLastTick.magnitude > 3) {
+			if (levelManager.CanAgeTransition(Strings.ButtonAgeShiftDown)) {
+				shader.DoFade (Strings.ButtonAgeShiftDown);
+			}
+		}
 	}
 	
 	// called when a click/tap occurs

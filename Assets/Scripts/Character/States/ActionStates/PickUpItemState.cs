@@ -10,7 +10,7 @@ public class PickUpItemState : AbstractState {
 	
 	public override void Update(){
 		Debug.Log(character.name + ": PickUpItemState Update");
-		
+		Debug.Log ("Player transform: " + character.animationData.mLocalTransform);
 		character.Inventory.PickUpObject(_toPickUp);
 		
 		Debug.Log("PickupItem does " + (character.Inventory.HasItem() ? "" : "not") + "have an item");
@@ -24,5 +24,12 @@ public class PickUpItemState : AbstractState {
 	
 	public override void OnExit(){
 		Debug.Log(character.name + ": PickUpItemState Exit");
+		
+		// Shoot off event for having picked up item
+		EventManager.instance.RiseOnPlayerPickupEvent(new PickUpStateArgs(_toPickUp));
+	}
+	
+	private void OnPickUpItem(EventManager Em, PickUpItemState pickedUpItem){
+		
 	}
 }

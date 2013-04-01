@@ -45,10 +45,10 @@ public class MoveState : AbstractState {
 				currentGoal = _pathFollowing.GetPoint();
 				
 				if (currentGoal.y > pos.y || currentGoal.y < pos.y){
-					Debug.Log("The point was different vertically switching to climbing");
+					//Debug.Log("The point was different vertically switching to climbing");
 					currentMovementState = new ClimbToState(character);
 				} else {
-					Debug.Log("The point was the same vertically switching to walking");
+					//Debug.Log("The point was the same vertically switching to walking");
 					currentMovementState = new WalkToState(character);
 				}
 			}
@@ -68,12 +68,11 @@ public class MoveState : AbstractState {
 	}
 	
 	public override void OnEnter(){
-		Debug.Log(character.name + ": MoveState Enter");
+		//Debug.Log(character.name + ": MoveState Enter");
 		speed = 5f;
 		
 		if (CalculatePath()){
 			currentGoal = _pathFollowing.GetPoint();
-			Debug.Log (currentMovementState);
 			currentMovementState = GetGoToStateToPoint(currentGoal);
 		} else {
 			OnNoPath();
@@ -81,11 +80,10 @@ public class MoveState : AbstractState {
 	}
 	
 	public override void OnExit(){
-		Debug.Log(character.name + ": MoveState Exit");
+		//Debug.Log(character.name + ": MoveState Exit");
 	}
 	
 	private void Move(Vector3 moveDelta){
-		Debug.Log (currentMovementState);
 		currentMovementState.Move(moveDelta);
 	}
 	

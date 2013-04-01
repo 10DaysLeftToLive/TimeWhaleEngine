@@ -13,6 +13,7 @@ public class TalkState : AbstractState {
 	
 	public override void OnEnter(){
 		Debug.Log(character.name + ": TalkState Enter");
+		character.PlayAnimation(Strings.animation_stand);
 		_toTalkWith.OpenChat();
 	}
 	

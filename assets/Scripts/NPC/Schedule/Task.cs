@@ -8,10 +8,12 @@ using System.Collections;
  */
 public class Task {
 	State _stateToPerform;
+	private bool _taskFinished = false;
 	
 	public State StatePerforming {
 		get {return _stateToPerform;}
 	}
+	
 	
 	public Task(State stateToPerform){
 		_stateToPerform = stateToPerform;
@@ -22,6 +24,6 @@ public class Task {
 	}
 	
 	public virtual bool IsComplete(){
-		return (false); // this task will go on forever
+		return (_taskFinished); // this task will go on forever
 	}
 }

@@ -195,6 +195,10 @@ public class TouchInput : InputType {
 		fingerDown[ 1 ] = -1;
 	}
 	
+	protected override void DragEvent(Vector2 inputChangeSinceLastTick) {
+		base.DragEvent(inputChangeSinceLastTick);
+	}
+	
 	// calculates the distance between touches to determine if the gesture is to zoom in or out
 	private void DetermineZoomingInOrOut(Touch touch0, Touch touch1){
 		float touchDistance = ( touch1.position - touch0.position ).magnitude;

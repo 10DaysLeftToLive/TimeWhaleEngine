@@ -8,12 +8,11 @@ using SmoothMoves;
  * 		This should not be edited for specific characters put any specific code in the children classes.
  */
 public abstract class Character : PauseObject {
-	#region Static Fields
-	private static float RIGHT = 1;
-	private static float LEFT = -1;
-	#endregion
+	#region Fields	
+	private float LEFT = -1;
+	private float RIGHT = 1;
 	
-	#region Fields
+	public bool SpriteLookingLeft;
 	protected State currentState;
 	private Inventory inventory;
 	private GrabableObject attachedObject = null;
@@ -25,15 +24,25 @@ public abstract class Character : PauseObject {
 		get {return (attachedObject);}
 	}
 	
-	public Inventory Inventory{
+	public Inventory Inventory {
 		get { return inventory; }
 	}
 	
 	void Start () {
 		currentState = new IdleState(this);
 		EnterState(new IdleState(this));
-		inventory = new Inventory(this.transform);// should give the right hand of the bone animation
+		Debug.Log(name);
+		Transform rightHand = animationData.GetSpriteTransform("Right Hand");
+		inventory = new Inventory(rightHand);
+		InitializeSpriteLookDirections();
 		Init();
+	}
+	
+	protected void InitializeSpriteLookDirections() {
+		if (SpriteLookingLeft) {
+			LEFT = 1;
+			RIGHT = -1;
+		}
 	}
 	
 	protected abstract void Init();
@@ -51,18 +60,24 @@ public abstract class Character : PauseObject {
 	}
 	
 	public void LookRight(){
-		Debug.Log ("Look Right");
 		this.transform.localScale = new Vector3(RIGHT, 1, 1);
 	}
 	
 	public void LookLeft(){
-		Debug.Log ("Look Left");
 		this.transform.localScale = new Vector3(LEFT, 1, 1);
 	}
 	
 	public void AttachTo(GameObject toAttachTo){
+		
+		// toAttachTo [box]
+		// this.gameObject [person]
 		attachedObject = toAttachTo.GetComponent<GrabableObject>();
 		attachedObject.AttachToPlayer(this.gameObject);
+	}
+	
+	public void DetachObject() {
+		if (attachedObject != null)
+			DetachFrom(attachedObject.gameObject);
 	}
 	
 	public void DetachFrom(GameObject toDetachFrom){
@@ -70,13 +85,15 @@ public abstract class Character : PauseObject {
 		toDetachFrom.GetComponent<GrabableObject>().DetachFromPlayer();
 	}
 	
-	public void ForceChangeToState(State newState){
+	public void ForceChangeToState(State newState) {
 		// TODO need to enter the correct idle state the change to the new one.
 		EnterState(newState);
 	}
 	
 	public void PlayAnimation(string animation){
-		animationData.Play(animation);
+		if (animationData.GetClipCount() > 0) {
+			animationData.Play(animation);
+		}
 	}
 	
 	public Vector3 GetFeet(){

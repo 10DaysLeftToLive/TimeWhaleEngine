@@ -5,7 +5,7 @@ using SmoothMoves;
 public class CharacterAgeManager {
 	private static Player playerCharacter;
 	private static CharacterAge[] characterAges = new CharacterAge[3];
-	private static CharacterAgeState currentAge;
+	public static CharacterAgeState currentAge;
 	
 	public static void SetPlayer (Player _playerCharacter) {
 		playerCharacter = _playerCharacter;	
@@ -65,27 +65,30 @@ public class CharacterAgeManager {
 	
 	private static void Transition(CharacterAge previousAge, CharacterAge newAge){
 		UpdatePlayer(previousAge);
-		Crossfade.FadeBetween(previousAge, newAge);
 	}
 	
 	public static void PlayCurrentSong(){
-		GetCurrentAge().backgroundMusic.Play();
+		//GetCurrentAge().backgroundMusic.Play();
 	}
 	
 	public static void UpdatePlayer(CharacterAge previousAge){
 		playerCharacter.ChangeAge(GetCurrentAge(), previousAge);
+		playerCharacter.DetachObject();
 	}
 	
-	public static void SetupYoung(BoneAnimation _boneAnimation, Transform _sectionTarget, AudioSource _backgroundMusic){
-		characterAges[(int)CharacterAgeState.YOUNG] = new CharacterAge(CharacterAgeState.YOUNG, _boneAnimation, _sectionTarget, _backgroundMusic, playerCharacter.smallHitBox);
+	public static void SetupYoung(BoneAnimation _boneAnimation, Transform _sectionTarget)
+	{
+		characterAges[(int)CharacterAgeState.YOUNG] = new CharacterAge(CharacterAgeState.YOUNG, _boneAnimation, _sectionTarget, playerCharacter.smallHitBox);
 	}
-	
-	public static void SetupMiddle(BoneAnimation _boneAnimation, Transform _sectionTarget, AudioSource _backgroundMusic){
-		characterAges[(int)CharacterAgeState.MIDDLE] = new CharacterAge(CharacterAgeState.MIDDLE, _boneAnimation, _sectionTarget, _backgroundMusic, playerCharacter.bigHitbox);
+
+	public static void SetupMiddle(BoneAnimation _boneAnimation, Transform _sectionTarget)
+	{
+		characterAges[(int)CharacterAgeState.MIDDLE] = new CharacterAge(CharacterAgeState.MIDDLE, _boneAnimation, _sectionTarget, playerCharacter.bigHitbox);
 	}
-	
-	public static void SetupOld(BoneAnimation _boneAnimation, Transform _sectionTarget, AudioSource _backgroundMusic){
-		characterAges[(int)CharacterAgeState.OLD] = new CharacterAge(CharacterAgeState.OLD, _boneAnimation, _sectionTarget, _backgroundMusic, playerCharacter.bigHitbox);
+
+	public static void SetupOld(BoneAnimation _boneAnimation, Transform _sectionTarget)
+	{
+		characterAges[(int)CharacterAgeState.OLD] = new CharacterAge(CharacterAgeState.OLD, _boneAnimation, _sectionTarget, playerCharacter.bigHitbox);
 	}
 	
 	public static CharacterAgeState GetCurrentAgeState(){

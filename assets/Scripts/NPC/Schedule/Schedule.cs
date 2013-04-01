@@ -25,6 +25,10 @@ public class Schedule {
 		_toManage = toManage;
 	}
 	
+	~Schedule() {
+		_tasksToDo.Clear ();
+	}
+	
 	public bool HasTask(){
 		return (current != null);
 	}
@@ -41,9 +45,11 @@ public class Schedule {
 	}
 	
 	public void NextTask(){
-		current = _tasksToDo.Dequeue();
-		Debug.Log(_toManage.name + " is now switching to " + current.StatePerforming);
-		_toManage.ForceChangeToState(current.StatePerforming);
+		if (_tasksToDo.Count > 0) {
+			current = _tasksToDo.Dequeue();
+			Debug.Log(_toManage.name + " is now switching to " + current.StatePerforming);
+			_toManage.ForceChangeToState(current.StatePerforming);
+		}
 	}
 	
 	public void Add(Task task){

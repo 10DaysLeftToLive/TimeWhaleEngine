@@ -8,16 +8,21 @@ public abstract class NPC : Character {
 	public int npcDisposition; // NOTE should not be public but this makes testing easier
 	private List<Item> itemReactions;
 	private bool chating = false;
-	private static int DISTANCE_TO_CHAT = 2;
+	private Texture charPortrait;
+	private static int DISTANCE_TO_CHAT = 12;
 	public int id;
 	private Schedule npcSchedule;
-	protected EmotionState currentEmotion;
+	public EmotionState currentEmotion;
 	
 	protected override void Init(){
 		chatObject = GameObject.Find("Chat").GetComponent<Chat>();
+		charPortrait = (Texture)Resources.Load("" + this.name, typeof(Texture));
+		Debug.Log ("TEXTURE LOADED IS CALLED: " + charPortrait.name);
 		player = GameObject.Find("PlayerCharacter").GetComponent<Player>();
 		EventManager.instance.mOnNPCInteractionEvent += new EventManager.mOnNPCInteractionDelegate(ReactToInteractionEvent);
-		npcSchedule = GetSchedule();
+		EventManager.instance.mOnPlayerPickupItemEvent += new EventManager.mOnPlayerPickupItemDelegate(ReactToItemPickedUp);
+		//npcSchedule = GetSchedule();
+		Debug.Log (name + ": Is player initialized: " + (player != null));
 		currentEmotion = GetInitEmotionState();
 	}
 	
@@ -25,7 +30,7 @@ public abstract class NPC : Character {
 		if (chating && !NearPlayer()){
 			CloseChat();
 		}
-		npcSchedule.Run(Time.deltaTime);
+		//npcSchedule.Run(Time.deltaTime);
 	}
 	
 	// ONLY PUT SPECIFIC NPC THINGS IN THESE IN THE CHILDREN
@@ -38,22 +43,25 @@ public abstract class NPC : Character {
 	private void ReactToInteractionEvent(EventManager EM, NPCInteraction otherInteraction){
 		Debug.Log(name + " is reacting to event with " + otherInteraction._npcReacting.name);
 		if (otherInteraction.GetType().Equals(typeof(NPCChoiceInteraction))){
+			Debug.Log("Calling Choice Interaction for " + otherInteraction._npcReacting.name);
 			NPCChoiceInteraction choiceInteraction = (NPCChoiceInteraction) otherInteraction;
 			currentEmotion.ReactToChoiceInteraction(choiceInteraction._npcReacting.name, choiceInteraction._choice);
 		} else if (otherInteraction.GetType().Equals(typeof(NPCItemInteraction))) {
+			Debug.Log("Calling Item Interaction for " + otherInteraction._npcReacting.name);
 			NPCItemInteraction itemInteraction = (NPCItemInteraction) otherInteraction;
-			currentEmotion.ReactToItemInteraction(itemInteraction._npcReacting.name, itemInteraction._itemName);
+			currentEmotion.ReactToItemInteraction(itemInteraction._npcReacting.name, itemInteraction._item);
 		} else if (otherInteraction.GetType().Equals(typeof(NPCEnviromentInteraction))) {
 			NPCEnviromentInteraction enviromentInteraction = (NPCEnviromentInteraction) otherInteraction;
-			currentEmotion.ReactToItemInteraction(enviromentInteraction._npcReacting.name, enviromentInteraction._enviromentAction);			
+			currentEmotion.ReactToEnviromentInteraction(enviromentInteraction._npcReacting.name, enviromentInteraction._enviromentAction);			
 		}
 	}
 	
+	private void ReactToItemPickedUp(EventManager EM, PickUpStateArgs itemPickedUp){
+		currentEmotion.ReactToItemPickedUp(itemPickedUp.itemPickedUp);
+	}
+	
 	private List<Choice> GetChoices(){
-		List<Choice> choices = new List<Choice>();//currentEmotion.GetChoices();
-		choices.Add(new Choice("Talk With", "This is a reaction."));
-		
-		return(choices);
+		return(currentEmotion.GetChoices());
 	}
 	
 	protected string GetWhatToSay(){
@@ -65,24 +73,38 @@ public abstract class NPC : Character {
 	}
 	
 	private void RightButtonClick(){
-		EventManager.instance.RiseOnNPCInteractionEvent(new NPCItemInteraction(this.gameObject, player.Inventory.GetItem().name));
-		RightButtonCallback();
-		Debug.Log("Right click");
-		UpdateChatButtons();
+		if (player.Inventory.GetItem() != null && currentEmotion.ItemHasReaction(player.Inventory.GetItem().name)){
+			EventManager.instance.RiseOnNPCInteractionEvent(new NPCItemInteraction(this.gameObject, player.Inventory.GetItem()));
+			RightButtonCallback();
+			Debug.Log("Right click");
+			player.Inventory.DisableHeldItem();
+			UpdateChatButtons();
+		}
 	}
 	
 	public void OpenChat(){
-		Debug.Log("Player does " + (player.Inventory.HasItem() ? "" : "not") + "have an item");
-		if (player.Inventory.HasItem()){
+		//Debug.Log("Player does " + (player.Inventory.HasItem() ? "" : "not") + "have an item");
+		Debug.Log(this.name + " What is player value: " + player);
+		if (player.Inventory.HasItem() && currentEmotion.ItemHasReaction(player.Inventory.GetItem().name)){
 			chatObject.SetButtonCallbacks(LeftButtonClick, RightButtonClick);
-			chatObject.SetButtonText(GetChoices(), player.Inventory.GetItem().name);
+			chatObject.SetGrabText(player.Inventory.GetItem().name);
 		} else {
 			chatObject.SetButtonCallbacks(LeftButtonClick);
-			chatObject.SetButtonText(GetChoices());
 		}
 		
 		chating = true;
-		chatObject.CreateChatBox(this.gameObject, player.gameObject, GetWhatToSay());
+		Debug.Log ("INFRONT OF setCharPortrait: " + charPortrait.name);
+		chatObject.setCharPortrait(charPortrait);
+		chatObject.CreateChatBox(GetChoices(), GetWhatToSay());
+	}
+	
+	public void UpdateChatButton(){
+		if (player.Inventory.HasItem() && currentEmotion.ItemHasReaction(player.Inventory.GetItem().name)){
+			chatObject.SetButtonCallbacks(LeftButtonClick, RightButtonClick);
+			chatObject.SetGrabText(player.Inventory.GetItem().name);
+		} else {
+			chatObject.SetButtonCallbacks(LeftButtonClick);
+		}
 	}
 	
 	public void ToggleChat(){
@@ -90,13 +112,13 @@ public abstract class NPC : Character {
 			player.EnterState(new IdleState(player));
 			CloseChat();
 		} else {
+			Debug.Log(player);
 			player.EnterState(new TalkState(player, this));
 			OpenChat();
 		}
-		chating = !chating;
 	}
 	
-	protected void UpdateChat(string newMessage){
+	public void UpdateChat(string newMessage){
 		chatObject.UpdateMessage(newMessage);
 	}
 	
@@ -115,10 +137,12 @@ public abstract class NPC : Character {
 	}
 	
 	private bool NearPlayer(){
-		return (Utils.CalcDistance(player.transform.position.x, this.transform.position.x) < DISTANCE_TO_CHAT);
+		return Vector3.Distance(player.transform.position, this.transform.position) < DISTANCE_TO_CHAT;
 	}
 	
 	public void NextTask(){
+		EventManager.instance.RiseOnNPCInteractionEvent(new NPCEnviromentInteraction(this.gameObject, player.Inventory.GetItem().name));
+		
 		npcSchedule.NextTask();
 	}
 	
@@ -127,7 +151,7 @@ public abstract class NPC : Character {
 		npcDisposition = disp;
 	}
 	
-	public int GetDisposition(){
+	public int GetDisposition() {
 		return npcDisposition;	
 	}
 	

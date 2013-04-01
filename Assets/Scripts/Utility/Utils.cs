@@ -28,4 +28,11 @@ public static class Utils{
 		
 		return (whereToMove);
 	}
+	
+	public static void SetActiveRecursively(GameObject gameObject, bool active) {
+		gameObject.SetActive (active);
+    	foreach (Transform limb in gameObject.transform) {
+        	SetActiveRecursively (limb.gameObject, active);
+		}
+	}
 }
