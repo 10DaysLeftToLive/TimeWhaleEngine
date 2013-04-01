@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class ShaderBase : MonoBehaviour {
+public class ShaderBase : PauseObject {
 	
 	//Location of the FadePlane if it is not fading
 	public Vector2 idlePosition; 

@@ -8,7 +8,7 @@ using System.Collections;
  */
 
 public class OnClickNextToPlayer : OnClick {
-	protected PlayerController playerCharacter;
+	protected Player playerCharacter;
 	public float minimumDistance = 1.5f;
 	protected Player player;
 	
@@ -17,7 +17,7 @@ public class OnClickNextToPlayer : OnClick {
 	}
 	
 	public void FindPlayer(){
-		playerCharacter = FindObjectOfType(typeof(PlayerController)) as PlayerController;		
+		playerCharacter = FindObjectOfType(typeof(Player)) as Player;		
 		player = FindObjectOfType(typeof(Player)) as Player;		
 	}
 
