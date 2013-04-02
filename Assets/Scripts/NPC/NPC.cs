@@ -10,6 +10,10 @@ public abstract class NPC : Character {
 	private bool chating = false;
 	private Texture charPortrait;
 	private static int DISTANCE_TO_CHAT = 12;
+	private static int DISPOSITION_LOW_END = 0;
+	private static int DISPOSITION_HIGH_END = 10;
+	public static int DISPOSITION_LOW = 3;
+	public static int DISPOSITION_HIGH = 7;
 	public int id;
 	private Schedule npcSchedule;
 	public EmotionState currentEmotion;
@@ -155,7 +159,17 @@ public abstract class NPC : Character {
 		return npcDisposition;	
 	}
 	
-	public void UpdateDisposition(int disp) {
+	// Changes the disposition to be within the disposition bounds
+	public void UpdateDisposition(int deltaDisp) {
+		int disp = npcDisposition + deltaDisp;
+		
+		if (disp < DISPOSITION_LOW_END){
+			disp = DISPOSITION_LOW_END;
+		}
+		else if (disp > DISPOSITION_HIGH_END) {
+			disp = DISPOSITION_HIGH_END;
+		}
+		
 		NPCDispositionManager.instance.UpdateWithId(id, disp);
 	}
 	#endregion
