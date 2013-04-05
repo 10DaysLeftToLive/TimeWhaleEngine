@@ -37,12 +37,6 @@ public class AgeTransitionShader : ShaderBase {
 	//Will get rid of this if Jared lets me refactor LevelManager a tiny bit.
 	private LevelManager levelManager;
 	
-	//Denotes the steps sizes for the fade.
-	private int fadeCycle = 0;
-	
-	//A variable that is used to interpolate a transparent color to the fade color
-	private float interpolationFactor = 0;
-	
 	
 	//Button pressed that we used to activate the fade
 	private string ageShiftAction;

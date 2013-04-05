@@ -15,6 +15,10 @@ public class SunriseSunsetTimer : ShaderBase {
 	
 	public float sunsetDuration;
 	
+	public float maxBrightness;
+	
+	public float minBrightness;
+	
 	private float sunriseEndTime;
 	
 	private float sunsetEndTime;
@@ -74,20 +78,30 @@ public class SunriseSunsetTimer : ShaderBase {
 	
 	//Insert mathematical function for sunrise/sunset here.
 	protected virtual float ChangeHue(bool isSunrise) {
-		float currentTime = isSunrise ? Time.time - sunriseStartTime : sunsetEndTime - Time.time;
+		float currentTime = isSunrise ? Time.time - sunriseStartTime : sunsetStartTime - Time.time;
 		
 		int k = 5;
 		int g = -170;
 		
-		return g - g*Mathf.Cos(k*currentTime) - ((2*Mathf.PI)/k)/2;
+		float fx = g - g*Mathf.Cos(k*currentTime) - ((2*Mathf.PI)/k)/2;
+		fx =  isSunrise ? fx : fx + -170;
+		return fx * 180/Mathf.PI;
 	}
 	
 	protected virtual float ChangeBrightness(bool isSunrise) {
-		return 0;
+		float currentTime;
+		if (isSunrise) {
+			currentTime = (Time.time - sunriseStartTime) / sunriseDuration;
+			return Mathf.Lerp(minBrightness, maxBrightness, currentTime);
+		}
+		else {
+			currentTime = (Time.time - sunsetStartTime) / sunsetDuration;
+			return Mathf.Lerp(maxBrightness, minBrightness, currentTime);
+		}
 	}
 	
 	protected virtual float ChangeSaturation(bool isSunrise) {
-		return 0;
+		return 1;
 	}
 	
 	protected override void FadeIn() {

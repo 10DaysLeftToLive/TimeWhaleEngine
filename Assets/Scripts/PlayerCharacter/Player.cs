@@ -213,7 +213,6 @@ public class Player : Character {
 	}
 	
 	
-	
 	public void DisableHeldItem(){
 		Inventory.DisableHeldItem();
 	}
@@ -229,6 +228,12 @@ public class Player : Character {
 		
 		animationData = newAnimation;
 		Utils.SetActiveRecursively(animationData.gameObject, true);
+		if (Inventory != null) {
+			Transform rightHand = animationData.GetSpriteTransform("Right Hand");
+			Inventory.ChangeRightHand(rightHand);
+		}
+		Debug.Log("Animation data active in hiearchy: " + animationData.gameObject.activeInHierarchy);
+		Debug.Log ("Is animation data enabled: " + animationData.enabled);
 	}
 	
 	
