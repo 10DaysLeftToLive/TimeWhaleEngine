@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class Mom : NPC {
+public class MomYoung : NPC {
 	string whatToSay;
 	
 	protected override EmotionState GetInitEmotionState(){

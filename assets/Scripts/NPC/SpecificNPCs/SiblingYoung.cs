@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Sister : NPC {	
+public class SiblingYoung : NPC {	
 	protected override EmotionState GetInitEmotionState(){
 		//EmotionState warningState = new EmotionState(this, "Stay safe and remember, don't go into the forest!");
 		return (new IntroEmotionState(this));
