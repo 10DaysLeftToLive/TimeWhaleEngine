@@ -10,12 +10,12 @@ public class CarpenterSonYoung : NPC {
 	}
 	protected override EmotionState GetInitEmotionState(){
 		if (this.GetDisposition() >= NPC.DISPOSITION_HIGH){
-			return (new CarpenterSonYoungHighDispositionEmotionState(this));	
+			return (new HighDispositionEmotionState(this));	
 		}
 		else if (this.GetDisposition() > NPC.DISPOSITION_LOW){
-			return (new CarpenterSonYoungMediumDispositionEmotionState(this));
+			return (new MediumDispositionEmotionState(this));
 		} else {
-			return (new CarpenterSonYoungLowDispositionEmotionState(this));
+			return (new LowDispositionEmotionState(this));
 		}
 	}
 	
@@ -47,7 +47,7 @@ public class CarpenterSonYoung : NPC {
 	
 	// Low disposition state (doesn't like you)
 	[System.Serializable]
-	public class CarpenterSonYoungLowDispositionEmotionState : EmotionState{
+	public class LowDispositionEmotionState : EmotionState{
 		public string toolboxResponse = "Thanks for the tools, now I can build my treehouse.";
 		public string toolboxDialogue = "Thanks for those tools!";
 		public string toolboxGivenToFatherDialogue = "Why did you give him that?  Now, he's gonna make me build stuff instead of letting me go fishing!";
@@ -60,13 +60,13 @@ public class CarpenterSonYoung : NPC {
 		public int fishingRodDispositionChange = 3;
 		public int appleStolenDispositionChange = -3;
 		
-		public CarpenterSonYoungLowDispositionEmotionState(NPC toControl) : base(toControl, "Hey!  We should play later!"){
+		public LowDispositionEmotionState(NPC toControl) : base(toControl, "Hey!  We should play later!"){
 			_acceptableItems.Add("ToolBox");
 			_acceptableItems.Add("FishingRod");
 		}
 		
 		// Pass the previous dialogue
-		public CarpenterSonYoungLowDispositionEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+		public LowDispositionEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
 			_acceptableItems.Add("ToolBox");
 			_acceptableItems.Add("FishingRod");
 		}
@@ -138,17 +138,17 @@ public class CarpenterSonYoung : NPC {
 		
 		public override void UpdateEmotionState(){
 			if (_npcInState.GetDisposition() >= NPC.DISPOSITION_HIGH){
-				_npcInState.currentEmotion = new CarpenterSonYoungHighDispositionEmotionState(_npcInState);	
+				_npcInState.currentEmotion = new HighDispositionEmotionState(_npcInState);	
 			}
 			else if (_npcInState.GetDisposition() > NPC.DISPOSITION_LOW){
-				_npcInState.currentEmotion = new CarpenterSonYoungMediumDispositionEmotionState(_npcInState);
+				_npcInState.currentEmotion = new MediumDispositionEmotionState(_npcInState);
 			}
 		}
 	}
 	
 	// Medium disposition state
 	[System.Serializable]
-	public class CarpenterSonYoungMediumDispositionEmotionState : EmotionState{
+	public class MediumDispositionEmotionState : EmotionState{
 		public string toolboxResponse = "Thanks for the tools, now I can build my treehouse.";
 		public string toolboxDialogue = "Thanks for those tools!";
 		public string toolboxGivenToFatherDialogue = "Why did you give him that?  Now, he's gonna make me build stuff instead of letting me go fishing!";
@@ -161,13 +161,13 @@ public class CarpenterSonYoung : NPC {
 		public int fishingRodDispositionChange = 3;
 		public int appleStolenDispositionChange = -3;
 		
-		public CarpenterSonYoungMediumDispositionEmotionState(NPC toControl) : base(toControl, "Hey!  We should play later!"){
+		public MediumDispositionEmotionState(NPC toControl) : base(toControl, "Hey!  We should play later!"){
 			_acceptableItems.Add("ToolBox");
 			_acceptableItems.Add("FishingRod");
 		}
 		
 		// Pass the previous dialogue
-		public CarpenterSonYoungMediumDispositionEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+		public MediumDispositionEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
 			_acceptableItems.Add("ToolBox");
 			_acceptableItems.Add("FishingRod");
 		}
@@ -249,17 +249,17 @@ public class CarpenterSonYoung : NPC {
 		
 		public override void UpdateEmotionState(){
 			if (_npcInState.GetDisposition() >= NPC.DISPOSITION_HIGH){
-				_npcInState.currentEmotion = new CarpenterSonYoungHighDispositionEmotionState(_npcInState);	
+				_npcInState.currentEmotion = new HighDispositionEmotionState(_npcInState);	
 			}
 			else if (_npcInState.GetDisposition() <= NPC.DISPOSITION_LOW){
-				_npcInState.currentEmotion = new CarpenterSonYoungLowDispositionEmotionState(_npcInState);
+				_npcInState.currentEmotion = new LowDispositionEmotionState(_npcInState);
 			}
 		}
 	}
 	
 	// High disposition state
 	[System.Serializable]
-	public class CarpenterSonYoungHighDispositionEmotionState : EmotionState{
+	public class HighDispositionEmotionState : EmotionState{
 		public string toolboxResponse = "Thanks for the tools, now I can build my treehouse.";
 		public string toolboxDialogue = "Thanks for those tools!";
 		public string toolboxGivenToFatherDialogue = "Why did you give him that?  Now, he's gonna make me build stuff instead of letting me go fishing!";
@@ -271,13 +271,13 @@ public class CarpenterSonYoung : NPC {
 		public int fishingRodDispositionChange = 3;
 		public int appleStolenDispositionChange = -3;
 		
-		public CarpenterSonYoungHighDispositionEmotionState(NPC toControl) : base(toControl, "Hey!  We should play later!"){
+		public HighDispositionEmotionState(NPC toControl) : base(toControl, "Hey!  We should play later!"){
 			_acceptableItems.Add("ToolBox");
 			_acceptableItems.Add("FishingRod");
 		}
 		
 		// Pass the previous dialogue
-		public CarpenterSonYoungHighDispositionEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+		public HighDispositionEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
 			_acceptableItems.Add("ToolBox");
 			_acceptableItems.Add("FishingRod");
 		}
@@ -352,10 +352,10 @@ public class CarpenterSonYoung : NPC {
 		
 		public override void UpdateEmotionState(){
 			if (_npcInState.GetDisposition() < NPC.DISPOSITION_HIGH){
-				_npcInState.currentEmotion = new CarpenterSonYoungMediumDispositionEmotionState(_npcInState);	
+				_npcInState.currentEmotion = new MediumDispositionEmotionState(_npcInState);	
 			}
 			else if (_npcInState.GetDisposition() <= NPC.DISPOSITION_LOW){
-				_npcInState.currentEmotion = new CarpenterSonYoungLowDispositionEmotionState(_npcInState);
+				_npcInState.currentEmotion = new LowDispositionEmotionState(_npcInState);
 			}
 		}
 	}
