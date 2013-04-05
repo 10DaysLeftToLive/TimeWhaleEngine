@@ -47,4 +47,5 @@ public class EmotionState {
 	public virtual void ReactToChoiceInteraction(string npc, string choice){}
 	public virtual void ReactToEnviromentInteraction(string npc, string enviromentAction){}
 	public virtual void ReactToItemPickedUp(GameObject item){}
+	public virtual void UpdateEmotionState(){}
 }
