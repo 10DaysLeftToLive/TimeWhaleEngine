@@ -9,6 +9,8 @@ public static class QuickPath {
 	public static Path StraightPath(Vector3 startPos, Vector3 destination){
 		Vector3[] points = {startPos, destination}; 
 		int[] dir = {0,0};
+		if (startPos.x > destination.x)
+			dir[1] = 1;
 		Path path = new Path(2, points, dir);
 		return path;
 	}

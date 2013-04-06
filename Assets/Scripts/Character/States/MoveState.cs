@@ -20,25 +20,22 @@ public class MoveState : AbstractState {
 	
 	public override void Update(){
 		Vector3 pos = character.transform.position;
-		Vector3 movement = new Vector3(0,0,0);
-		if (_pathFollowing.GetDirection() == 0){
-			if (pos.x < _pathFollowing.GetPoint().x){
-				movement.x += speed;
-				character.LookRight();
-			}else if (pos.x > _pathFollowing.GetPoint().x){
-				movement.x -= speed;	
-				character.LookLeft();
-			}
-		} else {
-			if (pos.y < _pathFollowing.GetPoint().y){
-				movement.y += speed;
-			}else if (pos.y > _pathFollowing.GetPoint().y){
-				movement.y -= speed;	
-			}
-		}
+		Vector3 movement = _pathFollowing.GetVectorDirection();
+		Vector3 speedVector = new Vector3(speed, speed, 0);
+
+		movement = Vector3.Scale(movement, speedVector);
 		movement *= Time.deltaTime;
 		
-		if (NearPoint(_pathFollowing.GetPoint(), _pathFollowing.GetDirection())){
+		if (movement.x < 0){
+			character.LookLeft();
+		}else if (movement.x > 0){
+			character.LookRight();
+		}else {
+			// going up/down
+		 	// character.climb???	
+		}
+		
+		if (NearPoint(_pathFollowing.GetPoint(), _pathFollowing.GetVectorDirection())){
 			if (!_pathFollowing.NextNode()){
 				OnGoalReached();
 			} else {
@@ -87,13 +84,19 @@ public class MoveState : AbstractState {
 		currentMovementState.Move(moveDelta);
 	}
 	
-	private bool NearPoint(Vector3 point, int dir){
+	private bool NearPoint(Vector3 point, Vector3 vectorDir){
 		Vector3 pos = character.transform.position;
+		pos = Vector3.Scale(pos,vectorDir);
+		float flatPos = pos.x + pos.y;
+		
+		point = Vector3.Scale(point,vectorDir);
+		float flatPoint = point.x + point.y;
+		
 		float difference = speed*Time.deltaTime;
-		if ((dir == 0 || dir == 1) && (pos.x  < point.x + difference && pos.x > point.x - difference))
+		
+		if (flatPos < flatPoint + difference && flatPos > flatPoint - difference)
 			return true;
-		if ((dir == 2 || dir == 3) && (pos.y  < point.y + difference && pos.y > point.y - difference))
-			return true;
+		
 		return false;
 	}
 	
@@ -106,12 +109,13 @@ public class MoveState : AbstractState {
 			hitPos.y += character.transform.localScale.y/2;
 			
 			_pathFollowing = new Path();
-			if (PathSearch(character.transform.position, hitPos, character.transform.localScale.y/2)){
+			_pathFollowing = QuickPath.StraightPath(character.transform.position, hitPos);
+			/*if (PathSearch(character.transform.position, hitPos, character.transform.localScale.y/2)){
 				_pathFollowing = PathFinding.GetPath();
 				
 				return (true);
-			}
-		} return (false);
+			}*/
+		} return (true);
 	}
 	
 	protected virtual bool PathSearch(Vector3 pos, Vector3 hitPos, float height){
