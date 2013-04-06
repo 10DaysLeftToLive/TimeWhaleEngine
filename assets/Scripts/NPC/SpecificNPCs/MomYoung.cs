@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class Mom : NPC {
+public class MomYoung : NPC {
 	string whatToSay;
 	
 	protected override EmotionState GetInitEmotionState(){
@@ -122,6 +122,123 @@ public class Mom : NPC {
 		
 		public override void ReactToEnviromentInteraction(string npc, string enviromentAction){
 			
+		}
+	}
+	
+	// Low disposition state (doesn't like you)
+	[System.Serializable]
+	public class LowDispositionEmotionState : EmotionState{
+		
+		public LowDispositionEmotionState(NPC toControl) : base(toControl, "Where is your sister?"){
+			
+		}
+		
+		// Pass the previous dialogue
+		public LowDispositionEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+			
+		}
+		
+		public override void ReactToItemInteraction(string npc, GameObject item){
+			
+		}
+		
+		public override void ReactToChoiceInteraction(string npc, string choice){
+			
+		}
+		
+		public override void ReactToEnviromentInteraction(string npc, string enviromentAction){
+			
+		}
+		
+		public override void ReactToItemPickedUp(GameObject item){
+			
+		}
+		
+		public override void UpdateEmotionState(){
+			if (_npcInState.GetDisposition() >= NPC.DISPOSITION_HIGH){
+				_npcInState.currentEmotion = new HighDispositionEmotionState(_npcInState);	
+			}
+			else if (_npcInState.GetDisposition() > NPC.DISPOSITION_LOW){
+				_npcInState.currentEmotion = new MediumDispositionEmotionState(_npcInState);
+			}
+		}
+	}
+	
+	// Medium disposition state
+	[System.Serializable]
+	public class MediumDispositionEmotionState : EmotionState{
+		
+		public MediumDispositionEmotionState(NPC toControl) : base(toControl, "Where is your sister?"){
+			
+		}
+		
+		// Pass the previous dialogue
+		public MediumDispositionEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+			
+		}
+		
+		public override void ReactToItemInteraction(string npc, GameObject item){
+			
+		}
+		
+		public override void ReactToChoiceInteraction(string npc, string choice){
+			
+		}
+		
+		public override void ReactToEnviromentInteraction(string npc, string enviromentAction){
+			
+		}
+		
+		public override void ReactToItemPickedUp(GameObject item){
+			
+		}
+		
+		public override void UpdateEmotionState(){
+			if (_npcInState.GetDisposition() >= NPC.DISPOSITION_HIGH){
+				_npcInState.currentEmotion = new HighDispositionEmotionState(_npcInState);	
+			}
+			else if (_npcInState.GetDisposition() <= NPC.DISPOSITION_LOW){
+				_npcInState.currentEmotion = new LowDispositionEmotionState(_npcInState);
+			}
+		}
+	}
+	
+	// High disposition state
+	[System.Serializable]
+	public class HighDispositionEmotionState : EmotionState{
+		
+		public HighDispositionEmotionState(NPC toControl) : base(toControl, "Where is your sister?"){
+			
+		}
+		
+		// Pass the previous dialogue
+		public HighDispositionEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+			
+		}
+		
+		public override void ReactToItemInteraction(string npc, GameObject item){
+			
+		}
+		
+		public override void ReactToChoiceInteraction(string npc, string choice){
+			
+		}
+		
+		public override void ReactToEnviromentInteraction(string npc, string enviromentAction){
+			
+		}
+		
+		public override void ReactToItemPickedUp(GameObject item){
+			
+		}
+		
+		public override void UpdateEmotionState(){
+			if (_npcInState.GetDisposition() < NPC.DISPOSITION_HIGH){
+				_npcInState.currentEmotion = new MediumDispositionEmotionState(_npcInState);	
+			}
+			else if (_npcInState.GetDisposition() <= NPC.DISPOSITION_LOW){
+				_npcInState.currentEmotion = new LowDispositionEmotionState(_npcInState);
+			}
 		}
 	}
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Sister : NPC {	
+public class SiblingYoung : NPC {	
 	protected override EmotionState GetInitEmotionState(){
 		//EmotionState warningState = new EmotionState(this, "Stay safe and remember, don't go into the forest!");
 		return (new IntroEmotionState(this));
@@ -119,6 +119,123 @@ public class Sister : NPC {
 		
 		public override void ReactToEnviromentInteraction(string npc, string enviromentAction){
 			
+		}
+	}
+	
+	// Low disposition state (doesn't like you)
+	[System.Serializable]
+	public class CarpenterSonMiddleLowDispositionEmotionState : EmotionState{
+		
+		public CarpenterSonMiddleLowDispositionEmotionState(NPC toControl) : base(toControl, "Hey!  We should play later!"){
+			
+		}
+		
+		// Pass the previous dialogue
+		public CarpenterSonMiddleLowDispositionEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+			
+		}
+		
+		public override void ReactToItemInteraction(string npc, GameObject item){
+			
+		}
+		
+		public override void ReactToChoiceInteraction(string npc, string choice){
+			
+		}
+		
+		public override void ReactToEnviromentInteraction(string npc, string enviromentAction){
+			
+		}
+		
+		public override void ReactToItemPickedUp(GameObject item){
+			
+		}
+		
+		public override void UpdateEmotionState(){
+			if (_npcInState.GetDisposition() >= NPC.DISPOSITION_HIGH){
+				_npcInState.currentEmotion = new CarpenterSonMiddleHighDispositionEmotionState(_npcInState);	
+			}
+			else if (_npcInState.GetDisposition() > NPC.DISPOSITION_LOW){
+				_npcInState.currentEmotion = new CarpenterSonMiddleMediumDispositionEmotionState(_npcInState);
+			}
+		}
+	}
+	
+	// Medium disposition state
+	[System.Serializable]
+	public class CarpenterSonMiddleMediumDispositionEmotionState : EmotionState{
+		
+		public CarpenterSonMiddleMediumDispositionEmotionState(NPC toControl) : base(toControl, "Hey!  We should play later!"){
+			
+		}
+		
+		// Pass the previous dialogue
+		public CarpenterSonMiddleMediumDispositionEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+			
+		}
+		
+		public override void ReactToItemInteraction(string npc, GameObject item){
+			
+		}
+		
+		public override void ReactToChoiceInteraction(string npc, string choice){
+			
+		}
+		
+		public override void ReactToEnviromentInteraction(string npc, string enviromentAction){
+			
+		}
+		
+		public override void ReactToItemPickedUp(GameObject item){
+			
+		}
+		
+		public override void UpdateEmotionState(){
+			if (_npcInState.GetDisposition() >= NPC.DISPOSITION_HIGH){
+				_npcInState.currentEmotion = new CarpenterSonMiddleHighDispositionEmotionState(_npcInState);	
+			}
+			else if (_npcInState.GetDisposition() <= NPC.DISPOSITION_LOW){
+				_npcInState.currentEmotion = new CarpenterSonMiddleLowDispositionEmotionState(_npcInState);
+			}
+		}
+	}
+	
+	// High disposition state
+	[System.Serializable]
+	public class CarpenterSonMiddleHighDispositionEmotionState : EmotionState{
+		
+		public CarpenterSonMiddleHighDispositionEmotionState(NPC toControl) : base(toControl, "Hey!  We should play later!"){
+			
+		}
+		
+		// Pass the previous dialogue
+		public CarpenterSonMiddleHighDispositionEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+			
+		}
+		
+		public override void ReactToItemInteraction(string npc, GameObject item){
+			
+		}
+		
+		public override void ReactToChoiceInteraction(string npc, string choice){
+			
+		}
+		
+		public override void ReactToEnviromentInteraction(string npc, string enviromentAction){
+			
+		}
+		
+		public override void ReactToItemPickedUp(GameObject item){
+			
+		}
+		
+		public override void UpdateEmotionState(){
+			if (_npcInState.GetDisposition() < NPC.DISPOSITION_HIGH){
+				_npcInState.currentEmotion = new CarpenterSonMiddleMediumDispositionEmotionState(_npcInState);	
+			}
+			else if (_npcInState.GetDisposition() <= NPC.DISPOSITION_LOW){
+				_npcInState.currentEmotion = new CarpenterSonMiddleLowDispositionEmotionState(_npcInState);
+			}
 		}
 	}
 }
