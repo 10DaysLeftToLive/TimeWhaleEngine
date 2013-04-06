@@ -15,6 +15,8 @@ public class Player : Character {
 	
 	public bool isTouchingGrowableUp = false;
 	
+	public ParticleSystem touchParticleEmitter;
+	
 	public Capsule smallHitBox;
 	public Capsule bigHitbox;
 	
@@ -22,6 +24,7 @@ public class Player : Character {
 		get{return currentTouchedGrowableUp;}
 	}
 	private GameObject currentTouchedGrowableUp;
+	
 	
 	public bool isTouchingTrigger = false;
 	
@@ -39,8 +42,11 @@ public class Player : Character {
 	// We want to be able to switch to move at any state when the player clicks
 	private void OnClickToMove (EventManager EM, ClickPositionArgs e){
 		Vector3 pos = Camera.main.ScreenToWorldPoint(e.position);
-		pos.z = this.transform.position.z;
 		
+		pos.z = this.transform.position.z;
+	
+		touchParticleEmitter.transform.position = pos;
+		touchParticleEmitter.Play();
 		Debug.Log("Click on no object  at point " + pos);
 		// Will need to be changed with later refactoring
 		if (currentState.GetType() == typeof(IdleState) || currentState.GetType() == typeof(ClimbIdleState)){ // if we are idled or climbing idled

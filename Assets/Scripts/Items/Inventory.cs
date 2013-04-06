@@ -15,25 +15,22 @@ public class Inventory {
 			Debug.Log("Swapping");
 			SwapItems(toPickUp);
 		} else {
+			originalLocalScale = toPickUp.transform.localScale;
 			pickedUpObject = toPickUp;
 			
-			//pickedUpObject.SetActive(true);
-			//Debug.Log ("Before: Item in hand: " + pickedUpObject.transform.localScale);
+			Debug.Log ("Before: Item in hand: " + pickedUpObject.transform.localScale);
 			
-			originalLocalScale = toPickUp.transform.localScale;
 			toPickUp.transform.position = new Vector3(rightHandTransform.position.x, 
 													  rightHandTransform.position.y, 
 													  rightHandTransform.position.z);
 			
 			
 			toPickUp.transform.parent = rightHandTransform;
+			Vector3 pickedUpItemScale = toPickUp.transform.localScale;
 			Utils.SetActiveRecursively(rightHandTransform.gameObject, true);
 			Utils.SetActiveRecursively(pickedUpObject.gameObject, true);
-			Debug.Log("rightHandTransform is active?: " + rightHandTransform.gameObject.activeInHierarchy);
-			Debug.Log("pickedUpObject is active?: " + pickedUpObject.gameObject.activeInHierarchy);
-			Debug.Log ("righthandTransform[PickedUpObject] childCount: " + rightHandTransform.childCount);
 			
-			//Debug.Log ("After(" + pickedUpObject.name + "): Item in hand: " + pickedUpObject.transform.localScale);
+			Debug.Log ("After(" + pickedUpObject.name + "): Item in hand: " + pickedUpObject.transform.localScale);
 			pickedUpObject.GetComponent<InteractableOnClick>().Disable();
 		}
 		Debug.Log("PickUpObject does " + (HasItem() ? "" : "not ") + "have an item");
@@ -79,15 +76,8 @@ public class Inventory {
 	}
 	
 	public void DisableHeldItem() {
-		
-		Transform trans = rightHandTransform.GetChild(0) as Transform;
-		trans = null;
 		pickedUpObject.transform.parent = null;
-		Debug.Log("Child Count of rightHandTransform: " + rightHandTransform.childCount);
-		Debug.Log ("Child Count of pickedUpObject.transform: " + pickedUpObject.transform.childCount);
 		Utils.SetActiveRecursively(pickedUpObject.gameObject, false);
-		Debug.Log("rightHandTransform is active?: " + rightHandTransform.gameObject.activeInHierarchy);
-		Debug.Log("pickedUpObject is active?: " + pickedUpObject.gameObject.activeInHierarchy);
 		pickedUpObject = null;	
 	}
 	
