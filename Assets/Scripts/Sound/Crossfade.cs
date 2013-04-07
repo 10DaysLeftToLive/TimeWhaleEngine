@@ -1,101 +1,35 @@
+
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
 public class Crossfade: MonoBehaviour {	
-
-	public AudioSource ForestBGM;
-	public AudioSource BeachBGM;
-	public AudioSource CliffBGM;
-	public AudioSource LighthouseBGM;
-	public AudioSource TreeBGM;
-	public AudioSource MarketBGM;
-
-	public static void FadeBetween()
-	{
-		string Current = null;
-		string Next = null;
-
-		Crossfade.CrossfadeInstance.StartCoroutine(CoroutineFadeOverTime(Current, Next));
+	public static void FadeBetween(CharacterAge current, CharacterAge next){
+	//public static void FadeBetween(currentSong, nextSong, Time transitionTime){
+		//Crossfade.CrossfadeInstance.StartCoroutine(CoroutineFadeOverTime());
 	}
 
 	static public Crossfade CrossfadeInstance;
 	
-	void Awake()
-	{
+	void Awake(){
 		Crossfade.CrossfadeInstance = this;
 	}
-
-	public static IEnumerator CoroutineFadeOverTime(string Current, string Next)
-	{
-
-		AudioSource CurrentSong;
-		AudioSource NextSong;
-
-		switch (Current)
-		{
-			case "Forest":
-				CurrentSong = CrossfadeInstance.ForestBGM;
-				break;
-			case "Beach":
-				CurrentSong = CrossfadeInstance.BeachBGM;
-				break;
-			case "Cliff":
-				CurrentSong = CrossfadeInstance.CliffBGM;
-				break;
-			case "Light":
-				CurrentSong = CrossfadeInstance.LighthouseBGM;
-				break;
-			case "Tree":
-				CurrentSong = CrossfadeInstance.TreeBGM;
-				break;
-			case "Market":
-				CurrentSong = CrossfadeInstance.MarketBGM;
-				break;
-			default:
-				CurrentSong = null;
-				break;
-		}
-
-		switch (Next)
-		{
-			case "Forest":
-				NextSong = CrossfadeInstance.ForestBGM;
-				break;
-			case "Beach":
-				NextSong = CrossfadeInstance.BeachBGM;
-				break;
-			case "Cliff":
-				NextSong = CrossfadeInstance.CliffBGM;
-				break;
-			case "Light":
-				NextSong = CrossfadeInstance.LighthouseBGM;
-				break;
-			case "Tree":
-				NextSong = CrossfadeInstance.TreeBGM;
-				break;
-			case "Market":
-				NextSong = CrossfadeInstance.MarketBGM;
-				break;
-			default:
-				NextSong = null;
-				break;
-		}
-
+	
+	public static IEnumerator CoroutineFadeOverTime(AudioSource current, AudioSource next){
+	//public static IEnumerator CoroutineFadeOverTime(AudioSource current, AudioSource next, Time transition){
+	// Time transition might not be necessary if we do multiple transition effects at once, then we can just call this along side other, for example, visual effects.
 		float fTimeCounter = 0f;
 
-		NextSong.volume = 0;
-		NextSong.Play();
+		next.Play();
 		
 		while(!(Mathf.Approximately(fTimeCounter, 1f)))
 		{
 			fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
-			CurrentSong.volume = 1f - fTimeCounter;
-			NextSong.volume = fTimeCounter;
+			current.volume = 1f - fTimeCounter;
+			next.volume = fTimeCounter;
 			yield return new WaitForSeconds(0.02f);
 		}
 		
-		CurrentSong.Stop();
+		current.Stop();
 		
 		
 		Crossfade.CrossfadeInstance.StopCoroutine("CoroutineFadeOverTime");

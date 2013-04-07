@@ -86,15 +86,24 @@ public class CheatListener : MonoBehaviour {
 		}	
 	}
 	
-	void ToggleSound() {		
-		if (Input.GetKeyDown(KeyCode.A)) {
+	void ToggleSound() {
+		if (Input.GetKeyDown(KeyCode.A))
+		{
 			isSoundOff = !isSoundOff;
-			
-			if (isSoundOff) {
+
+			if (isSoundOff)
+			{
 				AudioListener.pause = true;
-			} else {
+			}
+			else
+			{
 				AudioListener.pause = false;
 			}
-		}	
+		}
+
+		if (Input.GetKeyDown(KeyCode.Z))
+		{
+			StartCoroutine(Crossfade.CoroutineFadeOverTime("Forest", "Beach"));
+		}
 	}
 }
