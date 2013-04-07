@@ -64,6 +64,10 @@ public class MomYoung : NPC {
 		}*/
 	}
 	
+	protected override void ReactToTriggerCollision(EventManager EM, TriggerCollisionArgs triggerCollided){
+		
+	}
+	
 	public class MomIntroEmotionState : EmotionState{
 		public MomIntroEmotionState(NPC toControl) : base(toControl, "Where is your sister?"){
 			_choices.Add(new Choice("Tell on", "She's in big trouble! I'll deal with your sister..."));

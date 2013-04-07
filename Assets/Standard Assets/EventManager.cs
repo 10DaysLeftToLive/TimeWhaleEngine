@@ -74,6 +74,15 @@ public class EventManager : ManagerSingleton<EventManager> {
     public void RiseOnPlayerPickupEvent(PickUpStateArgs interaction){
         if(mOnPlayerPickupItemEvent != null)  mOnPlayerPickupItemEvent(this, interaction);
     }
+	
+	//EVENT: onPlayerTriggerCollision
+	public delegate void mOnPlayerTriggerCollisionDelegate(EventManager EM, TriggerCollisionArgs triggerCollided);
+    //Event
+    public event mOnPlayerTriggerCollisionDelegate mOnPlayerTriggerCollisionEvent;
+    //Riser
+    public void RiseOnPlayerTriggerCollisionEvent(TriggerCollisionArgs interaction){
+        if(mOnPlayerTriggerCollisionEvent != null)  mOnPlayerTriggerCollisionEvent(this, interaction);
+    }
 }
 
 public class ClickPositionArgs : EventArgs {
@@ -104,5 +113,12 @@ public class PickUpStateArgs : EventArgs {
 	public GameObject itemPickedUp;
 	public PickUpStateArgs(GameObject _itemPickedUp){
 		itemPickedUp = _itemPickedUp;
+	}
+}
+
+public class TriggerCollisionArgs : EventArgs {
+	public GameObject triggerCollided;
+	public TriggerCollisionArgs(GameObject _triggerCollided){
+		triggerCollided = _triggerCollided;
 	}
 }

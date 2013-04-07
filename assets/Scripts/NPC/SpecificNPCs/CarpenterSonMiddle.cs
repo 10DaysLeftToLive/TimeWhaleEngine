@@ -44,6 +44,11 @@ public class CarpenterSonMiddle : NPC {
 	protected override void DoReaction(GameObject itemToReactTo){
 		
 	}
+	
+	protected override void ReactToTriggerCollision(EventManager EM, TriggerCollisionArgs triggerCollided){
+		
+	}
+	
 	//********************* Carpenter ******************************//
 	// Low disposition state (doesn't like you)
 	[System.Serializable]

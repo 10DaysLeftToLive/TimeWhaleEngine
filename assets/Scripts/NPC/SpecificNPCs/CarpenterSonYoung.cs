@@ -45,6 +45,10 @@ public class CarpenterSonYoung : NPC {
 		
 	}
 	
+	protected override void ReactToTriggerCollision(EventManager EM, TriggerCollisionArgs triggerCollided){
+		
+	}
+	
 	// Low disposition state (doesn't like you)
 	[System.Serializable]
 	public class LowDispositionEmotionState : EmotionState{

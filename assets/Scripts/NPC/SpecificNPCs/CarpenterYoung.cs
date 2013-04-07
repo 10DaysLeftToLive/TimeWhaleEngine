@@ -45,7 +45,21 @@ public class CarpenterYoung : NPC {
 
 	}
 	
-	// Low disposition state (doesn't like you)
+	protected override void ReactToTriggerCollision(EventManager EM, TriggerCollisionArgs triggerCollided){
+		
+	}
+	
+	/*
+	=============================
+	  Emotion States
+	=============================
+	*/
+	
+	/* 
+	-----------------------------------------------
+	  Low disposition state (doesn't like you)
+	----------------------------------------------- 
+	*/ 
 	[System.Serializable]
 	public class LowDispositionEmotionState : EmotionState{
 		public string toolboxResponse = "Thanks for finding these for me. You know my father gave me these as my first set of tools...Now I'm going to pass these onto my son!";
@@ -134,7 +148,11 @@ public class CarpenterYoung : NPC {
 		}
 	}
 	
-	// Medium disposition state
+	/* 
+	-----------------------------------------------
+	  Medium disposition state
+	----------------------------------------------- 
+	*/ 
 	[System.Serializable]
 	public class MediumDispositionEmotionState : EmotionState{
 		public string toolboxResponse = "Thanks for finding these for me. You know my father gave me these as my first set of tools...Now I'm going to pass these onto my son!";
@@ -237,7 +255,11 @@ public class CarpenterYoung : NPC {
 		}
 	}
 	
-	// High disposition state
+	/* 
+	-----------------------------------------------
+	  High disposition state (likes you)
+	----------------------------------------------- 
+	*/ 
 	[System.Serializable]
 	public class HighDispositionEmotionState : EmotionState{
 		public string toolboxResponse = "Thanks for finding these for me. You know my father gave me these as my first set of tools...Now I'm going to pass these onto my son!";
@@ -338,7 +360,17 @@ public class CarpenterYoung : NPC {
 		}
 	}
 	
-	// Put special state cases here
+	/*
+	=============================
+	  Special Emotion States
+	=============================
+	*/
+	
+	/* 
+	-----------------------------------------------
+	  Apple Stolen
+	----------------------------------------------- 
+	*/ 
 	public class AppleStolenEmotionState : EmotionState{
 		public string appleStolenResponse = "That is my apple. Give it back!";
 		public string appleStolenDialogue = "Don't get anywhere near our apple tree again, thief!";

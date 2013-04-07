@@ -25,6 +25,7 @@ public abstract class NPC : Character {
 		player = GameObject.Find("PlayerCharacter").GetComponent<Player>();
 		EventManager.instance.mOnNPCInteractionEvent += new EventManager.mOnNPCInteractionDelegate(ReactToInteractionEvent);
 		EventManager.instance.mOnPlayerPickupItemEvent += new EventManager.mOnPlayerPickupItemDelegate(ReactToItemPickedUp);
+		EventManager.instance.mOnPlayerTriggerCollisionEvent += new EventManager.mOnPlayerTriggerCollisionDelegate(ReactToTriggerCollision);
 		//npcSchedule = GetSchedule();
 		Debug.Log (name + ": Is player initialized: " + (player != null));
 		currentEmotion = GetInitEmotionState();
@@ -63,6 +64,9 @@ public abstract class NPC : Character {
 	private void ReactToItemPickedUp(EventManager EM, PickUpStateArgs itemPickedUp){
 		currentEmotion.ReactToItemPickedUp(itemPickedUp.itemPickedUp);
 	}
+	
+	// NPC's reaction when the player collides with a trigger
+	protected virtual void ReactToTriggerCollision(EventManager EM, TriggerCollisionArgs triggerCollided){}
 	
 	private List<Choice> GetChoices(){
 		return(currentEmotion.GetChoices());

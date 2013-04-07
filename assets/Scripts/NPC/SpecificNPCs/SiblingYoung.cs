@@ -69,6 +69,10 @@ public class SiblingYoung : NPC {
 		}*/
 	}
 	
+	protected override void ReactToTriggerCollision(EventManager EM, TriggerCollisionArgs triggerCollided){
+		
+	}
+	
 	public class IntroEmotionState : EmotionState{
 		public IntroEmotionState(NPC toControl) : base(toControl, "Help me push this rock, I want to see what is on the other side!"){
 			_acceptableItems.Add("Plushie");
