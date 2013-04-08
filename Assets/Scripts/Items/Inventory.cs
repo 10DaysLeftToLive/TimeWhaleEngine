@@ -11,21 +11,25 @@ public class Inventory {
 	}
 	
 	public void PickUpObject(GameObject toPickUp){
-		if (HasItem()){
+		if (HasItem()) {
 			Debug.Log("Swapping");
 			SwapItems(toPickUp);
 		} else {
+			originalLocalScale = toPickUp.transform.localScale;
 			pickedUpObject = toPickUp;
 			
 			Debug.Log ("Before: Item in hand: " + pickedUpObject.transform.localScale);
 			
-			//originalLocalScale = toPickUp.transform.localScale;
 			toPickUp.transform.position = new Vector3(rightHandTransform.position.x, 
 													  rightHandTransform.position.y, 
 													  rightHandTransform.position.z);
 			
+			
 			toPickUp.transform.parent = rightHandTransform;
-
+			Vector3 pickedUpItemScale = toPickUp.transform.localScale;
+			Utils.SetActiveRecursively(rightHandTransform.gameObject, true);
+			Utils.SetActiveRecursively(pickedUpObject.gameObject, true);
+			
 			Debug.Log ("After(" + pickedUpObject.name + "): Item in hand: " + pickedUpObject.transform.localScale);
 			pickedUpObject.GetComponent<InteractableOnClick>().Disable();
 		}
@@ -34,7 +38,7 @@ public class Inventory {
         SoundManager.instance.PickUpItemSFX.Play();
 	}
 	
-	public bool HasItem(){
+	public bool HasItem() {
 		return (pickedUpObject != null);
 	}
 	
@@ -43,16 +47,16 @@ public class Inventory {
 	}
 	
 	public void DropItem(Vector3 toPlace) {
-		Debug.Log ("Before: Item to swap: " + pickedUpObject.transform.localScale);
+		//Debug.Log ("Before: Item to swap: " + pickedUpObject.transform.localScale);
 		GameObject oldPickedUpObject = pickedUpObject;
 		pickedUpObject.GetComponent<InteractableOnClick>().Enable();
 		pickedUpObject.transform.parent = null;
+		pickedUpObject.transform.localScale = originalLocalScale;
 		pickedUpObject.transform.position = toPlace;
 		
-		//pickedUpObject.transform.localScale = originalLocalScale;
 		pickedUpObject = null;
         SoundManager.instance.PutDownItemSFX.Play();
-		Debug.Log ("After(" + oldPickedUpObject.name + "): Item to swap: " + oldPickedUpObject.transform.localScale);
+		//Debug.Log ("After(" + oldPickedUpObject.name + "): Item to swap: " + oldPickedUpObject.transform.localScale);
 	}
 	
 	public void SwapItemWithCurrentAge(SmoothMoves.BoneAnimation animationData) {
@@ -64,14 +68,25 @@ public class Inventory {
 			pickedUpObject.transform.position = rightHandTransform.position;
 			pickedUpObject.transform.parent = rightHandTransform;
 			pickedUpObject.transform.localScale = oldScale;
-			Debug.Log("Carrying item with us through age: " + pickedUpObject);
+			//Debug.Log("Carrying item with us through age: " + pickedUpObject);
+		}
+		else {
+			Debug.Log("rightHandTransform is active?: " + rightHandTransform.gameObject.activeInHierarchy);
 		}
 	}
 	
 	public void DisableHeldItem() {
-		Utils.SetActiveRecursively(pickedUpObject, false);
 		pickedUpObject.transform.parent = null;
+		Utils.SetActiveRecursively(pickedUpObject.gameObject, false);
 		pickedUpObject = null;	
+	}
+	
+	public void ChangeRightHand(Transform newRightHand) {
+		if (!newRightHand) {
+			Debug.LogWarning("Invetory.cs: RIGHT HAND BEING SET TO NULL!");
+			return;
+		}
+		rightHandTransform = newRightHand;
 	}
 	
 	private void SwapItems(GameObject toSwapIn) {
