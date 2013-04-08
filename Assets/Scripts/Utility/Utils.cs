@@ -35,4 +35,9 @@ public static class Utils{
         	SetActiveRecursively (limb.gameObject, active);
 		}
 	}
+	
+	// returns the amount of time in ms
+	public static float CalcTimeToDisplayText(string text){
+		return (text.Length * .1f);
+	}
 }

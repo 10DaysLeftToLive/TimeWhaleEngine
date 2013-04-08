@@ -1,30 +1,75 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
+/*
+ * GUIManager.cs
+ * 	Responsible for managing all menus/buttons/chats
+ *  Will maintain a list of current controls it is displaying, and can be switched into mutliple modes
+ */
 public class GUIManager : MonoBehaviour {
-	private Rect ageUp;
-	private Rect ageDown;
-	private LevelManager levelManager;
+	private List<GUIControl> activeControls;
+	private static bool alreadyMade = false; // denotes if this is the first gui manager that has been awakened
 	
-	// Use this for initialization
-	void Start () {
-		ageUp = ScreenRectangle.NewRect(.01f,0f);
-		ageDown = ScreenRectangle.NewRect(.01f,.15f);
+	public ChatMenu chatMenu;
+	public InGameMenu inGameMenu;
+	
+	void Awake(){
+		if (alreadyMade){
+			Destroy(this); // no need for 2 gui managers
+			return;
+		}
+		alreadyMade = true;
+		DontDestroyOnLoad(this); // keep this manager and its loaded assests around
+		activeControls = new List<GUIControl>();
 		
-		levelManager = FindObjectOfType(typeof(LevelManager)) as LevelManager;
+		chatMenu = new ChatMenu();
+		inGameMenu = new InGameMenu();
 	}
 	
-	void OnGUI(){
-		if (GUI.Button(ageUp, "Shift Up")){
-		 	levelManager.ShiftUpAge();
+	public void AddNPCChat(NPCChat npcChatToAdd){
+		if (!ControlActive(chatMenu)){
+			LoadControl (chatMenu);
 		}
-		if (GUI.Button(ageDown, "Shift Down")){
-		 	levelManager.ShiftDownAge();
+		chatMenu.AddChat(npcChatToAdd);
+	}
+	
+	public void Update(){
+		UpdateControls();	
+	}
+	
+	public void OnGUI()	{
+		RenderControls();
+	}
+	
+	private void ClearControls(){
+		foreach (GUIControl control in activeControls){
+			control.ClearResponse();	
+		}
+		activeControls.Clear();
+	}
+		
+	private bool ControlActive(GUIControl guiControl){
+		return (activeControls.Contains(guiControl));		
+	}
+	
+	private void LoadControl(GUIControl guiControlToLoad){
+		if (!guiControlToLoad.Initialized){	
+			guiControlToLoad.Initialize();	
+		}
+		
+		activeControls.Add(guiControlToLoad);
+	}
+	
+	private void RenderControls(){
+		foreach (GUIControl control in activeControls){
+			control.Render();
 		}
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
+	private void UpdateControls(){
+		foreach (GUIControl control in activeControls){
+			control.Update();
+		}
 	}
 }

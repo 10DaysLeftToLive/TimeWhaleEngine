@@ -17,12 +17,12 @@ public abstract class NPC : Character {
 	protected override void Init(){
 		chatObject = GameObject.Find("Chat").GetComponent<Chat>();
 		charPortrait = (Texture)Resources.Load("" + this.name, typeof(Texture));
-		Debug.Log ("TEXTURE LOADED IS CALLED: " + charPortrait.name);
+		//Log ("TEXTURE LOADED IS CALLED: " + charPortrait.name);
 		player = GameObject.Find("PlayerCharacter").GetComponent<Player>();
 		EventManager.instance.mOnNPCInteractionEvent += new EventManager.mOnNPCInteractionDelegate(ReactToInteractionEvent);
 		EventManager.instance.mOnPlayerPickupItemEvent += new EventManager.mOnPlayerPickupItemDelegate(ReactToItemPickedUp);
 		//npcSchedule = GetSchedule();
-		Debug.Log (name + ": Is player initialized: " + (player != null));
+		//Debug.Log (name + ": Is player initialized: " + (player != null));
 		currentEmotion = GetInitEmotionState();
 	}
 	

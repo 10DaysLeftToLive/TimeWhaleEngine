@@ -11,7 +11,6 @@ public class ManagerSingleton<T> where T : ManagerSingleton<T>, new(){
 	
 	public static T instance{
 		get { 
-            // If it is still null after searching, create a new instance
             if (manager_instance == null) {
 				manager_instance = new T();
 				manager_instance.Init();
