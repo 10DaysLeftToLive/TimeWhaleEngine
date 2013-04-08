@@ -21,11 +21,10 @@ public class MoveState : AbstractState {
 	public override void Update(){
 		Vector3 pos = character.transform.position;
 		Vector3 movement = _pathFollowing.GetVectorDirection();
-		Vector3 speedVector = new Vector3(speed, speed, 0);
 
-		movement = Vector3.Scale(movement, speedVector);
+		movement *= speed;
 		movement *= Time.deltaTime;
-		
+		Debug.Log(movement);
 		if (movement.x < 0){
 			character.LookLeft();
 		}else if (movement.x > 0){
