@@ -55,18 +55,18 @@ public class Sister : NPC {
 	}
 	
 	protected override void DoReaction(GameObject itemToReactTo){
-		/*if (itemToReactTo != null){
-			Debug.Log(name + " is reacting to: " + itemToReactTo.name);
-			switch (itemToReactTo.tag){
-				case "Plushie":
-					break;
-				case "Frisbee":
-					break;
-				default:
-					break;
-			}
-			player.Inventory.DisableHeldItem();
-		}*/
+		Debug.Log("Is reacting to this item: " + itemToReactTo);
+//		if (itemToReactTo != null){
+//			Debug.Log(name + " is reacting to: " + itemToReactTo.name);
+//			switch (itemToReactTo.tag) {
+//				case "Plushie":
+//				case "Frisbee":
+//				player.Inventory.DisableHeldItem();
+//				break;
+//				default:
+//					break;
+//			}	
+//		}
 	}
 	
 	public class IntroEmotionState : EmotionState{

@@ -224,11 +224,13 @@ public class Player : Character {
 	
 	public void ChangeAnimation(BoneAnimation newAnimation){
 		if (animationData != null){
-			Utils.SetActiveRecursively(animationData.gameObject, false);
+			animationData.gameObject.SetActive(false);
+			
 		}
 		
 		animationData = newAnimation;
-		Utils.SetActiveRecursively(animationData.gameObject, true);
+		//Inventory.SwapHands(newAnimation);
+		animationData.gameObject.SetActive(true);
 	}
 	
 	

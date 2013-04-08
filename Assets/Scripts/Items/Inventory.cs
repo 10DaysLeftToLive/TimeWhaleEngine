@@ -23,13 +23,14 @@ public class Inventory {
 			toPickUp.transform.position = new Vector3(rightHandTransform.position.x, 
 													  rightHandTransform.position.y, 
 													  rightHandTransform.position.z);
-			
 			toPickUp.transform.parent = rightHandTransform;
+			toPickUp.SetActive(true);
+			Debug.Log ("Parent " + (toPickUp.transform.parent.gameObject.activeInHierarchy ? "is" : "is not") + " active");
 
 			Debug.Log ("After(" + pickedUpObject.name + "): Item in hand: " + pickedUpObject.transform.localScale);
 			pickedUpObject.GetComponent<InteractableOnClick>().Disable();
 		}
-		Debug.Log("PickUpObject does " + (HasItem() ? "" : "not ") + "have an item");
+		//Debug.Log("PickUpObject does " + (HasItem() ? "" : "not ") + "have an item");
 		
         SoundManager.instance.PickUpItemSFX.Play();
 	}
@@ -60,7 +61,7 @@ public class Inventory {
 			Vector3 oldScale = pickedUpObject.transform.localScale;
 			pickedUpObject.transform.parent = null;
 			rightHandTransform = animationData.GetSpriteTransform("Right Hand");
-			Utils.SetActiveRecursively(pickedUpObject, true);
+			pickedUpObject.SetActive(true);
 			pickedUpObject.transform.position = rightHandTransform.position;
 			pickedUpObject.transform.parent = rightHandTransform;
 			pickedUpObject.transform.localScale = oldScale;
@@ -69,9 +70,19 @@ public class Inventory {
 	}
 	
 	public void DisableHeldItem() {
-		Utils.SetActiveRecursively(pickedUpObject, false);
+		//Debug.Log("DISABLING ITEM: " + pickedUpObject.name);
+		Debug.Log ("Before: " + (rightHandTransform.gameObject.activeInHierarchy ? "I am active" : "I am not active"));
 		pickedUpObject.transform.parent = null;
+		pickedUpObject.SetActive(false);
+		Debug.Log ("After: " + (rightHandTransform.gameObject.activeInHierarchy ? "I am active" : "I am not active"));
 		pickedUpObject = null;	
+	}
+	
+	public void SwapHands(SmoothMoves.BoneAnimation animationData) {
+		if (HasItem()) {
+			rightHandTransform = animationData.GetSpriteTransform("Right Hand");
+			rightHandTransform.gameObject.SetActive(true);
+		}
 	}
 	
 	private void SwapItems(GameObject toSwapIn) {
@@ -84,4 +95,6 @@ public class Inventory {
 		PickUpObject(toSwapIn);
 		
 	}
+	
+	
 }
