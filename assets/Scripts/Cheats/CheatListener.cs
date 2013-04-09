@@ -9,14 +9,14 @@ public class CheatListener : MonoBehaviour {
 	
 	public float speedIncrease = 2;
 	
-	protected Player playerController;
+	protected Player player;
 	protected LevelManager levelManager;
 	protected CharacterController characterController;
 	
 	private float currentHorizontalSpeed = 0.0f;
 	
 	void Start() {
-		playerController = GameObject.Find("PlayerCharacter").GetComponent<Player>();
+		player = GameObject.Find("PlayerCharacter").GetComponent<Player>();
 		levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
 		characterController = GameObject.Find("PlayerCharacter").GetComponent<CharacterController>();
 	}
@@ -32,32 +32,32 @@ public class CheatListener : MonoBehaviour {
 		float verticalMovement = Input.GetAxisRaw(Strings.ButtonVertical);
 		float horizontalMovement = Input.GetAxisRaw(Strings.ButtonHorizontal);	
 		
-		currentHorizontalSpeed = playerController.walkSpeed * horizontalMovement;
+		currentHorizontalSpeed = player.walkSpeed * horizontalMovement;
 		
-		if(!playerController.isAffectedByGravity){
-			playerController.currentVerticalSpeed = playerController.walkSpeed * verticalMovement;	
+		if(!player.isAffectedByGravity){
+			player.currentVerticalSpeed = player.walkSpeed * verticalMovement;	
 		}
 		
 		MovePlayer();
 	}
 	void MovePlayer(){
 		// Calculate actual motion
-		Vector3 movement = new Vector3(currentHorizontalSpeed, playerController.currentVerticalSpeed, 0 );
+		Vector3 movement = new Vector3(currentHorizontalSpeed, player.currentVerticalSpeed, 0 );
 		movement *= Time.deltaTime;
 		
-		playerController.lastReturnedCollisionFlags = characterController.Move(movement);
+		player.lastReturnedCollisionFlags = characterController.Move(movement);
 	}
 	
 	void Fly() {
 		if (isFlying){
-			playerController.isAffectedByGravity = false;
+			player.isAffectedByGravity = false;
 		}
 		
 		if (Input.GetKeyDown(KeyCode.F)) {
 			isFlying = !isFlying;
 			
 			if (!isFlying) {
-				playerController.isAffectedByGravity = true;
+				player.isAffectedByGravity = true;
 			}
 		}
 	}
@@ -67,9 +67,9 @@ public class CheatListener : MonoBehaviour {
 			isFastMovement = !isFastMovement;
 			
 			if (isFastMovement) {
-				playerController.walkSpeed = playerController.walkSpeed * speedIncrease;
+				player.walkSpeed = player.walkSpeed * speedIncrease;
 			} else {
-				playerController.walkSpeed = playerController.walkSpeed / speedIncrease;	
+				player.walkSpeed = player.walkSpeed / speedIncrease;	
 			}
 		}	
 	}
@@ -86,15 +86,24 @@ public class CheatListener : MonoBehaviour {
 		}	
 	}
 	
-	void ToggleSound() {		
-		if (Input.GetKeyDown(KeyCode.A)) {
+	void ToggleSound() {
+		if (Input.GetKeyDown(KeyCode.A))
+		{
 			isSoundOff = !isSoundOff;
-			
-			if (isSoundOff) {
+
+			if (isSoundOff)
+			{
 				AudioListener.pause = true;
-			} else {
+			}
+			else
+			{
 				AudioListener.pause = false;
 			}
-		}	
+		}
+
+		if (Input.GetKeyDown(KeyCode.Z))
+		{
+			StartCoroutine(Crossfade.CoroutineFadeOverTime("Forest", "Beach"));
+		}
 	}
 }

@@ -13,7 +13,7 @@ public class PickUpItemState : AbstractState {
 		Debug.Log ("Player transform: " + character.animationData.mLocalTransform);
 		character.Inventory.PickUpObject(_toPickUp);
 		
-		Debug.Log("PickupItem does " + (character.Inventory.HasItem() ? "" : "not") + "have an item");
+		Debug.Log("PickupItem does " + (character.Inventory.HasItem() ? ": " + character.Inventory.GetItem().name : "not") + "have an item");
 		
 		character.EnterState(new IdleState(character));
 	}

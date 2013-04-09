@@ -49,4 +49,7 @@ public static class Strings{
 	public static string MiddleAge = "MiddleAge";
 	public static string OldAge = "OldAge";
 	
+	// Default Dialogue
+	public static string DialogueAmbivalent = "Ambivalent";
+	public static string DialogueAngry = "Angry";
 }

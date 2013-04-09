@@ -144,11 +144,11 @@ public static class PathFinding {
 			FindAPath(nodes, destination, height);
 		} else{	// if we hit either a climable or mechanics item
 			if (currentDirection == Direction.left || currentDirection == Direction.right){
-				if (CheckGround(nodes[index].curr, hit.point, heading, height)){
+				//if (CheckGround(nodes[index].curr, hit.point, heading, height)){
 					FindAPath(nodes, destination, height);
 					return foundPath;
 					// TODO maybe mark that we should go here
-				}
+				//}
 			} 
 			index++;
 			nodes[index] = HitInfo.CheckHit((int)currentDirection, hit, destination, nodes[index-1], height);
@@ -158,7 +158,7 @@ public static class PathFinding {
 	}
 	
 	// Will check if it is possible to walk to the end point from the start
-	private static bool CheckGround(Vector3 start, Vector3 end, Vector3 heading, float height){
+	/*private static bool CheckGround(Vector3 start, Vector3 end, Vector3 heading, float height){
 		int mask = LevelMasks.GroundMask | LevelMasks.ImpassableMask;
 		
 		float distance = Mathf.Abs(start.x - end.x);
@@ -170,7 +170,7 @@ public static class PathFinding {
 			return true;
 		}
 		return false;
-	}
+	}*/
 	
 	private static bool CheckDestination(Vector3 destination, Vector3 heading, float height){
 		if (nodes[index].curr.y + (height*2) < destination.y || nodes[index].curr.y - (height*2) > destination.y){
@@ -204,9 +204,9 @@ public static class PathFinding {
 				
 				if (nodes[index].curr.x > destination.x){
 					heading = Vector3.left;
-				} else if (CheckGround(nodes[index].curr, destination, heading, height)){
+				}/* else if (CheckGround(nodes[index].curr, destination, heading, height)){
 					return false;
-				}
+				}*/
 			} else {
 				currentDirection = Direction.up;
 			}
