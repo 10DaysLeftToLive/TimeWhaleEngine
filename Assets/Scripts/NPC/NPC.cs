@@ -29,6 +29,7 @@ public abstract class NPC : Character {
 		//npcSchedule = GetSchedule();
 		//Debug.Log (name + ": Is player initialized: " + (player != null));
 		currentEmotion = GetInitEmotionState();
+		NPCManager.instance.Add(this.gameObject);
 	}
 	
 	protected override void CharacterUpdate(){
