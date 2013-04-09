@@ -11,7 +11,7 @@ public class Player : Character {
 	
 	public CollisionFlags lastReturnedCollisionFlags;
 	
-	public bool isAffectedByGravity = true;
+	public bool isAffectedByGravity = false;
 	
 	public bool isTouchingGrowableUp = false;
 	
@@ -108,6 +108,15 @@ public class Player : Character {
 		base.UpdateObject();
 	}
 	
+	public void OnCollisionEnter(Collision collision) {
+		//if (collision.collider == Strings.tag_Ground)
+			Debug.Log("hit ground at collision");// + collision.collider);
+	}
+	
+	public void OnCollisionStay(Collision collision){
+		Debug.Log("hit ground at collision");
+	}
+	
 	public void OnTriggerEnter(Collider trigger) {		
 		isTouchingTrigger = CheckTriggers(trigger);
 	}
@@ -129,13 +138,15 @@ public class Player : Character {
 		else if(trigger.tag == Strings.tag_GrowableUp){
 			SetTouchingGrowableUp(true, trigger.gameObject);	
 			return true;
+		}else if (trigger.tag == Strings.tag_Ground){
+			Debug.Log("hit ground at trigger");
 		}
 		return false;
 	}
 	
 	public void OnTriggerExit(Collider trigger){
 		if(IsClimbable(trigger)){
-			isAffectedByGravity = true;
+			//isAffectedByGravity = true;
 		}
 		else if(trigger.tag == Strings.tag_GrowableUp){
 			isTouchingGrowableUp = false;	
@@ -145,7 +156,7 @@ public class Player : Character {
 	}
 	
 	private bool IsClimbable(Collider trigger){
-		return ((trigger.CompareTag(Strings.tag_Climbable) || trigger.CompareTag(Strings.tag_LadderTop)) && trigger.renderer.enabled);
+		return ((trigger.CompareTag(Strings.tag_Climbable)) && trigger.renderer.enabled);
 	}
 	
 	protected void OnControllerColliderHit(ControllerColliderHit hit){
@@ -174,6 +185,7 @@ public class Player : Character {
 	protected void ApplyGravity(){
 		if (IsGrounded ()){
 			currentVerticalSpeed = 0.0f;
+			isAffectedByGravity = false;
 		}
 		else{
 			currentVerticalSpeed -= gravity * Time.deltaTime;	
@@ -197,7 +209,7 @@ public class Player : Character {
 		ChangeAnimation(newAge.boneAnimation);
 		Inventory.SwapItemWithCurrentAge(newAge.boneAnimation);
 		
-		isAffectedByGravity = true;
+		//isAffectedByGravity = true;
 	}
 	
 	private void ChangeHitBox(CharacterAge newAge, CharacterAge previousAge){

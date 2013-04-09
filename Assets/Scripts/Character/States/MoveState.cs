@@ -20,11 +20,13 @@ public class MoveState : AbstractState {
 	
 	public override void Update(){
 		Vector3 pos = character.transform.position;
-		Vector3 movement = _pathFollowing.GetVectorDirection();
+		Vector3 movement = Vector3.zero;
+		movement = _pathFollowing.GetVectorDirection();
+		
 
 		movement *= speed;
 		movement *= Time.deltaTime;
-		Debug.Log(movement);
+
 		if (movement.x < 0){
 			character.LookLeft();
 		}else if (movement.x > 0){
@@ -89,11 +91,11 @@ public class MoveState : AbstractState {
 		float flatPos = pos.x + pos.y;
 		
 		point = Vector3.Scale(point,vectorDir);
-		float flatPoint = point.x + point.y;
+		float flatDestionation = point.x + point.y;
 		
 		float difference = speed*Time.deltaTime;
 		
-		if (flatPos < flatPoint + difference && flatPos > flatPoint - difference)
+		if (flatPos < flatDestionation + difference && flatPos > flatDestionation - difference)
 			return true;
 		
 		return false;
@@ -106,15 +108,15 @@ public class MoveState : AbstractState {
 		if (Physics.Raycast(_goal, Vector3.down , out hit, Mathf.Infinity, mask)) {
 			Vector3 hitPos = hit.point;
 			hitPos.y += character.transform.localScale.y/2;
-			
+
 			_pathFollowing = new Path();
-			_pathFollowing = QuickPath.StraightPath(character.transform.position, hitPos);
-			/*if (PathSearch(character.transform.position, hitPos, character.transform.localScale.y/2)){
+			//_pathFollowing = QuickPath.StraightPath(character.transform.position, hitPos);
+			if (PathSearch(character.transform.position, hitPos, character.transform.localScale.y/2)){
 				_pathFollowing = PathFinding.GetPath();
 				
 				return (true);
-			}*/
-		} return (true);
+			}
+		} return (false);
 	}
 	
 	protected virtual bool PathSearch(Vector3 pos, Vector3 hitPos, float height){

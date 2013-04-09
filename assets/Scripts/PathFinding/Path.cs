@@ -20,17 +20,24 @@ public class Path {
 			this.path[i] = paths[i];
 			direction[i] = dir[i];
 			if (direction[i] == 0){
-				vectorDirection[i] = new Vector3(1,0,0);	
+				vectorDirection[i] = new Vector3(1,0,0);
+				if (i > 0 && path[i-1] != path[i]){
+					vectorDirection[i].y = (path[i].y - path[i-1].y)/(Mathf.Abs(path[i-1].x - path[i].x));
+				}
 			}else if(direction[i] == 1){
 				vectorDirection[i] = new Vector3(-1,0,0);
+				if (i > 0 && path[i-1] != path[i]){
+					vectorDirection[i].y -= (path[i-1].y - path[i].y)/(Mathf.Abs(path[i-1].x - path[i].x));
+				}
 			}else if(direction[i] == 2){
 				vectorDirection[i] = new Vector3(0,1,0);
 			}else if(direction[i] == 3){
 				vectorDirection[i] = new Vector3(0,-1,0);
 			}
+			
 		}
 		index++;
-		//Print();
+		Print();
 	}
 	
 	public void Print(){

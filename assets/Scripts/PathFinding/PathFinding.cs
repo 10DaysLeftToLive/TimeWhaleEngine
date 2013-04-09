@@ -24,6 +24,7 @@ public static class PathFinding {
 	private static float levelDifferenceMax = .25f;
 	
 	public static bool StartPath(Vector3 startPos, Vector3 destination, float height){
+		Debug.Log("start");
 		nodes = new Node[15];
 		index = 0;
 		currentDirection = Direction.none;
@@ -181,7 +182,7 @@ public static class PathFinding {
 		int mask = LevelMasks.GroundMask | LevelMasks.ImpassableMask;
 		if (foundPath || !Physics.Linecast(nodes[index].curr, destination, out debugHit, mask)){ // if we found our path or we can walk to the goal
 			mask = LevelMasks.MechanicsMask;
-			
+		
 			if (Physics.Linecast(nodes[index].curr, destination, out debugHit, mask)){ // if we intersect with a mechanics object
 				if (debugHit.collider.bounds.Contains(destination)){ // if that mechanic object contains our destination then move next to it
 					if (debugHit.transform.position.x < nodes[index].curr.x){ // if the current node is to the right of the object
@@ -199,11 +200,13 @@ public static class PathFinding {
 				}
 			}
 			
-			if (currentDirection == Direction.down || currentDirection == Direction.up || currentDirection == Direction.none){
+			if (currentDirection == Direction.none){
+				Debug.Log(currentDirection);
 				currentDirection = Direction.left;
 				
 				if (nodes[index].curr.x > destination.x){
-					heading = Vector3.left;
+					heading = Vector3.right;
+					currentDirection = Direction.right;
 				}/* else if (CheckGround(nodes[index].curr, destination, heading, height)){
 					return false;
 				}*/
