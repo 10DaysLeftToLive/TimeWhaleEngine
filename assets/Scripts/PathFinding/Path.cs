@@ -37,7 +37,7 @@ public class Path {
 			
 		}
 		index++;
-		Print();
+		//Print();
 	}
 	
 	public void Print(){
