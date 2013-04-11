@@ -3,14 +3,14 @@ using System.Collections;
 
 public class WayPointPath {
 	
-	private static float NEARTHRESHOLD = .5f; // how close will the y positions be until looking for up/down paths
+	private static float NEARTHRESHOLD = .2f; // how close will the y positions be until looking for slopes
+	private static float NEXTFLOOR = 3f; // how close will the y positions be until looking for up/down paths
 	private static float MAXCLIMBABLEANGLE = 49; // maximum angle to climb (doesnt consider if angle between 2 waypoints) only small movement angle
 	private static float SLOPEDMOVEMENTTHRESHOLD = 1f; // how close must the guestimation for small slope movement before moving
 														// small movement = movement within 2 waypoints
 	private static Vector3[] points;
 	private static int index;
 	
-	//TODO check if current pos is on a slope and change raycast heading accordingly
 	
 	public static bool CheckForPath(Vector3 startPos, Vector3 destination, float height){
 		points = new Vector3[30];
@@ -56,11 +56,11 @@ public class WayPointPath {
 	private static bool ConnectTheDots(GameObject point, Vector3 startPos, Vector3 destination, float height, Vector3 heading){
 		WayPoints pointScript = GetScript(point);
 		
-		do{
+		do{		
 			AddPoint(new Vector3(pointScript.GetFloorPosition().x,pointScript.GetFloorPosition().y + height, pointScript.GetFloorPosition().z));
-			if (startPos.y < destination.y && Mathf.Abs(startPos.y - destination.y) > NEARTHRESHOLD && pointScript.CheckUp()){
+			if (startPos.y < destination.y && Mathf.Abs(startPos.y - destination.y) > NEXTFLOOR && pointScript.CheckUp()){
 				point = pointScript.GetUp();
-			}else if (startPos.y > destination.y && Mathf.Abs(startPos.y - destination.y) > NEARTHRESHOLD && pointScript.CheckDown()){
+			}else if (startPos.y > destination.y && Mathf.Abs(startPos.y - destination.y) > NEXTFLOOR && pointScript.CheckDown()){
 				point = pointScript.GetDown();
 			}else if (heading.x > 0 && pointScript.CheckRight()){
 				point = pointScript.GetRight();
@@ -72,8 +72,7 @@ public class WayPointPath {
 					return false;
 				return true;
 			}
-			pointScript = GetScript(point);
-			
+			pointScript = GetScript(point);	
 		}while ((pointScript.GetFloorPosition().x - destination.x)*heading.x <= 0);
 		AddPoint(destination);
 		if (!CheckAngle())

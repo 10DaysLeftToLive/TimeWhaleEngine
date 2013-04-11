@@ -14,6 +14,7 @@ public class MoveState : AbstractState {
 	private Vector3 currentGoal;
 	private Vector3 lastPos;
 	private float stuckTimer;
+	private int flyingTicker = 0;
 	
 	public MoveState(Character toControl, Vector3 goal) : base(toControl){
 		_goal = goal;
@@ -38,8 +39,13 @@ public class MoveState : AbstractState {
 		}
 
 		if (Vector3.Distance(pos,_pathFollowing.GetPoint()) > Vector3.Distance(lastPos,_pathFollowing.GetPoint())){
-			character.transform.position = 	_pathFollowing.GetPoint();
+			flyingTicker++;
+		}else {
+			flyingTicker = 0;
 		}
+		
+		if (flyingTicker > 3)
+			character.transform.position = 	_pathFollowing.GetPoint();
 		
 		if (NearPoint(_pathFollowing.GetPoint(), _pathFollowing.GetVectorDirection())){
 			if (!_pathFollowing.NextNode()){
