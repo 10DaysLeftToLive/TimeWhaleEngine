@@ -9,27 +9,21 @@ public static class QuickPath {
 	
 	public static Path StraightPath(Vector3 startPos, Vector3 destination, float height){
 		Path path;
-		if (Mathf.Abs(startPos.y - destination.y) > NEARTHRESHOLD)
+		/*if (Mathf.Abs(startPos.y - destination.y) > NEARTHRESHOLD)
 		{
 			path = FindSlope(startPos, destination, height);
-			//return path;
-		}
+			return path;
+		}*/
 		Vector3[] points = {startPos, destination}; 
-		int[] dir = {0,0};
-		if (startPos.x > destination.x)
-			dir[1] = 1;
-		path = new Path(2, points, dir);
-		if (Mathf.Abs(startPos.y - destination.y) < NEARTHRESHOLD)
-		Debug.Log(startPos.y + "   " + destination.y);
-			
+		path = new Path(2, points);
+
 		return path;
 	}	
 	
 	public static Path ClimbablePath(Vector3 startPos, Vector3 destination, GameObject climbable, float height){
 		Vector3[] climbablePoints = SetStartClimbablePosition(climbable, height, startPos);
 		Vector3[] points = {startPos, climbablePoints[0], climbablePoints[1]}; 
-		int[] dir = {0,0,3};
-		Path path = new Path(3, points, dir);
+		Path path = new Path(3, points);
 		return path;
 	}
 	
@@ -127,29 +121,39 @@ public static class QuickPath {
 		}
 		points[0] = bottomPos;
 		bottomPos.y -= height;
+		bottomPos.y += MINSLOPE;
 		//Debug.Log(bottomPos.y);
 		int mask = (1 << 9);
 		RaycastHit hit;
-		
+		float distance;
 		do{
-			if (Physics.Raycast(bottomPos, heading , out hit, Mathf.Infinity, mask)) {
-				//Debug.Log(hit.point);
-				bottomPos = hit.point;
-				points[index] = new Vector3 (bottomPos.x, bottomPos.y + height, bottomPos.z);
-				bottomPos.y += MINSLOPE;
-				index++;
-			}else {
+			distance = (topPos.x-bottomPos.x)*heading.x;
+			Debug.Log(distance);
+			if (distance <= 0){
 				points[index] = topPos;
+				Debug.Log(topPos);
 
 				if (topPos == startPos) // flip points
 				{
-					Debug.Log("index of " + index);
+					//Debug.Log("index of " + index);
 					points = ReverseArray(points, index+1);
 					
 				}
 				
-				Path path = new Path(index, points, dir);
+				Path path = new Path(index+1, points);
 				return path;
+			}
+			if (Physics.Raycast(bottomPos, heading , out hit, distance, mask)) {
+				Debug.Log(hit.transform.position + "  "  + hit.collider.bounds.size.x);
+				bottomPos = hit.point;
+				points[index] = new Vector3 (bottomPos.x, bottomPos.y + height, bottomPos.z);
+				bottomPos.y += MINSLOPE;
+				if (points[index -1].x == bottomPos.x){
+					Debug.Log("Stop");	
+				}
+				index++;
+			}else {
+				bottomPos = topPos;
 			}
 		}while(true);
 		

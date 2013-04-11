@@ -12,6 +12,7 @@ public class MoveState : AbstractState {
 	protected float speed = 5f;
 	private GoToState currentMovementState = null;
 	private Vector3 currentGoal;
+	private Vector3 lastPos;
 	private float stuckTimer;
 	
 	public MoveState(Character toControl, Vector3 goal) : base(toControl){
@@ -35,6 +36,10 @@ public class MoveState : AbstractState {
 			// going up/down
 		 	// character.climb???	
 		}
+
+		if (Vector3.Distance(pos,_pathFollowing.GetPoint()) > Vector3.Distance(lastPos,_pathFollowing.GetPoint())){
+			character.transform.position = 	_pathFollowing.GetPoint();
+		}
 		
 		if (NearPoint(_pathFollowing.GetPoint(), _pathFollowing.GetVectorDirection())){
 			if (!_pathFollowing.NextNode()){
@@ -51,6 +56,7 @@ public class MoveState : AbstractState {
 				}
 			}
 		} else {
+			lastPos = character.transform.position;
 			Move(movement);
 		}
 		
