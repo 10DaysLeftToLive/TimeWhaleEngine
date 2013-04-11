@@ -6,35 +6,32 @@ public class Path {
 	
 	Vector3[] path;
 	Vector3[] vectorDirection;
-	int [] direction;
+	//int [] direction;
 	int index;
 	
 	public Path(){}
 	
-	public Path(int size, Vector3[] paths, int[] dir){
+	public Path(int size, Vector3[] paths){
 		index = 0;
 		path = new Vector3[size];
 		vectorDirection = new Vector3[size];
-		direction = new int[size];
+		//direction = new int[size];
 		for (int i = 0; i < size; i++){
 			this.path[i] = paths[i];
-			direction[i] = dir[i];
-			if (direction[i] == 0){
+			//direction[i] = dir[i];
+			if (i > 0 && path[i-1].x - path[i].x < 0){
 				vectorDirection[i] = new Vector3(1,0,0);
-				if (i > 0 && path[i-1] != path[i]){
+				if (path[i-1] != path[i]){
 					vectorDirection[i].y = (path[i].y - path[i-1].y)/(Mathf.Abs(path[i-1].x - path[i].x));
+					vectorDirection[i] = vectorDirection[i].normalized;
 				}
-			}else if(direction[i] == 1){
+			}else if(i > 0 && path[i-1].x - path[i].x > 0){
 				vectorDirection[i] = new Vector3(-1,0,0);
-				if (i > 0 && path[i-1] != path[i]){
+				if (path[i-1] != path[i]){
 					vectorDirection[i].y -= (path[i-1].y - path[i].y)/(Mathf.Abs(path[i-1].x - path[i].x));
+					vectorDirection[i] = vectorDirection[i].normalized;	
 				}
-			}else if(direction[i] == 2){
-				vectorDirection[i] = new Vector3(0,1,0);
-			}else if(direction[i] == 3){
-				vectorDirection[i] = new Vector3(0,-1,0);
-			}
-			
+			}			
 		}
 		index++;
 		//Print();
@@ -43,7 +40,7 @@ public class Path {
 	public void Print(){
 
 		for (int i = 0; i < path.Length; i++){
-			Debug.Log("Point " + i + " at " + path[i] + " heading " + direction[i] + " vector heading " + vectorDirection[i]);
+			Debug.Log("Point " + i + " at " + path[i] + " vector heading " + vectorDirection[i]);
 		}
 	}
 	
@@ -55,9 +52,9 @@ public class Path {
 		return vectorDirection[index];	
 	}
 	
-	public int GetDirection(){
+	/*public int GetDirection(){
 		return direction[index];
-	}
+	}*/
 	
 	public bool NextNode(){
 		index++;
