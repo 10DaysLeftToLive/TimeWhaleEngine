@@ -28,10 +28,7 @@ public class InteractionMenu : GUIControl {
 	
 	private Rect portraitRect;
 	private Rect textBoxRect;
-	private Rect button1Rect;
-	private Rect button2Rect;
-	private Rect button3Rect;
-	private Rect buttonGiveRect;
+	private List<Rect> buttonRects;
 	
 	#region Settings
 	private static float CHATHEIGHTPERCENTAGE = .7f;
@@ -40,12 +37,15 @@ public class InteractionMenu : GUIControl {
 	private static float CHATINTERNALPADDING = .01f; // padding between chat elements in all directions
 	private static float CHATBUTTONPADDING = .01f; // padding between chat elements in all directions
 	private static float PORTRAITWIDTH = .2f;
+	private static int GIVEITEMBUTTON = 3; // index in rect list for wher give button should go
 	#endregion
 	
 	public override void Init(){
-		SetChatRectangles();
+		Debug.Log("Init of interaction");
 		player = (Player) GameObject.Find(Strings.Player).GetComponent<Player>(); // the player will always stay the same so find it at the start
 		buttonTexts = new List<string>();
+		buttonRects = new List<Rect>();
+		SetChatRectangles();
 		npcChattingWith = null;
 	}
 	
@@ -58,8 +58,35 @@ public class InteractionMenu : GUIControl {
 	}*/
 	
 	public override void Render(){
-		if (npcChattingWith == null) Debug.LogError("Trying to display a chat with no npc.");
+		if (npcChattingWith == null){
+			Debug.LogError("Trying to display a chat with no npc.");
+			return;
+		}
+		
+		DisplayButtonChoices();
+		if (player.Inventory.HasItem()){
+			DisplayGiveButton();
+		}
 	}
+	
+	private int currentButtonIndex;
+	private void DisplayButtonChoices(){
+		currentButtonIndex = 0;
+		
+		foreach (string text in buttonTexts){
+			if (GUI.Button(buttonRects[currentButtonIndex], text)){
+				DoClickOnChoice(text);
+			}
+			currentButtonIndex++;
+		}
+	}
+	
+	private void DisplayGiveButton(){
+		if (GUI.Button(buttonRects[GIVEITEMBUTTON], "Give")){
+			DoGiveClick();
+		}
+	}
+	
 	/*
 	public void UpdateMessage(string newMessage){
 		msg = ParseMessage(newMessage);
@@ -97,6 +124,14 @@ public class InteractionMenu : GUIControl {
 	public void UpdateChoices(List<Choice> choices){
 		_choices = choices;
 	}*/
+	
+	private void DoClickOnChoice(string choice){
+		Debug.Log("Doing click on " + choice);
+	}
+		
+	private void DoGiveClick(){
+		Debug.Log("Doing give click");
+	}
 	
 	private void GetNPCReactionText(){
 		
@@ -179,9 +214,9 @@ public class InteractionMenu : GUIControl {
 		float button3TopLeftX = button2TopLeftX + CHATBUTTONPADDING + buttonWidth;
 		float button4TopLeftX = button3TopLeftX + CHATBUTTONPADDING + buttonWidth;
 		
-		button1Rect = ScreenRectangle.NewRect(button1TopLeftX, buttonBoxTopLeftY, buttonWidth, buttonHeight);
-		button2Rect = ScreenRectangle.NewRect(button2TopLeftX, buttonBoxTopLeftY, buttonWidth, buttonHeight);
-		button3Rect = ScreenRectangle.NewRect(button3TopLeftX, buttonBoxTopLeftY, buttonWidth, buttonHeight);
-		buttonGiveRect = ScreenRectangle.NewRect(button4TopLeftX, buttonBoxTopLeftY, buttonWidth, buttonHeight);
+		buttonRects.Add(ScreenRectangle.NewRect(button1TopLeftX, buttonBoxTopLeftY, buttonWidth, buttonHeight));
+		buttonRects.Add(ScreenRectangle.NewRect(button2TopLeftX, buttonBoxTopLeftY, buttonWidth, buttonHeight));
+		buttonRects.Add(ScreenRectangle.NewRect(button3TopLeftX, buttonBoxTopLeftY, buttonWidth, buttonHeight));
+		buttonRects.Add(ScreenRectangle.NewRect(button4TopLeftX, buttonBoxTopLeftY, buttonWidth, buttonHeight));
 	}
 }

@@ -251,8 +251,6 @@ public class Player : Character {
 			Transform rightHand = animationData.GetSpriteTransform("Right Hand");
 			Inventory.ChangeRightHand(rightHand);
 		}
-		Debug.Log("Animation data active in hiearchy: " + animationData.gameObject.activeInHierarchy);
-		Debug.Log ("Is animation data enabled: " + animationData.enabled);
 	}
 	
 	
