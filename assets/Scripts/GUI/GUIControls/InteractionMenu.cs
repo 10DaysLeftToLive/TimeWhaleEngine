@@ -14,21 +14,25 @@ public class InteractionMenu : GUIControl {
 	private NPC npcChattingWith;
 	private Player player;
 	
-	string msg;
-	Vector2 offset;
-	private bool textFieldInit = false;
+	#region Publicly edited visual data
+	public GUIStyle textFieldStyle;
+	public GUIStyle buttonStyle;
+	public Font textFieldFont;
+	public Font buttonFont;
+	#endregion
 	
-	private GUIStyle textFieldStyle;
-	private GUIStyle buttonStyle;
-	private Font textFieldFont;
-	private Font buttonFont;
+	#region Saved Data for this interaction
+	string mainDisplayText;
 	private Texture charPortrait;
+	#endregion
 	
+	#region Rectangle Data
 	private Rect mainChatRect;
 	private Rect portraitRect;
 	private Rect textBoxRect;
 	private List<Rect> buttonRects;
 	private List<string> buttonTexts;
+	#endregion
 	
 	#region Settings
 	private static float CHATHEIGHTPERCENTAGE = .7f;
@@ -47,11 +51,10 @@ public class InteractionMenu : GUIControl {
 		buttonTexts = new List<string>();
 		buttonRects = new List<Rect>();
 		SetChatRectangles();
-		msg = "O Hai";
+		mainDisplayText = "O Hai";
 	}
 	
 	public override void Render(){
-		if (!textFieldInit) { // temporary system
 			// Create style for a box
 			textFieldStyle = new GUIStyle(GUI.skin.textField);
 			textFieldStyle.fontSize = 24;
@@ -66,8 +69,6 @@ public class InteractionMenu : GUIControl {
 			// Load and set Font
 			buttonFont = (Font)Resources.Load("century", typeof(Font));
 			buttonStyle.font = buttonFont;
-			textFieldInit = true;
-		}
 		
 		if (npcChattingWith == null){
 			Debug.LogError("Trying to display a chat with no npc.");
@@ -109,7 +110,7 @@ public class InteractionMenu : GUIControl {
 	}
 	
 	private void DrawTextBox(){
-		GUI.TextField (textBoxRect, msg, textFieldStyle);
+		GUI.TextField (textBoxRect, mainDisplayText, textFieldStyle);
 	}
 	
 	private void DoClickOnChoice(string choice){
