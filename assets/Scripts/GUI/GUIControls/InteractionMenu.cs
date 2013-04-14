@@ -13,6 +13,7 @@ public class InteractionMenu : GUIControl {
 	string msg;
 	int charPerLine = 60;
 	Vector2 offset;
+	private bool textFieldInit = false;
 	
 	private GUIStyle textFieldStyle;
 	private GUIStyle buttonStyle;
@@ -46,24 +47,40 @@ public class InteractionMenu : GUIControl {
 		buttonTexts = new List<string>();
 		buttonRects = new List<Rect>();
 		SetChatRectangles();
-		npcChattingWith = null;
+		msg = "O Hai";
 	}
 	
 	public override void Update(){
 		
 	}
-	/*
-	public void InitiateChat(ChatChoiceInfo chatChoiceInfo){
-		_chatChoiceInfo = chatChoiceInfo;
-	}*/
 	
 	public override void Render(){
+		if (!textFieldInit) { // temporary system
+			// Create style for a box
+			textFieldStyle = new GUIStyle(GUI.skin.textField);
+			textFieldStyle.fontSize = 24;
+			
+			// Load and set Font
+			textFieldFont = (Font)Resources.Load("century", typeof(Font));
+			textFieldStyle.font = textFieldFont;
+			
+			buttonStyle = new GUIStyle(GUI.skin.button);
+			buttonStyle.fontSize = 24;
+			 
+			// Load and set Font
+			buttonFont = (Font)Resources.Load("century", typeof(Font));
+			buttonStyle.font = buttonFont;
+			textFieldInit = true;
+		}
+		
 		if (npcChattingWith == null){
 			Debug.LogError("Trying to display a chat with no npc.");
 			return;
 		}
-		
+		DrawBackgroundBox();
+		DrawTextBox();
 		DisplayButtonChoices();
+		DisplayPortrait();
 		if (player.Inventory.HasItem()){
 			DisplayGiveButton();
 		}
@@ -87,43 +104,17 @@ public class InteractionMenu : GUIControl {
 		}
 	}
 	
-	/*
-	public void UpdateMessage(string newMessage){
-		msg = ParseMessage(newMessage);
+	private void DisplayPortrait(){
+		GUI.Box (portraitRect, _charPortrait);	
 	}
 	
-	public void CreateChatBox(List<Choice> choices, string text){
-		_choices = choices;
-		msg = ParseMessage(text);
-		
-		isActive = true;
+	private void DrawBackgroundBox(){
+		GUI.Box (mainChatRect, "");
 	}
 	
-	public void RemoveChatBox(){
-		isActive	= false;
-		showRightButton = false;
-		showLeftButton = false;
-		rightButtonClickDelegate = null;
-		leftButtonClickDelegate = null;
+	private void DrawTextBox(){
+		GUI.TextField (textBoxRect, msg, textFieldStyle);
 	}
-	
-	private void ClickChoice(Choice choice){
-		leftButtonClickDelegate(choice._choiceName);
-		UpdateMessage(choice._reactionDialog);
-	}
-	
-	public void SetGrabText(string itemName){
-		
-	}
-	
-	public void setCharPortrait (Texture charPortrait) {
-		Debug.Log ("INSIDE setCharPortrait: " + charPortrait.name);
-		_charPortrait = charPortrait;
-	}
-	
-	public void UpdateChoices(List<Choice> choices){
-		_choices = choices;
-	}*/
 	
 	private void DoClickOnChoice(string choice){
 		Debug.Log("Doing click on " + choice);
@@ -141,6 +132,7 @@ public class InteractionMenu : GUIControl {
 		Debug.Log("Opening interaction with " + _newNpcChatting);
 		npcChattingWith = _newNpcChatting;
 		GetChoicesFromNPC();
+		GetPortraitTexture();
 	}
 	
 	private void GetChoicesFromNPC(){
