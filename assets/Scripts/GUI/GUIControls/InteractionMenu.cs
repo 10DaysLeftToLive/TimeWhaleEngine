@@ -22,7 +22,7 @@ public class InteractionMenu : GUIControl {
 	#endregion
 	
 	#region Saved Data for this interaction
-	string mainDisplayText;
+	private string mainDisplayText;
 	private Texture charPortrait;
 	#endregion
 	
@@ -54,21 +54,15 @@ public class InteractionMenu : GUIControl {
 		mainDisplayText = "O Hai";
 	}
 	
-	public override void Render(){
-			// Create style for a box
+	private bool hasInitializedStyles = false;
+	public override void Render(){	
+		if (!hasInitializedStyles){
 			textFieldStyle = new GUIStyle(GUI.skin.textField);
 			textFieldStyle.fontSize = 24;
-			
-			// Load and set Font
-			textFieldFont = (Font)Resources.Load("century", typeof(Font));
-			textFieldStyle.font = textFieldFont;
-			
 			buttonStyle = new GUIStyle(GUI.skin.button);
 			buttonStyle.fontSize = 24;
-			 
-			// Load and set Font
-			buttonFont = (Font)Resources.Load("century", typeof(Font));
-			buttonStyle.font = buttonFont;
+			hasInitializedStyles = true;
+		}
 		
 		if (npcChattingWith == null){
 			Debug.LogError("Trying to display a chat with no npc.");

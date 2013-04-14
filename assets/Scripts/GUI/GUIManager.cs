@@ -80,7 +80,7 @@ public class GUIManager : MonoBehaviour {
 	
 	private void UpdateControls(){
 		foreach (GUIControl control in activeControls){
-			control.Update();
+			control.UpdateControl();
 		}
 	}
 }

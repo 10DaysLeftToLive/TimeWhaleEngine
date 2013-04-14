@@ -23,7 +23,7 @@ public abstract class GUIControl : MonoBehaviour {
 	}
 	
 	public virtual void Init(){}// for children to load settings as needed
-	public virtual void Update(){} // for updating as needed
+	public virtual void UpdateControl(){} // for updating as needed
 	public abstract void Render(); // to display the content of the control
 	
 	public void ClearResponse(){
