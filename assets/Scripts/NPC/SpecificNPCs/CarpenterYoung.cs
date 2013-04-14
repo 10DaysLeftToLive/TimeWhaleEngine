@@ -8,6 +8,7 @@ public class CarpenterYoung : NPC {
 		base.Init();
 		animationData = GetComponent<SmoothMoves.BoneAnimation>();
 	}
+	
 	protected override EmotionState GetInitEmotionState(){
 		if (this.GetDisposition() >= NPC.DISPOSITION_HIGH){
 			return (new HighDispositionEmotionState(this));	

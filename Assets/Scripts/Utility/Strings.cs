@@ -52,4 +52,8 @@ public static class Strings{
 	// Default Dialogue
 	public static string DialogueAmbivalent = "Ambivalent";
 	public static string DialogueAngry = "Angry";
+	
+	
+	// NPC Chat Texts
+	public static string DIALOGUENOTSET = "Dialogue was not set";
 }

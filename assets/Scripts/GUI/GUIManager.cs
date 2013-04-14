@@ -13,6 +13,7 @@ public class GUIManager : MonoBehaviour {
 	
 	public ChatMenu chatMenu;
 	public InGameMenu inGameMenu;
+	public InteractionMenu interactionMenu;
 	
 	void Awake(){
 		if (alreadyMade){
@@ -25,6 +26,7 @@ public class GUIManager : MonoBehaviour {
 		
 		chatMenu = new ChatMenu();
 		inGameMenu = new InGameMenu();
+		interactionMenu = new InteractionMenu();
 	}
 	
 	public void AddNPCChat(NPCChat npcChatToAdd){
@@ -32,6 +34,11 @@ public class GUIManager : MonoBehaviour {
 			LoadControl (chatMenu);
 		}
 		chatMenu.AddChat(npcChatToAdd);
+	}
+	
+	public void InitiateInteraction(NPC npcToInteractWith){
+		LoadControl(interactionMenu);
+		interactionMenu.OpenChatForNPC(npcToInteractWith);
 	}
 	
 	public void Update(){
@@ -59,6 +66,10 @@ public class GUIManager : MonoBehaviour {
 		}
 		
 		activeControls.Add(guiControlToLoad);
+	}
+	
+	private void UnLoadControl(GUIControl guiControlToUnLoad){
+		activeControls.Remove(guiControlToUnLoad);	
 	}
 	
 	private void RenderControls(){

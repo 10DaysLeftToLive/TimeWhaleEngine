@@ -131,6 +131,14 @@ public abstract class NPC : Character {
 		chatObject.UpdateMessage(newMessage);
 	}
 	
+	public Texture GetPortrait(){
+		return (charPortrait);	
+	}
+	
+	public List<string> GetButtonChats(){
+		return (currentEmotion.GetButtonTexts());
+	}
+	
 	protected void UpdateChatButtons(){
 		// TODO change words on buttons
 		if (player.Inventory.HasItem()){

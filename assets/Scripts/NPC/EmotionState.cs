@@ -7,6 +7,7 @@ public class EmotionState {
 	public string _textToSay;
 	protected List<Choice> _choices;
 	protected List<string> _acceptableItems;
+	protected ChatChoiceInfo _chatInfo;
 	
 	public List<Choice> ChoiceOptions{
 		get {return _choices;}
@@ -40,6 +41,14 @@ public class EmotionState {
 	
 	public bool ItemHasReaction(string itemName){
 		return (_acceptableItems.Contains(itemName));
+	}
+	
+	public List<string> GetButtonTexts(){
+		List<string> tempTexts = new List<string>();
+		tempTexts.Add("Hai1");
+		tempTexts.Add("Hai2");
+		tempTexts.Add("Hai3");
+		return (tempTexts);
 	}
 	
 	//Virtual so children don't have to override
