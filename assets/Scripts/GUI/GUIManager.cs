@@ -41,6 +41,14 @@ public class GUIManager : MonoBehaviour {
 		interactionMenu.OpenChatForNPC(npcToInteractWith);
 	}
 	
+	public void UpdateInteractionDisplay(string newText){
+		if (!ControlActive(interactionMenu)){
+			Debug.LogError("Can't update interaction display when it is not up.");
+			return;
+		}
+		interactionMenu.UpdateDisplayText(newText);
+	}
+	
 	public void Update(){
 		UpdateControls();	
 	}

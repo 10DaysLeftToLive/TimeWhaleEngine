@@ -109,10 +109,12 @@ public class InteractionMenu : GUIControl {
 	
 	private void DoClickOnChoice(string choice){
 		Debug.Log("Doing click on " + choice);
+		EventManager.instance.RiseOnNPCInteractionEvent(new NPCChoiceInteraction(this.gameObject, choice));
 	}
 		
 	private void DoGiveClick(){
 		Debug.Log("Doing give click");
+		EventManager.instance.RiseOnNPCInteractionEvent(new NPCItemInteraction(this.gameObject, player.Inventory.GetItem()));
 	}
 
 	public void OpenChatForNPC(NPC _newNpcChatting){
@@ -120,6 +122,10 @@ public class InteractionMenu : GUIControl {
 		npcChattingWith = _newNpcChatting;
 		GetChoicesFromNPC();
 		GetPortraitTexture();
+	}
+	
+	public void UpdateDisplayText(string newText){
+		mainDisplayText = newText;
 	}
 	
 	private void GetChoicesFromNPC(){
