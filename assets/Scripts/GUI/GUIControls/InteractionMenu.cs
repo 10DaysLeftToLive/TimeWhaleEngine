@@ -2,16 +2,19 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+/*
+ * InteractionMenu.cs
+ * 	Responsible for displaying an interaction with an npc
+ * 	 it will ask the npc for the list of buttons texts, portrait and defult text.
+ * 		the emotion state of the npc will provide these
+ * 	When a click on a button occurs it will call the corrisponding function of the npc
+ * 	 (which the emotion state will fullfill) and will expect a text back of what to display now
+ */
 public class InteractionMenu : GUIControl {
 	private NPC npcChattingWith;
 	private Player player;
-	private List<string> buttonTexts;
 	
-	public Texture btn1, btn2;
-	Vector3 pos, screenPos;
-	Vector2 size;
 	string msg;
-	int charPerLine = 60;
 	Vector2 offset;
 	private bool textFieldInit = false;
 	
@@ -19,17 +22,13 @@ public class InteractionMenu : GUIControl {
 	private GUIStyle buttonStyle;
 	private Font textFieldFont;
 	private Font buttonFont;
-	private Texture _charPortrait;
-	
-	private Vector2 bottomLeftChat;
+	private Texture charPortrait;
 	
 	private Rect mainChatRect;
-	private Rect leftButtonRect;
-	private Rect rightButtonRect;
-	
 	private Rect portraitRect;
 	private Rect textBoxRect;
 	private List<Rect> buttonRects;
+	private List<string> buttonTexts;
 	
 	#region Settings
 	private static float CHATHEIGHTPERCENTAGE = .7f;
@@ -39,6 +38,7 @@ public class InteractionMenu : GUIControl {
 	private static float CHATBUTTONPADDING = .01f; // padding between chat elements in all directions
 	private static float PORTRAITWIDTH = .2f;
 	private static int GIVEITEMBUTTON = 3; // index in rect list for wher give button should go
+	private static int charPerLine = 60;
 	#endregion
 	
 	public override void Init(){
@@ -48,10 +48,6 @@ public class InteractionMenu : GUIControl {
 		buttonRects = new List<Rect>();
 		SetChatRectangles();
 		msg = "O Hai";
-	}
-	
-	public override void Update(){
-		
 	}
 	
 	public override void Render(){
@@ -105,7 +101,7 @@ public class InteractionMenu : GUIControl {
 	}
 	
 	private void DisplayPortrait(){
-		GUI.Box (portraitRect, _charPortrait);	
+		GUI.Box (portraitRect, charPortrait);	
 	}
 	
 	private void DrawBackgroundBox(){
@@ -123,11 +119,7 @@ public class InteractionMenu : GUIControl {
 	private void DoGiveClick(){
 		Debug.Log("Doing give click");
 	}
-	
-	private void GetNPCReactionText(){
-		
-	}
-	
+
 	public void OpenChatForNPC(NPC _newNpcChatting){
 		Debug.Log("Opening interaction with " + _newNpcChatting);
 		npcChattingWith = _newNpcChatting;
@@ -137,15 +129,13 @@ public class InteractionMenu : GUIControl {
 	
 	private void GetChoicesFromNPC(){
 		buttonTexts = npcChattingWith.GetButtonChats();
-		foreach (string s in buttonTexts){
-			Debug.Log("Choice: " + s);	
-		}
 	}
 	
 	private void GetPortraitTexture(){
-		_charPortrait = npcChattingWith.GetPortrait();
+		charPortrait = npcChattingWith.GetPortrait();
 	}
 	
+	// Convert the given message's formatting so it will fit into the screen nicely
 	private string ParseMessage(string message){
 		if (message.Length > charPerLine){
 			int index = 0;
