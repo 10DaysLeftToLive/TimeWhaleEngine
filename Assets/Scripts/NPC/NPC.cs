@@ -15,7 +15,6 @@ public abstract class NPC : Character {
 	public static int DISPOSITION_LOW = 3;
 	public static int DISPOSITION_HIGH = 7;
 	public int id;
-	//private Schedule npcSchedule;
 	protected ScheduleStack scheduleStack;
 	public EmotionState currentEmotion;
 	
@@ -38,8 +37,7 @@ public abstract class NPC : Character {
 		if (chating && !NearPlayer()){
 			CloseChat();
 		}
-		scheduleStack.Run(Time.deltaTime);
-		//npcSchedule.Run(Time.deltaTime);
+		//scheduleStack.Run(Time.deltaTime);
 	}
 	
 	// ONLY PUT SPECIFIC NPC THINGS IN THESE IN THE CHILDREN
