@@ -9,7 +9,10 @@ public class test : MonoBehaviour {
 	public NPC npc1;
 	public NPC npc2;
 	
+	public bool DOTESTS = false;
+	
 	void Start () {
+		if (!DOTESTS) return;
 		TestInteractions();
 	}
 	
