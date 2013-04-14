@@ -13,7 +13,16 @@ public class IdleState : AbstractState {
 		Debug.Log(character.name + ": IdleState Enter");
 	}
 	
+	public override void Pause() {
+		
+	}
+	
+	public override void Resume() {
+		
+	}
+	
 	public override void OnExit(){
 		Debug.Log(character.name + ": IdleState Exit");
+		_isComplete = true;
 	}
 }

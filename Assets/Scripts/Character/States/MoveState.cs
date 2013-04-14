@@ -89,8 +89,17 @@ public class MoveState : AbstractState {
 		}
 	}
 	
+	public override void Pause() {
+		
+	}
+	
+	public override void Resume() {
+		
+	}
+	
 	public override void OnExit(){
 		//Debug.Log(character.name + ": MoveState Exit");
+		_isComplete = true;
 	}
 	
 	private void Move(Vector3 moveDelta){

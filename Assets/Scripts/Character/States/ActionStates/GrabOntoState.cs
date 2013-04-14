@@ -25,7 +25,16 @@ public class GrabOntoState : AbstractState {
 		//TODO Grab item
 	}
 	
+	public override void Pause() {
+		
+	}
+	
+	public override void Resume() {
+		
+	}
+	
 	public override void OnExit(){
 		Debug.Log(character.name + ": GrabOntoState Exit");
+		_isComplete = true;
 	}
 }
