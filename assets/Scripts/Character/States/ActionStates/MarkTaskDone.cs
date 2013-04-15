@@ -18,7 +18,16 @@ public class MarkTaskDone : AbstractState {
 		((NPC)character).NextTask();
 	}
 	
+	public override void Pause() {
+		
+	}
+	
+	public override void Resume() {
+		
+	}
+	
 	public override void OnExit(){
 		Debug.Log(character.name + ": MarkTaskDone Exit");
+		_isComplete = true;
 	}
 }

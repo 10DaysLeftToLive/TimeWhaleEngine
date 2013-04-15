@@ -17,6 +17,22 @@ public class TimeTask : Task {
 		Debug.Log("Time left = " + _timeTillMoveOn);
 	}
 	
+	public override void Run(float amount) {
+		Decrement(amount);
+		
+		if(_stateToPerform.IsComplete) {
+			_taskFinished = true;
+		}
+	}
+	
+	public override void Pause() {
+		_stateToPerform.Pause();
+	}
+	
+	public override void Resume() {
+		_stateToPerform.Resume();
+	}
+	
 	public override bool IsComplete(){
 		return (_timeTillMoveOn <= 0);
 	}

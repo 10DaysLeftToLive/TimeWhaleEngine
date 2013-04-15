@@ -15,7 +15,7 @@ public abstract class NPC : Character {
 	public static int DISPOSITION_LOW = 3;
 	public static int DISPOSITION_HIGH = 7;
 	public int id;
-	private Schedule npcSchedule;
+	protected ScheduleStack scheduleStack;
 	public EmotionState currentEmotion;
 	
 	protected override void Init(){
@@ -30,13 +30,14 @@ public abstract class NPC : Character {
 		//Debug.Log (name + ": Is player initialized: " + (player != null));
 		currentEmotion = GetInitEmotionState();
 		NPCManager.instance.Add(this.gameObject);
+		scheduleStack = new ScheduleStack();
 	}
 	
 	protected override void CharacterUpdate(){
 		if (chating && !NearPlayer()){
 			CloseChat();
 		}
-		//npcSchedule.Run(Time.deltaTime);
+		//scheduleStack.Run(Time.deltaTime);
 	}
 	
 	// ONLY PUT SPECIFIC NPC THINGS IN THESE IN THE CHILDREN
@@ -160,7 +161,7 @@ public abstract class NPC : Character {
 	public void NextTask(){
 		EventManager.instance.RiseOnNPCInteractionEvent(new NPCEnviromentInteraction(this.gameObject, player.Inventory.GetItem().name));
 		
-		npcSchedule.NextTask();
+		//npcSchedule.NextTask();
 	}
 	
 	#region disposition
