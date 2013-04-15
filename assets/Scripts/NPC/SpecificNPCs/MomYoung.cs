@@ -107,14 +107,14 @@ public class MomYoung : NPC {
 			Debug.Log("mom is choice reacting to " + npc + " making choice " + choice);
 				switch (choice){
 				case "Tell on": Debug.Log("Told on"); 
-					this._textToSay = "Thank you for watching out for your sister!";
+					this._defaultTextToSay = "Thank you for watching out for your sister!";
 					hasToldOn = true;
 					_acceptableItems.Add("Plushie");
 					_npcInState.UpdateChatButton();
 					_choices.Clear();
 					break;
 				case "Lie to": Debug.Log("Lied to"); 
-					this._textToSay = "Keep an eye out on your sister!";
+					this._defaultTextToSay = "Keep an eye out on your sister!";
 					_acceptableItems.Add("Plushie");
 					_npcInState.UpdateChatButton();
 					_choices.Clear();

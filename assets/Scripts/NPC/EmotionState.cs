@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class EmotionState {
 	protected NPC _npcInState;
-	public string _textToSay;
+	public string _defaultTextToSay;
 	protected List<Choice> _choices;
 	protected List<string> _acceptableItems;
 	protected ChatChoiceInfo _chatInfo;
@@ -15,20 +15,20 @@ public class EmotionState {
 	
 	public EmotionState(NPC npcInState, string textToSay){
 		_npcInState = npcInState;
-		_textToSay = textToSay;
+		_defaultTextToSay = textToSay;
 		_choices = new List<Choice>();
 		_acceptableItems = new List<string>();
 	}
 	
 	public EmotionState(NPC npcInState, string textToSay, List<Choice> choices, List<string> acceptableItems) {
 		_npcInState = npcInState;
-		_textToSay = textToSay;
+		_defaultTextToSay = textToSay;
 		_choices = choices;
 		_acceptableItems = acceptableItems;
 	}
 	
 	public string GetWhatToSay(){
-		return (_textToSay);
+		return (_defaultTextToSay);
 	}
 	
 	public List<Choice> GetChoices(){
@@ -41,6 +41,14 @@ public class EmotionState {
 	
 	public bool ItemHasReaction(string itemName){
 		return (_acceptableItems.Contains(itemName));
+	}
+	
+	protected void UpdateInteractionDisplay(string newText){
+		GUIManager.Instance.UpdateInteractionDisplay(newText);	
+	}
+	
+	protected void SetDefaultText(string newText){
+		_defaultTextToSay = newText;
 	}
 	
 	public List<string> GetButtonTexts(){

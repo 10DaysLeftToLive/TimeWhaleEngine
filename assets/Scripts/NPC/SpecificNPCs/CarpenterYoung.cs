@@ -80,16 +80,14 @@ public class CarpenterYoung : NPC {
 		}
 		
 		public override void ReactToItemInteraction(string npc, GameObject item){
-			if (item != null && npc == "Carpenter[SWITCH_SPRITES]"){
+			if (item != null && npc == StringsNPC.CarpenterYoung){
 				switch (item.name){
 					case "ToolBox":
-						// Update chat
-						_npcInState.UpdateChat(toolboxResponse);
-						this._textToSay = toolboxDialogue;
+						UpdateInteractionDisplay(toolboxResponse);
+						SetDefaultText(toolboxDialogue);
 					
 						// Tree house built
 					
-						// Set new disposition
 						_npcInState.UpdateDisposition(toolboxDispositionChange);
 						break;
 					default:
@@ -100,18 +98,18 @@ public class CarpenterYoung : NPC {
 			}
 			
 			// React to item interactions with the Carpenter's son
-			if (item != null && npc == "CarpenterSon[SWITCH_SPRITES]"){
+			if (item != null && npc == StringsNPC.CarpenterSonYoung){
 				switch (item.name){
 					case "ToolBox":
 						// Change default dialogue
-						this._textToSay = toolboxGivenToSonDialogue;
+						SetDefaultText(toolboxGivenToSonDialogue);
 						
 						// Set new disposition
 						_npcInState.UpdateDisposition(toolboxDispositionChange);
 						break;
 					case "FishingRod":
 						// Change default dialogue
-						this._textToSay = fishingRodGivenToSonDialogue;
+						SetDefaultText(fishingRodGivenToSonDialogue);
 						
 						// Set new disposition
 						_npcInState.UpdateDisposition(fishingRodGivenToSonDispositionChange);
@@ -177,26 +175,22 @@ public class CarpenterYoung : NPC {
 		}
 		
 		public override void ReactToItemInteraction(string npc, GameObject item){
-			if (item != null && npc == "Carpenter[SWITCH_SPRITES]"){
+			if (item != null && npc == StringsNPC.CarpenterYoung){
 				switch (item.name){
 					case "ToolBox":
-						// Update chat
-						_npcInState.UpdateChat(toolboxResponse);
-						this._textToSay = toolboxDialogue;
+						UpdateInteractionDisplay(toolboxResponse);
+						SetDefaultText(toolboxDialogue);
 					
 						// Tree house built
 					
-						// Set new disposition
 						_npcInState.UpdateDisposition(toolboxDispositionChange);
 						break;
 					case "FishingRod":
-						// Update chat
-						_npcInState.UpdateChat(fishingRodResponse);
-						this._textToSay = fishingRodDialogue;
+						UpdateInteractionDisplay(fishingRodResponse);
+						SetDefaultText(fishingRodDialogue);
 					
 						// Tree house built
 					
-						// Set new disposition
 						_npcInState.UpdateDisposition(fishingRodDispositionChange);
 						break;
 					default:
@@ -207,18 +201,18 @@ public class CarpenterYoung : NPC {
 			}
 			
 			// React to item interactions with the Carpenter's son
-			if (item != null && npc == "CarpenterSon[SWITCH_SPRITES]"){
+			if (item != null && npc == StringsNPC.CarpenterSonYoung){
 				switch (item.name){
 					case "ToolBox":
 						// Change default dialogue
-						this._textToSay = toolboxGivenToSonDialogue;
+						SetDefaultText(toolboxGivenToSonDialogue);
 						
 						// Set new disposition
 						_npcInState.UpdateDisposition(toolboxDispositionChange);
 						break;
 					case "FishingRod":
 						// Change default dialogue
-						this._textToSay = fishingRodGivenToSonDialogue;
+						SetDefaultText(fishingRodGivenToSonDialogue);
 						
 						// Set new disposition
 						_npcInState.UpdateDisposition(fishingRodGivenToSonDispositionChange);
@@ -284,12 +278,12 @@ public class CarpenterYoung : NPC {
 		}
 		
 		public override void ReactToItemInteraction(string npc, GameObject item){
-			if (item != null && npc == "Carpenter[SWITCH_SPRITES]"){
+			if (item != null && npc == StringsNPC.CarpenterYoung){
 				switch (item.name){
 					case "ToolBox":
 						// Update chat
-						_npcInState.UpdateChat(toolboxResponse);
-						this._textToSay = toolboxDialogue;
+						UpdateInteractionDisplay(toolboxResponse);
+						SetDefaultText(toolboxDialogue);
 					
 						// Tree house built
 					
@@ -298,8 +292,8 @@ public class CarpenterYoung : NPC {
 						break;
 					case "FishingRod":
 						// Update chat
-						_npcInState.UpdateChat(fishingRodResponse);
-						this._textToSay = fishingRodDialogue;
+						UpdateInteractionDisplay(fishingRodResponse);
+						SetDefaultText(fishingRodDialogue);
 					
 						// Tree house built
 					
@@ -314,18 +308,18 @@ public class CarpenterYoung : NPC {
 			}
 			
 			// React to item interactions with the Carpenter's son
-			if (item != null && npc == "CarpenterSon[SWITCH_SPRITES]"){
+			if (item != null && npc == StringsNPC.CarpenterSonYoung){
 				switch (item.name){
 					case "ToolBox":
 						// Change default dialogue
-						this._textToSay = toolboxGivenToSonDialogue;
+						SetDefaultText(toolboxGivenToSonDialogue);
 						
 						// Set new disposition
 						_npcInState.UpdateDisposition(toolboxDispositionChange);
 						break;
 					case "FishingRod":
 						// Change default dialogue
-						this._textToSay = fishingRodGivenToSonDialogue;
+						SetDefaultText(fishingRodGivenToSonDialogue);
 						
 						// Set new disposition
 						_npcInState.UpdateDisposition(fishingRodGivenToSonDispositionChange);
@@ -402,12 +396,12 @@ public class CarpenterYoung : NPC {
 		}
 		
 		public override void ReactToItemInteraction(string npc, GameObject item){
-			if (item != null && npc == "Carpenter[SWITCH_SPRITES]"){
+			if (item != null && npc == StringsNPC.CarpenterYoung){
 				switch (item.name){
 					case "ToolBox":
 						// Update chat
-						_npcInState.UpdateChat(toolboxResponse);
-						this._textToSay = toolboxDialogue;
+						UpdateInteractionDisplay(toolboxResponse);
+						SetDefaultText(toolboxDialogue);
 					
 						// Tree house built
 					
@@ -416,7 +410,7 @@ public class CarpenterYoung : NPC {
 						break;
 					case "Apple[Carpenter]":
 						// Update chat
-						_npcInState.UpdateChat(appleReturnedResponse);
+						UpdateInteractionDisplay(appleReturnedResponse);
 					
 						// Tree house built
 					
@@ -428,7 +422,8 @@ public class CarpenterYoung : NPC {
 						break;
 					case "Apple":
 						// Update chat
-						_npcInState.UpdateChat(otherAppleReturnedResponse);
+						UpdateInteractionDisplay(otherAppleReturnedResponse);
+	
 					
 						// Tree house built
 					
@@ -440,13 +435,13 @@ public class CarpenterYoung : NPC {
 						break;
 					default:
 						// Give a default response about the item, but do not accept the item
-						_npcInState.UpdateChat(DefaultDialogueYoung.getDialogue(Strings.DialogueAmbivalent));
+						UpdateInteractionDisplay(DefaultDialogueYoung.getDialogue(Strings.DialogueAmbivalent));
 						break;
 				}
 			}
 			
 			// React to item interactions with the Carpenter's son
-			if (item != null && npc == "CarpenterSon[SWITCH_SPRITES]"){
+			if (item != null && npc == StringsNPC.CarpenterSonYoung){
 				switch (item.name){
 					case "ToolBox":
 						// Set new disposition
@@ -457,7 +452,7 @@ public class CarpenterYoung : NPC {
 						break;
 					case "FishingRod":
 						// Change default dialogue
-						this._textToSay = fishingRodGivenToSonDialogue;
+						SetDefaultText(fishingRodGivenToSonDialogue);
 						
 						// Set new disposition
 						_npcInState.UpdateDisposition(fishingRodGivenToSonDispositionChange);

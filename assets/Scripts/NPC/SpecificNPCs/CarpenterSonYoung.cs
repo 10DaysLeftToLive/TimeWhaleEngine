@@ -81,7 +81,7 @@ public class CarpenterSonYoung : NPC {
 					case "ToolBox":
 						// Update chat
 						_npcInState.UpdateChat(toolboxResponse);
-						this._textToSay = toolboxDialogue;
+						this._defaultTextToSay = toolboxDialogue;
 					
 						// Tree house built
 					
@@ -100,14 +100,14 @@ public class CarpenterSonYoung : NPC {
 				switch (item.name){
 					case "ToolBox":
 						// Change default dialogue
-						this._textToSay = toolboxGivenToFatherDialogue;
+						this._defaultTextToSay = toolboxGivenToFatherDialogue;
 						
 						// Set new disposition
 						_npcInState.UpdateDisposition(toolboxDispositionChange);
 						break;
 					case "FishingRod":
 						// Change default dialogue
-						this._textToSay = fishingRodGivenToFatherDialogue;
+						this._defaultTextToSay = fishingRodGivenToFatherDialogue;
 						
 						// Set new disposition
 						_npcInState.UpdateDisposition(fishingRodGivenToFatherDispositionChange);
@@ -133,7 +133,7 @@ public class CarpenterSonYoung : NPC {
 			if(item.name == "Apple[Carpenter]"){	
 				// If Carpenter does NOT let you take the apple
 					// Change default dialogue
-					this._textToSay = appleStolenDialogue;
+					this._defaultTextToSay = appleStolenDialogue;
 					
 					// Set new disposition
 					_npcInState.UpdateDisposition(appleStolenDispositionChange);
@@ -182,7 +182,7 @@ public class CarpenterSonYoung : NPC {
 					case "ToolBox":
 						// Update chat
 						_npcInState.UpdateChat(toolboxResponse);
-						this._textToSay = toolboxDialogue;
+						this._defaultTextToSay = toolboxDialogue;
 					
 						// Tree house built
 					
@@ -192,7 +192,7 @@ public class CarpenterSonYoung : NPC {
 					case "FishingRod":
 						// Update chat
 						_npcInState.UpdateChat(fishingRodResponse);
-						this._textToSay = fishingRodDialogue;
+						this._defaultTextToSay = fishingRodDialogue;
 					
 						// Make Fisherman
 					
@@ -211,14 +211,14 @@ public class CarpenterSonYoung : NPC {
 				switch (item.name){
 					case "ToolBox":
 						// Change default dialogue
-						this._textToSay = toolboxGivenToFatherDialogue;
+						this._defaultTextToSay = toolboxGivenToFatherDialogue;
 						
 						// Set new disposition
 						_npcInState.UpdateDisposition(toolboxDispositionChange);
 						break;
 					case "FishingRod":
 						// Change default dialogue
-						this._textToSay = fishingRodGivenToFatherDialogue;
+						this._defaultTextToSay = fishingRodGivenToFatherDialogue;
 						
 						// Set new disposition
 						_npcInState.UpdateDisposition(fishingRodGivenToFatherDispositionChange);
@@ -244,7 +244,7 @@ public class CarpenterSonYoung : NPC {
 			if(item.name == "Apple[Carpenter]"){	
 				// If Carpenter does NOT let you take the apple
 					// Change default dialogue
-					this._textToSay = appleStolenDialogue;
+					this._defaultTextToSay = appleStolenDialogue;
 					
 					// Set new disposition
 					_npcInState.UpdateDisposition(appleStolenDispositionChange);
@@ -292,7 +292,7 @@ public class CarpenterSonYoung : NPC {
 					case "ToolBox":
 						// Update chat
 						_npcInState.UpdateChat(toolboxResponse);
-						this._textToSay = toolboxDialogue;
+						this._defaultTextToSay = toolboxDialogue;
 					
 						// Tree house built
 					
@@ -302,7 +302,7 @@ public class CarpenterSonYoung : NPC {
 					case "FishingRod":
 						// Update chat
 						_npcInState.UpdateChat(fishingRodResponse);
-						this._textToSay = fishingRodDialogue;
+						this._defaultTextToSay = fishingRodDialogue;
 					
 						// Make Fisherman
 					
@@ -321,14 +321,14 @@ public class CarpenterSonYoung : NPC {
 				switch (item.name){
 					case "ToolBox":
 						// Change default dialogue
-						this._textToSay = toolboxGivenToFatherDialogue;
+						this._defaultTextToSay = toolboxGivenToFatherDialogue;
 						
 						// Set new disposition
 						_npcInState.UpdateDisposition(toolboxDispositionChange);
 						break;
 					case "FishingRod":
 						// Change default dialogue
-						this._textToSay = fishingRodGivenToFatherDialogue;
+						this._defaultTextToSay = fishingRodGivenToFatherDialogue;
 						
 						// Set new disposition
 						_npcInState.UpdateDisposition(fishingRodGivenToFatherDispositionChange);

@@ -46,7 +46,6 @@ public class InteractionMenu : GUIControl {
 	#endregion
 	
 	public override void Init(){
-		Debug.Log("Init of interaction");
 		player = (Player) GameObject.Find(Strings.Player).GetComponent<Player>(); // the player will always stay the same so find it at the start
 		buttonTexts = new List<string>();
 		buttonRects = new List<Rect>();

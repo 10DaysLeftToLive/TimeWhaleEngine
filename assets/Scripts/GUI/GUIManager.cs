@@ -11,6 +11,11 @@ public class GUIManager : MonoBehaviour {
 	private List<GUIControl> activeControls;
 	private static bool alreadyMade = false; // denotes if this is the first gui manager that has been awakened
 	
+	private static GUIManager instance = null;
+	public static GUIManager Instance {
+		get {return instance;}	
+	}
+	
 	public ChatMenu chatMenu;
 	public InGameMenu inGameMenu;
 	public InteractionMenu interactionMenu;
@@ -20,6 +25,7 @@ public class GUIManager : MonoBehaviour {
 			Destroy(this); // no need for 2 gui managers
 			return;
 		}
+		instance = this;
 		alreadyMade = true;
 		DontDestroyOnLoad(this); // keep this manager and its loaded assests around
 		activeControls = new List<GUIControl>();
