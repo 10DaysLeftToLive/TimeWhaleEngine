@@ -52,11 +52,28 @@ public class EmotionState {
 	}
 	
 	public List<string> GetButtonTexts(){
-		List<string> tempTexts = new List<string>();
-		tempTexts.Add("Hai1");
-		tempTexts.Add("Hai2");
-		tempTexts.Add("Hai3");
-		return (tempTexts);
+		List<string> toReturn = new List<string>();
+		
+		_choices.Add(new Choice("Hai 0", "O Hai 0"));
+		_choices.Add(new Choice("Hai 1", "O Hai 1"));
+		_choices.Add(new Choice("Hai 2", "O Hai 2"));
+		
+		foreach (Choice choice in _choices){
+			toReturn.Add(choice._choiceName);
+		}
+		return (toReturn);
+	}
+	
+	public void ReactToChoice(string choiceName){
+		foreach (Choice choice in _choices){
+			if (choice._choiceName == choiceName){
+				DoReaction(choice);	
+			}
+		}
+	}
+				
+	private void DoReaction(Choice choice){
+		choice.Perform(this);
 	}
 	
 	//Virtual so children don't have to override

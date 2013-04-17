@@ -18,8 +18,6 @@ public class Inventory {
 			originalLocalScale = toPickUp.transform.localScale;
 			pickedUpObject = toPickUp;
 			
-			Debug.Log ("Before: Item in hand: " + pickedUpObject.transform.localScale);
-			
 			toPickUp.transform.position = new Vector3(rightHandTransform.position.x, 
 													  rightHandTransform.position.y, 
 													  rightHandTransform.position.z);

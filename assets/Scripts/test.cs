@@ -13,10 +13,12 @@ public class test : MonoBehaviour {
 	
 	void Start () {
 		if (!DOTESTS) return;
-		TestInteractions();
+		StartCoroutine(TestInteractions());
 	}
 	
-	private void TestInteractions(){
+	private IEnumerator TestInteractions(){
+		yield return new WaitForSeconds(.1f);
+		
 		manager.InitiateInteraction(npc1);
 	}
 	

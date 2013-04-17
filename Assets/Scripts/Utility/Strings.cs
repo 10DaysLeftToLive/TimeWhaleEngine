@@ -11,8 +11,6 @@ public static class Strings{
 	public static string ButtonAgeShiftDown = "Age Shift Down";
 	public static string ButtonFly = "Fly";
 	
-	
-	
 	public static string tag_Climbable = "Climbable";
 	public static string tag_Pushable = "Pushable";
 	public static string tag_NPC = "NPC";
@@ -52,7 +50,6 @@ public static class Strings{
 	// Default Dialogue
 	public static string DialogueAmbivalent = "Ambivalent";
 	public static string DialogueAngry = "Angry";
-	
 	
 	// NPC Chat Texts
 	public static string DIALOGUENOTSET = "Dialogue was not set";

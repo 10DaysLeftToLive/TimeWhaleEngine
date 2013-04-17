@@ -30,9 +30,9 @@ public class GUIManager : MonoBehaviour {
 		DontDestroyOnLoad(this); // keep this manager and its loaded assests around
 		activeControls = new List<GUIControl>();
 		
-		chatMenu = new ChatMenu();
-		inGameMenu = new InGameMenu();
-		interactionMenu = new InteractionMenu();
+		chatMenu = GetComponent<ChatMenu>();
+		inGameMenu = GetComponent<InGameMenu>();
+		interactionMenu = GetComponent<InteractionMenu>();
 	}
 	
 	public void AddNPCChat(NPCChat npcChatToAdd){

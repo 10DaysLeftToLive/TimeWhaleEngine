@@ -205,11 +205,9 @@ public class LevelManager : MonoBehaviour {
 		/* if (InputManager.UPUPDOWNDOWNLEFTRIGHTLEFTRIGHTABDETECTED())
 		 *     TimeWhaleEngine.Begin(); // Needs rewording as there is no begining to Time Whale the glory of Time Whale. It is eternal and does not require a cause
 		 */
-		
 	}
 
 	void OnApplicationQuit(){
 		SaveDispositions();
 	}
-	
 }

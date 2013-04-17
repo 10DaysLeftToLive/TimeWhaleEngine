@@ -4,7 +4,6 @@ using SmoothMoves;
 
 [RequireComponent(typeof(CharacterController))]
 public class Player : Character {
-	
 	public float walkSpeed = 2.0f;
 	public float gravity = 20.0f;
 	public float pushPower = 2.0f;
@@ -28,6 +27,7 @@ public class Player : Character {
 	
 	public bool isTouchingTrigger = false;
 	
+	
 	public float currentVerticalSpeed = 0.0f;
 	
 	// Use this for initialization
@@ -36,14 +36,12 @@ public class Player : Character {
 		EventManager.instance.mOnClickNoObjectEvent += new EventManager.mOnClickedNoObjectDelegate (OnClickToMove);
 		EventManager.instance.mOnClickOnPlayerEvent += new EventManager.mOnClickOnPlayerDelegate (OnClickOnPlayer);
 		AgeSwapMover.instance.SetPlayer(this);
-		
 	}
 	
 	// We want to be able to switch to move at any state when the player clicks
 	private void OnClickToMove (EventManager EM, ClickPositionArgs e){
 		Vector3 pos = Camera.main.ScreenToWorldPoint(e.position);
 		pos.z = this.transform.position.z;
-		
 		
 		Debug.Log("Click on no object  at point " + pos);
 
@@ -82,7 +80,6 @@ public class Player : Character {
 				EnterState(new MoveThenDoState(this, goal, new GrabOntoState(this, e.clickedObject)));
 			}
 		} else if (tag == Strings.tag_NPC){
-			
 			NPC toTalkWith = (NPC)e.clickedObject.gameObject.GetComponent<NPC>();
 			Vector3 currentPos = this.transform.position;
 			Vector3 goalPosInfront = Utils.GetPointInfrontOf(currentPos, toTalkWith.gameObject);

@@ -74,6 +74,10 @@ public abstract class NPC : Character {
 		return(currentEmotion.GetChoices());
 	}
 	
+	public void ReactToChoice(string choice){
+		currentEmotion.ReactToChoice(choice);	
+	}
+	
 	protected string GetWhatToSay(){
 		return (currentEmotion.GetWhatToSay());
 	}
@@ -159,7 +163,7 @@ public abstract class NPC : Character {
 	}
 	
 	public void NextTask(){
-		EventManager.instance.RiseOnNPCInteractionEvent(new NPCEnviromentInteraction(this.gameObject, player.Inventory.GetItem().name));
+		EventManager.instance.RiseOnNPCInteractionEvent(new NPCEnviromentInteraction(this.gameObject, "Task Done"));
 		
 		//npcSchedule.NextTask();
 	}

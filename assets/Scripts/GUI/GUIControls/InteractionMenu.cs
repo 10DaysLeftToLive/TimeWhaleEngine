@@ -106,9 +106,10 @@ public class InteractionMenu : GUIControl {
 		GUI.TextField (textBoxRect, mainDisplayText, textFieldStyle);
 	}
 	
-	private void DoClickOnChoice(string choice){
+	public void DoClickOnChoice(string choice){
 		Debug.Log("Doing click on " + choice);
 		EventManager.instance.RiseOnNPCInteractionEvent(new NPCChoiceInteraction(this.gameObject, choice));
+		npcChattingWith.ReactToChoice(choice);
 	}
 		
 	private void DoGiveClick(){

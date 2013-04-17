@@ -281,23 +281,19 @@ public class CarpenterYoung : NPC {
 			if (item != null && npc == StringsNPC.CarpenterYoung){
 				switch (item.name){
 					case "ToolBox":
-						// Update chat
 						UpdateInteractionDisplay(toolboxResponse);
 						SetDefaultText(toolboxDialogue);
 					
 						// Tree house built
 					
-						// Set new disposition
 						_npcInState.UpdateDisposition(toolboxDispositionChange);
 						break;
 					case "FishingRod":
-						// Update chat
 						UpdateInteractionDisplay(fishingRodResponse);
 						SetDefaultText(fishingRodDialogue);
 					
 						// Tree house built
 					
-						// Set new disposition
 						_npcInState.UpdateDisposition(fishingRodDispositionChange);
 						break;
 					default:
@@ -311,10 +307,7 @@ public class CarpenterYoung : NPC {
 			if (item != null && npc == StringsNPC.CarpenterSonYoung){
 				switch (item.name){
 					case "ToolBox":
-						// Change default dialogue
 						SetDefaultText(toolboxGivenToSonDialogue);
-						
-						// Set new disposition
 						_npcInState.UpdateDisposition(toolboxDispositionChange);
 						break;
 					case "FishingRod":
@@ -437,6 +430,7 @@ public class CarpenterYoung : NPC {
 						// Give a default response about the item, but do not accept the item
 						UpdateInteractionDisplay(DefaultDialogueYoung.getDialogue(Strings.DialogueAmbivalent));
 						break;
+	
 				}
 			}
 			
