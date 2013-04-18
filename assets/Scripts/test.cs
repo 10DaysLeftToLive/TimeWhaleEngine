@@ -13,14 +13,18 @@ public class test : MonoBehaviour {
 	
 	void Start () {
 		if (!DOTESTS) return;
-		TestFlagManager();
+		StartCoroutine(TestFlagManager());
 		
 		
 		//StartCoroutine(TestInteractions());
 	}
 	
-	private void TestFlagManager(){
-		FlagManager.instance.SetFlag("Flag 1");	
+	private IEnumerator TestFlagManager(){
+		yield return new WaitForSeconds(.1f);
+		
+		FlagManager.instance.SetFlag("Eat pie");	
+		FlagManager.instance.SetFlag("Eat pies");	
+		FlagManager.instance.SetFlag("Take apple");	
 	}
 	
 	private IEnumerator TestInteractions(){

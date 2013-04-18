@@ -18,6 +18,8 @@ public abstract class NPC : Character {
 	protected ScheduleStack scheduleStack;
 	public EmotionState currentEmotion;
 	
+	private Dictionary<string, string> flagReactions;
+	
 	protected override void Init(){
 		chatObject = GameObject.Find("Chat").GetComponent<Chat>();
 		charPortrait = (Texture)Resources.Load("" + this.name, typeof(Texture));
@@ -31,6 +33,7 @@ public abstract class NPC : Character {
 		currentEmotion = GetInitEmotionState();
 		NPCManager.instance.Add(this.gameObject);
 		scheduleStack = new ScheduleStack();
+		flagReactions = new Dictionary<string, string>();
 	}
 	
 	protected override void CharacterUpdate(){
@@ -69,6 +72,10 @@ public abstract class NPC : Character {
 	
 	// NPC's reaction when the player collides with a trigger
 	protected virtual void ReactToTriggerCollision(EventManager EM, TriggerCollisionArgs triggerCollided){}
+	
+	public void ReactToFlag(string flagName){
+		Debug.Log(name + " is reacting to " + flagName);	
+	}
 	
 	private List<Choice> GetChoices(){
 		return(currentEmotion.GetChoices());
@@ -142,6 +149,14 @@ public abstract class NPC : Character {
 	
 	public List<string> GetButtonChats(){
 		return (currentEmotion.GetButtonTexts());
+	}
+	
+	public List<string> GetFlags(){
+		Debug.Log("Geting flags from npc " + name);
+		List<string> flags = new List<string>();
+		flags.Add("Eat pie");
+		flags.Add("Take apple");
+		return (flags);
 	}
 	
 	protected void UpdateChatButtons(){
