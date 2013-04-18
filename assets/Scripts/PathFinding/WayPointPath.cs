@@ -21,10 +21,10 @@ public class WayPointPath {
 		GameObject start = GetPoint(startPos, mask, heading);
 		heading = SetHeading(destination, startPos);
 		GameObject end = GetPoint(destination, mask, heading);
-		if (start == null || end == null)return false;
+		if (start == null || end == null) return false;
 		WayPoints startScript = GetScript(start);
 		WayPoints endScript = GetScript(end);
-		if (Vector3.Distance(startPos, startScript.GetFloorPosition()) > Vector3.Distance(startPos, destination)) 
+		if (Vector3.Distance(startPos, startScript.GetFloorPosition()) > Vector3.Distance(startPos, destination) && !PathToOtherFloor(startPos,destination)) 
 			return AddPoint(destination);
 		Search.ShortestPath(startScript.id, endScript.id);
 		Search.Compute();
@@ -160,6 +160,13 @@ public class WayPointPath {
 		}
 		return false;
 	}
+	
+	private static bool PathToOtherFloor(Vector3 start, Vector3 end){
+		if (Mathf.Abs(start.y - end.y) > NEXTFLOOR)
+			return true;
+		return false;
+	}
+
 	
 	public static Path GetPath(){
 		Path path = new Path(index, points);

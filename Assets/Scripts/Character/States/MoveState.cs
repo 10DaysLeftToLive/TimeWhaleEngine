@@ -125,12 +125,16 @@ public class MoveState : AbstractState {
 			hitPos.y += character.transform.localScale.y/2;
 			//Debug.Log("ground at " + hitPos);
 			
-			if (WayPointPath.CheckForPath(character.transform.position, hitPos, character.transform.localScale.y/2)){
+			_pathFollowing = new Path();
+			_pathFollowing = QuickPath.StraightPath(character.transform.position, hitPos, character.transform.localScale.y/2);
+			return true;
+			
+			/*if (WayPointPath.CheckForPath(character.transform.position, hitPos, character.transform.localScale.y/2)){
 				_pathFollowing = new Path();
 				_pathFollowing = WayPointPath.GetPath();
 				
 				return (true);
-			}
+			}*/
 		} return (false);
 	}
 	
