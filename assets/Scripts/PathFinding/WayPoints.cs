@@ -8,11 +8,19 @@ public class WayPoints : MonoBehaviour {
 	public GameObject UpWayPoint;
 	public GameObject DownWayPoint;
 	
+	public float leftDistance;
+	public float rightDistance;
+	public float upDistance;
+	public float downDistance;
+	
+	public int id;
+	
 	private Vector3 floorPosition;
 	
 	void Start () {
 		floorPosition = this.transform.position;
 		floorPosition.y -= this.collider.bounds.size.y/2;
+		SetDistance();
 	}
 	
 	public Vector3 GetFloorPosition(){
@@ -57,6 +65,14 @@ public class WayPoints : MonoBehaviour {
 		if (DownWayPoint != null)
 			return true;
 		return false;
+	}
+	
+	private void SetDistance(){
+		Vector3 pos = this.transform.position;
+		if (CheckLeft()) leftDistance = Vector3.Distance(pos, LeftWayPoint.transform.position);
+		if (CheckRight()) rightDistance = Vector3.Distance(pos, RightWayPoint.transform.position);
+		if (CheckUp()) upDistance = Vector3.Distance(pos, UpWayPoint.transform.position);
+		if (CheckDown()) downDistance = Vector3.Distance(pos, DownWayPoint.transform.position);
 	}
 	
 }
