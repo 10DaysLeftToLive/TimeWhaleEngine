@@ -67,15 +67,11 @@ public class EmotionState {
 	public void ReactToChoice(string choiceName){
 		foreach (Choice choice in _choices){
 			if (choice._choiceName == choiceName){
-				DoReaction(choice);	
+				choice.Perform(this);
 			}
 		}
 	}
-				
-	private void DoReaction(Choice choice){
-		choice.Perform(this);
-	}
-	
+
 	//Virtual so children don't have to override
 	public virtual void ReactToItemInteraction(string npc, GameObject item){}
 	public virtual void ReactToChoiceInteraction(string npc, string choice){}

@@ -12,5 +12,6 @@ public class Choice {
 	
 	public void Perform(EmotionState toUpdate){
 		Debug.Log("Performing on " + toUpdate.ToString());	
+		GUIManager.Instance.UpdateInteractionDisplay(_reactionDialog);
 	}
 }

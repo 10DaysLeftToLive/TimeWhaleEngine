@@ -13,7 +13,14 @@ public class test : MonoBehaviour {
 	
 	void Start () {
 		if (!DOTESTS) return;
-		StartCoroutine(TestInteractions());
+		TestFlagManager();
+		
+		
+		//StartCoroutine(TestInteractions());
+	}
+	
+	private void TestFlagManager(){
+		FlagManager.instance.SetFlag("Flag 1");	
 	}
 	
 	private IEnumerator TestInteractions(){
