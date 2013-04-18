@@ -7,11 +7,6 @@ public class FlagManager : ManagerSingleton<FlagManager> {
 	
 	public override void Init(){
 		_flags = NPCManager.instance.GetFlags();
-		
-		/*_flags.Add(new Flag("Flag 1"));
-		_flags.Add(new Flag("Flag 2"));
-		_flags.Add(new Flag("Flag 3"));
-		_flags.Add(new Flag("Flag 4"));*/
 	}
 	
 	public void SetFlags(List<Flag> flags){

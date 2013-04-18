@@ -23,17 +23,17 @@ public abstract class NPC : Character {
 	protected override void Init(){
 		chatObject = GameObject.Find("Chat").GetComponent<Chat>();
 		charPortrait = (Texture)Resources.Load("" + this.name, typeof(Texture));
-		//Log ("TEXTURE LOADED IS CALLED: " + charPortrait.name);
 		player = GameObject.Find("PlayerCharacter").GetComponent<Player>();
 		EventManager.instance.mOnNPCInteractionEvent += new EventManager.mOnNPCInteractionDelegate(ReactToInteractionEvent);
 		EventManager.instance.mOnPlayerPickupItemEvent += new EventManager.mOnPlayerPickupItemDelegate(ReactToItemPickedUp);
 		EventManager.instance.mOnPlayerTriggerCollisionEvent += new EventManager.mOnPlayerTriggerCollisionDelegate(ReactToTriggerCollision);
 		//npcSchedule = GetSchedule();
-		//Debug.Log (name + ": Is player initialized: " + (player != null));
 		currentEmotion = GetInitEmotionState();
 		NPCManager.instance.Add(this.gameObject);
 		scheduleStack = new ScheduleStack();
 		flagReactions = new Dictionary<string, string>();
+		flagReactions.Add("Eat pie", "Shock");
+		flagReactions.Add("Say hi", "Run");
 	}
 	
 	protected override void CharacterUpdate(){
@@ -74,7 +74,7 @@ public abstract class NPC : Character {
 	protected virtual void ReactToTriggerCollision(EventManager EM, TriggerCollisionArgs triggerCollided){}
 	
 	public void ReactToFlag(string flagName){
-		Debug.Log(name + " is reacting to " + flagName);	
+		Debug.Log(name + " is reacting to " + flagName + " by doing " + flagReactions[flagName]);
 	}
 	
 	private List<Choice> GetChoices(){
@@ -152,10 +152,10 @@ public abstract class NPC : Character {
 	}
 	
 	public List<string> GetFlags(){
-		Debug.Log("Geting flags from npc " + name);
 		List<string> flags = new List<string>();
-		flags.Add("Eat pie");
-		flags.Add("Take apple");
+		foreach (string flag in flagReactions.Keys){
+			flags.Add(flag);	
+		}
 		return (flags);
 	}
 	

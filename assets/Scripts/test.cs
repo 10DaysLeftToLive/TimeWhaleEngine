@@ -24,7 +24,7 @@ public class test : MonoBehaviour {
 		
 		FlagManager.instance.SetFlag("Eat pie");	
 		FlagManager.instance.SetFlag("Eat pies");	
-		FlagManager.instance.SetFlag("Take apple");	
+		FlagManager.instance.SetFlag("Say hi");	
 	}
 	
 	private IEnumerator TestInteractions(){
