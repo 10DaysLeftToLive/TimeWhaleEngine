@@ -12,7 +12,6 @@ public class MoveState : AbstractState {
 	protected float speed = 5f;
 	private GoToState currentMovementState = null;
 	private Vector3 currentGoal;
-	private Vector3 lastPos;
 	private float stuckTimer;
 	
 	public MoveState(Character toControl, Vector3 goal) : base(toControl){
@@ -51,7 +50,6 @@ public class MoveState : AbstractState {
 				}
 			}
 		} else {
-			lastPos = character.transform.position;
 			Move(movement);
 		}
 		

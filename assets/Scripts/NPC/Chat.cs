@@ -19,7 +19,6 @@ public class Chat : MonoBehaviour {
 	public delegate void ChoiceButtonClickDelegate(string choice);
 	ChoiceButtonClickDelegate leftButtonClickDelegate;
 	ButtonClickDelegate rightButtonClickDelegate;
-	private bool showLeftButton = false;
 	private bool showRightButton = false;
 	private bool textFieldInit = false;
 	private bool buttonInit = false;
@@ -45,8 +44,6 @@ public class Chat : MonoBehaviour {
 	
 	private float[] topLeftPositionPercentages;
 	
-	private static float CHATHEIGHTPERCENTAGE = .7f;
-	private static float BUTTONHEIGHTPERCENTAGE = 1-CHATHEIGHTPERCENTAGE;
 	private static float CHATPADDING = .01f; // padding between chat and the screen in all directions
 	private static float CHATINTERNALPADDING = .01f; // padding between chat elements in all directions
 	private static float CHATBUTTONPADDING = .01f; // padding between chat elements in all directions
@@ -170,7 +167,6 @@ public class Chat : MonoBehaviour {
 	public void RemoveChatBox(){
 		isActive	= false;
 		showRightButton = false;
-		showLeftButton = false;
 		rightButtonClickDelegate = null;
 		leftButtonClickDelegate = null;
 	}
@@ -182,7 +178,6 @@ public class Chat : MonoBehaviour {
 	
 	private void SetLeftButton(ChoiceButtonClickDelegate leftButtonClick){
 		leftButtonClickDelegate += leftButtonClick;
-		showLeftButton = true;
 	}
 	
 	private void SetRightButton(ButtonClickDelegate rightButtonClick){
@@ -193,13 +188,11 @@ public class Chat : MonoBehaviour {
 	// We will have the single constructor set the right button as we will only need the right for items some of the time
 	public void SetButtonCallbacks(ChoiceButtonClickDelegate leftButtonClick){
 		showRightButton = false;
-		showLeftButton = false;
 		SetLeftButton(leftButtonClick);
 	}
 	
 	public void SetButtonCallbacks(ChoiceButtonClickDelegate leftButtonClick, ButtonClickDelegate rightButtonClick){
 		showRightButton = false;
-		showLeftButton = false;
 		SetLeftButton(leftButtonClick);
 		SetRightButton(rightButtonClick);
 	}
@@ -223,8 +216,8 @@ public class Chat : MonoBehaviour {
 	}
 	
 	private void SetChatRectangles(){
-		GameObject player = GameObject.Find("PlayerCharacter");
-		Vector3 maxBounds = Camera.main.WorldToScreenPoint (player.transform.position); // TODO
+		//GameObject player = GameObject.Find("PlayerCharacter");
+		//Vector3 maxBounds = Camera.main.WorldToScreenPoint (player.transform.position); // TODO
 		
 		// Overall Chat variables
 		float chatWidth = 1 - (2f * CHATPADDING);

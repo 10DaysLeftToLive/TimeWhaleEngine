@@ -15,7 +15,7 @@ public class AgeTransitionShader : ShaderBase {
 	//Duration of the fade in and out in ticks
 	public float fadeDuration; 
 	
-	private CameraController camera;
+	private CameraController cameraController;
 	
 	//A flag that determines if our plane is fading in/out in front of the camera.
 	//NOTE:Will get rid of this only temporary until we optimize.
@@ -48,7 +48,7 @@ public class AgeTransitionShader : ShaderBase {
 	/// </summary>
 	void Start () {
 		levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
-		camera = Camera.main.GetComponent<CameraController>();
+		cameraController = Camera.main.GetComponent<CameraController>();
 		renderer.material.color = Color.clear;
 		transform.position = new Vector3(idlePosition.x, idlePosition.y, FadeShaderConstants.HIDE_Z_LOC);
 	}
@@ -62,7 +62,7 @@ public class AgeTransitionShader : ShaderBase {
 	void Update () {
 		if (isFading) {
 			//Moves the FadePlane to the front of the screen.
-			Vector3 cameraPos = camera.transform.position;
+			Vector3 cameraPos = cameraController.transform.position;
 			transform.position = new Vector3(cameraPos.x, cameraPos.y, cameraPos.z + FadeShaderConstants.FADEPLANEOFFSET);
 			
 			//Color fades in and out.

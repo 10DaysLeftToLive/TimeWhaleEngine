@@ -12,7 +12,6 @@ public class Inventory {
 	
 	public void PickUpObject(GameObject toPickUp){
 		if (HasItem()) {
-			Debug.Log("Swapping");
 			SwapItems(toPickUp);
 		} else {
 			originalLocalScale = toPickUp.transform.localScale;
@@ -24,11 +23,9 @@ public class Inventory {
 			
 			
 			toPickUp.transform.parent = rightHandTransform;
-			Vector3 pickedUpItemScale = toPickUp.transform.localScale;
 			Utils.SetActiveRecursively(rightHandTransform.gameObject, true);
 			Utils.SetActiveRecursively(pickedUpObject.gameObject, true);
 			
-			Debug.Log ("After(" + pickedUpObject.name + "): Item in hand: " + pickedUpObject.transform.localScale);
 			pickedUpObject.GetComponent<InteractableOnClick>().Disable();
 		}
 		Debug.Log("PickUpObject does " + (HasItem() ? "" : "not ") + "have an item");
@@ -45,8 +42,6 @@ public class Inventory {
 	}
 	
 	public void DropItem(Vector3 toPlace) {
-		//Debug.Log ("Before: Item to swap: " + pickedUpObject.transform.localScale);
-		GameObject oldPickedUpObject = pickedUpObject;
 		pickedUpObject.GetComponent<InteractableOnClick>().Enable();
 		pickedUpObject.transform.parent = null;
 		pickedUpObject.transform.localScale = originalLocalScale;
@@ -54,7 +49,6 @@ public class Inventory {
 		
 		pickedUpObject = null;
         SoundManager.instance.PutDownItemSFX.Play();
-		//Debug.Log ("After(" + oldPickedUpObject.name + "): Item to swap: " + oldPickedUpObject.transform.localScale);
 	}
 	
 	public void SwapItemWithCurrentAge(SmoothMoves.BoneAnimation animationData) {

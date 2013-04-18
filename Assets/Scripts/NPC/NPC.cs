@@ -206,10 +206,4 @@ public abstract class NPC : Character {
 		NPCDispositionManager.instance.UpdateWithId(id, disp);
 	}
 	#endregion
-	
-	#region item interactions
-	public void SetInteractions(List<Item> items){
-		itemReactions = items;
-	}
-	#endregion
 }

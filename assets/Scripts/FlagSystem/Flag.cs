@@ -19,6 +19,7 @@ public class Flag : IEquatable<Flag>{ // needs to implement IEquatable to play n
 	}
 	
 	public void SetOff(){
+		if (_isSetOff) Debug.LogWarning("Flag " + _name + " was already set off");
 		Debug.Log("Setting off " + _name);
 		foreach (NPC npc in npcsThatCareAboutFlag){
 			npc.ReactToFlag(_name);	
@@ -81,4 +82,8 @@ public class Flag : IEquatable<Flag>{ // needs to implement IEquatable to play n
 		else    
 			return Equals(flagObj);   
 	}   
+	
+	public override int GetHashCode(){
+		return this._name.GetHashCode();
+	}
 }

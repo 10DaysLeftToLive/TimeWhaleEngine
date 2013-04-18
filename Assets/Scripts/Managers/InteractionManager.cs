@@ -26,34 +26,25 @@ public class InteractionManager : ManagerSingleton<InteractionManager> {
 		npcCollection.Save(disposiitonData);
 	}
 
-	public void InitilizeNPCs(string dispositionData, string levelData){
+	public void InitilizeNPCs(string dispositionData){
 		NPCCollection npcCollection = NPCCollection.Load(dispositionData);
-		NPCToItemCollection npcToItems = NPCToItemCollection.Load(levelData);
 		
 		GameObject[] npcs = GetNPCs();
 		NPC npc_Class;
 		NPCData currentData = new NPCData();
-		NPCItemsReactions currentNPCReactions = new NPCItemsReactions();
 		
 		foreach (GameObject npc in npcs){
 			currentData = npcCollection.GetNPC(npc.name);
 			npc_Class = npc.GetComponent<NPC>();
 			
-			currentNPCReactions = npcToItems.GetNPC(npc.name);
-			
-			SetNPCDisposition(npc_Class, currentData);
-			SetNPCInteractions(npc_Class, currentNPCReactions);			
+			SetNPCDisposition(npc_Class, currentData);		
 		}
 	}
 	
 	private GameObject[] GetNPCs(){
 		return (GameObject.FindGameObjectsWithTag(Strings.tag_NPC)); 
 	}
-	
-	private void SetNPCInteractions(NPC npcClass, NPCItemsReactions data){		
-		npcClass.SetInteractions(data.items);
-	}
-	
+
 	private void SetNPCDisposition(NPC npcClass, NPCData data){
 		npcClass.SetDisposition(data.disposition);
 	}

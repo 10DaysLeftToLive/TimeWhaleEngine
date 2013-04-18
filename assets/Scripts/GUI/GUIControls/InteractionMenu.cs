@@ -35,8 +35,6 @@ public class InteractionMenu : GUIControl {
 	#endregion
 	
 	#region Settings
-	private static float CHATHEIGHTPERCENTAGE = .7f;
-	private static float BUTTONHEIGHTPERCENTAGE = 1-CHATHEIGHTPERCENTAGE;
 	private static float CHATPADDING = .01f; // padding between chat and the screen in all directions
 	private static float CHATINTERNALPADDING = .01f; // padding between chat elements in all directions
 	private static float CHATBUTTONPADDING = .01f; // padding between chat elements in all directions
@@ -156,10 +154,7 @@ public class InteractionMenu : GUIControl {
 		return (message);
 	}
 	
-	private void SetChatRectangles(){
-		GameObject player = GameObject.Find("PlayerCharacter");
-		Vector3 maxBounds = Camera.main.WorldToScreenPoint (player.transform.position); // TODO
-		
+	private void SetChatRectangles(){		
 		// Overall Chat variables
 		float chatWidth = 1 - (2f * CHATPADDING);
 		float chatHeight = .5f - (2f * CHATPADDING);
