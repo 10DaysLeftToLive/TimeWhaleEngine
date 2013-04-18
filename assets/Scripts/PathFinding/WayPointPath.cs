@@ -21,9 +21,11 @@ public class WayPointPath {
 		GameObject start = GetPoint(startPos, mask, heading);
 		heading = SetHeading(destination, startPos);
 		GameObject end = GetPoint(destination, mask, heading);
-		if (start == null || end == null) return false;
+		if (start == null || end == null)return false;
 		WayPoints startScript = GetScript(start);
 		WayPoints endScript = GetScript(end);
+		if (Vector3.Distance(startPos, startScript.GetFloorPosition()) > Vector3.Distance(startPos, destination)) 
+			return AddPoint(destination);
 		Search.ShortestPath(startScript.id, endScript.id);
 		Search.Compute();
 		return AddArray(destination);
@@ -61,7 +63,6 @@ public class WayPointPath {
 	
 	private static bool CheckExtraPoints(int first, int second, int third){
 		if (CheckAngle(first,second) || CheckAngle (second, third)){
-			//Debug.Log("skipping due to angle");
 			return false;
 		}
 		float dif1 = Utils.CalcDifference(points[first].x, points[second].x);
@@ -69,7 +70,7 @@ public class WayPointPath {
 		
 		float dif2 = Utils.CalcDifference(points[second].x, points[third].x);
 		dif2 /= Mathf.Abs(dif2);
-		
+		Debug.Log("dif: " + dif1 + "  " + dif2);
 		if (dif1 != dif2){
 			points[second] = Vector3.zero;
 			return true;
@@ -145,9 +146,10 @@ public class WayPointPath {
 		return script;
 	}
 
-	private static void AddPoint(Vector3 pos){
+	private static bool AddPoint(Vector3 pos){
 		points[index] = pos;
 		index++;
+		return true;
 	}
 	
 	private static bool CheckAngle(int a, int b){
