@@ -14,7 +14,7 @@ public class TalkState : AbstractState {
 	public override void OnEnter(){
 		Debug.Log(character.name + ": TalkState Enter");
 		character.PlayAnimation(Strings.animation_stand);
-		_toTalkWith.OpenChat();
+		GUIManager.Instance.InitiateInteraction(_toTalkWith);
 	}
 	
 	public override void Pause() {
@@ -27,7 +27,6 @@ public class TalkState : AbstractState {
 	
 	public override void OnExit(){
 		Debug.Log(character.name + ": TalkState Exit");
-		_toTalkWith.CloseChat();
 		_isComplete = true;
 	}
 }

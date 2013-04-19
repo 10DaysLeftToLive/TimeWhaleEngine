@@ -92,7 +92,7 @@ public class CarpenterYoung : NPC {
 						break;
 					default:
 						// Give a default response about the item, but do not accept the item
-						_npcInState.UpdateChat(DefaultDialogueYoung.getDialogue(Strings.DialogueAngry));
+						//_npcInState.UpdateChat(DefaultDialogueYoung.getDialogue(Strings.DialogueAngry));
 						break;
 				}
 			}
@@ -195,7 +195,7 @@ public class CarpenterYoung : NPC {
 						break;
 					default:
 						// Give a default response about the item, but do not accept the item
-						_npcInState.UpdateChat(DefaultDialogueYoung.getDialogue(Strings.DialogueAmbivalent));
+						//_npcInState.UpdateChat(DefaultDialogueYoung.getDialogue(Strings.DialogueAmbivalent));
 						break;
 				}
 			}
@@ -298,7 +298,7 @@ public class CarpenterYoung : NPC {
 						break;
 					default:
 						// Give a default response about the item, but do not accept the item
-						_npcInState.UpdateChat(DefaultDialogueYoung.getDialogue(Strings.DialogueAmbivalent));
+						//_npcInState.UpdateChat(DefaultDialogueYoung.getDialogue(Strings.DialogueAmbivalent));
 						break;
 				}
 			}
@@ -379,10 +379,10 @@ public class CarpenterYoung : NPC {
 			
 			// toggle chat
 			//_npcInState.ToggleChat();
-			_npcInState.OpenChat();
+			//_npcInState.OpenChat();
 			
 			// Update dialogue
-			_npcInState.UpdateChat(appleStolenResponse);
+			//_npcInState.UpdateChat(appleStolenResponse);
 			
 			// Update the disposition for stealing the apple
 			_npcInState.UpdateDisposition(appleStolenDispositionChange);

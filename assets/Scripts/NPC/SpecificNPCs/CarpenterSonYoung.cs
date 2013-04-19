@@ -80,7 +80,7 @@ public class CarpenterSonYoung : NPC {
 				switch (item.name){
 					case "ToolBox":
 						// Update chat
-						_npcInState.UpdateChat(toolboxResponse);
+						//_npcInState.UpdateChat(toolboxResponse);
 						this._defaultTextToSay = toolboxDialogue;
 					
 						// Tree house built
@@ -90,7 +90,7 @@ public class CarpenterSonYoung : NPC {
 						break;
 					default:
 						// Give a default response about the item, but do not accept the item
-						_npcInState.UpdateChat(DefaultDialogueYoung.getDialogue(Strings.DialogueAngry));
+						//_npcInState.UpdateChat(DefaultDialogueYoung.getDialogue(Strings.DialogueAngry));
 						break;
 				}
 			}
@@ -181,7 +181,7 @@ public class CarpenterSonYoung : NPC {
 				switch (item.name){
 					case "ToolBox":
 						// Update chat
-						_npcInState.UpdateChat(toolboxResponse);
+						//_npcInState.UpdateChat(toolboxResponse);
 						this._defaultTextToSay = toolboxDialogue;
 					
 						// Tree house built
@@ -191,7 +191,7 @@ public class CarpenterSonYoung : NPC {
 						break;
 					case "FishingRod":
 						// Update chat
-						_npcInState.UpdateChat(fishingRodResponse);
+						//_npcInState.UpdateChat(fishingRodResponse);
 						this._defaultTextToSay = fishingRodDialogue;
 					
 						// Make Fisherman
@@ -201,7 +201,7 @@ public class CarpenterSonYoung : NPC {
 						break;
 					default:
 						// Give a default response about the item, but do not accept the item
-						_npcInState.UpdateChat(DefaultDialogueYoung.getDialogue(Strings.DialogueAmbivalent));
+						//_npcInState.UpdateChat(DefaultDialogueYoung.getDialogue(Strings.DialogueAmbivalent));
 						break;
 				}
 			}
@@ -291,7 +291,7 @@ public class CarpenterSonYoung : NPC {
 				switch (item.name){
 					case "ToolBox":
 						// Update chat
-						_npcInState.UpdateChat(toolboxResponse);
+						//_npcInState.UpdateChat(toolboxResponse);
 						this._defaultTextToSay = toolboxDialogue;
 					
 						// Tree house built
@@ -301,7 +301,7 @@ public class CarpenterSonYoung : NPC {
 						break;
 					case "FishingRod":
 						// Update chat
-						_npcInState.UpdateChat(fishingRodResponse);
+						//_npcInState.UpdateChat(fishingRodResponse);
 						this._defaultTextToSay = fishingRodDialogue;
 					
 						// Make Fisherman
@@ -311,7 +311,7 @@ public class CarpenterSonYoung : NPC {
 						break;
 					default:
 						// Give a default response about the item, but do not accept the item
-						_npcInState.UpdateChat(DefaultDialogueYoung.getDialogue(Strings.DialogueAmbivalent));
+						//_npcInState.UpdateChat(DefaultDialogueYoung.getDialogue(Strings.DialogueAmbivalent));
 						break;
 				}
 			}

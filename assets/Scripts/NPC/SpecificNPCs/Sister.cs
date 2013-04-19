@@ -83,7 +83,7 @@ public class Sister : NPC {
 				switch (item.name){
 					case "Plushie":
 					Debug.Log("NPC: " +npc + " Item: " +item.name + "  in sister");
-						_npcInState.UpdateChat("Thanks, you're super cool! Hey let's play later!");
+						//_npcInState.UpdateChat("Thanks, you're super cool! Hey let's play later!");
 						this._defaultTextToSay = "Let's play later!";
 						break;
 					default:

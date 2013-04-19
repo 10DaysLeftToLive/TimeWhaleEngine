@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public abstract class NPC : Character {
 	protected Player player;
-	Chat chatObject;
 	public int npcDisposition; // NOTE should not be public but this makes testing easier
 	private List<Item> itemReactions;
 	private bool chating = false;
@@ -18,10 +17,9 @@ public abstract class NPC : Character {
 	protected ScheduleStack scheduleStack;
 	public EmotionState currentEmotion;
 	
-	private Dictionary<string, string> flagReactions;
+	private Dictionary<string, Reaction> flagReactions;
 	
 	protected override void Init(){
-		chatObject = GameObject.Find("Chat").GetComponent<Chat>();
 		charPortrait = (Texture)Resources.Load("" + this.name, typeof(Texture));
 		player = GameObject.Find("PlayerCharacter").GetComponent<Player>();
 		EventManager.instance.mOnNPCInteractionEvent += new EventManager.mOnNPCInteractionDelegate(ReactToInteractionEvent);
@@ -31,9 +29,11 @@ public abstract class NPC : Character {
 		currentEmotion = GetInitEmotionState();
 		NPCManager.instance.Add(this.gameObject);
 		scheduleStack = new ScheduleStack();
-		flagReactions = new Dictionary<string, string>();
-		flagReactions.Add("Eat pie", "Shock");
-		flagReactions.Add("Say hi", "Run");
+		flagReactions = new Dictionary<string, Reaction>();
+		Reaction eatPie = new Reaction();
+		eatPie.AddAction(new UpdateNPCDispositionAction(this, 5));
+		
+		flagReactions.Add("Eat pie", eatPie);
 	}
 	
 	protected override void CharacterUpdate(){
@@ -74,7 +74,8 @@ public abstract class NPC : Character {
 	protected virtual void ReactToTriggerCollision(EventManager EM, TriggerCollisionArgs triggerCollided){}
 	
 	public void ReactToFlag(string flagName){
-		Debug.Log(name + " is reacting to " + flagName + " by doing " + flagReactions[flagName]);
+		Debug.Log(name + " is reacting to " + flagName);
+		flagReactions[flagName].React();
 	}
 	
 	private List<Choice> GetChoices(){
@@ -83,64 +84,6 @@ public abstract class NPC : Character {
 	
 	public void ReactToChoice(string choice){
 		currentEmotion.ReactToChoice(choice);	
-	}
-	
-	protected string GetWhatToSay(){
-		return (currentEmotion.GetWhatToSay());
-	}
-	
-	private void LeftButtonClick(string choice){
-		LeftButtonCallback(choice);
-	}
-	
-	private void RightButtonClick(){
-		if (player.Inventory.GetItem() != null && currentEmotion.ItemHasReaction(player.Inventory.GetItem().name)){
-			EventManager.instance.RiseOnNPCInteractionEvent(new NPCItemInteraction(this.gameObject, player.Inventory.GetItem()));
-			RightButtonCallback();
-			Debug.Log("Right click");
-			player.Inventory.DisableHeldItem();
-			UpdateChatButtons();
-		}
-	}
-	
-	public void OpenChat(){
-		//Debug.Log("Player does " + (player.Inventory.HasItem() ? "" : "not") + "have an item");
-		Debug.Log(this.name + " What is player value: " + player);
-		if (player.Inventory.HasItem() && currentEmotion.ItemHasReaction(player.Inventory.GetItem().name)){
-			chatObject.SetButtonCallbacks(LeftButtonClick, RightButtonClick);
-			chatObject.SetGrabText(player.Inventory.GetItem().name);
-		} else {
-			chatObject.SetButtonCallbacks(LeftButtonClick);
-		}
-		
-		chating = true;
-		Debug.Log ("INFRONT OF setCharPortrait: " + charPortrait.name);
-		chatObject.setCharPortrait(charPortrait);
-		chatObject.CreateChatBox(GetChoices(), GetWhatToSay());
-	}
-	
-	public void UpdateChatButton(){
-		if (player.Inventory.HasItem() && currentEmotion.ItemHasReaction(player.Inventory.GetItem().name)){
-			chatObject.SetButtonCallbacks(LeftButtonClick, RightButtonClick);
-			chatObject.SetGrabText(player.Inventory.GetItem().name);
-		} else {
-			chatObject.SetButtonCallbacks(LeftButtonClick);
-		}
-	}
-	
-	public void ToggleChat(){
-		if (chating){
-			player.EnterState(new IdleState(player));
-			CloseChat();
-		} else {
-			Debug.Log(player);
-			player.EnterState(new TalkState(player, this));
-			OpenChat();
-		}
-	}
-	
-	public void UpdateChat(string newMessage){
-		chatObject.UpdateMessage(newMessage);
 	}
 	
 	public Texture GetPortrait(){
@@ -158,21 +101,7 @@ public abstract class NPC : Character {
 		}
 		return (flags);
 	}
-	
-	protected void UpdateChatButtons(){
-		// TODO change words on buttons
-		if (player.Inventory.HasItem()){
-			chatObject.SetButtonCallbacks(LeftButtonClick, RightButtonClick);
-		} else {
-			chatObject.SetButtonCallbacks(LeftButtonClick);
-		}
-	}
-	
-	public void CloseChat(){
-		chatObject.RemoveChatBox();
-		chating = false;
-	}
-	
+
 	private bool NearPlayer(){
 		return Vector3.Distance(player.transform.position, this.transform.position) < DISTANCE_TO_CHAT;
 	}
@@ -181,6 +110,14 @@ public abstract class NPC : Character {
 		EventManager.instance.RiseOnNPCInteractionEvent(new NPCEnviromentInteraction(this.gameObject, "Task Done"));
 		
 		//npcSchedule.NextTask();
+	}
+	
+	private void CloseChat(){
+		
+	}
+	
+	public void UpdateEmotionState(EmotionState newEmotionState){
+		currentEmotion = newEmotionState;	
 	}
 	
 	#region disposition
@@ -194,6 +131,7 @@ public abstract class NPC : Character {
 	
 	// Changes the disposition to be within the disposition bounds
 	public void UpdateDisposition(int deltaDisp) {
+		Debug.Log("Updating disposition to " + deltaDisp);
 		int disp = npcDisposition + deltaDisp;
 		
 		if (disp < DISPOSITION_LOW_END){

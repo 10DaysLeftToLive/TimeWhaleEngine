@@ -29,9 +29,6 @@ public class WayPointPath {
 		Search.ShortestPath(startScript.id, endScript.id);
 		Search.Compute();
 		return AddArray(destination);
-
-
-		return false;
 	}
 	
 	private static Vector3 SetHeading(Vector3 pos1, Vector3 pos2){
