@@ -2,6 +2,12 @@ using UnityEngine;
 using System.Collections;
 
 public class WayPoints : MonoBehaviour {
+	
+	public enum Age {
+		young = 0,
+		middle = 1,
+		old = 2
+	};
 
 	public GameObject LeftWayPoint;
 	public GameObject RightWayPoint;
@@ -14,6 +20,9 @@ public class WayPoints : MonoBehaviour {
 	public float downDistance;
 	
 	public int id;
+	public Age pointAge;
+	
+	private bool setupWayPoints = false;
 	
 	private Vector3 floorPosition;
 	
@@ -21,6 +30,14 @@ public class WayPoints : MonoBehaviour {
 		floorPosition = this.transform.position;
 		floorPosition.y -= this.collider.bounds.size.y/2;
 		SetDistance();
+	}
+	
+	void Update (){
+		if (this.name == "WayPoint.000" && !setupWayPoints && pointAge == Age.young){
+			Graph.Init(this.gameObject);//GameObject.Find("WayPoint.000"));
+			setupWayPoints = true;
+			Debug.Log("setup graph");
+		}
 	}
 	
 	public Vector3 GetFloorPosition(){

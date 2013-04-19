@@ -19,6 +19,7 @@ public static class Graph {
 				distance[i,j] = 0;
 			}
 		MakeGraph(point);
+
 	}
 	
 	private static void RemoveEdge(int i, int j) 
@@ -42,9 +43,9 @@ public static class Graph {
 	
 	public static float IsEdge(int i, int j) 
 	{
-		if (i >= 0 && i < wayPointCount && j >= 0 && j < wayPointCount)
+		if (i >= 0 && i < wayPointCount && j >= 0 && j < wayPointCount){
 			return distance[i,j];
-		else
+		}else
 			return 0;
 	}
 	
@@ -104,8 +105,9 @@ public static class Graph {
 		return false;
 	}
 	
-	public static void graphOutput()
+	public static void graphOutput(int age)
 	{
+		
 		for (int i = 0; i < wayPointCount; i++)
 		{
 			for (int j = 0; j < wayPointCount; j++)

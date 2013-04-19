@@ -8,6 +8,7 @@ public class WayPointPath {
 	private static Vector3[] points;
 	private static int index;
 	private static float height;
+	private static int currentAge;
 	
 	public static bool CheckForPath(Vector3 startPos, Vector3 destination, float ht){
 		height = ht;
@@ -15,7 +16,6 @@ public class WayPointPath {
 		index = 0;
 		AddPoint(startPos);
 		int mask = (1 << 15); // wayPoint layer
-		RaycastHit hit;
 		Vector3 heading = SetHeading(startPos,destination);
 		
 		GameObject start = GetPoint(startPos, mask, heading);
@@ -24,6 +24,7 @@ public class WayPointPath {
 		if (start == null || end == null) return false;
 		WayPoints startScript = GetScript(start);
 		WayPoints endScript = GetScript(end);
+		currentAge = (int)startScript.pointAge;
 		if (Vector3.Distance(startPos, startScript.GetFloorPosition()) > Vector3.Distance(startPos, destination) && !PathToOtherFloor(startPos,destination)) 
 			return AddPoint(destination);
 		Search.ShortestPath(startScript.id, endScript.id);
@@ -45,7 +46,7 @@ public class WayPointPath {
 	private static bool AddArray(Vector3 destination){
 		Vector3[] temp = Search.GetVectors();
 		for (int i = 0; i < Search.index; i++){
-			AddPoint(new Vector3 (temp[i].x, temp[i].y + height,temp[i].z));
+			AddPoint(new Vector3 (temp[i].x, temp[i].y + height + 50*currentAge,temp[i].z));
 		}
 		AddPoint(destination);
 		bool checkStart = false;
@@ -59,15 +60,16 @@ public class WayPointPath {
 	}
 	
 	private static bool CheckExtraPoints(int first, int second, int third){
-		if (CheckAngle(first,second) || CheckAngle (second, third)){
+		if (CheckAngle(first,second) || CheckAngle (second, third))
 			return false;
-		}
+		if (PathToOtherFloor(points[first], points[second]) || PathToOtherFloor(points[second], points[third]))
+			return false;
 		float dif1 = Utils.CalcDifference(points[first].x, points[second].x);
 		dif1 /= Mathf.Abs(dif1);
 		
 		float dif2 = Utils.CalcDifference(points[second].x, points[third].x);
 		dif2 /= Mathf.Abs(dif2);
-		Debug.Log("dif: " + dif1 + "  " + dif2);
+		//Debug.Log("dif: " + dif1 + "  " + dif2);
 		if (dif1 != dif2){
 			points[second] = Vector3.zero;
 			return true;

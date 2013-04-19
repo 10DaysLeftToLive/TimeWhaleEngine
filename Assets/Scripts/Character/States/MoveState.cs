@@ -13,18 +13,12 @@ public class MoveState : AbstractState {
 	private GoToState currentMovementState = null;
 	private Vector3 currentGoal;
 	private float stuckTimer;
-	
-	private bool setupWayPoints = false;
-	
+		
 	public MoveState(Character toControl, Vector3 goal) : base(toControl){
 		_goal = goal;
 	}
 	
 	public override void Update(){
-		if (!setupWayPoints){
-			Graph.Init(GameObject.Find("WayPoint.000"));
-			setupWayPoints = true;
-		}
 		Vector3 pos = character.transform.position;
 		Vector3 movement = Vector3.zero;
 		movement = _pathFollowing.GetVectorDirection();
