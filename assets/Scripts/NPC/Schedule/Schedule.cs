@@ -14,7 +14,6 @@ public class Schedule {
 	Queue<Task> _tasksToDo;
 	NPC _toManage;
 	Task current;
-	private bool _scheduleFinished = false;
 	public int schedulePriority; // high 1 - 10 low
 	
 	public enum priorityEnum {
@@ -53,7 +52,7 @@ public class Schedule {
 	
 	public void Run(float timeSinceLastTick){
 		if (HasTask()){
-			current.Run(timeSinceLastTick);
+			current.Decrement(timeSinceLastTick);
 			if (current.IsComplete()){
 				current = null;
 			}
