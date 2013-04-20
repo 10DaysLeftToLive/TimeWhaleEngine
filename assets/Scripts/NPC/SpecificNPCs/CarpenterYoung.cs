@@ -30,26 +30,6 @@ public class CarpenterYoung : NPC {
 		return (schedule);
 	}
 	
-	protected override void LeftButtonCallback(string choice){
-		Debug.Log(this.name + " left callback for choice " + choice);
-		// TODO? this is for a chat dialoge
-		EventManager.instance.RiseOnNPCInteractionEvent(new NPCChoiceInteraction(this.gameObject, choice));
-	}
-	
-	protected override void RightButtonCallback(){
-		Debug.Log(this.name + " right callback");
-		GameObject item = player.Inventory.GetItem();
-		DoReaction(item);
-	}
-	
-	protected override void DoReaction(GameObject itemToReactTo){
-
-	}
-	
-	protected override void ReactToTriggerCollision(EventManager EM, TriggerCollisionArgs triggerCollided){
-		
-	}
-	
 	/*
 	=============================
 	  Emotion States

@@ -22,18 +22,11 @@ public abstract class NPC : Character {
 	protected override void Init(){
 		charPortrait = (Texture)Resources.Load("" + this.name, typeof(Texture));
 		player = GameObject.Find("PlayerCharacter").GetComponent<Player>();
-		EventManager.instance.mOnNPCInteractionEvent += new EventManager.mOnNPCInteractionDelegate(ReactToInteractionEvent);
-		EventManager.instance.mOnPlayerPickupItemEvent += new EventManager.mOnPlayerPickupItemDelegate(ReactToItemPickedUp);
-		EventManager.instance.mOnPlayerTriggerCollisionEvent += new EventManager.mOnPlayerTriggerCollisionDelegate(ReactToTriggerCollision);
 		//npcSchedule = GetSchedule();
 		currentEmotion = GetInitEmotionState();
 		NPCManager.instance.Add(this.gameObject);
 		scheduleStack = new ScheduleStack();
 		flagReactions = new Dictionary<string, Reaction>();
-		Reaction eatPie = new Reaction();
-		eatPie.AddAction(new UpdateNPCDispositionAction(this, 5));
-		
-		flagReactions.Add("Eat pie", eatPie);
 	}
 	
 	protected override void CharacterUpdate(){
@@ -43,10 +36,6 @@ public abstract class NPC : Character {
 		//scheduleStack.Run(Time.deltaTime);
 	}
 	
-	// ONLY PUT SPECIFIC NPC THINGS IN THESE IN THE CHILDREN
-	protected abstract void LeftButtonCallback(string choice);
-	protected abstract void RightButtonCallback();
-	protected abstract void DoReaction(GameObject itemToReactTo);
 	protected abstract Schedule GetSchedule(); // TODO read/set this from file?
 	protected abstract EmotionState GetInitEmotionState();
 	
@@ -66,15 +55,8 @@ public abstract class NPC : Character {
 		}
 	}
 	
-	private void ReactToItemPickedUp(EventManager EM, PickUpStateArgs itemPickedUp){
-		currentEmotion.ReactToItemPickedUp(itemPickedUp.itemPickedUp);
-	}
-	
-	// NPC's reaction when the player collides with a trigger
-	protected virtual void ReactToTriggerCollision(EventManager EM, TriggerCollisionArgs triggerCollided){}
-	
 	public void ReactToFlag(string flagName){
-		Debug.Log(name + " is reacting to " + flagName);
+		Debug.Log(name + " is reacting to the flag " + flagName);
 		flagReactions[flagName].React();
 	}
 	

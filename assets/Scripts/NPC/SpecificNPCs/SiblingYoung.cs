@@ -42,37 +42,6 @@ public class SiblingYoung : NPC {
 		return(schedule);
 	}
 	
-	protected override void LeftButtonCallback(string choice){
-		Debug.Log(this.name + " left callback(" + choice + ")");
-		EventManager.instance.RiseOnNPCInteractionEvent(new NPCChoiceInteraction(this.gameObject, choice));
-		// TODO? this is for a chat dialoge
-	}
-	
-	protected override void RightButtonCallback(){
-		Debug.Log(this.name + " right callback");
-		GameObject item = player.Inventory.GetItem();
-		DoReaction(item);
-	}
-	
-	protected override void DoReaction(GameObject itemToReactTo){
-		/*if (itemToReactTo != null){
-			Debug.Log(name + " is reacting to: " + itemToReactTo.name);
-			switch (itemToReactTo.tag){
-				case "Plushie":
-					break;
-				case "Frisbee":
-					break;
-				default:
-					break;
-			}
-			player.Inventory.DisableHeldItem();
-		}*/
-	}
-	
-	protected override void ReactToTriggerCollision(EventManager EM, TriggerCollisionArgs triggerCollided){
-		
-	}
-	
 	public class IntroEmotionState : EmotionState{
 		public IntroEmotionState(NPC toControl) : base(toControl, "Help me push this rock, I want to see what is on the other side!"){
 			_acceptableItems.Add("Plushie");

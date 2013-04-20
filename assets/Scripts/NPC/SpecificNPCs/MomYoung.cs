@@ -35,39 +35,6 @@ public class MomYoung : NPC {
 		return (schedule);
 	}
 	
-	protected override void LeftButtonCallback(string choice){
-		Debug.Log(this.name + " left callback for choice " + choice);
-		// TODO? this is for a chat dialoge
-		EventManager.instance.RiseOnNPCInteractionEvent(new NPCChoiceInteraction(this.gameObject, choice));
-	}
-	
-	protected override void RightButtonCallback(){
-		Debug.Log(this.name + " right callback");
-		GameObject item = player.Inventory.GetItem();
-		DoReaction(item);
-	}
-	
-	protected override void DoReaction(GameObject itemToReactTo){
-		/*if (itemToReactTo != null){
-			Debug.Log(name + " is reacting to: " + itemToReactTo.name);
-			switch (itemToReactTo.name){
-				case "Plushie":
-					UpdateChat("Thanks kid.");
-					break;
-				case "Apple":
-					UpdateChat("Perfect! These will work wonderfully!");
-					break;
-				default:
-					break;
-			}
-			player.Inventory.DisableHeldItem();
-		}*/
-	}
-	
-	protected override void ReactToTriggerCollision(EventManager EM, TriggerCollisionArgs triggerCollided){
-		
-	}
-	
 	public class MomIntroEmotionState : EmotionState{
 		public MomIntroEmotionState(NPC toControl) : base(toControl, "Where is your sister?"){
 			_choices.Add(new Choice("Tell on", "She's in big trouble! I'll deal with your sister..."));
