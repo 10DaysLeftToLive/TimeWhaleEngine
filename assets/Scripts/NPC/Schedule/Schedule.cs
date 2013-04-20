@@ -14,15 +14,32 @@ public class Schedule {
 	Queue<Task> _tasksToDo;
 	NPC _toManage;
 	Task current;
+	public int schedulePriority; // high 1 - 10 low
+	
+	public enum priorityEnum {
+		Default=1, 
+		Low, 
+		Medium, 
+		High, 
+		DoNow
+	};
 	
 	public Schedule(NPC toManage){
 		_tasksToDo = new Queue<Task>();
 		_toManage = toManage;
+		schedulePriority = (int)priorityEnum.Low;
 	}
 	
-	public Schedule(Queue<Task> tasksToDo, NPC toManage){
+	public Schedule(NPC toManage, int priority){
+		_tasksToDo = new Queue<Task>();
+		_toManage = toManage;
+		schedulePriority = priority;
+	}
+	
+	public Schedule(Queue<Task> tasksToDo, NPC toManage, int priority){
 		_tasksToDo = tasksToDo;
 		_toManage = toManage;
+		schedulePriority = priority;
 	}
 	
 	~Schedule() {
@@ -44,6 +61,15 @@ public class Schedule {
 		}
 	}
 	
+	// Schedule sets what it manages to the correct state the schedule is in
+	public void Resume() {
+		if (!HasTask()) {
+			NextTask();
+		}
+		
+		_toManage.ForceChangeToState(current.StatePerforming);	
+	}
+	
 	public void NextTask(){
 		if (_tasksToDo.Count > 0) {
 			current = _tasksToDo.Dequeue();
@@ -52,7 +78,25 @@ public class Schedule {
 		}
 	}
 	
+	// Schedule is complete if the current task is complete and there are no other tasks to complete
+	public bool IsComplete(){
+		if (current == null && _tasksToDo.Count == 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public void Add(Task task){
 		_tasksToDo.Enqueue(task);
+	}
+	
+	// Checks if this schedule has a higher priority than the schedule passed in
+	public bool HigherPriority(Schedule schedule) {
+		if (this.schedulePriority < schedule.schedulePriority) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

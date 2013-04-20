@@ -55,12 +55,10 @@ public static class PathFinding {
 	
 	public static Path GetPath(){
 		Vector3[] points = new Vector3[index+1]; 
-		int[] dir = new int[index+1];
 		for (int i = 0; i <= index; i++){
 			points[i] = nodes[i].curr;
-			dir[i] = nodes[i].past;
 		}
-		Path path = new Path(index + 1, points, dir);
+		Path path = new Path(index + 1, points);
 		return path;
 	}
 	
@@ -295,8 +293,6 @@ public static class PathFinding {
 			top.y += height; // add in the height where the player will goto
 			bottom.y += height;
 		}
-		
-		
 		
 		Vector3[] pair = new Vector3[2]; // TODO do a union class
 		pair[0] = top;

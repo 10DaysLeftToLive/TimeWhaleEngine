@@ -20,7 +20,6 @@ public class ChatInfo {
 	
 	public bool DecrementTime(float deltaTime){
 		displayTime -= deltaTime;
-		//Debug.Log("Decrimenting to " + displayTime);
 		return (displayTime <= 0);	
 	}
 }

@@ -13,7 +13,7 @@ public class MoveState : AbstractState {
 	private GoToState currentMovementState = null;
 	private Vector3 currentGoal;
 	private float stuckTimer;
-	
+		
 	public MoveState(Character toControl, Vector3 goal) : base(toControl){
 		_goal = goal;
 	}
@@ -22,10 +22,8 @@ public class MoveState : AbstractState {
 		Vector3 pos = character.transform.position;
 		Vector3 movement = Vector3.zero;
 		movement = _pathFollowing.GetVectorDirection();
-		
 
-		movement *= speed;
-		movement *= Time.deltaTime;
+		movement *= (speed * Time.deltaTime);
 
 		if (movement.x < 0){
 			character.LookLeft();
@@ -68,7 +66,6 @@ public class MoveState : AbstractState {
 	public override void OnEnter(){
 		//Debug.Log(character.name + ": MoveState Enter");
 		speed = 5f;
-		
 		if (CalculatePath()){
 			currentGoal = _pathFollowing.GetPoint();
 			currentMovementState = GetGoToStateToPoint(currentGoal);
@@ -77,8 +74,17 @@ public class MoveState : AbstractState {
 		}
 	}
 	
+	public override void Pause() {
+		
+	}
+	
+	public override void Resume() {
+		
+	}
+	
 	public override void OnExit(){
 		//Debug.Log(character.name + ": MoveState Exit");
+		_isComplete = true;
 	}
 	
 	private void Move(Vector3 moveDelta){
@@ -89,7 +95,6 @@ public class MoveState : AbstractState {
 		Vector3 pos = character.transform.position;
 		
 		pos = Vector3.Scale(pos,vectorDir);
-		Debug.Log("Near point position: " + pos);
 		float flatPos = pos.x + pos.y;
 		
 		point = Vector3.Scale(point,vectorDir);
@@ -107,17 +112,21 @@ public class MoveState : AbstractState {
 		int mask = (1 << 9);
 		RaycastHit hit;
 		
-		if (Physics.Raycast(_goal, Vector3.down , out hit, Mathf.Infinity, mask)) {
+		if (Physics.Raycast(_goal, Vector3.down , out hit, 10, mask)) {
 			Vector3 hitPos = hit.point;
 			hitPos.y += character.transform.localScale.y/2;
-
+			//Debug.Log("ground at " + hitPos);
+			
 			_pathFollowing = new Path();
-			//_pathFollowing = QuickPath.StraightPath(character.transform.position, hitPos);
-			if (PathSearch(character.transform.position, hitPos, character.transform.localScale.y/2)){
-				_pathFollowing = PathFinding.GetPath();
+			_pathFollowing = QuickPath.StraightPath(character.transform.position, hitPos, character.transform.localScale.y/2);
+			return true;
+			
+			/*if (WayPointPath.CheckForPath(character.transform.position, hitPos, character.transform.localScale.y/2)){
+				_pathFollowing = new Path();
+				_pathFollowing = WayPointPath.GetPath();
 				
 				return (true);
-			}
+			}*/
 		} return (false);
 	}
 	

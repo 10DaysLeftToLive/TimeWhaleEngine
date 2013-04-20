@@ -84,17 +84,17 @@ public class MomYoung : NPC {
 					case "Plushie":
 					Debug.Log("NPC: " +npc + " Item: " +item.name + " in mom");
 					if (hasToldOn){
-							_npcInState.UpdateChat("*sigh*  This stupid plushie again?  Its always causing trouble!");
+							//_npcInState.UpdateChat("*sigh*  This stupid plushie again?  Its always causing trouble!");
 					}
 					else{
-						_npcInState.UpdateChat("Oh, your sister was looking for this, I'll give it to her.");
+						//_npcInState.UpdateChat("Oh, your sister was looking for this, I'll give it to her.");
 					}
 							break;
 					case "Apple":
-						_npcInState.UpdateChat("Perfect! These will work wonderfully!");
+						//_npcInState.UpdateChat("Perfect! These will work wonderfully!");
 						break;
 					case "Apple[Carpenter]":
-						_npcInState.UpdateChat("Perfect! These will work wonderfully!");
+						//_npcInState.UpdateChat("Perfect! These will work wonderfully!");
 						break;
 					default:
 						break;
@@ -107,16 +107,16 @@ public class MomYoung : NPC {
 			Debug.Log("mom is choice reacting to " + npc + " making choice " + choice);
 				switch (choice){
 				case "Tell on": Debug.Log("Told on"); 
-					this._textToSay = "Thank you for watching out for your sister!";
+					this._defaultTextToSay = "Thank you for watching out for your sister!";
 					hasToldOn = true;
 					_acceptableItems.Add("Plushie");
-					_npcInState.UpdateChatButton();
+					//_npcInState.UpdateChatButton();
 					_choices.Clear();
 					break;
 				case "Lie to": Debug.Log("Lied to"); 
-					this._textToSay = "Keep an eye out on your sister!";
+					this._defaultTextToSay = "Keep an eye out on your sister!";
 					_acceptableItems.Add("Plushie");
-					_npcInState.UpdateChatButton();
+					//_npcInState.UpdateChatButton();
 					_choices.Clear();
 					break;
 				default: break;

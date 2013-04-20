@@ -30,7 +30,6 @@ public class LevelManager : MonoBehaviour {
 	public string levelDataName;
 	
 	private string dispositionDataFile;
-	private string levelInteractionFile;
 	
 	void Awake(){
 		if(playerCharacter == null) {
@@ -79,12 +78,9 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	private void SetFiles(){
-		levelInteractionFile = Application.dataPath + "/Data/LevelData/" + levelDataName + ".xml";
 		dispositionDataFile = Application.dataPath + "/Data/DispositionData/" + Strings.DispositionFile + ".xml";
 		
-		if (!System.IO.File.Exists(levelInteractionFile)){
-			Debug.LogError("Error: " + levelInteractionFile + " was not found.");
-		} else if (!System.IO.File.Exists(dispositionDataFile)){
+		if (!System.IO.File.Exists(dispositionDataFile)){
 			Debug.LogError("Error: " + dispositionDataFile + " was not found.");
 		}
 	}
@@ -107,7 +103,7 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	void SetNPCData(){		
-		InteractionManager.instance.InitilizeNPCs(dispositionDataFile, levelInteractionFile);
+		InteractionManager.instance.InitilizeNPCs(dispositionDataFile);
 	}	
 	
 	void SaveDispositions(){
@@ -205,11 +201,9 @@ public class LevelManager : MonoBehaviour {
 		/* if (InputManager.UPUPDOWNDOWNLEFTRIGHTLEFTRIGHTABDETECTED())
 		 *     TimeWhaleEngine.Begin(); // Needs rewording as there is no begining to Time Whale the glory of Time Whale. It is eternal and does not require a cause
 		 */
-		
 	}
 
 	void OnApplicationQuit(){
 		SaveDispositions();
 	}
-	
 }

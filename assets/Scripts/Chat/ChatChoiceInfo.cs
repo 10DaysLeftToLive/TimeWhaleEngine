@@ -10,4 +10,12 @@ public class ChatChoiceInfo : ChatInfo {
 		choices = _choices;
 		itemGiveChoice = _itemGiveChoice;
 	}
+	
+	public List<string> GetChatButtonTexts(){
+		List<string> buttonTexts = new List<string>();
+		foreach	(Choice choice in choices){
+			buttonTexts.Add(choice._choiceName);	
+		}
+		return (buttonTexts);
+	}
 }

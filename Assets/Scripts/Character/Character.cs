@@ -31,7 +31,6 @@ public abstract class Character : PauseObject {
 	void Start () {
 		currentState = new IdleState(this);
 		EnterState(new IdleState(this));
-		Debug.Log(name);
 		Transform rightHand = animationData.GetSpriteTransform("Right Hand");
 		inventory = new Inventory(rightHand);
 		InitializeSpriteLookDirections();

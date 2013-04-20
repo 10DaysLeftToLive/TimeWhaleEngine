@@ -7,8 +7,8 @@ using System.Collections;
  *  if you want it to go one for a specified amount of time use TimeTask
  */
 public class Task {
-	State _stateToPerform;
-	private bool _taskFinished = false;
+	protected State _stateToPerform;
+	protected bool _taskFinished = false;
 	
 	public State StatePerforming {
 		get {return _stateToPerform;}
@@ -21,6 +21,20 @@ public class Task {
 	
 	public virtual void Decrement(float amount){
 		// timeleft = infinity - amount aka do nothing
+	}
+	
+	public virtual void Run(float amount) {
+		if(_stateToPerform.IsComplete) {
+			_taskFinished = true;
+		}
+	}
+	
+	public virtual void Pause() {
+		_stateToPerform.Pause();
+	}
+	
+	public virtual void Resume() {
+		_stateToPerform.Resume();
 	}
 	
 	public virtual bool IsComplete(){

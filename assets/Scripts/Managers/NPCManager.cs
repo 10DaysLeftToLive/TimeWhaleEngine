@@ -11,4 +11,25 @@ public class NPCManager : ManagerSingleton<NPCManager> {
 	public GameObject getNPC(string npcName) {
 		return dictNPC[npcName];
 	}
+	
+	public List<Flag> GetFlags(){
+		List<Flag> allNPCFlags = new List<Flag>();
+		
+		foreach (GameObject npc in dictNPC.Values){
+			NPC npcClass = npc.GetComponent<NPC>();
+			Debug.Log("Getting flags of " + npc.name);
+			List<string> currentNPCFlags = npcClass.GetFlags();
+			foreach (string flag in currentNPCFlags){
+				Debug.Log("Adding flag " + flag);
+				Flag newFlag = new Flag(flag);
+				if (!allNPCFlags.Contains(newFlag)){
+					allNPCFlags.Add(newFlag);
+				}
+				int index = allNPCFlags.IndexOf(newFlag);
+				allNPCFlags[index].AddNPC(npcClass);
+			}
+			currentNPCFlags.Clear();
+		}
+		return(allNPCFlags);
+	}
 }

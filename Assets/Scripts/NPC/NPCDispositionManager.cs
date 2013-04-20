@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class NPCDispositionManager : ManagerSingleton<NPCDispositionManager> {
-	static protected Dictionary<int, NPCClassContainer > containersInLevel;
+	static protected Dictionary<int, NPCClassContainer> containersInLevel;
 	
 	public override void Init(){
 		containersInLevel = new Dictionary<int, NPCClassContainer >();
@@ -18,6 +18,7 @@ public class NPCDispositionManager : ManagerSingleton<NPCDispositionManager> {
 		Component[] componentsToManage = (Component[])rootOfAge.GetComponentsInChildren(typeof(NPC));
 		
 		foreach (NPC objectToManage in componentsToManage){
+			Debug.Log (objectToManage.name);
 			if (!containersInLevel.ContainsKey(objectToManage.id)){
 				containersInLevel.Add(objectToManage.id, new NPCClassContainer());
 			}
