@@ -7,7 +7,7 @@ using System.Collections;
  * 	all menus will derive from this class and be given to the gui manager
  */
 
-public abstract class GUIControl {
+public abstract class GUIControl : MonoBehaviour {
 	private bool initialized = false; // Records if this control has already been initialized or not
 	protected GUIEvent currentResponse;
 	
@@ -23,7 +23,7 @@ public abstract class GUIControl {
 	}
 	
 	public virtual void Init(){}// for children to load settings as needed
-	public virtual void Update(){} // for updating as needed
+	public virtual void UpdateControl(){} // for updating as needed
 	public abstract void Render(); // to display the content of the control
 	
 	public void ClearResponse(){

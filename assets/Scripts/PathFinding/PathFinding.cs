@@ -294,8 +294,6 @@ public static class PathFinding {
 			bottom.y += height;
 		}
 		
-		
-		
 		Vector3[] pair = new Vector3[2]; // TODO do a union class
 		pair[0] = top;
 		pair[1] = bottom;

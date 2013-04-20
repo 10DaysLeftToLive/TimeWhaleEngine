@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class NPCDispositionManager : ManagerSingleton<NPCDispositionManager> {
-	static protected Dictionary<int, NPCClassContainer > containersInLevel;
+	static protected Dictionary<int, NPCClassContainer> containersInLevel;
 	
 	public override void Init(){
 		containersInLevel = new Dictionary<int, NPCClassContainer >();

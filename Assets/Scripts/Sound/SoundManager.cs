@@ -7,9 +7,6 @@ public class SoundManager : MonoBehaviour {
     public AudioSource GiveItemSFX;
     public AudioSource PickUpItemSFX;
     public AudioSource PutDownItemSFX;
-	
-	
-	
 	// Needs to be a monobehavior to be put in scene, so make a singleton here instead of using managersingleton
 	// Should be changed to be given these files from the loader
 	private static SoundManager manager_instance = null;

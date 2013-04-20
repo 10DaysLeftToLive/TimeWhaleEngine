@@ -21,7 +21,16 @@ public class DropItemState : AbstractState {
 		Debug.Log(character.name + ": DropItemState Enter to pickup ");
 	}
 	
+	public override void Pause() {
+		
+	}
+	
+	public override void Resume() {
+		
+	}
+	
 	public override void OnExit(){
 		Debug.Log(character.name + ": DropItemState Exit");
+		_isComplete = true;
 	}
 }

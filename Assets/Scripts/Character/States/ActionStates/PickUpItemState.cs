@@ -22,8 +22,17 @@ public class PickUpItemState : AbstractState {
 		Debug.Log(character.name + ": PickUpItemState Enter to pickup " + _toPickUp.name);
 	}
 	
+	public override void Pause() {
+		
+	}
+	
+	public override void Resume() {
+		
+	}
+	
 	public override void OnExit(){
 		Debug.Log(character.name + ": PickUpItemState Exit");
+		_isComplete = true;
 		
 		// Shoot off event for having picked up item
 		EventManager.instance.RiseOnPlayerPickupEvent(new PickUpStateArgs(_toPickUp));

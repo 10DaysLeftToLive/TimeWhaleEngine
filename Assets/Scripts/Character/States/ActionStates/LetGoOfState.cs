@@ -21,7 +21,16 @@ public class LetGoOfState : AbstractState {
 		// TODO let go of item
 	}
 	
+	public override void Pause() {
+		
+	}
+	
+	public override void Resume() {
+		
+	}
+	
 	public override void OnExit(){
 		Debug.Log(character.name + ": LetGoOfState Exit");
+		_isComplete = true;
 	}
 }

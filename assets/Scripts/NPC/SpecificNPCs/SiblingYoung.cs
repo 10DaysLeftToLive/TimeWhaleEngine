@@ -87,8 +87,8 @@ public class SiblingYoung : NPC {
 				switch (item.name){
 					case "Plushie":
 					Debug.Log("NPC: " +npc + " Item: " +item.name + "  in sister");
-						_npcInState.UpdateChat("Thanks, you're super cool! Hey let's play later!");
-						this._textToSay = "Let's play later!";
+						//_npcInState.UpdateChat("Thanks, you're super cool! Hey let's play later!");
+						this._defaultTextToSay = "Let's play later!";
 						break;
 					default:
 						break;
@@ -98,7 +98,7 @@ public class SiblingYoung : NPC {
 				switch(item.name){
 				case "Plushie":
 					if (toldOn == false){
-						this._textToSay = "Why'd you give the plushie to Mom first?";
+						this._defaultTextToSay = "Why'd you give the plushie to Mom first?";
 					}
 					break;
 				default:
@@ -112,7 +112,7 @@ public class SiblingYoung : NPC {
 			Debug.Log("sister is choice reacting to " + npc + " making choice " + choice);
 				switch (choice){
 				case "Tell on": Debug.Log("Told on"); 
-					this._textToSay = "Go away! You told Mom, I don't talk to traitors!";
+					this._defaultTextToSay = "Go away! You told Mom, I don't talk to traitors!";
 					toldOn = true;
 					_acceptableItems.Clear();
 					break;

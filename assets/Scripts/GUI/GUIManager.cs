@@ -11,20 +11,28 @@ public class GUIManager : MonoBehaviour {
 	private List<GUIControl> activeControls;
 	private static bool alreadyMade = false; // denotes if this is the first gui manager that has been awakened
 	
+	private static GUIManager instance = null;
+	public static GUIManager Instance {
+		get {return instance;}	
+	}
+	
 	public ChatMenu chatMenu;
 	public InGameMenu inGameMenu;
+	public InteractionMenu interactionMenu;
 	
 	void Awake(){
 		if (alreadyMade){
 			Destroy(this); // no need for 2 gui managers
 			return;
 		}
+		instance = this;
 		alreadyMade = true;
 		DontDestroyOnLoad(this); // keep this manager and its loaded assests around
 		activeControls = new List<GUIControl>();
 		
-		chatMenu = new ChatMenu();
-		inGameMenu = new InGameMenu();
+		chatMenu = GetComponent<ChatMenu>();
+		inGameMenu = GetComponent<InGameMenu>();
+		interactionMenu = GetComponent<InteractionMenu>();
 	}
 	
 	public void AddNPCChat(NPCChat npcChatToAdd){
@@ -32,6 +40,19 @@ public class GUIManager : MonoBehaviour {
 			LoadControl (chatMenu);
 		}
 		chatMenu.AddChat(npcChatToAdd);
+	}
+	
+	public void InitiateInteraction(NPC npcToInteractWith){
+		LoadControl(interactionMenu);
+		interactionMenu.OpenChatForNPC(npcToInteractWith);
+	}
+	
+	public void UpdateInteractionDisplay(string newText){
+		if (!ControlActive(interactionMenu)){
+			Debug.LogError("Can't update interaction display when it is not up.");
+			return;
+		}
+		interactionMenu.UpdateDisplayText(newText);
 	}
 	
 	public void Update(){
@@ -61,6 +82,10 @@ public class GUIManager : MonoBehaviour {
 		activeControls.Add(guiControlToLoad);
 	}
 	
+	private void UnLoadControl(GUIControl guiControlToUnLoad){
+		activeControls.Remove(guiControlToUnLoad);	
+	}
+	
 	private void RenderControls(){
 		foreach (GUIControl control in activeControls){
 			control.Render();
@@ -69,7 +94,7 @@ public class GUIManager : MonoBehaviour {
 	
 	private void UpdateControls(){
 		foreach (GUIControl control in activeControls){
-			control.Update();
+			control.UpdateControl();
 		}
 	}
 }

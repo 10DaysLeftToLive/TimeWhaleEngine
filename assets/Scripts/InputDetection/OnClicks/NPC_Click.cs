@@ -18,6 +18,5 @@ public class NPC_Click : OnClickNextToPlayer {
 	}
 	
 	protected override void DoClickNextToPlayer(){
-		npcAttachedTo.ToggleChat();
 	}
 }

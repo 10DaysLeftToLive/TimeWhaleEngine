@@ -3,84 +3,135 @@ using System.Collections;
 
 public class WayPointPath {
 	
-	private static float NEARTHRESHOLD = .2f; // how close will the y positions be until looking for slopes
 	private static float NEXTFLOOR = 3f; // how close will the y positions be until looking for up/down paths
-	private static float MAXCLIMBABLEANGLE = 49; // maximum angle to climb (doesnt consider if angle between 2 waypoints) only small movement angle
-	private static float SLOPEDMOVEMENTTHRESHOLD = 1f; // how close must the guestimation for small slope movement before moving
-														// small movement = movement within 2 waypoints
+														
 	private static Vector3[] points;
 	private static int index;
+	private static float height;
+	private static int currentAge;
 	
-	
-	public static bool CheckForPath(Vector3 startPos, Vector3 destination, float height){
+	public static bool CheckForPath(Vector3 startPos, Vector3 destination, float ht){
+		height = ht;
 		points = new Vector3[30];
 		index = 0;
 		AddPoint(startPos);
 		int mask = (1 << 15); // wayPoint layer
-		RaycastHit hit;
+		Vector3 heading = SetHeading(startPos,destination);
+		
+		GameObject start = GetPoint(startPos, mask, heading);
+		heading = SetHeading(destination, startPos);
+		GameObject end = GetPoint(destination, mask, heading);
+		if (start == null || end == null) return false;
+		WayPoints startScript = GetScript(start);
+		WayPoints endScript = GetScript(end);
+		currentAge = (int)startScript.pointAge;
+		if (Vector3.Distance(startPos, startScript.GetFloorPosition()) > Vector3.Distance(startPos, destination) && !PathToOtherFloor(startPos,destination)) 
+			return AddPoint(destination);
+		Search.ShortestPath(startScript.id, endScript.id);
+		Search.Compute();
+		return AddArray(destination);
+	}
+	
+	private static Vector3 SetHeading(Vector3 pos1, Vector3 pos2){
 		Vector3 heading;
-		if (startPos.x > destination.x){
+		if (pos1.x > pos2.x){
 			heading = Vector3.left;
 		}else{
 			heading = Vector3.right;
 		}		
-		heading.y += CheckStart(startPos)*heading.x;
-		//Debug.Log("heading " + heading);
-		//Debug.DrawRay(startPos,heading,Color.red,20);
-		if (Physics.Raycast(startPos, heading , out hit, Mathf.Abs(startPos.x - destination.x), mask)){
-			GameObject wayPoint = hit.collider.gameObject;
-			//Debug.Log(wayPoint.name);
-			return ConnectTheDots(wayPoint, startPos, destination, height, heading);
-		}else if (Mathf.Abs(startPos.y - destination.y) < NEARTHRESHOLD){ // handles small movements on flat ground
-			AddPoint(destination);
-			return true;
-		}else { // handles small movement on sloped ground
-			float distance = Vector3.Distance(startPos, destination);
-			heading *= distance;
-			startPos += heading;
-			//Debug.Log("estimated destination " + (startPos));
-			if (Vector3.Distance(startPos,destination) < SLOPEDMOVEMENTTHRESHOLD){
-				AddPoint(destination);
-				return CheckAngle();
-			}
+		heading.y += CheckPositionForSlope(pos1)*heading.x;
+		return heading;
+	}
+	
+	private static bool AddArray(Vector3 destination){
+		Vector3[] temp = Search.GetVectors();
+		for (int i = 0; i < Search.index; i++){
+			AddPoint(new Vector3 (temp[i].x, temp[i].y + height + 50*currentAge,temp[i].z));
 		}
+		AddPoint(destination);
+		bool checkStart = false;
+		if (index > 4)
+			checkStart = CheckExtraPoints(0,1,2);
+		bool checkEnd = CheckExtraPoints(Search.index-1,Search.index,Search.index+1);
+		if (checkStart || checkEnd){
+			ReoraganizeArray(points);
+		}
+		return true;
+	}
+	
+	private static bool CheckExtraPoints(int first, int second, int third){
+		if (CheckAngle(first,second) || CheckAngle (second, third))
+			return false;
+		if (PathToOtherFloor(points[first], points[second]) || PathToOtherFloor(points[second], points[third]))
+			return false;
+		float dif1 = Utils.CalcDifference(points[first].x, points[second].x);
+		dif1 /= Mathf.Abs(dif1);
 		
+		float dif2 = Utils.CalcDifference(points[second].x, points[third].x);
+		dif2 /= Mathf.Abs(dif2);
+		//Debug.Log("dif: " + dif1 + "  " + dif2);
+		if (dif1 != dif2){
+			points[second] = Vector3.zero;
+			return true;
+		}
 		return false;
 	}
 	
-	public static Path GetPath(){
-		Path path = new Path(index, points);
-		return path;
+	private static void ReoraganizeArray(Vector3[] temp){
+		Vector3[] newArray = new Vector3[index];
+		int newSize = 0;
+		for(int i = 0; i < index; i++){
+			if (temp[i] != Vector3.zero){
+				newArray[newSize] = temp[i];
+				newSize++;
+			}
+		}
+		index = newSize;
+		for (int i = 0; i < index; i++){
+			points[i] = newArray[i];
+		}
 	}
-	
-	private static bool ConnectTheDots(GameObject point, Vector3 startPos, Vector3 destination, float height, Vector3 heading){
+
+	private static bool HorizontalMovement(GameObject point, Vector3 startPos, Vector3 destination, float height, Vector3 heading){
 		WayPoints pointScript = GetScript(point);
-		
 		do{		
-			AddPoint(new Vector3(pointScript.GetFloorPosition().x,pointScript.GetFloorPosition().y + height, pointScript.GetFloorPosition().z));
-			if (startPos.y < destination.y && Mathf.Abs(startPos.y - destination.y) > NEXTFLOOR && pointScript.CheckUp()){
-				point = pointScript.GetUp();
-			}else if (startPos.y > destination.y && Mathf.Abs(startPos.y - destination.y) > NEXTFLOOR && pointScript.CheckDown()){
-				point = pointScript.GetDown();
-			}else if (heading.x > 0 && pointScript.CheckRight()){
+			AddPoint(new Vector3 (pointScript.GetFloorPosition().x, pointScript.GetFloorPosition().y + height,pointScript.GetFloorPosition().z));
+			if (heading.x > 0 && pointScript.CheckRight()){
 				point = pointScript.GetRight();
 			}else if (heading.x <= 0 && pointScript.CheckLeft()){
 				point = pointScript.GetLeft();
 			}else{
 				AddPoint(destination);
-				if (!CheckAngle())
-					return false;
 				return true;
 			}
 			pointScript = GetScript(point);	
 		}while ((pointScript.GetFloorPosition().x - destination.x)*heading.x <= 0);
 		AddPoint(destination);
-		if (!CheckAngle())
-			return false;
 		return true;
 	}
 	
-	private static float CheckStart(Vector3 startPos){
+	private static GameObject GetPoint(Vector3 pos, int mask, Vector3 heading){
+		RaycastHit hit;
+		//Debug.DrawRay(pos,heading,Color.red,20);
+		//Debug.DrawRay(pos,heading*-1,Color.red,20);
+		if (Physics.Raycast(pos, heading , out hit, Mathf.Infinity, mask)){
+			GameObject wayPoint = hit.collider.gameObject;
+			return wayPoint;
+		}else if (Physics.Raycast(pos, heading*-1 , out hit, Mathf.Infinity, mask)){
+			GameObject wayPoint = hit.collider.gameObject;
+			return wayPoint;
+		}else if (Physics.Raycast(pos, Vector3.up , out hit, 8, mask)){
+			GameObject wayPoint = hit.collider.gameObject;
+			return wayPoint;
+		}
+		else if (Physics.Raycast(pos, Vector3.down , out hit, 8, mask)){
+			GameObject wayPoint = hit.collider.gameObject;
+			return wayPoint;
+		}
+		return null;
+	}
+
+	private static float CheckPositionForSlope(Vector3 startPos){
 		int mask = (1 << 9); //ground
 		RaycastHit hit;
 		if (Physics.Raycast(startPos, Vector3.down, out hit, 5f, mask)) {
@@ -88,31 +139,45 @@ public class WayPointPath {
 		}
 		return 0;
 	}
-	
+
 	private static WayPoints GetScript(GameObject point){
 		WayPoints script = point.GetComponent<WayPoints>();
 		return script;
 	}
-	
-	private static void AddPoint(Vector3 pos){
+
+	private static bool AddPoint(Vector3 pos){
 		points[index] = pos;
 		index++;
-	}
-	
-	private static bool CheckAngle(){
-		float angle = (Mathf.Abs( points[index-2].y - points[index-1].y))/( Mathf.Abs(points[index-2].x - points[index-1].x));
-		if (angle*45 > MAXCLIMBABLEANGLE){
-			Debug.Log("bad angle " + (angle*45));
-			return false;
-		}
 		return true;
 	}
 	
+	private static bool CheckAngle(int a, int b){
+		float angle = (Mathf.Abs( points[a].y - points[b].y))/( Mathf.Abs(points[a].x - points[b].x));
+		if (angle*45 > 70){
+			//Debug.Log("bad angle " + (angle*45));
+			return true;
+		}
+		return false;
+	}
+	
+	private static bool PathToOtherFloor(Vector3 start, Vector3 end){
+		if (Mathf.Abs(start.y - end.y) > NEXTFLOOR)
+			return true;
+		return false;
+	}
+
+	
+	public static Path GetPath(){
+		Path path = new Path(index, points);
+		return path;
+	}
+
 	//Debugging
 	private static void PrintPoints(){
 		for(int i = 0; i < index; i++){
 		 Debug.Log("Point " + i + " at " + points[i]);	
 		}
 	}
+
 	
 }

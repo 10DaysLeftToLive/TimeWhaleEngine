@@ -12,10 +12,8 @@ public class MoveState : AbstractState {
 	protected float speed = 5f;
 	private GoToState currentMovementState = null;
 	private Vector3 currentGoal;
-	private Vector3 lastPos;
 	private float stuckTimer;
-	private int flyingTicker = 0;
-	
+		
 	public MoveState(Character toControl, Vector3 goal) : base(toControl){
 		_goal = goal;
 	}
@@ -24,9 +22,7 @@ public class MoveState : AbstractState {
 		Vector3 pos = character.transform.position;
 		Vector3 movement = Vector3.zero;
 		movement = _pathFollowing.GetVectorDirection();
-		
 
-		//movement *= speed;
 		movement *= (speed * Time.deltaTime);
 
 		if (movement.x < 0){
@@ -37,15 +33,6 @@ public class MoveState : AbstractState {
 			// going up/down
 		 	// character.climb???	
 		}
-
-		if (Vector3.Distance(pos,_pathFollowing.GetPoint()) > Vector3.Distance(lastPos,_pathFollowing.GetPoint())){
-			flyingTicker++;
-		}else {
-			flyingTicker = 0;
-		}
-		
-		if (flyingTicker > 3)
-			character.transform.position = 	_pathFollowing.GetPoint();
 		
 		if (NearPoint(_pathFollowing.GetPoint(), _pathFollowing.GetVectorDirection())){
 			if (!_pathFollowing.NextNode()){
@@ -62,7 +49,6 @@ public class MoveState : AbstractState {
 				}
 			}
 		} else {
-			lastPos = character.transform.position;
 			Move(movement);
 		}
 		
@@ -80,7 +66,6 @@ public class MoveState : AbstractState {
 	public override void OnEnter(){
 		//Debug.Log(character.name + ": MoveState Enter");
 		speed = 5f;
-		
 		if (CalculatePath()){
 			currentGoal = _pathFollowing.GetPoint();
 			currentMovementState = GetGoToStateToPoint(currentGoal);
@@ -89,8 +74,17 @@ public class MoveState : AbstractState {
 		}
 	}
 	
+	public override void Pause() {
+		
+	}
+	
+	public override void Resume() {
+		
+	}
+	
 	public override void OnExit(){
 		//Debug.Log(character.name + ": MoveState Exit");
+		_isComplete = true;
 	}
 	
 	private void Move(Vector3 moveDelta){
@@ -101,7 +95,6 @@ public class MoveState : AbstractState {
 		Vector3 pos = character.transform.position;
 		
 		pos = Vector3.Scale(pos,vectorDir);
-		//Debug.Log("Near point position: " + pos);
 		float flatPos = pos.x + pos.y;
 		
 		point = Vector3.Scale(point,vectorDir);
@@ -119,25 +112,21 @@ public class MoveState : AbstractState {
 		int mask = (1 << 9);
 		RaycastHit hit;
 		
-		if (Physics.Raycast(_goal, Vector3.down , out hit, Mathf.Infinity, mask)) {
+		if (Physics.Raycast(_goal, Vector3.down , out hit, 10, mask)) {
 			Vector3 hitPos = hit.point;
 			hitPos.y += character.transform.localScale.y/2;
 			//Debug.Log("ground at " + hitPos);
 			
-			if (WayPointPath.CheckForPath(character.transform.position, hitPos, character.transform.localScale.y/2)){
+			_pathFollowing = new Path();
+			_pathFollowing = QuickPath.StraightPath(character.transform.position, hitPos, character.transform.localScale.y/2);
+			return true;
+			
+			/*if (WayPointPath.CheckForPath(character.transform.position, hitPos, character.transform.localScale.y/2)){
 				_pathFollowing = new Path();
 				_pathFollowing = WayPointPath.GetPath();
 				
 				return (true);
-			}
-			//_pathFollowing = new Path();
-			//_pathFollowing = QuickPath.StraightPath(character.transform.position, hitPos, character.transform.localScale.y/2);
-			/*if (PathSearch(character.transform.position, hitPos, character.transform.localScale.y/2)){
-				_pathFollowing = PathFinding.GetPath();
-				
-				return (true);
 			}*/
-			//return (true);
 		} return (false);
 	}
 	

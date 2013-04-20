@@ -19,7 +19,7 @@ public class ChatMenu : GUIControl {
 	}
 	
 	private List<NPCChat> toRemove = new List<NPCChat>();
-	public override void Update(){
+	public override void UpdateControl(){
 		toRemove.Clear();
 		foreach (NPCChat npcChat in _npcsChats){
 			if (npcChat.UpdateChat(Time.deltaTime)){

@@ -9,4 +9,9 @@ public class Choice {
 		_choiceName = choiceName;
 		_reactionDialog = reactionDialog;
 	}
+	
+	public void Perform(EmotionState toUpdate){
+		Debug.Log("Performing on " + toUpdate.ToString());	
+		GUIManager.Instance.UpdateInteractionDisplay(_reactionDialog);
+	}
 }
