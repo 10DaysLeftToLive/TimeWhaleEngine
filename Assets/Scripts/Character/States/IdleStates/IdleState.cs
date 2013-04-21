@@ -12,15 +12,6 @@ public class IdleState : AbstractState {
 		character.PlayAnimation(Strings.animation_stand);
 	}
 	
-	public override void Pause() {
-		
-	}
-	
-	public override void Resume() {
-		
-	}
-	
 	public override void OnExit(){
-		_isComplete = true;
 	}
 }

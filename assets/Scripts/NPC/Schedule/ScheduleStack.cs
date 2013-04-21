@@ -26,6 +26,10 @@ public class ScheduleStack {
 			NextSchedule();
 		}
 	}
+	
+	public void NextTask() {
+		current.NextTask();
+	}
 		
 	public void NextSchedule() {
 		current = _schedulesToDo.Pop();

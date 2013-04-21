@@ -74,17 +74,8 @@ public class MoveState : AbstractState {
 		}
 	}
 	
-	public override void Pause() {
-		
-	}
-	
-	public override void Resume() {
-		
-	}
-	
 	public override void OnExit(){
 		//Debug.Log(character.name + ": MoveState Exit");
-		_isComplete = true;
 	}
 	
 	private void Move(Vector3 moveDelta){
@@ -147,7 +138,7 @@ public class MoveState : AbstractState {
 	private void OnNoPath(){
 		// TODO make a state for "can't do that"
 		Debug.Log(character.name + " could not find a path. Returning to idle");
-		character.EnterState(new IdleState(character));
+		character.EnterState(new MarkTaskDone(character));
 	}
 	
 	protected virtual void OnGoalReached(){

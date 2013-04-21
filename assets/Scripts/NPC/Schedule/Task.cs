@@ -23,20 +23,6 @@ public class Task {
 		// timeleft = infinity - amount aka do nothing
 	}
 	
-	public virtual void Run(float amount) {
-		if(_stateToPerform.IsComplete) {
-			_taskFinished = true;
-		}
-	}
-	
-	public virtual void Pause() {
-		_stateToPerform.Pause();
-	}
-	
-	public virtual void Resume() {
-		_stateToPerform.Resume();
-	}
-	
 	public virtual bool IsComplete(){
 		return (_taskFinished); // this task will go on forever
 	}

@@ -8,11 +8,11 @@ public class WalkToState : AbstractGoToState {
 	public override void OnGoalReached(){
 		Debug.Log("While walking " + character.name + " reached goal. Returning to idle");
 		character.PlayAnimation(Strings.animation_stand);
-		character.EnterState(new IdleState(character));
+		character.EnterState(new MarkTaskDone(character));
 	}
 	
 	public override void OnStuck(){
 		character.PlayAnimation(Strings.animation_stand);
-		character.EnterState(new IdleState(character));
+		character.EnterState(new MarkTaskDone(character));
 	}
 }

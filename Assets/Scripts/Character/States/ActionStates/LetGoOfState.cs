@@ -13,7 +13,7 @@ public class LetGoOfState : AbstractState {
 		
 		character.DetachFrom(_toLetGoOf);
 		
-		character.EnterState(new IdleState(character));
+		character.EnterState(new MarkTaskDone(character));
 	}
 	
 	public override void OnEnter(){
@@ -21,16 +21,7 @@ public class LetGoOfState : AbstractState {
 		// TODO let go of item
 	}
 	
-	public override void Pause() {
-		
-	}
-	
-	public override void Resume() {
-		
-	}
-	
 	public override void OnExit(){
 		Debug.Log(character.name + ": LetGoOfState Exit");
-		_isComplete = true;
 	}
 }

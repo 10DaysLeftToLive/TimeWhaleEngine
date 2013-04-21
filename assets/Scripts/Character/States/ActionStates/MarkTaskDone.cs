@@ -7,7 +7,7 @@ using System.Collections;
  * 	Do not use with the player
  */
 public class MarkTaskDone : AbstractState {
-	public MarkTaskDone(NPC toControl) : base(toControl){
+	public MarkTaskDone(Character toControl) : base(toControl){
 	}
 	
 	public override void Update(){
@@ -15,19 +15,14 @@ public class MarkTaskDone : AbstractState {
 	
 	public override void OnEnter(){
 		Debug.Log(character.name + ": MarkTaskDone Enter");
-		((NPC)character).NextTask();
-	}
-	
-	public override void Pause() {
-		
-	}
-	
-	public override void Resume() {
-		
+		if (character.GetType() == typeof(NPC)) {
+			((NPC)character).NextTask();
+		} else {
+			character.EnterState(new IdleState(character));
+		}
 	}
 	
 	public override void OnExit(){
 		Debug.Log(character.name + ": MarkTaskDone Exit");
-		_isComplete = true;
 	}
 }

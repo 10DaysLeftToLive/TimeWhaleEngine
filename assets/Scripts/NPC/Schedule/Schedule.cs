@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -11,17 +12,17 @@ using System.Collections.Generic;
  *  See Task and TimeTask for the basics of what you can schedule
  */
 public class Schedule {
-	Queue<Task> _tasksToDo;
-	NPC _toManage;
-	Task current;
+	protected Queue<Task> _tasksToDo;
+	protected NPC _toManage;
+	protected Task current;
 	public int schedulePriority; // high 1 - 10 low
 	
 	public enum priorityEnum {
-		Default=1, 
-		Low, 
-		Medium, 
-		High, 
-		DoNow
+		DoNow=1,
+		High,
+		Medium,
+		Low,
+		Default
 	};
 	
 	public Schedule(NPC toManage){
@@ -30,16 +31,16 @@ public class Schedule {
 		schedulePriority = (int)priorityEnum.Low;
 	}
 	
-	public Schedule(NPC toManage, int priority){
+	public Schedule(NPC toManage, Enum priority){
 		_tasksToDo = new Queue<Task>();
 		_toManage = toManage;
-		schedulePriority = priority;
+		schedulePriority = Convert.ToInt32(priority);
 	}
 	
-	public Schedule(Queue<Task> tasksToDo, NPC toManage, int priority){
+	public Schedule(Queue<Task> tasksToDo, NPC toManage, Enum priority){
 		_tasksToDo = tasksToDo;
 		_toManage = toManage;
-		schedulePriority = priority;
+		schedulePriority = Convert.ToInt32(priority);
 	}
 	
 	~Schedule() {
@@ -70,7 +71,7 @@ public class Schedule {
 		_toManage.ForceChangeToState(current.StatePerforming);	
 	}
 	
-	public void NextTask(){
+	public virtual void NextTask(){
 		if (_tasksToDo.Count > 0) {
 			current = _tasksToDo.Dequeue();
 			Debug.Log(_toManage.name + " is now switching to " + current.StatePerforming);

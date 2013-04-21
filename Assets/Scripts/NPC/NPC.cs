@@ -15,6 +15,7 @@ public abstract class NPC : Character {
 	public static int DISPOSITION_HIGH = 7;
 	public int id;
 	protected ScheduleStack scheduleStack;
+	protected Schedule defaultSchedule;
 	public EmotionState currentEmotion;
 	
 	private Dictionary<string, Reaction> flagReactions;
@@ -32,15 +33,16 @@ public abstract class NPC : Character {
 		flagReactions = new Dictionary<string, Reaction>();
 		Reaction eatPie = new Reaction();
 		eatPie.AddAction(new UpdateNPCDispositionAction(this, 5));
-		
 		flagReactions.Add("Eat pie", eatPie);
+		defaultSchedule = new DefaultSchedule(this);
+		scheduleStack.Add(defaultSchedule);
 	}
 	
 	protected override void CharacterUpdate(){
 		if (chating && !NearPlayer()){
 			CloseChat();
 		}
-		//scheduleStack.Run(Time.deltaTime);
+		scheduleStack.Run(Time.deltaTime);
 	}
 	
 	// ONLY PUT SPECIFIC NPC THINGS IN THESE IN THE CHILDREN
