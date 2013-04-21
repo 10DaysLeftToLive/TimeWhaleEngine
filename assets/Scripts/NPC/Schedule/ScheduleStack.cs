@@ -15,6 +15,10 @@ public class ScheduleStack {
 		return (current != null);
 	}
 	
+	public bool CanChat() {
+		return current.CanChat;
+	}
+	
 	// Does not run and change schedules the same tick.
 	public void Run(float timeSinceLastTick) {
 		if (HasSchedule()) {

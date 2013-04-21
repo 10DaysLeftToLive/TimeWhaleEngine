@@ -26,7 +26,6 @@ public abstract class NPC : Character {
 		EventManager.instance.mOnNPCInteractionEvent += new EventManager.mOnNPCInteractionDelegate(ReactToInteractionEvent);
 		EventManager.instance.mOnPlayerPickupItemEvent += new EventManager.mOnPlayerPickupItemDelegate(ReactToItemPickedUp);
 		EventManager.instance.mOnPlayerTriggerCollisionEvent += new EventManager.mOnPlayerTriggerCollisionDelegate(ReactToTriggerCollision);
-		//npcSchedule = GetSchedule();
 		currentEmotion = GetInitEmotionState();
 		NPCManager.instance.Add(this.gameObject);
 		scheduleStack = new ScheduleStack();
@@ -43,6 +42,33 @@ public abstract class NPC : Character {
 			CloseChat();
 		}
 		scheduleStack.Run(Time.deltaTime);
+	}
+	
+	private void PassiveChat(){
+		// if can chat
+		if (scheduleStack.CanChat()) {
+			// if near player say hello
+			Dictionary<string, GameObject> npcDict = NPCManager.instance.getNPCDictionary();
+			// check npc close (not self)
+			foreach (var npc in npcDict) {
+				if(npc.Value != this && InChatDistance(npc.Value)) {
+					// send request if so
+					// if other NPC can chat
+						// chat
+				}
+			}	
+		}
+	}
+	
+	private bool InChatDistance(GameObject gameObject) {
+		float xDistance = Mathf.Abs(this.transform.position.x - gameObject.transform.position.x);
+		float yDistance = Mathf.Abs(this.transform.position.y - gameObject.transform.position.y);
+		
+		if (xDistance < DISTANCE_TO_CHAT && yDistance < DISTANCE_TO_CHAT) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	// ONLY PUT SPECIFIC NPC THINGS IN THESE IN THE CHILDREN
@@ -111,7 +137,7 @@ public abstract class NPC : Character {
 	public void NextTask(){
 		EventManager.instance.RiseOnNPCInteractionEvent(new NPCEnviromentInteraction(this.gameObject, "Task Done"));
 		
-		//npcSchedule.NextTask();
+		scheduleStack.NextTask();
 	}
 	
 	private void CloseChat(){

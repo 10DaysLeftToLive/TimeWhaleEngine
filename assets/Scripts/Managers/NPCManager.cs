@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 public class NPCManager : ManagerSingleton<NPCManager> {
 	private static Dictionary<string, GameObject> dictNPC = new Dictionary<string, GameObject>();
@@ -10,6 +11,10 @@ public class NPCManager : ManagerSingleton<NPCManager> {
 	
 	public GameObject getNPC(string npcName) {
 		return dictNPC[npcName];
+	}
+	
+	public Dictionary<string, GameObject> getNPCDictionary() {
+		return dictNPC;
 	}
 	
 	public List<Flag> GetFlags(){

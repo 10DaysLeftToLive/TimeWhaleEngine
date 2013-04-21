@@ -15,6 +15,10 @@ public class Schedule {
 	protected Queue<Task> _tasksToDo;
 	protected NPC _toManage;
 	protected Task current;
+	protected bool canChat = false;
+	public bool CanChat {
+		get { return canChat; }
+	}
 	public int schedulePriority; // high 1 - 10 low
 	
 	public enum priorityEnum {
