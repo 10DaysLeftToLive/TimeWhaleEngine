@@ -20,7 +20,7 @@ public class PriorityStack {
 		int ci = _schedulesToDo.Count - 1;
 		while (ci > 0) {
 			int pi = (ci - 1);
-			if(_schedulesToDo[ci].HigherPriority(_schedulesToDo[pi])) {
+			if(_schedulesToDo[ci].CheckPriorityTo(_schedulesToDo[pi]) >= 0) {
 				break;
 			}
 			Schedule tmp = _schedulesToDo[ci];

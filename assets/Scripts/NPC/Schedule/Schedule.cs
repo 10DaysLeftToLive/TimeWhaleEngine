@@ -92,12 +92,27 @@ public class Schedule {
 		_tasksToDo.Enqueue(task);
 	}
 	
-	// Checks if this schedule has a higher priority than the schedule passed in
-	public bool HigherPriority(Schedule schedule) {
+	/// <summary>
+	/// 1 = Higher priority,
+	/// 0 = Same priority,
+	/// -1 = Lower priority
+	/// </summary>
+	/// <returns>
+	/// 1 = Higher priority
+	/// 0 = Same priority
+	/// -1 = Lower priority
+	/// </returns>
+	/// <param name='schedule'>
+	/// Schedule.
+	/// </param>
+	public int CheckPriorityTo(Schedule schedule) {
 		if (this.schedulePriority < schedule.schedulePriority) {
-			return true;
+			return 1;
+		} 
+		else if (this.schedulePriority == schedule.schedulePriority) {
+			return 0;
 		} else {
-			return false;
+			return -1;
 		}
 	}
 }

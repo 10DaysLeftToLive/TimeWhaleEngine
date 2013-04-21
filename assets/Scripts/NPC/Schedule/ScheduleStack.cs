@@ -37,6 +37,15 @@ public class ScheduleStack {
 	}
 	
 	public void Add(Schedule schedule) {
-		_schedulesToDo.Push(schedule);
+		if (current == null) {
+			current = schedule;
+		} 
+		else if (schedule.CheckPriorityTo(current) >= 0) {
+			_schedulesToDo.Push(current);
+			current = schedule;
+			current.Resume();
+		} else {
+			_schedulesToDo.Push(schedule);
+		}
 	}
 }
