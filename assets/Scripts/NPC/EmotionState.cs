@@ -5,42 +5,23 @@ using System.Collections.Generic;
 public class EmotionState {
 	protected NPC _npcInState;
 	public string _defaultTextToSay;
-	protected List<Choice> _choices;
-	protected List<string> _acceptableItems;
 	protected ChatChoiceInfo _chatInfo;
-	
-	public List<Choice> ChoiceOptions{
-		get {return _choices;}
-	}
+	protected Dictionary<Choice, DispositionDependentReaction> _allChoiceReactions;
+	protected Dictionary<string, DispositionDependentReaction> _allItemReactions;
 	
 	public EmotionState(NPC npcInState, string textToSay){
 		_npcInState = npcInState;
 		_defaultTextToSay = textToSay;
-		_choices = new List<Choice>();
-		_acceptableItems = new List<string>();
-	}
-	
-	public EmotionState(NPC npcInState, string textToSay, List<Choice> choices, List<string> acceptableItems) {
-		_npcInState = npcInState;
-		_defaultTextToSay = textToSay;
-		_choices = choices;
-		_acceptableItems = acceptableItems;
+		_allChoiceReactions = new Dictionary<Choice, DispositionDependentReaction>();
+		_allItemReactions = new Dictionary<string, DispositionDependentReaction>();
 	}
 	
 	public string GetWhatToSay(){
 		return (_defaultTextToSay);
 	}
-	
-	public List<Choice> GetChoices(){
-		return (_choices);
-	}
-	
-	public void AddChoice(Choice newChoice){
-		_choices.Add(newChoice);
-	}
-	
+
 	public bool ItemHasReaction(string itemName){
-		return (_acceptableItems.Contains(itemName));
+		return (_allItemReactions.ContainsKey(itemName));
 	}
 	
 	protected void UpdateInteractionDisplay(string newText){
@@ -54,25 +35,44 @@ public class EmotionState {
 	public List<string> GetButtonTexts(){
 		List<string> toReturn = new List<string>();
 		
-		_choices.Add(new Choice("Hai 0", "O Hai 0"));
-		_choices.Add(new Choice("Hai 1", "O Hai 1"));
-		_choices.Add(new Choice("Hai 2", "O Hai 2"));
-		
-		foreach (Choice choice in _choices){
+		foreach (Choice choice in _allChoiceReactions.Keys){
 			toReturn.Add(choice._choiceName);
 		}
+		
 		return (toReturn);
 	}
 	
+	/// <summary>
+	/// Reacts to choice by calling the corrisponding reaction
+	/// </summary>
+	/// <param name='choiceName'>
+	/// Choice name to react to
+	/// </param>
 	public void ReactToChoice(string choiceName){
-		foreach (Choice choice in _choices){
+		foreach (Choice choice in _allChoiceReactions.Keys){
 			if (choice._choiceName == choiceName){
-				choice.Perform(this);
+				PerformReactionBasedOnDisposition(_allChoiceReactions[choice]);
+				GUIManager.Instance.UpdateInteractionDisplay(choice._reactionDialog);
 			}
 		}
 	}
-
-	//Virtual so children don't have to override
+	
+	/// <summary>
+	/// Performs the reaction based on disposition. If the reaction does not have that type of reaction then it will 
+	/// 	perform the default reaction
+	/// </summary>
+	/// <param name='reaction'>
+	/// Reaction to do
+	/// </param>
+	private void PerformReactionBasedOnDisposition(DispositionDependentReaction reaction){
+		if (_npcInState.GetDisposition() >= _npcInState.GetHighDisposition() && reaction.HasHighReaction()){
+			reaction.PerformHighReaction();
+		} else if (_npcInState.GetDisposition() <= _npcInState.GetLowDisposition() && reaction.HasLowReaction()){
+			reaction.PerformLowReaction();
+		} else {
+			reaction.PerformReaction();
+		}
+	}
 	public virtual void ReactToItemInteraction(string npc, GameObject item){}
 	public virtual void ReactToChoiceInteraction(string npc, string choice){}
 	public virtual void ReactToEnviromentInteraction(string npc, string enviromentAction){}

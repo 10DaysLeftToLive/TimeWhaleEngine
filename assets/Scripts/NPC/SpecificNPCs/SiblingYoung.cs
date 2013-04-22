@@ -8,6 +8,10 @@ public class SiblingYoung : NPC {
 		return (new IntroEmotionState(this));
 	}
 	
+	protected override void SetFlagReactions(){
+		
+	}
+	
 	protected override Schedule GetSchedule(){
 		Schedule schedule = new Schedule(this);
 		
@@ -44,8 +48,8 @@ public class SiblingYoung : NPC {
 	
 	public class IntroEmotionState : EmotionState{
 		public IntroEmotionState(NPC toControl) : base(toControl, "Help me push this rock, I want to see what is on the other side!"){
-			_acceptableItems.Add("Plushie");
-			_acceptableItems.Add("Frisbee");
+			//_acceptableItems.Add("Plushie");
+			//_acceptableItems.Add("Frisbee");
 		}
 		
 		public bool toldOn = false;
@@ -83,7 +87,7 @@ public class SiblingYoung : NPC {
 				case "Tell on": Debug.Log("Told on"); 
 					this._defaultTextToSay = "Go away! You told Mom, I don't talk to traitors!";
 					toldOn = true;
-					_acceptableItems.Clear();
+					//_acceptableItems.Clear();
 					break;
 				default: break;
 				}

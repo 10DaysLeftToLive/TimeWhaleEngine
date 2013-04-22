@@ -23,8 +23,8 @@ public class test : MonoBehaviour {
 		yield return new WaitForSeconds(.1f);
 		
 		FlagManager.instance.SetFlag("Eat pie");	
-		FlagManager.instance.SetFlag("Eat pies");	
-		FlagManager.instance.SetFlag("Say hi");	
+		//FlagManager.instance.SetFlag("Eat pies");	
+		//FlagManager.instance.SetFlag("Say hi");	
 	}
 	
 	private IEnumerator TestInteractions(){

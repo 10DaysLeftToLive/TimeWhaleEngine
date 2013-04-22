@@ -4,10 +4,10 @@ using System.Collections;
 public class CarpenterSonYoung : NPC {
 	string whatToSay;
 	
-	protected override void Init() {
-		base.Init();
-		animationData = GetComponent<SmoothMoves.BoneAnimation>();
+	protected override void SetFlagReactions(){
+		
 	}
+	
 	protected override EmotionState GetInitEmotionState(){
 		if (this.GetDisposition() >= NPC.DISPOSITION_HIGH){
 			return (new HighDispositionEmotionState(this));	
@@ -45,14 +45,14 @@ public class CarpenterSonYoung : NPC {
 		public int appleStolenDispositionChange = -3;
 		
 		public LowDispositionEmotionState(NPC toControl) : base(toControl, "Hey!  We should play later!"){
-			_acceptableItems.Add("ToolBox");
-			_acceptableItems.Add("FishingRod");
+			/*_acceptableItems.Add("ToolBox");
+			_acceptableItems.Add("FishingRod");*/
 		}
 		
 		// Pass the previous dialogue
 		public LowDispositionEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
-			_acceptableItems.Add("ToolBox");
-			_acceptableItems.Add("FishingRod");
+			/*_acceptableItems.Add("ToolBox");
+			_acceptableItems.Add("FishingRod");*/
 		}
 		
 		public override void ReactToItemInteraction(string npc, GameObject item){
@@ -146,14 +146,14 @@ public class CarpenterSonYoung : NPC {
 		public int appleStolenDispositionChange = -3;
 		
 		public MediumDispositionEmotionState(NPC toControl) : base(toControl, "Hey!  We should play later!"){
-			_acceptableItems.Add("ToolBox");
-			_acceptableItems.Add("FishingRod");
+			/*_acceptableItems.Add("ToolBox");
+			_acceptableItems.Add("FishingRod");*/
 		}
 		
 		// Pass the previous dialogue
 		public MediumDispositionEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
-			_acceptableItems.Add("ToolBox");
-			_acceptableItems.Add("FishingRod");
+			//_acceptableItems.Add("ToolBox");
+			//_acceptableItems.Add("FishingRod");
 		}
 		
 		public override void ReactToItemInteraction(string npc, GameObject item){
@@ -256,14 +256,14 @@ public class CarpenterSonYoung : NPC {
 		public int appleStolenDispositionChange = -3;
 		
 		public HighDispositionEmotionState(NPC toControl) : base(toControl, "Hey!  We should play later!"){
-			_acceptableItems.Add("ToolBox");
-			_acceptableItems.Add("FishingRod");
+			//_acceptableItems.Add("ToolBox");
+			//_acceptableItems.Add("FishingRod");
 		}
 		
 		// Pass the previous dialogue
 		public HighDispositionEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
-			_acceptableItems.Add("ToolBox");
-			_acceptableItems.Add("FishingRod");
+			//_acceptableItems.Add("ToolBox");
+			//_acceptableItems.Add("FishingRod");
 		}
 		
 		public override void ReactToItemInteraction(string npc, GameObject item){

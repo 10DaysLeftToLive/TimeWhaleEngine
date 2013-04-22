@@ -109,7 +109,7 @@ public class InteractionMenu : GUIControl {
 		EventManager.instance.RiseOnNPCInteractionEvent(new NPCChoiceInteraction(this.gameObject, choice));
 		npcChattingWith.ReactToChoice(choice);
 	}
-		
+	
 	private void DoGiveClick(){
 		Debug.Log("Doing give click");
 		EventManager.instance.RiseOnNPCInteractionEvent(new NPCItemInteraction(this.gameObject, player.Inventory.GetItem()));
@@ -118,6 +118,7 @@ public class InteractionMenu : GUIControl {
 	public void OpenChatForNPC(NPC _newNpcChatting){
 		Debug.Log("Opening interaction with " + _newNpcChatting);
 		npcChattingWith = _newNpcChatting;
+		UpdateDisplayText(GetDisplayText());
 		GetChoicesFromNPC();
 		GetPortraitTexture();
 	}
@@ -132,6 +133,10 @@ public class InteractionMenu : GUIControl {
 	
 	private void GetPortraitTexture(){
 		charPortrait = npcChattingWith.GetPortrait();
+	}
+	
+	private string GetDisplayText(){
+		return (npcChattingWith.GetDisplayText());	
 	}
 	
 	// Convert the given message's formatting so it will fit into the screen nicely
