@@ -8,7 +8,8 @@ public abstract class NPC : Character {
 	private List<Item> itemReactions;
 	private bool chating = false;
 	private Texture charPortrait;
-	private static int DISTANCE_TO_CHAT = 12;
+	private static int DISTANCE_TO_CHAT = 4;
+	private static int DISTANCE_TO_SEE = 8;
 	private static int DISPOSITION_LOW_END = 0;
 	private static int DISPOSITION_HIGH_END = 10;
 	public static int DISPOSITION_LOW = 3; // these should not be hard set
@@ -43,17 +44,20 @@ public abstract class NPC : Character {
 			if (InChatDistance(player.gameObject)) {
 				// Say hi (one off chat)
 			} else {
-				// Try to start conversation with nearby NPC or say hi (one off chat)
+				// Try to start conversation with nearby NPC or say hi (one off chat) if the player is in sight
 				Dictionary<string, GameObject> npcDict = NPCManager.instance.getNPCDictionary();
+				NPC npcClass;
 				foreach (var npc in npcDict.Values) {
-					NPC npcClass = npc.GetComponent<NPC>();
+					npcClass = npc.GetComponent<NPC>();
 					if(npcClass != this && InChatDistance(npc)) {
-						if (RequestChat(npcClass)) {
-							// chat Schedule
-							break;
-						} else {
-							// Say hi (one off chat)
-							break;
+						if (InSight(player.gameObject)) {
+							if (RequestChat(npcClass)) {
+								// chat Schedule
+								break;
+							} else { 
+								// Say hi (one off chat)
+								break;
+							}
 						}
 					}
 				}	
@@ -74,6 +78,17 @@ public abstract class NPC : Character {
 		float yDistance = Mathf.Abs(this.transform.position.y - gameObject.transform.position.y);
 		
 		if (xDistance < DISTANCE_TO_CHAT && yDistance < DISTANCE_TO_CHAT) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	private bool InSight(GameObject gameObject) {
+		float xDistance = Mathf.Abs(this.transform.position.x - gameObject.transform.position.x);
+		float yDistance = Mathf.Abs(this.transform.position.y - gameObject.transform.position.y);
+		
+		if (xDistance < DISTANCE_TO_SEE && yDistance < DISTANCE_TO_SEE) {
 			return true;
 		} else {
 			return false;
