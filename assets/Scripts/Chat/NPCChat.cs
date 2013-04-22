@@ -11,8 +11,8 @@ using System.Collections.Generic;
 public class NPCChat {
 	public delegate void NPCChatChange(ChatInfo oldChat, ChatInfo newChat); // update the chat dialog when the current chat changes
 	
-	private List<ChatInfo> _chatTexts;
-	private int _chatIndex;
+	protected List<ChatInfo> _chatTexts;
+	protected int _chatIndex;
 	private NPCChatChange _npcChatChange;
 	
 	public ChatInfo GetCurrentInfo(){
@@ -23,9 +23,13 @@ public class NPCChat {
 		return (_chatTexts[_chatTexts.Count-1]);	
 	}
 	
-	public NPCChat(List<ChatInfo> chatTexts){
-		_chatTexts = chatTexts;	
+	public NPCChat(){
+		_chatTexts = new List<ChatInfo>();
 		_chatIndex = 0;
+	}
+	
+	public NPCChat(List<ChatInfo> chatTexts) : base(){
+		_chatTexts = chatTexts;	
 	}
 	
 	/// <summary>

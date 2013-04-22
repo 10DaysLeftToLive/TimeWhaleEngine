@@ -58,7 +58,6 @@ public class ChatMenu : GUIControl {
 		Vector3 pos = npc.transform.position;
 		Vector3 screenPos = Camera.mainCamera.WorldToViewportPoint(pos);
 		screenPos.y += .1f;
-		Debug.Log("GetRectOverNPC = " + ScreenRectangle.NewRect(screenPos.x, screenPos.y, CHATWIDTH, CHATHEIGHT));
 		return (ScreenRectangle.NewRect(screenPos.x, screenPos.y, CHATWIDTH, CHATHEIGHT));
 	}
 }

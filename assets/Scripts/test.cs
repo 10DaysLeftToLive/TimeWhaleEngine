@@ -13,7 +13,7 @@ public class test : MonoBehaviour {
 	
 	void Start () {
 		if (!DOTESTS) return;
-		StartCoroutine(TestFlagManager());
+		StartCoroutine(TestOneOffChat());
 		
 		
 		//StartCoroutine(TestInteractions());
@@ -28,9 +28,18 @@ public class test : MonoBehaviour {
 	}
 	
 	private IEnumerator TestInteractions(){
-		yield return new WaitForSeconds(.1f);
+		yield return new WaitForSeconds(1f);
 		
 		manager.InitiateInteraction(npc1);
+	}
+	
+	private IEnumerator TestOneOffChat(){
+		yield return new WaitForSeconds(.1f);
+		
+		List<ChatInfo> chats = new List<ChatInfo>();
+		chats.Add(new ChatInfo(npc1, "Chat 1"));
+		NPCChat chat = new NPCChat(chats);
+		GUIManager.Instance.AddNPCChat(new NPCOneOffChat(new ChatInfo(npc1, "This is but a test")));
 	}
 	
 	private void TestChat(){
