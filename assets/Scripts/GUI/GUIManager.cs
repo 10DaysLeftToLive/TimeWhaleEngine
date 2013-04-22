@@ -9,6 +9,7 @@ using System.Collections.Generic;
  */
 public class GUIManager : MonoBehaviour {
 	private List<GUIControl> activeControls;
+	private List<GUIControl> controlsToRemove;
 	private static bool alreadyMade = false; // denotes if this is the first gui manager that has been awakened
 	
 	private static GUIManager instance = null;
@@ -29,6 +30,7 @@ public class GUIManager : MonoBehaviour {
 		alreadyMade = true;
 		DontDestroyOnLoad(this); // keep this manager and its loaded assests around
 		activeControls = new List<GUIControl>();
+		controlsToRemove = new List<GUIControl>();
 		
 		chatMenu = GetComponent<ChatMenu>();
 		inGameMenu = GetComponent<InGameMenu>();
@@ -63,6 +65,10 @@ public class GUIManager : MonoBehaviour {
 		RenderControls();
 	}
 	
+	public void CloseInteractionMenu(){
+		MarkControlForRemoval(interactionMenu);	
+	}
+	
 	private void ClearControls(){
 		foreach (GUIControl control in activeControls){
 			control.ClearResponse();	
@@ -83,13 +89,26 @@ public class GUIManager : MonoBehaviour {
 	}
 	
 	private void UnLoadControl(GUIControl guiControlToUnLoad){
+		Debug.Log("Unloading " + guiControlToUnLoad.ToString());
 		activeControls.Remove(guiControlToUnLoad);	
 	}
 	
+	private void MarkControlForRemoval(GUIControl guiControlToUnLoad){
+		controlsToRemove.Add(guiControlToUnLoad);
+	}
+	
 	private void RenderControls(){
+		CleanupControls();
 		foreach (GUIControl control in activeControls){
 			control.Render();
 		}
+	}
+	
+	private void CleanupControls(){
+		foreach (GUIControl control in controlsToRemove){
+			UnLoadControl(control);
+		}
+		controlsToRemove.Clear();
 	}
 	
 	private void UpdateControls(){

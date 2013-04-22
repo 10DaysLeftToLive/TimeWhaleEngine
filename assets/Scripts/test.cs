@@ -13,9 +13,7 @@ public class test : MonoBehaviour {
 	
 	void Start () {
 		if (!DOTESTS) return;
-		StartCoroutine(TestOneOffChat());
-		
-		
+		StartCoroutine(TestInteractions());
 		//StartCoroutine(TestInteractions());
 	}
 	
@@ -53,7 +51,6 @@ public class test : MonoBehaviour {
 		
 		manager.AddNPCChat(npcChat);
 	}
-
 	
 	void Update () {
 		

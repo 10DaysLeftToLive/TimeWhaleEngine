@@ -30,6 +30,7 @@ public class InteractionMenu : GUIControl {
 	private Rect mainChatRect;
 	private Rect portraitRect;
 	private Rect textBoxRect;
+	private Rect leaveButtonRect;
 	private List<Rect> buttonRects;
 	private List<string> buttonTexts;
 	#endregion
@@ -40,6 +41,7 @@ public class InteractionMenu : GUIControl {
 	private static float CHATBUTTONPADDING = .01f; // padding between chat elements in all directions
 	private static float PORTRAITWIDTH = .2f;
 	private static int GIVEITEMBUTTON = 3; // index in rect list for wher give button should go
+	private static float LEAVEBUTTONHEIGHT = .15f;
 	private static int charPerLine = 60;
 	#endregion
 	
@@ -69,6 +71,7 @@ public class InteractionMenu : GUIControl {
 		DrawTextBox();
 		DisplayButtonChoices();
 		DisplayPortrait();
+		DisplayLeaveButton();
 		if (player.Inventory.HasItem()){
 			DisplayGiveButton();
 		}
@@ -98,6 +101,12 @@ public class InteractionMenu : GUIControl {
 	
 	private void DrawBackgroundBox(){
 		GUI.Box (mainChatRect, "");
+	}
+	
+	private void DisplayLeaveButton(){
+		if (GUI.Button(leaveButtonRect, "Leave")){
+			GUIManager.Instance.CloseInteractionMenu();	
+		}
 	}
 	
 	private void DrawTextBox(){
@@ -171,8 +180,9 @@ public class InteractionMenu : GUIControl {
 		float portraitTopLeftX = chatTopLeftX + CHATINTERNALPADDING;
 		float portraitTopLeftY = chatTopLeftY + CHATINTERNALPADDING;
 		float portraitWidth = PORTRAITWIDTH;
-		float portraitHeight = chatHeight - (2f * CHATINTERNALPADDING);
+		float portraitHeight = chatHeight - (2f * CHATINTERNALPADDING) - LEAVEBUTTONHEIGHT;
 		portraitRect = ScreenRectangle.NewRect(portraitTopLeftX, portraitTopLeftY, portraitWidth, portraitHeight);
+		leaveButtonRect = ScreenRectangle.NewRect(portraitTopLeftX, portraitTopLeftY + portraitHeight, portraitWidth, LEAVEBUTTONHEIGHT); 
 		
 		// Text Box Variables
 		float textBoxTopLeftX = chatTopLeftX + (2f * CHATBUTTONPADDING) + portraitWidth;
