@@ -69,6 +69,17 @@ public class GUIManager : MonoBehaviour {
 		MarkControlForRemoval(interactionMenu);	
 	}
 	
+	public bool ClickOnGUI(Vector2 clickOnScreen){
+		// flip the screen to start form the top right
+		Vector2 convertedScreenClick = new Vector2(clickOnScreen.x, ScreenSetup.screenHeight - clickOnScreen.y); 		
+		foreach (GUIControl control in activeControls){
+			if (control.ClickOnGUI(convertedScreenClick)){
+				return (true);	
+			}
+		}
+		return (false);
+	}
+	
 	private void ClearControls(){
 		foreach (GUIControl control in activeControls){
 			control.ClearResponse();	

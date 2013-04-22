@@ -89,6 +89,11 @@ public class InteractionMenu : GUIControl {
 		}
 	}
 	
+	public override bool ClickOnGUI(Vector2 screenPos){
+		Debug.Log("Doing cllick on gui " + screenPos + " " + mainChatRect.ToString() + " " + mainChatRect.Contains(screenPos));
+		return (mainChatRect.Contains(screenPos));
+	}
+	
 	private void DisplayGiveButton(){
 		if (GUI.Button(buttonRects[GIVEITEMBUTTON], "Give")){
 			DoGiveClick();

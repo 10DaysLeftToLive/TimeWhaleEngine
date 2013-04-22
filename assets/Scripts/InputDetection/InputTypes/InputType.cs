@@ -65,8 +65,10 @@ public abstract class InputType  {
 	}
 	
 	// called when a click/tap occurs
-	protected void SingleClickEvent(Vector2 inputScreenPos){	
-		DelegateClickForObjects(inputScreenPos);
+	protected void SingleClickEvent(Vector2 inputScreenPos){
+		if (!GUIManager.Instance.ClickOnGUI(inputScreenPos)){
+			DelegateClickForObjects(inputScreenPos);
+		}
 	}
 	
 	// Tell the camera to zoom in or out

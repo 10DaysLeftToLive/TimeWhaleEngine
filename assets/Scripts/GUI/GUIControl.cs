@@ -25,6 +25,7 @@ public abstract class GUIControl : MonoBehaviour {
 	public virtual void Init(){}// for children to load settings as needed
 	public virtual void UpdateControl(){} // for updating as needed
 	public abstract void Render(); // to display the content of the control
+	public virtual bool ClickOnGUI(Vector2 screenPos){return (false);}
 	
 	public void ClearResponse(){
 		currentResponse.type = GUIEventType.NULLEVENT;
