@@ -42,23 +42,22 @@ public abstract class NPC : Character {
 		if (scheduleStack.CanChat()) {
 			if (InChatDistance(player.gameObject)) {
 				// Say hi (one off chat)
-				break;
-			}
-			
-			// Try to start conversation with nearby NPC or say hi (one off chat)
-			Dictionary<string, GameObject> npcDict = NPCManager.instance.getNPCDictionary();
-			foreach (var npc in npcDict.Values) {
-				NPC npcClass = npc.GetComponent<NPC>();
-				if(npcClass != this && InChatDistance(npc)) {
-					if (RequestChat(npcClass)) {
-						// chat Schedule
-						break;
-					} else {
-						// Say hi (one off chat)
-						break;
+			} else {
+				// Try to start conversation with nearby NPC or say hi (one off chat)
+				Dictionary<string, GameObject> npcDict = NPCManager.instance.getNPCDictionary();
+				foreach (var npc in npcDict.Values) {
+					NPC npcClass = npc.GetComponent<NPC>();
+					if(npcClass != this && InChatDistance(npc)) {
+						if (RequestChat(npcClass)) {
+							// chat Schedule
+							break;
+						} else {
+							// Say hi (one off chat)
+							break;
+						}
 					}
-				}
-			}	
+				}	
+			}
 		}
 	}
 	
