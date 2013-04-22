@@ -27,7 +27,7 @@ public abstract class NPC : Character {
 		scheduleStack = new ScheduleStack();
 		flagReactions = new Dictionary<string, Reaction>();
 		SetFlagReactions();
-		defaultSchedule = new DefaultSchedule(this);
+		defaultSchedule = GetSchedule();
 		scheduleStack.Add(defaultSchedule);
 	}
 	
@@ -45,7 +45,7 @@ public abstract class NPC : Character {
 			Dictionary<string, GameObject> npcDict = NPCManager.instance.getNPCDictionary();
 			// check npc close (not self)
 			foreach (var npc in npcDict) {
-				if(npc.Value != this && InChatDistance(npc.Value)) {
+				if(npc.Value != this && !chating && InChatDistance(npc.Value)) {
 					// send request if so
 					// if other NPC can chat
 						// chat
@@ -119,8 +119,8 @@ public abstract class NPC : Character {
 	}
 	
 	public void NextTask(){
-		EventManager.instance.RiseOnNPCInteractionEvent(new NPCEnviromentInteraction(this.gameObject, "Task Done"));
-		
+		//EventManager.instance.RiseOnNPCInteractionEvent(new NPCEnviromentInteraction(this.gameObject, "Task Done"));
+		Debug.Log(name + " NPC next task");
 		scheduleStack.NextTask();
 	}
 	

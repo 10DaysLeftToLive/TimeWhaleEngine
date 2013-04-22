@@ -13,28 +13,22 @@ public class MomYoung : NPC {
 	}
 	
 	protected override Schedule GetSchedule(){
-		Schedule schedule = new Schedule(this);
+		Schedule schedule = new Schedule(this, Schedule.priorityEnum.High);
 		
-		/*
 		Vector3 currentPos = transform.position;
 		
 		currentPos.x = currentPos.x - 5;
 		
-		TimeTask standAroundForBit = new TimeTask(2, new IdleState(this));
+		TimeTask standAroundForBit = new TimeTask(.5f, new IdleState(this));
 		
 		Task walkLeft = new Task(new MoveThenDoState(this, currentPos, new MarkTaskDone(this)));
 		
-		currentPos.x = currentPos.x + 10;
-		
-		Task walkRight = new Task(new MoveThenDoState(this, currentPos, new MarkTaskDone(this)));
-		
 		schedule.Add(standAroundForBit);
 		schedule.Add(walkLeft);
-		schedule.Add(walkRight);
 		
 		Task standAround = new Task(new IdleState(this));
 		
-		schedule.Add(standAround);*/
+		schedule.Add(standAround);
 		
 		return (schedule);
 	}

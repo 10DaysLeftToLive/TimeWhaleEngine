@@ -13,7 +13,7 @@ public class SiblingYoung : NPC {
 	}
 	
 	protected override Schedule GetSchedule(){
-		Schedule schedule = new Schedule(this);
+		Schedule schedule = new DefaultSchedule(this);
 		
 		/* Note this is hard coded. This is an example of how scheduling works now
 		Vector3 currentPos = transform.position;
@@ -32,7 +32,7 @@ public class SiblingYoung : NPC {
 		schedule.Add(walkLeft);
 		schedule.Add(walkRight);
 		
-		*/
+		
 		Vector3 currentPos = transform.position;
 		currentPos.x = currentPos.x + 50;
 		Task walkRight = new Task(new MoveThenDoState(this, currentPos, new MarkTaskDone(this)));
@@ -41,7 +41,7 @@ public class SiblingYoung : NPC {
 		//Task standAround = new Task(new IdleState(this));
 		
 		schedule.Add(standAroundForBit);
-		schedule.Add(walkRight);
+		schedule.Add(walkRight);*/
 		
 		return(schedule);
 	}

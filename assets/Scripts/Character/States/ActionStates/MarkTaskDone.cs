@@ -15,7 +15,8 @@ public class MarkTaskDone : AbstractState {
 	
 	public override void OnEnter(){
 		Debug.Log(character.name + ": MarkTaskDone Enter");
-		if (character.GetType() == typeof(NPC)) {
+		if (character is NPC) {
+			Debug.Log("Was an npc");
 			((NPC)character).NextTask();
 		} else {
 			character.EnterState(new IdleState(character));

@@ -14,7 +14,6 @@ public class TimeTask : Task {
 	
 	public override void Decrement(float amount){
 		_timeTillMoveOn -= amount;
-		Debug.Log("Time left = " + _timeTillMoveOn);
 	}
 	
 	public override bool IsComplete(){

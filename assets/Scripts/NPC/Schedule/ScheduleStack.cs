@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 // Used for scheduling
 // The end of the list is the highest priority
@@ -24,6 +25,7 @@ public class ScheduleStack {
 		if (HasSchedule()) {
 			current.Run(timeSinceLastTick);
 			if (current.IsComplete()) {
+				Debug.Log("Current schedule complete");
 				current = null;
 			}
 		} else {
@@ -32,6 +34,8 @@ public class ScheduleStack {
 	}
 	
 	public void NextTask() {
+		Debug.Log("Schedule Stack next task");
+		
 		current.NextTask();
 	}
 		

@@ -59,6 +59,7 @@ public class Schedule {
 		if (HasTask()){
 			current.Decrement(timeSinceLastTick);
 			if (current.IsComplete()){
+				Debug.Log("Completed task");
 				current = null;
 			}
 		} else {
@@ -76,8 +77,11 @@ public class Schedule {
 	}
 	
 	public virtual void NextTask(){
+		Debug.Log(_toManage + " schedule next task");
+		
 		if (_tasksToDo.Count > 0) {
 			current = _tasksToDo.Dequeue();
+			Debug.Log("There are " + _tasksToDo.Count + " tasks");
 			Debug.Log(_toManage.name + " is now switching to " + current.StatePerforming);
 			_toManage.ForceChangeToState(current.StatePerforming);
 		}
