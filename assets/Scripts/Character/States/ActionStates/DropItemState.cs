@@ -14,23 +14,14 @@ public class DropItemState : AbstractState {
 		
 		character.Inventory.DropItem(character.GetFeet()); // TODO better implementation.
 		
-		character.EnterState(new IdleState(character));
+		character.EnterState(new MarkTaskDone(character));
 	}
 	
 	public override void OnEnter(){
 		Debug.Log(character.name + ": DropItemState Enter to pickup ");
 	}
 	
-	public override void Pause() {
-		
-	}
-	
-	public override void Resume() {
-		
-	}
-	
 	public override void OnExit(){
 		Debug.Log(character.name + ": DropItemState Exit");
-		_isComplete = true;
 	}
 }

@@ -15,6 +15,10 @@ public class ScheduleStack {
 		return (current != null);
 	}
 	
+	public bool CanChat() {
+		return current.CanChat;
+	}
+	
 	// Does not run and change schedules the same tick.
 	public void Run(float timeSinceLastTick) {
 		if (HasSchedule()) {
@@ -26,6 +30,10 @@ public class ScheduleStack {
 			NextSchedule();
 		}
 	}
+	
+	public void NextTask() {
+		current.NextTask();
+	}
 		
 	public void NextSchedule() {
 		current = _schedulesToDo.Pop();
@@ -33,6 +41,15 @@ public class ScheduleStack {
 	}
 	
 	public void Add(Schedule schedule) {
-		_schedulesToDo.Push(schedule);
+		if (current == null) {
+			current = schedule;
+		} 
+		else if (schedule.CheckPriorityTo(current) >= 0) {
+			_schedulesToDo.Push(current);
+			current = schedule;
+			current.Resume();
+		} else {
+			_schedulesToDo.Push(schedule);
+		}
 	}
 }

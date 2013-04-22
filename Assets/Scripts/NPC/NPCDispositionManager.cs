@@ -18,6 +18,7 @@ public class NPCDispositionManager : ManagerSingleton<NPCDispositionManager> {
 		Component[] componentsToManage = (Component[])rootOfAge.GetComponentsInChildren(typeof(NPC));
 		
 		foreach (NPC objectToManage in componentsToManage){
+			Debug.Log (objectToManage.name);
 			if (!containersInLevel.ContainsKey(objectToManage.id)){
 				containersInLevel.Add(objectToManage.id, new NPCClassContainer());
 			}

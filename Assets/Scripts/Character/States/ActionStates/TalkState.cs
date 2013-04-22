@@ -18,16 +18,7 @@ public class TalkState : AbstractState {
 		GUIManager.Instance.InitiateInteraction(_toTalkWith);
 	}
 	
-	public override void Pause() {
-		
-	}
-	
-	public override void Resume() {
-		
-	}
-	
 	public override void OnExit(){
 		Debug.Log(character.name + ": TalkState Exit");
-		_isComplete = true;
 	}
 }

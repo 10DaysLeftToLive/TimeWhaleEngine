@@ -1,14 +1,8 @@
 using UnityEngine;
 using System.Collections;
 
-public interface State {
-	bool IsComplete {
-		get;	
-	}
-	
+public interface State {	
 	void Update();
 	void OnEnter();
 	void OnExit();
-	void Pause();
-	void Resume();
 }

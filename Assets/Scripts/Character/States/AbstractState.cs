@@ -8,10 +8,6 @@ using System.Collections;
  */
 public abstract class AbstractState : State {
 	protected Character character; // The character that is in this state
-	protected bool _isComplete = false;
-	public bool IsComplete {
-		get { return _isComplete;}	
-	}
 	
 	public AbstractState(Character toControl){
 		character = toControl;
@@ -19,8 +15,6 @@ public abstract class AbstractState : State {
 	
 	public abstract void Update();
 	public abstract void OnEnter();
-	public abstract void Pause();
-	public abstract void Resume();
 	public abstract void OnExit();
 	
 }

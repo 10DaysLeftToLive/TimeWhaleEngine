@@ -15,28 +15,56 @@ public abstract class NPC : Character {
 	public static int DISPOSITION_HIGH = 7;
 	public int id;
 	protected ScheduleStack scheduleStack;
+	protected Schedule defaultSchedule;
 	public EmotionState currentEmotion;
 	protected Dictionary<string, Reaction> flagReactions;
 	
 	protected override void Init(){
 		charPortrait = (Texture)Resources.Load("" + this.name, typeof(Texture));
 		player = GameObject.Find("PlayerCharacter").GetComponent<Player>();
-		//npcSchedule = GetSchedule();
 		currentEmotion = GetInitEmotionState();
 		NPCManager.instance.Add(this.gameObject);
 		scheduleStack = new ScheduleStack();
 		flagReactions = new Dictionary<string, Reaction>();
 		SetFlagReactions();
+		defaultSchedule = new DefaultSchedule(this);
+		scheduleStack.Add(defaultSchedule);
 	}
 	
 	protected override void CharacterUpdate(){
 		if (chating && !NearPlayer()){
 			CloseChat();
 		}
-		//scheduleStack.Run(Time.deltaTime);
+		scheduleStack.Run(Time.deltaTime);
 	}
 	
-	protected abstract void SetFlagReactions();
+	private void PassiveChat(){
+		// if can chat
+		if (scheduleStack.CanChat()) {
+			// if near player say hello
+			Dictionary<string, GameObject> npcDict = NPCManager.instance.getNPCDictionary();
+			// check npc close (not self)
+			foreach (var npc in npcDict) {
+				if(npc.Value != this && InChatDistance(npc.Value)) {
+					// send request if so
+					// if other NPC can chat
+						// chat
+				}
+			}	
+		}
+	}
+	
+	private bool InChatDistance(GameObject gameObject) {
+		float xDistance = Mathf.Abs(this.transform.position.x - gameObject.transform.position.x);
+		float yDistance = Mathf.Abs(this.transform.position.y - gameObject.transform.position.y);
+		
+		if (xDistance < DISTANCE_TO_CHAT && yDistance < DISTANCE_TO_CHAT) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+protected abstract void SetFlagReactions();
 	protected abstract Schedule GetSchedule(); // TODO read/set this from file?
 	protected abstract EmotionState GetInitEmotionState();
 	
@@ -92,7 +120,7 @@ public abstract class NPC : Character {
 	public void NextTask(){
 		EventManager.instance.RiseOnNPCInteractionEvent(new NPCEnviromentInteraction(this.gameObject, "Task Done"));
 		
-		//npcSchedule.NextTask();
+		scheduleStack.NextTask();
 	}
 	
 	private void CloseChat(){
