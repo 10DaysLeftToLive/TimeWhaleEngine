@@ -14,16 +14,7 @@ public class InteractingWithPlayerState : AbstractState {
 		character.PlayAnimation(Strings.animation_stand);
 	}
 	
-	public override void Pause() {
-		
-	}
-	
-	public override void Resume() {
-		
-	}
-	
 	public override void OnExit(){
 		Debug.Log(character.name + ": InteractingWithPlayerState Exit");
-		_isComplete = true;
 	}
 }
