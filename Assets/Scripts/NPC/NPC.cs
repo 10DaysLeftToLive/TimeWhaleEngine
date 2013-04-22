@@ -64,7 +64,8 @@ public abstract class NPC : Character {
 			return false;
 		}
 	}
-protected abstract void SetFlagReactions();
+	
+	protected abstract void SetFlagReactions();
 	protected abstract Schedule GetSchedule(); // TODO read/set this from file?
 	protected abstract EmotionState GetInitEmotionState();
 	

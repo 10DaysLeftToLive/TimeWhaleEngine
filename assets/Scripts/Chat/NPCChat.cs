@@ -28,6 +28,13 @@ public class NPCChat {
 		_chatIndex = 0;
 	}
 	
+	/// <summary>
+	/// Sets the callback for getting the new chat data at the right time. This will only be used by the chat menu and will be done 
+	/// 	automatically
+	/// </summary>
+	/// <param name='npcChatChange'>
+	/// Npc chat change.
+	/// </param>
 	public void SetCallback(NPCChatChange npcChatChange){
 		_npcChatChange = npcChatChange;
 	}
