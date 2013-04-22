@@ -39,18 +39,34 @@ public abstract class NPC : Character {
 	}
 	
 	private void PassiveChat(){
-		// if can chat
 		if (scheduleStack.CanChat()) {
-			// if near player say hello
+			if (InChatDistance(player.gameObject)) {
+				// Say hi (one off chat)
+				break;
+			}
+			
+			// Try to start conversation with nearby NPC or say hi (one off chat)
 			Dictionary<string, GameObject> npcDict = NPCManager.instance.getNPCDictionary();
-			// check npc close (not self)
-			foreach (var npc in npcDict) {
-				if(npc.Value != this && !chating && InChatDistance(npc.Value)) {
-					// send request if so
-					// if other NPC can chat
-						// chat
+			foreach (var npc in npcDict.Values) {
+				NPC npcClass = npc.GetComponent<NPC>();
+				if(npcClass != this && InChatDistance(npc)) {
+					if (RequestChat(npcClass)) {
+						// chat Schedule
+						break;
+					} else {
+						// Say hi (one off chat)
+						break;
+					}
 				}
 			}	
+		}
+	}
+	
+	public bool RequestChat(NPC npc) {
+		if (npc.scheduleStack.CanChat()) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 	

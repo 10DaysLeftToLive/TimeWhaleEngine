@@ -3,7 +3,7 @@ using System.Collections;
 
 public static class Graph {
 	
-	public static int wayPointCount = 14;
+	public static int wayPointCount = 35;
 	public static Vector3[] wayPointPosition;
 	private static float[,] distance;
 	private static int[] closedPoints;
@@ -19,7 +19,8 @@ public static class Graph {
 				distance[i,j] = 0;
 			}
 		MakeGraph(point);
-
+		Debug.Log("output");
+		graphOutput();
 	}
 	
 	private static void RemoveEdge(int i, int j) 
@@ -37,7 +38,7 @@ public static class Graph {
 		{
 			distance[i,j] = dist;
 			distance[j,i] = dist;
-			//Debug.Log("added " + i + ", " + j + " of " + dist);
+			Debug.Log("added " + i + ", " + j + " of " + dist);
 		}
 	}
 	
@@ -65,15 +66,7 @@ public static class Graph {
 				MakeGraph(temp);
 			}
 		}
-		if (pointScript.CheckRight()){
-			temp = pointScript.GetRight();
-			tempScript = GetScript(temp);
-			if (!CheckPastPoints(tempScript.id)){
-				AddEdge(pointScript.id, tempScript.id, pointScript.rightDistance);
-				closedPoints[tempScript.id] = 1;
-				MakeGraph(temp);
-			}
-		}
+		
 		if (pointScript.CheckUp()){
 			temp = pointScript.GetUp();
 			tempScript = GetScript(temp);
@@ -92,6 +85,15 @@ public static class Graph {
 				MakeGraph(temp);
 			}
 		}
+		if (pointScript.CheckRight()){
+			temp = pointScript.GetRight();
+			tempScript = GetScript(temp);
+			if (!CheckPastPoints(tempScript.id)){
+				AddEdge(pointScript.id, tempScript.id, pointScript.rightDistance);
+				closedPoints[tempScript.id] = 1;
+				MakeGraph(temp);
+			}
+		}
 	}
 	
 	private static WayPoints GetScript(GameObject point){
@@ -105,7 +107,7 @@ public static class Graph {
 		return false;
 	}
 	
-	public static void graphOutput(int age)
+	public static void graphOutput()
 	{
 		
 		for (int i = 0; i < wayPointCount; i++)
