@@ -8,6 +8,10 @@ public class SiblingYoung : NPC {
 		return (new IntroEmotionState(this));
 	}
 	
+	protected override void SetFlagReactions(){
+		
+	}
+	
 	protected override Schedule GetSchedule(){
 		Schedule schedule = new Schedule(this);
 		
@@ -42,41 +46,10 @@ public class SiblingYoung : NPC {
 		return(schedule);
 	}
 	
-	protected override void LeftButtonCallback(string choice){
-		Debug.Log(this.name + " left callback(" + choice + ")");
-		EventManager.instance.RiseOnNPCInteractionEvent(new NPCChoiceInteraction(this.gameObject, choice));
-		// TODO? this is for a chat dialoge
-	}
-	
-	protected override void RightButtonCallback(){
-		Debug.Log(this.name + " right callback");
-		GameObject item = player.Inventory.GetItem();
-		DoReaction(item);
-	}
-	
-	protected override void DoReaction(GameObject itemToReactTo){
-		/*if (itemToReactTo != null){
-			Debug.Log(name + " is reacting to: " + itemToReactTo.name);
-			switch (itemToReactTo.tag){
-				case "Plushie":
-					break;
-				case "Frisbee":
-					break;
-				default:
-					break;
-			}
-			player.Inventory.DisableHeldItem();
-		}*/
-	}
-	
-	protected override void ReactToTriggerCollision(EventManager EM, TriggerCollisionArgs triggerCollided){
-		
-	}
-	
 	public class IntroEmotionState : EmotionState{
 		public IntroEmotionState(NPC toControl) : base(toControl, "Help me push this rock, I want to see what is on the other side!"){
-			_acceptableItems.Add("Plushie");
-			_acceptableItems.Add("Frisbee");
+			//_acceptableItems.Add("Plushie");
+			//_acceptableItems.Add("Frisbee");
 		}
 		
 		public bool toldOn = false;
@@ -114,7 +87,7 @@ public class SiblingYoung : NPC {
 				case "Tell on": Debug.Log("Told on"); 
 					this._defaultTextToSay = "Go away! You told Mom, I don't talk to traitors!";
 					toldOn = true;
-					_acceptableItems.Clear();
+					//_acceptableItems.Clear();
 					break;
 				default: break;
 				}

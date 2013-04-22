@@ -14,7 +14,6 @@ public class Task {
 		get {return _stateToPerform;}
 	}
 	
-	
 	public Task(State stateToPerform){
 		_stateToPerform = stateToPerform;
 	}

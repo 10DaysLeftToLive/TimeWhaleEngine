@@ -9,6 +9,10 @@ public class CarpenterYoung : NPC {
 		animationData = GetComponent<SmoothMoves.BoneAnimation>();
 	}
 	
+	protected override void SetFlagReactions(){
+		
+	}
+	
 	protected override EmotionState GetInitEmotionState(){
 		if (this.GetDisposition() >= NPC.DISPOSITION_HIGH){
 			return (new HighDispositionEmotionState(this));	
@@ -28,26 +32,6 @@ public class CarpenterYoung : NPC {
 		schedule.Add(standAround);
 		
 		return (schedule);
-	}
-	
-	protected override void LeftButtonCallback(string choice){
-		Debug.Log(this.name + " left callback for choice " + choice);
-		// TODO? this is for a chat dialoge
-		EventManager.instance.RiseOnNPCInteractionEvent(new NPCChoiceInteraction(this.gameObject, choice));
-	}
-	
-	protected override void RightButtonCallback(){
-		Debug.Log(this.name + " right callback");
-		GameObject item = player.Inventory.GetItem();
-		DoReaction(item);
-	}
-	
-	protected override void DoReaction(GameObject itemToReactTo){
-
-	}
-	
-	protected override void ReactToTriggerCollision(EventManager EM, TriggerCollisionArgs triggerCollided){
-		
 	}
 	
 	/*
@@ -71,12 +55,12 @@ public class CarpenterYoung : NPC {
 		public int fishingRodGivenToSonDispositionChange = -2;
 		
 		public LowDispositionEmotionState(NPC toControl) : base(toControl, "[Make angry?] You can play with my son when he finishes building his treehouse. Now where did I place my old tools?"){
-			_acceptableItems.Add("ToolBox");
+			//_acceptableItems.Add("ToolBox");
 		}
 		
 		// Pass the previous dialogue
 		public LowDispositionEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
-			_acceptableItems.Add("ToolBox");
+			//_acceptableItems.Add("ToolBox");
 		}
 		
 		public override void ReactToItemInteraction(string npc, GameObject item){
@@ -165,13 +149,13 @@ public class CarpenterYoung : NPC {
 		public int fishingRodGivenToSonDispositionChange = -1;
 		
 		public MediumDispositionEmotionState(NPC toControl) : base(toControl, "You can play with my son when he finishes building his treehouse. Now where did I place my old tools?"){
-			_acceptableItems.Add("ToolBox");
-			_acceptableItems.Add("FishingRod");
+			//_acceptableItems.Add("ToolBox");
+			//_acceptableItems.Add("FishingRod");
 		}
 		
 		// Pass the previous dialogue
 		public MediumDispositionEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
-			_acceptableItems.Add("ToolBox");
+			//_acceptableItems.Add("ToolBox");
 		}
 		
 		public override void ReactToItemInteraction(string npc, GameObject item){
@@ -268,13 +252,13 @@ public class CarpenterYoung : NPC {
 		public int fishingRodGivenToSonDispositionChange = -1;
 		
 		public HighDispositionEmotionState(NPC toControl) : base(toControl, "You can play with my son when he finishes building his treehouse. Now where did I place my old tools?"){
-			_acceptableItems.Add("ToolBox");
-			_acceptableItems.Add("FishingRod");
+			/*_acceptableItems.Add("ToolBox");
+			_acceptableItems.Add("FishingRod");*/
 		}
 		
 		// Pass the previous dialogue
 		public HighDispositionEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
-			_acceptableItems.Add("ToolBox");
+			//_acceptableItems.Add("ToolBox");
 		}
 		
 		public override void ReactToItemInteraction(string npc, GameObject item){
@@ -373,9 +357,9 @@ public class CarpenterYoung : NPC {
 		public int fishingRodGivenToSonDispositionChange = -3;
 		
 		public AppleStolenEmotionState(NPC toControl) : base(toControl, "Don't get anywhere near our apple tree again, thief!"){
-			_acceptableItems.Add("ToolBox");
+			/*_acceptableItems.Add("ToolBox");
 			_acceptableItems.Add("Apple");
-			_acceptableItems.Add("Apple[Carpenter]");
+			_acceptableItems.Add("Apple[Carpenter]");*/
 			
 			// toggle chat
 			//_npcInState.ToggleChat();

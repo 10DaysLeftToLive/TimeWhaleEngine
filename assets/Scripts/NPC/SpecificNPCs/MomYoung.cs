@@ -8,6 +8,10 @@ public class MomYoung : NPC {
 		return (new MomIntroEmotionState(this));
 	}
 	
+	protected override void SetFlagReactions(){
+		
+	}
+	
 	protected override Schedule GetSchedule(){
 		Schedule schedule = new Schedule(this);
 		
@@ -35,45 +39,13 @@ public class MomYoung : NPC {
 		return (schedule);
 	}
 	
-	protected override void LeftButtonCallback(string choice){
-		Debug.Log(this.name + " left callback for choice " + choice);
-		// TODO? this is for a chat dialoge
-		EventManager.instance.RiseOnNPCInteractionEvent(new NPCChoiceInteraction(this.gameObject, choice));
-	}
-	
-	protected override void RightButtonCallback(){
-		Debug.Log(this.name + " right callback");
-		GameObject item = player.Inventory.GetItem();
-		DoReaction(item);
-	}
-	
-	protected override void DoReaction(GameObject itemToReactTo){
-		/*if (itemToReactTo != null){
-			Debug.Log(name + " is reacting to: " + itemToReactTo.name);
-			switch (itemToReactTo.name){
-				case "Plushie":
-					UpdateChat("Thanks kid.");
-					break;
-				case "Apple":
-					UpdateChat("Perfect! These will work wonderfully!");
-					break;
-				default:
-					break;
-			}
-			player.Inventory.DisableHeldItem();
-		}*/
-	}
-	
-	protected override void ReactToTriggerCollision(EventManager EM, TriggerCollisionArgs triggerCollided){
-		
-	}
-	
 	public class MomIntroEmotionState : EmotionState{
-		public MomIntroEmotionState(NPC toControl) : base(toControl, "Where is your sister?"){
-			_choices.Add(new Choice("Tell on", "She's in big trouble! I'll deal with your sister..."));
-			_choices.Add(new Choice("Lie to", "Ok, well make sure she's okay..."));
+		public MomIntroEmotionState(NPC toControl) : base(toControl, "Where is your sister?"){/*
+			_allChoiceReactions.Add(new Choice("Tell on", "She's in big trouble! I'll deal with your sister..."));
+			_allChoiceReactions.Add(new Choice("Lie to", "Ok, well make sure she's okay..."));
 			_acceptableItems.Add("Apple");
-			_acceptableItems.Add("Apple[Carpenter]");
+			_acceptableItems.Add("Apple[Carpenter]");*/
+			
 		}
 		public bool hasToldOn = false;
 		
@@ -109,15 +81,15 @@ public class MomYoung : NPC {
 				case "Tell on": Debug.Log("Told on"); 
 					this._defaultTextToSay = "Thank you for watching out for your sister!";
 					hasToldOn = true;
-					_acceptableItems.Add("Plushie");
+					//_acceptableItems.Add("Plushie");
 					//_npcInState.UpdateChatButton();
-					_choices.Clear();
+					_allChoiceReactions.Clear();
 					break;
 				case "Lie to": Debug.Log("Lied to"); 
 					this._defaultTextToSay = "Keep an eye out on your sister!";
-					_acceptableItems.Add("Plushie");
+					//_acceptableItems.Add("Plushie");
 					//_npcInState.UpdateChatButton();
-					_choices.Clear();
+					_allChoiceReactions.Clear();
 					break;
 				default: break;
 				}
