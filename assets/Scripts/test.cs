@@ -13,7 +13,7 @@ public class test : MonoBehaviour {
 	
 	void Start () {
 		if (!DOTESTS) return;
-		StartCoroutine(TestInteractions());
+		StartCoroutine(TestFlagManager());
 		//StartCoroutine(TestInteractions());
 	}
 	

@@ -90,8 +90,13 @@ public abstract class Character : PauseObject {
 	}
 	
 	public void PlayAnimation(string animation){
+		
 		if (animationData.GetClipCount() > 0) {
-			animationData.Play(animation);
+			try {
+				//animationData.Play(animation);
+			} catch {
+				Debug.LogError("Animation data " + animation + " does not exsist for " + name);
+			}
 		}
 	}
 	

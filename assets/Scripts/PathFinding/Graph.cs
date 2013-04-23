@@ -38,7 +38,7 @@ public static class Graph {
 		{
 			distance[i,j] = dist;
 			distance[j,i] = dist;
-			Debug.Log("added " + i + ", " + j + " of " + dist);
+			//Debug.Log("added " + i + ", " + j + " of " + dist);
 		}
 	}
 	
@@ -114,8 +114,9 @@ public static class Graph {
 		{
 			for (int j = 0; j < wayPointCount; j++)
 			{
-				if (distance[i,j] != 0)
-					Debug.Log("i: " + i + ", j " + j + " distance " + distance[i,j]);
+				if (distance[i,j] != 0){
+					//Debug.Log("i: " + i + ", j " + j + " distance " + distance[i,j]);
+				}
 			}
 		}
 	}

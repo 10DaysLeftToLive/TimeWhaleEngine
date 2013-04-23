@@ -56,8 +56,9 @@ public class ChatMenu : GUIControl {
 	
 	private Rect GetRectOverNPC(NPC npc){
 		Vector3 pos = npc.transform.position;
-		Vector3 screenPos = Camera.mainCamera.WorldToViewportPoint(pos);
-		screenPos.y += .1f;
-		return (ScreenRectangle.NewRect(screenPos.x, screenPos.y, CHATWIDTH, CHATHEIGHT));
+		Vector2 screenPos = Camera.mainCamera.WorldToScreenPoint(pos);
+		// invert the y and put it above the npc, kinda arbitrary values
+		Vector2 percentageConvertedPos = new Vector2(screenPos.x/ScreenSetup.screenWidth - .1f, 1 - (screenPos.y/ScreenSetup.screenHeight) - .3f);
+		return (ScreenRectangle.NewRect(percentageConvertedPos.x, percentageConvertedPos.y, CHATWIDTH, CHATHEIGHT));
 	}
 }
