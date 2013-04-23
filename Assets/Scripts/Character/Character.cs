@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using SmoothMoves;
 
@@ -93,8 +94,8 @@ public abstract class Character : PauseObject {
 		
 		if (animationData.GetClipCount() > 0) {
 			try {
-				//animationData.Play(animation);
-			} catch {
+				animationData.Play(animation);
+			} catch (ArgumentOutOfRangeException e){
 				Debug.LogError("Animation data " + animation + " does not exsist for " + name);
 			}
 		}
