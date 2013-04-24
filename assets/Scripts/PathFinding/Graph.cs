@@ -19,7 +19,6 @@ public static class Graph {
 				distance[i,j] = 0;
 			}
 		MakeGraph(point);
-		Debug.Log("output");
 		graphOutput();
 	}
 	

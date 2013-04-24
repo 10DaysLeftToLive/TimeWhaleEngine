@@ -2,9 +2,9 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// Carpenter son old specific scripting values
+/// Sibling young specific scripting values
 /// </summary>
-public class CarpenterSonOld : NPC {
+public class SiblingYoung : NPC {
 	protected override void Init() {
 		base.Init();
 	}

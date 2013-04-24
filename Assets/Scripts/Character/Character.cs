@@ -91,7 +91,6 @@ public abstract class Character : PauseObject {
 	}
 	
 	public void PlayAnimation(string animation){
-		
 		if (animationData.GetClipCount() > 0) {
 			try {
 				animationData.Play(animation);

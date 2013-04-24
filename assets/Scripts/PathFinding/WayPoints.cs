@@ -36,7 +36,6 @@ public class WayPoints : MonoBehaviour {
 		if (this.name == "WayPoint.000" && !setupWayPoints && pointAge == Age.young){
 			Graph.Init(this.gameObject);//GameObject.Find("WayPoint.000"));
 			setupWayPoints = true;
-			Debug.Log("setup graph");
 		}
 	}
 	
