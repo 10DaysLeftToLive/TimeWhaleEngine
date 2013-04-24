@@ -2,43 +2,73 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// NPC class that all specific NPCs will inherit from
+/// 	Has an emotion state that will determine what it will say and take when interacting with the player
+/// 	Has a Schedule stack that it will follow and may be interupted by the player or other NPCs
+/// 	Contains a dictionary of flag reactions which are called when a certain flag event occurs
+/// </summary>
 public abstract class NPC : Character {
+	#region Fields
+	public int id = -1;
+	private int npcDisposition;
+	
+	protected ScheduleStack scheduleStack;
+	protected EmotionState currentEmotion;
+	protected Dictionary<string, Reaction> flagReactions;
+	
 	private Player player;
-	public int npcDisposition; // NOTE should not be public but this makes testing easier
-	private List<Item> itemReactions;
 	private bool chating = false;
 	private Texture charPortrait;
+	#endregion
+	
+	#region Set Values
 	private static int DISTANCE_TO_CHAT = 4;
 	private static int DISTANCE_TO_SEE = 8;
 	private static int DISPOSITION_LOW_END = 0;
 	private static int DISPOSITION_HIGH_END = 10;
 	public static int DISPOSITION_LOW = 3; // these should not be hard set
 	public static int DISPOSITION_HIGH = 7;
-	public int id;
-	protected ScheduleStack scheduleStack;
-	protected Schedule defaultSchedule;
-	public EmotionState currentEmotion;
-	protected Dictionary<string, Reaction> flagReactions;
+	#endregion
 	
+	#region Initialization
 	protected override void Init(){
-		charPortrait = (Texture)Resources.Load("" + this.name, typeof(Texture));
-		player = GameObject.Find("PlayerCharacter").GetComponent<Player>();
+		if (id == -1)Debug.LogWarning("Id for " + name + " was not set.");	
+		FindInitialObjects();
 		currentEmotion = GetInitEmotionState();
 		NPCManager.instance.Add(this.gameObject);
 		scheduleStack = new ScheduleStack();
 		flagReactions = new Dictionary<string, Reaction>();
 		SetFlagReactions();
-		defaultSchedule = GetSchedule();
-		scheduleStack.Add(defaultSchedule);
+		scheduleStack.Add(GetSchedule());
 	}
 	
+	private void FindInitialObjects(){
+		charPortrait = (Texture)Resources.Load("" + this.name, typeof(Texture));
+		player = GameObject.Find("PlayerCharacter").GetComponent<Player>();
+		animationData = GetComponent<SmoothMoves.BoneAnimation>();
+		if (animationData == null){
+			Debug.LogError("No animation data attached to " + name);	
+		}
+		if (charPortrait == null){
+			Debug.LogError("No character portait found for " + name);	
+		}
+		if (player == null){
+			Debug.LogError("No player was found by " + name);	
+		}
+	}
+	#endregion
+	
+	#region Update
 	protected override void CharacterUpdate(){
 		if (chating && !NearPlayer()){
 			CloseChat();
 		}
 		scheduleStack.Run(Time.deltaTime);
 	}
+	#endregion
 	
+	#region Chat/Interaction 
 	private void PassiveChat(){
 		if (scheduleStack.CanChat()) {
 			if (InChatDistance(player.gameObject)) {
@@ -84,37 +114,21 @@ public abstract class NPC : Character {
 		}
 	}
 	
-	private bool InSight(GameObject gameObject) {
-		float xDistance = Mathf.Abs(this.transform.position.x - gameObject.transform.position.x);
-		float yDistance = Mathf.Abs(this.transform.position.y - gameObject.transform.position.y);
-		
-		if (xDistance < DISTANCE_TO_SEE && yDistance < DISTANCE_TO_SEE) {
-			return true;
-		} else {
-			return false;
-		}
+	private void CloseChat(){
 	}
 	
+	public void StarTalkingWithPlayer(){
+		EnterState(new InteractingWithPlayerState(this));
+	}
+	#endregion	
+	
+	#region Functions specific to eahc NPC
 	protected abstract void SetFlagReactions();
 	protected abstract Schedule GetSchedule(); // TODO read/set this from file?
 	protected abstract EmotionState GetInitEmotionState();
+	#endregion
 	
-	private void ReactToInteractionEvent(EventManager EM, NPCInteraction otherInteraction){
-		Debug.Log(name + " is reacting to event with " + otherInteraction._npcReacting.name);
-		if (otherInteraction.GetType().Equals(typeof(NPCChoiceInteraction))){
-			Debug.Log("Calling Choice Interaction for " + otherInteraction._npcReacting.name);
-			NPCChoiceInteraction choiceInteraction = (NPCChoiceInteraction) otherInteraction;
-			currentEmotion.ReactToChoiceInteraction(choiceInteraction._npcReacting.name, choiceInteraction._choice);
-		} else if (otherInteraction.GetType().Equals(typeof(NPCItemInteraction))) {
-			Debug.Log("Calling Item Interaction for " + otherInteraction._npcReacting.name);
-			NPCItemInteraction itemInteraction = (NPCItemInteraction) otherInteraction;
-			currentEmotion.ReactToItemInteraction(itemInteraction._npcReacting.name, itemInteraction._item);
-		} else if (otherInteraction.GetType().Equals(typeof(NPCEnviromentInteraction))) {
-			NPCEnviromentInteraction enviromentInteraction = (NPCEnviromentInteraction) otherInteraction;
-			currentEmotion.ReactToEnviromentInteraction(enviromentInteraction._npcReacting.name, enviromentInteraction._enviromentAction);			
-		}
-	}
-	
+	#region Reactions
 	public void ReactToFlag(string flagName){
 		Debug.Log(name + " is reacting to the flag " + flagName);
 		flagReactions[flagName].React();
@@ -123,7 +137,9 @@ public abstract class NPC : Character {
 	public void ReactToChoice(string choice){
 		currentEmotion.ReactToChoice(choice);	
 	}
+	#endregion
 	
+	#region Getters
 	public string GetDisplayText(){
 		return (currentEmotion.GetWhatToSay());	
 	}
@@ -143,7 +159,17 @@ public abstract class NPC : Character {
 		}
 		return (flags);
 	}
-
+	
+	public int GetHighDisposition(){
+		return (11);	
+	}
+	
+	public int GetLowDisposition(){
+		return (-5);	
+	}
+	#endregion
+	
+	#region Utility Methods
 	private bool NearPlayer(){
 		return Vector3.Distance(player.transform.position, this.transform.position) < DISTANCE_TO_CHAT;
 	}
@@ -154,27 +180,23 @@ public abstract class NPC : Character {
 		scheduleStack.NextTask();
 	}
 	
-	private void CloseChat(){
-		
-	}
-	
-	public void StarTalkingWithPlayer(){
-		EnterState(new InteractingWithPlayerState(this));
-	}
-	
 	public void UpdateEmotionState(EmotionState newEmotionState){
 		currentEmotion = newEmotionState;	
 	}
 	
-	public int GetHighDisposition(){
-		return (11);	
+	private bool InSight(GameObject gameObject) {
+		float xDistance = Mathf.Abs(this.transform.position.x - gameObject.transform.position.x);
+		float yDistance = Mathf.Abs(this.transform.position.y - gameObject.transform.position.y);
+		
+		if (xDistance < DISTANCE_TO_SEE && yDistance < DISTANCE_TO_SEE) {
+			return true;
+		} else {
+			return false;
+		}
 	}
+	#endregion
 	
-	public int GetLowDisposition(){
-		return (-5);	
-	}
-	
-	#region disposition
+	#region Disposition
 	public void SetDisposition(int disp) {
 		npcDisposition = disp;
 	}

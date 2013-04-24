@@ -126,10 +126,10 @@ public class MomYoung : NPC {
 		
 		public override void UpdateEmotionState(){
 			if (_npcInState.GetDisposition() >= NPC.DISPOSITION_HIGH){
-				_npcInState.currentEmotion = new HighDispositionEmotionState(_npcInState);	
+				//npcInState.currentEmotion = new HighDispositionEmotionState(_npcInState);	
 			}
 			else if (_npcInState.GetDisposition() > NPC.DISPOSITION_LOW){
-				_npcInState.currentEmotion = new MediumDispositionEmotionState(_npcInState);
+				//npcInState.currentEmotion = new MediumDispositionEmotionState(_npcInState);
 			}
 		}
 	}
@@ -165,10 +165,10 @@ public class MomYoung : NPC {
 		
 		public override void UpdateEmotionState(){
 			if (_npcInState.GetDisposition() >= NPC.DISPOSITION_HIGH){
-				_npcInState.currentEmotion = new HighDispositionEmotionState(_npcInState);	
+				//npcInState.currentEmotion = new HighDispositionEmotionState(_npcInState);	
 			}
 			else if (_npcInState.GetDisposition() <= NPC.DISPOSITION_LOW){
-				_npcInState.currentEmotion = new LowDispositionEmotionState(_npcInState);
+				//npcInState.currentEmotion = new LowDispositionEmotionState(_npcInState);
 			}
 		}
 	}
@@ -204,10 +204,10 @@ public class MomYoung : NPC {
 		
 		public override void UpdateEmotionState(){
 			if (_npcInState.GetDisposition() < NPC.DISPOSITION_HIGH){
-				_npcInState.currentEmotion = new MediumDispositionEmotionState(_npcInState);	
+				//npcInState.currentEmotion = new MediumDispositionEmotionState(_npcInState);	
 			}
 			else if (_npcInState.GetDisposition() <= NPC.DISPOSITION_LOW){
-				_npcInState.currentEmotion = new LowDispositionEmotionState(_npcInState);
+				//npcInState.currentEmotion = new LowDispositionEmotionState(_npcInState);
 			}
 		}
 	}
