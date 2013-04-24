@@ -122,7 +122,13 @@ public abstract class NPC : Character {
 	}
 	#endregion	
 	
-	#region Functions specific to eahc NPC
+	#region Schedule
+	public void AddSchedule(Schedule scheduleToAdd){
+		scheduleStack.Add(scheduleToAdd);	
+	}
+	#endregion
+	
+	#region Functions specific to each NPC
 	protected abstract void SetFlagReactions();
 	protected abstract Schedule GetSchedule(); // TODO read/set this from file?
 	protected abstract EmotionState GetInitEmotionState();
