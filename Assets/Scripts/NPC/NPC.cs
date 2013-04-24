@@ -138,7 +138,7 @@ public abstract class NPC : Character {
 	}
 	
 	public void UpdateDefaultText(string newText){
-		currentEmotion._defaultTextToSay = newText;	
+		currentEmotion.SetDefaultText(newText);	
 	}
 	#endregion	
 	

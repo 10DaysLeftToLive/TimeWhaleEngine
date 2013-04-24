@@ -17,7 +17,7 @@ public class MotherYoung : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "Hai"));
+		return (new InitialEmotionState(this, "Don't you step on that frog."));
 	}
 	
 	protected override Schedule GetSchedule(){
@@ -36,8 +36,10 @@ public class MotherYoung : NPC {
 	#region EmotionStates
 		#region Initial Emotion State
 		private class InitialEmotionState : EmotionState{
+		string text1 = "I can't stop you but what I can do is use a very particular set of skills. Skills I have acquired over a very long career. Skills that make me a nightmare for people like you.";
 			public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
-				
+				_allChoiceReactions.Add(new Choice("Watch me", text1), new DispositionDependentReaction(new Reaction()));
+				_allChoiceReactions.Add(new Choice("Okay Mom", "Good boy"), new DispositionDependentReaction(new Reaction()));
 			}
 			
 			public override void UpdateEmotionState(){
