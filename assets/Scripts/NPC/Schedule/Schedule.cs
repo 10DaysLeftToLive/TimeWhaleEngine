@@ -55,6 +55,10 @@ public class Schedule {
 		return (current != null);
 	}
 	
+	public void SetCanChat(bool _canChat){
+		canChat = _canChat;
+	}
+	
 	public void Run(float timeSinceLastTick){
 		if (HasTask()){
 			current.Decrement(timeSinceLastTick);

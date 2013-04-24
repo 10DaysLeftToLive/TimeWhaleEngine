@@ -11,7 +11,8 @@ public class MotherYoung : NPC {
 	
 	protected override void SetFlagReactions(){
 		Reaction frogCrushing = new Reaction();
-		frogCrushing.AddAction(new ShowOneOffChatAction(this, "OmG yOu KiLleD dAt fROg!1!"));
+		frogCrushing.AddAction(new ShowOneOffChatAction(this, "Gross! I'm out of here."));
+		frogCrushing.AddAction(new NPCAddScheduleAction(this, runToCarpenter));
 		flagReactions.Add(FlagStrings.CrushFrog, frogCrushing); 
 	}
 	
@@ -20,13 +21,16 @@ public class MotherYoung : NPC {
 	}
 	
 	protected override Schedule GetSchedule(){
-		Schedule schedule = new Schedule(this);
-		
-		Task standAround = new Task(new IdleState(this));
-		
-		schedule.Add(standAround);
-		
+		Schedule schedule = new DefaultSchedule(this);
 		return (schedule);
+	}
+	
+	private Schedule runToCarpenter;
+	protected override void SetUpSchedules(){
+		runToCarpenter = new Schedule(this, Schedule.priorityEnum.High);
+		runToCarpenter.Add(new TimeTask(1, new IdleState(this)));
+		runToCarpenter.Add(new Task(new MoveThenDoState(this, new Vector3(10, -1f,.3f), new MarkTaskDone(this))));
+		runToCarpenter.SetCanChat(true);
 	}
 	
 	#region EmotionStates

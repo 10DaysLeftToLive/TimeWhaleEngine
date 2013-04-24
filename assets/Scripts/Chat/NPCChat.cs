@@ -32,6 +32,14 @@ public class NPCChat {
 		_chatTexts = chatTexts;	
 	}
 	
+	public float AddUpTimeToChat(){
+		float timeTotal = 0;
+		foreach (ChatInfo chatInfo in _chatTexts){
+			timeTotal += chatInfo.GetTime();
+		}
+		return (timeTotal);
+	}
+	
 	/// <summary>
 	/// Sets the callback for getting the new chat data at the right time. This will only be used by the chat menu and will be done 
 	/// 	automatically
