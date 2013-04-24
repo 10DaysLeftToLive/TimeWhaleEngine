@@ -53,4 +53,12 @@ public static class Strings{
 	
 	// NPC Chat Texts
 	public static string DIALOGUENOTSET = "Dialogue was not set";
+	
+	// Parallax
+	public static string PARALLAXMANAGER = "ParallaxManager";
+	public static string PARALLAX = "Parallax";
+	public const string PARALLAXONE = "ParallaxOne";
+	public const string PARALLAXTWO = "ParallaxTwo";
+	public const string PARALLAXTHREE = "ParallaxThree";
+	public const string PARALLAXFOUR = "ParallaxFour";
 }

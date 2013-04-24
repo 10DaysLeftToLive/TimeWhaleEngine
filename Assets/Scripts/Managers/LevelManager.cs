@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class LevelManager : MonoBehaviour {
 	public Player playerCharacter;
 	public AgeTransitionShader fadeShader;
+	private ParallaxManager parallaxManager;
 	
 	public TimeSwitchObject[] timeSwitchObjects;
 	
@@ -58,6 +59,7 @@ public class LevelManager : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		parallaxManager = GameObject.Find(Strings.PARALLAXMANAGER).GetComponent<ParallaxManager>();
 		ScreenSetup.CalculateSettings();
 		StartCoroutine(Init());
 	}
@@ -75,6 +77,8 @@ public class LevelManager : MonoBehaviour {
 		ManagerLoader.LoadManagers(youngSectionTarget, middleSectionTarget, oldSectionTarget);
 		
 		playerCharacter.gravity = 50;
+		
+		parallaxManager.Init();
 	}
 	
 	private void SetFiles(){
