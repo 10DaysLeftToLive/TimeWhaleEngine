@@ -10,7 +10,9 @@ public class MotherYoung : NPC {
 	}
 	
 	protected override void SetFlagReactions(){
-		
+		Reaction frogCrushing = new Reaction();
+		frogCrushing.AddAction(new ShowOneOffChatAction(this, "OmG yOu KiLleD dAt fROg!1!"));
+		flagReactions.Add(FlagStrings.CrushFrog, frogCrushing); 
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
