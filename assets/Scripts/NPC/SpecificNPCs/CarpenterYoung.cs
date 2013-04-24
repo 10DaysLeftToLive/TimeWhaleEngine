@@ -117,16 +117,16 @@ public class CarpenterYoung : NPC {
 		
 		public override void ReactToItemPickedUp(GameObject item){
 			if(item.name == "Apple[Carpenter]"){	
-				_npcInState.currentEmotion = new AppleStolenEmotionState(_npcInState);	
+				//npcInState.currentEmotion = new AppleStolenEmotionState(_npcInState);	
 			}
 		}
 		
 		public override void UpdateEmotionState(){
 			if (_npcInState.GetDisposition() >= NPC.DISPOSITION_HIGH){
-				_npcInState.currentEmotion = new HighDispositionEmotionState(_npcInState);	
+				//npcInState.currentEmotion = new HighDispositionEmotionState(_npcInState);	
 			}
 			else if (_npcInState.GetDisposition() > NPC.DISPOSITION_LOW){
-				_npcInState.currentEmotion = new MediumDispositionEmotionState(_npcInState);
+				//npcInState.currentEmotion = new MediumDispositionEmotionState(_npcInState);
 			}
 		}
 	}
@@ -220,16 +220,16 @@ public class CarpenterYoung : NPC {
 		
 		public override void ReactToItemPickedUp(GameObject item){
 			if(item.name == "Apple[Carpenter]"){	
-				_npcInState.currentEmotion = new AppleStolenEmotionState(_npcInState);	
+				//npcInState.currentEmotion = new AppleStolenEmotionState(_npcInState);	
 			}
 		}
 		
 		public override void UpdateEmotionState(){
 			if (_npcInState.GetDisposition() >= NPC.DISPOSITION_HIGH){
-				_npcInState.currentEmotion = new HighDispositionEmotionState(_npcInState);	
+				//npcInState.currentEmotion = new HighDispositionEmotionState(_npcInState);	
 			}
 			else if (_npcInState.GetDisposition() <= NPC.DISPOSITION_LOW){
-				_npcInState.currentEmotion = new LowDispositionEmotionState(_npcInState);
+				//npcInState.currentEmotion = new LowDispositionEmotionState(_npcInState);
 			}
 		}
 	}
@@ -324,10 +324,10 @@ public class CarpenterYoung : NPC {
 		
 		public override void UpdateEmotionState(){
 			if (_npcInState.GetDisposition() < NPC.DISPOSITION_HIGH){
-				_npcInState.currentEmotion = new MediumDispositionEmotionState(_npcInState);	
+				//npcInState.currentEmotion = new MediumDispositionEmotionState(_npcInState);	
 			}
 			else if (_npcInState.GetDisposition() <= NPC.DISPOSITION_LOW){
-				_npcInState.currentEmotion = new LowDispositionEmotionState(_npcInState);
+				//npcInState.currentEmotion = new LowDispositionEmotionState(_npcInState);
 			}
 		}
 	}
@@ -458,18 +458,18 @@ public class CarpenterYoung : NPC {
 		
 		public override void UpdateEmotionState(){
 			if (_npcInState.GetDisposition() >= NPC.DISPOSITION_HIGH){
-				_npcInState.currentEmotion = new HighDispositionEmotionState(_npcInState);	
+				//npcInState.currentEmotion = new HighDispositionEmotionState(_npcInState);	
 			}
 		}
 		
 		public void ReturnToDispositionState() {
 			if (_npcInState.GetDisposition() >= NPC.DISPOSITION_HIGH){
-				_npcInState.currentEmotion = new HighDispositionEmotionState(_npcInState);	
+				//npcInState.currentEmotion = new HighDispositionEmotionState(_npcInState);	
 			}
 			else if (_npcInState.GetDisposition() > NPC.DISPOSITION_LOW){
-				_npcInState.currentEmotion = new MediumDispositionEmotionState(_npcInState);
+				//npcInState.currentEmotion = new MediumDispositionEmotionState(_npcInState);
 			} else {
-				_npcInState.currentEmotion = new LowDispositionEmotionState(_npcInState);
+				//npcInState.currentEmotion = new LowDispositionEmotionState(_npcInState);
 			}
 		}
 	}

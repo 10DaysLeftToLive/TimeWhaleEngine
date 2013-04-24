@@ -122,10 +122,10 @@ public class CarpenterSonYoung : NPC {
 		
 		public override void UpdateEmotionState(){
 			if (_npcInState.GetDisposition() >= NPC.DISPOSITION_HIGH){
-				_npcInState.currentEmotion = new HighDispositionEmotionState(_npcInState);	
+				//_npcInState.currentEmotion = new HighDispositionEmotionState(_npcInState);	
 			}
 			else if (_npcInState.GetDisposition() > NPC.DISPOSITION_LOW){
-				_npcInState.currentEmotion = new MediumDispositionEmotionState(_npcInState);
+				//_npcInState.currentEmotion = new MediumDispositionEmotionState(_npcInState);
 			}
 		}
 	}
@@ -233,10 +233,10 @@ public class CarpenterSonYoung : NPC {
 		
 		public override void UpdateEmotionState(){
 			if (_npcInState.GetDisposition() >= NPC.DISPOSITION_HIGH){
-				_npcInState.currentEmotion = new HighDispositionEmotionState(_npcInState);	
+				//_npcInState.currentEmotion = new HighDispositionEmotionState(_npcInState);	
 			}
 			else if (_npcInState.GetDisposition() <= NPC.DISPOSITION_LOW){
-				_npcInState.currentEmotion = new LowDispositionEmotionState(_npcInState);
+				//_npcInState.currentEmotion = new LowDispositionEmotionState(_npcInState);
 			}
 		}
 	}
@@ -336,10 +336,10 @@ public class CarpenterSonYoung : NPC {
 		
 		public override void UpdateEmotionState(){
 			if (_npcInState.GetDisposition() < NPC.DISPOSITION_HIGH){
-				_npcInState.currentEmotion = new MediumDispositionEmotionState(_npcInState);	
+				//_npcInState.currentEmotion = new MediumDispositionEmotionState(_npcInState);	
 			}
 			else if (_npcInState.GetDisposition() <= NPC.DISPOSITION_LOW){
-				_npcInState.currentEmotion = new LowDispositionEmotionState(_npcInState);
+				//_npcInState.currentEmotion = new LowDispositionEmotionState(_npcInState);
 			}
 		}
 	}

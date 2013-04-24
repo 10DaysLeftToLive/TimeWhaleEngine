@@ -80,10 +80,10 @@ public class CarpenterSonMiddle : NPC {
 			
 			public override void UpdateEmotionState(){
 				if (_npcInState.GetDisposition() >= NPC.DISPOSITION_HIGH){
-					_npcInState.currentEmotion = new CarpenterSonMiddleHighDispositionEmotionState(_npcInState);	
+					//_npcInState.currentEmotion = new CarpenterSonMiddleHighDispositionEmotionState(_npcInState);	
 				}
 				else if (_npcInState.GetDisposition() > NPC.DISPOSITION_LOW){
-					_npcInState.currentEmotion = new CarpenterSonMiddleMediumDispositionEmotionState(_npcInState);
+					//_npcInState.currentEmotion = new CarpenterSonMiddleMediumDispositionEmotionState(_npcInState);
 				}
 			}
 		}
@@ -99,10 +99,10 @@ public class CarpenterSonMiddle : NPC {
 			
 			public override void UpdateEmotionState(){
 				if (_npcInState.GetDisposition() >= NPC.DISPOSITION_HIGH){
-					_npcInState.currentEmotion = new CarpenterSonMiddleHighDispositionEmotionState(_npcInState);	
+					//_npcInState.currentEmotion = new CarpenterSonMiddleHighDispositionEmotionState(_npcInState);	
 				}
 				else if (_npcInState.GetDisposition() <= NPC.DISPOSITION_LOW){
-					_npcInState.currentEmotion = new CarpenterSonMiddleLowDispositionEmotionState(_npcInState);
+					//_npcInState.currentEmotion = new CarpenterSonMiddleLowDispositionEmotionState(_npcInState);
 				}
 			}
 		}
@@ -118,10 +118,10 @@ public class CarpenterSonMiddle : NPC {
 			
 			public override void UpdateEmotionState(){
 				if (_npcInState.GetDisposition() < NPC.DISPOSITION_HIGH){
-					_npcInState.currentEmotion = new CarpenterSonMiddleMediumDispositionEmotionState(_npcInState);	
+					//_npcInState.currentEmotion = new CarpenterSonMiddleMediumDispositionEmotionState(_npcInState);	
 				}
 				else if (_npcInState.GetDisposition() <= NPC.DISPOSITION_LOW){
-					_npcInState.currentEmotion = new CarpenterSonMiddleLowDispositionEmotionState(_npcInState);
+					//_npcInState.currentEmotion = new CarpenterSonMiddleLowDispositionEmotionState(_npcInState);
 				}
 			}
 		}
@@ -138,10 +138,10 @@ public class CarpenterSonMiddle : NPC {
 			
 			public override void UpdateEmotionState(){
 				if (_npcInState.GetDisposition() >= NPC.DISPOSITION_HIGH){
-					_npcInState.currentEmotion = new CarpenterSonMiddleHighDispositionEmotionState(_npcInState);	
+					//_npcInState.currentEmotion = new CarpenterSonMiddleHighDispositionEmotionState(_npcInState);	
 				}
 				else if (_npcInState.GetDisposition() > NPC.DISPOSITION_LOW){
-					_npcInState.currentEmotion = new CarpenterSonMiddleMediumDispositionEmotionState(_npcInState);
+					//_npcInState.currentEmotion = new CarpenterSonMiddleMediumDispositionEmotionState(_npcInState);
 				}
 			}
 		}
@@ -157,10 +157,10 @@ public class CarpenterSonMiddle : NPC {
 			
 			public override void UpdateEmotionState(){
 				if (_npcInState.GetDisposition() >= NPC.DISPOSITION_HIGH){
-					_npcInState.currentEmotion = new CarpenterSonFishermanMiddleHighDispositionEmotionState(_npcInState);	
+					//_npcInState.currentEmotion = new CarpenterSonFishermanMiddleHighDispositionEmotionState(_npcInState);	
 				}
 				else if (_npcInState.GetDisposition() <= NPC.DISPOSITION_LOW){
-					_npcInState.currentEmotion = new CarpenterSonFishermanMiddleLowDispositionEmotionState(_npcInState);
+					//_npcInState.currentEmotion = new CarpenterSonFishermanMiddleLowDispositionEmotionState(_npcInState);
 				}
 			}
 		}
@@ -176,10 +176,10 @@ public class CarpenterSonMiddle : NPC {
 			
 			public override void UpdateEmotionState(){
 				if (_npcInState.GetDisposition() < NPC.DISPOSITION_HIGH){
-					_npcInState.currentEmotion = new CarpenterSonFishermanMiddleMediumDispositionEmotionState(_npcInState);	
+					//_npcInState.currentEmotion = new CarpenterSonFishermanMiddleMediumDispositionEmotionState(_npcInState);	
 				}
 				else if (_npcInState.GetDisposition() <= NPC.DISPOSITION_LOW){
-					_npcInState.currentEmotion = new CarpenterSonFishermanMiddleLowDispositionEmotionState(_npcInState);
+					//_npcInState.currentEmotion = new CarpenterSonFishermanMiddleLowDispositionEmotionState(_npcInState);
 				}
 			}
 		}
