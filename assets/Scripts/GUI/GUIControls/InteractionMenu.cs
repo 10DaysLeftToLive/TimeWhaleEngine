@@ -110,7 +110,7 @@ public class InteractionMenu : GUIControl {
 	
 	private void DisplayLeaveButton(){
 		if (GUI.Button(leaveButtonRect, "Leave")){
-			GUIManager.Instance.CloseInteractionMenu();	
+			player.LeaveInteraction();
 		}
 	}
 	

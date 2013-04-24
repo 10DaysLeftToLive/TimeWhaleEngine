@@ -18,5 +18,6 @@ public class NPC_Click : OnClickNextToPlayer {
 	}
 	
 	protected override void DoClickNextToPlayer(){
+		Debug.Log("Click next to player");
 	}
 }
