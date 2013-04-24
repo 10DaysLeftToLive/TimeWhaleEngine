@@ -28,7 +28,7 @@ public class EmotionState {
 		GUIManager.Instance.UpdateInteractionDisplay(newText);	
 	}
 	
-	protected void SetDefaultText(string newText){
+	public void SetDefaultText(string newText){
 		_defaultTextToSay = newText;
 	}
 	

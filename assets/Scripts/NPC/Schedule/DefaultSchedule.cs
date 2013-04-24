@@ -9,6 +9,6 @@ public class DefaultSchedule : ScheduleLoop {
 	private void init() {
 		Add(new Task(new IdleState(_toManage)));
 		schedulePriority = (int)Schedule.priorityEnum.Default;
-		canChat = true;
+		canChat = false;
 	}
 }
