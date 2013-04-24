@@ -38,7 +38,9 @@ public class MotherYoung : NPC {
 		private class InitialEmotionState : EmotionState{
 		string text1 = "I can't stop you but what I can do is use a very particular set of skills. Skills I have acquired over a very long career. Skills that make me a nightmare for people like you.";
 			public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
-				_allChoiceReactions.Add(new Choice("Watch me", text1), new DispositionDependentReaction(new Reaction()));
+				Reaction changeDefaultText = new Reaction();
+				changeDefaultText.AddAction(new NPCEmotionUpdateAction(toControl, new MadEmotionState(toControl)));
+				_allChoiceReactions.Add(new Choice("Watch me", text1), new DispositionDependentReaction(changeDefaultText));
 				_allChoiceReactions.Add(new Choice("Okay Mom", "Good boy"), new DispositionDependentReaction(new Reaction()));
 			}
 			
@@ -47,5 +49,14 @@ public class MotherYoung : NPC {
 			}
 		}
 		#endregion
+	
+	private class MadEmotionState : EmotionState {
+		public MadEmotionState(NPC toControl) : base(toControl, "I can't believe you would talk to me like that."){
+		}
+		
+		public override void UpdateEmotionState(){
+			
+		}
+	}
 	#endregion
 }

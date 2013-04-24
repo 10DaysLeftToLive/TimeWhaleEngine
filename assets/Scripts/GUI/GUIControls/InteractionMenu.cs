@@ -132,6 +132,10 @@ public class InteractionMenu : GUIControl {
 	public void OpenChatForNPC(NPC _newNpcChatting){
 		Debug.Log("Opening interaction with " + _newNpcChatting);
 		npcChattingWith = _newNpcChatting;
+		Refresh();
+	}
+	
+	public void Refresh(){
 		UpdateDisplayText(GetDisplayText());
 		GetChoicesFromNPC();
 		GetPortraitTexture();
