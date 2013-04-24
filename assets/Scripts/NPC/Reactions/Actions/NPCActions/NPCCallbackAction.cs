@@ -3,7 +3,7 @@ using System.Collections;
 
 /// <summary>
 /// NPC callback action. The most customizable reaction. It will be given a function with no arguments and will call that
-/// 	when it reacts
+/// when it reacts
 /// </summary>
 public class NPCCallbackAction : Action {
 	public delegate void Callback();

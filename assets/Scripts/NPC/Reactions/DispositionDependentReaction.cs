@@ -2,6 +2,14 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// Disposition dependent reaction contains the possibility for 3 types of reaction to be called depending on the disposition
+/// of the NPC. 
+/// Has High, Default and Low reactions that can be set via SetHighReaction(Reaction) and SetLowReaction(Reaction)
+/// It must be given a default reaction but the others are optional. 
+/// If the NPC is in a disposition level that does not have a set reaction then the default reaction will be called.
+/// Performing the reaction will be handled by the system.
+/// </summary>
 public class DispositionDependentReaction {
 	private Reaction defaultReaction;
 	private Reaction highReaction = null;

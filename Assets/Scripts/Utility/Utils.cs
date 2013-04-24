@@ -38,6 +38,6 @@ public static class Utils{
 	
 	// returns the amount of time in ms
 	public static float CalcTimeToDisplayText(string text){
-		return (1000 * text.Length * .1f);
+		return (text.Length * .1f);
 	}
 }
