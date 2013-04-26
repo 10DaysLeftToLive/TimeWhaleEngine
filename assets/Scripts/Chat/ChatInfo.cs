@@ -22,4 +22,8 @@ public class ChatInfo {
 		displayTime -= deltaTime;
 		return (displayTime <= 0);	
 	}
+	
+	public float GetTime(){
+		return (displayTime);	
+	}
 }

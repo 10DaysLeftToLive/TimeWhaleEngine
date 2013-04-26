@@ -16,16 +16,21 @@ public class ScheduleStack {
 		return (current != null);
 	}
 	
-	public bool CanChat() {
-		return current.CanChat;
+	public bool CanPassiveChat() {
+		if (current == null){ // if we are transistioning we cannot chat
+			return (false);	
+		}
+		return (current.CanPassiveChat);
 	}
 	
 	// Does not run and change schedules the same tick.
-	public void Run(float timeSinceLastTick) {
+	public void Run(float timeSinceLastTick) {		
 		if (HasSchedule()) {
 			current.Run(timeSinceLastTick);
 			if (current.IsComplete()) {
 				Debug.Log("Current schedule complete");
+				Debug.Log("The next task is " + _schedulesToDo.peek());
+				_schedulesToDo.RemoveDoneFlagSchedules(current);
 				current = null;
 			}
 		} else {
@@ -40,7 +45,9 @@ public class ScheduleStack {
 	}
 		
 	public void NextSchedule() {
+		Debug.Log("Moving on to next schedule");
 		current = _schedulesToDo.Pop();
+		Debug.Log((current == null) ? "Current was null" : "Current was not null");
 		current.Resume();
 	}
 	

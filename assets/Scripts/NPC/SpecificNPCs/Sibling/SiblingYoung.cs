@@ -10,7 +10,10 @@ public class SiblingYoung : NPC {
 	}
 	
 	protected override void SetFlagReactions(){
-		
+		Reaction frogCrushing = new Reaction();
+		frogCrushing.AddAction(new ShowOneOffChatAction(this, "OmG yOu KiLleD dAt fROg!1!"));
+		frogCrushing.AddAction(new UpdateDefaultTextAction(this, "I can't belive you did that."));
+		flagReactions.Add(FlagStrings.CrushFrog, frogCrushing); 
 	}
 	
 	protected override EmotionState GetInitEmotionState(){

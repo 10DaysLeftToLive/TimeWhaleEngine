@@ -11,10 +11,12 @@ public static class Search {
     private static int start;
 	private static int destination;
 	public static int index;
+	private static int age;
 	
-	public static void ShortestPath(int startPoint, int destinationPoint)
+	public static void ShortestPath(int startPoint, int destinationPoint, int a)
     {
 		index = 0;
+		age = a;
        	vertex = Graph.wayPointCount;
 		visited = new bool [vertex];
 		path = new float [vertex];
@@ -43,11 +45,11 @@ public static class Search {
 	       visited[closest] = true;
 	       for (int i = 0; i < vertex; i++)
 	       {
-	          if (Graph.IsEdge(closest,i) > 0 && !visited[i])
+	          if (Graph.IsEdge(closest,i,age) > 0 && !visited[i])
 	          {
-				  if (path[i] > path[closest] + Graph.IsEdge(closest,i))
+				  if (path[i] > path[closest] + Graph.IsEdge(closest,i, age))
 				  {
-	              path[i] = path[closest] + Graph.IsEdge(closest,i);
+	              path[i] = path[closest] + Graph.IsEdge(closest,i, age);
 	              last[i] = closest;
 				  }
 	          }
@@ -100,7 +102,7 @@ public static class Search {
 	{
 		//PrintPath(destination);
 		OrganizePath(destination);
-		Debug.Log("path size of " + path[destination]);
+		//Debug.Log("path size of " + path[destination]);
 	}
 	
 	public static void OrganizePath(int i){

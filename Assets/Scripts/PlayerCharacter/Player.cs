@@ -88,7 +88,7 @@ public class Player : Character {
 	
 	private void OnClickOnPlayer(EventManager EM){
 		if (currentState.GetType() == typeof(TalkState)){ // if we are talking exit before doing anything else.
-			EnterState(new IdleState(this));
+			LeaveInteraction();
 		} else {
 			if (Inventory.HasItem()){
 				Inventory.DropItem(GetFeet());
@@ -198,14 +198,11 @@ public class Player : Character {
 	}
 	
 	public void ChangeAge(CharacterAge newAge, CharacterAge previousAge){
-
 		AgeSwapMover.instance.ChangeAgePosition(newAge, previousAge);
 
 		ChangeHitBox(newAge, previousAge);
 		ChangeAnimation(newAge.boneAnimation);
 		Inventory.SwapItemWithCurrentAge(newAge.boneAnimation);
-		
-		//isAffectedByGravity = true;
 	}
 	
 	private void ChangeHitBox(CharacterAge newAge, CharacterAge previousAge){
@@ -248,5 +245,9 @@ public class Player : Character {
 		}
 	}
 	
-	
+	public void LeaveInteraction(){
+		Debug.Log("Leaving interaction");
+		GUIManager.Instance.CloseInteractionMenu();
+		EnterState(new IdleState(this));
+	}
 }

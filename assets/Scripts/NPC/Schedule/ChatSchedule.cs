@@ -1,15 +1,12 @@
 using UnityEngine;
 using System.Collections;
 
-public class ChatSchedule : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+public class ChatSchedule : Schedule{
+	public ChatSchedule(NPC npcToChat, NPCChat chatToPerform) : base(npcToChat, priorityEnum.DoNow){
+		float timeToChat = chatToPerform.AddUpTimeToChat();
+		Debug.Log("Time to chat = " + timeToChat);
+		canPassiveChat = false;
+		GUIManager.Instance.AddNPCChat(chatToPerform);
+		Add(new TimeTask(timeToChat, new InteractingWithPlayerState(npcToChat)));
 	}
 }

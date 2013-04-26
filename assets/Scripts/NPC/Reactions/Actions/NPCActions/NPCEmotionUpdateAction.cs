@@ -10,5 +10,6 @@ public class NPCEmotionUpdateAction : NPCValueUpdateAction {
 	
 	public override void Perform(){
 		npcToUpdate.UpdateEmotionState(newEmotionState);
+		GUIManager.Instance.RefreshInteraction();
 	}
 }

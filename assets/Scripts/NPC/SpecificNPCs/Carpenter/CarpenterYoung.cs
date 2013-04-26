@@ -18,14 +18,14 @@ public class CarpenterYoung : NPC {
 	}
 	
 	protected override Schedule GetSchedule(){
-		Schedule schedule = new Schedule(this);
-		
-		Task standAround = new Task(new IdleState(this));
-		
-		schedule.Add(standAround);
-		
+		Schedule schedule = new DefaultSchedule(this);
 		return (schedule);
 	}
+
+	protected override void SetUpSchedules(){
+		
+	}
+	
 	
 	#region EmotionStates
 		#region Initial Emotion State

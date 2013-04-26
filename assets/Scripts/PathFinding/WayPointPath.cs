@@ -3,7 +3,7 @@ using System.Collections;
 
 public class WayPointPath {
 	
-	private static float NEXTFLOOR = 3f; // how close will the y positions be until looking for up/down paths
+	private static float NEXTFLOOR = 5f; // how close will the y positions be until looking for up/down paths
 														
 	private static Vector3[] points;
 	private static int index;
@@ -19,16 +19,20 @@ public class WayPointPath {
 		Vector3 heading = SetHeading(startPos,destination);
 		
 		GameObject start = GetPoint(startPos, mask, heading);
+		//Debug.Log("starting point " + start);
 		heading = SetHeading(destination, startPos);
 		GameObject end = GetPoint(destination, mask, heading);
-		if (start == null || end == null) return false;
+		//Debug.Log("ending point " + end);
+		if (start == null || end == null) return AddPoint(destination);//return false;
 		WayPoints startScript = GetScript(start);
 		WayPoints endScript = GetScript(end);
 		currentAge = (int)startScript.pointAge;
 		if (Vector3.Distance(startPos, startScript.GetFloorPosition()) > Vector3.Distance(startPos, destination) && !PathToOtherFloor(startPos,destination)) 
 			return AddPoint(destination);
-		Search.ShortestPath(startScript.id, endScript.id);
+		Search.ShortestPath(startScript.id, endScript.id, (int)startScript.pointAge);
 		Search.Compute();
+		Search.print();
+		//Search.Output();
 		return AddArray(destination);
 	}
 	
@@ -60,10 +64,10 @@ public class WayPointPath {
 	}
 	
 	private static bool CheckExtraPoints(int first, int second, int third){
-		if (CheckAngle(first,second) || CheckAngle (second, third))
+		/*if (CheckAngle(first,second) || CheckAngle (second, third))
 			return false;
 		if (PathToOtherFloor(points[first], points[second]) || PathToOtherFloor(points[second], points[third]))
-			return false;
+			return false;*/
 		float dif1 = Utils.CalcDifference(points[first].x, points[second].x);
 		dif1 /= Mathf.Abs(dif1);
 		

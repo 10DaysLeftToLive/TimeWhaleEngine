@@ -65,7 +65,15 @@ public class GUIManager : MonoBehaviour {
 		RenderControls();
 	}
 	
+	public void RefreshInteraction(){
+		interactionMenu.Refresh();	
+	}
+	
 	public void CloseInteractionMenu(){
+		if (!ControlActive(interactionMenu)){
+			Debug.LogError("Can't update interaction display when it is not up.");
+			return;
+		}
 		MarkControlForRemoval(interactionMenu);	
 	}
 	

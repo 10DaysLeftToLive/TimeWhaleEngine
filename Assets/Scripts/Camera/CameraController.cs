@@ -15,7 +15,7 @@ public class CameraController : MonoBehaviour {
 	static private float farthestZoomDistnace = 2f;
 	static private float zoomingIncrement = .075f;
 	
-	static private float yOffsetRelativeToTarget = 1;
+	static private float yOffsetRelativeToTarget = 3.5f;
 	static private float zOffsetRelativeToPlayer = - 10;
 	
 	static private Camera thisCamera;

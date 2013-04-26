@@ -42,7 +42,7 @@ public class InteractionMenu : GUIControl {
 	private static float PORTRAITWIDTH = .2f;
 	private static int GIVEITEMBUTTON = 3; // index in rect list for wher give button should go
 	private static float LEAVEBUTTONHEIGHT = .15f;
-	private static int charPerLine = 60;
+	private static int charPerLine = 45;
 	#endregion
 	
 	public override void Init(){
@@ -110,7 +110,7 @@ public class InteractionMenu : GUIControl {
 	
 	private void DisplayLeaveButton(){
 		if (GUI.Button(leaveButtonRect, "Leave")){
-			GUIManager.Instance.CloseInteractionMenu();	
+			player.LeaveInteraction();
 		}
 	}
 	
@@ -132,13 +132,17 @@ public class InteractionMenu : GUIControl {
 	public void OpenChatForNPC(NPC _newNpcChatting){
 		Debug.Log("Opening interaction with " + _newNpcChatting);
 		npcChattingWith = _newNpcChatting;
+		Refresh();
+	}
+	
+	public void Refresh(){
 		UpdateDisplayText(GetDisplayText());
 		GetChoicesFromNPC();
 		GetPortraitTexture();
 	}
 	
 	public void UpdateDisplayText(string newText){
-		mainDisplayText = newText;
+		mainDisplayText = ParseMessage(newText);
 	}
 	
 	private void GetChoicesFromNPC(){

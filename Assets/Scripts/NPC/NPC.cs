@@ -18,7 +18,8 @@ public abstract class NPC : Character {
 	protected Dictionary<string, Reaction> flagReactions;
 	
 	private Player player;
-	private bool chating = false;
+	private bool chatingWithPlayer = false;
+	public bool chatingWithNPC = false;
 	private Texture charPortrait;
 	#endregion
 	
@@ -39,6 +40,7 @@ public abstract class NPC : Character {
 		NPCManager.instance.Add(this.gameObject);
 		scheduleStack = new ScheduleStack();
 		flagReactions = new Dictionary<string, Reaction>();
+		SetUpSchedules();
 		SetFlagReactions();
 		scheduleStack.Add(GetSchedule());
 	}
@@ -61,8 +63,10 @@ public abstract class NPC : Character {
 	
 	#region Update
 	protected override void CharacterUpdate(){
-		if (chating && !NearPlayer()){
+		if (chatingWithPlayer && !NearPlayer()){
 			CloseChat();
+		} else {
+			PassiveChat();
 		}
 		scheduleStack.Run(Time.deltaTime);
 	}
@@ -70,24 +74,36 @@ public abstract class NPC : Character {
 	
 	#region Chat/Interaction 
 	private void PassiveChat(){
-		if (scheduleStack.CanChat()) {
+		if (scheduleStack.CanPassiveChat()) {
 			if (InChatDistance(player.gameObject)) {
 				// Say hi (one off chat)
-			} else {
+			} else if (InSight(player.gameObject)) {
+				//Debug.Log("Trying to chat");
 				// Try to start conversation with nearby NPC or say hi (one off chat) if the player is in sight
 				Dictionary<string, GameObject> npcDict = NPCManager.instance.getNPCDictionary();
 				NPC npcClass;
 				foreach (var npc in npcDict.Values) {
 					npcClass = npc.GetComponent<NPC>();
 					if(npcClass != this && InChatDistance(npc)) {
-						if (InSight(player.gameObject)) {
-							if (RequestChat(npcClass)) {
-								// chat Schedule
-								break;
-							} else { 
-								// Say hi (one off chat)
-								break;
-							}
+						if (RequestChat(npcClass) && this.scheduleStack.CanPassiveChat()) {
+							// chat Schedule
+							/*Debug.Log("Going to chat");
+							List<ChatInfo> chats = new List<ChatInfo>();
+							chats.Add(new ChatInfo(this, "Chat 1"));
+							chats.Add(new ChatInfo(npcClass, "Chat 2"));
+							chats.Add(new ChatInfo(this, "Chat 3"));
+							chats.Add(new ChatInfo(npcClass, "Chat 4"));
+							chats.Add(new ChatInfo(this, "Chat 5"));
+							NPCChat tempChat = new NPCChat(chats);
+							ChatSchedule chatSchedule1 = new ChatSchedule(this, tempChat);
+							this.AddSchedule(chatSchedule1);
+							ChatSchedule chatSchedule2 = new ChatSchedule(npcClass, tempChat);
+							npcClass.AddSchedule(chatSchedule2);
+							chatingWithNPC = true;*/
+							break;
+						} else { 
+							// Say hi (one off chat)
+							break;
 						}
 					}
 				}	
@@ -96,7 +112,7 @@ public abstract class NPC : Character {
 	}
 	
 	public bool RequestChat(NPC npc) {
-		if (npc.scheduleStack.CanChat()) {
+		if (npc.scheduleStack.CanPassiveChat()) {
 			return true;
 		} else {
 			return false;
@@ -120,9 +136,22 @@ public abstract class NPC : Character {
 	public void StarTalkingWithPlayer(){
 		EnterState(new InteractingWithPlayerState(this));
 	}
+	
+	public void UpdateDefaultText(string newText){
+		currentEmotion.SetDefaultText(newText);	
+	}
 	#endregion	
 	
-	#region Functions specific to eahc NPC
+	#region Schedule
+	public void AddSchedule(Schedule scheduleToAdd){
+		scheduleStack.Add(scheduleToAdd);	
+	}
+	
+	// Can be overriden by children. Is recomended to do this.
+	protected virtual void SetUpSchedules(){}
+	#endregion
+	
+	#region Functions specific to each NPC
 	protected abstract void SetFlagReactions();
 	protected abstract Schedule GetSchedule(); // TODO read/set this from file?
 	protected abstract EmotionState GetInitEmotionState();
