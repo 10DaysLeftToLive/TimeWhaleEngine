@@ -15,9 +15,9 @@ public class Schedule {
 	protected Queue<Task> _tasksToDo;
 	protected NPC _toManage;
 	protected Task current;
-	protected bool canChat = false;
-	public bool CanChat {
-		get { return canChat; }
+	protected bool canPassiveChat = false; // Should only be true for priorities that are low or less
+	public bool CanPassiveChat {
+		get { return canPassiveChat; }
 	}
 	public int schedulePriority; // high 1 - 10 low
 	
@@ -56,7 +56,7 @@ public class Schedule {
 	}
 	
 	public void SetCanChat(bool _canChat){
-		canChat = _canChat;
+		canPassiveChat = _canChat;
 	}
 	
 	public void Run(float timeSinceLastTick){

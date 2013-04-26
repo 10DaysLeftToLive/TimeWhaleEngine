@@ -74,7 +74,7 @@ public abstract class NPC : Character {
 	
 	#region Chat/Interaction 
 	private void PassiveChat(){
-		if (scheduleStack.CanChat()) {
+		if (scheduleStack.CanPassiveChat()) {
 			if (InChatDistance(player.gameObject)) {
 				// Say hi (one off chat)
 			} else if (InSight(player.gameObject)) {
@@ -85,7 +85,7 @@ public abstract class NPC : Character {
 				foreach (var npc in npcDict.Values) {
 					npcClass = npc.GetComponent<NPC>();
 					if(npcClass != this && InChatDistance(npc)) {
-						if (RequestChat(npcClass) && this.scheduleStack.CanChat()) {
+						if (RequestChat(npcClass) && this.scheduleStack.CanPassiveChat()) {
 							// chat Schedule
 							/*Debug.Log("Going to chat");
 							List<ChatInfo> chats = new List<ChatInfo>();
@@ -112,7 +112,7 @@ public abstract class NPC : Character {
 	}
 	
 	public bool RequestChat(NPC npc) {
-		if (npc.scheduleStack.CanChat()) {
+		if (npc.scheduleStack.CanPassiveChat()) {
 			return true;
 		} else {
 			return false;
