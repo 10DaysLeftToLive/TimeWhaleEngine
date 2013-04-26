@@ -16,11 +16,11 @@ public class ScheduleStack {
 		return (current != null);
 	}
 	
-	public bool CanChat() {
+	public bool CanPassiveChat() {
 		if (current == null){ // if we are transistioning we cannot chat
 			return (false);	
 		}
-		return (current.CanChat);
+		return (current.CanPassiveChat);
 	}
 	
 	// Does not run and change schedules the same tick.
@@ -30,6 +30,7 @@ public class ScheduleStack {
 			if (current.IsComplete()) {
 				Debug.Log("Current schedule complete");
 				Debug.Log("The next task is " + _schedulesToDo.peek());
+				_schedulesToDo.RemoveDoneFlagSchedules(current);
 				current = null;
 			}
 		} else {

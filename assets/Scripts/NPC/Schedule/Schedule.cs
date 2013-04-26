@@ -12,12 +12,13 @@ using System.Collections.Generic;
  *  See Task and TimeTask for the basics of what you can schedule
  */
 public class Schedule {
+	public List<List<string>> flagList;
 	protected Queue<Task> _tasksToDo;
 	protected NPC _toManage;
 	protected Task current;
-	protected bool canChat = false;
-	public bool CanChat {
-		get { return canChat; }
+	protected bool canPassiveChat = false; // Should only be true for priorities that are low or less
+	public bool CanPassiveChat {
+		get { return canPassiveChat; }
 	}
 	public int schedulePriority; // high 1 - 10 low
 	
@@ -33,18 +34,21 @@ public class Schedule {
 		_tasksToDo = new Queue<Task>();
 		_toManage = toManage;
 		schedulePriority = (int)priorityEnum.Low;
+		flagList = new List<List<string>>();
 	}
 	
 	public Schedule(NPC toManage, Enum priority){
 		_tasksToDo = new Queue<Task>();
 		_toManage = toManage;
 		schedulePriority = Convert.ToInt32(priority);
+		flagList = new List<List<string>>();
 	}
 	
 	public Schedule(Queue<Task> tasksToDo, NPC toManage, Enum priority){
 		_tasksToDo = tasksToDo;
 		_toManage = toManage;
 		schedulePriority = Convert.ToInt32(priority);
+		flagList = new List<List<string>>();
 	}
 	
 	~Schedule() {
@@ -55,8 +59,21 @@ public class Schedule {
 		return (current != null);
 	}
 	
+	
+	#region Flags To Add
+	public void AddFlagGroup(string flag) {
+		List<string> newFlagList = new List<string>();
+		newFlagList.Add(flag);
+	}
+	
+	public void AddFlagGroup(List<string> flags) {
+		flagList.Add(flags);
+	}
+	#endregion
+	
+	// REMOVE - for testing
 	public void SetCanChat(bool _canChat){
-		canChat = _canChat;
+		canPassiveChat = _canChat;
 	}
 	
 	public void Run(float timeSinceLastTick){

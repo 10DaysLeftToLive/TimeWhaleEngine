@@ -113,18 +113,18 @@ public class MoveState : AbstractState {
         if (Physics.Raycast(_goal, Vector3.down , out hit, 10, mask)) {
             Vector3 hitPos = hit.point;
             hitPos.y += character.transform.localScale.y/2;
-            //Debug.Log("ground at " + hitPos);
+            Debug.Log("ground at " + hitPos);
             
-            _pathFollowing = new Path();
+            /*_pathFollowing = new Path();
             _pathFollowing = QuickPath.StraightPath(character.transform.position, hitPos, character.transform.localScale.y/2);
-            return true;
+            return true;*/
             
-            /*if (WayPointPath.CheckForPath(character.transform.position, hitPos, character.transform.localScale.y/2)){
+            if (WayPointPath.CheckForPath(character.transform.position, hitPos, character.transform.localScale.y/2)){
                 _pathFollowing = new Path();
                 _pathFollowing = WayPointPath.GetPath();
                 
                 return (true);
-            }*/
+            }
         } return (false);
     }
     

@@ -8,10 +8,19 @@ public static class Graph {
 	private static float[,] distance;
 	private static int[] closedPoints;
 	
-	public static void Init(GameObject point){
+	private static float [,] distanceYoung, distanceMiddle, distanceOld;
+	
+	public static void Initialize(){
 		wayPointPosition = new Vector3[wayPointCount];
 		closedPoints = new int[wayPointCount];
-		distance = new float[wayPointCount,wayPointCount];
+		distance = new float[wayPointCount,wayPointCount];	
+		distanceYoung = new float[wayPointCount,wayPointCount];	
+		distanceMiddle = new float[wayPointCount,wayPointCount];	
+		distanceOld = new float[wayPointCount,wayPointCount];	
+	}
+	
+	public static void StartGraph(GameObject point, int age){
+		//Debug.Log("starting with " + point.name);
 		for (int i = 0; i < wayPointCount; i++) 
 			{
 			closedPoints[i] = 0;
@@ -19,7 +28,14 @@ public static class Graph {
 				distance[i,j] = 0;
 			}
 		MakeGraph(point);
-		graphOutput();
+		
+		switch(age){
+		case 0: distanceYoung = distance;  break;
+		case 1: distanceMiddle = distance; break;
+		case 2: distanceOld = distance; break;
+		}
+		
+		//graphOutput();
 	}
 	
 	private static void RemoveEdge(int i, int j) 
@@ -41,6 +57,19 @@ public static class Graph {
 		}
 	}
 	
+	public static float IsEdge(int i, int j, int age) 
+	{
+		if (i >= 0 && i < wayPointCount && j >= 0 && j < wayPointCount){
+			switch(age){
+			case 0: return distanceYoung[i,j]; break;
+			case 1: return distanceMiddle[i,j]; break;
+			case 2: return distanceOld[i,j]; break;
+			}
+			return distance[i,j];
+		}else
+			return 0;
+	}
+	
 	public static float IsEdge(int i, int j) 
 	{
 		if (i >= 0 && i < wayPointCount && j >= 0 && j < wayPointCount){
@@ -59,7 +88,7 @@ public static class Graph {
 		if (pointScript.CheckLeft()){
 			temp = pointScript.GetLeft();
 			tempScript = GetScript(temp);
-			if (!CheckPastPoints(tempScript.id)){
+			if (!CheckPastPoints(tempScript.id) || IsEdge(pointScript.id, tempScript.id) == 0){
 				AddEdge(pointScript.id, tempScript.id, pointScript.leftDistance);
 				closedPoints[tempScript.id] = 1;
 				MakeGraph(temp);
@@ -69,7 +98,7 @@ public static class Graph {
 		if (pointScript.CheckUp()){
 			temp = pointScript.GetUp();
 			tempScript = GetScript(temp);
-			if (!CheckPastPoints(tempScript.id)){
+			if (!CheckPastPoints(tempScript.id) || IsEdge(pointScript.id, tempScript.id) == 0){
 				AddEdge(pointScript.id, tempScript.id, pointScript.upDistance);
 				closedPoints[tempScript.id] = 1;
 				MakeGraph(temp);
@@ -78,7 +107,7 @@ public static class Graph {
 		if (pointScript.CheckDown()){
 			temp = pointScript.GetDown();
 			tempScript = GetScript(temp);
-			if (!CheckPastPoints(tempScript.id)){
+			if (!CheckPastPoints(tempScript.id) || IsEdge(pointScript.id, tempScript.id) == 0){
 				AddEdge(pointScript.id, tempScript.id, pointScript.downDistance);
 				closedPoints[tempScript.id] = 1;
 				MakeGraph(temp);
@@ -87,7 +116,7 @@ public static class Graph {
 		if (pointScript.CheckRight()){
 			temp = pointScript.GetRight();
 			tempScript = GetScript(temp);
-			if (!CheckPastPoints(tempScript.id)){
+			if (!CheckPastPoints(tempScript.id) || IsEdge(pointScript.id, tempScript.id) == 0){
 				AddEdge(pointScript.id, tempScript.id, pointScript.rightDistance);
 				closedPoints[tempScript.id] = 1;
 				MakeGraph(temp);
@@ -114,7 +143,7 @@ public static class Graph {
 			for (int j = 0; j < wayPointCount; j++)
 			{
 				if (distance[i,j] != 0){
-					//Debug.Log("i: " + i + ", j " + j + " distance " + distance[i,j]);
+					Debug.Log("i: " + i + ", j " + j + " distance " + distance[i,j]);
 				}
 			}
 		}

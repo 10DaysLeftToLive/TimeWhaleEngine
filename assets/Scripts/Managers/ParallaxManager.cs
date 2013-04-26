@@ -2,10 +2,10 @@ using UnityEngine;
 using System.Collections;
 
 public class ParallaxManager : MonoBehaviour {
-	public float speedOne = 2.5F;
-	public float speedTwo = 2.0F;
-	public float speedThree = 1.5F;
-	public float speedFour = 1.2F;
+	public float speedOne = 0.175F;
+	public float speedTwo = 0.1F;
+	public float speedThree = 0.05F;
+	public float speedFour = 0.025F;
 	private Player player;
 	private Vector3 prevPos;
 	private Vector3 deltaPos;
