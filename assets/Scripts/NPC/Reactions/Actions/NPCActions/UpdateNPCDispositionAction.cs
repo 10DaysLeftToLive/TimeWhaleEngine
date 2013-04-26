@@ -2,13 +2,13 @@ using UnityEngine;
 using System.Collections;
 
 public class UpdateNPCDispositionAction : NPCValueUpdateAction {
-	int newDisposition;
+	int deltaDisposition;
 	
-	public UpdateNPCDispositionAction(NPC _npcToUpdate, int _newDisposition) : base(_npcToUpdate) {
-		newDisposition = _newDisposition;
+	public UpdateNPCDispositionAction(NPC _npcToUpdate, int _deltaDisposition) : base(_npcToUpdate) {
+		deltaDisposition = _deltaDisposition;
 	}
 	
 	public override void Perform(){
-		npcToUpdate.UpdateDisposition(newDisposition);
+		npcToUpdate.UpdateDisposition(deltaDisposition);
 	}
 }
