@@ -30,6 +30,7 @@ public class ScheduleStack {
 			if (current.IsComplete()) {
 				Debug.Log("Current schedule complete");
 				Debug.Log("The next task is " + _schedulesToDo.peek());
+				_schedulesToDo.RemoveDoneFlagSchedules(current);
 				current = null;
 			}
 		} else {

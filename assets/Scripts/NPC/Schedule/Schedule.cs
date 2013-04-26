@@ -12,6 +12,11 @@ using System.Collections.Generic;
  *  See Task and TimeTask for the basics of what you can schedule
  */
 public class Schedule {
+	public List<string> flagList;
+	protected bool endOnFirstFlagCompleted = false; // When flags are checked to remove schedules, this says if it is removed if one flag in its list is done (true) or all (false)
+	public bool EndOnFirstFlagCompleted {
+		get { return endOnFirstFlagCompleted; }
+	}
 	protected Queue<Task> _tasksToDo;
 	protected NPC _toManage;
 	protected Task current;
@@ -33,18 +38,21 @@ public class Schedule {
 		_tasksToDo = new Queue<Task>();
 		_toManage = toManage;
 		schedulePriority = (int)priorityEnum.Low;
+		flagList = new List<string>();
 	}
 	
 	public Schedule(NPC toManage, Enum priority){
 		_tasksToDo = new Queue<Task>();
 		_toManage = toManage;
 		schedulePriority = Convert.ToInt32(priority);
+		flagList = new List<string>();
 	}
 	
 	public Schedule(Queue<Task> tasksToDo, NPC toManage, Enum priority){
 		_tasksToDo = tasksToDo;
 		_toManage = toManage;
 		schedulePriority = Convert.ToInt32(priority);
+		flagList = new List<string>();
 	}
 	
 	~Schedule() {
@@ -55,6 +63,11 @@ public class Schedule {
 		return (current != null);
 	}
 	
+	public void AddFlag(string flag) {
+		flagList.Add(flag);
+	}
+	
+	// REMOVE - for testing
 	public void SetCanChat(bool _canChat){
 		canPassiveChat = _canChat;
 	}

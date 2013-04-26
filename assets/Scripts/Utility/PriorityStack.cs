@@ -49,4 +49,22 @@ public class PriorityStack {
 			return false;
 		}
     }
+	
+	public void RemoveDoneFlagSchedules(Schedule current) {
+		foreach (string flag in current.flagList) {
+			foreach (Schedule sched in _schedulesToDo) {
+				if (sched.flagList.Contains(flag)) {
+					if (sched.EndOnFirstFlagCompleted) {
+						_schedulesToDo.Remove(sched);
+					} else {
+						if (sched.flagList.Count == 1) {
+							_schedulesToDo.Remove(sched);
+						} else { 
+							sched.flagList.Remove(flag);
+						}
+					}
+				} 
+			}
+		}
+	}
 }
