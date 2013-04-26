@@ -50,20 +50,19 @@ public class PriorityStack {
 		}
     }
 	
+	// Uses magic
 	public void RemoveDoneFlagSchedules(Schedule current) {
-		foreach (string flag in current.flagList) {
-			foreach (Schedule sched in _schedulesToDo) {
-				if (sched.flagList.Contains(flag)) {
-					if (sched.EndOnFirstFlagCompleted) {
-						_schedulesToDo.Remove(sched);
-					} else {
-						if (sched.flagList.Count == 1) {
+		foreach (List<string> flagGroupCur in current.flagList) {
+			foreach (string flagCur in flagGroupCur) {
+				foreach (Schedule sched in _schedulesToDo) {
+					foreach (List<string> flagGroupSched in sched.flagList) {
+						if (flagGroupSched.Count == 1 && flagGroupSched.Contains(flagCur)) {
 							_schedulesToDo.Remove(sched);
-						} else { 
-							sched.flagList.Remove(flag);
+						} else {
+							flagGroupSched.Remove(flagCur);
 						}
 					}
-				} 
+				}
 			}
 		}
 	}
