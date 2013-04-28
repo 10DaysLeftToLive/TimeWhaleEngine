@@ -12,6 +12,7 @@ public class NPCConvoSchedule : Schedule {
 	protected ChatInfo chatInfo;
 	protected NPCChat chatToPerform;
 	protected NPC npcNotTalking;
+	protected NPC npcTalking;
 	
 	public NPCConvoSchedule(NPC npcOne, NPC npcTwo, NPCConversation conversation) : base(npcOne) {
 		SetConvoTasks(conversation);
@@ -19,21 +20,23 @@ public class NPCConvoSchedule : Schedule {
 	
 	protected void SetConvoTasks(NPCConversation convo) {
 		foreach (Dialogue textToSay in convo.convoList) {
-			chatInfo = new ChatInfo(textToSay._npc, textToSay._TextToSay);
+			if (textToSay._npc == 1) {
+				npcNotTalking = _npcTwo;
+				npcTalking = _toManage;
+			} else {
+				npcNotTalking = _toManage;
+				npcTalking = _npcTwo;
+			}
+			
+			chatInfo = new ChatInfo(npcTalking, textToSay._TextToSay);
 			chatInfoList = new List<ChatInfo>();
 			chatInfoList.Add(chatInfo);
 			chatToPerform = new NPCChat(chatInfoList);
 			float timeToChat = chatToPerform.AddUpTimeToChat();
 			
-			if (textToSay._npc == _toManage) {
-				npcNotTalking = _npcTwo;
-			} else {
-				npcNotTalking = _toManage;
-			}
+			Add (new TimeTask(timeToChat, new NPCConvoState((Character)npcTalking, (Character)npcNotTalking, chatToPerform)));
 			
-			Add (new TimeTask(timeToChat, new NPCConvoState((Character)textToSay._npc, (Character)npcNotTalking, chatToPerform)));
-			
-			_npcTalkingQueue.Enqueue(textToSay._npc);
+			_npcTalkingQueue.Enqueue(npcTalking);
 		}
 	}
 	
@@ -73,9 +76,9 @@ public class NPCConvoSchedule : Schedule {
 			
 			current = _tasksToDo.Dequeue();
 			Debug.Log("There are " + _tasksToDo.Count + " tasks");
-			_npcTalking = _npcTalkingQueue.Dequeue();
+			npcTalking = _npcTalkingQueue.Dequeue();
 			
-			if (_npcTalking = _toManage) {
+			if (npcTalking == _toManage) {
 				Debug.Log(_toManage.name + " is now switching to " + current.StatePerforming);
 				_toManage.ForceChangeToState(current.StatePerforming);
 				currentListening = new Task(new IdleState(_npcTwo));

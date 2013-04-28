@@ -21,6 +21,7 @@ public class NPCConvoState : AbstractState {
 		
 		Debug.Log(character.name + ": NPCConvoState Enter");
 		character.PlayAnimation(Strings.animation_stand); // Should be a talk animation
+		_toTalkWith.PlayAnimation(Strings.animation_stand);
 	}
 	
 	public override void OnExit(){
