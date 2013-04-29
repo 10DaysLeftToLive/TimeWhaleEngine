@@ -113,15 +113,11 @@ public class MoveState : AbstractState {
         if (Physics.Raycast(_goal, Vector3.down , out hit, 10, mask)) {
             Vector3 hitPos = hit.point;
             hitPos.y += character.transform.localScale.y/2;
-            Debug.Log("ground at " + hitPos);
+            //Debug.Log("ground at " + hitPos);
             
-            /*_pathFollowing = new Path();
-            _pathFollowing = QuickPath.StraightPath(character.transform.position, hitPos, character.transform.localScale.y/2);
-            return true;*/
-            
-            if (WayPointPath.CheckForPath(character.transform.position, hitPos, character.transform.localScale.y/2)){
+            if (PathFinding.GetPathForPoints(character.transform.position, hitPos, character.transform.localScale.y/2)){
                 _pathFollowing = new Path();
-                _pathFollowing = WayPointPath.GetPath();
+                _pathFollowing = PathFinding.GetPath();
                 
                 return (true);
             }
@@ -129,7 +125,7 @@ public class MoveState : AbstractState {
     }
     
     protected virtual bool PathSearch(Vector3 pos, Vector3 hitPos, float height){
-        return (PathFinding.StartPath(pos, hitPos, height));
+        return (PathFinding.GetPathForPoints(pos, hitPos, height));
     }
     
     // Draw a line from the current position to the point and determine if we should walk or climb there

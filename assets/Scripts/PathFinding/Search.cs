@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public static class Search {
-	
+
     private static bool[] visited; // has the vertex been visted by algorithm
     private static float[] path; // distance between 2 vertecies
     private static int[] last; // last vertex visited
@@ -11,12 +11,10 @@ public static class Search {
     private static int start;
 	private static int destination;
 	public static int index;
-	private static int age;
-	
-	public static void ShortestPath(int startPoint, int destinationPoint, int a)
+
+	public static void ShortestPath(int startPoint, int destinationPoint)
     {
 		index = 0;
-		age = a;
        	vertex = Graph.wayPointCount;
 		visited = new bool [vertex];
 		path = new float [vertex];
@@ -33,7 +31,7 @@ public static class Search {
        	}
        	path[start] = 0; // Sets the starting location of Dijkstra’s algorithm
     }
-	
+
 	// Finds shortest path from start to destination
     public static void Compute()
     {
@@ -45,20 +43,19 @@ public static class Search {
 	       visited[closest] = true;
 	       for (int i = 0; i < vertex; i++)
 	       {
-	          if (Graph.IsEdge(closest,i,age) > 0 && !visited[i])
+	          if (Graph.IsEdge(closest,i) > 0 && !visited[i])
 	          {
-				  if (path[i] > path[closest] + Graph.IsEdge(closest,i, age))
+				  if (path[i] > path[closest] + Graph.IsEdge(closest,i))
 				  {
-	              path[i] = path[closest] + Graph.IsEdge(closest,i, age);
+	              path[i] = path[closest] + Graph.IsEdge(closest,i);
 	              last[i] = closest;
 				  }
 	          }
-	         
+
 	       }    
 	   }
-	
     }
-	
+
 	// Returns adjacent vertex with minimum edge
     private static int Minimum()
     {
@@ -74,7 +71,7 @@ public static class Search {
 	    }
 	    return point;
     }
-	
+
 	private static void PrintPath(int i)
 		{
 			if (i == start)
@@ -98,22 +95,38 @@ public static class Search {
 			}
 		}
 
-	public static void Output()
+	public static void Output(int dest)
 	{
 		//PrintPath(destination);
-		OrganizePath(destination);
-		//Debug.Log("path size of " + path[destination]);
+		Debug.Log("path size of " + path[dest]);
 	}
-	
+
+	public static float GetPathSize(int a){
+		return path[a];	
+	}
+
+	public static int GetPathPoints(int a){
+		return last[a];	
+	}
+
 	public static void OrganizePath(int i){
 		if (i != start)
 			OrganizePath(last[i]);
 		completePath[index] = i;
 		index++;
 	}
-	
-	public static Vector3[] GetVectors(){
-		OrganizePath(destination);
+
+	public static void OrganizePath(int i, int start){
+		if (i != start)
+			OrganizePath(WayPointPath.pathPoints[start,i], start);
+		completePath[index] = i;
+		index++;
+	}
+
+	public static Vector3[] GetVectors(int dest, int start){
+		index = 0;
+		completePath = new int [vertex];
+		OrganizePath(dest, start);
 		Vector3[] vectorPath = new Vector3[index];
 		for (int i = 0; i < index; i++){
 			vectorPath[i] = Graph.wayPointPosition[completePath[i]];
@@ -121,12 +134,12 @@ public static class Search {
 		}
 		return vectorPath;
 	}
-	
+
 	public static void print(){
 		for (int i = 0; i < index; i++){
 			Debug.Log(completePath[i]);
 		}
 	}
-	
+
 
 }

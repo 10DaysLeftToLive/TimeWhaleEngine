@@ -2,25 +2,19 @@ using UnityEngine;
 using System.Collections;
 
 public static class Graph {
-	
+
 	public static int wayPointCount = 35;
 	public static Vector3[] wayPointPosition;
 	private static float[,] distance;
 	private static int[] closedPoints;
-	
-	private static float [,] distanceYoung, distanceMiddle, distanceOld;
-	
+
 	public static void Initialize(){
 		wayPointPosition = new Vector3[wayPointCount];
 		closedPoints = new int[wayPointCount];
 		distance = new float[wayPointCount,wayPointCount];	
-		distanceYoung = new float[wayPointCount,wayPointCount];	
-		distanceMiddle = new float[wayPointCount,wayPointCount];	
-		distanceOld = new float[wayPointCount,wayPointCount];	
 	}
-	
-	public static void StartGraph(GameObject point, int age){
-		//Debug.Log("starting with " + point.name);
+
+	public static void StartGraph(GameObject point){
 		for (int i = 0; i < wayPointCount; i++) 
 			{
 			closedPoints[i] = 0;
@@ -28,16 +22,8 @@ public static class Graph {
 				distance[i,j] = 0;
 			}
 		MakeGraph(point);
-		
-		switch(age){
-		case 0: distanceYoung = distance;  break;
-		case 1: distanceMiddle = distance; break;
-		case 2: distanceOld = distance; break;
-		}
-		
-		//graphOutput();
 	}
-	
+
 	private static void RemoveEdge(int i, int j) 
 	{
 		if (i >= 0 && i < wayPointCount && j > 0 && j < wayPointCount) 
@@ -46,7 +32,7 @@ public static class Graph {
 			distance[j,i] = 0;
 		}
 	}
-	
+
 	private static void AddEdge(int i, int j, float dist) 
 	{
 		if (i >= 0 && i < wayPointCount && j >= 0 && j < wayPointCount) 
@@ -56,20 +42,7 @@ public static class Graph {
 			//Debug.Log("added " + i + ", " + j + " of " + dist);
 		}
 	}
-	
-	public static float IsEdge(int i, int j, int age) 
-	{
-		if (i >= 0 && i < wayPointCount && j >= 0 && j < wayPointCount){
-			switch(age){
-			case 0: return distanceYoung[i,j]; break;
-			case 1: return distanceMiddle[i,j]; break;
-			case 2: return distanceOld[i,j]; break;
-			}
-			return distance[i,j];
-		}else
-			return 0;
-	}
-	
+
 	public static float IsEdge(int i, int j) 
 	{
 		if (i >= 0 && i < wayPointCount && j >= 0 && j < wayPointCount){
@@ -77,7 +50,7 @@ public static class Graph {
 		}else
 			return 0;
 	}
-	
+
 	private static void MakeGraph(GameObject point)
 	{
 		GameObject temp;
@@ -94,7 +67,7 @@ public static class Graph {
 				MakeGraph(temp);
 			}
 		}
-		
+
 		if (pointScript.CheckUp()){
 			temp = pointScript.GetUp();
 			tempScript = GetScript(temp);
@@ -123,21 +96,21 @@ public static class Graph {
 			}
 		}
 	}
-	
+
 	private static WayPoints GetScript(GameObject point){
 		WayPoints script = point.GetComponent<WayPoints>();
 		return script;
 	}
-	
+
 	private static bool CheckPastPoints(int id){
 		if(closedPoints[id] != 0)
 			return true;
 		return false;
 	}
-	
-	public static void graphOutput()
+
+	public static void graphOutput(int age)
 	{
-		
+
 		for (int i = 0; i < wayPointCount; i++)
 		{
 			for (int j = 0; j < wayPointCount; j++)
