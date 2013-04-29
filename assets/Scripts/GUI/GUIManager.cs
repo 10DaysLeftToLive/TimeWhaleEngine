@@ -44,6 +44,14 @@ public class GUIManager : MonoBehaviour {
 		chatMenu.AddChat(npcChatToAdd);
 	}
 	
+	public void AddInGameMenu(){
+		if (ControlActive(chatMenu)){
+			Debug.LogWarning("In game menu was already up");
+			return;
+		}
+		LoadControl (inGameMenu);
+	}
+	
 	public void InitiateInteraction(NPC npcToInteractWith){
 		CheckChatMenu();
 		LoadControl(interactionMenu);
@@ -105,7 +113,7 @@ public class GUIManager : MonoBehaviour {
 		}
 		activeControls.Clear();
 	}
-		
+	
 	private bool ControlActive(GUIControl guiControl){
 		return (activeControls.Contains(guiControl));		
 	}

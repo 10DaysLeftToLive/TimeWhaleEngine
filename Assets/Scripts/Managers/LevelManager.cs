@@ -62,6 +62,7 @@ public class LevelManager : MonoBehaviour {
 		parallaxManager = GameObject.Find(Strings.PARALLAXMANAGER).GetComponent<ParallaxManager>();
 		ScreenSetup.CalculateSettings();
 		StartCoroutine(Init());
+		GUIManager.Instance.AddInGameMenu();
 	}
 	
 	private IEnumerator Init(){		

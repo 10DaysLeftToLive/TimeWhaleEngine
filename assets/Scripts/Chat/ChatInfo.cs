@@ -18,6 +18,12 @@ public class ChatInfo {
 		displayTime = Utils.CalcTimeToDisplayText(text);
 	}
 	
+	public ChatInfo(NPC _npcTalking, string _text, float time){
+		npcTalking = _npcTalking;
+		text = _text;
+		displayTime = time;
+	}
+	
 	public bool DecrementTime(float deltaTime){
 		displayTime -= deltaTime;
 		return (displayTime <= 0);	
