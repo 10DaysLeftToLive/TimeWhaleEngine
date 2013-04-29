@@ -24,7 +24,7 @@ public class SunriseSunsetTimer : ShaderBase {
 	private float sunsetEndTime;
 	
 	// Use this for initialization
-	void Start () {
+	protected override void Initialize () {
 		Mesh mesh = GetComponent<MeshFilter>().mesh;
 		vertexColors = new Color[mesh.vertices.Length];
 //		Debug.Log("Vertex count: " + mesh.vertices.Length);
