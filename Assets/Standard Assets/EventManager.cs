@@ -83,6 +83,15 @@ public class EventManager : ManagerSingleton<EventManager> {
     public void RiseOnPlayerTriggerCollisionEvent(TriggerCollisionArgs interaction){
         if(mOnPlayerTriggerCollisionEvent != null)  mOnPlayerTriggerCollisionEvent(this, interaction);
     }
+	
+	//EVENT: onPlayerTriggerCollision
+	public delegate void mOnDragDelegate(EventManager EM, DragArgs dragMagnitde);
+    //Event
+    public event mOnDragDelegate mOnDragEvent;
+    //Riser
+    public void RiseOnDragEvent(DragArgs dragMagnitude) {
+        if(mOnDragEvent != null)  mOnDragEvent(this, dragMagnitude);
+    }
 }
 
 public class ClickPositionArgs : EventArgs {
@@ -120,5 +129,12 @@ public class TriggerCollisionArgs : EventArgs {
 	public GameObject triggerCollided;
 	public TriggerCollisionArgs(GameObject _triggerCollided){
 		triggerCollided = _triggerCollided;
+	}
+}
+
+public class DragArgs : EventArgs {
+	public Vector2 dragMagnitude;
+	public DragArgs(Vector2 _dragMagnitude){
+		dragMagnitude = _dragMagnitude;
 	}
 }

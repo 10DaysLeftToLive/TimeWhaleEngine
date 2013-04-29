@@ -117,11 +117,13 @@ public class LevelManager : MonoBehaviour {
 	void HandleInput(){	
 		if(Input.GetButtonDown(Strings.ButtonAgeShiftDown)
 			&& CanAgeTransition(Strings.ButtonAgeShiftDown)) {
-				fadeShader.DoFade(Strings.ButtonAgeShiftDown);
+				fadeShader.DoFade();
+				fadeShader.DoAgeShift(Strings.ButtonAgeShiftDown);
 		}
 		else if(Input.GetButtonDown(Strings.ButtonAgeShiftUp) &&
 			CanAgeTransition(Strings.ButtonAgeShiftUp)) {
-				fadeShader.DoFade(Strings.ButtonAgeShiftUp);
+				fadeShader.DoFade();
+				fadeShader.DoAgeShift(Strings.ButtonAgeShiftUp);
 		}
 	}
 	
