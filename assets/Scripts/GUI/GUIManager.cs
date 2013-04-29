@@ -45,6 +45,7 @@ public class GUIManager : MonoBehaviour {
 	}
 	
 	public void InitiateInteraction(NPC npcToInteractWith){
+		CheckChatMenu();
 		LoadControl(interactionMenu);
 		interactionMenu.OpenChatForNPC(npcToInteractWith);
 	}
@@ -71,10 +72,20 @@ public class GUIManager : MonoBehaviour {
 	
 	public void CloseInteractionMenu(){
 		if (!ControlActive(interactionMenu)){
-			Debug.LogError("Can't update interaction display when it is not up.");
+			Debug.LogError("Can't close interaction display when it is not up.");
 			return;
 		}
+		LoadControl (chatMenu);
 		MarkControlForRemoval(interactionMenu);	
+	}
+	
+	/// <summary>
+	/// Checks if the chat menu is up if it is then close it. Since we can't show an interaction menu and 
+	/// </summary>
+	private void CheckChatMenu(){
+		if (ControlActive(chatMenu)){
+			MarkControlForRemoval(chatMenu);
+		}
 	}
 	
 	public bool ClickOnGUI(Vector2 clickOnScreen){
@@ -102,6 +113,11 @@ public class GUIManager : MonoBehaviour {
 	private void LoadControl(GUIControl guiControlToLoad){
 		if (!guiControlToLoad.Initialized){	
 			guiControlToLoad.Initialize();	
+		}
+		
+		if (ControlActive(guiControlToLoad)){
+			Debug.LogWarning(guiControlToLoad.name + " is already loaded");	
+			return;
 		}
 		
 		activeControls.Add(guiControlToLoad);
@@ -134,5 +150,9 @@ public class GUIManager : MonoBehaviour {
 		foreach (GUIControl control in activeControls){
 			control.UpdateControl();
 		}
+	}
+	
+	private bool IsInteracting(){
+		return (activeControls.Contains(interactionMenu));
 	}
 }

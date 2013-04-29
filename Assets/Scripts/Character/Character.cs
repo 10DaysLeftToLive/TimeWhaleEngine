@@ -54,7 +54,7 @@ public abstract class Character : PauseObject {
 	}
 	
 	public void EnterState(State newState){		
-		currentState.OnExit(); // Exit the current state
+		currentState.ExitState(); // Exit the current state
 		currentState = newState; // Update the current state
 		newState.OnEnter(); // Enter the new state
 	}
