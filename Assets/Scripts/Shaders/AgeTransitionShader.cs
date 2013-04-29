@@ -2,184 +2,71 @@ using UnityEngine;
 using System.Collections;
 using SmoothMoves;
 
-public class AgeTransitionShader : ShaderBase {
-	//TODO: Optimize the Update Function so that it is not called every tick
-	//Solution:? NGUI's UpdateManager
+public class AgeTransitionShader : FadeShader {
 	
-	//Location of the FadePlane if it is not fading
-	public Vector2 idlePosition; 
+	//Reference to the LevelManager.
+	public LevelManager levelManager;
 	
-	//Denotes the color of the fade
-	public Color fadeColor; 
-	
-	//Duration of the fade in and out in ticks
-	public float fadeDuration; 
-	
-	private CameraController cameraController;
-	
-	//A flag that determines if our plane is fading in/out in front of the camera.
-	//NOTE:Will get rid of this only temporary until we optimize.
-	protected bool isFading = false;
-
-	//Flag that is denotes if the FadePlane should fade in or out.
-	private bool fade = true;
-	
-	private struct FadeShaderConstants {
-	
-		public const int STOPFADE_THRESHOLD = 2;
-		
-		public const float FADEPLANEOFFSET = 0.3f;
-		
-		public const float HIDE_Z_LOC = 1f;
-		
-	}
-	
-	//Will get rid of this if Jared lets me refactor LevelManager a tiny bit.
-	private LevelManager levelManager;
-	
-	
-	//Button pressed that we used to activate the fade
-	private string ageShiftAction;
+	//The age state that the player should transition to after a fade in.
+	protected string ageShiftAction = "";
 	
 	/// <summary>
-	/// Start:
-	/// Sets the initial color of the plain to a completely transparent color and
-	/// moves the FadePlane offscreen.
+	///  Initialize: <see cref="inhert doc"/>
+	/// Checks to see if the LevelManager has been initializes so that the 
+	/// player age transitions properly.
 	/// </summary>
-	void Start () {
-		levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
-		cameraController = Camera.main.GetComponent<CameraController>();
-		renderer.material.color = Color.clear;
-		transform.position = new Vector3(idlePosition.x, idlePosition.y, FadeShaderConstants.HIDE_Z_LOC);
+	protected override void Initialize() {
+		if (levelManager == null) {
+			Debug.LogError("LevelManager not set in AgeTransitionShader");
+		}
+		base.Initialize();
 	}
-
+	
 	/// <summary>
-	/// Update:
-	/// Does nothing unless the FadePlane needs to fade in or out.
-	/// Fades the FadePlane in and out while interpolating the colors from a transparent
-	/// color to the fadeColor based on half the fade speed.
+	/// <seealso cref="Inherit Doc"/>
+	/// Performs an age shift back in time if able.
 	/// </summary>
-	void Update () {
-		if (isFading) {
-			//Moves the FadePlane to the front of the screen.
-			Vector3 cameraPos = cameraController.transform.position;
-			transform.position = new Vector3(cameraPos.x, cameraPos.y, cameraPos.z + FadeShaderConstants.FADEPLANEOFFSET);
-			
-			//Color fades in and out.
-			if (fade) {
-				FadeIn();
-			}
-			else {
-				FadeOut();
-			}
-			
-			//Increments the interpolation factor based on fade speed or resets it to zero.
-			UpdateInterpolationFator();
-			
-			//Stops the fade when the FadePlane has faded in and out once.
-			if (fadeCycle == FadeShaderConstants.STOPFADE_THRESHOLD) 
-			{
-				StopFade();
-			}
+	protected override void OnDragDown() {
+		if (levelManager.CanAgeTransition(Strings.ButtonAgeShiftUp)) {
+			DoFade();
+			DoAgeShift(Strings.ButtonAgeShiftDown);
 		}
 	}
 	
 	/// <summary>
-	/// FadeIn:
-	/// Fades in the denoted fade color. 
+	/// <seealso cref="Inherit Doc"/>
+	/// Performs an age shift back forward through time if able.
 	/// </summary>
-	protected override void FadeIn() 
-	{
-		renderer.material.color = 
-			Color.Lerp(Color.clear, fadeColor, interpolationFactor);
-	}
-	
-	/// <summary>
-	/// FadeOut;
-	/// Fades out the denoted fade color to a transparent color.
-	/// </summary>		
-	protected override void FadeOut()
-	{
-		renderer.material.color = 
-			Color.Lerp(fadeColor, Color.clear, interpolationFactor);
-	}
-	
-	
-	/// <summary>
-	/// UpdateInterpolationFator:
-	/// Increments the interpolation factor based on half the fade speed.  Resets the interpolation
-	/// factor to zero when the interpolation factor reaches one which signifys a change from fade
-	/// in to fade out.
-	/// </summary>
-	protected void UpdateInterpolationFator() 
-	{
-		if (interpolationFactor < 1) {
-			interpolationFactor += Time.deltaTime / (fadeDuration/2);
-		}
-		else {
-			interpolationFactor = 0;
-			//Pauses the game until the fade is done.
-			EventManager.instance.RiseOnPauseToggleEvent(new PauseStateArgs(fade));
-			
-			//Switch fade in to fade out.
-			fade = fade ? false : true;
-			fadeCycle++;
-			
-			//We shift the age after the fade in is done.
-			//This way the change in age is completely hidden by the fade.
-			if (fadeCycle == 1) {
-				ShiftAge(ageShiftAction);
-			}
+	protected override void OnDragUp() {
+		if (levelManager.CanAgeTransition(Strings.ButtonAgeShiftDown)) {
+			DoFade();
+			DoAgeShift(Strings.ButtonAgeShiftUp);
 		}
 	}
 	
 	/// <summary>
-	/// DoFade:
-	/// Resets the variables for the FadePlane to fade in.  If the
-	/// FadePlane is fading in out then this function resets the color
-	/// of the FadePlane to transparent.
+	/// DoShiftAge:
+	/// Gets the current AgeTransitionState(Young, Middle, Old)
+	/// that the player will transition up to.
 	/// </summary>
 	/// <param name='ageShiftAction'>
-	/// The age shift action used to make the FadePlane fade in and out.
+	/// Age shift action.
 	/// </param>
-	public void DoFade(string ageShiftAction) 
-	{
-		if (isFading) {
-			renderer.material.color = Color.clear;
-		}
-		isFading = true;
-		fade = true;
-		interpolationFactor = 0;
-		fadeCycle = 0;
+	public void DoAgeShift(string ageShiftAction) {
 		this.ageShiftAction = ageShiftAction;
-		
-		//For optimization later
-		//UpdateManager.AddUpdate(this, 0,FadeUpdate); 
 	}
-	
-	
 	
 	/// <summary>
-	/// StopFade:
-	/// Stops the fade and moves the FadePlane to the idle position.
+	/// OnFadeInComplete:
+	/// Transitions up and down ages when the fade color covers the screen.
 	/// </summary>
-	protected void StopFade()
-	{
-		isFading = false;
-		transform.position = new Vector3(idlePosition.x, idlePosition.y, FadeShaderConstants.HIDE_Z_LOC);
-		fadeCycle = 0;
-		
-		//For optimization later
-		//UpdateManager.RemoveUpdate(FadeUpdate);
-	}
-	
-	public void ShiftAge(string ageShiftAction) {
-			if (ageShiftAction.Equals(Strings.ButtonAgeShiftDown)) {
-				levelManager.ShiftDownAge();
-			}
-			else {
-				levelManager.ShiftUpAge();
-			}
+	public override void OnFadeInComplete() {
+		if (ageShiftAction.Equals(Strings.ButtonAgeShiftDown)) {
+			levelManager.ShiftDownAge();
+		}
+		else {
+			levelManager.ShiftUpAge();
+		}
 	}
 
 }
