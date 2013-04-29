@@ -8,19 +8,13 @@ public static class Graph {
 	private static float[,] distance;
 	private static int[] closedPoints;
 	
-	private static float [,] distanceYoung, distanceMiddle, distanceOld;
-	
 	public static void Initialize(){
 		wayPointPosition = new Vector3[wayPointCount];
 		closedPoints = new int[wayPointCount];
 		distance = new float[wayPointCount,wayPointCount];	
-		distanceYoung = new float[wayPointCount,wayPointCount];	
-		distanceMiddle = new float[wayPointCount,wayPointCount];	
-		distanceOld = new float[wayPointCount,wayPointCount];	
 	}
 	
-	public static void StartGraph(GameObject point, int age){
-		//Debug.Log("starting with " + point.name);
+	public static void StartGraph(GameObject point){
 		for (int i = 0; i < wayPointCount; i++) 
 			{
 			closedPoints[i] = 0;
@@ -28,14 +22,6 @@ public static class Graph {
 				distance[i,j] = 0;
 			}
 		MakeGraph(point);
-		
-		switch(age){
-		case 0: distanceYoung = distance;  break;
-		case 1: distanceMiddle = distance; break;
-		case 2: distanceOld = distance; break;
-		}
-		
-		//graphOutput();
 	}
 	
 	private static void RemoveEdge(int i, int j) 
@@ -55,19 +41,6 @@ public static class Graph {
 			distance[j,i] = dist;
 			//Debug.Log("added " + i + ", " + j + " of " + dist);
 		}
-	}
-	
-	public static float IsEdge(int i, int j, int age) 
-	{
-		if (i >= 0 && i < wayPointCount && j >= 0 && j < wayPointCount){
-			switch(age){
-			case 0: return distanceYoung[i,j]; break;
-			case 1: return distanceMiddle[i,j]; break;
-			case 2: return distanceOld[i,j]; break;
-			}
-			return distance[i,j];
-		}else
-			return 0;
 	}
 	
 	public static float IsEdge(int i, int j) 
@@ -135,7 +108,7 @@ public static class Graph {
 		return false;
 	}
 	
-	public static void graphOutput()
+	public static void graphOutput(int age)
 	{
 		
 		for (int i = 0; i < wayPointCount; i++)
