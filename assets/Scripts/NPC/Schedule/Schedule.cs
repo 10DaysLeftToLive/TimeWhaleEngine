@@ -76,7 +76,7 @@ public class Schedule {
 		canPassiveChat = _canChat;
 	}
 	
-	public void Run(float timeSinceLastTick){
+	public virtual void Run(float timeSinceLastTick){
 		if (HasTask()){
 			current.Decrement(timeSinceLastTick);
 			if (current.IsComplete()){
@@ -89,7 +89,7 @@ public class Schedule {
 	}
 	
 	// Schedule sets what it manages to the correct state the schedule is in
-	public void Resume() {
+	public virtual void Resume() {
 		if (!HasTask()) {
 			NextTask();
 		}
