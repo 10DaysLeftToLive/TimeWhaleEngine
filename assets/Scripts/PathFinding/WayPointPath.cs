@@ -15,6 +15,7 @@ public class WayPointPath {
 	private static int startPoint, endPoint;
 	private static WayPoints start, end;
 	private static bool skipWayPoints = false;
+	private static bool noPath = false;
 
 	public static void Initialize(){
 		pathDistance = new float[Graph.wayPointCount,Graph.wayPointCount];
@@ -31,6 +32,7 @@ public class WayPointPath {
 	}
 
 	public static void SetupPathfinding(Vector3 startPos, Vector3 destination, float ht){
+		noPath = false;
 		skipWayPoints = false;
 		startPoint = -1;
 		endPoint = -1;
@@ -74,6 +76,8 @@ public class WayPointPath {
 		startPoint = start.id;
 		endPoint = end.id;
 		currentAge = (int)start.pointAge;
+		if (minDistance == 999)
+			noPath = true;
 	}
 
 	public static bool CheckForPathBetweenPoints(){		
@@ -81,6 +85,9 @@ public class WayPointPath {
 		if (skipWayPoints){
 			return AddPoint(destPosition);
 		}
+		
+		if (noPath)
+			return false;
 
 		if (startPoint == -1 || endPoint == -1) 
 			return false; 
