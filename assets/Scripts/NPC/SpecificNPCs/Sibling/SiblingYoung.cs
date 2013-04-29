@@ -13,11 +13,17 @@ public class SiblingYoung : NPC {
 		Reaction frogCrushing = new Reaction();
 		frogCrushing.AddAction(new ShowOneOffChatAction(this, "OmG yOu KiLleD dAt fROg!1!"));
 		frogCrushing.AddAction(new UpdateDefaultTextAction(this, "I can't belive you did that."));
-		flagReactions.Add(FlagStrings.CrushFrog, frogCrushing); 
+		flagReactions.Add(FlagStrings.CrushFrog, frogCrushing);
+		
+		//Reaction FirstTimeMotherTalks = new Reaction();
+		//FirstTimeMotherTalks.AddAction(new ShowOneOffChatAction(this, "Let's go!", 5));
+		//FirstTimeMotherTalks.AddAction(new ShowOneOffChatAction(this, "Let's go!"));
+		//FirstTimeMotherTalks.AddAction(new NPCAddScheduleAction(this, runToCarpenter));
+		//flagReactions.Add(FlagStrings.SiblingExplore, FirstTimeMotherTalks); 
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "Hai"));
+		return (new InitialEmotionState(this, "Hey there ;}"));
 	}
 	
 	protected override Schedule GetSchedule(){

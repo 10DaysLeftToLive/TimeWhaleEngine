@@ -17,7 +17,7 @@ public class MotherYoung : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "Don't you step on that frog."));
+		return (new InitialEmotionState(this, "Good morning! Are you busy?"));
 	}
 	
 	protected override Schedule GetSchedule(){
@@ -36,14 +36,58 @@ public class MotherYoung : NPC {
 	#region EmotionStates
 		#region Initial Emotion State
 		private class InitialEmotionState : EmotionState{
-		string text1 = "I can't stop you but what I can do is use a very particular set of skills. Skills I have acquired over a very long career. Skills that make me a nightmare for people like you.";
+			int numberOfTimesBuggedMother;
+			string text1 = "Ok, come back when you have some time!";
+			
+			Choice firstTimeBusy;
+			Reaction changeDefaultText;
+			Reaction enterMadState;
+		
 			public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
-				Reaction changeDefaultText = new Reaction();
-				changeDefaultText.AddAction(new NPCEmotionUpdateAction(toControl, new MadEmotionState(toControl)));
-				_allChoiceReactions.Add(new Choice("Watch me", text1), new DispositionDependentReaction(changeDefaultText));
-				_allChoiceReactions.Add(new Choice("Okay Mom", "Good boy"), new DispositionDependentReaction(new Reaction()));
+				numberOfTimesBuggedMother = 0;
+				changeDefaultText = new Reaction();
+				enterMadState = new Reaction();
+				enterMadState.AddAction(new NPCEmotionUpdateAction(toControl, new MadEmotionState(toControl)));
+				changeDefaultText.AddAction(new NPCCallbackAction(UpdateText));
+				firstTimeBusy = new Choice("Busy!", text1);
+				_allChoiceReactions.Add((firstTimeBusy), new DispositionDependentReaction(changeDefaultText));		
+				_allChoiceReactions.Add(new Choice("Nope!", "Good boy"), new DispositionDependentReaction(new Reaction()));
 			}
 			
+			public void UpdateText() {
+				numberOfTimesBuggedMother++;
+				Debug.Log(numberOfTimesBuggedMother);
+				if (numberOfTimesBuggedMother == 1) {
+					SetDefaultText("Are you free now?");
+					text1 = "Alright, I need your help, so come back soon.";
+					//FlagManager.instance.SetFlag(FlagStrings.SiblingExplore);
+				}
+			
+				if (numberOfTimesBuggedMother == 2) {
+					SetDefaultText("Back again? Have any time now?");
+					text1 = "This isn't a game, I really do need help.";
+				}
+			
+				if (numberOfTimesBuggedMother == 3) {
+					SetDefaultText("Good you're back, the seeds are over there.");
+					text1 = "If you're busy, stop bugging me.";
+					_allChoiceReactions.Remove(firstTimeBusy);
+					firstTimeBusy = new Choice ("Busy!!", text1);
+					_allChoiceReactions.Add((firstTimeBusy), new DispositionDependentReaction(changeDefaultText));
+					GUIManager.Instance.RefreshInteraction();
+				
+					_allChoiceReactions.Remove(firstTimeBusy);
+					_allChoiceReactions.Add((firstTimeBusy), new DispositionDependentReaction(enterMadState));
+				}
+			
+				if (numberOfTimesBuggedMother >= 1 && numberOfTimesBuggedMother <= 2) { 
+					_allChoiceReactions.Remove(firstTimeBusy);
+					firstTimeBusy = new Choice ("Busy!!", text1);
+					_allChoiceReactions.Add((firstTimeBusy), new DispositionDependentReaction(changeDefaultText));
+					GUIManager.Instance.RefreshInteraction();
+				}
+			}
+		
 			public override void UpdateEmotionState(){
 				
 			}
@@ -51,7 +95,7 @@ public class MotherYoung : NPC {
 		#endregion
 	
 	private class MadEmotionState : EmotionState {
-		public MadEmotionState(NPC toControl) : base(toControl, "I can't believe you would talk to me like that."){
+		public MadEmotionState(NPC toControl) : base(toControl, "You're useless, go away!"){
 		}
 		
 		public override void UpdateEmotionState(){

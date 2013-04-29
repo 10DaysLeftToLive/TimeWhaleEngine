@@ -49,12 +49,15 @@ public class EmotionState {
 	/// Choice name to react to
 	/// </param>
 	public void ReactToChoice(string choiceName){
+		Choice choiceToSetOff = null;
 		foreach (Choice choice in _allChoiceReactions.Keys){
 			if (choice._choiceName == choiceName){
-				PerformReactionBasedOnDisposition(_allChoiceReactions[choice]);
-				GUIManager.Instance.UpdateInteractionDisplay(choice._reactionDialog);
+				choiceToSetOff = choice;
+			break;
 			}
 		}
+		PerformReactionBasedOnDisposition(_allChoiceReactions[choiceToSetOff]);
+		GUIManager.Instance.UpdateInteractionDisplay(choiceToSetOff._reactionDialog);
 	}
 	
 	/// <summary>

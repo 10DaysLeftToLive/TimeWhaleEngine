@@ -57,7 +57,7 @@ public class InteractionMenu : GUIControl {
 	public override void Render(){	
 		if (!hasInitializedStyles){
 			textFieldStyle = new GUIStyle(GUI.skin.textField);
-			textFieldStyle.fontSize = 24;
+			textFieldStyle.fontSize = 16; //edited
 			buttonStyle = new GUIStyle(GUI.skin.button);
 			buttonStyle.fontSize = 24;
 			hasInitializedStyles = true;
