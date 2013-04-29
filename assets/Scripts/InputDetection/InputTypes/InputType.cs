@@ -53,13 +53,15 @@ public abstract class InputType  {
 		if (inputChangeSinceLastTick.y > 0 &&
 			inputChangeSinceLastTick.x == 0 && inputChangeSinceLastTick.magnitude > 3) {
 			if (levelManager.CanAgeTransition(Strings.ButtonAgeShiftUp)) {
-				shader.DoFade(Strings.ButtonAgeShiftUp);
+				shader.DoFade();
+				shader.DoAgeShift(Strings.ButtonAgeShiftUp);
 			}
 		}
 		else if (inputChangeSinceLastTick.y < 0 &&
 			inputChangeSinceLastTick.x == 0 && inputChangeSinceLastTick.magnitude > 3) {
 			if (levelManager.CanAgeTransition(Strings.ButtonAgeShiftDown)) {
-				shader.DoFade (Strings.ButtonAgeShiftDown);
+				shader.DoFade ();
+				shader.DoAgeShift(Strings.ButtonAgeShiftDown);
 			}
 		}
 	}

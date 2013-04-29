@@ -14,6 +14,7 @@ public abstract class ShaderBase : PauseObject {
 	
 	}
 	
+	protected abstract void Initialize();
 	protected abstract void FadeIn();
 	protected abstract void FadeOut();
 	
