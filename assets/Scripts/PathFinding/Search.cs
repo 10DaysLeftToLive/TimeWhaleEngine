@@ -11,10 +11,12 @@ public static class Search {
     private static int start;
 	private static int destination;
 	public static int index;
+	private static int age;
 	
-	public static void ShortestPath(int startPoint, int destinationPoint)
+	public static void ShortestPath(int startPoint, int destinationPoint, int a)
     {
 		index = 0;
+		age = a;
        	vertex = Graph.wayPointCount;
 		visited = new bool [vertex];
 		path = new float [vertex];
@@ -43,17 +45,18 @@ public static class Search {
 	       visited[closest] = true;
 	       for (int i = 0; i < vertex; i++)
 	       {
-	          if (Graph.IsEdge(closest,i) > 0 && !visited[i])
+	          if (Graph.IsEdge(closest,i,age) > 0 && !visited[i])
 	          {
-				  if (path[i] > path[closest] + Graph.IsEdge(closest,i))
+				  if (path[i] > path[closest] + Graph.IsEdge(closest,i, age))
 				  {
-	              path[i] = path[closest] + Graph.IsEdge(closest,i);
+	              path[i] = path[closest] + Graph.IsEdge(closest,i, age);
 	              last[i] = closest;
 				  }
 	          }
 	         
 	       }    
 	   }
+	
     }
 	
 	// Returns adjacent vertex with minimum edge
@@ -95,18 +98,11 @@ public static class Search {
 			}
 		}
 
-	public static void Output(int dest)
+	public static void Output()
 	{
 		//PrintPath(destination);
-		Debug.Log("path size of " + path[dest]);
-	}
-	
-	public static float GetPathSize(int a){
-		return path[a];	
-	}
-	
-	public static int GetPathPoints(int a){
-		return last[a];	
+		OrganizePath(destination);
+		//Debug.Log("path size of " + path[destination]);
 	}
 	
 	public static void OrganizePath(int i){
@@ -116,17 +112,8 @@ public static class Search {
 		index++;
 	}
 	
-	public static void OrganizePath(int i, int start){
-		if (i != start)
-			OrganizePath(WayPointPath.pathPoints[start,i], start);
-		completePath[index] = i;
-		index++;
-	}
-	
-	public static Vector3[] GetVectors(int dest, int start){
-		index = 0;
-		completePath = new int [vertex];
-		OrganizePath(dest, start);
+	public static Vector3[] GetVectors(){
+		OrganizePath(destination);
 		Vector3[] vectorPath = new Vector3[index];
 		for (int i = 0; i < index; i++){
 			vectorPath[i] = Graph.wayPointPosition[completePath[i]];

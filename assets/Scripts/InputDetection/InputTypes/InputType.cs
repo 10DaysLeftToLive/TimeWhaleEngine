@@ -50,20 +50,8 @@ public abstract class InputType  {
 	#region InputEvents
 	// ------------ These functions will be called when the given event occurs, put any code to be perform on the event in here 
 	protected virtual void DragEvent(Vector2 inputChangeSinceLastTick){
-		if (inputChangeSinceLastTick.y > 0 &&
-			inputChangeSinceLastTick.x == 0 && inputChangeSinceLastTick.magnitude > 3) {
-			if (levelManager.CanAgeTransition(Strings.ButtonAgeShiftUp)) {
-				shader.DoFade();
-				shader.DoAgeShift(Strings.ButtonAgeShiftUp);
-			}
-		}
-		else if (inputChangeSinceLastTick.y < 0 &&
-			inputChangeSinceLastTick.x == 0 && inputChangeSinceLastTick.magnitude > 3) {
-			if (levelManager.CanAgeTransition(Strings.ButtonAgeShiftDown)) {
-				shader.DoFade ();
-				shader.DoAgeShift(Strings.ButtonAgeShiftDown);
-			}
-		}
+		Debug.Log ("FADING");
+		EventManager.instance.RiseOnDragEvent(new DragArgs(inputChangeSinceLastTick));
 	}
 	
 	// called when a click/tap occurs
@@ -89,7 +77,7 @@ public abstract class InputType  {
 	}
 	#endregion
 	
-	private void DelegateClickForObjects(Vector2 inputScreenPos){
+	private void DelegateClickForObjects(Vector2 inputScreenPos) {
 		Ray ray = Camera.main.ScreenPointToRay (inputScreenPos);
 		
 		RaycastHit hit;

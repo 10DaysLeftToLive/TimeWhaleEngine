@@ -15,7 +15,7 @@ public class GrabMoveState : MoveState {
 	}
 	
 	protected override bool PathSearch(Vector3 pos, Vector3 hitPos, float height){
-		return false;//(PathFinding.StartPathWithGrabable(pos, hitPos, height, character.AttachedObject.gameObject));
+		return (PathFinding.StartPathWithGrabable(pos, hitPos, height, character.AttachedObject.gameObject));
 	}
 	
 	public override void OnStuck(){

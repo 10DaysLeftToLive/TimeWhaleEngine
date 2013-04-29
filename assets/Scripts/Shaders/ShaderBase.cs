@@ -11,10 +11,11 @@ public abstract class ShaderBase : PauseObject {
 	
 	// Use this for initialization
 	void Start () {
-	
+		Initialize();
 	}
 	
 	protected abstract void Initialize();
+	
 	protected abstract void FadeIn();
 	protected abstract void FadeOut();
 	

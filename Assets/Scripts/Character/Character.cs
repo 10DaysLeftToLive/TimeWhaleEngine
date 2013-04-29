@@ -51,10 +51,11 @@ public abstract class Character : PauseObject {
 	protected override void UpdateObject(){
 		currentState.Update();
 		CharacterUpdate();
+		Debug.Log ("[" + name + "] is in current state: " + currentState);
 	}
 	
 	public void EnterState(State newState){		
-		currentState.ExitState(); // Exit the current state
+		currentState.OnExit(); // Exit the current state
 		currentState = newState; // Update the current state
 		newState.OnEnter(); // Enter the new state
 	}
