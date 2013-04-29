@@ -60,7 +60,8 @@ public class WayPointPath {
 		if (endLeft != null) Debug.Log("endLeft " + endLeft.name);
 		if (endRight != null) Debug.Log("endRight " + endRight.name);*/
 		
-		if (startLeft.name == endLeft.name && startRight.name == endRight.name){
+		if ( (startLeft != null && startRight != null && endLeft != null && endRight != null) 
+			&& (startLeft.name == endLeft.name && startRight.name == endRight.name)){
 			skipWayPoints = true;
 			//Debug.Log("SKIP WAYPOINTS");	
 		}
@@ -77,8 +78,6 @@ public class WayPointPath {
 
 	public static bool CheckForPathBetweenPoints(){		
 		// if moving small distance and wont use waypoints
-		/*if (Vector3.Distance(startPosition, start.GetFloorPosition()) > Vector3.Distance(startPosition, destPosition) && !PathToOtherFloor(startPosition,destPosition))
-				return AddPoint(destPosition);*/
 		if (skipWayPoints){
 			return AddPoint(destPosition);
 		}
@@ -98,9 +97,7 @@ public class WayPointPath {
 
 	private static float CheckDistance(WayPoints st, WayPoints ed, float minDistance){
 		if ((st != null && ed != null) && (pathDistance[st.id, ed.id] + Vector3.Distance(st.GetFloorPosition(), startPosition) + Vector3.Distance(ed.GetFloorPosition(), destPosition)) < minDistance){
-			//Debug.Log("old distance " + minDistance);
-			minDistance = pathDistance[st.id, ed.id];
-			//Debug.Log("new distance " + minDistance);
+			minDistance = pathDistance[st.id, ed.id] + Vector3.Distance(st.GetFloorPosition(), startPosition) + Vector3.Distance(ed.GetFloorPosition(), destPosition);
 			start = st;
 			end = ed;
 		}
@@ -109,7 +106,7 @@ public class WayPointPath {
 
 	private static Vector3 SetHeading(Vector3 pos1, Vector3 pos2){
 		Vector3 heading = CheckPositionForSlope(pos1);
-		Debug.DrawRay(pos1,heading,Color.green,20);
+		//Debug.DrawRay(pos1,heading,Color.green,20);
 		return heading;
 	}
 
@@ -131,10 +128,9 @@ public class WayPointPath {
 
 	private static GameObject GetLeft(Vector3 pos, int mask, Vector3 heading){
 		RaycastHit hit;
-		Debug.DrawRay(pos,heading,Color.red,20);
+		//Debug.DrawRay(pos,heading,Color.red,20);
 		if (Physics.Raycast(pos, heading , out hit, Mathf.Infinity, mask)){
 			GameObject wayPoint = hit.collider.gameObject;
-			//Debug.Log("hit " + wayPoint.name);
 			return wayPoint;
 		}
 		return null;
@@ -142,7 +138,7 @@ public class WayPointPath {
 
 	private static GameObject GetRight(Vector3 pos, int mask, Vector3 heading){
 		RaycastHit hit;
-		Debug.DrawRay(pos,heading*-1,Color.red,20);
+		//Debug.DrawRay(pos,heading*-1,Color.red,20);
 		if (Physics.Raycast(pos, heading*-1 , out hit, Mathf.Infinity, mask)){
 			GameObject wayPoint = hit.collider.gameObject;
 			return wayPoint;
