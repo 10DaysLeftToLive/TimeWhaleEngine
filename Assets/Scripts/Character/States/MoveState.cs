@@ -116,6 +116,7 @@ public class MoveState : AbstractState {
             //Debug.Log("ground at " + hitPos);
             
             if (PathFinding.GetPathForPoints(character.transform.position, hitPos, character.transform.localScale.y/2)){
+			//if (PathFinding.GetPathToNode(character.transform.position, "WayPoint.011", character.transform.localScale.y/2)){
                 _pathFollowing = new Path();
                 _pathFollowing = PathFinding.GetPath();
                 

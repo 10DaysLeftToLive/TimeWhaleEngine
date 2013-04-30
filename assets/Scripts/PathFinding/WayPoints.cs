@@ -41,7 +41,6 @@ public class WayPoints : MonoBehaviour {
 			Graph.StartGraph(this.gameObject);
 			WayPointPath.Initialize();
 			setupWayPoints = true;
-
 		}
 		initialized = true;
 	}

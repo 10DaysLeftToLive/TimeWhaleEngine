@@ -7,11 +7,13 @@ public static class Graph {
 	public static Vector3[] wayPointPosition;
 	private static float[,] distance;
 	private static int[] closedPoints;
+	private static GameObject[] wayPoints;
 
 	public static void Initialize(){
 		wayPointPosition = new Vector3[wayPointCount];
 		closedPoints = new int[wayPointCount];
 		distance = new float[wayPointCount,wayPointCount];	
+		wayPoints = new GameObject[wayPointCount];
 	}
 
 	public static void StartGraph(GameObject point){
@@ -58,6 +60,7 @@ public static class Graph {
 		WayPoints pointScript = GetScript(point);
 		wayPointPosition[pointScript.id] = pointScript.GetFloorPosition();
 		closedPoints[pointScript.id] = 1;
+		wayPoints[pointScript.id] = point;
 		if (pointScript.CheckLeft()){
 			temp = pointScript.GetLeft();
 			tempScript = GetScript(temp);
@@ -107,6 +110,23 @@ public static class Graph {
 			return true;
 		return false;
 	}
+	
+	public static GameObject FindWayPoint(string name){
+		for(int i = 0; i < wayPointCount; i++){
+			if (wayPoints[i].name == name)
+				return wayPoints[i];
+		}
+		return null;
+	}
+	
+	public static void GetAllNames(){
+		for(int i = 0; i < wayPointCount; i++){
+			if (wayPoints[i] != null)
+				Debug.Log(wayPoints[i].name);
+		}
+	}
+	
+	
 
 	public static void graphOutput(int age)
 	{

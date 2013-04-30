@@ -43,11 +43,11 @@ public class WayPointPath {
 		index = 0;
 		AddPoint(startPos);
 		int mask = (1 << 15); // wayPoint layer
-		Vector3 heading = SetHeading(startPos,destination);
+		Vector3 heading = SetHeading(startPos);
 		GameObject startLeft = GetLeft(startPos, mask, heading);
 		GameObject startRight = GetRight(startPos, mask, heading);
 
-		heading = SetHeading(destination, startPos);
+		heading = SetHeading(destination);
 		GameObject endLeft = GetLeft(destination, mask, heading);
 		GameObject endRight = GetRight(destination, mask, heading);
 
@@ -64,8 +64,7 @@ public class WayPointPath {
 		
 		if ( (startLeft != null && startRight != null && endLeft != null && endRight != null) 
 			&& (startLeft.name == endLeft.name && startRight.name == endRight.name)){
-			skipWayPoints = true;
-			//Debug.Log("SKIP WAYPOINTS");	
+			skipWayPoints = true;	
 		}
 
 		float minDistance = 999;
@@ -78,6 +77,38 @@ public class WayPointPath {
 		currentAge = (int)start.pointAge;
 		if (minDistance == 999)
 			noPath = true;
+	}
+	
+	public static void SetupPathfinding(Vector3 startPos, string name, float ht){
+		noPath = false;
+		startPosition = startPos;
+		height = ht;
+		points = new Vector3[30];
+		index = 0;
+		AddPoint(startPos);
+		int mask = (1 << 15); // wayPoint layer
+		Vector3 heading = SetHeading(startPos);
+		GameObject startLeft = GetLeft(startPos, mask, heading);
+		GameObject startRight = GetRight(startPos, mask, heading);
+		WayPoints startLeftScript, startRightScript, endScript;
+		startLeftScript = GetScript(startLeft);
+		startRightScript = GetScript(startRight);
+		endScript = GetScript(Graph.FindWayPoint(name));
+
+		/*if (startLeft != null) Debug.Log("startLeft " + startLeft.name);
+		if (startRight != null) Debug.Log("startRight " + startRight.name);
+		if (endLeft != null) Debug.Log("endLeft " + endLeft.name);
+		if (endRight != null) Debug.Log("endRight " + endRight.name);*/
+
+		float minDistance = 999;
+		minDistance = CheckDistance(startLeftScript, endScript, minDistance);
+		minDistance = CheckDistance(startRightScript, endScript, minDistance);
+		startPoint = start.id;
+		endPoint = end.id;
+		currentAge = (int)start.pointAge;
+		if (minDistance == 999)
+			noPath = true;
+		
 	}
 
 	public static bool CheckForPathBetweenPoints(){		
@@ -96,9 +127,9 @@ public class WayPointPath {
 	}
 
 	public static bool CheckForPathToNode(){
-		if (startPoint == -1 || endPoint == -1) 
-			return false; 
-
+		if (noPath)
+			return false;
+		
 		return AddArray(startPoint, endPoint);
 	}
 
@@ -110,8 +141,17 @@ public class WayPointPath {
 		}
 		return minDistance;
 	}
+	
+	private static float CheckDistanceFromStart(WayPoints st, WayPoints ed, float minDistance){
+		if ((st != null && ed != null) && (pathDistance[st.id, ed.id] + Vector3.Distance(st.GetFloorPosition(), startPosition)) < minDistance){
+			minDistance = pathDistance[st.id, ed.id] + Vector3.Distance(st.GetFloorPosition(), startPosition);
+			start = st;
+			end = ed;
+		}
+		return minDistance;
+	}
 
-	private static Vector3 SetHeading(Vector3 pos1, Vector3 pos2){
+	private static Vector3 SetHeading(Vector3 pos1){
 		Vector3 heading = CheckPositionForSlope(pos1);
 		//Debug.DrawRay(pos1,heading,Color.green,20);
 		return heading;
