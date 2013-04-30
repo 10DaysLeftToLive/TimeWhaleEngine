@@ -7,4 +7,20 @@ public static class StringsNPC {
 	public static string MomYoung = "Mom";
 	
 	public static string SiblingYoung = "Sibling";
+	
+	public static string FarmerYoung = "";
+	
+	public static string FarmerHusbandYoung = "";
+	
+	public static string LighthouseGirlYoung = "";
+	
+	public static string CastlemanYoung = "";
+	
+	public static string SeaCaptainYoung = "";
+	
+	public static string BazaarmanYoung = "";
+	
+	public static string MusicianYoung = "";
+	
+	public static string FortuneTellerYoung = "";
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -18,8 +19,12 @@ public class NPCConvoSchedule : Schedule {
 		SetConvoTasks(conversation);
 	}
 	
+	public NPCConvoSchedule(NPC npcOne, NPC npcTwo, NPCConversation conversation, Enum priority) : base(npcOne, priority) {
+		SetConvoTasks(conversation);
+	}
+	
 	protected void SetConvoTasks(NPCConversation convo) {
-		foreach (Dialogue textToSay in convo.convoList) {
+		foreach (Dialogue textToSay in convo.dialogueList) {
 			if (textToSay._npc == 1) {
 				npcNotTalking = _npcTwo;
 				npcTalking = _toManage;
@@ -60,7 +65,7 @@ public class NPCConvoSchedule : Schedule {
 	}
 	
 	// Schedule sets what it manages to the correct state the schedule is in
-	public virtual void Resume() {
+	public override void Resume() {
 		if (!HasTask()) {
 			NextTask();
 		}

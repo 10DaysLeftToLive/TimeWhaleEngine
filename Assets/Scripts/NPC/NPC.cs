@@ -28,6 +28,7 @@ public abstract class NPC : Character {
 	private static int DISTANCE_TO_SEE = 8;
 	private static int DISPOSITION_LOW_END = 0;
 	private static int DISPOSITION_HIGH_END = 10;
+	private static int CHANCE_TO_CHAT = 3; // Sets chance to be 1 out of this value
 	public static int DISPOSITION_LOW = 3; // these should not be hard set
 	public static int DISPOSITION_HIGH = 7;
 	#endregion
@@ -84,26 +85,30 @@ public abstract class NPC : Character {
 				NPC npcClass;
 				foreach (var npc in npcDict.Values) {
 					npcClass = npc.GetComponent<NPC>();
-					if(npcClass != this && InChatDistance(npc)) {
-						if (RequestChat(npcClass) && this.scheduleStack.CanPassiveChat()) {
-							// chat Schedule
-							/*Debug.Log("Going to chat");
-							List<ChatInfo> chats = new List<ChatInfo>();
-							chats.Add(new ChatInfo(this, "Chat 1"));
-							chats.Add(new ChatInfo(npcClass, "Chat 2"));
-							chats.Add(new ChatInfo(this, "Chat 3"));
-							chats.Add(new ChatInfo(npcClass, "Chat 4"));
-							chats.Add(new ChatInfo(this, "Chat 5"));
-							NPCChat tempChat = new NPCChat(chats);
-							ChatSchedule chatSchedule1 = new ChatSchedule(this, tempChat);
-							this.AddSchedule(chatSchedule1);
-							ChatSchedule chatSchedule2 = new ChatSchedule(npcClass, tempChat);
-							npcClass.AddSchedule(chatSchedule2);
-							chatingWithNPC = true;*/
-							break;
-						} else { 
-							// Say hi (one off chat)
-							break;
+					if(npcClass != this && InChatDistance(npc) /*TODO - Check if past chat timer to chat again*/) {
+						if (Random.Range(1, CHANCE_TO_CHAT) > 1) { // Roll dice to check if they will chat
+							if (RequestChat(npcClass) && this.scheduleStack.CanPassiveChat()) {
+								
+								
+								// chat Schedule
+								/*Debug.Log("Going to chat");
+								List<ChatInfo> chats = new List<ChatInfo>();
+								chats.Add(new ChatInfo(this, "Chat 1"));
+								chats.Add(new ChatInfo(npcClass, "Chat 2"));
+								chats.Add(new ChatInfo(this, "Chat 3"));
+								chats.Add(new ChatInfo(npcClass, "Chat 4"));
+								chats.Add(new ChatInfo(this, "Chat 5"));
+								NPCChat tempChat = new NPCChat(chats);
+								ChatSchedule chatSchedule1 = new ChatSchedule(this, tempChat);
+								this.AddSchedule(chatSchedule1);
+								ChatSchedule chatSchedule2 = new ChatSchedule(npcClass, tempChat);
+								npcClass.AddSchedule(chatSchedule2);
+								chatingWithNPC = true;*/
+								break;
+							} else { 
+								// Say hi (one off chat)
+								break;
+							}
 						}
 					}
 				}	
