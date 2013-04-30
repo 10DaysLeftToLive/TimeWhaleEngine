@@ -60,7 +60,7 @@ public class MotherYoung : NPC {
 				if (numberOfTimesBuggedMother == 1) {
 					SetDefaultText("Are you free now?");
 					text1 = "Alright, I need your help, so come back soon.";
-					//FlagManager.instance.SetFlag(FlagStrings.SiblingExplore);
+					FlagManager.instance.SetFlag(FlagStrings.SiblingExplore);
 				}
 			
 				if (numberOfTimesBuggedMother == 2) {
