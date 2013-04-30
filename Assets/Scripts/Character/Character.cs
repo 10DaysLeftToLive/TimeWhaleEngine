@@ -29,6 +29,10 @@ public abstract class Character : PauseObject {
 		get { return inventory; }
 	}
 	
+	protected override void Awake() {
+		base.Awake();
+	}
+	
 	void Start () {
 		currentState = new IdleState(this);
 		EnterState(new IdleState(this));

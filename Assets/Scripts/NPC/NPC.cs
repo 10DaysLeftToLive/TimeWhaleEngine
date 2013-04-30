@@ -34,11 +34,15 @@ public abstract class NPC : Character {
 	#endregion
 	
 	#region Initialization
+	protected override void Awake() {
+		base.Awake();
+		NPCManager.instance.Add(this.gameObject);
+	}
+	
 	protected override void Init(){
 		if (id == -1)Debug.LogWarning("Id for " + name + " was not set.");	
 		FindInitialObjects();
 		currentEmotion = GetInitEmotionState();
-		NPCManager.instance.Add(this.gameObject);
 		scheduleStack = new ScheduleStack();
 		flagReactions = new Dictionary<string, Reaction>();
 		SetUpSchedules();

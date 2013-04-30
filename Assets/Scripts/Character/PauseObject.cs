@@ -9,7 +9,7 @@ using System.Collections;
 public abstract class PauseObject : MonoBehaviour {
 	private bool gamePaused = false;
 	
-	void Awake() {
+	protected virtual void Awake() {
 		EventManager.instance.mOnPauseToggleEvent += new EventManager.mOnPauseToggleDelegate (TogglePauseEvent);
 	}
 	
