@@ -1,10 +1,19 @@
-<?xml version="1.0" encoding="us-ascii"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <NPCCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Npcs>
     <Npcs name="SiblingYoung">
       <disposition>0</disposition>
     </Npcs>
     <Npcs name="MotherYoung">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="FarmerFatherYoung">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="LighthouseGirlYoung">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="FarmerMotherYoung">
       <disposition>0</disposition>
     </Npcs>
     <Npcs name="CarpenterYoung">
