@@ -27,7 +27,7 @@ public class AgeTransitionShader : FadeShader {
 	/// Performs an age shift back in time if able.
 	/// </summary>
 	protected override void OnDragDown() {
-		if (levelManager.CanAgeTransition(Strings.ButtonAgeShiftUp)) {
+		if (levelManager.CanAgeTransition(Strings.ButtonAgeShiftDown)) {
 			DoFade();
 			DoAgeShift(Strings.ButtonAgeShiftDown);
 		}
@@ -38,7 +38,7 @@ public class AgeTransitionShader : FadeShader {
 	/// Performs an age shift back forward through time if able.
 	/// </summary>
 	protected override void OnDragUp() {
-		if (levelManager.CanAgeTransition(Strings.ButtonAgeShiftDown)) {
+		if (levelManager.CanAgeTransition(Strings.ButtonAgeShiftUp)) {
 			DoFade();
 			DoAgeShift(Strings.ButtonAgeShiftUp);
 		}
