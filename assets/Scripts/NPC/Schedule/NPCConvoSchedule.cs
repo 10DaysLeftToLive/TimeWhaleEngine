@@ -17,10 +17,12 @@ public class NPCConvoSchedule : Schedule {
 	
 	public NPCConvoSchedule(NPC npcOne, NPC npcTwo, NPCConversation conversation) : base(npcOne) {
 		SetConvoTasks(conversation);
+		npcTwo.AddSchedule(this);
 	}
 	
 	public NPCConvoSchedule(NPC npcOne, NPC npcTwo, NPCConversation conversation, Enum priority) : base(npcOne, priority) {
 		SetConvoTasks(conversation);
+		npcTwo.AddSchedule(this);
 	}
 	
 	protected void SetConvoTasks(NPCConversation convo) {

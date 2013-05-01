@@ -9,8 +9,8 @@ public class NPCManager : ManagerSingleton<NPCManager> {
 		dictNPC.Add(npc.name, npc);
 	}
 	
-	public GameObject getNPC(string npcName) {
-		return dictNPC[npcName];
+	public NPC getNPC(string npcName) {
+		return dictNPC[npcName].GetComponent<NPC>();
 	}
 	
 	public Dictionary<string, GameObject> getNPCDictionary() {
