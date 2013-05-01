@@ -45,6 +45,7 @@ public abstract class NPC : Character {
 		currentEmotion = GetInitEmotionState();
 		scheduleStack = new ScheduleStack();
 		flagReactions = new Dictionary<string, Reaction>();
+		scheduleStack.Add(new DefaultSchedule(this)); // Need to add a default schedule that will never end
 		SetUpSchedules();
 		SetFlagReactions();
 		scheduleStack.Add(GetSchedule());
@@ -153,7 +154,16 @@ public abstract class NPC : Character {
 	
 	#region Schedule
 	public void AddSchedule(Schedule scheduleToAdd){
+		// Special case since conversation schedules are shared
+		if (scheduleToAdd is NPCConvoSchedule) {
+			((NPCConvoSchedule)scheduleToAdd)._npcTwo.AddSharedSchedule((NPCConvoSchedule)scheduleToAdd);
+		}
+		
 		scheduleStack.Add(scheduleToAdd);	
+	}
+	
+	public void AddSharedSchedule(NPCConvoSchedule scheduleToAdd){
+		scheduleStack.Add(scheduleToAdd);
 	}
 	
 	// Can be overriden by children. Is recomended to do this.

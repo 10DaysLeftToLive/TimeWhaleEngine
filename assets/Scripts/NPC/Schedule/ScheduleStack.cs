@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using System.Reflection;
 
 // Used for scheduling
 // The end of the list is the highest priority
@@ -28,8 +30,8 @@ public class ScheduleStack {
 		if (HasSchedule()) {
 			current.Run(timeSinceLastTick);
 			if (current.IsComplete()) {
-				Debug.Log("Current schedule complete");
-				Debug.Log("The next task is " + _schedulesToDo.peek());
+				//Debug.Log("Current schedule complete");
+				//Debug.Log("The next task is " + _schedulesToDo.peek());
 				_schedulesToDo.RemoveDoneFlagSchedules(current);
 				current = null;
 			}
@@ -51,7 +53,7 @@ public class ScheduleStack {
 		current.Resume();
 	}
 	
-	public void Add(Schedule schedule) {
+	public void Add(Schedule schedule) {		
 		if (current == null) {
 			current = schedule;
 		} 
