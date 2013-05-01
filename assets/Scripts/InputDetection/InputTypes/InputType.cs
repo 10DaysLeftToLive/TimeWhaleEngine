@@ -50,7 +50,6 @@ public abstract class InputType  {
 	#region InputEvents
 	// ------------ These functions will be called when the given event occurs, put any code to be perform on the event in here 
 	protected virtual void DragEvent(Vector2 inputChangeSinceLastTick){
-		Debug.Log ("FADING");
 		EventManager.instance.RiseOnDragEvent(new DragArgs(inputChangeSinceLastTick));
 	}
 	
