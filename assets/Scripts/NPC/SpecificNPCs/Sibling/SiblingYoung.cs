@@ -40,7 +40,10 @@ public class SiblingYoung : NPC {
 	protected override void SetUpSchedules(){
 		runToCarpenter = new Schedule(this, Schedule.priorityEnum.High);
 		runToCarpenter.Add(new TimeTask(2, new IdleState(this)));
-		runToCarpenter.Add(new Task(new MoveThenDoState(this, NPCManager.instance.getNPC(StringsNPC.CarpenterYoung).transform.position, new MarkTaskDone(this))));
+		//runToCarpenter.Add(new Task(new MoveThenDoState(this, NPCManager.instance.getNPC(StringsNPC.CarpenterYoung).transform.position, new MarkTaskDone(this))));
+		runToCarpenter.Add(new Task(new MoveThenDoState(this, new Vector3 (5, .2f, .3f), new MarkTaskDone(this))));
+//adding the ability to set flags would be nice
+//adding the ability to set emotion States on would be nice. (actions)
 		runToCarpenter.SetCanChat(false);
 	
 	}

@@ -10,20 +10,25 @@ public class MotherYoung : NPC {
 	}
 	
 	protected override void SetFlagReactions(){
-		Reaction frogCrushing = new Reaction();
-		frogCrushing.AddAction(new ShowOneOffChatAction(this, "Gross! I'm out of here."));
-		frogCrushing.AddAction(new NPCAddScheduleAction(this, runToCarpenter));
-		flagReactions.Add(FlagStrings.CrushFrog, frogCrushing); 
+		//Reaction frogCrushing = new Reaction();
+		//frogCrushing.AddAction(new ShowOneOffChatAction(this, "Gross! I'm out of here."));
+		//frogCrushing.AddAction(new NPCAddScheduleAction(this, runToCarpenter));
+		//flagReactions.Add(FlagStrings.CrushFrog, frogCrushing); 
 		
 		Reaction enterHappy = new Reaction();
 		enterHappy.AddAction(new ShowOneOffChatAction(this, "I think there's a good spot over here!"));
 		enterHappy.AddAction(new NPCAddScheduleAction(this, moveMotherHappyState));
 		//enterHappy.AddAction(new NPCAddScheduleAction(this, runToCarpenter));
 		flagReactions.Add (FlagStrings.EnterHappyState, enterHappy);
+		
+		Reaction moveHome = new Reaction();
+		moveHome.AddAction(new ShowOneOffChatAction(this, "Let's go back to the house."));
+		moveHome.AddAction(new NPCAddScheduleAction(this, runToCarpenter));
+		flagReactions.Add (FlagStrings.MoveHome, moveHome);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "Good morning! Are you busy?"));
+		return (new InitialEmotionState(this, "Morning! Do you have some time to help?"));
 	}
 	
 	protected override Schedule GetSchedule(){
@@ -35,23 +40,23 @@ public class MotherYoung : NPC {
 	private Schedule moveMotherHappyState;
 	
 	protected override void SetUpSchedules(){
-		runToCarpenter = new Schedule(this, Schedule.priorityEnum.High);
+		runToCarpenter = new Schedule(this, Schedule.priorityEnum.DoNow);
 		runToCarpenter.Add(new TimeTask(3, new IdleState(this)));
-		runToCarpenter.Add(new Task(new MoveThenDoState(this, new Vector3(10, -1f,.3f), new MarkTaskDone(this))));
-		runToCarpenter.SetCanChat(true);
+		runToCarpenter.Add(new Task(new MoveThenDoState(this, new Vector3(0, -1f,.3f), new MarkTaskDone(this))));
 		
 		moveMotherHappyState = new Schedule(this, Schedule.priorityEnum.DoNow);
 		moveMotherHappyState.Add (new TimeTask(2, new IdleState(this)));
 		//moveMotherHappyState.Add(new Task(new MoveThenDoState(this, PathFinding.GetPathToNode(this.transform.position, "waypoint001", this.transform.localScale.y/2), new MarkTaskDone(this))));
-		moveMotherHappyState.Add(new Task(new MoveThenDoState(this, new Vector3(-25f, -1f, 0), new MarkTaskDone(this))));
-		
+		moveMotherHappyState.Add(new Task(new MoveThenDoState(this, new Vector3(-20f, -1f, -.5f), new MarkTaskDone(this))));
+	
+	
 	}
 	
 	#region EmotionStates
 		#region Initial Emotion State
 		private class InitialEmotionState : EmotionState{
 			int numberOfTimesBuggedMother;
-			string text1 = "Ok, come back when you have some time!";
+			string text1 = "Ok, come back when you have some time! Remember, don't go near the cliffs!";
 			
 			Choice firstTimeBusy;
 			Reaction changeDefaultText;
@@ -68,9 +73,9 @@ public class MotherYoung : NPC {
 				enterMadState.AddAction(new NPCEmotionUpdateAction(toControl, new MadEmotionState(toControl)));
 				enterHappyState.AddAction(new NPCEmotionUpdateAction(toControl, new HappyEmotionState(toControl)));
 				changeDefaultText.AddAction(new NPCCallbackAction(UpdateText));
-				firstTimeBusy = new Choice("Busy!", text1);
+				firstTimeBusy = new Choice("I'm Busy!", text1);
 				_allChoiceReactions.Add((firstTimeBusy), new DispositionDependentReaction(changeDefaultText));		
-				_allChoiceReactions.Add(new Choice("Nope!", "Good boy"), new DispositionDependentReaction(enterHappyState));
+				_allChoiceReactions.Add(new Choice("I'm free!", "Great! Take these and find somewhere to plant them."), new DispositionDependentReaction(enterHappyState));
 			}
 			
 			public void UpdateText() {
@@ -83,7 +88,7 @@ public class MotherYoung : NPC {
 				}
 			
 				if (numberOfTimesBuggedMother == 2) {
-					SetDefaultText("Back again? Have any time now?");
+					SetDefaultText("Oh good, you're back!!");
 					text1 = "This isn't a game, I really do need help.";
 				}
 			
@@ -91,7 +96,7 @@ public class MotherYoung : NPC {
 					SetDefaultText("Good you're back, the seeds are over there.");
 					text1 = "If you're busy, stop bugging me.";
 					_allChoiceReactions.Remove(firstTimeBusy);
-					firstTimeBusy = new Choice ("Busy!!", text1);
+					firstTimeBusy = new Choice ("I'm Busy!!", text1);
 					_allChoiceReactions.Add((firstTimeBusy), new DispositionDependentReaction(changeDefaultText));
 					GUIManager.Instance.RefreshInteraction();
 				
@@ -101,7 +106,7 @@ public class MotherYoung : NPC {
 			
 				if (numberOfTimesBuggedMother >= 1 && numberOfTimesBuggedMother <= 2) { 
 					_allChoiceReactions.Remove(firstTimeBusy);
-					firstTimeBusy = new Choice ("Busy!!", text1);
+					firstTimeBusy = new Choice ("Busy mom!!", text1);
 					_allChoiceReactions.Add((firstTimeBusy), new DispositionDependentReaction(changeDefaultText));
 					GUIManager.Instance.RefreshInteraction();
 				}
@@ -112,30 +117,56 @@ public class MotherYoung : NPC {
 			}
 		}
 		#endregion
-	
+		#region MadEmotionState
 	private class MadEmotionState : EmotionState {
-		public MadEmotionState(NPC toControl) : base(toControl, "You're useless, go away!"){
+		Action evokeDisplayMad;
+		
+		public MadEmotionState(NPC toControl) : base(toControl, "I've had enough of your behavior today. Keep this up and you won't be getting dinner tonight."){
+			evokeDisplayMad = new NPCCallbackAction(displayMad);
+			evokeDisplayMad.Perform();
 		}
 		
-		public override void UpdateEmotionState(){
-			
+		public void displayMad() {
+			//Stall the mother for 15 seconds, then transition her back to a new state
+			Schedule angryMom = new Schedule(_npcInState, Schedule.priorityEnum.DoNow);
+			Action displayAnger = new ShowOneOffChatAction(_npcInState, "That isn't how you treat your mother!");
+			angryMom.Add(new TimeTask(15, new IdleState(_npcInState)));
+//how can I transition back to another emotion state?			
+			//angryMom.Add(new Task(
+			//_npcInState.AddSchedule(angryMom);
 		}
 	}
-	
+		#endregion
+		#region PLantTreeState
 	private class PlantTreeState : EmotionState {
+		Action evokeUpdatePosition;
 		bool flagSet = false;
+		Reaction changeFlag;
 		
 		public PlantTreeState(NPC toControl) : base(toControl, "I raised you well :')"){
-			
+			//evokeUpdatePosition = new NPCCallbackAction(UpdatePosition);
+			//evokeUpdatePosition.Perform();
+			changeFlag = new Reaction();
+			changeFlag.AddAction(new NPCCallbackAction(UpdatePosition));
+			_allChoiceReactions.Add(new Choice("Let's go back!", "Yes! There's more to do at home!"),new DispositionDependentReaction(changeFlag));
 		}
 		
 		public void UpdatePosition() {
-			Schedule moveMyMomma = new Schedule(_npcInState, Schedule.priorityEnum.High);
-			moveMyMomma.Add(new Task(new MoveThenDoState(_npcInState, new Vector3(10, -1f,.3f), new MarkTaskDone(_npcInState))));
-			_npcInState.AddSchedule(moveMyMomma);
+			if (!flagSet) {
+				FlagManager.instance.SetFlag(FlagStrings.MoveHome);
+				flagSet = true;
+				SetDefaultText("Good work! I love you =]");
+			}
+			
+			
+			//Schedule moveMyMomma = new Schedule(_npcInState, Schedule.priorityEnum.High);
+			//moveMyMomma.Add(new Task(new MoveThenDoState(_npcInState, new Vector3(10, -1f,.3f), new MarkTaskDone(_npcInState))));
+			//_npcInState.AddSchedule(moveMyMomma);
 		}
 	}
 	
+		#endregion
+		#region HappyEmotionState
 	private class HappyEmotionState : EmotionState {
 		
 		bool flagSet = false;
@@ -147,7 +178,7 @@ public class MotherYoung : NPC {
 		public HappyEmotionState(NPC toControl) : base(toControl, "You're my best friend! =]"){
 			changeFlag = new Reaction();
 			postSeed = new Reaction();
-			testing = new Choice ("TRANSFORM", "Follow Me!!");
+			testing = new Choice ("Where?", "Follow me, I saw a good spot the other day.");
 			postSeed.AddAction(new NPCEmotionUpdateAction(toControl, new PlantTreeState(toControl)));
 			changeFlag.AddAction(new NPCCallbackAction(UpdateFlag));
 			_allChoiceReactions.Add((testing), new DispositionDependentReaction(changeFlag));
@@ -159,12 +190,13 @@ public class MotherYoung : NPC {
 				FlagManager.instance.SetFlag(FlagStrings.EnterHappyState);	
 				flagSet = true;
 				_allChoiceReactions.Remove(testing);
-				SetDefaultText("Yay, you planted the seed!");
-				testing = new Choice ("BaBoom!!", "transform to postSeed");
+				SetDefaultText("Right here would be good!");
+				testing = new Choice ("*plant seed*", "Beautiful! I can't wait to see how beautiful these tree will be in a few years. !");
 				_allChoiceReactions.Add((testing), new DispositionDependentReaction(postSeed));
 				
 			}
 		}
 	}
+		#endregion
 	#endregion
 }
