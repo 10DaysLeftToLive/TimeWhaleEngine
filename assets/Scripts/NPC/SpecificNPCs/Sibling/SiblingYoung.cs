@@ -18,7 +18,7 @@ public class SiblingYoung : NPC {
 		Reaction FirstTimeMotherTalks = new Reaction();
 		//FirstTimeMotherTalks.AddAction(new ShowOneOffChatAction(this, "Let's go!", 5));
 		FirstTimeMotherTalks.AddAction(new ShowOneOffChatAction(this, "Let's go!"));
-		//FirstTimeMotherTalks.AddAction(new NPCAddScheduleAction(this, runToCarpenter));
+		FirstTimeMotherTalks.AddAction(new NPCAddScheduleAction(this, runToCarpenter));
 		flagReactions.Add(FlagStrings.SiblingExplore, FirstTimeMotherTalks); 
 	}
 	

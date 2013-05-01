@@ -14,6 +14,12 @@ public class MotherYoung : NPC {
 		frogCrushing.AddAction(new ShowOneOffChatAction(this, "Gross! I'm out of here."));
 		frogCrushing.AddAction(new NPCAddScheduleAction(this, runToCarpenter));
 		flagReactions.Add(FlagStrings.CrushFrog, frogCrushing); 
+		
+		Reaction enterHappy = new Reaction();
+		enterHappy.AddAction(new ShowOneOffChatAction(this, "I think there's a good spot over here!"));
+		enterHappy.AddAction(new NPCAddScheduleAction(this, moveMotherHappyState));
+		//enterHappy.AddAction(new NPCAddScheduleAction(this, runToCarpenter));
+		flagReactions.Add (FlagStrings.EnterHappyState, enterHappy);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
@@ -26,11 +32,19 @@ public class MotherYoung : NPC {
 	}
 	
 	private Schedule runToCarpenter;
+	private Schedule moveMotherHappyState;
+	
 	protected override void SetUpSchedules(){
 		runToCarpenter = new Schedule(this, Schedule.priorityEnum.High);
-		runToCarpenter.Add(new TimeTask(1, new IdleState(this)));
+		runToCarpenter.Add(new TimeTask(3, new IdleState(this)));
 		runToCarpenter.Add(new Task(new MoveThenDoState(this, new Vector3(10, -1f,.3f), new MarkTaskDone(this))));
 		runToCarpenter.SetCanChat(true);
+		
+		moveMotherHappyState = new Schedule(this, Schedule.priorityEnum.DoNow);
+		moveMotherHappyState.Add (new TimeTask(2, new IdleState(this)));
+		//moveMotherHappyState.Add(new Task(new MoveThenDoState(this, PathFinding.GetPathToNode(this.transform.position, "waypoint001", this.transform.localScale.y/2), new MarkTaskDone(this))));
+		moveMotherHappyState.Add(new Task(new MoveThenDoState(this, new Vector3(-25f, -1f, 0), new MarkTaskDone(this))));
+		
 	}
 	
 	#region EmotionStates
@@ -42,16 +56,21 @@ public class MotherYoung : NPC {
 			Choice firstTimeBusy;
 			Reaction changeDefaultText;
 			Reaction enterMadState;
+			Reaction enterHappyState;
 		
 			public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+				enterMadState = new Reaction();
+				enterHappyState = new Reaction();
+			
 				numberOfTimesBuggedMother = 0;
 				changeDefaultText = new Reaction();
-				enterMadState = new Reaction();
+				
 				enterMadState.AddAction(new NPCEmotionUpdateAction(toControl, new MadEmotionState(toControl)));
+				enterHappyState.AddAction(new NPCEmotionUpdateAction(toControl, new HappyEmotionState(toControl)));
 				changeDefaultText.AddAction(new NPCCallbackAction(UpdateText));
 				firstTimeBusy = new Choice("Busy!", text1);
 				_allChoiceReactions.Add((firstTimeBusy), new DispositionDependentReaction(changeDefaultText));		
-				_allChoiceReactions.Add(new Choice("Nope!", "Good boy"), new DispositionDependentReaction(new Reaction()));
+				_allChoiceReactions.Add(new Choice("Nope!", "Good boy"), new DispositionDependentReaction(enterHappyState));
 			}
 			
 			public void UpdateText() {
@@ -100,6 +119,51 @@ public class MotherYoung : NPC {
 		
 		public override void UpdateEmotionState(){
 			
+		}
+	}
+	
+	private class PlantTreeState : EmotionState {
+		bool flagSet = false;
+		
+		public PlantTreeState(NPC toControl) : base(toControl, "I raised you well :')"){
+			
+		}
+		
+		public void UpdatePosition() {
+			Schedule moveMyMomma = new Schedule(_npcInState, Schedule.priorityEnum.High);
+			moveMyMomma.Add(new Task(new MoveThenDoState(_npcInState, new Vector3(10, -1f,.3f), new MarkTaskDone(_npcInState))));
+			_npcInState.AddSchedule(moveMyMomma);
+		}
+	}
+	
+	private class HappyEmotionState : EmotionState {
+		
+		bool flagSet = false;
+		Choice testing;
+		
+		Reaction changeFlag;
+		Reaction postSeed;
+		
+		public HappyEmotionState(NPC toControl) : base(toControl, "You're my best friend! =]"){
+			changeFlag = new Reaction();
+			postSeed = new Reaction();
+			testing = new Choice ("TRANSFORM", "Follow Me!!");
+			postSeed.AddAction(new NPCEmotionUpdateAction(toControl, new PlantTreeState(toControl)));
+			changeFlag.AddAction(new NPCCallbackAction(UpdateFlag));
+			_allChoiceReactions.Add((testing), new DispositionDependentReaction(changeFlag));
+		}
+		
+		public void UpdateFlag() {
+			
+			if (!flagSet) {
+				FlagManager.instance.SetFlag(FlagStrings.EnterHappyState);	
+				flagSet = true;
+				_allChoiceReactions.Remove(testing);
+				SetDefaultText("Yay, you planted the seed!");
+				testing = new Choice ("BaBoom!!", "transform to postSeed");
+				_allChoiceReactions.Add((testing), new DispositionDependentReaction(postSeed));
+				
+			}
 		}
 	}
 	#endregion
