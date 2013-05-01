@@ -141,6 +141,7 @@ public class MotherYoung : NPC {
 	private class PlantTreeState : EmotionState {
 		Action evokeUpdatePosition;
 		bool flagSet = false;
+		Choice goBackHome;
 		Reaction changeFlag;
 		
 		public PlantTreeState(NPC toControl) : base(toControl, "I raised you well :')"){
@@ -148,7 +149,8 @@ public class MotherYoung : NPC {
 			//evokeUpdatePosition.Perform();
 			changeFlag = new Reaction();
 			changeFlag.AddAction(new NPCCallbackAction(UpdatePosition));
-			_allChoiceReactions.Add(new Choice("Let's go back!", "Yes! There's more to do at home!"),new DispositionDependentReaction(changeFlag));
+			goBackHome = new Choice("Let's go back!", "Yes! There's more to do at home!");
+			_allChoiceReactions.Add(goBackHome, new DispositionDependentReaction(changeFlag));
 		}
 		
 		public void UpdatePosition() {
@@ -156,6 +158,8 @@ public class MotherYoung : NPC {
 				FlagManager.instance.SetFlag(FlagStrings.MoveHome);
 				flagSet = true;
 				SetDefaultText("Good work! I love you =]");
+				_allChoiceReactions.Remove(goBackHome);
+				GUIManager.Instance.RefreshInteraction();
 			}
 			
 			
@@ -182,6 +186,7 @@ public class MotherYoung : NPC {
 			postSeed.AddAction(new NPCEmotionUpdateAction(toControl, new PlantTreeState(toControl)));
 			changeFlag.AddAction(new NPCCallbackAction(UpdateFlag));
 			_allChoiceReactions.Add((testing), new DispositionDependentReaction(changeFlag));
+			//GUIManager.Instance.RefreshInteraction();
 		}
 		
 		public void UpdateFlag() {
@@ -191,8 +196,9 @@ public class MotherYoung : NPC {
 				flagSet = true;
 				_allChoiceReactions.Remove(testing);
 				SetDefaultText("Right here would be good!");
-				testing = new Choice ("*plant seed*", "Beautiful! I can't wait to see how beautiful these tree will be in a few years. !");
+				testing = new Choice ("*plant seed*", "Beautiful! I can't wait to see how beautiful this tree will be in a few years!");
 				_allChoiceReactions.Add((testing), new DispositionDependentReaction(postSeed));
+				GUIManager.Instance.RefreshInteraction();
 				
 			}
 		}
