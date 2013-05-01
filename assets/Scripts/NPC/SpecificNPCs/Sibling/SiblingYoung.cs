@@ -15,11 +15,11 @@ public class SiblingYoung : NPC {
 		frogCrushing.AddAction(new UpdateDefaultTextAction(this, "I can't belive you did that."));
 		flagReactions.Add(FlagStrings.CrushFrog, frogCrushing);
 		
-		//Reaction FirstTimeMotherTalks = new Reaction();
+		Reaction FirstTimeMotherTalks = new Reaction();
 		//FirstTimeMotherTalks.AddAction(new ShowOneOffChatAction(this, "Let's go!", 5));
-		//FirstTimeMotherTalks.AddAction(new ShowOneOffChatAction(this, "Let's go!"));
-		//FirstTimeMotherTalks.AddAction(new NPCAddScheduleAction(this, runToCarpenter));
-		//flagReactions.Add(FlagStrings.SiblingExplore, FirstTimeMotherTalks); 
+		FirstTimeMotherTalks.AddAction(new ShowOneOffChatAction(this, "Let's go!"));
+		FirstTimeMotherTalks.AddAction(new NPCAddScheduleAction(this, runToCarpenter));
+		flagReactions.Add(FlagStrings.SiblingExplore, FirstTimeMotherTalks); 
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
@@ -36,6 +36,14 @@ public class SiblingYoung : NPC {
 		return (schedule);
 	}
 	
+	private Schedule runToCarpenter;
+	protected override void SetUpSchedules(){
+		runToCarpenter = new Schedule(this, Schedule.priorityEnum.High);
+		runToCarpenter.Add(new TimeTask(2, new IdleState(this)));
+		runToCarpenter.Add(new Task(new MoveThenDoState(this, NPCManager.instance.getNPC(StringsNPC.CarpenterYoung).transform.position, new MarkTaskDone(this))));
+		runToCarpenter.SetCanChat(false);
+	
+	}
 	#region EmotionStates
 		#region Initial Emotion State
 		private class InitialEmotionState : EmotionState{
