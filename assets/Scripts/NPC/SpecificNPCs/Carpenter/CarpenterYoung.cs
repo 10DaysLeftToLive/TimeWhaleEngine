@@ -4,7 +4,7 @@ using System.Collections;
 /// <summary>
 /// Carpenter young specific scripting values
 /// </summary>
-public class CarpenterYoung : NPC {
+public class CarpenterYoung : NPC {	
 	protected override void Init() {
 		base.Init();
 	}
@@ -14,7 +14,7 @@ public class CarpenterYoung : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "Hai"));
+		return (new InitialEmotionState(this, "||||This boy..."));
 	}
 	
 	protected override Schedule GetSchedule(){
@@ -28,16 +28,39 @@ public class CarpenterYoung : NPC {
 	
 	
 	#region EmotionStates
-		#region Initial Emotion State
-		private class InitialEmotionState : EmotionState{
-			public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
-				
-			}
+	#region Initial Emotion State
+	private class InitialEmotionState : EmotionState{
+	
+		Choice giveToolsChoice;
+		Reaction giveToolsReaction;
+	
+		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+			giveToolsChoice = new Choice("Give Tools.", "Thanks for finding my tools instead of my lazy son.  Honestly he sometimes I think he doesn't care about our great legacy.");
+			giveToolsReaction = new Reaction();
+			giveToolsReaction.AddAction(new NPCCallbackAction(GiveToolsToCarpenter));
+		
+			giveToolsReaction.AddAction(new ShowOneOffChatAction(NPCManager.instance.getNPC(StringsNPC.CarpenterYoung), 
+				 "Now if you are to actually start becoming a great carpenter like my father and his before " +
+				 "him then you need to start practicing on your own. Why don't you start with a treehouse?"));	
 			
-			public override void UpdateEmotionState(){
-				
-			}
+			_allChoiceReactions.Add(giveToolsChoice,new DispositionDependentReaction(giveToolsReaction));
+		
 		}
-		#endregion
+		
+		public override void UpdateEmotionState(){
+			
+		}
+	
+		private void GiveToolsToCarpenter(){
+			_allChoiceReactions.Remove(giveToolsChoice);
+			GUIManager.Instance.RefreshInteraction();
+			SetDefaultText("Thank you for them tools, you rascal!");
+			
+			//Need to walk away and come back later to check on son
+		
+		
+		}
+	}
+	#endregion
 	#endregion
 }

@@ -1,7 +1,7 @@
 public static class StringsNPC {
-	public static string CarpenterYoung = "Carpenter[SWITCH_SPRITES]";
+	public static string CarpenterYoung = "CarpenterYoung";
 	
-	public static string CarpenterSonYoung = "CarpenterSon[SWITCH_SPRITES]";
+	public static string CarpenterSonYoung = "CarpenterSonYoung";
 	public static string CarpenterSonMiddle = "";
 	
 	public static string MomYoung = "Mom";
