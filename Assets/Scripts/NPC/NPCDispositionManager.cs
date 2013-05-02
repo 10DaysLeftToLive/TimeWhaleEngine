@@ -10,7 +10,7 @@ public class NPCDispositionManager : ManagerSingleton<NPCDispositionManager> {
 	}
 	
 	public void Add(NPC objectToAdd, CharacterAgeState ageToAdd){
-		containersInLevel[objectToAdd.id].Add(objectToAdd, ageToAdd);
+		containersInLevel[objectToAdd.ID].Add(objectToAdd, ageToAdd);
 	}
 	
 	// Load in all objects that this manager should handle from the given age root
@@ -18,8 +18,8 @@ public class NPCDispositionManager : ManagerSingleton<NPCDispositionManager> {
 		Component[] componentsToManage = (Component[])rootOfAge.GetComponentsInChildren(typeof(NPC));
 		
 		foreach (NPC objectToManage in componentsToManage){
-			if (!containersInLevel.ContainsKey(objectToManage.id)){
-				containersInLevel.Add(objectToManage.id, new NPCClassContainer());
+			if (!containersInLevel.ContainsKey(objectToManage.ID)){
+				containersInLevel.Add(objectToManage.ID, new NPCClassContainer());
 			}
 			Add (objectToManage, ageRootIn);
 		}

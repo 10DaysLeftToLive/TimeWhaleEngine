@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class CarpenterSonMiddle : NPC {
+public class CarpenterSonMiddleTest : NPC {
 	string whatToSay;
 	
 	protected override void SetFlagReactions(){

@@ -1,15 +1,48 @@
 using UnityEngine;
 using System.Collections;
 
-public class MotherMiddle : MonoBehaviour {
+/// <summary>
+/// Mother young specific scripting values
+/// </summary>
+public class MotherMiddle : NPC {
+	protected override void Init() {
+		id = NPCIDs.MOTHER;
+		base.Init();
+	}
+	
+	protected override void SetFlagReactions(){
+		
+	}
+	
+	protected override EmotionState GetInitEmotionState(){
+		return (new InitialEmotionState(this, "|||| HI DI HO SON!"));
+	}
+	
+	protected override Schedule GetSchedule(){
+		Schedule schedule = new DefaultSchedule(this);
+		return (schedule);
+	}
 
-	// Use this for initialization
-	void Start () {
-	
+	protected override void SetUpSchedules(){
+		
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	
+	#region EmotionStates
+	#region Initial Emotion State
+	private class InitialEmotionState : EmotionState{
+	
+	
+		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+			
+		
+		}
+		
+		public override void UpdateEmotionState(){
+			
+		}
 	
 	}
+	#endregion
+	#endregion
 }

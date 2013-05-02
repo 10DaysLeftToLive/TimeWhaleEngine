@@ -6,6 +6,7 @@ using System.Collections;
 /// </summary>
 public class CarpenterSonOld : NPC {
 	protected override void Init() {
+		id = NPCIDs.CARPENTER_SON;
 		base.Init();
 	}
 	
@@ -14,30 +15,34 @@ public class CarpenterSonOld : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "Hai"));
+		return (new InitialEmotionState(this, "|||| Where my cane at?"));
 	}
 	
 	protected override Schedule GetSchedule(){
-		Schedule schedule = new Schedule(this);
-		
-		Task standAround = new Task(new IdleState(this));
-		
-		schedule.Add(standAround);
-		
+		Schedule schedule = new DefaultSchedule(this);
 		return (schedule);
 	}
+
+	protected override void SetUpSchedules(){
+		
+	}
+	
 	
 	#region EmotionStates
-		#region Initial Emotion State
-		private class InitialEmotionState : EmotionState{
-			public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
-				
-			}
+	#region Initial Emotion State
+	private class InitialEmotionState : EmotionState{
+	
+	
+		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
 			
-			public override void UpdateEmotionState(){
-				
-			}
+		
 		}
-		#endregion
+		
+		public override void UpdateEmotionState(){
+			
+		}
+	
+	}
+	#endregion
 	#endregion
 }

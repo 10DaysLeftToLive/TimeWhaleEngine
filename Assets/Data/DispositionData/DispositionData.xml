@@ -4,6 +4,12 @@
     <Npcs name="SiblingYoung">
       <disposition>0</disposition>
     </Npcs>
+    <Npcs name="FortuneTellerYoung">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="MusicianYoung">
+      <disposition>0</disposition>
+    </Npcs>
     <Npcs name="MotherYoung">
       <disposition>0</disposition>
     </Npcs>
@@ -16,10 +22,61 @@
     <Npcs name="FarmerMotherYoung">
       <disposition>0</disposition>
     </Npcs>
-    <Npcs name="CarpenterYoung">
+    <Npcs name="BazaarmanYoung">
       <disposition>0</disposition>
     </Npcs>
     <Npcs name="CarpenterSonYoung">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="CastlemanYoung">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="CarpenterYoung">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="SiblingMiddle">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="FarmerMotherMiddle">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="SeaCaptainMiddle">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="CarpenterMiddle">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="LighthouseGirlMiddle">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="CastlemanMiddle">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="CarpenterSonMiddle">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="FortuneTellerMiddle">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="MusicianMiddle">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="MotherMiddle">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="SiblingOld">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="LighthouseGirlOld">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="CarpenterSonOld">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="CastlemanOld">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="FortuneTellerOld">
       <disposition>0</disposition>
     </Npcs>
   </Npcs>

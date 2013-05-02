@@ -10,7 +10,7 @@ using System.Collections.Generic;
 /// </summary>
 public abstract class NPC : Character {
 	#region Fields
-	public int id = -1;
+	protected int id = -1;
 	private int npcDisposition;
 	
 	protected ScheduleStack scheduleStack;
@@ -40,7 +40,6 @@ public abstract class NPC : Character {
 	}
 	
 	protected override void Init(){
-		if (id == -1)Debug.LogWarning("Id for " + name + " was not set.");	
 		FindInitialObjects();
 		currentEmotion = GetInitEmotionState();
 		scheduleStack = new ScheduleStack();
@@ -215,6 +214,11 @@ public abstract class NPC : Character {
 	public int GetLowDisposition(){
 		return (-5);	
 	}
+	
+	public int ID{
+		get {return id;}
+	}
+	
 	#endregion
 	
 	#region Utility Methods
