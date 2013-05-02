@@ -19,7 +19,13 @@ public class SiblingYoung : NPC {
 		//FirstTimeMotherTalks.AddAction(new ShowOneOffChatAction(this, "Let's go!", 5));
 		FirstTimeMotherTalks.AddAction(new ShowOneOffChatAction(this, "Let's go!"));
 		FirstTimeMotherTalks.AddAction(new NPCAddScheduleAction(this, runToCarpenter));
+		//FirstTimeMotherTalks.AddAction(new ShowOneOffChatAction(this, "C'mon, let's race!!!"));
 		flagReactions.Add(FlagStrings.SiblingExplore, FirstTimeMotherTalks); 
+		
+		Reaction raceTime = new Reaction();
+		raceTime.AddAction(new ShowOneOffChatAction(this, "Hey, let's race!!"));
+		flagReactions.Add(FlagStrings.RaceTime, raceTime);
+		
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
@@ -40,9 +46,15 @@ public class SiblingYoung : NPC {
 	protected override void SetUpSchedules(){
 		runToCarpenter = new Schedule(this, Schedule.priorityEnum.High);
 		runToCarpenter.Add(new TimeTask(2, new IdleState(this)));
-		runToCarpenter.Add(new Task(new MoveThenDoState(this, NPCManager.instance.getNPC(StringsNPC.CarpenterYoung).transform.position, new MarkTaskDone(this))));
+		//runToCarpenter.Add(new Task(new MoveThenDoState(this, NPCManager.instance.getNPC(StringsNPC.CarpenterYoung).transform.position, new MarkTaskDone(this))));
+		runToCarpenter.Add(new Task(new MoveThenDoState(this, new Vector3 (5, .2f, .3f), new MarkTaskDone(this))));
+		runToCarpenter.Add (new TimeTask(1f, new IdleState(this)));
+		runToCarpenter.Add(new Task(new MoveThenDoState(this, new Vector3 (4, .2f, .3f), new MarkTaskDone(this))));
+		runToCarpenter.Add (new TimeTask(2f, new IdleState(this)));
+		runToCarpenter.Add(new Task(new MoveThenDoState(this, new Vector3 (10, .2f, .3f), new MarkTaskDone(this))));
+//adding the ability to set flags would be nice
+//adding the ability to set emotion States on would be nice. (actions)
 		runToCarpenter.SetCanChat(false);
-	
 	}
 	#region EmotionStates
 		#region Initial Emotion State

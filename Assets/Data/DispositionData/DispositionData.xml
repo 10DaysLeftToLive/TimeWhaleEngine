@@ -7,6 +7,15 @@
     <Npcs name="MotherYoung">
       <disposition>0</disposition>
     </Npcs>
+    <Npcs name="FarmerFatherYoung">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="LighthouseGirlYoung">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="FarmerMotherYoung">
+      <disposition>0</disposition>
+    </Npcs>
     <Npcs name="CarpenterYoung">
       <disposition>0</disposition>
     </Npcs>

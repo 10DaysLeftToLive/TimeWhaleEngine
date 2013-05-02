@@ -6,6 +6,7 @@ public abstract class NPCConversation {
 	public List<Dialogue> dialogueList;
 	
 	public NPCConversation() {
+		dialogueList = new List<Dialogue>();
 		DialogueScript();
 	}
 	

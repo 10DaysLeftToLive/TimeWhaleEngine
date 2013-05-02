@@ -6,7 +6,7 @@ public static class StringsNPC {
 	
 	public static string MomYoung = "Mom";
 	
-	public static string SiblingYoung = "Sibling";
+	public static string SiblingYoung = "SiblingYoung";
 	
 	public static string FarmerYoung = "";
 	
