@@ -17,7 +17,7 @@ public abstract class NPC : Character {
 	protected EmotionState currentEmotion;
 	protected Dictionary<string, Reaction> flagReactions;
 	
-	private Player player;
+	public Player player;
 	private bool chatingWithPlayer = false;
 	public bool chatingWithNPC = false;
 	private Texture charPortrait;
