@@ -12,6 +12,10 @@ public class MoveThenDoState : MoveState {
 		_toDoWhenDone = toDoWhenDone;
 	}
 	
+	public MoveThenDoState(Character toControl, string goal, State toDoWhenDone) : base(toControl, goal){
+		_toDoWhenDone = toDoWhenDone;
+	}
+	
 	public override void OnEnter(){
 		Debug.Log(character.name + ": MoveThenDoState Enter");
 		//TODO: Handle case for climb
