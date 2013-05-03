@@ -18,7 +18,7 @@ public class Schedule {
 	protected NPC _toManage;
 	protected Task current;
 	protected bool canPassiveChat = false; // Should only be true for priorities that are low or less
-	protected bool canInteractWithPlayer = false;
+	protected bool canInteractWithPlayer = true;
 	public bool CanPassiveChat {
 		get { return canPassiveChat; }
 	}
