@@ -104,7 +104,7 @@ public class InteractionMenu : GUIControl {
 	}
 	
 	private void DisplayGiveButton(){
-		if (ButtonClick(buttonRects[GIVEITEMBUTTON], "Give")){
+		if (ButtonClick(buttonRects[GIVEITEMBUTTON], "Give " + player.Inventory.GetItem().name)){
 			DoGiveClick();
 		}
 	}
@@ -129,13 +129,12 @@ public class InteractionMenu : GUIControl {
 	
 	public void DoClickOnChoice(string choice){
 		Debug.Log("Doing click on " + choice);
-		EventManager.instance.RiseOnNPCInteractionEvent(new NPCChoiceInteraction(this.gameObject, choice));
 		npcChattingWith.ReactToChoice(choice);
 	}
 	
 	private void DoGiveClick(){
 		Debug.Log("Doing give click");
-		EventManager.instance.RiseOnNPCInteractionEvent(new NPCItemInteraction(this.gameObject, player.Inventory.GetItem()));
+		npcChattingWith.ReactToBeingGivenItem(player.Inventory.GetItem());
 	}
 
 	public void OpenChatForNPC(NPC _newNpcChatting){

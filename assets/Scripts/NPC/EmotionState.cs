@@ -8,12 +8,16 @@ public class EmotionState {
 	protected ChatChoiceInfo _chatInfo;
 	protected Dictionary<Choice, DispositionDependentReaction> _allChoiceReactions;
 	protected Dictionary<string, DispositionDependentReaction> _allItemReactions;
+	protected DispositionDependentReaction defaultItemReaction;
 	
 	public EmotionState(NPC npcInState, string textToSay){
 		_npcInState = npcInState;
 		_defaultTextToSay = textToSay;
 		_allChoiceReactions = new Dictionary<Choice, DispositionDependentReaction>();
 		_allItemReactions = new Dictionary<string, DispositionDependentReaction>();
+		Reaction defaultItemReact = new Reaction();
+		defaultItemReact.AddAction(new UpdateCurrentTextAction(npcInState, "No thank you."));
+		defaultItemReaction = new DispositionDependentReaction(defaultItemReact);
 	}
 	
 	public string GetWhatToSay(){
@@ -58,6 +62,21 @@ public class EmotionState {
 		}
 		PerformReactionBasedOnDisposition(_allChoiceReactions[choiceToSetOff]);
 		GUIManager.Instance.UpdateInteractionDisplay(choiceToSetOff._reactionDialog);
+	}
+	
+	/// <summary>
+	/// Reacts to the given item by calling the corrisponding reaction or the default one if none have been set for it
+	/// </summary>
+	/// <param name='item'>
+	/// Item.
+	/// </param>
+	public void ReactToGiveItem(GameObject item){
+		if (_allItemReactions.ContainsKey(item.name)){
+			PerformReactionBasedOnDisposition(_allItemReactions[item.name]);
+		} else {
+			Debug.LogWarning("No give reaction was set for " + item.name);
+			PerformReactionBasedOnDisposition(defaultItemReaction);
+		}
 	}
 	
 	/// <summary>

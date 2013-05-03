@@ -180,6 +180,10 @@ public abstract class NPC : Character {
 	public void ReactToChoice(string choice){
 		currentEmotion.ReactToChoice(choice);	
 	}
+	
+	public void ReactToBeingGivenItem(GameObject item){
+		currentEmotion.ReactToGiveItem(item);
+	}
 	#endregion
 	
 	#region Getters
