@@ -28,7 +28,6 @@ public class WayPointPath {
 				pathPoints[i,j] = Search.GetPathPoints(j);
 			}
 		}
-		Debug.Log("pathfinding initialized");		
 	}
 
 	public static void SetupPathfinding(Vector3 startPos, Vector3 destination, float ht){

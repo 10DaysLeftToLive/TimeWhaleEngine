@@ -125,15 +125,16 @@ public abstract class NPC : Character {
 	}
 	
 	private void CloseChat(){
+		GUIManager.Instance.CloseInteractionMenu();
 	}
 	
-	public void CloseInteraction(){
+	public void LeaveInteraction(){
 		chatingWithPlayer = false;
 	}
 	
 	private void StopTalkingWithPlayer(){
 		GUIManager.Instance.CloseInteractionMenu();
-		CloseInteraction();
+		LeaveInteraction();
 	}
 	
 	public void StarTalkingWithPlayer(){

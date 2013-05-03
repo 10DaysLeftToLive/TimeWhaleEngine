@@ -86,7 +86,7 @@ public class Player : Character {
 	
 	private void OnClickOnPlayer(EventManager EM){
 		if (currentState.GetType() == typeof(TalkState)){ // if we are talking exit before doing anything else.
-			LeaveInteraction();
+			CloseInteraction();
 		} else {
 			if (Inventory.HasItem()){
 				Inventory.DropItem(GetFeet());
@@ -197,7 +197,7 @@ public class Player : Character {
 	
 	public void ChangeAge(CharacterAge newAge, CharacterAge previousAge){
 		if (IsInteracting()){
-			LeaveInteraction();	
+			CloseInteraction();	
 		}
 		
 		AgeSwapMover.instance.ChangeAgePosition(newAge, previousAge);
@@ -251,9 +251,13 @@ public class Player : Character {
 		return (currentState is TalkState);	
 	}
 	
-	public void LeaveInteraction(){
+	private void CloseInteraction(){
 		Debug.Log("Leaving interaction");
 		GUIManager.Instance.CloseInteractionMenu();
+	}
+	
+	public void LeaveInteraction(){
 		EnterState(new IdleState(this));
+		
 	}
 }

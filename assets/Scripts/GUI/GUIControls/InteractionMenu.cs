@@ -90,12 +90,12 @@ public class InteractionMenu : GUIControl {
 	}
 	
 	public override bool ClickOnGUI(Vector2 screenPos){
-		Debug.Log("Doing cllick on gui " + screenPos + " " + mainChatRect.ToString() + " " + mainChatRect.Contains(screenPos));
+		Debug.Log("Doing click on gui " + screenPos + " " + mainChatRect.ToString() + " " + mainChatRect.Contains(screenPos));
 		return (mainChatRect.Contains(screenPos));
 	}
 	
 	public void Close(){
-		npcChattingWith.CloseInteraction();	
+		npcChattingWith.LeaveInteraction();	
 		player.LeaveInteraction();
 	}
 	
@@ -115,7 +115,7 @@ public class InteractionMenu : GUIControl {
 	
 	private void DisplayLeaveButton(){
 		if (GUI.Button(leaveButtonRect, "Leave")){
-			Close();
+			GUIManager.Instance.CloseInteractionMenu();
 		}
 	}
 	
