@@ -145,6 +145,10 @@ public abstract class NPC : Character {
 	public void UpdateDefaultText(string newText){
 		currentEmotion.SetDefaultText(newText);	
 	}
+	
+	public bool IsInteracting(){
+		return (chatingWithPlayer);	
+	}
 	#endregion	
 	
 	#region Schedule

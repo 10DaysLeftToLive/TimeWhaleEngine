@@ -14,8 +14,10 @@ public class TalkState : AbstractState {
 	public override void OnEnter(){
 		Debug.Log(character.name + ": TalkState Enter");
 		character.PlayAnimation(Strings.animation_stand);
-		_toTalkWith.StarTalkingWithPlayer();
-		GUIManager.Instance.InitiateInteraction(_toTalkWith);
+		if (!_toTalkWith.IsInteracting()){
+			_toTalkWith.StarTalkingWithPlayer();
+			GUIManager.Instance.InitiateInteraction(_toTalkWith);
+		}
 	}
 	
 	public override void OnExit(){
