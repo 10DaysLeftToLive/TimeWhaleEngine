@@ -12,10 +12,19 @@ public class InGameMenu : GUIControl {
 	}
 	
 	public override void Render(){
-		if (GUI.Button(pauseButtonRect, "Pause")){
-			EventManager.instance.RiseOnPauseToggleEvent(new PauseStateArgs(isPaused));	
+		if (GUI.Button(pauseButtonRect, (isPaused ? "Resume" : "Pause"))){
+			if (isPaused){
+				GUIManager.Instance.HidePauseMenu();
+			} else {
+				GUIManager.Instance.ShowPauseMenu();
+			}
 			isPaused = !isPaused;
+			EventManager.instance.RiseOnPauseToggleEvent(new PauseStateArgs(isPaused));	
 		}
+	}
+	
+	public override bool ClickOnGUI(Vector2 screenPos){
+		return (pauseButtonRect.Contains(screenPos));
 	}
 	
 	private void SetupRectangles(){

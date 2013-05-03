@@ -82,7 +82,11 @@ public class InteractionMenu : GUIControl {
 		currentButtonIndex = 0;
 		
 		foreach (string text in buttonTexts){
-			if (GUI.Button(buttonRects[currentButtonIndex], text)){
+			if (currentButtonIndex == 3){
+				Debug.LogError("Trying to display more than 3 choices");
+				return;
+			}
+			if (ButtonClick(buttonRects[currentButtonIndex], text)){
 				DoClickOnChoice(text);
 			}
 			currentButtonIndex++;
@@ -90,12 +94,17 @@ public class InteractionMenu : GUIControl {
 	}
 	
 	public override bool ClickOnGUI(Vector2 screenPos){
-		Debug.Log("Doing cllick on gui " + screenPos + " " + mainChatRect.ToString() + " " + mainChatRect.Contains(screenPos));
+		Debug.Log("Doing click on gui " + screenPos + " " + mainChatRect.ToString() + " " + mainChatRect.Contains(screenPos));
 		return (mainChatRect.Contains(screenPos));
 	}
 	
+	public void Close(){
+		npcChattingWith.LeaveInteraction();	
+		player.LeaveInteraction();
+	}
+	
 	private void DisplayGiveButton(){
-		if (GUI.Button(buttonRects[GIVEITEMBUTTON], "Give")){
+		if (ButtonClick(buttonRects[GIVEITEMBUTTON], "Give " + player.Inventory.GetItem().name)){
 			DoGiveClick();
 		}
 	}
@@ -109,8 +118,8 @@ public class InteractionMenu : GUIControl {
 	}
 	
 	private void DisplayLeaveButton(){
-		if (GUI.Button(leaveButtonRect, "Leave")){
-			player.LeaveInteraction();
+		if (ButtonClick(leaveButtonRect, "Leave")){
+			GUIManager.Instance.CloseInteractionMenu();
 		}
 	}
 	
@@ -120,13 +129,12 @@ public class InteractionMenu : GUIControl {
 	
 	public void DoClickOnChoice(string choice){
 		Debug.Log("Doing click on " + choice);
-		EventManager.instance.RiseOnNPCInteractionEvent(new NPCChoiceInteraction(this.gameObject, choice));
 		npcChattingWith.ReactToChoice(choice);
 	}
 	
 	private void DoGiveClick(){
 		Debug.Log("Doing give click");
-		EventManager.instance.RiseOnNPCInteractionEvent(new NPCItemInteraction(this.gameObject, player.Inventory.GetItem()));
+		npcChattingWith.ReactToBeingGivenItem(player.Inventory.GetItem());
 	}
 
 	public void OpenChatForNPC(NPC _newNpcChatting){

@@ -10,6 +10,7 @@ using System.Collections.Generic;
  *  For moving you need to use MoveThenDo(MarkTaskDone)
  * 		So we know when the npc completed that task
  *  See Task and TimeTask for the basics of what you can schedule
+ *  defaults to not being able to passive chat or be interupted by the player
  */
 public class Schedule {
 	public List<List<string>> flagList;
@@ -17,8 +18,12 @@ public class Schedule {
 	protected NPC _toManage;
 	protected Task current;
 	protected bool canPassiveChat = false; // Should only be true for priorities that are low or less
+	protected bool canInteractWithPlayer = false;
 	public bool CanPassiveChat {
 		get { return canPassiveChat; }
+	}
+	public bool CanInteractWithPlayer {
+		get { return canInteractWithPlayer; }	
 	}
 	public int schedulePriority; // high 1 - 10 low
 	

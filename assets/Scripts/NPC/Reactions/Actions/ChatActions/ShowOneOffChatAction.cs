@@ -10,6 +10,10 @@ public class ShowOneOffChatAction : Action {
 		chatInfo = new ChatInfo(_npcToChat, _textToShow);
 	}
 	
+	public ShowOneOffChatAction(NPC _npcToChat, string _textToShow, float _timeToShow){
+		chatInfo = new ChatInfo(_npcToChat, _textToShow, _timeToShow);
+	}
+	
 	public override void Perform(){
 		GUIManager.Instance.AddNPCChat(new NPCOneOffChat(chatInfo));
 	}

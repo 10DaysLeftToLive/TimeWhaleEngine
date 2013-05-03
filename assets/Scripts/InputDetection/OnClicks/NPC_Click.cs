@@ -18,7 +18,16 @@ public class NPC_Click : OnClickNextToPlayer {
 	}
 	
 	protected override void DoClickNextToPlayer(){
-		Debug.Log("Click next to player");
-		player.EnterState(new TalkState(player, npcAttachedTo));
+		if (NPCIsOpenToInteracting()){
+			player.EnterState(new TalkState(player, npcAttachedTo));
+		} else if (npcAttachedTo.IsInteracting()) {
+			GUIManager.Instance.CloseInteractionMenu();
+		} else {
+			Debug.Log("Tried to talk to " + npcAttachedTo + " but it didn't want to talk");	
+		}	
+	}
+	
+	private bool NPCIsOpenToInteracting(){
+		return (!npcAttachedTo.IsInteracting() && npcAttachedTo.CanTalk()); 		
 	}
 }

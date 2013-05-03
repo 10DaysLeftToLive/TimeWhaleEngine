@@ -10,5 +10,6 @@ public class DefaultSchedule : ScheduleLoop {
 		Add(new Task(new IdleState(_toManage)));
 		schedulePriority = (int)Schedule.priorityEnum.Default;
 		canPassiveChat = false;
+		canInteractWithPlayer = true;
 	}
 }

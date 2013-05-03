@@ -23,10 +23,8 @@ public class Player : Character {
 		get{return currentTouchedGrowableUp;}
 	}
 	private GameObject currentTouchedGrowableUp;
-	
-	
+
 	public bool isTouchingTrigger = false;
-	
 	
 	public float currentVerticalSpeed = 0.0f;
 	
@@ -88,7 +86,7 @@ public class Player : Character {
 	
 	private void OnClickOnPlayer(EventManager EM){
 		if (currentState.GetType() == typeof(TalkState)){ // if we are talking exit before doing anything else.
-			LeaveInteraction();
+			CloseInteraction();
 		} else {
 			if (Inventory.HasItem()){
 				Inventory.DropItem(GetFeet());
@@ -198,6 +196,10 @@ public class Player : Character {
 	}
 	
 	public void ChangeAge(CharacterAge newAge, CharacterAge previousAge){
+		if (IsInteracting()){
+			CloseInteraction();	
+		}
+		
 		AgeSwapMover.instance.ChangeAgePosition(newAge, previousAge);
 
 		ChangeHitBox(newAge, previousAge);
@@ -245,9 +247,17 @@ public class Player : Character {
 		}
 	}
 	
-	public void LeaveInteraction(){
+	private bool IsInteracting(){
+		return (currentState is TalkState);	
+	}
+	
+	private void CloseInteraction(){
 		Debug.Log("Leaving interaction");
 		GUIManager.Instance.CloseInteractionMenu();
+	}
+	
+	public void LeaveInteraction(){
 		EnterState(new IdleState(this));
+		
 	}
 }
