@@ -25,6 +25,13 @@ public class ScheduleStack {
 		return (current.CanPassiveChat);
 	}
 	
+	public bool CanInteractWithPlayer(){
+		if (current == null){
+			return (false);
+		}
+		return(current.CanInteractWithPlayer);
+	}
+	
 	// Does not run and change schedules the same tick.
 	public void Run(float timeSinceLastTick) {		
 		if (HasSchedule()) {

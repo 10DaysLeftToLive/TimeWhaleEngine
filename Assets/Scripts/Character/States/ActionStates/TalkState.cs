@@ -14,9 +14,12 @@ public class TalkState : AbstractState {
 	public override void OnEnter(){
 		Debug.Log(character.name + ": TalkState Enter");
 		character.PlayAnimation(Strings.animation_stand);
-		if (!_toTalkWith.IsInteracting()){
+		if (!_toTalkWith.IsInteracting() && _toTalkWith.CanTalk()){
 			_toTalkWith.StarTalkingWithPlayer();
 			GUIManager.Instance.InitiateInteraction(_toTalkWith);
+		} else {
+			Debug.Log("Tried to talk to " + _toTalkWith + " but it didn't want to talk");	
+			character.EnterState(new IdleState(character));
 		}
 	}
 	

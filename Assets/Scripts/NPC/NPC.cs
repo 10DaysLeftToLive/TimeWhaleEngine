@@ -105,23 +105,19 @@ public abstract class NPC : Character {
 		}
 	}
 	
-	public bool RequestChat(NPC npc) {
-		if (npc.scheduleStack.CanPassiveChat()) {
-			return true;
-		} else {
-			return false;
-		}
+	public bool RequestChat(NPC npcToRequest) {
+		return (npcToRequest.scheduleStack.CanPassiveChat());
+	}
+	
+	public bool CanTalk(){
+		return (this.scheduleStack.CanInteractWithPlayer());
 	}
 	
 	private bool InChatDistance(GameObject gameObject) {
 		float xDistance = Mathf.Abs(this.transform.position.x - gameObject.transform.position.x);
 		float yDistance = Mathf.Abs(this.transform.position.y - gameObject.transform.position.y);
 		
-		if (xDistance < DISTANCE_TO_CHAT && yDistance < DISTANCE_TO_CHAT) {
-			return true;
-		} else {
-			return false;
-		}
+		return (xDistance < DISTANCE_TO_CHAT && yDistance < DISTANCE_TO_CHAT);
 	}
 	
 	private void CloseChat(){
