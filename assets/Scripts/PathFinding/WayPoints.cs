@@ -23,7 +23,6 @@ public class WayPoints : MonoBehaviour {
 	public Age pointAge;
 	
 	private bool setupWayPoints = false;
-	private bool initialized = false;
 	
 	private Vector3 floorPosition;
 	
@@ -34,15 +33,12 @@ public class WayPoints : MonoBehaviour {
 	}
 	
 	void Update (){
-		if (this.name == "WayPoint.000" && !initialized){
+		if ( id == 0 && !setupWayPoints && pointAge == Age.young){
 			Graph.Initialize();	
-		}
-		if ((this.name == "WayPoint.000")&& !setupWayPoints && initialized){
 			Graph.StartGraph(this.gameObject);
 			WayPointPath.Initialize();
 			setupWayPoints = true;
 		}
-		initialized = true;
 	}
 	
 	public Vector3 GetFloorPosition(){

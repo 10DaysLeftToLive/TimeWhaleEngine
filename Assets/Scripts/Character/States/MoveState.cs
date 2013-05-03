@@ -8,6 +8,8 @@ using System.Collections;
  */
 public class MoveState : AbstractState {
     private Vector3 _goal;
+	private string _goalName;
+	private bool goalByName;
     private Path _pathFollowing;
     protected float speed = 5f;
     private GoToState currentMovementState = null;
@@ -17,6 +19,12 @@ public class MoveState : AbstractState {
         
     public MoveState(Character toControl, Vector3 goal) : base(toControl){
         _goal = goal;
+		goalByName = false;
+    }
+	
+	public MoveState(Character toControl, string goal) : base(toControl){
+        _goalName = goal;
+		goalByName = true;
     }
     
     public override void Update(){
@@ -110,19 +118,22 @@ public class MoveState : AbstractState {
         int mask = (1 << 9);
         RaycastHit hit;
         
-        if (Physics.Raycast(_goal, Vector3.down , out hit, 10, mask)) {
+        if (!goalByName && Physics.Raycast(_goal, Vector3.down , out hit, 10, mask)) {
             Vector3 hitPos = hit.point;
             hitPos.y += character.transform.localScale.y/2;
-            //Debug.Log("ground at " + hitPos);
             
             if (PathFinding.GetPathForPoints(character.transform.position, hitPos, character.transform.localScale.y/2)){
-			//if (PathFinding.GetPathToNode(character.transform.position, "WayPoint.011", character.transform.localScale.y/2)){
                 _pathFollowing = new Path();
                 _pathFollowing = PathFinding.GetPath();
-                
                 return (true);
             }
-        } return (false);
+        } else if (goalByName){
+			if (PathFinding.GetPathToNode(character.transform.position, _goalName, character.transform.localScale.y/2)){
+                _pathFollowing = new Path();
+                _pathFollowing = PathFinding.GetPath();
+				return (true);
+			}
+		}return (false);
     }
     
     protected virtual bool PathSearch(Vector3 pos, Vector3 hitPos, float height){

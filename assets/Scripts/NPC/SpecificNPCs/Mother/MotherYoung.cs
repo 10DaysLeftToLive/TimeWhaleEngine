@@ -65,18 +65,21 @@ public class MotherYoung : NPC {
 			Reaction enterHappyState;
 		
 			public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+				
+				changeDefaultText = new Reaction();
 				enterMadState = new Reaction();
 				enterHappyState = new Reaction();
 			
 				numberOfTimesBuggedMother = 0;
-				changeDefaultText = new Reaction();
 				
 				enterMadState.AddAction(new NPCEmotionUpdateAction(toControl, new MadEmotionState(toControl)));
 				enterHappyState.AddAction(new NPCEmotionUpdateAction(toControl, new HappyEmotionState(toControl)));
 				changeDefaultText.AddAction(new NPCCallbackAction(UpdateText));
 				firstTimeBusy = new Choice("I'm Busy!", text1);
 				_allChoiceReactions.Add((firstTimeBusy), new DispositionDependentReaction(changeDefaultText));		
-				_allChoiceReactions.Add(new Choice("I'm free!", "Great! Take these and find somewhere to plant them."), new DispositionDependentReaction(enterHappyState));
+				_allChoiceReactions.Add(new Choice("I'm free!", "Great! Could you plant these in the backyard?"), new DispositionDependentReaction(enterHappyState));
+			
+// Add auto close GUIBox
 			}
 			
 			public void UpdateText() {
@@ -85,12 +88,12 @@ public class MotherYoung : NPC {
 				if (numberOfTimesBuggedMother == 1) {
 					SetDefaultText("Are you free now?");
 					text1 = "Alright, I need your help, so come back soon.";
-					FlagManager.instance.SetFlag(FlagStrings.SiblingExplore);
 				}
 			
 				if (numberOfTimesBuggedMother == 2) {
 					SetDefaultText("Oh good, you're back!!");
 					text1 = "This isn't a game, I really do need help.";
+					FlagManager.instance.SetFlag(FlagStrings.SiblingExplore);
 				}
 			
 				if (numberOfTimesBuggedMother == 3) {
@@ -113,9 +116,6 @@ public class MotherYoung : NPC {
 				}
 			}
 		
-			public override void UpdateEmotionState(){
-				
-			}
 		}
 		#endregion
 		#region MadEmotionState
@@ -150,7 +150,7 @@ public class MotherYoung : NPC {
 			//evokeUpdatePosition.Perform();
 			changeFlag = new Reaction();
 			changeFlag.AddAction(new NPCCallbackAction(UpdatePosition));
-			goBackHome = new Choice("Let's go back!", "Yes! There's more to do at home!");
+			goBackHome = new Choice("See ya!", "Looks like you had fun!");
 			_allChoiceReactions.Add(goBackHome, new DispositionDependentReaction(changeFlag));
 		}
 		
@@ -183,7 +183,7 @@ public class MotherYoung : NPC {
 		public HappyEmotionState(NPC toControl) : base(toControl, "You're my best friend! =]"){
 			changeFlag = new Reaction();
 			postSeed = new Reaction();
-			testing = new Choice ("Where?", "Follow me, I saw a good spot the other day.");
+			testing = new Choice ("Where?", "Follow me, There's a good spot over here.");
 			postSeed.AddAction(new NPCEmotionUpdateAction(toControl, new PlantTreeState(toControl)));
 			changeFlag.AddAction(new NPCCallbackAction(UpdateFlag));
 			_allChoiceReactions.Add((testing), new DispositionDependentReaction(changeFlag));
@@ -193,6 +193,7 @@ public class MotherYoung : NPC {
 		public void UpdateFlag() {
 			
 			if (!flagSet) {
+				FlagManager.instance.SetFlag(FlagStrings.SiblingExplore);
 				FlagManager.instance.SetFlag(FlagStrings.EnterHappyState);	
 				flagSet = true;
 				_allChoiceReactions.Remove(testing);
