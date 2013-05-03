@@ -49,6 +49,9 @@
     <Npcs name="LighthouseGirlMiddle">
       <disposition>0</disposition>
     </Npcs>
+    <Npcs name="FarmerFatherMiddle">
+      <disposition>0</disposition>
+    </Npcs>
     <Npcs name="CastlemanMiddle">
       <disposition>0</disposition>
     </Npcs>

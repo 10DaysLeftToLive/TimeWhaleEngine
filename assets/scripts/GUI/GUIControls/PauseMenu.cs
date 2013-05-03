@@ -16,6 +16,10 @@ public class PauseMenu : GUIControl{
 		}
 	}
 	
+	public override bool ClickOnGUI(Vector2 screenPos){
+		return (quitButtonRect.Contains(screenPos));
+	}
+	
 	private void SetupRectangles(){
 		quitButtonRect = ScreenRectangle.NewRect(.4f,.5f,.2f,.2f);	
 	}

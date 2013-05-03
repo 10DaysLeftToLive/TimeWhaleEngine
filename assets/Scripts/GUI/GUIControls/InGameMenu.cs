@@ -23,6 +23,10 @@ public class InGameMenu : GUIControl {
 		}
 	}
 	
+	public override bool ClickOnGUI(Vector2 screenPos){
+		return (pauseButtonRect.Contains(screenPos));
+	}
+	
 	private void SetupRectangles(){
 		pauseButtonRect = ScreenRectangle.NewRect(.0f,.8f,.2f,.2f);	
 	}

@@ -12,6 +12,8 @@ public abstract class Character : PauseObject {
 	#region Fields	
 	private float LEFT = -1;
 	private float RIGHT = 1;
+	private static bool PAUSED = true;
+	private static bool UPPAUSED = false;
 	
 	public bool SpriteLookingLeft;
 	protected State currentState;
@@ -55,6 +57,19 @@ public abstract class Character : PauseObject {
 	protected override void UpdateObject(){
 		currentState.Update();
 		CharacterUpdate();
+	}
+	
+	protected override void OnPause(){
+		ToggleAnimationPlaying(PAUSED);
+	}
+	
+	protected override void OnResume(){
+		ToggleAnimationPlaying(UPPAUSED);
+	}
+	
+	private void ToggleAnimationPlaying(bool isPaused){
+		int speed = (isPaused ? 0 : 1);
+		// TODO by Brent
 	}
 	
 	public void EnterState(State newState){		

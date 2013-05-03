@@ -15,10 +15,17 @@ public abstract class PauseObject : MonoBehaviour {
 	
 	private void TogglePauseEvent(EventManager EM, PauseStateArgs pauseState){
 		gamePaused = pauseState.isPaused;
+		if (gamePaused){
+			OnPause();	
+		} else {
+			OnResume();	
+		}
 	}
 	
 	// To be implemented by child
 	protected abstract void UpdateObject();
+	protected virtual void OnPause(){}
+	protected virtual void OnResume(){}
 	
 	void Update () {
 		if (!gamePaused){
