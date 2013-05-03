@@ -1,6 +1,9 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Updates the NPC's disposition by the given amount
+/// </summary>
 public class UpdateNPCDispositionAction : NPCValueUpdateAction {
 	int deltaDisposition;
 	

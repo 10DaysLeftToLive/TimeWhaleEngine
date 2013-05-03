@@ -1,9 +1,15 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Age swap detector is responsible for checking if there is anything in the way of the player in the next age
+/// </summary>
 public class AgeSwapDetector {
 	private static float RAYCAST_Z_OFFSET = -2;
 	
+	/// <summary>
+	/// Checks the transition position success. Will return true if the player can move to that location or false if they can't.
+	/// </summary>
 	public static bool CheckTransitionPositionSuccess(Vector3 playerCenter, CharacterController charControl){
 		Vector3 linecastTopLeftStart = new Vector3(playerCenter.x - charControl.radius, playerCenter.y + (charControl.height * 0.5f),playerCenter.z - charControl.radius + RAYCAST_Z_OFFSET);
 		Vector3 linecastTopLeftEnd = new Vector3(playerCenter.x - charControl.radius, playerCenter.y + (charControl.height * 0.5f), playerCenter.z + charControl.radius);
@@ -32,6 +38,5 @@ public class AgeSwapDetector {
 		}
 		
 		return true;	
-		
 	}
 }

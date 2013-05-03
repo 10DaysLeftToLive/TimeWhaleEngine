@@ -145,6 +145,10 @@ public abstract class NPC : Character {
 	public bool IsInteracting(){
 		return (chatingWithPlayer);	
 	}
+	
+	public bool IsWithinOfPlayer(int distance){
+		return (Utils.CalcDistance(player.transform.position.x, transform.position.x) < distance);	
+	}
 	#endregion	
 	
 	#region Schedule

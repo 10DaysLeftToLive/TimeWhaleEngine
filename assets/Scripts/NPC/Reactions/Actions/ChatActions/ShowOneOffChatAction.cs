@@ -1,6 +1,9 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Show one off chat action will display a chatinfo to the screen for a set time or a time based on its' text size
+/// </summary>
 public class ShowOneOffChatAction : Action {
 	private ChatInfo chatInfo;
 	

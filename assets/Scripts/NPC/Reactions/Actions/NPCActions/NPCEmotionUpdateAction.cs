@@ -1,6 +1,9 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// NPC emotion update action will update the emotion state of the given npc.
+/// </summary>
 public class NPCEmotionUpdateAction : NPCValueUpdateAction {
 	EmotionState newEmotionState;
 	
