@@ -82,7 +82,11 @@ public class InteractionMenu : GUIControl {
 		currentButtonIndex = 0;
 		
 		foreach (string text in buttonTexts){
-			if (GUI.Button(buttonRects[currentButtonIndex], text)){
+			if (currentButtonIndex == 3){
+				Debug.LogError("Trying to display more than 3 choices");
+				return;
+			}
+			if (ButtonClick(buttonRects[currentButtonIndex], text)){
 				DoClickOnChoice(text);
 			}
 			currentButtonIndex++;
@@ -100,7 +104,7 @@ public class InteractionMenu : GUIControl {
 	}
 	
 	private void DisplayGiveButton(){
-		if (GUI.Button(buttonRects[GIVEITEMBUTTON], "Give")){
+		if (ButtonClick(buttonRects[GIVEITEMBUTTON], "Give")){
 			DoGiveClick();
 		}
 	}
@@ -114,7 +118,7 @@ public class InteractionMenu : GUIControl {
 	}
 	
 	private void DisplayLeaveButton(){
-		if (GUI.Button(leaveButtonRect, "Leave")){
+		if (ButtonClick(leaveButtonRect, "Leave")){
 			GUIManager.Instance.CloseInteractionMenu();
 		}
 	}

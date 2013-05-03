@@ -9,15 +9,13 @@ using System.Collections;
 
 public abstract class GUIControl : MonoBehaviour {
 	private bool initialized = false; // Records if this control has already been initialized or not
-	protected GUIEvent currentResponse;
+	private bool isClickable = true; // used for disabling buttons but still rendering them
 	
 	public bool Initialized {
 		get {return (initialized);}	
 	}
 	
 	public void Initialize(){
-		currentResponse = new GUIEvent();
-		ClearResponse();
 		Init();
 		initialized = true;
 	}
@@ -27,7 +25,15 @@ public abstract class GUIControl : MonoBehaviour {
 	public abstract void Render(); // to display the content of the control
 	public virtual bool ClickOnGUI(Vector2 screenPos){return (false);}
 	
-	public void ClearResponse(){
-		currentResponse.type = GUIEventType.NULLEVENT;
+	public void ToggleClickable(bool newClickableState){
+		isClickable = newClickableState;	
+	}
+	
+	protected bool ButtonClick(Rect buttonArea, string text){
+		if (isClickable){	
+			return (GUI.Button(buttonArea, text));	
+		} 
+		GUI.Box(buttonArea, text);
+		return (false);
 	}
 }
