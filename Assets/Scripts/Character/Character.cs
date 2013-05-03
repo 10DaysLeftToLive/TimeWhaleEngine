@@ -55,7 +55,6 @@ public abstract class Character : PauseObject {
 	protected override void UpdateObject(){
 		currentState.Update();
 		CharacterUpdate();
-		Debug.Log ("[" + name + "] is in current state: " + currentState);
 	}
 	
 	public void EnterState(State newState){		

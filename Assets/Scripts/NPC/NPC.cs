@@ -71,6 +71,7 @@ public abstract class NPC : Character {
 	protected override void CharacterUpdate(){
 		if (chatingWithPlayer && !NearPlayer()){
 			CloseChat();
+			StopTalkingWithPlayer();
 		} else {
 			PassiveChat();
 		}
@@ -93,22 +94,6 @@ public abstract class NPC : Character {
 					if(npcClass != this && InChatDistance(npc) /*TODO - Check if past chat timer to chat again*/) {
 						if (Random.Range(1, CHANCE_TO_CHAT) > 1) { // Roll dice to check if they will chat
 							if (RequestChat(npcClass) && this.scheduleStack.CanPassiveChat()) {
-								
-								
-								// chat Schedule
-								/*Debug.Log("Going to chat");
-								List<ChatInfo> chats = new List<ChatInfo>();
-								chats.Add(new ChatInfo(this, "Chat 1"));
-								chats.Add(new ChatInfo(npcClass, "Chat 2"));
-								chats.Add(new ChatInfo(this, "Chat 3"));
-								chats.Add(new ChatInfo(npcClass, "Chat 4"));
-								chats.Add(new ChatInfo(this, "Chat 5"));
-								NPCChat tempChat = new NPCChat(chats);
-								ChatSchedule chatSchedule1 = new ChatSchedule(this, tempChat);
-								this.AddSchedule(chatSchedule1);
-								ChatSchedule chatSchedule2 = new ChatSchedule(npcClass, tempChat);
-								npcClass.AddSchedule(chatSchedule2);
-								chatingWithNPC = true;*/
 								break;
 							} else { 
 								// Say hi (one off chat)
@@ -143,7 +128,17 @@ public abstract class NPC : Character {
 	private void CloseChat(){
 	}
 	
+	public void CloseInteraction(){
+		chatingWithPlayer = false;
+	}
+	
+	private void StopTalkingWithPlayer(){
+		GUIManager.Instance.CloseInteractionMenu();
+		CloseInteraction();
+	}
+	
 	public void StarTalkingWithPlayer(){
+		chatingWithPlayer = true;
 		EnterState(new InteractingWithPlayerState(this));
 	}
 	

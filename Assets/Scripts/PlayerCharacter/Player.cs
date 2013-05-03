@@ -23,10 +23,8 @@ public class Player : Character {
 		get{return currentTouchedGrowableUp;}
 	}
 	private GameObject currentTouchedGrowableUp;
-	
-	
+
 	public bool isTouchingTrigger = false;
-	
 	
 	public float currentVerticalSpeed = 0.0f;
 	
@@ -198,6 +196,10 @@ public class Player : Character {
 	}
 	
 	public void ChangeAge(CharacterAge newAge, CharacterAge previousAge){
+		if (IsInteracting()){
+			LeaveInteraction();	
+		}
+		
 		AgeSwapMover.instance.ChangeAgePosition(newAge, previousAge);
 
 		ChangeHitBox(newAge, previousAge);
@@ -243,6 +245,10 @@ public class Player : Character {
 			Transform rightHand = animationData.GetSpriteTransform("Right Hand");
 			Inventory.ChangeRightHand(rightHand);
 		}
+	}
+	
+	private bool IsInteracting(){
+		return (currentState is TalkState);	
 	}
 	
 	public void LeaveInteraction(){

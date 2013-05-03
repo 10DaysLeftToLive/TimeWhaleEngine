@@ -94,6 +94,11 @@ public class InteractionMenu : GUIControl {
 		return (mainChatRect.Contains(screenPos));
 	}
 	
+	public void Close(){
+		npcChattingWith.CloseInteraction();	
+		player.LeaveInteraction();
+	}
+	
 	private void DisplayGiveButton(){
 		if (GUI.Button(buttonRects[GIVEITEMBUTTON], "Give")){
 			DoGiveClick();
@@ -110,7 +115,7 @@ public class InteractionMenu : GUIControl {
 	
 	private void DisplayLeaveButton(){
 		if (GUI.Button(leaveButtonRect, "Leave")){
-			player.LeaveInteraction();
+			Close();
 		}
 	}
 	

@@ -82,6 +82,7 @@ public class GUIManager : MonoBehaviour {
 			Debug.LogError("Can't update interaction display when it is not up.");
 			return;
 		}
+		interactionMenu.Close();
 		MarkControlForRemoval(interactionMenu);	
 	}
 	
