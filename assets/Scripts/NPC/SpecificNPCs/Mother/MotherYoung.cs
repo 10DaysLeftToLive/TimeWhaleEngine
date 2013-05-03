@@ -6,6 +6,7 @@ using System.Collections;
 /// </summary>
 public class MotherYoung : NPC {
 	protected override void Init() {
+		id = NPCIDs.MOTHER;
 		base.Init();
 	}
 	
