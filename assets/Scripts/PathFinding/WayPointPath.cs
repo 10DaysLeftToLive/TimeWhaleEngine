@@ -92,7 +92,7 @@ public class WayPointPath {
 		WayPoints startLeftScript, startRightScript, endScript;
 		startLeftScript = GetScript(startLeft);
 		startRightScript = GetScript(startRight);
-		endScript = GetScript(Graph.FindWayPoint(name));
+		endScript = GetScript(Graph.FindWayPointByName(name));
 
 		/*if (startLeft != null) Debug.Log("startLeft " + startLeft.name);
 		if (startRight != null) Debug.Log("startRight " + startRight.name);

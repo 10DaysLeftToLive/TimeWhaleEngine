@@ -6,7 +6,6 @@ public class Path {
 	
 	Vector3[] path;
 	Vector3[] vectorDirection;
-	//int [] direction;
 	int index;
 	
 	public Path(){}
@@ -15,10 +14,8 @@ public class Path {
 		index = 0;
 		path = new Vector3[size];
 		vectorDirection = new Vector3[size];
-		//direction = new int[size];
 		for (int i = 0; i < size; i++){
 			this.path[i] = paths[i];
-			//direction[i] = dir[i];
 			if (i > 0 && path[i-1].x - path[i].x < 0){
 				vectorDirection[i] = new Vector3(1,0,0);
 				if (path[i-1] != path[i]){
@@ -52,9 +49,16 @@ public class Path {
 		return vectorDirection[index];	
 	}
 	
-	/*public int GetDirection(){
-		return direction[index];
-	}*/
+	public float DistanceToNextNode(Vector3 currentPos){
+		if (index > 0){
+			float a = Vector3.Distance(path[index-1], currentPos);
+			float b = Vector3.Distance(path[index-1], path[index]);
+			if (index+1 < path.Length){
+				return (a/b);
+			}
+		}
+		return -1;
+	}
 	
 	public bool NextNode(){
 		index++;
