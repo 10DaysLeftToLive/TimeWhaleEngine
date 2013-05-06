@@ -9,6 +9,7 @@ using System.Reflection;
 public class ScheduleStack {
 	Schedule current;
 	PriorityStack _schedulesToDo;
+	private bool isPaused = false;
 
     public ScheduleStack() {
       this._schedulesToDo = new PriorityStack();
@@ -34,16 +35,18 @@ public class ScheduleStack {
 	
 	// Does not run and change schedules the same tick.
 	public void Run(float timeSinceLastTick) {		
-		if (HasSchedule()) {
-			current.Run(timeSinceLastTick);
-			if (current.IsComplete()) {
-				//Debug.Log("Current schedule complete");
-				//Debug.Log("The next task is " + _schedulesToDo.peek());
-				_schedulesToDo.RemoveDoneFlagSchedules(current);
-				current = null;
+		if (!isPaused){
+			if (HasSchedule()) {
+				current.Run(timeSinceLastTick);
+				if (current.IsComplete()) {
+					//Debug.Log("Current schedule complete");
+					//Debug.Log("The next task is " + _schedulesToDo.peek());
+					_schedulesToDo.RemoveDoneFlagSchedules(current);
+					current = null;
+				}
+			} else {
+				NextSchedule();
 			}
-		} else {
-			NextSchedule();
 		}
 	}
 	
@@ -70,6 +73,17 @@ public class ScheduleStack {
 			current.Resume();
 		} else {
 			_schedulesToDo.Push(schedule);
+		}
+	}
+	
+	public void Pause() {
+		isPaused = true;
+	}
+	
+	public void Resume() {
+		isPaused = false;
+		if (current != null) {
+			current.Resume();
 		}
 	}
 }

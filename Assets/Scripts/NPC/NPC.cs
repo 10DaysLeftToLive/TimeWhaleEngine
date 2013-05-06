@@ -126,6 +126,7 @@ public abstract class NPC : Character {
 	
 	public void LeaveInteraction(){
 		chatingWithPlayer = false;
+		scheduleStack.Resume();
 	}
 	
 	private void StopTalkingWithPlayer(){
@@ -135,6 +136,7 @@ public abstract class NPC : Character {
 	
 	public void StarTalkingWithPlayer(){
 		chatingWithPlayer = true;
+		scheduleStack.Pause();
 		EnterState(new InteractingWithPlayerState(this));
 	}
 	
