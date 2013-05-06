@@ -22,6 +22,7 @@ public class NPCGiveItemAction : Action {
 			Debug.Log("Did not find " + _itemToGiveName);
 			return;
 		}
-		GameObject.Instantiate(itemToPlace, _npcToGiveItem.GetFeet(), Quaternion.identity);
+		Object newItem = GameObject.Instantiate(itemToPlace, _npcToGiveItem.GetFeet(), Quaternion.identity);
+		newItem.name = _itemToGiveName;
 	}
 }

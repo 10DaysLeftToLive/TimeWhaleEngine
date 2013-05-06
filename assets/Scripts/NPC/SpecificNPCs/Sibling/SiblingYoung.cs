@@ -65,10 +65,15 @@ public class SiblingYoung : NPC {
 		#endregion
 		#region Reflection Tree to Home
 		Reaction reflectionTreeToHome = new Reaction();
-		reflectionTreeToHome.AddAction(new UpdateDefaultTextAction(this, "Ready for the last sprint?"));
+		reflectionTreeToHome.AddAction(new UpdateDefaultTextAction(this, "Thanks for the race! It was soo much fun!"));
 		reflectionTreeToHome.AddAction(new NPCAddScheduleAction(this, runToHome));
 		flagReactions.Add(FlagStrings.RunToHome, reflectionTreeToHome);
 		#endregion
+		
+		Reaction postRaceTalkToMom = new Reaction();
+		postRaceTalkToMom.AddAction(new NPCAddScheduleAction(this, postRaceTalkToMomSchedule));
+		postRaceTalkToMom.AddAction(new ShowOneOffChatAction(this, "Hey mom! We just had the best race up to the Reflection Tree!"));
+		flagReactions.Add(FlagStrings.PostSiblingExplore, postRaceTalkToMom);
 		
 		Reaction firstTimeMotherTalks = new Reaction();
 		//FirstTimeMotherTalks.AddAction(new ShowOneOffChatAction(this, "Let's go!", 5));
@@ -76,6 +81,8 @@ public class SiblingYoung : NPC {
 		firstTimeMotherTalks.AddAction(new NPCAddScheduleAction(this, runToCarpenter));
 		//FirstTimeMotherTalks.AddAction(new ShowOneOffChatAction(this, "C'mon, let's race!!!"));
 		flagReactions.Add(FlagStrings.SiblingExplore, firstTimeMotherTalks); 
+		
+		
 	}
 	#endregion
 	protected override EmotionState GetInitEmotionState() {
@@ -103,6 +110,8 @@ public class SiblingYoung : NPC {
 	private Schedule runToMarket;
 	private Schedule runToReflectionTree;
 	private Schedule runToHome;
+	private Schedule postRaceTalkToMomSchedule;
+	
 	#region Set Up Sechedules
 	protected override void SetUpSchedules() {
 		/*
@@ -193,7 +202,8 @@ public class SiblingYoung : NPC {
 		
 		runToHome = new Schedule(this, Schedule.priorityEnum.High);
 		runToHome.Add(new TimeTask(.25f, new IdleState(this)));
-		runToHome.Add(new Task(new MoveThenDoState(this, new Vector3 (-48, 30f, .3f), new MarkTaskDone(this))));
+		/*
+		 * runToHome.Add(new Task(new MoveThenDoState(this, new Vector3 (-48, 30f, .3f), new MarkTaskDone(this))));
 		runToHome.Add(new TimeTask(2f, new IdleState(this)));
 		runToHome.Add(new Task(new MoveThenDoState(this, new Vector3 (-41, 25f, .3f), new MarkTaskDone(this))));
 		runToHome.Add(new TimeTask(1f, new IdleState(this)));
@@ -202,10 +212,15 @@ public class SiblingYoung : NPC {
 		runToHome.Add(new Task(new MoveThenDoState(this, new Vector3 (-40, 16f, .3f), new MarkTaskDone(this))));
 		runToHome.Add(new TimeTask(1.5f, new IdleState(this)));
 		runToHome.Add(new Task(new MoveThenDoState(this, new Vector3 (-18, 6f, .3f), new MarkTaskDone(this))));
+		*/
 		runToHome.Add(new TimeTask(1f, new IdleState(this)));
-		runToHome.Add(new Task(new MoveThenDoState(this, new Vector3 (-9, -1.5f, .3f), new MarkTaskDone(this))));
+		runToHome.Add(new Task(new MoveThenDoState(this, new Vector3 (-5, -1.5f, .3f), new MarkTaskDone(this))));
 		runToHome.Add(new TimeTask(.5f, new IdleState(this)));
-		runToHome.Add(new Task(new MoveThenDoState(this, new Vector3 (-7, -1.5f, .3f), new MarkTaskDone(this))));
+		runToHome.Add(new Task(new MoveThenDoState(this, new Vector3 (-2, -1.5f, .3f), new MarkTaskDone(this))));
+		
+		postRaceTalkToMomSchedule = new Schedule (this, Schedule.priorityEnum.High);
+		postRaceTalkToMomSchedule.Add(new TimeTask(3f, new IdleState(this)));
+		postRaceTalkToMomSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (0, -1.5f, .3f), new MarkTaskDone(this))));
 	}
 	#endregion
 	
@@ -433,7 +448,7 @@ public class SiblingYoung : NPC {
 				activateWalkToHomeState.AddAction(new NPCEmotionUpdateAction(toControl, new WalkToHomeState(toControl)));
 				activateWalkToHomeState.AddAction(new NPCCallbackAction(updatePassiveText));
 				activateWalkToHomeState.AddAction(new ShowOneOffChatAction(toControl, "Race you home!!! I'm going to win!"));
-				_allChoiceReactions.Add(new Choice("Home", "Good Choice~"), new DispositionDependentReaction(activateWalkToHomeState));
+				_allChoiceReactions.Add(new Choice("Home", "Ready for the last sprint?"), new DispositionDependentReaction(activateWalkToHomeState));
 			}
 			
 			public void updatePassiveText() {
@@ -448,34 +463,60 @@ public class SiblingYoung : NPC {
 		private class WalkToHomeState : EmotionState {
 		
 			bool flagSet = false;	
+			Choice choice;
 			Reaction activatePostSiblingExplore;
 			Reaction choiceTwoReaction;
 			string str_readyToRace = "Goooooo!!!!";	
 		
-			public WalkToHomeState(NPC toControl) : base(toControl, " ") {
-			
+			public WalkToHomeState(NPC toControl) : base(toControl, "Good Race!") {
+				
 				activatePostSiblingExplore = new Reaction();
+				choiceTwoReaction = new Reaction();
+				choice = new Choice("Mm hmm!", "Should we tell mom about our adventure?");
 				//activatePostSiblingExplore.AddAction(new NPCEmotionUpdateAction(toControl, new ERROR(toControl)));
-				activatePostSiblingExplore.AddAction(new NPCCallbackAction(updatePassiveText));
-				activatePostSiblingExplore.AddAction(new NPCCallbackAction(changeMomState));
 				activatePostSiblingExplore.AddAction(new ShowOneOffChatAction(toControl, "You're the best! Thanks for playing with me!"));
-				_allChoiceReactions.Add(new Choice("Home", "Good Choice~"), new DispositionDependentReaction(activatePostSiblingExplore));
+				activatePostSiblingExplore.AddAction(new NPCCallbackOnNPCAction(updatePassiveText, toControl));
+				//activatePostSiblingExplore.AddAction(new NPCEmotionUpdateAction(toControl, new MotherUpsetState(toControl)));	
+				choiceTwoReaction.AddAction(new NPCCallbackAction(changeLocation));
+				choiceTwoReaction.AddAction(new NPCEmotionUpdateAction(toControl, new MotherUpsetState(toControl)));
+				_allChoiceReactions.Add(choice, new DispositionDependentReaction(activatePostSiblingExplore));
 			}
 		
-			public void updatePassiveText() {
+			public void updatePassiveText(NPC toControl) {
 				if (!flagSet) {	
-					FlagManager.instance.SetFlag(FlagStrings.PostSiblingExplore);
-					flagSet = true;
+					//FlagManager.instance.SetFlag(FlagStrings.PostSiblingExplore);
+					//flagSet = true;
+					//activatePostSiblingExplore.AddAction(new ShowOneOffChatAction(toControl, "You're the best! Thanks for playing with me!"));
+					
+				//DOESN'T WORK =(
+					//Schedule testSchedule = new Schedule(toControl, Schedule.priorityEnum.DoNow);
+					//testSchedule.Add(new TimeTask(.5f, new IdleState(toControl)));
+					//testSchedule.Add(new Task(new MoveThenDoState(toControl, new Vector3 (10, -1.5f, .3f), new MarkTaskDone(toControl))));	
+					_allChoiceReactions.Remove(choice);
+					SetDefaultText ("Should we tell mom about our adventure?");
+					choice = new Choice("Sure!", "Yay! Let's go!");
+					_allChoiceReactions.Add(choice, new DispositionDependentReaction(choiceTwoReaction));
+					_allChoiceReactions.Add(new Choice ("Don't!","Too bad, I'm going to tell her anyways!"), new DispositionDependentReaction(choiceTwoReaction));
+					GUIManager.Instance.RefreshInteraction();
 				}
 			}
 		
-			public void changeMomState() {
-				// Attempt to change mother state from Sibling
+			public void changeLocation() {
 				FlagManager.instance.SetFlag(FlagStrings.PostSiblingExplore);
-				Action raceComplete;
-				NPC motherName = NPCManager.instance.getNPC(StringsNPC.MomYoung);
-				raceComplete = new NPCEmotionUpdateAction(motherName, new MotherYoung.DummyState(motherName));
-				//
+			}
+		}
+		#endregion
+		#region Mother Upset State 
+		private class MotherUpsetState : EmotionState {
+		
+			bool flagSet = false;	
+			Choice choice;
+			Reaction activatePostSiblingExplore;
+			Reaction choiceTwoReaction;
+			string str_readyToRace = "Goooooo!!!!";	
+		
+			public MotherUpsetState(NPC toControl) : base(toControl, " ") {
+				SetDefaultText("Opps.. I got us in trouble.");	
 			}
 		}
 		#endregion
