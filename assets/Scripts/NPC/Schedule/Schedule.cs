@@ -42,6 +42,14 @@ public class Schedule {
 		flagList = new List<List<string>>();
 	}
 	
+	public Schedule(NPC toManage, bool _canPassiveChat){
+		_tasksToDo = new Queue<Task>();
+		_toManage = toManage;
+		canPassiveChat = _canPassiveChat;
+		schedulePriority = (int)priorityEnum.Low;
+		flagList = new List<List<string>>();
+	}
+	
 	public Schedule(NPC toManage, Enum priority){
 		_tasksToDo = new Queue<Task>();
 		_toManage = toManage;
@@ -49,9 +57,25 @@ public class Schedule {
 		flagList = new List<List<string>>();
 	}
 	
+	public Schedule(NPC toManage, Enum priority, bool _canPassiveChat){
+		_tasksToDo = new Queue<Task>();
+		_toManage = toManage;
+		canPassiveChat = _canPassiveChat;
+		schedulePriority = Convert.ToInt32(priority);
+		flagList = new List<List<string>>();
+	}
+	
 	public Schedule(Queue<Task> tasksToDo, NPC toManage, Enum priority){
 		_tasksToDo = tasksToDo;
 		_toManage = toManage;
+		schedulePriority = Convert.ToInt32(priority);
+		flagList = new List<List<string>>();
+	}
+	
+	public Schedule(Queue<Task> tasksToDo, NPC toManage, Enum priority, bool _canPassiveChat){
+		_tasksToDo = tasksToDo;
+		_toManage = toManage;
+		canPassiveChat = _canPassiveChat;
 		schedulePriority = Convert.ToInt32(priority);
 		flagList = new List<List<string>>();
 	}
@@ -148,5 +172,13 @@ public class Schedule {
 		} else {
 			return -1;
 		}
+	}
+	
+	public virtual void OnInterrupt() {	
+	}
+	
+	protected void SetComplete() {
+		_tasksToDo.Clear();
+		current = null;
 	}
 }

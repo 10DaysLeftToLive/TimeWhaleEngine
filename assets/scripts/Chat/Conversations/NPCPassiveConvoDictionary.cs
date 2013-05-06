@@ -2,12 +2,12 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class NPCConvoDictionary {
+public class NPCPassiveConvoDictionary : ManagerSingleton<NPCPassiveConvoDictionary> {
 	public Dictionary<string, List<NPCConvoChance>> convoDict;
 	private List<NPCConvoChance> convoList;
 	private static int UPPERBOUND = 100;
 	
-	public NPCConvoDictionary() {
+	public override void Init() {
 		convoDict = new Dictionary<string, List<NPCConvoChance>>();
 		AddConversationLists();
 	}
@@ -48,9 +48,11 @@ public class NPCConvoDictionary {
 		}
 		
 		// go through specific conversations
-		foreach(NPCConvoChance convo in convoDict[npc.name]) {
-			if (IsConvoDrop(convo)) {
-				return (NPCConversation)convo;
+		if (convoDict.ContainsKey(npc.name)) {
+			foreach(NPCConvoChance convo in convoDict[npc.name]) {
+				if (IsConvoDrop(convo)) {
+					return (NPCConversation)convo;
+				}
 			}
 		}
 		

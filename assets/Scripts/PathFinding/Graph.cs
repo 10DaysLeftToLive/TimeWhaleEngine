@@ -111,10 +111,21 @@ public static class Graph {
 		return false;
 	}
 	
-	public static GameObject FindWayPoint(string name){
+	public static GameObject FindWayPointByName(string name){
 		for(int i = 0; i < wayPointCount; i++){
 			if (wayPoints[i].name == name)
 				return wayPoints[i];
+		}
+		return null;
+	}
+	
+	public static GameObject FindWayPointById(int id){
+		if (id != -1){
+			for(int i = 0; i < wayPointCount; i++){
+				WayPoints tmpScript = GetScript(wayPoints[i]);
+				if (tmpScript.id == id)
+					return wayPoints[i];
+			}
 		}
 		return null;
 	}

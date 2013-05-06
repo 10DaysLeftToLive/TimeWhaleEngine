@@ -78,6 +78,9 @@ public class ScheduleStack {
 	
 	public void Pause() {
 		isPaused = true;
+		if (current != null) {
+			current.OnInterrupt();
+		}
 	}
 	
 	public void Resume() {

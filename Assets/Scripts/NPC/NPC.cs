@@ -21,9 +21,12 @@ public abstract class NPC : Character {
 	private bool chatingWithPlayer = false;
 	public bool chatingWithNPC = false;
 	private Texture charPortrait;
+	private Action sayHi;
+	private float timeTillPassiveChatAgain = 0;
 	#endregion
 	
 	#region Set Values
+	private static int NEAR_DISTANCE = 8;
 	private static int DISTANCE_TO_CHAT = 4;
 	private static int DISTANCE_TO_SEE = 8;
 	private static int DISPOSITION_LOW_END = 0;
@@ -31,6 +34,7 @@ public abstract class NPC : Character {
 	private static int CHANCE_TO_CHAT = 3; // Sets chance to be 1 out of this value
 	public static int DISPOSITION_LOW = 3; // these should not be hard set
 	public static int DISPOSITION_HIGH = 7;
+	public static float TIME_INBETWEEN_PASSIVE_CHATS = 20;
 	#endregion
 	
 	#region Initialization
@@ -68,7 +72,7 @@ public abstract class NPC : Character {
 	
 	#region Update
 	protected override void CharacterUpdate(){
-		if (chatingWithPlayer && !NearPlayer()){
+		if (chatingWithPlayer && !NearPlayerToChat()){
 			CloseChat();
 			StopTalkingWithPlayer();
 		} else {
@@ -80,9 +84,12 @@ public abstract class NPC : Character {
 	
 	#region Chat/Interaction 
 	private void PassiveChat(){
-		if (scheduleStack.CanPassiveChat()) {
-			if (InChatDistance(player.gameObject)) {
-				// Say hi (one off chat)
+		DecrementPassiveChatTimer();
+		if (scheduleStack.CanPassiveChat() && timeTillPassiveChatAgain <= 0) {
+			SetPassiveChatTimer();
+			if (InPassiveChatDistance(player.gameObject)) {
+				sayHi = new ShowOneOffChatAction(this, "Hai player!");
+				sayHi.Perform();
 			} else if (InSight(player.gameObject)) {
 				//Debug.Log("Trying to chat");
 				// Try to start conversation with nearby NPC or say hi (one off chat) if the player is in sight
@@ -90,12 +97,14 @@ public abstract class NPC : Character {
 				NPC npcClass;
 				foreach (var npc in npcDict.Values) {
 					npcClass = npc.GetComponent<NPC>();
-					if(npcClass != this && InChatDistance(npc) /*TODO - Check if past chat timer to chat again*/) {
+					if(npcClass != this && InPassiveChatDistance(npc)) {
 						if (Random.Range(1, CHANCE_TO_CHAT) > 1) { // Roll dice to check if they will chat
 							if (RequestChat(npcClass) && this.scheduleStack.CanPassiveChat()) {
+								AddSchedule(new NPCConvoSchedule(this, npcClass, NPCPassiveConvoDictionary.instance.GetConversation(this)));
 								break;
 							} else { 
-								// Say hi (one off chat)
+								sayHi = new ShowOneOffChatAction(this, "Hai" + npcClass.name + "!");
+								sayHi.Perform();
 								break;
 							}
 						}
@@ -103,6 +112,14 @@ public abstract class NPC : Character {
 				}	
 			}
 		}
+	}
+	
+	private void SetPassiveChatTimer() {
+		timeTillPassiveChatAgain = TIME_INBETWEEN_PASSIVE_CHATS;
+	}
+	
+	private void DecrementPassiveChatTimer() {
+		timeTillPassiveChatAgain -= Time.deltaTime;
 	}
 	
 	public bool RequestChat(NPC npcToRequest) {
@@ -113,11 +130,23 @@ public abstract class NPC : Character {
 		return (this.scheduleStack.CanInteractWithPlayer());
 	}
 	
-	private bool InChatDistance(GameObject gameObject) {
+	private bool InPassiveChatDistance(GameObject gameObject) {
+		return InDistance(gameObject, DISTANCE_TO_CHAT);
+	}
+	
+	public bool NearNPC(NPC npcNear) {
+		return InDistance(npcNear.gameObject, NEAR_DISTANCE);
+	}
+	
+	public bool NearPlayer() {
+		return InDistance(player.gameObject, NEAR_DISTANCE);
+	}
+	
+	private bool InDistance(GameObject gameObject, float distance) {
 		float xDistance = Mathf.Abs(this.transform.position.x - gameObject.transform.position.x);
 		float yDistance = Mathf.Abs(this.transform.position.y - gameObject.transform.position.y);
 		
-		return (xDistance < DISTANCE_TO_CHAT && yDistance < DISTANCE_TO_CHAT);
+		return (xDistance < distance && yDistance < distance);
 	}
 	
 	private void CloseChat(){
@@ -224,7 +253,7 @@ public abstract class NPC : Character {
 	#endregion
 	
 	#region Utility Methods
-	private bool NearPlayer(){
+	private bool NearPlayerToChat(){
 		return Vector3.Distance(player.transform.position, this.transform.position) < DISTANCE_TO_CHAT;
 	}
 	
