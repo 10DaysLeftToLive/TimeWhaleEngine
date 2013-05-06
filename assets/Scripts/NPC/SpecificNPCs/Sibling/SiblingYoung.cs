@@ -453,9 +453,11 @@ public class SiblingYoung : NPC {
 			string str_readyToRace = "Goooooo!!!!";	
 		
 			public WalkToHomeState(NPC toControl) : base(toControl, " ") {
+			
 				activatePostSiblingExplore = new Reaction();
 				//activatePostSiblingExplore.AddAction(new NPCEmotionUpdateAction(toControl, new ERROR(toControl)));
 				activatePostSiblingExplore.AddAction(new NPCCallbackAction(updatePassiveText));
+				activatePostSiblingExplore.AddAction(new NPCCallbackAction(changeMomState));
 				activatePostSiblingExplore.AddAction(new ShowOneOffChatAction(toControl, "You're the best! Thanks for playing with me!"));
 				_allChoiceReactions.Add(new Choice("Home", "Good Choice~"), new DispositionDependentReaction(activatePostSiblingExplore));
 			}
@@ -465,6 +467,15 @@ public class SiblingYoung : NPC {
 					FlagManager.instance.SetFlag(FlagStrings.PostSiblingExplore);
 					flagSet = true;
 				}
+			}
+		
+			public void changeMomState() {
+				// Attempt to change mother state from Sibling
+				FlagManager.instance.SetFlag(FlagStrings.PostSiblingExplore);
+				Action raceComplete;
+				NPC motherName = NPCManager.instance.getNPC(StringsNPC.MomYoung);
+				raceComplete = new NPCEmotionUpdateAction(motherName, new MotherYoung.DummyState(motherName));
+				//
 			}
 		}
 		#endregion

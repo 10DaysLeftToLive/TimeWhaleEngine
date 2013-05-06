@@ -19,17 +19,32 @@ public class MotherYoung : NPC {
 		Reaction enterHappy = new Reaction();
 		enterHappy.AddAction(new ShowOneOffChatAction(this, "I think there's a good spot over here!"));
 		enterHappy.AddAction(new NPCAddScheduleAction(this, moveMotherHappyState));
-		//enterHappy.AddAction(new NPCAddScheduleAction(this, runToCarpenter));
 		flagReactions.Add (FlagStrings.EnterHappyState, enterHappy);
 		
 		Reaction moveHome = new Reaction();
 		moveHome.AddAction(new ShowOneOffChatAction(this, "Let's go back to the house."));
 		moveHome.AddAction(new NPCAddScheduleAction(this, runToCarpenter));
 		flagReactions.Add (FlagStrings.MoveHome, moveHome);
+		
+		Reaction gaveApple = new Reaction();
+		gaveApple.AddAction(new ShowOneOffChatAction(this, "What a delicious looking apple!"));
+		gaveApple.AddAction(new NPCAddScheduleAction(this, gaveAppleSchedule));
+		flagReactions.Add (FlagStrings.GaveApple, gaveApple);
+		
+		Reaction giveSeeds = new Reaction();
+		giveSeeds.AddAction(new ShowOneOffChatAction(this, "Here's the leftover seeds."));
+		giveSeeds.AddAction(new NPCAddScheduleAction(this, giveSeedsSchedule));
+		flagReactions.Add (FlagStrings.GiveSeeds, giveSeeds);
+		
+		Reaction postRace = new Reaction();
+		postRace.AddAction(new ShowOneOffChatAction(this, "Here's the leftover seeds."));
+		postRace.AddAction(new NPCAddScheduleAction(this, runToCarpenter));
+		postRace.AddAction(new NPCEmotionUpdateAction(this, new DummyState(this)));
+		flagReactions.Add (FlagStrings.PostSiblingExplore, postRace);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "Morning! Do you have some time to help?"));
+		return (new InitialEmotionState(this, "Morning! I think we're out of apples, could you go get one for me?"));
 	}
 	
 	protected override Schedule GetSchedule(){
@@ -37,25 +52,86 @@ public class MotherYoung : NPC {
 		return (schedule);
 	}
 	
-	private Schedule runToCarpenter;
+	private Schedule gaveAppleSchedule;
+	private Schedule giveSeedsSchedule;
 	private Schedule moveMotherHappyState;
+	private Schedule postRace;
+	private Schedule runToCarpenter;
+
 	
 	protected override void SetUpSchedules(){
+		
+		
+		gaveAppleSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
+		gaveAppleSchedule.Add (new TimeTask(1, new IdleState(this)));
+		gaveAppleSchedule.Add(new Task(new MoveThenDoState(this, new Vector3(4f, -1f, -.5f), new MarkTaskDone(this))));
+		
+		giveSeedsSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
+		giveSeedsSchedule.Add (new TimeTask(1, new IdleState(this)));
+		giveSeedsSchedule.Add(new Task(new MoveThenDoState(this, new Vector3(-5f, -1f, -.5f), new MarkTaskDone(this))));
+		
+		moveMotherHappyState = new Schedule(this, Schedule.priorityEnum.DoNow);
+		moveMotherHappyState.Add (new TimeTask(2, new IdleState(this)));
+		moveMotherHappyState.Add(new Task(new MoveThenDoState(this, new Vector3(-20f, -1f, -.5f), new MarkTaskDone(this))));
+		
+		postRace = new Schedule(this, Schedule.priorityEnum.DoNow);
+		
 		runToCarpenter = new Schedule(this, Schedule.priorityEnum.DoNow);
 		runToCarpenter.Add(new TimeTask(3, new IdleState(this)));
 		runToCarpenter.Add(new Task(new MoveThenDoState(this, new Vector3(0, -1f,.3f), new MarkTaskDone(this))));
 		
-		moveMotherHappyState = new Schedule(this, Schedule.priorityEnum.DoNow);
-		moveMotherHappyState.Add (new TimeTask(2, new IdleState(this)));
-		//moveMotherHappyState.Add(new Task(new MoveThenDoState(this, PathFinding.GetPathToNode(this.transform.position, "waypoint001", this.transform.localScale.y/2), new MarkTaskDone(this))));
-		moveMotherHappyState.Add(new Task(new MoveThenDoState(this, new Vector3(-20f, -1f, -.5f), new MarkTaskDone(this))));
-	
-	
 	}
 	
 	#region EmotionStates
 		#region Initial Emotion State
-		private class InitialEmotionState : EmotionState{
+		private class InitialEmotionState : EmotionState {
+			Reaction enterAppleState; 
+			Reaction otherState;
+		
+			public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue) {
+				enterAppleState = new Reaction();
+				otherState = new Reaction();
+				
+				otherState.AddAction(new NPCGiveItemAction(toControl, "apple"));
+				_allChoiceReactions.Add(new Choice ("Spawn Apple", "Spawning Apple, Clink, Clink, Clink. Buhjunk."), new DispositionDependentReaction(otherState));
+			
+				enterAppleState.AddAction(new NPCEmotionUpdateAction(toControl, new GaveAppleState(toControl," ")));
+				enterAppleState.AddAction(new NPCCallbackAction(UpdateText));
+				_allItemReactions.Add("apple",  new DispositionDependentReaction(enterAppleState));
+			}	
+		
+		public void UpdateText() {
+			FlagManager.instance.SetFlag(FlagStrings.GaveApple);	
+		}
+	}
+	
+		#endregion
+	#region Gave Emotion State
+		private class GaveAppleState : EmotionState {
+			Reaction enterPostInitialEmotionState; 
+			Reaction otherState;
+		
+			public GaveAppleState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue) {
+				SetDefaultText("Thanks so much! Now I can start baking!");
+				enterPostInitialEmotionState = new Reaction();
+				otherState = new Reaction();
+				
+				enterPostInitialEmotionState.AddAction(new NPCEmotionUpdateAction(toControl, new PostInitialEmotionState(toControl," ")));
+				enterPostInitialEmotionState.AddAction(new NPCGiveItemAction(toControl, "apple")); // supposed to drop apple seeds (brown baggy?)
+				enterPostInitialEmotionState.AddAction(new NPCCallbackAction(UpdateText));
+			
+				_allChoiceReactions.Add(new Choice ("Switch States", "Entering PostInitialEmotionState"), new DispositionDependentReaction(enterPostInitialEmotionState));	
+			}	
+		
+		public void UpdateText() {
+			FlagManager.instance.SetFlag(FlagStrings.GiveSeeds);
+		}
+	}
+	
+		#endregion
+		
+	#region PostInitialEmotionState
+		private class PostInitialEmotionState : EmotionState {
 			int numberOfTimesBuggedMother;
 			string text1 = "Ok, come back when you have some time! Remember, don't go near the cliffs!";
 			
@@ -64,8 +140,10 @@ public class MotherYoung : NPC {
 			Reaction enterMadState;
 			Reaction enterHappyState;
 		
-			public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+			public PostInitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
 				
+				SetDefaultText("You're such a great help! Do you have more time to help me?");
+			
 				changeDefaultText = new Reaction();
 				enterMadState = new Reaction();
 				enterHappyState = new Reaction();
@@ -78,8 +156,7 @@ public class MotherYoung : NPC {
 				firstTimeBusy = new Choice("I'm Busy!", text1);
 				_allChoiceReactions.Add((firstTimeBusy), new DispositionDependentReaction(changeDefaultText));		
 				_allChoiceReactions.Add(new Choice("I'm free!", "Great! Could you plant these in the backyard?"), new DispositionDependentReaction(enterHappyState));
-			
-// Add auto close GUIBox
+	
 			}
 			
 			public void UpdateText() {
@@ -115,9 +192,9 @@ public class MotherYoung : NPC {
 					GUIManager.Instance.RefreshInteraction();
 				}
 			}
-		
 		}
-		#endregion
+	#endregion
+	
 		#region MadEmotionState
 	private class MadEmotionState : EmotionState {
 		Action evokeDisplayMad;
@@ -143,16 +220,19 @@ public class MotherYoung : NPC {
 		Action evokeUpdatePosition;
 		bool flagSet = false;
 		Choice goBackHome;
+		Choice otherChoice;
 		Reaction changeFlag;
+		Reaction otherReaction;
 		
 		public PlantTreeState(NPC toControl) : base(toControl, "I raised you well :')"){
 			//evokeUpdatePosition = new NPCCallbackAction(UpdatePosition);
 			//evokeUpdatePosition.Perform();
 			changeFlag = new Reaction();
+			otherReaction = new Reaction();
 			changeFlag.AddAction(new NPCCallbackAction(UpdatePosition));
-			goBackHome = new Choice("See ya!", "Looks like you had fun!");
+			goBackHome = new Choice("All Done!", "Looks like you had fun!");
+			otherChoice = new Choice("(X.X)", "Shouldn't be able to see this initialization");;
 			_allChoiceReactions.Add(goBackHome, new DispositionDependentReaction(changeFlag));
-			
 			//_allItemReactions.Add ("apple", 11);
 			//.AddAction(new UpdateCurrentTextAction(npcInState, "Why thank you!"));
 		}
@@ -161,12 +241,17 @@ public class MotherYoung : NPC {
 			if (!flagSet) {
 				FlagManager.instance.SetFlag(FlagStrings.MoveHome);
 				flagSet = true;
-				SetDefaultText("Good work! I love you =]");
+				SetDefaultText("If you go into the market and buy mommy some more seeds, I'll tell you a story when you get back.");
 				_allChoiceReactions.Remove(goBackHome);
+				goBackHome = new Choice("Ok!", "The story is a secret till you come back with more seeds to plant.");
 				GUIManager.Instance.RefreshInteraction();
+				
+				otherChoice = new Choice("Not now", "Ok, well if you change your mind, I'll be here for a little while.");
+				//otherReaction.Add();
+				_allChoiceReactions.Add(goBackHome, new DispositionDependentReaction(otherReaction));
+				_allChoiceReactions.Add(otherChoice, new DispositionDependentReaction(otherReaction));
+				
 			}
-			
-			
 			//Schedule moveMyMomma = new Schedule(_npcInState, Schedule.priorityEnum.High);
 			//moveMyMomma.Add(new Task(new MoveThenDoState(_npcInState, new Vector3(10, -1f,.3f), new MarkTaskDone(_npcInState))));
 			//_npcInState.AddSchedule(moveMyMomma);
@@ -174,6 +259,21 @@ public class MotherYoung : NPC {
 	}
 	
 		#endregion
+	#region Dummy State
+	public class DummyState : EmotionState {
+		
+		bool flagSet = false;
+		Choice testing;
+		
+		Reaction changeFlag;
+		Reaction postSeed;
+		
+		public DummyState(NPC toControl) : base(toControl, "I'm a dummy"){
+			SetDefaultText("I'M A DUMMY");
+		}
+	}
+		#endregion
+	
 		#region HappyEmotionState
 	private class HappyEmotionState : EmotionState {
 		
@@ -183,7 +283,7 @@ public class MotherYoung : NPC {
 		Reaction changeFlag;
 		Reaction postSeed;
 		
-		public HappyEmotionState(NPC toControl) : base(toControl, "You're my best friend! =]"){
+		public HappyEmotionState(NPC toControl) : base(toControl, "in Happy Emotion State"){
 			changeFlag = new Reaction();
 			postSeed = new Reaction();
 			testing = new Choice ("Where?", "Follow me, There's a good spot over here.");

@@ -7,6 +7,8 @@ public static class FlagStrings {
 	#region Mother
 	public static string EnterHappyState = "Enter Happy State";
 	public static string MoveHome = "Move Home";
+	public static string GaveApple = "Gave Apple";
+	public static string GiveSeeds = "Give Seeds";
 	#endregion
 	
 	#region Sibling
