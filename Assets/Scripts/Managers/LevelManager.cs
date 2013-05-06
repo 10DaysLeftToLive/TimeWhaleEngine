@@ -55,7 +55,6 @@ public class LevelManager : MonoBehaviour {
 		CharacterAgeManager.SetPlayer(playerCharacter);
 		playerCharacter.ChangeAnimation(genderAnimationInUse.youngBoneAnimation);
 		SetNPCData();	
-		NPCPassiveConvoDictionary.instance.Init();
 	}
 	
 	// Use this for initialization
