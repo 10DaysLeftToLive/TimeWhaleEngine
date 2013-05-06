@@ -107,4 +107,8 @@ public class NPCConvoSchedule : Schedule {
 			}
 		}
 	}
+	
+	public override void OnInterrupt() {
+		SetComplete();
+	}
 }

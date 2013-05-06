@@ -173,4 +173,12 @@ public class Schedule {
 			return -1;
 		}
 	}
+	
+	public virtual void OnInterrupt() {	
+	}
+	
+	protected void SetComplete() {
+		_tasksToDo.Clear();
+		current = null;
+	}
 }
