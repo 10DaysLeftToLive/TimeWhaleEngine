@@ -6,19 +6,18 @@ public class Path {
 	
 	Vector3[] path;
 	Vector3[] vectorDirection;
-	//int [] direction;
+	int[] wayPoints;
 	int index;
 	
 	public Path(){}
 	
-	public Path(int size, Vector3[] paths){
+	public Path(int size, Vector3[] paths, int[] points){
 		index = 0;
 		path = new Vector3[size];
 		vectorDirection = new Vector3[size];
-		//direction = new int[size];
+		wayPoints = new int[size];
 		for (int i = 0; i < size; i++){
 			this.path[i] = paths[i];
-			//direction[i] = dir[i];
 			if (i > 0 && path[i-1].x - path[i].x < 0){
 				vectorDirection[i] = new Vector3(1,0,0);
 				if (path[i-1] != path[i]){
@@ -52,9 +51,19 @@ public class Path {
 		return vectorDirection[index];	
 	}
 	
-	/*public int GetDirection(){
-		return direction[index];
-	}*/
+	public GameObject GetLastWayPoint(){
+		if (index > 0){
+			return Graph.FindWayPointById(wayPoints[index-1]);
+		}
+		return null;
+	}
+	
+	public GameObject GetNextWayPoint(){
+		if (index < path.Length){
+			return Graph.FindWayPointById(index);
+		}
+		return null;
+	}
 	
 	public bool NextNode(){
 		index++;

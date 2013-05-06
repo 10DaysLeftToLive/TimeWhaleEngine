@@ -14,16 +14,18 @@ public static class QuickPath {
 			path = FindSlope(startPos, destination, height);
 			return path;
 		}*/
-		Vector3[] points = {startPos, destination}; 
-		path = new Path(2, points);
+		Vector3[] points = {startPos, destination};
+		int[] wayPoints = {-1, -1};
+		path = new Path(2, points, wayPoints);
 
 		return path;
 	}	
 	
 	public static Path ClimbablePath(Vector3 startPos, Vector3 destination, GameObject climbable, float height){
 		Vector3[] climbablePoints = SetStartClimbablePosition(climbable, height, startPos);
-		Vector3[] points = {startPos, climbablePoints[0], climbablePoints[1]}; 
-		Path path = new Path(3, points);
+		Vector3[] points = {startPos, climbablePoints[0], climbablePoints[1]};
+		int[] wayPoints = {-1, -1, -1};
+		Path path = new Path(3, points, wayPoints);
 		return path;
 	}
 	
@@ -101,6 +103,7 @@ public static class QuickPath {
 		int index = 1;
 		Vector3 bottomPos, topPos, heading;
 		Vector3[] points = new Vector3[15];
+		int[] wayPoints = new int[15];
 		int[] dir = new int[15];
 		if (startPos.x > destination.x){
 			dir = SetupDir(dir, 1);
@@ -120,6 +123,7 @@ public static class QuickPath {
 			heading = Vector3.right;
 		}
 		points[0] = bottomPos;
+		wayPoints[0] = -1;
 		bottomPos.y -= height;
 		bottomPos.y += MINSLOPE;
 		//Debug.Log(bottomPos.y);
@@ -131,6 +135,7 @@ public static class QuickPath {
 			Debug.Log(distance);
 			if (distance <= 0){
 				points[index] = topPos;
+				wayPoints[index] = -1;
 				Debug.Log(topPos);
 
 				if (topPos == startPos) // flip points
@@ -140,7 +145,7 @@ public static class QuickPath {
 					
 				}
 				
-				Path path = new Path(index+1, points);
+				Path path = new Path(index+1, points, wayPoints);
 				return path;
 			}
 			if (Physics.Raycast(bottomPos, heading , out hit, distance, mask)) {

@@ -6,6 +6,7 @@ public class WayPointPath {
 	private static float NEXTFLOOR = 3f; // how close will the y positions be until looking for up/down paths
 
 	private static Vector3[] points;
+	private static int[] wayPoints;
 	private static Vector3 startPosition, destPosition;
 	private static int index;
 	private static float height;
@@ -39,16 +40,17 @@ public class WayPointPath {
 		destPosition = destination;
 		height = ht;
 		points = new Vector3[30];
+		wayPoints = new int[30];
 		index = 0;
-		AddPoint(startPos);
+		AddPoint(startPos, -1);
 		int mask = (1 << 15); // wayPoint layer
 		Vector3 heading = SetHeading(startPos);
-		GameObject startLeft = GetLeft(startPos, mask, heading);
-		GameObject startRight = GetRight(startPos, mask, heading);
+		GameObject startLeft = GetPoint(startPos, mask, heading);
+		GameObject startRight = GetPoint(startPos, mask, heading*-1);
 
 		heading = SetHeading(destination);
-		GameObject endLeft = GetLeft(destination, mask, heading);
-		GameObject endRight = GetRight(destination, mask, heading);
+		GameObject endLeft = GetPoint(destination, mask, heading);
+		GameObject endRight = GetPoint(destination, mask, heading*-1);
 
 		WayPoints startLeftScript, startRightScript, endLeftScript, endRightScript;
 		startLeftScript = GetScript(startLeft);
@@ -83,21 +85,18 @@ public class WayPointPath {
 		startPosition = startPos;
 		height = ht;
 		points = new Vector3[30];
+		wayPoints = new int[30];
 		index = 0;
-		AddPoint(startPos);
+		AddPoint(startPos, -1);
 		int mask = (1 << 15); // wayPoint layer
 		Vector3 heading = SetHeading(startPos);
-		GameObject startLeft = GetLeft(startPos, mask, heading);
-		GameObject startRight = GetRight(startPos, mask, heading);
+		GameObject startLeft = GetPoint(startPos, mask, heading);
+		GameObject startRight = GetPoint(startPos, mask, heading);
+		
 		WayPoints startLeftScript, startRightScript, endScript;
 		startLeftScript = GetScript(startLeft);
 		startRightScript = GetScript(startRight);
-		endScript = GetScript(Graph.FindWayPoint(name));
-
-		/*if (startLeft != null) Debug.Log("startLeft " + startLeft.name);
-		if (startRight != null) Debug.Log("startRight " + startRight.name);
-		if (endLeft != null) Debug.Log("endLeft " + endLeft.name);
-		if (endRight != null) Debug.Log("endRight " + endRight.name);*/
+		endScript = GetScript(Graph.FindWayPointByName(name));
 
 		float minDistance = 999;
 		minDistance = CheckDistance(startLeftScript, endScript, minDistance);
@@ -113,7 +112,7 @@ public class WayPointPath {
 	public static bool CheckForPathBetweenPoints(){		
 		// if moving small distance and wont use waypoints
 		if (skipWayPoints){
-			return AddPoint(destPosition);
+			return AddPoint(destPosition, -1);
 		}
 		
 		if (noPath)
@@ -158,34 +157,26 @@ public class WayPointPath {
 
 	private static bool AddArray(int start, int stop, Vector3 destination){
 		Vector3[] temp = Search.GetVectors(stop, start);
+		int[] wayPointTemp = Search.GetWayPointIndices(stop, start);
 		for (int i = 0; i < Search.index; i++)
-			AddPoint(new Vector3 (temp[i].x, temp[i].y + height + 50*currentAge,temp[i].z));
-		AddPoint(destination);
+			AddPoint(new Vector3 (temp[i].x, temp[i].y + height + 50*currentAge,temp[i].z), wayPointTemp[i]);
+		AddPoint(destination, -1);
 		return true;
 	}
 
 	private static bool AddArray(int start, int stop){
 		Vector3[] temp = Search.GetVectors(stop, start);
+		int[] wayPointTemp = Search.GetWayPointIndices(stop, start);
 		for (int i = 0; i < Search.index; i++)
-			AddPoint(new Vector3 (temp[i].x, temp[i].y + height + 50*currentAge,temp[i].z));
+			AddPoint(new Vector3 (temp[i].x, temp[i].y + height + 50*currentAge,temp[i].z), wayPointTemp[i]);
 		return true;
 	}
 
 
-	private static GameObject GetLeft(Vector3 pos, int mask, Vector3 heading){
+	private static GameObject GetPoint(Vector3 pos, int mask, Vector3 heading){
 		RaycastHit hit;
 		//Debug.DrawRay(pos,heading,Color.red,20);
 		if (Physics.Raycast(pos, heading , out hit, Mathf.Infinity, mask)){
-			GameObject wayPoint = hit.collider.gameObject;
-			return wayPoint;
-		}
-		return null;
-	}
-
-	private static GameObject GetRight(Vector3 pos, int mask, Vector3 heading){
-		RaycastHit hit;
-		//Debug.DrawRay(pos,heading*-1,Color.red,20);
-		if (Physics.Raycast(pos, heading*-1 , out hit, Mathf.Infinity, mask)){
 			GameObject wayPoint = hit.collider.gameObject;
 			return wayPoint;
 		}
@@ -210,20 +201,15 @@ public class WayPointPath {
 		return null;
 	}
 
-	private static bool AddPoint(Vector3 pos){
+	private static bool AddPoint(Vector3 pos, int wayPoint){
 		points[index] = pos;
+		wayPoints[index] = wayPoint;
 		index++;
 		return true;
 	}
 
-	private static bool PathToOtherFloor(Vector3 start, Vector3 end){
-		if (Mathf.Abs(start.y - end.y) > NEXTFLOOR)
-			return true;
-		return false;
-	}
-
 	public static Path GetPath(){
-		Path path = new Path(index, points);
+		Path path = new Path(index, points, wayPoints);
 		return path;
 	}
 

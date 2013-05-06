@@ -134,6 +134,17 @@ public static class Search {
 		}
 		return vectorPath;
 	}
+	
+	public static int[] GetWayPointIndices(int dest, int start){
+		index = 0;
+		completePath = new int [vertex];
+		OrganizePath(dest, start);
+		int[] wayPointPath = new int[index];
+		for (int i = 0; i < index; i++){
+			wayPointPath[i] = completePath[i];
+		}
+		return wayPointPath;
+	}
 
 	public static void print(){
 		for (int i = 0; i < index; i++){
