@@ -152,6 +152,9 @@ public class MotherYoung : NPC {
 			changeFlag.AddAction(new NPCCallbackAction(UpdatePosition));
 			goBackHome = new Choice("See ya!", "Looks like you had fun!");
 			_allChoiceReactions.Add(goBackHome, new DispositionDependentReaction(changeFlag));
+			
+			//_allItemReactions.Add ("apple", 11);
+			//.AddAction(new UpdateCurrentTextAction(npcInState, "Why thank you!"));
 		}
 		
 		public void UpdatePosition() {

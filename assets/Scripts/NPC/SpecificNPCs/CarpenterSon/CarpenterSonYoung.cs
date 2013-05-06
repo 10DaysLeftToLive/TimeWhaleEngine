@@ -49,6 +49,8 @@ public class CarpenterSonYoung : NPC {
 				"Now if  you are to actually start becoming a great carpenter like my father and his before him then you need to start practicing on your own. " +
 				"Why don't you start with a treehouse?"));	
 			
+			giveToolsReaction.AddAction(new NPCGiveItemAction(NPCManager.instance.getNPC(StringsNPC.CarpenterYoung),"apple"));
+			
 			_allChoiceReactions.Add(giveToolsChoice,new DispositionDependentReaction(giveToolsReaction));
 		
 		}
