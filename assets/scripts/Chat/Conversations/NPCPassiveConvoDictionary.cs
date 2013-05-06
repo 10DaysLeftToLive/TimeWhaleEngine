@@ -7,7 +7,7 @@ public class NPCPassiveConvoDictionary : ManagerSingleton<NPCPassiveConvoDiction
 	private List<NPCConvoChance> convoList;
 	private static int UPPERBOUND = 100;
 	
-	public void Init() {
+	public override void Init() {
 		convoDict = new Dictionary<string, List<NPCConvoChance>>();
 		AddConversationLists();
 	}
