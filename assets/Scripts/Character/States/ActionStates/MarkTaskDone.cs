@@ -16,9 +16,9 @@ public class MarkTaskDone : AbstractState {
 	public override void OnEnter(){
 		Debug.Log(character.name + ": MarkTaskDone Enter");
 		if (character is NPC) {
-			Debug.Log("Was an npc");
 			((NPC)character).NextTask();
 		} else {
+			Debug.LogWarning("Putting player in a mark task done state.");
 			character.EnterState(new IdleState(character));
 		}
 	}

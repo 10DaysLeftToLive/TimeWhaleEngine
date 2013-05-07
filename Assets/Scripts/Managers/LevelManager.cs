@@ -14,6 +14,8 @@ public class LevelManager : MonoBehaviour {
 	public Transform middleSectionTarget;
 	public Transform oldSectionTarget;
 	
+	public static float levelYOffSetFromCenter = 50;
+	
 	/*public AudioSource youngBGM;
 	public AudioSource middleBGM;
 	public AudioSource oldBGM;*/

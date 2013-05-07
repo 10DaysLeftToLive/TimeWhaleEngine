@@ -40,7 +40,6 @@ public class CameraController : MonoBehaviour {
 		} else if (!isZoomingIn && CanZoomOut()) {
 			ZoomOut();
 		}
-		Debug.Log("Zoom size = " + thisCamera.orthographicSize);
 	}
 	
 	static private bool CanZoomIn(){
