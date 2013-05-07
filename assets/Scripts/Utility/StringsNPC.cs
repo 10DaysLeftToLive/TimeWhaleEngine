@@ -4,7 +4,7 @@ public static class StringsNPC {
 	public static string CarpenterSonYoung = "CarpenterSonYoung";
 	public static string CarpenterSonMiddle = "";
 	
-	public static string MomYoung = "Mom";
+	public static string MomYoung = "MotherYoung";
 	
 	public static string SiblingYoung = "SiblingYoung";
 	
