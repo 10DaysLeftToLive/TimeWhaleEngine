@@ -164,6 +164,7 @@ public abstract class NPC : Character {
 	}
 	
 	public void StarTalkingWithPlayer(){
+		currentEmotion.OnInteractionOpens();
 		chatingWithPlayer = true;
 		scheduleStack.Pause();
 		EnterState(new InteractingWithPlayerState(this));

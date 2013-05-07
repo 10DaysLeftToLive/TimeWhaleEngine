@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ public class EmotionState {
 	protected Dictionary<Choice, DispositionDependentReaction> _allChoiceReactions;
 	protected Dictionary<string, DispositionDependentReaction> _allItemReactions;
 	protected DispositionDependentReaction defaultItemReaction;
+	protected DispositionDependentReaction interactionOpeningReaction;
 	
 	public EmotionState(NPC npcInState, string textToSay){
 		_npcInState = npcInState;
@@ -18,6 +20,7 @@ public class EmotionState {
 		Reaction defaultItemReact = new Reaction();
 		defaultItemReact.AddAction(new UpdateCurrentTextAction(npcInState, "No thank you."));
 		defaultItemReaction = new DispositionDependentReaction(defaultItemReact);
+		interactionOpeningReaction = null;
 	}
 	
 	public string GetWhatToSay(){
@@ -44,6 +47,16 @@ public class EmotionState {
 		}
 		
 		return (toReturn);
+	}
+	
+	private void SetOnOpenInteractionReaction(DispositionDependentReaction reaction){
+		interactionOpeningReaction = reaction;
+	}
+	
+	public void OnInteractionOpens(){
+		if (interactionOpeningReaction != null){
+			PerformReactionBasedOnDisposition(interactionOpeningReaction);
+		}
 	}
 	
 	/// <summary>
