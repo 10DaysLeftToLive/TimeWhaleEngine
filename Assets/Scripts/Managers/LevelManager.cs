@@ -100,8 +100,8 @@ public class LevelManager : MonoBehaviour {
 	
 	// After being loaded in they are all at 0,0,0 so move them apart along the y axis
 	private void SpreadSections(){
-		middleSectionTarget.transform.position = new Vector3(0,50,0);
-		oldSectionTarget.transform.position = new Vector3(0,100,0);
+		middleSectionTarget.transform.position = new Vector3(0,levelYOffSetFromCenter,0);
+		oldSectionTarget.transform.position = new Vector3(0,levelYOffSetFromCenter*2,0);
 	}
 	
 	// Update is called once per frame

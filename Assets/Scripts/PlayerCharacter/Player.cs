@@ -28,6 +28,8 @@ public class Player : Character {
 	
 	public float currentVerticalSpeed = 0.0f;
 	
+	public NPC npcTalkingWith;
+	
 	// Use this for initialization
 	protected override void Init(){
 		EventManager.instance.mOnClickOnObjectAwayFromPlayerEvent += new EventManager.mOnClickOnObjectAwayFromPlayerDelegate (OnClickToInteract);
@@ -56,15 +58,11 @@ public class Player : Character {
     }
 	
 	private void OnClickToInteract(EventManager EM, ClickedObjectArgs e){
-		Debug.Log("Click on " + e.clickedObject.name + " with tag " + e.clickedObject.tag + " at point " + e.clickedObject.transform.position);
-		
 		string tag = e.clickedObject.tag;
-		
 		Vector3 goal = e.clickedObject.transform.position;
 		goal.z = this.transform.position.z;
 		
 		if (tag == Strings.tag_CarriableItem){
-			Debug.Log (name + "Picking up item " + e.clickedObject.name);
 			EnterState(new MoveThenDoState(this, goal, new PickUpItemState(this, e.clickedObject)));
 		} else if (tag == Strings.tag_Pushable){
 			if (currentState.GetType() == typeof(GrabIdleState)){
@@ -79,7 +77,6 @@ public class Player : Character {
 			NPC toTalkWith = (NPC)e.clickedObject.gameObject.GetComponent<NPC>();
 			Vector3 currentPos = this.transform.position;
 			Vector3 goalPosInfront = Utils.GetPointInfrontOf(currentPos, toTalkWith.gameObject);
-			Debug.Log("Goal was " + toTalkWith.transform.position + " infront = " + goalPosInfront);
 			EnterState(new MoveThenDoState(this, goalPosInfront, new TalkState(this, toTalkWith)));
 		}
 	}

@@ -50,7 +50,7 @@ public class InteractionMenu : GUIControl {
 		buttonTexts = new List<string>();
 		buttonRects = new List<Rect>();
 		SetChatRectangles();
-		mainDisplayText = "O Hai";
+		mainDisplayText = null;
 	}
 	
 	private bool hasInitializedStyles = false;
@@ -94,7 +94,6 @@ public class InteractionMenu : GUIControl {
 	}
 	
 	public override bool ClickOnGUI(Vector2 screenPos){
-		Debug.Log("Doing click on gui " + screenPos + " " + mainChatRect.ToString() + " " + mainChatRect.Contains(screenPos));
 		return (mainChatRect.Contains(screenPos));
 	}
 	
@@ -124,6 +123,7 @@ public class InteractionMenu : GUIControl {
 	}
 	
 	private void DrawTextBox(){
+		if (mainDisplayText == null) Refresh();
 		GUI.TextField (textBoxRect, mainDisplayText, textFieldStyle);
 	}
 	

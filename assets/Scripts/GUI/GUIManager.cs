@@ -82,8 +82,10 @@ public class GUIManager : MonoBehaviour {
 	}
 	
 	public void InitiateInteraction(NPC npcToInteractWith){
-		MarkControlForAdding(interactionMenu);
 		interactionMenu.OpenChatForNPC(npcToInteractWith);
+		if (!ControlActive(interactionMenu)){
+			MarkControlForAdding(interactionMenu);
+		}
 	}
 	
 	public void UpdateInteractionDisplay(string newText){

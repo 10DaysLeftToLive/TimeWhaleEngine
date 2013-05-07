@@ -15,12 +15,17 @@ public class TalkState : AbstractState {
 		Debug.Log(character.name + ": TalkState Enter");
 		character.PlayAnimation(Strings.animation_stand);
 		if (!_toTalkWith.IsInteracting() && _toTalkWith.CanTalk()){
+			if (((Player) character).npcTalkingWith != null){
+				((Player) character).npcTalkingWith.LeaveInteraction();
+			}
 			_toTalkWith.StarTalkingWithPlayer();
+			((Player) character).npcTalkingWith = _toTalkWith;
 			GUIManager.Instance.InitiateInteraction(_toTalkWith);
 		} else {
 			Debug.Log("Tried to talk to " + _toTalkWith + " but it didn't want to talk");	
 			character.EnterState(new IdleState(character));
 		}
+		
 	}
 	
 	public override void OnExit(){
