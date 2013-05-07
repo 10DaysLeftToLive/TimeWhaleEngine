@@ -40,6 +40,7 @@ public class Schedule {
 		_toManage = toManage;
 		schedulePriority = (int)priorityEnum.Low;
 		flagList = new List<List<string>>();
+		Init ();
 	}
 	
 	public Schedule(NPC toManage, bool _canPassiveChat){
@@ -48,6 +49,7 @@ public class Schedule {
 		canPassiveChat = _canPassiveChat;
 		schedulePriority = (int)priorityEnum.Low;
 		flagList = new List<List<string>>();
+		Init ();
 	}
 	
 	public Schedule(NPC toManage, Enum priority){
@@ -55,6 +57,7 @@ public class Schedule {
 		_toManage = toManage;
 		schedulePriority = Convert.ToInt32(priority);
 		flagList = new List<List<string>>();
+		Init ();
 	}
 	
 	public Schedule(NPC toManage, Enum priority, bool _canPassiveChat){
@@ -63,6 +66,7 @@ public class Schedule {
 		canPassiveChat = _canPassiveChat;
 		schedulePriority = Convert.ToInt32(priority);
 		flagList = new List<List<string>>();
+		Init ();
 	}
 	
 	public Schedule(Queue<Task> tasksToDo, NPC toManage, Enum priority){
@@ -70,6 +74,7 @@ public class Schedule {
 		_toManage = toManage;
 		schedulePriority = Convert.ToInt32(priority);
 		flagList = new List<List<string>>();
+		Init ();
 	}
 	
 	public Schedule(Queue<Task> tasksToDo, NPC toManage, Enum priority, bool _canPassiveChat){
@@ -78,11 +83,14 @@ public class Schedule {
 		canPassiveChat = _canPassiveChat;
 		schedulePriority = Convert.ToInt32(priority);
 		flagList = new List<List<string>>();
+		Init ();
 	}
 	
 	~Schedule() {
 		_tasksToDo.Clear ();
 	}
+	
+	protected virtual void Init() {}
 	
 	public bool HasTask(){
 		return (current != null);
