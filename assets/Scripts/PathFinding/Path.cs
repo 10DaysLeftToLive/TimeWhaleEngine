@@ -51,6 +51,15 @@ public class Path {
 		return vectorDirection[index];	
 	}
 	
+	public float GetDistanceToNextPoint(Vector3 currentPos){
+		if (index > 0 && index < path.Length){
+			float a = Vector3.Distance(path[index-1], currentPos);
+			float b = Vector3.Distance(path[index-1], path[index]);
+			return a/b; //returns value 0.0 - 1.0 
+		}
+		return -1;
+	}
+	
 	public GameObject GetLastWayPoint(){
 		if (index > 0){
 			return Graph.FindWayPointById(wayPoints[index-1]);
