@@ -11,7 +11,7 @@ public class YoungRunIslandScript : Schedule {
 		protected override void Init() {
 			Add(new TimeTask(.75f, new IdleState(_toManage)));
 			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (6, .2f, .3f), new MarkTaskDone(_toManage))));
-			Add (new TimeTask(5, new WaitTillPlayerCloseState());
+			//Add (new TimeTask(5, new WaitTillPlayerCloseState());
 			Add(new TimeTask(.5f, new IdleState(_toManage)));
 			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (4, .2f, .3f), new MarkTaskDone(_toManage))));
 			Add(new TimeTask(.5f, new IdleState(_toManage)));
