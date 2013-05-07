@@ -11,12 +11,12 @@ Attach this script to the camera.
 public class CameraController : MonoBehaviour {
 	#region Fields
 	// Variables for altering the camera's movement
-	static private float closestZoomDistance = 1.5f;	
-	static private float farthestZoomDistnace = 2f;
+	static private float closestZoomDistance = 4f;	
+	static private float farthestZoomDistnace = 4f;
 	static private float zoomingIncrement = .075f;
 	
-	static private float yOffsetRelativeToTarget = 3.5f;
-	static private float zOffsetRelativeToPlayer = - 10;
+	public float yOffsetRelativeToTarget = 1.6f;
+	public float zOffsetRelativeToPlayer = - 10;
 	
 	static private Camera thisCamera;
 	static private Player player;
@@ -25,6 +25,7 @@ public class CameraController : MonoBehaviour {
 	public void Start () {
 		thisCamera = Camera.main;
 		player = FindObjectOfType(typeof(Player)) as Player;
+		thisCamera.orthographicSize = farthestZoomDistnace;
 	}
 	
 	void Update () {
@@ -39,6 +40,7 @@ public class CameraController : MonoBehaviour {
 		} else if (!isZoomingIn && CanZoomOut()) {
 			ZoomOut();
 		}
+		Debug.Log("Zoom size = " + thisCamera.orthographicSize);
 	}
 	
 	static private bool CanZoomIn(){
@@ -57,8 +59,9 @@ public class CameraController : MonoBehaviour {
 		thisCamera.orthographicSize += zoomingIncrement;
 	}
 	
-	static private void MoveCameraToTarget() {
-		Vector3 newCameraPosition = player.transform.position;
+	private Vector3 newCameraPosition;
+	private void MoveCameraToTarget() {
+		newCameraPosition = player.transform.position;
 		newCameraPosition.y += yOffsetRelativeToTarget;
 		newCameraPosition.z += zOffsetRelativeToPlayer;
 		thisCamera.transform.position = newCameraPosition;
