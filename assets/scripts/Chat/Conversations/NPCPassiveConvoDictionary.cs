@@ -20,8 +20,8 @@ public class NPCPassiveConvoDictionary : ManagerSingleton<NPCPassiveConvoDiction
 		convoDict.Add (StringsNPC.MomYoung, new YoungMotherConvos().GetList());
 		convoDict.Add (StringsNPC.CarpenterYoung, new YoungCarpenterConvos().GetList());
 		convoDict.Add (StringsNPC.CarpenterSonYoung, new YoungCarpenterSonConvos().GetList());
-		convoDict.Add (StringsNPC.FarmerYoung, new YoungFarmerConvos().GetList());
-		convoDict.Add (StringsNPC.FarmerHusbandYoung, new YoungFarmerHusbandConvos().GetList());
+		convoDict.Add (StringsNPC.FarmerMotherYoung, new YoungFarmerConvos().GetList());
+		convoDict.Add (StringsNPC.FarmerFatherYoung, new YoungFarmerHusbandConvos().GetList());
 		convoDict.Add (StringsNPC.LighthouseGirlYoung, new YoungLighthouseGirlConvos().GetList());
 		convoDict.Add (StringsNPC.CastlemanYoung, new YoungCastlemanConvos().GetList());
 		convoDict.Add (StringsNPC.SeaCaptainYoung, new YoungSeaCaptainConvos().GetList());

@@ -34,8 +34,10 @@ public class CarpenterYoung : NPC {
 	
 		Choice giveToolsChoice;
 		Reaction giveToolsReaction;
-	
+		NPC carpenterRef;
+		
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+			carpenterRef = toControl;
 			giveToolsChoice = new Choice("Give Tools.", "Thanks for finding my tools instead of my lazy son.  Honestly he sometimes I think he doesn't care about our great legacy.");
 			giveToolsReaction = new Reaction();
 			giveToolsReaction.AddAction(new NPCCallbackAction(GiveToolsToCarpenter));
@@ -55,6 +57,7 @@ public class CarpenterYoung : NPC {
 		private void GiveToolsToCarpenter(){
 			_allChoiceReactions.Remove(giveToolsChoice);
 			GUIManager.Instance.RefreshInteraction();
+			carpenterRef.SetCharacterPortrait(StringsNPC.Happy);
 			SetDefaultText("Thank you for them tools, you rascal!");
 			
 			//Need to walk away and come back later to check on son
