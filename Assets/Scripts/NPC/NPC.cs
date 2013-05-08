@@ -156,6 +156,7 @@ public abstract class NPC : Character {
 	public void LeaveInteraction(){
 		chatingWithPlayer = false;
 		scheduleStack.Resume();
+		currentEmotion.OnInteractionCloses();
 	}
 	
 	private void StopTalkingWithPlayer(){

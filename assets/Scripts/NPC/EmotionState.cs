@@ -11,6 +11,7 @@ public class EmotionState {
 	protected Dictionary<string, DispositionDependentReaction> _allItemReactions;
 	protected DispositionDependentReaction defaultItemReaction;
 	protected DispositionDependentReaction interactionOpeningReaction;
+	protected DispositionDependentReaction interactionClosingReaction;
 	
 	public EmotionState(NPC npcInState, string textToSay){
 		_npcInState = npcInState;
@@ -53,9 +54,19 @@ public class EmotionState {
 		interactionOpeningReaction = reaction;
 	}
 	
+	protected void SetOnCloseInteractionReaction(DispositionDependentReaction reaction){
+		interactionClosingReaction = reaction;
+	}
+	
 	public void OnInteractionOpens(){
 		if (interactionOpeningReaction != null){
 			PerformReactionBasedOnDisposition(interactionOpeningReaction);
+		}
+	}
+	
+	public void OnInteractionCloses(){
+		if (interactionClosingReaction != null){
+			PerformReactionBasedOnDisposition(interactionClosingReaction);
 		}
 	}
 	
