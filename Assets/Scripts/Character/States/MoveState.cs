@@ -40,14 +40,7 @@ public class MoveState : AbstractState {
                 OnGoalReached();
             } else {
                 currentGoal = _pathFollowing.GetPoint();
-                
-                if (currentGoal.y > pos.y || currentGoal.y < pos.y){
-                    //Debug.Log("The point was different vertically switching to climbing");
-                    currentMovementState = new ClimbToState(character);
-                } else {
-                    //Debug.Log("The point was the same vertically switching to walking");
-                    currentMovementState = new WalkToState(character);
-                }
+                currentMovementState = new WalkToState(character);
             }
         } else {
             Move(movement);

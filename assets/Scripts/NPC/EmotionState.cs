@@ -49,7 +49,7 @@ public class EmotionState {
 		return (toReturn);
 	}
 	
-	private void SetOnOpenInteractionReaction(DispositionDependentReaction reaction){
+	protected void SetOnOpenInteractionReaction(DispositionDependentReaction reaction){
 		interactionOpeningReaction = reaction;
 	}
 	
