@@ -232,6 +232,7 @@ public class MotherYoung : NPC {
 			changeFlag = new Reaction();
 			otherReaction = new Reaction();
 			changeFlag.AddAction(new NPCCallbackAction(UpdatePosition));
+			otherReaction.AddAction(new NPCCallbackAction(initiateSeedQuest));
 			goBackHome = new Choice("All Done!", "Looks like you had fun!");
 			otherChoice = new Choice("(X.X)", "Shouldn't be able to see this initialization");;
 			_allChoiceReactions.Add(goBackHome, new DispositionDependentReaction(changeFlag));
@@ -251,13 +252,23 @@ public class MotherYoung : NPC {
 				otherChoice = new Choice("Not now", "Ok, well if you change your mind, I'll be here for a little while.");
 				//otherReaction.Add();
 				_allChoiceReactions.Add(goBackHome, new DispositionDependentReaction(otherReaction));
-				_allChoiceReactions.Add(otherChoice, new DispositionDependentReaction(otherReaction));
+				_allChoiceReactions.Add(otherChoice, new DispositionDependentReaction(changeFlag));
 				
 			}
 			//Schedule moveMyMomma = new Schedule(_npcInState, Schedule.priorityEnum.High);
 			//moveMyMomma.Add(new Task(new MoveThenDoState(_npcInState, new Vector3(10, -1f,.3f), new MarkTaskDone(_npcInState))));
 			//_npcInState.AddSchedule(moveMyMomma);
 		}
+		
+		public void initiateSeedQuest() {
+				//FlagManager.instance.SetFlag(FlagStrings.MoveHome);
+				SetDefaultText("Get the seeds, then I'll tell you the story");
+				_allChoiceReactions.Remove(goBackHome);
+				_allChoiceReactions.Remove(otherChoice);
+				GUIManager.Instance.RefreshInteraction();
+				_allItemReactions.Add("", new DispositionDependentReaction(otherReaction));
+		}
+		
 	}
 	
 		#endregion

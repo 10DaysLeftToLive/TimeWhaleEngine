@@ -9,10 +9,12 @@ public class SiblingYoung : NPC {
 		id = NPCIDs.SIBLING;
 		base.Init();
 	}
-
+	//
 	#region Set Flag Reactions
 	public string currentPassiveText;
 	protected override void SetFlagReactions() {
+		
+/*		
 		//Reaction frogCrushing = new Reaction();
 		//frogCrushing.AddAction(new ShowOneOffChatAction(this, "OmG yOu KiLleD dAt fROg!1!"));
 		//frogCrushing.AddAction(new UpdateDefaultTextAction(this, "I can't belive you did that."));
@@ -81,7 +83,7 @@ public class SiblingYoung : NPC {
 		firstTimeMotherTalks.AddAction(new NPCAddScheduleAction(this, runToCarpenter));
 		//FirstTimeMotherTalks.AddAction(new ShowOneOffChatAction(this, "C'mon, let's race!!!"));
 		flagReactions.Add(FlagStrings.SiblingExplore, firstTimeMotherTalks); 
-		
+*/
 		
 	}
 	#endregion
@@ -102,125 +104,9 @@ public class SiblingYoung : NPC {
 		return (schedule);
 	}
 	
-	private Schedule runToBeach;
-	private Schedule runToBridge;
-	private Schedule runToCarpenter;
-	private Schedule runToFarmer;
-	private Schedule runToLighthouse;
-	private Schedule runToMarket;
-	private Schedule runToReflectionTree;
-	private Schedule runToHome;
-	private Schedule postRaceTalkToMomSchedule;
-	
 	#region Set Up Sechedules
 	protected override void SetUpSchedules() {
-		/*
-		runToCarpenter = new Schedule(this, Schedule.priorityEnum.High);
-		runToCarpenter.Add(new TimeTask(2, new IdleState(this)));
-		//runToCarpenter.Add(new Task(new MoveThenDoState(this, NPCManager.instance.getNPC(StringsNPC.CarpenterYoung).transform.position, new MarkTaskDone(this))));
-		runToCarpenter.Add(new Task(new MoveThenDoState(this, new Vector3 (5, .2f, .3f), new MarkTaskDone(this))));
-		runToCarpenter.Add (new TimeTask(1f, new IdleState(this)));
-		runToCarpenter.Add(new Task(new MoveThenDoState(this, new Vector3 (4, .2f, .3f), new MarkTaskDone(this))));
-		runToCarpenter.Add (new TimeTask(2f, new IdleState(this)));
-		runToCarpenter.Add(new Task(new MoveThenDoState(this, new Vector3 (10, .2f, .3f), new MarkTaskDone(this))));
-	
-		//adding the ability to set flags would be nice
-		//adding the ability to set emotion States on would be nice. (actions)
-		runToCarpenter.SetCanChat(false); 
-		*/
-		
-		runToBridge = new Schedule(this, Schedule.priorityEnum.High);
-		runToBridge.Add(new TimeTask(.75f, new IdleState(this)));
-		runToBridge.Add(new Task(new MoveThenDoState(this, new Vector3 (6, .2f, .3f), new MarkTaskDone(this))));
-		runToBridge.Add(new TimeTask(.5f, new IdleState(this)));
-		runToBridge.Add(new Task(new MoveThenDoState(this, new Vector3 (4, .2f, .3f), new MarkTaskDone(this))));
-		runToBridge.Add(new TimeTask(.5f, new IdleState(this)));
-		runToBridge.Add(new Task(new MoveThenDoState(this, new Vector3 (11, .2f, .3f), new MarkTaskDone(this))));
-		runToBridge.Add(new Task(new MoveThenDoState(this, new Vector3 (10.90f, .2f, .3f), new MarkTaskDone(this))));
-		
-		runToCarpenter = new Schedule(this, Schedule.priorityEnum.High);
-		//Some interactions with Carpenter
-		runToCarpenter.Add(new TimeTask(.25f, new IdleState(this)));
-		runToCarpenter.Add(new Task(new MoveThenDoState(this, new Vector3 (28, .2f, .3f), new MarkTaskDone(this))));
-		
-		runToBeach = new Schedule(this, Schedule.priorityEnum.High);
-		runToBeach.Add(new TimeTask(.25f, new IdleState(this)));
-		runToBeach.Add(new Task(new MoveThenDoState(this, new Vector3 (59, .2f, .3f), new MarkTaskDone(this))));
-		//wait for player to reach, or wait 10 seconds
-		runToBeach.Add(new TimeTask(2f, new IdleState(this)));
-		runToBeach.Add(new Task(new MoveThenDoState(this, new Vector3 (66, -7.6f, .3f), new MarkTaskDone(this))));
-		runToBeach.Add(new Task(new MoveThenDoState(this, new Vector3 (70, -8f, .3f), new MarkTaskDone(this))));
-		//PIER (79,-5.1)
-		runToFarmer = new Schedule(this, Schedule.priorityEnum.High);
-		runToFarmer.Add(new TimeTask(.25f, new IdleState(this)));
-		runToFarmer.Add(new Task(new MoveThenDoState(this, new Vector3 (66, -7.6f, .3f), new MarkTaskDone(this))));
-		runToFarmer.Add(new TimeTask(.25f, new IdleState(this)));
-		runToFarmer.Add(new Task(new MoveThenDoState(this, new Vector3 (59, .2f, .3f), new MarkTaskDone(this))));
-		runToFarmer.Add(new TimeTask(2f, new IdleState(this)));
-		runToFarmer.Add(new Task(new MoveThenDoState(this, new Vector3 (47, -1f, .3f), new MarkTaskDone(this))));
-		runToFarmer.Add(new TimeTask(2f, new IdleState(this)));
-		runToFarmer.Add(new Task(new MoveThenDoState(this, new Vector3 (53, 5f, .3f), new MarkTaskDone(this))));
-		runToFarmer.Add(new TimeTask(1f, new IdleState(this)));
-		runToFarmer.Add(new Task(new MoveThenDoState(this, new Vector3 (50, 10f, .3f), new MarkTaskDone(this))));
-		runToFarmer.Add(new TimeTask(1f, new IdleState(this)));
-		runToFarmer.Add(new Task(new MoveThenDoState(this, new Vector3 (55, 16f, .3f), new MarkTaskDone(this))));
-		runToFarmer.Add(new TimeTask(1f, new IdleState(this)));
-		runToFarmer.Add(new Task(new MoveThenDoState(this, new Vector3 (63, 16f, .3f), new MarkTaskDone(this))));
-		
-		runToLighthouse = new Schedule(this, Schedule.priorityEnum.High);
-		runToLighthouse.Add(new TimeTask(.25f, new IdleState(this)));
-		runToLighthouse.Add(new Task(new MoveThenDoState(this, new Vector3 (70, 16f, .3f), new MarkTaskDone(this))));
-			
-		//runToLighthouse.Add(new Task(new MoveThenDoState(this, new Vector3 (28, .2f, .3f), new MarkTaskDone(this))));
-		
-		runToMarket = new Schedule(this, Schedule.priorityEnum.High);
-		runToMarket.Add(new TimeTask(.25f, new IdleState(this)));
-		runToMarket.Add(new Task(new MoveThenDoState(this, new Vector3 (63, 16f, .3f), new MarkTaskDone(this))));
-		runToMarket.Add(new TimeTask(1f, new IdleState(this)));
-		runToMarket.Add(new Task(new MoveThenDoState(this, new Vector3 (55, 16f, .3f), new MarkTaskDone(this))));
-		runToMarket.Add(new TimeTask(1.25f, new IdleState(this)));
-		runToMarket.Add(new Task(new MoveThenDoState(this, new Vector3 (50, 10f, .3f), new MarkTaskDone(this))));
-		runToMarket.Add(new TimeTask(1f, new IdleState(this)));
-		runToMarket.Add(new Task(new MoveThenDoState(this, new Vector3 (37, 10f, .3f), new MarkTaskDone(this))));
-		runToMarket.Add(new TimeTask(.5f, new IdleState(this)));
-		runToMarket.Add(new Task(new MoveThenDoState(this, new Vector3 (40, 10f, .3f), new MarkTaskDone(this))));
-		runToMarket.Add(new TimeTask(.5f, new IdleState(this)));
-		runToMarket.Add(new Task(new MoveThenDoState(this, new Vector3 (27, 10f, .3f), new MarkTaskDone(this))));
-		runToMarket.Add(new Task(new MoveThenDoState(this, new Vector3 (27.05f, 10f, .3f), new MarkTaskDone(this))));
-		
-		runToReflectionTree = new Schedule(this, Schedule.priorityEnum.High);
-		runToReflectionTree.Add(new TimeTask(.25f, new IdleState(this)));
-		runToReflectionTree.Add(new Task(new MoveThenDoState(this, new Vector3 (-40, 16f, .3f), new MarkTaskDone(this))));
-		runToReflectionTree.Add(new TimeTask(2f, new IdleState(this)));
-		runToReflectionTree.Add(new Task(new MoveThenDoState(this, new Vector3 (-49, 18f, .3f), new MarkTaskDone(this))));
-		runToReflectionTree.Add(new TimeTask(2f, new IdleState(this)));
-		runToReflectionTree.Add(new Task(new MoveThenDoState(this, new Vector3 (-41, 25f, .3f), new MarkTaskDone(this))));
-		runToReflectionTree.Add(new TimeTask(.5f, new IdleState(this)));
-		runToReflectionTree.Add(new Task(new MoveThenDoState(this, new Vector3 (-48, 30f, .3f), new MarkTaskDone(this))));
-		runToReflectionTree.Add(new TimeTask(.1f, new IdleState(this)));
-		runToReflectionTree.Add(new Task(new MoveThenDoState(this, new Vector3 (-66, 29.5f, .3f), new MarkTaskDone(this))));
-		
-		runToHome = new Schedule(this, Schedule.priorityEnum.High);
-		runToHome.Add(new TimeTask(.25f, new IdleState(this)));
-		/*
-		 * runToHome.Add(new Task(new MoveThenDoState(this, new Vector3 (-48, 30f, .3f), new MarkTaskDone(this))));
-		runToHome.Add(new TimeTask(2f, new IdleState(this)));
-		runToHome.Add(new Task(new MoveThenDoState(this, new Vector3 (-41, 25f, .3f), new MarkTaskDone(this))));
-		runToHome.Add(new TimeTask(1f, new IdleState(this)));
-		runToHome.Add(new Task(new MoveThenDoState(this, new Vector3 (-49, 18f, .3f), new MarkTaskDone(this))));
-		runToHome.Add(new TimeTask(1f, new IdleState(this)));
-		runToHome.Add(new Task(new MoveThenDoState(this, new Vector3 (-40, 16f, .3f), new MarkTaskDone(this))));
-		runToHome.Add(new TimeTask(1.5f, new IdleState(this)));
-		runToHome.Add(new Task(new MoveThenDoState(this, new Vector3 (-18, 6f, .3f), new MarkTaskDone(this))));
-		*/
-		runToHome.Add(new TimeTask(1f, new IdleState(this)));
-		runToHome.Add(new Task(new MoveThenDoState(this, new Vector3 (-5, -1.5f, .3f), new MarkTaskDone(this))));
-		runToHome.Add(new TimeTask(.5f, new IdleState(this)));
-		runToHome.Add(new Task(new MoveThenDoState(this, new Vector3 (-2, -1.5f, .3f), new MarkTaskDone(this))));
-		
-		postRaceTalkToMomSchedule = new Schedule (this, Schedule.priorityEnum.High);
-		postRaceTalkToMomSchedule.Add(new TimeTask(3f, new IdleState(this)));
-		postRaceTalkToMomSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (0, -1.5f, .3f), new MarkTaskDone(this))));
+		scheduleStack.Add (new YoungRunIslandScript(this));
 	}
 	#endregion
 	
@@ -516,7 +402,14 @@ public class SiblingYoung : NPC {
 			string str_readyToRace = "Goooooo!!!!";	
 		
 			public MotherUpsetState(NPC toControl) : base(toControl, " ") {
+				activatePostSiblingExplore = new Reaction();
 				SetDefaultText("Opps.. I got us in trouble.");	
+				activatePostSiblingExplore.AddAction(new NPCCallbackOnNPCAction(talkToMother,toControl));
+				_allChoiceReactions.Add(new Choice("Mom!", "fdsfds"), new DispositionDependentReaction(activatePostSiblingExplore));
+			}
+		
+			public void talkToMother(NPC toControl) {
+				toControl.AddSchedule(new NPCConvoSchedule(toControl, NPCManager.instance.getNPC(StringsNPC.MomYoung), new ExampleNPCConverastion(),Schedule.priorityEnum.DoNow));	
 			}
 		}
 		#endregion
