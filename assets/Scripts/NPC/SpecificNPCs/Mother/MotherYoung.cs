@@ -99,7 +99,7 @@ public class MotherYoung : NPC {
 				_allChoiceReactions.Add(new Choice ("Spawn Apple", "Spawning Apple, Clink, Clink, Clink. Buhjunk."), new DispositionDependentReaction(otherState));
 			
 				enterAppleState.AddAction(new NPCEmotionUpdateAction(toControl, new GaveAppleState(toControl," ")));
-				enterAppleState.AddAction(new NPCCallbackAction(UpdateText));
+				//enterAppleState.AddAction(new NPCCallbackAction(UpdateText)); // ACTIVATING GaveApple Flag CREATES AN ERROR (From OneOffChat I believe)
 				enterAppleState.AddAction(new NPCTakeItemAction(toControl));
 				_allItemReactions.Add("apple",  new DispositionDependentReaction(enterAppleState));
 			}	

@@ -1,26 +1,50 @@
 public static class StringsNPC {
-	public static string CarpenterYoung = "CarpenterYoung";
-	
-	public static string CarpenterSonYoung = "CarpenterSonYoung";
-	public static string CarpenterSonMiddle = "";
+	#region NPC Game Objects
+	public static string SiblingYoung = "SiblingYoung";
+	public static string SiblingMiddle = "SiblingMiddle";
+	public static string SiblingOld = "SiblingOld";
 	
 	public static string MomYoung = "MotherYoung";
+	public static string MotherMiddle = "MotherMiddle";
 	
-	public static string SiblingYoung = "SiblingYoung";
+	public static string CarpenterYoung = "CarpenterYoung";
+	public static string CarpenterMiddle = "CarpenterMiddle";
 	
-	public static string FarmerYoung = "";
+	public static string CarpenterSonYoung = "CarpenterSonYoung";
+	public static string CarpenterSonMiddle = "CarpenterSonMiddle";
+	public static string CarpenterSonOld = "CarpenterSonOld";
 	
-	public static string FarmerHusbandYoung = "";
+	public static string FarmerMotherYoung = "FarmerMotherYoung";
+	public static string FarmerMotherMiddle = "FarmerMotherMiddle";
 	
-	public static string LighthouseGirlYoung = "";
+	public static string FarmerFatherYoung = "FarmerFatherYoung";
+	public static string FarmerFatherMiddle = "FarmerFatherMiddle";
 	
-	public static string CastlemanYoung = "";
+	public static string LighthouseGirlYoung = "LighthouseGirlYoung";
+	public static string LighthouseGirlMiddle = "LighthouseGirlMiddle";
+	public static string LighthouseGirlOld = "LighthouseGirlOld";
 	
-	public static string SeaCaptainYoung = "";
+	public static string CastlemanYoung = "CastlemanYoung";
+	public static string CastlemanMiddle = "CastlemanMiddle";
+	public static string CastlemanOld = "CastlemanOld";
 	
-	public static string BazaarmanYoung = "";
+	public static string SeaCaptainYoung = "SeaCaptainYoung";
 	
-	public static string MusicianYoung = "";
+	public static string BazaarmanYoung = "BazaarmanYoung";
 	
-	public static string FortuneTellerYoung = "";
+	public static string MusicianYoung = "MusicianYoung";
+	public static string MusicianMiddle = "MusicianMiddle";
+	public static string MusicianOld = "MusicianOld";
+	
+	public static string FortuneTellerYoung = "FortuneTellerYoung";
+	public static string FortuneTellerMiddle = "FortuneTellerMiddle";
+	public static string FortuneTellerOld = "FortuneTellerOld";
+	#endregion
+	
+	#region Emotions
+	public static string Default = "";
+	public static string Happy = "Happy";
+	public static string Angry = "Angry";
+	
+	#endregion
 }

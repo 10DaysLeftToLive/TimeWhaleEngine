@@ -43,21 +43,29 @@ public class CarpenterYoung : NPC {
 		int SureCounter = 0;
 		int BusyCounter = 0;
 		Reaction giveToolsReaction;
+<<<<<<< HEAD
 		Reaction changeTextReactionSure;
 		Reaction changeTextReactionBusy;
 		
 		public string _carpenterText = "Alright, come back later if you still want to help";
 		
-		NPC carpenterRef;		
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
-			carpenterRef = toControl;
 			
 			giveToolsChoiceSure = new Choice("Sure", "Alright, go find my tools then.");
 			giveToolsChoiceBusy = new Choice("Busy", _carpenterText);
+=======
+		NPC carpenterRef;
+		
+		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+			carpenterRef = toControl;
+			giveToolsChoice = new Choice("Give Tools.", "Thanks for finding my tools instead of my lazy son.  Honestly he sometimes I think he doesn't care about our great legacy.");
+>>>>>>> 0f16276e1d470ae1327d800e5e8c777f85959b03
 			giveToolsReaction = new Reaction();
 			giveToolsReaction.AddAction(new NPCGiveItemAction(toControl, "apple"));
 			giveToolsReaction.AddAction(new NPCCallbackAction(GiveToolsToCarpenter));
 			giveToolsReaction.AddAction(new NPCTakeItemAction(toControl));
+			
+			
 			
 			changeTextReactionSure = new Reaction();
 			changeTextReactionSure.AddAction(new NPCCallbackAction(updateTextSure));
@@ -82,8 +90,11 @@ public class CarpenterYoung : NPC {
 			}
 			SetDefaultText("Thank you for 'em tools, you rascal!");
 			GUIManager.Instance.RefreshInteraction();
+<<<<<<< HEAD
+=======
 			carpenterRef.SetCharacterPortrait(StringsNPC.Happy);
 			SetDefaultText("Thank you for them tools, you rascal!");
+>>>>>>> 0f16276e1d470ae1327d800e5e8c777f85959b03
 			
 			//Need to walk away and come back later to check on son
 		}

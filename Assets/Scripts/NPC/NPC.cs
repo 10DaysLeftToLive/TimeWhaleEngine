@@ -62,7 +62,7 @@ public abstract class NPC : Character {
 			Debug.LogError("No animation data attached to " + name);	
 		}
 		if (charPortrait == null){
-			Debug.LogError("No character portait found for " + name);	
+			Debug.LogError("No initial character portait found for " + name);	
 		}
 		if (player == null){
 			Debug.LogError("No player was found by " + name);	
@@ -177,6 +177,20 @@ public abstract class NPC : Character {
 	
 	public bool IsInteracting(){
 		return (chatingWithPlayer);	
+	}
+	
+	/// <summary>
+	/// Sets the character portrait.
+	/// </summary>
+	/// <param name='emotion'>
+	/// Name of the emotion in resources folder [npcName][emotion]. Send empty string for default/neutral face
+	/// </param>
+	public void SetCharacterPortrait(string emotion){
+		charPortrait = (Texture)Resources.Load(this.name + emotion, typeof(Texture));
+		if(charPortrait == null){
+			Debug.LogWarning("Could not find " + this.name + emotion + " in /Resources");
+			charPortrait = (Texture)Resources.Load(this.name, typeof(Texture));
+		}
 	}
 	#endregion	
 	
