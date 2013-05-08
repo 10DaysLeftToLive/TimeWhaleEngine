@@ -69,13 +69,28 @@ public class MoveState : AbstractState {
         
         // Needs a check for which area the player is in to switch which
         // walking SFX is loaded.
-        SoundManager.instance.PlaySFX("WalkForest");
+
+        if (character is NPC)
+        {
+
+        }
+        else
+        {
+            SoundManager.instance.PlaySFX("WalkForest");
+        }
     }
     
     public override void OnExit(){
         //Debug.Log(character.name + ": MoveState Exit");
 
-        SoundManager.instance.StopSFX();
+        if (character is NPC)
+        {
+
+        }
+        else
+        {
+            SoundManager.instance.StopSFX();
+        }
     }
     
     private void Move(Vector3 moveDelta){
