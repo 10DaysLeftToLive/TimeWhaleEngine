@@ -2,8 +2,6 @@ using UnityEngine;
 using System.Collections;
 
 public static class QuickPath {
-	
-	private static float NEARTHRESHOLD = .2f; // how close will the y positions be until calling FindSlope
 	private static float MINSLOPE = .2f; // amount to increase y position after hitting a slope (smaller number means smaller slopes found and more precise but more raycasts)
 	
 	
