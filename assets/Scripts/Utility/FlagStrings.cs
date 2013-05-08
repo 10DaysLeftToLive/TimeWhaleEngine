@@ -9,6 +9,8 @@ public static class FlagStrings {
 	public static string MoveHome = "Move Home";
 	public static string GaveApple = "Gave Apple";
 	public static string GiveSeeds = "Give Seeds";
+	
+	public static string GiveItems = "Give Items";
 	#endregion
 	
 	#region Sibling
