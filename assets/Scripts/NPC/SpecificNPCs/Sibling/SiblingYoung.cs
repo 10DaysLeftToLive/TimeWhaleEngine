@@ -13,90 +13,29 @@ public class SiblingYoung : NPC {
 	#region Set Flag Reactions
 	public string currentPassiveText;
 	protected override void SetFlagReactions() {
-		
-/*		
-		//Reaction frogCrushing = new Reaction();
-		//frogCrushing.AddAction(new ShowOneOffChatAction(this, "OmG yOu KiLleD dAt fROg!1!"));
-		//frogCrushing.AddAction(new UpdateDefaultTextAction(this, "I can't belive you did that."));
-		//flagReactions.Add(FlagStrings.CrushFrog, frogCrushing);
+
 		#region Home To Bridge
+/*
 		Reaction homeToBridge = new Reaction();
 		//raceTime.AddAction(new ShowOneOffChatAction(this, "Hurry up! We don't have all day!!"));
 		homeToBridge.AddAction(new ShowOneOffChatAction(this, "Go!!!"));
 		homeToBridge.AddAction(new UpdateDefaultTextAction(this, "I heard there's a secret waterway under this bridge :)"));
-		homeToBridge.AddAction(new NPCAddScheduleAction(this, runToBridge));
+		homeToBridge.AddAction(new NPCAddScheduleAction(this, initialSchedule));
 		flagReactions.Add(FlagStrings.RunToBridge, homeToBridge);
-		#endregion	
-		#region Bridge To Carpenter
-		Reaction bridgeToCarpenter = new Reaction();
-		//bridgeToCarpenter.AddAction(new ShowOneOffChatAction(this, currentPassiveText));
-		//bridgeToCarpenter.AddAction(new NPCCallbackSetstringAction(setPassiveText, this));
-		bridgeToCarpenter.AddAction(new UpdateDefaultTextAction(this, "Careful, the Carpenter is mean!"));
-		bridgeToCarpenter.AddAction(new NPCAddScheduleAction(this, runToCarpenter));
-		flagReactions.Add(FlagStrings.RunToCarpenter, bridgeToCarpenter);
-		#endregion
-		#region Carpenter To Beach
-		Reaction carpenterToBeach = new Reaction();
-		carpenterToBeach.AddAction(new UpdateDefaultTextAction(this, "The Ocean is beautiful~"));
-		carpenterToBeach.AddAction(new NPCAddScheduleAction(this, runToBeach));
-		flagReactions.Add(FlagStrings.RunToBeach, carpenterToBeach);
-		#endregion
-		#region Beach To Farmer
-		Reaction beachToFarmer = new Reaction();
-		beachToFarmer.AddAction(new UpdateDefaultTextAction(this, "Ms. Farmer is mean. /n but Mr. Farmer is nice!"));
-		beachToFarmer.AddAction(new NPCAddScheduleAction(this, runToFarmer));
-		flagReactions.Add(FlagStrings.RunToFarmer, beachToFarmer);
-		#endregion
-		#region Farmer to Lighthouse
-		Reaction farmerToLighthouse = new Reaction();
-		farmerToLighthouse.AddAction(new UpdateDefaultTextAction(this, "The lighthouse girl knows some good stories! There's one about a Sea Captain"));
-		farmerToLighthouse.AddAction(new NPCAddScheduleAction(this, runToLighthouse));
-		flagReactions.Add(FlagStrings.RunToLighthouse, farmerToLighthouse);
-		#endregion
-		#region Lighthouse to Market
-		Reaction lighthouseToMarket = new Reaction();
-		lighthouseToMarket.AddAction(new UpdateDefaultTextAction(this, "I really want a new toy. Could you get me one? "));
-		lighthouseToMarket.AddAction(new NPCAddScheduleAction(this, runToMarket));
-		flagReactions.Add(FlagStrings.RunToMarket, lighthouseToMarket);
-		#endregion
-		#region Market to Reflection Tree
-		Reaction marketToReflectionTree = new Reaction();
-		marketToReflectionTree.AddAction(new UpdateDefaultTextAction(this, "Soo peaceful~ I don't know why mom doesn't let us come here."));
-		marketToReflectionTree.AddAction(new NPCAddScheduleAction(this, runToReflectionTree));
-		flagReactions.Add(FlagStrings.RunToReflectionTree, marketToReflectionTree);
-		#endregion
-		#region Reflection Tree to Home
-		Reaction reflectionTreeToHome = new Reaction();
-		reflectionTreeToHome.AddAction(new UpdateDefaultTextAction(this, "Thanks for the race! It was soo much fun!"));
-		reflectionTreeToHome.AddAction(new NPCAddScheduleAction(this, runToHome));
-		flagReactions.Add(FlagStrings.RunToHome, reflectionTreeToHome);
-		#endregion
-		
-		Reaction postRaceTalkToMom = new Reaction();
-		postRaceTalkToMom.AddAction(new NPCAddScheduleAction(this, postRaceTalkToMomSchedule));
-		postRaceTalkToMom.AddAction(new ShowOneOffChatAction(this, "Hey mom! We just had the best race up to the Reflection Tree!"));
-		flagReactions.Add(FlagStrings.PostSiblingExplore, postRaceTalkToMom);
-		
-		Reaction firstTimeMotherTalks = new Reaction();
-		//FirstTimeMotherTalks.AddAction(new ShowOneOffChatAction(this, "Let's go!", 5));
-		firstTimeMotherTalks.AddAction(new ShowOneOffChatAction(this, "Let's go!"));
-		firstTimeMotherTalks.AddAction(new NPCAddScheduleAction(this, runToCarpenter));
-		//FirstTimeMotherTalks.AddAction(new ShowOneOffChatAction(this, "C'mon, let's race!!!"));
-		flagReactions.Add(FlagStrings.SiblingExplore, firstTimeMotherTalks); 
 */
-		
+		#endregion			
 	}
 	#endregion
 	protected override EmotionState GetInitEmotionState() {
 		// change portrait picture
 		return (new InitialEmotionState(this, "Hey there! Are you ready to race!?"));
 	}
-	
+
 	protected override Schedule GetSchedule(){
 		Schedule schedule = new Schedule(this);
-		
-		Task initialSchedule = new Task(new IdleState(this));
+		Task initialSchedule = new TimeTask(.25f , new IdleState(this));
 		schedule.Add(initialSchedule);
+		
 		//TimeTask exploringNearHome = new TimeTask(10, new IdleState(this));
 		//Task moveToBridge = new Task(new MoveThenDoState(this, new Vector3(5, .2f, .3f), new MarkTaskDone(this)));
 		//schedule.Add(exploringNearHome);
@@ -104,9 +43,25 @@ public class SiblingYoung : NPC {
 		return (schedule);
 	}
 	
+	//private Schedule initialSchedule;
+	
 	#region Set Up Sechedules
 	protected override void SetUpSchedules() {
+		 //initialSchedule = new Schedule(this);
+		
 		scheduleStack.Add (new YoungRunIslandScript(this));
+		/*
+		initialSchedule.Add(new TimeTask(.5f, new IdleState(this)));
+		initialSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (6, .2f, .3f), new MarkTaskDone(this))));
+			//Add (new TimeTask(5, new WaitTillPlayerCloseState(this));
+		initialSchedule.Add(new TimeTask(.5f, new IdleState(this)));
+		initialSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (4, .2f, .3f), new MarkTaskDone(this))));
+		initialSchedule.Add(new TimeTask(.5f, new IdleState(this)));
+		initialSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (11, .2f, .3f), new MarkTaskDone(this))));
+		initialSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (10.90f, .2f, .3f), new MarkTaskDone(this)))); // at bridge
+		initialSchedule.Add(new TimeTask(10f, new WaitTillPlayerCloseState(this, this.player)));
+		scheduleStack.Add (initialSchedule);
+		*/
 	}
 	#endregion
 	
@@ -212,7 +167,7 @@ public class SiblingYoung : NPC {
 			Reaction activateWalkToBeachState;
 			Reaction choiceTwoReaction;
 			Reaction choiceThreeReaction;
-			string str_readyToRace = "Goooooo!!!!";
+			//string str_readyToRace = "Goooooo!!!!";
 		
 			public WalkToBeachState(NPC toControl) : base(toControl, "The Ocean is beautiful~") {
 				//GUIManager.Instance.RefreshInteraction(); <--DON'T DO THIS IN CONSTRUCTOR
@@ -251,7 +206,7 @@ public class SiblingYoung : NPC {
 			bool flagSet = false;	
 			Reaction activateWalkToLighthouseState;
 			//Reaction choiceTwoReaction;
-			string str_readyToRace = "Goooooo!!!!";
+			//string str_readyToRace = "Goooooo!!!!";
 		
 			public WalkToFarmerState(NPC toControl) : base(toControl, " ") {
 				activateWalkToLighthouseState = new Reaction();
@@ -276,7 +231,7 @@ public class SiblingYoung : NPC {
 			bool flagSet = false;	
 			Reaction activateWalkToMarketState;
 			//Reaction choiceTwoReaction;
-			string str_readyToRace = "Goooooo!!!!";
+			//string str_readyToRace = "Goooooo!!!!";
 		
 			public WalkToLighthouseState(NPC toControl) : base(toControl, " ") {
 				activateWalkToMarketState = new Reaction();
@@ -301,7 +256,7 @@ public class SiblingYoung : NPC {
 			bool flagSet = false;	
 			Reaction activateWalkToReflectionTreeState;
 			//Reaction choiceTwoReaction;
-			string str_readyToRace = "Goooooo!!!!";
+			//string str_readyToRace = "Goooooo!!!!";
 		
 			public WalkToMarketState(NPC toControl) : base(toControl, " ") {
 				activateWalkToReflectionTreeState = new Reaction();
@@ -327,7 +282,7 @@ public class SiblingYoung : NPC {
 			bool flagSet = false;	
 			Reaction activateWalkToHomeState;
 			Reaction choiceTwoReaction;
-			string str_readyToRace = "Goooooo!!!!";
+			//string str_readyToRace = "Goooooo!!!!";
 			
 			public WalkToReflectionTreeState(NPC toControl) : base(toControl, " ") {
 				activateWalkToHomeState = new Reaction();
@@ -352,7 +307,7 @@ public class SiblingYoung : NPC {
 			Choice choice;
 			Reaction activatePostSiblingExplore;
 			Reaction choiceTwoReaction;
-			string str_readyToRace = "Goooooo!!!!";	
+			//string str_readyToRace = "Goooooo!!!!";	
 		
 			public WalkToHomeState(NPC toControl) : base(toControl, "Good Race!") {
 				
@@ -395,11 +350,11 @@ public class SiblingYoung : NPC {
 		#region Mother Upset State 
 		private class MotherUpsetState : EmotionState {
 		
-			bool flagSet = false;	
+			//bool flagSet = false;	
 			Choice choice;
 			Reaction activatePostSiblingExplore;
 			Reaction choiceTwoReaction;
-			string str_readyToRace = "Goooooo!!!!";	
+			//string str_readyToRace = "Goooooo!!!!";	
 		
 			public MotherUpsetState(NPC toControl) : base(toControl, " ") {
 				activatePostSiblingExplore = new Reaction();

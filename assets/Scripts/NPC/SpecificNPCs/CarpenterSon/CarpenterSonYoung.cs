@@ -41,9 +41,11 @@ public class CarpenterSonYoung : NPC {
 		Choice makeTreeHouseChoice = new Choice("Make TreeHouse.", "|||| Chu be right broski, I maka ze treehouz");
 		Reaction makeTreeHouseReaction = new Reaction();
 	
-		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
-			giveToolsReaction.AddAction(new NPCCallbackAction(GiveToolsToCarpenterSon));
+		Choice createToolboxChoice = new Choice ("You Have it.", "You caught me.");
+		Reaction createToolboxReaction = new Reaction();
 		
+		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){			
+			giveToolsReaction.AddAction(new NPCCallbackAction(GiveToolsToCarpenterSon));
 			giveToolsReaction.AddAction(new ShowOneOffChatAction(NPCManager.instance.getNPC(StringsNPC.CarpenterYoung), 
 				"Oh good you found my old tools! " +
 				"Now if  you are to actually start becoming a great carpenter like my father and his before him then you need to start practicing on your own. " +
@@ -52,6 +54,10 @@ public class CarpenterSonYoung : NPC {
 			giveToolsReaction.AddAction(new NPCGiveItemAction(NPCManager.instance.getNPC(StringsNPC.CarpenterYoung),"apple"));
 			
 			_allChoiceReactions.Add(giveToolsChoice,new DispositionDependentReaction(giveToolsReaction));
+			//TEMP
+			createToolboxReaction.AddAction(new NPCGiveItemAction(toControl,"toolbox"));
+			createToolboxReaction.AddAction(new NPCCallbackAction(GaveToolbox));
+			_allChoiceReactions.Add (createToolboxChoice, new DispositionDependentReaction(createToolboxReaction));
 		
 		}
 		
@@ -59,6 +65,11 @@ public class CarpenterSonYoung : NPC {
 			
 		}
 	
+		private void GaveToolbox() {
+			_allChoiceReactions.Remove(createToolboxChoice);
+			GUIManager.Instance.RefreshInteraction();
+		}
+		
 		private void GiveToolsToCarpenterSon(){
 			_allChoiceReactions.Remove(giveToolsChoice);
 			GUIManager.Instance.RefreshInteraction();

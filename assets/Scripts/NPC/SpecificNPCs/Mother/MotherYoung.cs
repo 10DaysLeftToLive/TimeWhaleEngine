@@ -82,7 +82,6 @@ public class MotherYoung : NPC {
 		moveHomeSchedule.Add(new TimeTask(.5f, new IdleState(this)));
 		moveHomeSchedule.Add(new Task(new MoveThenDoState(this, new Vector3(0, -1f,.3f), new MarkTaskDone(this))));
 		moveHomeSchedule.Add(new Task(new MoveThenDoState(this, new Vector3(-.9f, -1f,.3f), new MarkTaskDone(this))));
-		
 	}
 	
 	#region EmotionStates
@@ -90,18 +89,22 @@ public class MotherYoung : NPC {
 		private class InitialEmotionState : EmotionState {
 			Reaction enterAppleState; 
 			Reaction otherState;
-		
+	
 			public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue) {
 				enterAppleState = new Reaction();
-				otherState = new Reaction();
+				//otherState = new Reaction();
 				
-				otherState.AddAction(new NPCGiveItemAction(toControl, "apple"));
-				_allChoiceReactions.Add(new Choice ("Spawn Apple", "Spawning Apple, Clink, Clink, Clink. Buhjunk."), new DispositionDependentReaction(otherState));
+				//otherState.AddAction(new NPCGiveItemAction(toControl, "apple"));
+				//_allChoiceReactions.Add(new Choice ("Spawn Apple", "Spawning Apple, Clink, Clink, Clink. Buhjunk."), new DispositionDependentReaction(otherState));
 			
 				enterAppleState.AddAction(new NPCEmotionUpdateAction(toControl, new GaveAppleState(toControl," ")));
-				enterAppleState.AddAction(new NPCCallbackAction(UpdateText));
+				//enterAppleState.AddAction(new NPCCallbackAction(UpdateText)); // ACTIVATING GaveApple Flag CREATES AN ERROR (From OneOffChat I believe)
 				enterAppleState.AddAction(new NPCTakeItemAction(toControl));
 				_allItemReactions.Add("apple",  new DispositionDependentReaction(enterAppleState));
+			
+				otherState = new Reaction();
+				otherState.AddAction(new NPCEmotionUpdateAction(toControl, new PostInitialEmotionState(toControl,"You're such a great help! Do you have more time to help me?")));
+				//otherState.AddAction(new ShowOneOffChatAction(toControl, "Let's go back to the house."));
 			}	
 		
 		public void UpdateText() {
@@ -118,17 +121,24 @@ public class MotherYoung : NPC {
 			public GaveAppleState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue) {
 				SetDefaultText("Thanks so much! Now I can start baking!");
 				enterPostInitialEmotionState = new Reaction();
-				otherState = new Reaction();
 				
-				//enterPostInitialEmotionState.AddAction(new NPCEmotionUpdateAction(toControl, new PostInitialEmotionState(toControl," ")));
-				enterPostInitialEmotionState.AddAction(new NPCGiveItemAction(toControl, "apple")); // supposed to drop apple seeds (brown baggy?)
+				enterPostInitialEmotionState.AddAction(new NPCGiveItemAction(toControl, "seeds")); // supposed to drop apple seeds (brown baggy?)
 				enterPostInitialEmotionState.AddAction(new NPCCallbackAction(UpdateText));
+				
+				otherState = new Reaction();
+				otherState.AddAction(new NPCEmotionUpdateAction(toControl, new PostInitialEmotionState(toControl,"You're such a great help! Do you have more time to help me?")));
+				//otherState.AddAction(new ShowOneOffChatAction(toControl, "Let's go back to the house."));
 			
 				_allChoiceReactions.Add(new Choice ("Switch States", "You're such a great help! Do you have more time to help me?"), new DispositionDependentReaction(enterPostInitialEmotionState));	
 			}	
 		
 		public void UpdateText() {
 			FlagManager.instance.SetFlag(FlagStrings.GiveSeeds);
+			//_allChoiceReactions.Remove(giveToolsChoiceSure);
+			SetOnOpenInteractionReaction(new DispositionDependentReaction(otherState));
+			//GUIManager.Instance.RefreshInteraction();
+			//SetDefaultText("Care you dance?");
+			
 		}
 	}
 	
@@ -163,7 +173,7 @@ public class MotherYoung : NPC {
 			
 			public void UpdateText() {
 				numberOfTimesBuggedMother++;
-				Debug.Log(numberOfTimesBuggedMother);
+				//Debug.Log(numberOfTimesBuggedMother);
 				if (numberOfTimesBuggedMother == 1) {
 					SetDefaultText("Are you free now?");
 					text1 = "Alright, I need your help, so come back soon.";
@@ -209,7 +219,7 @@ public class MotherYoung : NPC {
 		public void displayMad() {
 			//Stall the mother for 15 seconds, then transition her back to a new state
 			Schedule angryMom = new Schedule(_npcInState, Schedule.priorityEnum.DoNow);
-			Action displayAnger = new ShowOneOffChatAction(_npcInState, "That isn't how you treat your mother!");
+			//Action displayAnger = new ShowOneOffChatAction(_npcInState, "That isn't how you treat your mother!");
 			angryMom.Add(new TimeTask(15, new IdleState(_npcInState)));
 //how can I transition back to another emotion state?			
 			//angryMom.Add(new Task(
@@ -275,7 +285,7 @@ public class MotherYoung : NPC {
 	#region Dummy State
 	public class DummyState : EmotionState {
 		
-		bool flagSet = false;
+		//bool flagSet = false;
 		Choice testing;
 		
 		Reaction changeFlag;

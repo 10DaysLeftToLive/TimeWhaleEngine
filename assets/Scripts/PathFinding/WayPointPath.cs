@@ -2,9 +2,6 @@ using UnityEngine;
 using System.Collections;
 
 public class WayPointPath {
-
-	private static float NEXTFLOOR = 3f; // how close will the y positions be until looking for up/down paths
-
 	private static Vector3[] points;
 	private static int[] wayPoints;
 	private static Vector3 startPosition, destPosition;
