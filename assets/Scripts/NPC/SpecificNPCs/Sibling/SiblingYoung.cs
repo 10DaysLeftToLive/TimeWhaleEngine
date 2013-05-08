@@ -13,78 +13,17 @@ public class SiblingYoung : NPC {
 	#region Set Flag Reactions
 	public string currentPassiveText;
 	protected override void SetFlagReactions() {
-		
-/*		
-		//Reaction frogCrushing = new Reaction();
-		//frogCrushing.AddAction(new ShowOneOffChatAction(this, "OmG yOu KiLleD dAt fROg!1!"));
-		//frogCrushing.AddAction(new UpdateDefaultTextAction(this, "I can't belive you did that."));
-		//flagReactions.Add(FlagStrings.CrushFrog, frogCrushing);
+
 		#region Home To Bridge
+/*
 		Reaction homeToBridge = new Reaction();
 		//raceTime.AddAction(new ShowOneOffChatAction(this, "Hurry up! We don't have all day!!"));
-		homeToBridge.AddAction(new ShowOneOffChatAction(this, "Go!!!"));
-		homeToBridge.AddAction(new UpdateDefaultTextAction(this, "I heard there's a secret waterway under this bridge :)"));
-		homeToBridge.AddAction(new NPCAddScheduleAction(this, runToBridge));
-		flagReactions.Add(FlagStrings.RunToBridge, homeToBridge);
-		#endregion	
-		#region Bridge To Carpenter
-		Reaction bridgeToCarpenter = new Reaction();
-		//bridgeToCarpenter.AddAction(new ShowOneOffChatAction(this, currentPassiveText));
-		//bridgeToCarpenter.AddAction(new NPCCallbackSetstringAction(setPassiveText, this));
-		bridgeToCarpenter.AddAction(new UpdateDefaultTextAction(this, "Careful, the Carpenter is mean!"));
-		bridgeToCarpenter.AddAction(new NPCAddScheduleAction(this, runToCarpenter));
-		flagReactions.Add(FlagStrings.RunToCarpenter, bridgeToCarpenter);
-		#endregion
-		#region Carpenter To Beach
-		Reaction carpenterToBeach = new Reaction();
-		carpenterToBeach.AddAction(new UpdateDefaultTextAction(this, "The Ocean is beautiful~"));
-		carpenterToBeach.AddAction(new NPCAddScheduleAction(this, runToBeach));
-		flagReactions.Add(FlagStrings.RunToBeach, carpenterToBeach);
-		#endregion
-		#region Beach To Farmer
-		Reaction beachToFarmer = new Reaction();
-		beachToFarmer.AddAction(new UpdateDefaultTextAction(this, "Ms. Farmer is mean. /n but Mr. Farmer is nice!"));
-		beachToFarmer.AddAction(new NPCAddScheduleAction(this, runToFarmer));
-		flagReactions.Add(FlagStrings.RunToFarmer, beachToFarmer);
-		#endregion
-		#region Farmer to Lighthouse
-		Reaction farmerToLighthouse = new Reaction();
-		farmerToLighthouse.AddAction(new UpdateDefaultTextAction(this, "The lighthouse girl knows some good stories! There's one about a Sea Captain"));
-		farmerToLighthouse.AddAction(new NPCAddScheduleAction(this, runToLighthouse));
-		flagReactions.Add(FlagStrings.RunToLighthouse, farmerToLighthouse);
-		#endregion
-		#region Lighthouse to Market
-		Reaction lighthouseToMarket = new Reaction();
-		lighthouseToMarket.AddAction(new UpdateDefaultTextAction(this, "I really want a new toy. Could you get me one? "));
-		lighthouseToMarket.AddAction(new NPCAddScheduleAction(this, runToMarket));
-		flagReactions.Add(FlagStrings.RunToMarket, lighthouseToMarket);
-		#endregion
-		#region Market to Reflection Tree
-		Reaction marketToReflectionTree = new Reaction();
-		marketToReflectionTree.AddAction(new UpdateDefaultTextAction(this, "Soo peaceful~ I don't know why mom doesn't let us come here."));
-		marketToReflectionTree.AddAction(new NPCAddScheduleAction(this, runToReflectionTree));
-		flagReactions.Add(FlagStrings.RunToReflectionTree, marketToReflectionTree);
-		#endregion
-		#region Reflection Tree to Home
-		Reaction reflectionTreeToHome = new Reaction();
-		reflectionTreeToHome.AddAction(new UpdateDefaultTextAction(this, "Thanks for the race! It was soo much fun!"));
-		reflectionTreeToHome.AddAction(new NPCAddScheduleAction(this, runToHome));
-		flagReactions.Add(FlagStrings.RunToHome, reflectionTreeToHome);
-		#endregion
-		
-		Reaction postRaceTalkToMom = new Reaction();
-		postRaceTalkToMom.AddAction(new NPCAddScheduleAction(this, postRaceTalkToMomSchedule));
-		postRaceTalkToMom.AddAction(new ShowOneOffChatAction(this, "Hey mom! We just had the best race up to the Reflection Tree!"));
-		flagReactions.Add(FlagStrings.PostSiblingExplore, postRaceTalkToMom);
-		
-		Reaction firstTimeMotherTalks = new Reaction();
-		//FirstTimeMotherTalks.AddAction(new ShowOneOffChatAction(this, "Let's go!", 5));
-		firstTimeMotherTalks.AddAction(new ShowOneOffChatAction(this, "Let's go!"));
-		firstTimeMotherTalks.AddAction(new NPCAddScheduleAction(this, runToCarpenter));
-		//FirstTimeMotherTalks.AddAction(new ShowOneOffChatAction(this, "C'mon, let's race!!!"));
-		flagReactions.Add(FlagStrings.SiblingExplore, firstTimeMotherTalks); 
+//		homeToBridge.AddAction(new ShowOneOffChatAction(this, "Go!!!"));
+//		homeToBridge.AddAction(new UpdateDefaultTextAction(this, "I heard there's a secret waterway under this bridge :)"));
+//		homeToBridge.AddAction(new NPCAddScheduleAction(this, runToBridge));
+//		flagReactions.Add(FlagStrings.RunToBridge, homeToBridge);
 */
-		
+		#endregion			
 	}
 	#endregion
 	protected override EmotionState GetInitEmotionState() {

@@ -11,44 +11,42 @@ public class YoungRunIslandScript : Schedule {
 		protected override void Init() {
 			Add(new TimeTask(.75f, new IdleState(_toManage)));
 			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (6, .2f, .3f), new MarkTaskDone(_toManage))));
-			//Add (new TimeTask(5, new WaitTillPlayerCloseState());
+			//Add (new TimeTask(5, new WaitTillPlayerCloseState(_toManage));
 			Add(new TimeTask(.5f, new IdleState(_toManage)));
 			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (4, .2f, .3f), new MarkTaskDone(_toManage))));
 			Add(new TimeTask(.5f, new IdleState(_toManage)));
 			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (11, .2f, .3f), new MarkTaskDone(_toManage))));
-			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (10.90f, .2f, .3f), new MarkTaskDone(_toManage))));
+			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (10.90f, .2f, .3f), new MarkTaskDone(_toManage)))); // at bridge
+			Add(new TimeTask(10f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
 
-			//
-			Add(new TimeTask(.25f, new IdleState(_toManage)));
-			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (28, .2f, .3f), new MarkTaskDone(_toManage))));
-			
-			//
-			Add(new TimeTask(.25f, new IdleState(_toManage)));
-			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (59, .2f, .3f), new MarkTaskDone(_toManage))));
-			//wait for player to reach, or wait 10 seconds
-			Add(new TimeTask(2f, new IdleState(_toManage)));
+			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (28, .2f, .3f), new MarkTaskDone(_toManage)))); // at carpenter
+			Add(new TimeTask(10f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
+		
+			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (59, .2f, .3f), new MarkTaskDone(_toManage)))); // at base staircase
+			Add(new TimeTask(2f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
 			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (66, -7.6f, .3f), new MarkTaskDone(_toManage))));
-			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (70, -8f, .3f), new MarkTaskDone(_toManage))));
+			Add(new TimeTask(2f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
+			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (70, -8f, .3f), new MarkTaskDone(_toManage)))); // at Beach
+			Add(new TimeTask(15f, new IdleState(_toManage)));
 			//PIER (79,-5.1)
 
-			Add(new TimeTask(.25f, new IdleState(_toManage)));
+			
 			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (66, -7.6f, .3f), new MarkTaskDone(_toManage))));
 			Add(new TimeTask(.25f, new IdleState(_toManage)));
 			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (59, .2f, .3f), new MarkTaskDone(_toManage))));
-			Add(new TimeTask(2f, new IdleState(_toManage)));
+			Add(new TimeTask(2f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
 			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (47, -1f, .3f), new MarkTaskDone(_toManage))));
-			Add(new TimeTask(2f, new IdleState(_toManage)));
+			Add(new TimeTask(2f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
 			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (53, 5f, .3f), new MarkTaskDone(_toManage))));
-			Add(new TimeTask(1f, new IdleState(_toManage)));
+			Add(new TimeTask(2f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
 			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (50, 10f, .3f), new MarkTaskDone(_toManage))));
-			Add(new TimeTask(1f, new IdleState(_toManage)));
+			Add(new TimeTask(2f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
 			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (55, 16f, .3f), new MarkTaskDone(_toManage))));
-			Add(new TimeTask(1f, new IdleState(_toManage)));
+			Add(new TimeTask(2f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
 			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (63, 16f, .3f), new MarkTaskDone(_toManage))));
-			
-			Add(new TimeTask(.25f, new IdleState(_toManage)));
-			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (70, 16f, .3f), new MarkTaskDone(_toManage))));
-				
+			Add(new TimeTask(15f, new IdleState(_toManage)));
+			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (75, 16f, .3f), new MarkTaskDone(_toManage))));
+			Add(new TimeTask(20f, new IdleState(_toManage)));
 			//runToLighthouse.Add(new Task(new MoveThenDoState(_toManage, new Vector3 (28, .2f, .3f), new MarkTaskDone(_toManage))));
 	
 			Add(new TimeTask(.25f, new IdleState(_toManage)));

@@ -163,7 +163,7 @@ public class MotherYoung : NPC {
 			
 			public void UpdateText() {
 				numberOfTimesBuggedMother++;
-				Debug.Log(numberOfTimesBuggedMother);
+				//Debug.Log(numberOfTimesBuggedMother);
 				if (numberOfTimesBuggedMother == 1) {
 					SetDefaultText("Are you free now?");
 					text1 = "Alright, I need your help, so come back soon.";

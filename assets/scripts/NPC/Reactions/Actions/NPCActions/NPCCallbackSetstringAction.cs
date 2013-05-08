@@ -6,17 +6,20 @@ using System.Collections;
 /// when it reacts
 /// </summary>
 public class NPCCallbackSetStringAction : Action {
-	public delegate string Callback();
+	public delegate void Callback(NPC _toControl, string _updateText);
 	NPC toControl;
+	string updateText;
 	Callback functionToCall;
 	
-	public NPCCallbackSetStringAction(Callback _functionToCall, NPC _toControl){
+	public NPCCallbackSetStringAction(Callback _functionToCall, NPC _toControl, string _updateText){
 		functionToCall = _functionToCall;
 		toControl = _toControl;
+		updateText = _updateText;
 	}
 	
 	public override void Perform(){
-		ChatInfo chatInfo = new ChatInfo(toControl, functionToCall());
-		GUIManager.Instance.AddNPCChat(new NPCOneOffChat(chatInfo));
+		functionToCall(toControl, updateText);
+		//ChatInfo chatInfo = new ChatInfo(toControl, functionToCall());
+		//GUIManager.Instance.AddNPCChat(new NPCOneOffChat(chatInfo));
 	}
 }
