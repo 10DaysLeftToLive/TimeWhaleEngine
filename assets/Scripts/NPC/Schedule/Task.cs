@@ -9,6 +9,10 @@ using System.Collections;
 public class Task {
 	protected State _stateToPerform;
 	protected bool _taskFinished = false;
+	protected string _passiveTextToSay;
+	protected NPC _toManage;
+	float _timeTillPassiveChat = 0;
+	protected bool hasPassiveChat = false;
 	
 	public State StatePerforming {
 		get {return _stateToPerform;}
@@ -18,8 +22,23 @@ public class Task {
 		_stateToPerform = stateToPerform;
 	}
 	
+	public Task(State stateToPerform, NPC toManage, float timeTillPassiveChat, string passiveTextToSay) {
+		_stateToPerform = stateToPerform;
+		_passiveTextToSay = passiveTextToSay;
+		_toManage = toManage;
+		_timeTillPassiveChat = timeTillPassiveChat;
+		hasPassiveChat = true;
+	}
+	
 	public virtual void Decrement(float amount){
 		// timeleft = infinity - amount aka do nothing
+		if (hasPassiveChat) {
+			_timeTillPassiveChat -= amount;
+			if (_timeTillPassiveChat <= 0) {
+				new ShowOneOffChatAction(_toManage, _passiveTextToSay).Perform();
+				hasPassiveChat = false;
+			}
+		}
 	}
 	
 	public virtual bool IsComplete(){

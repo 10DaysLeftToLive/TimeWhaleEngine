@@ -54,6 +54,11 @@ public class WayPointPath {
 		startRightScript = GetScript(startRight);
 		endLeftScript = GetScript(endLeft);
 		endRightScript = GetScript(endRight);
+		
+		if (startLeft == null || startRight == null){
+			startLeft = GetPoint(new Vector3(startPos.x - heading.x*.2f, startPos.y + ht/2 - heading.y*.2f, startPos.z), mask, heading);
+			startRight = GetPoint(new Vector3(startPos.x + heading.x*.2f, startPos.y + ht/2 + heading.y*.2f, startPos.z), mask, heading*-1);
+		}
 
 		/*if (startLeft != null) Debug.Log("startLeft " + startLeft.name);
 		if (startRight != null) Debug.Log("startRight " + startRight.name);
@@ -73,8 +78,10 @@ public class WayPointPath {
 		startPoint = start.id;
 		endPoint = end.id;
 		currentAge = (int)start.pointAge;
-		if (minDistance == 999)
+		if (minDistance == 999){
 			noPath = true;
+			//Debug.Log("min distance of " + minDistance);
+		}
 	}
 	
 	public static void SetupPathfinding(Vector3 startPos, string name, float ht){
@@ -115,7 +122,7 @@ public class WayPointPath {
 		if (noPath)
 			return false;
 
-		if (startPoint == -1 || endPoint == -1) 
+		if (startPoint == -1 || endPoint == -1)
 			return false; 
 
 		return AddArray(startPoint, endPoint, destPosition);
