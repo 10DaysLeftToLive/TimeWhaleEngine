@@ -68,6 +68,7 @@ public class ScheduleStack {
 			current = schedule;
 		} 
 		else if (schedule.CheckPriorityTo(current) >= 0) {
+			current.OnInterrupt();
 			_schedulesToDo.Push(current);
 			current = schedule;
 			current.Resume();
