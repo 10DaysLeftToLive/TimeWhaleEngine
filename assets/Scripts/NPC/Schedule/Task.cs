@@ -13,6 +13,7 @@ public class Task {
 	protected NPC _toManage;
 	float _timeTillPassiveChat = 0;
 	protected bool hasPassiveChat = false;
+	private string flagToSet = null;
 	
 	public State StatePerforming {
 		get {return _stateToPerform;}
@@ -28,6 +29,16 @@ public class Task {
 		_toManage = toManage;
 		_timeTillPassiveChat = timeTillPassiveChat;
 		hasPassiveChat = true;
+	}
+	
+	public void AddFlagToSet(string flag){
+		flagToSet = flag;
+	}
+	
+	public void Finish(){
+		if (flagToSet != null){
+			FlagManager.instance.SetFlag(flagToSet);
+		}
 	}
 	
 	public virtual void Decrement(float amount){
