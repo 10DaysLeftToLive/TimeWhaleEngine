@@ -2,11 +2,14 @@ Shader "Custom/BackgroundShader" {
 	Properties {
 		//Emission variables for testing, will get rid of them when I decide what a good sun location and color is.
 		_MainTex ("Texture", 2D) = "white" {}
-		_Contrast("Contrast", Float) = 1
-		_Brightness("Brightness", Float) = 1
+		_GradinetMap ("Texture", 2D) = "white" {}
+		_Contrast("Contrast", Range(0, 1)) = 1
+		_Brightness("Brightness", Range(0,1)) = 1
 		//Don't mess with this variable the values of these variables will be computed in a script.
+		//_Hue("Hue", Range(0, 360)) = 0
+		_GreenFilter("GreenFilter", Float) = 0
 		_Hue("Hue", Float) = 0
-		_Saturation("Saturation", Float) = 0
+		_Saturation("Saturation", Range(0,1)) = 0
 		_TimeFactor("InterpolationFactor", Range(0,1)) = 1
 	}
 	
@@ -19,11 +22,13 @@ Shader "Custom/BackgroundShader" {
 			#pragma fragment frag
 			
 			uniform sampler2D _MainTex;
+			uniform sampler2D _GradientMap;
 			uniform float _Hue;
 			uniform float _Saturation;
 			uniform float _TimeFactor;
 			uniform float _Contrast;
 			uniform float _Brightness;
+			uniform float _GreenFilter;
 			
 			const float3 lumCoeff = float3(0.2125, 0.7154, 0.0721);
 			
@@ -59,7 +64,18 @@ Shader "Custom/BackgroundShader" {
     			2.0 * float3(b.y, a.x, diag.z));
 			}
 			
+			float3 ComputeContrast(float3 texColor) {
+				return (texColor.xyz - 0.5) *(_Contrast + 1.0) + 0.5;
+			}
 			
+			float3 ComputeHue(float4 texColor) {
+				float3 root3 = float3(0.57735, 0.57735, 0.57735);
+				float half_angle = 0.5 * radians(_Hue); // Hue is radians of 0 to 360 degrees
+        		float4 rot_quat = float4( (root3 * sin(half_angle)), cos(half_angle));
+        		float3x3 rot_Matrix = QuaternionToMatrix(rot_quat);     
+        		texColor.rgb = mul(rot_Matrix, texColor.rgb);
+        		return texColor.rgb;
+			} 
 			
 			v2f vert(a2v In) : POSITION
 			{
@@ -77,6 +93,7 @@ Shader "Custom/BackgroundShader" {
 				
 				//Gets the real texture color and stores it for later use.
 				float4 texColor = tex2D(_MainTex, In.uv);
+				float4 gradientMapColor = tex2D(_GradientMap, In.uv);
 				
 //				float VSU = _Value*_Saturation*cos(_Hue*3.14159/180);
 //				float VSW = _Value*_Saturation*sin(_Hue*3.14159/180);
@@ -94,24 +111,23 @@ Shader "Custom/BackgroundShader" {
 //        		
 //        		texColor.rgb = fmod(texColor.rgb, float3(1,1,1));
 //        		texColor.rgb = abs(texColor.rgb);
- 
- 
-							 
+ 				
+ 				texColor.rgb = ComputeHue(texColor);
+ 				gradientMapColor.rgb = lerp(float3(0,0,0), gradientMapColor.rgb, _TimeFactor);
 
-				float3 root3 = float3(0.57735, 0.57735, 0.57735);
-				float half_angle = 0.5 * radians(_Hue); // Hue is radians of 0 to 360 degrees
-        		float4 rot_quat = float4( (root3 * sin(half_angle)), cos(half_angle));
-        		float3x3 rot_Matrix = QuaternionToMatrix(rot_quat);     
-        		texColor.rgb = mul(rot_Matrix, texColor.rgb);
         		//Contrast
-        		texColor.rgb = (texColor.rgb - 0.5) *(_Contrast + 1.0) + 0.5;
+        		texColor.rgb = ComputeContrast(texColor.rgb);
         		//Brightness  
         		texColor.rgb = texColor.rgb + _Brightness;         
         		float3 intensity = float3(dot(texColor.rgb, lumCoeff));
         		//Color saturate between the old color and the new color
         		texColor.rgb = lerp(intensity, texColor.rgb, _Saturation );
-        		//Add any ambient colors from the sun based on vertex colors    
-				texColor.rgb += lerp(float3(0,0,0) , In.color.rgb, _TimeFactor);
+//        		float colMix = dot(texColor.rgb, gradientMapColor.rgb);
+//        		
+//        		texColor.r += gradientMapColor.r * colMix;
+//        		texColor.g += gradientMapColor.g * colMix;
+//        		texColor.b += gradientMapColor.b * colMix;
+				texColor.g = texColor.g - _GreenFilter;
 				return texColor;
 				
 				//Testing to see which color corresponds to which vertex in the script that uses this shader.

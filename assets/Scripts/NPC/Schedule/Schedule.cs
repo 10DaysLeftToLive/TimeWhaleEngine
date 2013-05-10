@@ -97,7 +97,7 @@ public class Schedule {
 	}
 	
 	
-	#region Flags To Add
+	#region Flag Handling
 	public void AddFlagGroup(string flag) {
 		List<string> newFlagList = new List<string>();
 		newFlagList.Add(flag);
@@ -105,6 +105,16 @@ public class Schedule {
 	
 	public void AddFlagGroup(List<string> flags) {
 		flagList.Add(flags);
+	}
+	
+	public void RemoveScheduleWithFlag(string flag) {
+		foreach (List<string> fl in flagList) {
+			foreach (string f in fl) {
+				if (f == flag) {
+					SetComplete();
+				}
+			}
+		}
 	}
 	#endregion
 	
@@ -118,6 +128,7 @@ public class Schedule {
 			current.Decrement(timeSinceLastTick);
 			if (current.IsComplete()){
 				Debug.Log("Completed task");
+				current.Finish();
 				current = null;
 			}
 		} else {

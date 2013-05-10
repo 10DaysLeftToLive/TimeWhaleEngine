@@ -50,6 +50,12 @@ public class PriorityStack {
 		}
     }
 	
+	public void RemoveScheduleWithFlag(string flag) {
+		foreach (Schedule sched in _schedulesToDo) {
+			sched.RemoveScheduleWithFlag(flag);
+		}
+	}
+	
 	// Uses magic
 	public void RemoveDoneFlagSchedules(Schedule current) {
 		foreach (List<string> flagGroupCur in current.flagList) {

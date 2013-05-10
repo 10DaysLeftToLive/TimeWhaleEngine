@@ -51,15 +51,15 @@ public class ScheduleStack {
 	}
 	
 	public void NextTask() {
-		Debug.Log("Schedule Stack next task");
+		//Debug.Log("Schedule Stack next task");
 		
 		current.NextTask();
 	}
 		
 	public void NextSchedule() {
-		Debug.Log("Moving on to next schedule");
+		//Debug.Log("Moving on to next schedule");
 		current = _schedulesToDo.Pop();
-		Debug.Log((current == null) ? "Current was null" : "Current was not null");
+		//Debug.Log((current == null) ? "Current was null" : "Current was not null");
 		current.Resume();
 	}
 	
@@ -89,5 +89,9 @@ public class ScheduleStack {
 		if (current != null) {
 			current.Resume();
 		}
+	}
+	
+	public void RemoveScheduleWithFlag(string flag) {
+		_schedulesToDo.RemoveScheduleWithFlag(flag);
 	}
 }
