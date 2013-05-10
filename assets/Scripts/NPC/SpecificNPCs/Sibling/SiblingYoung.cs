@@ -47,7 +47,7 @@ public class SiblingYoung : NPC {
 	
 	#region Set Up Sechedules
 	protected override void SetUpSchedules() {
-		 //initialSchedule = new Schedule(this);
+		//Schedule initialSchedule = new Schedule(this);
 		
 		scheduleStack.Add (new YoungRunIslandScript(this));
 		/*
@@ -62,6 +62,7 @@ public class SiblingYoung : NPC {
 		initialSchedule.Add(new TimeTask(10f, new WaitTillPlayerCloseState(this, this.player)));
 		scheduleStack.Add (initialSchedule);
 		*/
+		
 	}
 	#endregion
 	
@@ -69,57 +70,147 @@ public class SiblingYoung : NPC {
 		#region Initial Emotion State
 		private class InitialEmotionState : EmotionState {
 			bool flagSet = false;	
-			//Choice firstTimeBusy;
 			Reaction activateWalkToBridgeState;
 			Reaction changeDefaultText;
 			string str_readyToRace = "Go!!!";
 		
 			public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
 				activateWalkToBridgeState = new Reaction();
-				//changeDefaultText = new Reaction();
-				   //enterMadState.AddAction(new NPCEmotionUpdateAction(toControl, new MadEmotionState(toControl)));
-				activateWalkToBridgeState.AddAction(new NPCEmotionUpdateAction(toControl, new WalkToBridgeState(toControl)));
+				//changeDefaultText = new Reaction();		
 				//changeDefaultText.AddAction(new NPCCallbackAction(UpdateText));
-				//firstTimeBusy = new Choice("You're On!", str_readyToRace);	
+				
+				activateWalkToBridgeState.AddAction(new NPCEmotionUpdateAction(toControl, new WalkToBridgeState(toControl)));	
 				activateWalkToBridgeState.AddAction(new NPCCallbackAction(updateFlag));
 				_allChoiceReactions.Add(new Choice("You're On!", str_readyToRace), new DispositionDependentReaction(activateWalkToBridgeState));		
 				_allChoiceReactions.Add(new Choice("Hold on.", str_readyToRace), new DispositionDependentReaction(activateWalkToBridgeState));
-
-// use to make item reactions
-			
-				//_allItemReactions
 			}
 		
 			public void updateFlag() {
 				if (!flagSet) {
-					FlagManager.instance.SetFlag(FlagStrings.RunToBridge);
+					//FlagManager.instance.SetFlag(FlagStrings.RunToBridge);
+					flagSet = true;
+					SetDefaultText("I'm going to beat you!!!");
+				}
+			}
+		}
+		#endregion
+	#region Toy Quest
+		#region Want Toy State 
+		private class WantToyState : EmotionState {	
+			Reaction dollReaction = new Reaction();
+			Reaction trainReaction = new Reaction();
+			Reaction swordReaction = new Reaction();
+			string defaultText = "I want a new toy?! All these old one are boring. See if your friend the carpenter's son can make one.";	
+		
+			public WantToyState(NPC toControl, string currentDialogue) : base(toControl, "These toys are boring. Could you ask our neighbors to make me a new one?") {
+				dollReaction.AddAction(new NPCEmotionUpdateAction(toControl, new GaveDollState(toControl)));
+				//dollReaction.AddAction(new NPCTakeItemAction(toControl));
+				//dollReaction.AddAction(new NPCEmotionUpdateAction(toControl, new gaveDollState(toControl)));
+				
+				trainReaction.AddAction(new NPCEmotionUpdateAction(toControl, new GaveTrainState(toControl)));
+				trainReaction.AddAction(new NPCTakeItemAction(toControl));
+				//trainReaction.AddAction(new NPCEmotionUpdateAction(toControl, new gaveDollState(toControl)));
+				
+				swordReaction.AddAction(new NPCEmotionUpdateAction(toControl, new GaveSwordState(toControl)));
+				swordReaction.AddAction(new NPCTakeItemAction(toControl));
+				//swordReaction.AddAction(new NPCEmotionUpdateAction(toControl, new gaveDollState(toControl)));
+			
+				//activateWalkToBridgeState.AddAction(new NPCCallbackAction(updateFlag));
+				_allItemReactions.Add("doll",new DispositionDependentReaction(dollReaction));
+				_allItemReactions.Add("train",new DispositionDependentReaction(trainReaction));
+				_allItemReactions.Add("sword",new DispositionDependentReaction(swordReaction));
+				
+			}
+		}
+		#endregion
+		#region Want Toy State 
+		private class GaveDollState : EmotionState {	
+			Reaction dollReaction = new Reaction();
+			
+			public GaveDollState(NPC toControl) : base(toControl, "Ugh! A doll. You must think I'm a baby!") {
+				//dollReaction.AddAction(new NPCEmotionUpdateAction(toControl, new GaveDollState(toControl)));
+				//dollReaction.AddAction(new NPCTakeItemAction(toControl));
+				//dollReaction.AddAction(new NPCEmotionUpdateAction(toControl, new gaveDollState(toControl)));
+			}
+		}
+		#endregion
+		#region Want Toy State 
+		private class GaveTrainState : EmotionState {	
+			Reaction trainReaction = new Reaction();
+			
+			public GaveTrainState(NPC toControl) : base(toControl, "Thanks, you're the best!") {
+				//trainReaction.AddAction(new NPCEmotionUpdateAction(toControl, new GaveDollState(toControl)));
+				//trainReaction.AddAction(new NPCTakeItemAction(toControl));
+				//trainReaction.AddAction(new NPCEmotionUpdateAction(toControl, new gaveDollState(toControl)));
+
+			}
+		}
+		#endregion
+		#region Want Toy State 
+		private class GaveSwordState : EmotionState {	
+			bool flagSet = false;
+			Reaction swordReaction = new Reaction();
+			
+			public GaveSwordState(NPC toControl) : base(toControl, "Wow! This is the best toy ever!") {
+				//swordReaction.AddAction(new NPCEmotionUpdateAction(toControl, new GaveDollState(toControl)));
+				//swordReaction.AddAction(new NPCTakeItemAction(toControl));
+				swordReaction.AddAction(new NPCCallbackAction(SetMotherSwordFlag));
+			}
+			
+			public void SetMotherSwordFlag() { // activates mother's reaction to sibling to the sword if she is within a certain radius
+				if 	(!flagSet) {
+					//FlagManager.instance.SetFlag(FlagStrings.)
+					flagSet = true;
+				}
+			}
+			//Hey! What have I told you about playing with dangerous toys? Toy Weapons?
+		
+		}
+		#endregion
+	#endregion
+	#region ReflectionTree
+		//WTB === Walk to Bridge
+		private class ReflectionTreeState : EmotionState {	
+			bool flagSet = false;
+			Reaction walkToTreeReaction = new Reaction();
+			Reaction walkHomeReaction = new Reaction();
+			
+			public ReflectionTreeState(NPC toControl) : base(toControl, "I'm going to beat you!") {//He's mean.") {
+				walkToTreeReaction = new Reaction();
+				//walkToTreeReaction.AddAction(new NPCEmotionUpdateAction(toControl, new WalkToCarpenterState(toControl)));
+				_allChoiceReactions.Add(new Choice("Let's go!", "Yay! First one to the top wins!"), new DispositionDependentReaction(walkToTreeReaction));
+				_allChoiceReactions.Add(new Choice("No Way!", "You're never any fun.. You've ruined the race. Let's go back home."), new DispositionDependentReaction(walkHomeReaction));
+				walkHomeReaction.AddAction(new NPCCallbackAction(SetMotherAfterRace));
+			}
+			public void SetMotherAfterRace() { // lets the mother know to ask where you've been when you get back
+				if (!flagSet) {
+					//FlagManager.instance.SetFlag(FlagStrings.);
 					flagSet = true;
 				}
 			}
 		}
-	
 		#endregion
-		#region Walk To Bridge State
-		//WTB === Walk to Bridge
-		private class WalkToBridgeState : EmotionState {
+	
+	#region Walk To Bridge State
+	private class WalkToBridgeState : EmotionState {
 		
 			bool flagSet = false;	
 			Reaction activateWalkToCarpenterState;
 			Reaction choiceTwoReaction;
 			string str_readyToRace = "Goooooo!!!!";
 			
-			public WalkToBridgeState(NPC toControl) : base(toControl, "He's mean.") {
+			public WalkToBridgeState(NPC toControl) : base(toControl, "I'm going to beat you!") {//He's mean.") {
 				activateWalkToCarpenterState = new Reaction();
 				activateWalkToCarpenterState.AddAction(new NPCEmotionUpdateAction(toControl, new WalkToCarpenterState(toControl)));
 				activateWalkToCarpenterState.AddAction(new NPCCallbackAction(updatePassiveText));
 				activateWalkToCarpenterState.AddAction(new ShowOneOffChatAction(toControl, "Hurry up Slowpoke!"));
-				_allChoiceReactions.Add(new Choice("Really?", "What? Where?"), new DispositionDependentReaction(activateWalkToCarpenterState));	
+				//_allChoiceReactions.Add(new Choice("Really?", "What? Where?"), new DispositionDependentReaction(activateWalkToCarpenterState));	
 			
 				choiceTwoReaction = new Reaction();
 				choiceTwoReaction.AddAction(new NPCEmotionUpdateAction(toControl, new WalkToCarpenterState(toControl)));
 				choiceTwoReaction.AddAction(new NPCCallbackAction(updatePassiveText));
 				choiceTwoReaction.AddAction(new ShowOneOffChatAction(toControl, "Out of breath already? We have a long ways to go!"));
-				_allChoiceReactions.Add(new Choice("*Huff*", str_readyToRace), new DispositionDependentReaction(choiceTwoReaction));
+				//_allChoiceReactions.Add(new Choice("*Huff*", str_readyToRace), new DispositionDependentReaction(choiceTwoReaction));
 			}
 		
 			public void updatePassiveText() {
@@ -128,7 +219,7 @@ public class SiblingYoung : NPC {
 					flagSet = true;
 				}
 			}
-		}
+		}	
 		#endregion
 		#region Walk To Carpenter State
 		private class WalkToCarpenterState : EmotionState{
@@ -138,7 +229,7 @@ public class SiblingYoung : NPC {
 			Reaction choiceTwoReaction;
 			string str_readyToRace = "Goooooo!!!!";
 			
-			public WalkToCarpenterState(NPC toControl) : base(toControl, " <(0.0)>") {
+			public WalkToCarpenterState(NPC toControl) : base(toControl, " ") {
 				activateWalkToBeachState = new Reaction();
 				activateWalkToBeachState.AddAction(new NPCEmotionUpdateAction(toControl, new WalkToBeachState(toControl)));
 				activateWalkToBeachState.AddAction(new NPCCallbackAction(updatePassiveText));

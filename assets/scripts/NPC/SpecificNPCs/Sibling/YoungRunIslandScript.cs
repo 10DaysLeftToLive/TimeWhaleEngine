@@ -10,7 +10,7 @@ public class YoungRunIslandScript : Schedule {
 	
 		protected override void Init() {
 			
-			Add(new TimeTask(15f, new IdleState(_toManage)));
+			Add(new TimeTask(6f, new IdleState(_toManage)));
 			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (6, .2f, .3f), new MarkTaskDone(_toManage))));
 			Add(new TimeTask(.5f, new IdleState(_toManage)));
 			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (4, .2f, .3f), new MarkTaskDone(_toManage))));
@@ -20,13 +20,15 @@ public class YoungRunIslandScript : Schedule {
 			Add(new TimeTask(10f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
 			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (28, .2f, .3f), new MarkTaskDone(_toManage)))); // at carpenter
 			Add(new TimeTask(10f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
+			//NPCManager.instance.getNPC(StringsNPC.CarpenterYoung);
+			//Add(new Task(new ChangeEmotionState(_toManage,(SiblingYoung.EMOTIONSTATENAME);
 		
 			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (59, .2f, .3f), new MarkTaskDone(_toManage)))); // at base staircase
 			Add(new TimeTask(2f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
 			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (66, -7.6f, .3f), new MarkTaskDone(_toManage))));
 			Add(new TimeTask(2f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
 			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (70, -8f, .3f), new MarkTaskDone(_toManage)))); // at Beach
-			Add(new TimeTask(15f, new IdleState(_toManage)));
+			Add(new TimeTask(8f, new IdleState(_toManage)));
 			//PIER (79,-5.1)
 
 			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (66, -7.6f, .3f), new MarkTaskDone(_toManage))));
