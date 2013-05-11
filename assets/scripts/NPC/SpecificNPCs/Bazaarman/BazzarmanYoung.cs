@@ -64,63 +64,61 @@ public class BazzarmanYoung : NPC {
 			
 			SetupInventory();
 			
-			/*
 			#region Item Swaping
-			gaveApple.AddAction(new NPCTakeItemAction(toControl));
+			/*gaveApple.AddAction(new NPCTakeItemAction(toControl));
 			gaveApple.AddAction(new NPCCallbackSetStringAction(AddTextToList, toControl, "Where did you find such a good apple?"));
-			gaveApple.AddAction(new NPCGiveItemAction(toControl,GetItemFromInventory())); // gives random item
+			gaveApple.AddAction(new NPCGiveItemAction(toControl,inventory.Dequeue())); // gives random item
 			gaveApple.AddAction(new UpdateCurrentTextAction(toControl, "A pleasure doing business with you my friend!"));
 			_allItemReactions.Add(StringsItem.Apple,  new DispositionDependentReaction(gaveApple));
 			
 			gaveTools.AddAction(new NPCTakeItemAction(toControl));
 			gaveTools.AddAction(new NPCCallbackSetStringAction(AddTextToList, toControl, "The construction work going on on the other side of the island really appreciated having such fine tools to work with!"));
-			gaveTools.AddAction(new NPCGiveItemAction(toControl,GetItemFromInventory())); // gives random item
+			gaveTools.AddAction(new NPCGiveItemAction(toControl,inventory.Dequeue())); // gives random item
 			gaveTools.AddAction(new UpdateCurrentTextAction(toControl, "A pleasure doing business with you my friend!"));
 			_allItemReactions.Add(StringsItem.ToolBox,  new DispositionDependentReaction(gaveTools));
 			
 			gaveSeaShell.AddAction(new NPCTakeItemAction(toControl));
 			gaveSeaShell.AddAction(new NPCCallbackSetStringAction(AddTextToList, toControl, "Some mighty fine sea shells you found!"));
-			gaveSeaShell.AddAction(new NPCGiveItemAction(toControl,GetItemFromInventory())); // gives random item
+			gaveSeaShell.AddAction(new NPCGiveItemAction(toControl,inventory.Dequeue())); // gives random item
 			gaveSeaShell.AddAction(new UpdateCurrentTextAction(toControl, "A pleasure doing business with you my friend!"));
 			_allItemReactions.Add(StringsItem.SeaShell,  new DispositionDependentReaction(gaveSeaShell));
 			
 			gaveRose.AddAction(new NPCTakeItemAction(toControl));
 			gaveRose.AddAction(new NPCCallbackSetStringAction(AddTextToList, toControl, "Unfortunately that rose wilted before I could trade it....oh well you win some and lose some..."));
-			gaveRose.AddAction(new NPCGiveItemAction(toControl,GetItemFromInventory())); // gives random item
+			gaveRose.AddAction(new NPCGiveItemAction(toControl,inventory.Dequeue())); // gives random item
 			gaveRose.AddAction(new UpdateCurrentTextAction(toControl, "A pleasure doing business with you my friend!"));
 			_allItemReactions.Add(StringsItem.Rose,  new DispositionDependentReaction(gaveRose));
 			
 			gaveCaptainsLog.AddAction(new NPCTakeItemAction(toControl));
 			gaveCaptainsLog.AddAction(new NPCCallbackSetStringAction(AddTextToList, toControl, "The sea capatin has had quite an adventure"));
-			gaveCaptainsLog.AddAction(new NPCGiveItemAction(toControl,GetItemFromInventory())); // gives random item
+			gaveCaptainsLog.AddAction(new NPCGiveItemAction(toControl,inventory.Dequeue())); // gives random item
 			gaveCaptainsLog.AddAction(new UpdateCurrentTextAction(toControl, "A pleasure doing business with you my friend!"));
 			_allItemReactions.Add(StringsItem.CaptainsLog,  new DispositionDependentReaction(gaveCaptainsLog));
 			
 			gaveToySword.AddAction(new NPCTakeItemAction(toControl));
 			gaveToySword.AddAction(new NPCCallbackSetStringAction(AddTextToList, toControl, "That toy sword has brought back some fond memories"));
-			gaveToySword.AddAction(new NPCGiveItemAction(toControl,GetItemFromInventory())); // gives random item
+			gaveToySword.AddAction(new NPCGiveItemAction(toControl,inventory.Dequeue())); // gives random item
 			gaveToySword.AddAction(new UpdateCurrentTextAction(toControl, "A pleasure doing business with you my friend!"));
 			_allItemReactions.Add(StringsItem.ToySword,  new DispositionDependentReaction(gaveToySword));
 			
 			gavePortrait.AddAction(new NPCTakeItemAction(toControl));
 			gavePortrait.AddAction(new NPCCallbackSetStringAction(AddTextToList, toControl, "That portrait you gave me earlier...It's a fake!"));
-			gavePortrait.AddAction(new NPCGiveItemAction(toControl,GetItemFromInventory())); // gives random item
+			gavePortrait.AddAction(new NPCGiveItemAction(toControl,inventory.Dequeue())); // gives random item
 			gavePortrait.AddAction(new UpdateCurrentTextAction(toControl, "A pleasure doing business with you my friend!"));
 			_allItemReactions.Add(StringsItem.Portrait,  new DispositionDependentReaction(gavePortrait));
 			
 			gaveRope.AddAction(new NPCTakeItemAction(toControl));
 			gaveRope.AddAction(new NPCCallbackSetStringAction(AddTextToList, toControl, "All I need now is a hat to go with the rope you gave me!"));
-			gaveRope.AddAction(new NPCGiveItemAction(toControl,GetItemFromInventory())); // gives random item
+			gaveRope.AddAction(new NPCGiveItemAction(toControl,inventory.Dequeue())); // gives random item
 			gaveRope.AddAction(new UpdateCurrentTextAction(toControl, "A pleasure doing business with you my friend!"));
 			_allItemReactions.Add(StringsItem.Rope,  new DispositionDependentReaction(gaveRope));
 			
 			gaveVegetable.AddAction(new NPCTakeItemAction(toControl));
 			gaveVegetable.AddAction(new NPCCallbackSetStringAction(AddTextToList, toControl, "Those families over on the other side of the island really made good use of these vegetales"));
-			gaveVegetable.AddAction(new NPCGiveItemAction(toControl,GetItemFromInventory())); // gives random item
+			gaveVegetable.AddAction(new NPCGiveItemAction(toControl,inventory.Dequeue())); // gives random item
 			gaveVegetable.AddAction(new UpdateCurrentTextAction(toControl, "A pleasure doing business with you my friend!"));
-			_allItemReactions.Add(StringsItem.Vegetable,  new DispositionDependentReaction(gaveVegetable));
+			_allItemReactions.Add(StringsItem.Vegetable,  new DispositionDependentReaction(gaveVegetable));*/
 			#endregion
-			*/
 			
 			gavePendant.AddAction(new NPCTakeItemAction(toControl));
 			//gavePendant.AddAction(new NPCCallbackAction(SetPendant)); 
@@ -173,10 +171,6 @@ public class BazzarmanYoung : NPC {
 					break;
 				}
 			}while (currentInventory < startingInventory);
-		}
-		
-		public string GetItemFromInventory(){
-			return 	inventory.Dequeue();
 		}
 		
 		public void RandomMessage(){
