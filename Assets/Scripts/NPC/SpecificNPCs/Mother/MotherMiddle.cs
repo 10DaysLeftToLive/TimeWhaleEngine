@@ -37,7 +37,7 @@ public class MotherMiddle : NPC {
 	}
 	
 	public void SendText(){
-		state.PassStringToEmotionState("new string");
+		//state.PassStringToEmotionState("new string");
 	}
 	
 	
@@ -116,9 +116,9 @@ public class MotherMiddle : NPC {
 			
 		}
 		
-		public override void PassStringToEmotionState(string text){
-			stringCounter++;
-		}
+//		public override void PassStringToEmotionState(string text){
+//			stringCounter++;
+//		}
 	
 	}
 	#endregion
