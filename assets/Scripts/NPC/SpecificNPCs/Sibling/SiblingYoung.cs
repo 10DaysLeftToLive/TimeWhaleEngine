@@ -12,8 +12,15 @@ public class SiblingYoung : NPC {
 	//
 	#region Set Flag Reactions
 	public string currentPassiveText;
+	//private bool initScheduleTriggered = false; //if the race is initiated via chatBox, it begins a new schedule
+	
 	protected override void SetFlagReactions() {
-
+		Reaction raceToCarpenterHouse = new Reaction();
+		Debug.Log("set off CarpenterFlag!");
+		raceToCarpenterHouse.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "raceToCarpenterHouseFlag set: Line 19!")));
+		raceToCarpenterHouse.AddAction(new ShowOneOffChatAction(this, "These are our neighbors!", 3f));
+		raceToCarpenterHouse.AddAction(new NPCAddScheduleAction(this, carpenterRaceSchedule));
+		flagReactions.Add(FlagStrings.RunToCarpenter, raceToCarpenterHouse);
 		#region Home To Bridge
 /*
 		Reaction homeToBridge = new Reaction();
@@ -24,6 +31,7 @@ public class SiblingYoung : NPC {
 		flagReactions.Add(FlagStrings.RunToBridge, homeToBridge);
 */
 		#endregion			
+	
 	}
 	#endregion
 	protected override EmotionState GetInitEmotionState() {
@@ -32,8 +40,8 @@ public class SiblingYoung : NPC {
 	}
 
 	protected override Schedule GetSchedule(){
-		Schedule schedule = new Schedule(this);
-		Task initialSchedule = new TimeTask(.25f , new IdleState(this));
+		Schedule schedule = new Schedule(this, Schedule.priorityEnum.Low);
+		Task initialSchedule = new TimeTask(.6f, new IdleState(this));
 		schedule.Add(initialSchedule);
 		
 		//TimeTask exploringNearHome = new TimeTask(10, new IdleState(this));
@@ -43,13 +51,29 @@ public class SiblingYoung : NPC {
 		return (schedule);
 	}
 	
-	//private Schedule initialSchedule;
+	private Schedule carpenterRaceSchedule;
 	
 	#region Set Up Sechedules
 	protected override void SetUpSchedules() {
 		//Schedule initialSchedule = new Schedule(this);
-		
 		scheduleStack.Add (new YoungRunIslandScript(this));
+		
+		Schedule temp = new Schedule(this, Schedule.priorityEnum.Low);
+		//temp.Add(new TimeTask (6f, new IdleState(this)));
+		//scheduleStack.Add(temp);	
+		carpenterRaceSchedule = new Schedule(this, Schedule.priorityEnum.Medium);
+		carpenterRaceSchedule.Add(new TimeTask(1f, new IdleState(this)));
+		carpenterRaceSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (27, .2f, .3f), new MarkTaskDone(this))));
+		carpenterRaceSchedule.Add(new TimeTask(1f, new IdleState(this)));
+		carpenterRaceSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (29, .2f, .3f), new MarkTaskDone(this))));
+		carpenterRaceSchedule.Add(new TimeTask(.5f, new IdleState(this)));
+		carpenterRaceSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (27, .2f, .3f), new MarkTaskDone(this))));
+		carpenterRaceSchedule.Add(new TimeTask(1f, new IdleState(this)));
+		carpenterRaceSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (29, .2f, .3f), new MarkTaskDone(this))));
+		carpenterRaceSchedule.Add(new TimeTask(.5f,  new IdleState(this)));
+		carpenterRaceSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (27, .2f, .3f), new MarkTaskDone(this))));
+		
+		
 		/*
 		initialSchedule.Add(new TimeTask(.5f, new IdleState(this)));
 		initialSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (6, .2f, .3f), new MarkTaskDone(this))));
@@ -215,7 +239,7 @@ public class SiblingYoung : NPC {
 		
 			public void updatePassiveText() {
 				if (!flagSet) {	
-					FlagManager.instance.SetFlag(FlagStrings.RunToCarpenter);
+					//FlagManager.instance.SetFlag(FlagStrings.RunToCarpenter);
 					flagSet = true;
 				}
 			}

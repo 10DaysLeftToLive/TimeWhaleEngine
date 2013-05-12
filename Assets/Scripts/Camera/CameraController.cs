@@ -12,8 +12,8 @@ public class CameraController : MonoBehaviour {
 	#region Fields
 	// Variables for altering the camera's movement
 	static private float closestZoomDistance = 2.45f;	
-	static private float farthestZoomDistnace = 4f;
-	static private float zoomingIncrement = .075f;
+	static private float farthestZoomDistance = 8f;
+	static private float zoomingIncrement = .25f; //.2f; was soso //.075f; was original
 	static private float maxYOffset = 1f;
 	static private float minYOffset = 1.3f;
 	
@@ -27,7 +27,7 @@ public class CameraController : MonoBehaviour {
 	public void Start () {
 		thisCamera = Camera.main;
 		player = FindObjectOfType(typeof(Player)) as Player;
-		thisCamera.orthographicSize = farthestZoomDistnace;
+		thisCamera.orthographicSize = getStartZoom();
 	}
 	
 	void Update () {
@@ -37,10 +37,10 @@ public class CameraController : MonoBehaviour {
 	// This function is used to zoom the camera in and out.
 	// Assumes the camera is at a 45 degree angle towards the terrain.
 	static public void Zoom(bool isZoomingIn){
-		if (isZoomingIn && CanZoomIn()){
-			ZoomIn();
-		} else if (!isZoomingIn && CanZoomOut()) {
+		if (isZoomingIn && CanZoomOut()){
 			ZoomOut();
+		} else if (!isZoomingIn && CanZoomIn()) {	
+			ZoomIn();
 		}
 		currentYOffsetRelativeToTarget = CalcOffset();
 	}
@@ -50,7 +50,7 @@ public class CameraController : MonoBehaviour {
 	}
 	
 	static private bool CanZoomOut(){
-		return (thisCamera.orthographicSize < farthestZoomDistnace);
+		return (thisCamera.orthographicSize < farthestZoomDistance);
 	}
 	
 	static private void ZoomIn(){
@@ -69,11 +69,15 @@ public class CameraController : MonoBehaviour {
 		thisCamera.transform.position = newCameraPosition;
 	}
 	
+	private float getStartZoom() {
+			return (farthestZoomDistance + closestZoomDistance) / 2;
+	}
+	
 	/// <summary>
 	/// Calculates the offset in the y direction by linear interpolation
 	/// </summary>
 	static private float CalcOffset(){
-		return (minYOffset + (maxYOffset - minYOffset)*((thisCamera.orthographicSize - closestZoomDistance)/(farthestZoomDistnace-closestZoomDistance)));
+		return ((minYOffset + (maxYOffset - minYOffset)*((thisCamera.orthographicSize - closestZoomDistance)/(farthestZoomDistance-closestZoomDistance))));
 	}
 	
 }
