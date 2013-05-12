@@ -22,16 +22,19 @@ public abstract class NPC : Character {
 	public bool chatingWithNPC = false;
 	private Texture charPortrait;
 	private Action sayHi;
-	public float timeTillPassiveChatAgain = 0;
+	private float timeTillPassiveChatAgain = 0;
 	#endregion
 	
 	#region Set Values
 	private static int NEAR_DISTANCE = 8;
 	private static int DISTANCE_TO_CHAT = 4;
+	private static int DISTANCE_TO_SEE = 8;
 	private static int DISPOSITION_LOW_END = 0;
 	private static int DISPOSITION_HIGH_END = 10;
+	private static int CHANCE_TO_CHAT = 3; // Sets chance to be 1 out of this value
 	public static int DISPOSITION_LOW = 3; // these should not be hard set
 	public static int DISPOSITION_HIGH = 7;
+	public static float TIME_INBETWEEN_PASSIVE_CHATS = 20;
 	#endregion
 	
 	#region Initialization
@@ -73,19 +76,62 @@ public abstract class NPC : Character {
 			CloseChat();
 			StopTalkingWithPlayer();
 		} else {
-			//PassiveChat();
+			PassiveChat();
 		}
 		scheduleStack.Run(Time.deltaTime);
 	}
 	#endregion
 	
 	#region Chat/Interaction 
+	private void PassiveChat(){
+		DecrementPassiveChatTimer();
+		if (scheduleStack.CanPassiveChat() && timeTillPassiveChatAgain <= 0) {
+			SetPassiveChatTimer();
+			if (InPassiveChatDistance(player.gameObject)) {
+				sayHi = new ShowOneOffChatAction(this, "Hai player!");
+				sayHi.Perform();
+			} else if (InSight(player.gameObject)) {
+				//Debug.Log("Trying to chat");
+				// Try to start conversation with nearby NPC or say hi (one off chat) if the player is in sight
+				Dictionary<string, GameObject> npcDict = NPCManager.instance.getNPCDictionary();
+				NPC npcClass;
+				foreach (var npc in npcDict.Values) {
+					npcClass = npc.GetComponent<NPC>();
+					if(npcClass != this && InPassiveChatDistance(npc)) {
+						if (Random.Range(1, CHANCE_TO_CHAT) > 1) { // Roll dice to check if they will chat
+							if (RequestChat(npcClass) && this.scheduleStack.CanPassiveChat()) {
+								AddSchedule(new NPCConvoSchedule(this, npcClass, NPCPassiveConvoDictionary.instance.GetConversation(this)));
+								break;
+							} else { 
+								sayHi = new ShowOneOffChatAction(this, "Hai" + npcClass.name + "!");
+								sayHi.Perform();
+								break;
+							}
+						}
+					}
+				}	
+			}
+		}
+	}
+	
+	private void SetPassiveChatTimer() {
+		timeTillPassiveChatAgain = TIME_INBETWEEN_PASSIVE_CHATS;
+	}
+	
+	private void DecrementPassiveChatTimer() {
+		timeTillPassiveChatAgain -= Time.deltaTime;
+	}
+	
+	public bool RequestChat(NPC npcToRequest) {
+		return (npcToRequest.scheduleStack.CanPassiveChat());
+	}
+	
 	public bool CanTalk(){
 		return (this.scheduleStack.CanInteractWithPlayer());
 	}
 	
-	public bool CanPassiveChat() {
-		return (scheduleStack.CanPassiveChat());
+	private bool InPassiveChatDistance(GameObject gameObject) {
+		return InDistance(gameObject, DISTANCE_TO_CHAT);
 	}
 	
 	public bool NearNPC(NPC npcNear) {
@@ -235,6 +281,17 @@ public abstract class NPC : Character {
 	
 	public void UpdateEmotionState(EmotionState newEmotionState){
 		currentEmotion = newEmotionState;	
+	}
+	
+	private bool InSight(GameObject gameObject) {
+		float xDistance = Mathf.Abs(this.transform.position.x - gameObject.transform.position.x);
+		float yDistance = Mathf.Abs(this.transform.position.y - gameObject.transform.position.y);
+		
+		if (xDistance < DISTANCE_TO_SEE && yDistance < DISTANCE_TO_SEE) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	#endregion
 	
