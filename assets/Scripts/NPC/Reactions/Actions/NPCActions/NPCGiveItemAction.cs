@@ -6,10 +6,8 @@ using System.Collections;
 /// resources folder and will be loaded by it's string name
 /// </summary>
 public class NPCGiveItemAction : Action {
-	public delegate string ItemToGetFunction();
 	private string _itemToGiveName;
 	private NPC _npcToGiveItem;
-	private ItemToGetFunction functToGetItem = null;
 	
 	public NPCGiveItemAction(){}
 	
@@ -18,15 +16,7 @@ public class NPCGiveItemAction : Action {
 		_npcToGiveItem = npcToGiveItem;
 	}
 	
-	public NPCGiveItemAction(NPC npcToGiveItem, ItemToGetFunction itemToGiveFNCallback){
-		_npcToGiveItem = npcToGiveItem;
-		functToGetItem = itemToGiveFNCallback;
-	}
-	
 	public override void Perform(){
-		if (functToGetItem != null){
-			_itemToGiveName = functToGetItem();
-		}
 		Object itemToPlace = Resources.Load(_itemToGiveName);
 		if (itemToPlace == null){
 			Debug.Log("Did not find " + _itemToGiveName);

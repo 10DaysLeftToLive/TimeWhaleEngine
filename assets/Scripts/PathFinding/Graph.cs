@@ -3,7 +3,7 @@ using System.Collections;
 
 public static class Graph {
 
-	public static int wayPointCount = 60;
+	public static int wayPointCount = 35;
 	public static Vector3[] wayPointPosition;
 	private static float[,] distance;
 	private static int[] closedPoints;

@@ -65,7 +65,7 @@ public class MotherMiddle : NPC {
 			gaveRose.AddAction(new NPCCallbackAction(SetRose));
 			//gaveRose.AddAction(new UpdateDefaultTextAction(toControl, "new default"));
 			gaveRose.AddAction(new UpdateCurrentTextAction(toControl, "My bedroom window when I was little had this bed of peach colored roses, they made my room smell wonderful in the summers."));
-			_allItemReactions.Add(StringsItem.Apple,  new DispositionDependentReaction(gaveRose)); // change item to rose
+			_allItemReactions.Add("apple",  new DispositionDependentReaction(gaveRose)); // change item to rose
 			
 			gavePendant.AddAction(new NPCTakeItemAction(toControl));
 			gavePendant.AddAction(new NPCCallbackAction(SetPendant)); 
@@ -116,9 +116,9 @@ public class MotherMiddle : NPC {
 			
 		}
 		
-		public override void PassStringToEmotionState(string text){
-			stringCounter++;
-		}
+//		public override void PassStringToEmotionState(string text){
+//			stringCounter++;
+//		}
 	
 	}
 	#endregion
