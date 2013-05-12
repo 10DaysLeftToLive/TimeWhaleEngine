@@ -147,6 +147,9 @@ public class Schedule {
 	
 	public virtual void NextTask(){
 		Debug.Log(_toManage + " schedule next task");
+		if (current != null){ // if we are going to skip the current task but it has not finished
+			current.Finish();
+		}
 		
 		if (_tasksToDo.Count > 0) {
 			current = _tasksToDo.Dequeue();
