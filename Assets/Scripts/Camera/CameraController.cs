@@ -11,12 +11,14 @@ Attach this script to the camera.
 public class CameraController : MonoBehaviour {
 	#region Fields
 	// Variables for altering the camera's movement
-	static private float closestZoomDistance = 4f;	
+	static private float closestZoomDistance = 2.45f;	
 	static private float farthestZoomDistnace = 4f;
 	static private float zoomingIncrement = .075f;
+	static private float maxYOffset = 1f;
+	static private float minYOffset = 1.3f;
 	
-	public float yOffsetRelativeToTarget = 1.6f;
-	public float zOffsetRelativeToPlayer = - 10;
+	static public float currentYOffsetRelativeToTarget = 1f;
+	static private float zOffsetFromTarget = -5f;
 	
 	static private Camera thisCamera;
 	static private Player player;
@@ -40,6 +42,7 @@ public class CameraController : MonoBehaviour {
 		} else if (!isZoomingIn && CanZoomOut()) {
 			ZoomOut();
 		}
+		currentYOffsetRelativeToTarget = CalcOffset();
 	}
 	
 	static private bool CanZoomIn(){
@@ -61,9 +64,16 @@ public class CameraController : MonoBehaviour {
 	private Vector3 newCameraPosition;
 	private void MoveCameraToTarget() {
 		newCameraPosition = player.transform.position;
-		newCameraPosition.y += yOffsetRelativeToTarget;
-		newCameraPosition.z += zOffsetRelativeToPlayer;
+		newCameraPosition.y += currentYOffsetRelativeToTarget;
+		newCameraPosition.z += zOffsetFromTarget;
 		thisCamera.transform.position = newCameraPosition;
+	}
+	
+	/// <summary>
+	/// Calculates the offset in the y direction by linear interpolation
+	/// </summary>
+	static private float CalcOffset(){
+		return (minYOffset + (maxYOffset - minYOffset)*((thisCamera.orthographicSize - closestZoomDistance)/(farthestZoomDistnace-closestZoomDistance)));
 	}
 	
 }
