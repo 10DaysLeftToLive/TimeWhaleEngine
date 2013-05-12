@@ -34,10 +34,10 @@ public class WayPoints : MonoBehaviour {
 	}
 	
 	void Update (){
-		if (this.name == "WayPoint.000" && !initialized){
+		if (this.id == 0 && !initialized){
 			Graph.Initialize();	
 		}
-		if ((this.name == "WayPoint.000")&& !setupWayPoints && initialized){
+		if ((this.id == 0)&& !setupWayPoints && initialized){
 			Graph.StartGraph(this.gameObject);
 			WayPointPath.Initialize();
 			setupWayPoints = true;
