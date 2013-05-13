@@ -164,6 +164,10 @@ public abstract class NPC : Character {
 	
 	// Can be overriden by children. Is recomended to do this.
 	protected virtual void SetUpSchedules(){}
+	
+	public void RemoveScheduleWithFlag(string flag) {
+		scheduleStack.RemoveScheduleWithFlag(flag);
+	}
 	#endregion
 	
 	#region Functions specific to each NPC

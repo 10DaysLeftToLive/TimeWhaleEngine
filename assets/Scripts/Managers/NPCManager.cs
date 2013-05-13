@@ -21,6 +21,12 @@ public class NPCManager : ManagerSingleton<NPCManager> {
 		return dictNPC;
 	}
 	
+	public void RemoveSchedulesWithFlag(string flag) {
+		foreach (NPC npc in dictNPC.Values) {
+			npc.RemoveScheduleWithFlag(flag);
+		}
+	}
+	
 	public List<Flag> GetFlags(){
 		List<Flag> allNPCFlags = new List<Flag>();
 		
