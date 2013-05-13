@@ -54,12 +54,18 @@ public class ScheduleStack {
 		//Debug.Log("Schedule Stack next task");
 		if(HasSchedule()){
 			current.NextTask();	
+		} else {
+			NextSchedule();
 		}
 	}
 		
 	public void NextSchedule() {
 		//Debug.Log("Moving on to next schedule");
 		current = _schedulesToDo.Pop();
+		if (current == null){
+			Debug.LogWarning("No schedule to go to");
+			return;
+		}
 		//Debug.Log((current == null) ? "Current was null" : "Current was not null");
 		current.Resume();
 	}
