@@ -24,7 +24,6 @@ public class FarmerFatherYoung : NPC {
 	}
 
 	protected override void SetUpSchedules(){
-		
 	}
 	
 	
