@@ -26,6 +26,7 @@ public abstract class InputType  {
 	protected float minimumMovementDistance = 5; // the amount of posisiton change in a single touch gesture/click before it is considered a drag
 	protected bool zoomEnabled = true; 
 	protected float zoomEpsilon = 10;
+	protected float firstTouchTime;
 	
 	// some variables to represent zooming in/out
 	protected bool ZOOM_IN  = true;

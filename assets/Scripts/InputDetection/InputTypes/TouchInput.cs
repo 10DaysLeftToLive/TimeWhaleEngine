@@ -12,7 +12,6 @@ public class TouchInput : InputType {
 	private int[] fingerDown = new int[ 2 ];
 	private Vector2[] fingerDownPosition = new Vector2[ 2 ];
 	private int[] fingerDownFrame = new int[ 2 ];
-	private float firstTouchTime;
 	private int touchCount;
 	private Vector3 deltaSinceDown;
 	#endregion
