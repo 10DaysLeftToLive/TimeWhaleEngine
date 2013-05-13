@@ -19,19 +19,28 @@ public class TouchInput : InputType {
 	
 	public TouchInput() : base(){}
 	
+	
+	private int i;
+    private Touch touch;
+    private Touch[] theseTouches = Input.touches;
+    
+    private Touch touch0 = new Touch();
+    private Touch touch1 = new Touch();
+    private bool gotTouch0 = false;
+    private bool gotTouch1 = false;   
 	public override void HandleInput(){
 		touchCount = Input.touchCount;
 	    if ( touchCount == 0 ){
 	        ResetControlState();
 	    } else{
-	        int i;
-	        Touch touch;
-	        Touch[] theseTouches = Input.touches;
+	        i = 0;
+	        touch = null;
+	        theseTouches = Input.touches;
 	        
 	        Touch touch0 = new Touch();
 	        Touch touch1 = new Touch();
-	        bool gotTouch0 = false;
-	        bool gotTouch1 = false;          
+	        gotTouch0 = false;
+	        gotTouch1 = false;          
 	        
 	        // Check if we got the first finger down
 	        if (currentState == ControlState.WaitingForFirstInput){

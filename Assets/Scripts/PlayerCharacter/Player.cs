@@ -44,9 +44,10 @@ public class Player : Character {
 		AgeSwapMover.instance.SetPlayer(this);
 	}
 	
+	private Vector3 pos;
 	// We want to be able to switch to move at any state when the player clicks
 	private void OnClickToMove (EventManager EM, ClickPositionArgs e){
-		Vector3 pos = Camera.main.ScreenToWorldPoint(e.position);
+		pos = Camera.main.ScreenToWorldPoint(e.position);
 		pos.z = this.transform.position.z;
 		
 		// Will need to be changed with later refactoring
@@ -99,7 +100,7 @@ public class Player : Character {
 	
 	private void OnHoldClick(EventManager EM, ClickPositionArgs e){
 		if (timeSinceLastHold > TIMEBETWEENHOLDMOVES){
-			Vector3 pos = Camera.main.ScreenToWorldPoint(e.position);
+			pos = Camera.main.ScreenToWorldPoint(e.position);
 			pos.z = this.transform.position.z;
 			
 			EnterState(new MoveState(this, pos)); // move normaly
@@ -277,6 +278,5 @@ public class Player : Character {
 	
 	public void LeaveInteraction(){
 		EnterState(new IdleState(this));
-		
 	}
 }
