@@ -30,11 +30,17 @@ public class Player : Character {
 	
 	public NPC npcTalkingWith;
 	
+	private float timeSinceLastHold = 0;
+	private static float TIMEBETWEENHOLDMOVES = .2f;
+	
 	// Use this for initialization
 	protected override void Init(){
 		EventManager.instance.mOnClickOnObjectAwayFromPlayerEvent += new EventManager.mOnClickOnObjectAwayFromPlayerDelegate (OnClickToInteract);
 		EventManager.instance.mOnClickNoObjectEvent += new EventManager.mOnClickedNoObjectDelegate (OnClickToMove);
 		EventManager.instance.mOnClickOnPlayerEvent += new EventManager.mOnClickOnPlayerDelegate (OnClickOnPlayer);
+		EventManager.instance.mOnClickHoldEvent += new EventManager.mOnClickHoldDelegate (OnHoldClick);
+		EventManager.instance.mOnClickHoldReleaseEvent += new EventManager.mOnClickHoldReleaseDelegate(OnHoldRelease);
+		
 		AgeSwapMover.instance.SetPlayer(this);
 	}
 	
@@ -89,6 +95,22 @@ public class Player : Character {
 				Inventory.DropItem(GetFeet());
 			}
 		}
+	}
+	
+	private void OnHoldClick(EventManager EM, ClickPositionArgs e){
+		if (timeSinceLastHold > TIMEBETWEENHOLDMOVES){
+			Vector3 pos = Camera.main.ScreenToWorldPoint(e.position);
+			pos.z = this.transform.position.z;
+			
+			EnterState(new MoveState(this, pos)); // move normaly
+			timeSinceLastHold = 0;
+		} else {
+			timeSinceLastHold += Time.deltaTime;
+		}
+	}
+	
+	private void OnHoldRelease(EventManager EM){
+		EnterState(new IdleState(this));
 	}
 	
 	// Update is called once per frame

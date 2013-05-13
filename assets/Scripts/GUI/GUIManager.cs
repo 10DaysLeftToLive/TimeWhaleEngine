@@ -63,6 +63,7 @@ public class GUIManager : MonoBehaviour {
 		}
 		ToggleControlsClickableState(false);
 		MarkControlForAdding(pauseMenu);
+		inGameMenu.SetPausedState(false);
 	}
 	
 	public void HidePauseMenu(){

@@ -80,7 +80,9 @@ public class TouchInput : InputType {
 		                        } else if (DragMovementDetected(deltaSinceDown)){ // else if the single touch has moved more than the minimum amount we take it to be a drag
 		                        	currentState = ControlState.DragingCamera;
 		                        	break;
-		                        }
+		                        } else {
+									currentState = ControlState.HoldingClick;
+								}
 		                    }                                           
 	                    }
 	                }
@@ -186,6 +188,17 @@ public class TouchInput : InputType {
 		            currentState = ControlState.WaitingForNoInput;
 		        }
 		    } 
+			
+			if (currentState == ControlState.HoldingClick){
+				touch = theseTouches[ 0 ];
+	        	
+	        	if (touch.phase == TouchPhase.Ended){
+	        		currentState = ControlState.WaitingForFirstInput;
+					OnHoldRelease();
+	        	} else {
+					OnHoldClick(touch.position);
+		        }
+			}
     	}    
 	}
 	

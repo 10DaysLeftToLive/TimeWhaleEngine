@@ -31,6 +31,10 @@ public abstract class Character : PauseObject {
 		get { return inventory; }
 	}
 	
+	public State State {
+		get {return currentState;}
+	}
+	
 	protected override void Awake() {
 		base.Awake();
 	}

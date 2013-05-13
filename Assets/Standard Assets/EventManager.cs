@@ -12,6 +12,24 @@ public class EventManager : ManagerSingleton<EventManager> {
         if(mOnClickEvent != null)  mOnClickEvent(this,clickPosition);
     }
 	
+	//EVENT: OnHoldDown
+    public delegate void mOnClickHoldDelegate(EventManager EM, ClickPositionArgs e);
+    //Event
+    public event mOnClickHoldDelegate mOnClickHoldEvent;
+    //Riser
+    public void RiseOnClickHoldEvent(ClickPositionArgs clickPosition){
+        if(mOnClickHoldEvent != null)  mOnClickHoldEvent(this,clickPosition);
+    }
+	
+	//EVENT: OnHoldRelease
+    public delegate void mOnClickHoldReleaseDelegate(EventManager EM);
+    //Event
+    public event mOnClickHoldReleaseDelegate mOnClickHoldReleaseEvent;
+    //Riser
+    public void RiseOnClickHoldReleaseEvent(){
+        if(mOnClickHoldReleaseEvent != null)  mOnClickHoldReleaseEvent(this);
+    }
+	
 	//EVENT: OnClickOnObject
     public delegate void mOnClickedObjectDelegate(EventManager EM, ClickedObjectArgs e);
     //Event

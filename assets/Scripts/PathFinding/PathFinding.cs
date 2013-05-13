@@ -19,8 +19,6 @@ public static class PathFinding {
 		return false;
 	}
 
-
-
 	public static Path GetPath(){
 		return WayPointPath.GetPath();	
 	}

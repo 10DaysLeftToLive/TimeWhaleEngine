@@ -7,6 +7,8 @@ using System.Collections;
 /// </summary>
 public class Game  {
 	public static void Reset(){
+		Application.LoadLevel(Application.loadedLevel);
+		GUIManager.Instance.HidePauseMenu();//just in case
 	}
 	
 	public static void Quit(){

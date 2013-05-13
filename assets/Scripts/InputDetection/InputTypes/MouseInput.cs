@@ -39,6 +39,17 @@ public class MouseInput : InputType {
 			} else if (!Input.GetKey(KeyCode.Mouse0)){ // if the mouse has been released or held for the minimum duration then count it as a click
 				SingleClickEvent(Input.mousePosition);
 				currentState = ControlState.WaitingForFirstInput;
+			} else {
+				currentState = ControlState.HoldingClick;
+			}
+		}
+		
+		if (currentState == ControlState.HoldingClick){
+			if (!Input.GetKey(KeyCode.Mouse0)){
+				currentState = ControlState.WaitingForFirstInput;
+				OnHoldRelease();
+			} else {
+				OnHoldClick(Input.mousePosition);
 			}
 		}
 		

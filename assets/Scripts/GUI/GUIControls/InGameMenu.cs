@@ -23,6 +23,10 @@ public class InGameMenu : GUIControl {
 		}
 	}
 	
+	public void SetPausedState(bool newState){
+		isPaused = newState;
+	}
+	
 	public override bool ClickOnGUI(Vector2 screenPos){
 		return (pauseButtonRect.Contains(screenPos));
 	}

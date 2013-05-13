@@ -10,12 +10,13 @@ using System.Collections;
 public abstract class InputType  {
 	// The input detection is based off of these states
 	protected enum ControlState {
-		WaitingForFirstInput, // there are no fingers down/ mouse down
-		WaitingForSecondTouch, // there is one finger down and we are waiting to see if user presses down another for 2 touch actions *note this will only occur on mobile
-		WaitingForMovement, // the user has pressed 2 fingers down and we are waiting to see what gesture is performed
-		DragingCamera, // the user has one finger down/clicked and is moving across the screen greater than some minimum amount
+		WaitingForFirstInput, // There are no fingers down/ mouse down
+		WaitingForSecondTouch, // There is one finger down and we are waiting to see if user presses down another for 2 touch actions *note this will only occur on mobile
+		WaitingForMovement, // The user has pressed 2 fingers down and we are waiting to see what gesture is performed
+		DragingCamera, // The user has one finger down/clicked and is moving across the screen greater than some minimum amount
 		ZoomingCamera, // The state that occurs when the user move two fingers in opposite directions to zoom in and out or if using mouse when using the wheel
-		WaitingForNoInput // The final state where the user's input has been performed but the user is still touching the screen/ clicking
+		WaitingForNoInput, // The final state where the user's input has been performed but the user is still touching the screen/ clicking
+		HoldingClick // Where the user has help down a click and is continuing to hold
 	};
 	
 	public CameraController camera;
@@ -64,6 +65,14 @@ public abstract class InputType  {
 	protected void ZoomEvent(bool isZoomingIn){
 		CameraController.Zoom(isZoomingIn);
 	}	
+	
+	protected void OnHoldClick(Vector2 inputScreenPos){
+		EventManager.instance.RiseOnClickHoldEvent(new ClickPositionArgs(inputScreenPos));
+	}
+	
+	protected void OnHoldRelease(){
+		EventManager.instance.RiseOnClickHoldReleaseEvent();
+	}
 	#endregion	
 	
 	#region Notifications

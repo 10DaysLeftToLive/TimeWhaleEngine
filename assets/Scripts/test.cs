@@ -13,8 +13,8 @@ public class test : MonoBehaviour {
 	
 	void Start () {
 		if (!DOTESTS) return;
-		StartCoroutine(TestFlagManager());
-		//StartCoroutine(TestInteractions());
+		//StartCoroutine(TestFlagManager());
+		StartCoroutine(TestOneOffChat());
 	}
 	
 	private IEnumerator TestFlagManager(){
@@ -33,11 +33,16 @@ public class test : MonoBehaviour {
 	
 	private IEnumerator TestOneOffChat(){
 		yield return new WaitForSeconds(.1f);
+		Debug.Log("Testing one off chat");
+		npc1 = GameObject.Find("MotherYoung").GetComponent<NPC>();
+		npc2 = GameObject.Find("SiblingYoung").GetComponent<NPC>();
+		
 		
 		List<ChatInfo> chats = new List<ChatInfo>();
-		chats.Add(new ChatInfo(npc1, "Chat 1"));
+		chats.Add(new ChatInfo(npc1, "Chat 1", 10f));
 		NPCChat chat = new NPCChat(chats);
-		GUIManager.Instance.AddNPCChat(new NPCOneOffChat(new ChatInfo(npc1, "This is but a test")));
+		GUIManager.Instance.AddNPCChat(new NPCOneOffChat(new ChatInfo(npc1, "This is but a test, if it were real you would be dead already", 100f)));
+		GUIManager.Instance.AddNPCChat(new NPCOneOffChat(new ChatInfo(npc2, "This is but a test", 100f)));
 	}
 	
 	private void TestChat(){
