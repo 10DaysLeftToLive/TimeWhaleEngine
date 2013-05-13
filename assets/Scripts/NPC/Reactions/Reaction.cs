@@ -17,6 +17,17 @@ public class Reaction {
 	}
 	
 	/// <summary>
+	/// Initializes a new instance of the <see cref="Reaction"/> class.
+	/// </summary>
+	/// <param name='actionToAdd'>
+	/// Action to add.
+	/// </param>
+	public Reaction(Action actionToAdd){
+		actionsToPerform = new List<Action>();
+		actionsToPerform.Add (actionToAdd);
+	}
+	
+	/// <summary>
 	/// Adds the action to the list of action to perform when this goes off
 	/// </summary>
 	/// <param name='actionToAdd'>

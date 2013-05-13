@@ -52,8 +52,9 @@ public class ScheduleStack {
 	
 	public void NextTask() {
 		//Debug.Log("Schedule Stack next task");
-		
-		current.NextTask();
+		if(HasSchedule()){
+			current.NextTask();	
+		}
 	}
 		
 	public void NextSchedule() {
