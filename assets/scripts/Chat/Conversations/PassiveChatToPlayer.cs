@@ -3,23 +3,41 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class PassiveChatToPlayer : ManagerSingleton<PassiveChatToPlayer> {
-	private static Queue<string> whatToSayQueue;
-	private string whatToSay;
+	private static List<ChatToPlayer> whatToSayQueue;
+	private ChatToPlayer chatToSay;
+	private string textToSay;
 	
 	public override void Init() {
-		whatToSayQueue = new Queue<string>();
+		whatToSayQueue = new List<ChatToPlayer>();
 	}
 	
-	public string GetTextToSay() {
-		if (whatToSayQueue.Count <= 0) {
-			return (whatToSayQueue.Dequeue());
+	public string GetTextToSay(NPC npc) {
+		if (whatToSayQueue.Count > 0) {
+			if (whatToSayQueue[whatToSayQueue.Count - 1]._npc != npc) {
+				chatToSay = whatToSayQueue[whatToSayQueue.Count - 1];
+				textToSay = chatToSay._textToSay;
+				whatToSayQueue.Remove(chatToSay);
+				return (textToSay);
+			}
 		}
 		
 		return ChooseGenericText();
 	}
 	
 	public void AddTextToSay(string toSay) {
-		whatToSayQueue.Enqueue(toSay);
+		whatToSayQueue.Add(new ChatToPlayer(toSay));
+	}
+	
+	public void AddTextToSayAboutNPC(NPC npc, string toSay) {
+		whatToSayQueue.Add(new ChatToPlayer(npc, toSay));
+	}
+	
+	public void RemoveNPCChat(NPC npc) {
+		foreach (ChatToPlayer chat in whatToSayQueue) {
+			if (chat._npc == npc) {
+				whatToSayQueue.Remove(chat);
+			}
+		}
 	}
 	
 	private string ChooseGenericText() {
@@ -40,5 +58,22 @@ public class PassiveChatToPlayer : ManagerSingleton<PassiveChatToPlayer> {
 				return "Hi";
 				break;
 		}
+	}
+		
+		
+}
+
+public struct ChatToPlayer {
+	public NPC _npc;
+	public string _textToSay;
+	
+	public ChatToPlayer(string textToSay) {
+		_npc = null;
+		_textToSay = textToSay;
+	}
+	
+	public ChatToPlayer(NPC npc, string textToSay) {
+		_npc = npc;
+		_textToSay = textToSay;
 	}
 }
