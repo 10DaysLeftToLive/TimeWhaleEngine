@@ -34,7 +34,7 @@ public class TouchInput : InputType {
 	        ResetControlState();
 	    } else{
 	        i = 0;
-	        touch = null;
+	        touch = new Touch();
 	        theseTouches = Input.touches;
 	        
 	        Touch touch0 = new Touch();
