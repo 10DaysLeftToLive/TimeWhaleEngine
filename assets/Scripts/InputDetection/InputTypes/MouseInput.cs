@@ -40,7 +40,7 @@ public class MouseInput : InputType {
 				SingleClickEvent(Input.mousePosition);
 				currentState = ControlState.WaitingForFirstInput;
 			} else {
-				currentState = ControlState.HoldingClick;
+				//currentState = ControlState.HoldingClick;
 			}
 		}
 		
