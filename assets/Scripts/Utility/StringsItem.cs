@@ -19,4 +19,5 @@ public static class StringsItem {
 	public static string TulipSeeds = "Tulip Seeds";
 	public static string SunflowerSeeds = "Sunflower Seeds";
 	public static string Pendant = "Pendant";
+	public static string Note = "Note";
 }
