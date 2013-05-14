@@ -14,6 +14,9 @@ public static class FlagStrings {
 	#endregion
 	
 	#region Sibling
+	// new one
+	public static string StartedRace = "Started Race";
+	//
 	public static string PostSiblingExplore = "Post Sibling Exploration";
 	public static string SiblingExplore = "Sibling Explore";
 	public static string RaceTime = "Activate Passive";

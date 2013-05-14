@@ -15,12 +15,28 @@ public class SiblingYoung : NPC {
 	//private bool initScheduleTriggered = false; //if the race is initiated via chatBox, it begins a new schedule
 	
 	protected override void SetFlagReactions() {
+		#region race To Carpenter House
 		Reaction raceToCarpenterHouse = new Reaction();
-		Debug.Log("set off CarpenterFlag!");
 		raceToCarpenterHouse.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "raceToCarpenterHouseFlag set: Line 19!")));
-		raceToCarpenterHouse.AddAction(new ShowOneOffChatAction(this, "These are our neighbors!", 3f));
+		raceToCarpenterHouse.AddAction(new ShowOneOffChatAction(this, "These are our neighbors!", 2f));
 		raceToCarpenterHouse.AddAction(new NPCAddScheduleAction(this, carpenterRaceSchedule));
 		flagReactions.Add(FlagStrings.RunToCarpenter, raceToCarpenterHouse);
+		
+		Reaction nothing = new Reaction();
+		flagReactions.Add(FlagStrings.StartedRace, nothing);
+		#endregion
+		
+		#region race To Beach House
+		Reaction raceToBeachHouse = new Reaction();
+		raceToBeachHouse.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "raceToCarpenterHouseFlag set: Line 31!")));
+		raceToBeachHouse.AddAction(new ShowOneOffChatAction(this, "Let's go to the beach!", 2f));
+		raceToBeachHouse.AddAction(new NPCAddScheduleAction(this, walkToBeach));
+		flagReactions.Add(FlagStrings.RunToBeach, raceToBeachHouse);
+		
+		//Reaction nothingTwo = new Reaction();
+		//flagReactions.Add(FlagStrings.StartedRace, nothingTwo);
+		#endregion
+		
 		#region Home To Bridge
 /*
 		Reaction homeToBridge = new Reaction();
@@ -40,10 +56,9 @@ public class SiblingYoung : NPC {
 	}
 
 	protected override Schedule GetSchedule(){
-		Schedule schedule = new Schedule(this, Schedule.priorityEnum.Low);
-		Task initialSchedule = new TimeTask(.6f, new IdleState(this));
+		Schedule schedule = new Schedule(this, Schedule.priorityEnum.DoNow);
+		Task initialSchedule = new TimeTask(1f, new IdleState(this));
 		schedule.Add(initialSchedule);
-		
 		//TimeTask exploringNearHome = new TimeTask(10, new IdleState(this));
 		//Task moveToBridge = new Task(new MoveThenDoState(this, new Vector3(5, .2f, .3f), new MarkTaskDone(this)));
 		//schedule.Add(exploringNearHome);
@@ -52,16 +67,34 @@ public class SiblingYoung : NPC {
 	}
 	
 	private Schedule carpenterRaceSchedule;
+	private Schedule walkToCarpenter;
+	private Schedule walkToBeach;
 	
 	#region Set Up Sechedules
 	protected override void SetUpSchedules() {
-		//Schedule initialSchedule = new Schedule(this);
-		scheduleStack.Add (new YoungRunIslandScript(this));
+		Schedule test = (new YoungRunIslandToCarpenterScript(this));
+		scheduleStack.Add(test);
 		
-		Schedule temp = new Schedule(this, Schedule.priorityEnum.Low);
-		//temp.Add(new TimeTask (6f, new IdleState(this)));
-		//scheduleStack.Add(temp);	
-		carpenterRaceSchedule = new Schedule(this, Schedule.priorityEnum.Medium);
+		// Changing an emotion state 
+		//carpenterRaceSchedule.Add(new TimeTask(10f, new ChangeEmotionState(this, new InitialEmotionState(this))));
+		//walkToCarpenter = (new YoungRunIslandToCarpenterScript(this));
+		
+		/*
+		walkToCarpenter = new Schedule(this, Schedule.priorityEnum.Low);
+		walkToCarpenter.RemoveScheduleWithFlag(FlagStrings.StartedRace);
+		walkToCarpenter.Add(new TimeTask(.1f, new IdleState(this))); //or self-triggering
+		walkToCarpenter.Add(new Task(new MoveThenDoState(this, new Vector3 (12, .2f, .3f), new MarkTaskDone(this))));
+		walkToCarpenter.Add(new TimeTask(.2f, new IdleState(this)));
+		walkToCarpenter.Add(new Task(new MoveThenDoState(this, new Vector3 (11.8f, .2f, .3f), new MarkTaskDone(this)))); // at bridge
+		walkToCarpenter.Add(new TimeTask(10f, new WaitTillPlayerCloseState(this, this.player)));
+		Task reachCarpenterTask = new Task(new MoveThenDoState(this, new Vector3 (28, .2f, .3f), new MarkTaskDone(this))); // at carpenter
+		//reachCarpenterTask.AddFlagToSet(FlagStrings.StartedRace);
+		walkToCarpenter.Add(reachCarpenterTask);
+		walkToCarpenter.Add(new TimeTask(2f, new IdleState(this)));
+		walkToCarpenter.Add(new Task (new IdleState(this)));
+		*/
+		
+		carpenterRaceSchedule = new Schedule(this, Schedule.priorityEnum.Medium); 
 		carpenterRaceSchedule.Add(new TimeTask(1f, new IdleState(this)));
 		carpenterRaceSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (27, .2f, .3f), new MarkTaskDone(this))));
 		carpenterRaceSchedule.Add(new TimeTask(1f, new IdleState(this)));
@@ -69,11 +102,12 @@ public class SiblingYoung : NPC {
 		carpenterRaceSchedule.Add(new TimeTask(.5f, new IdleState(this)));
 		carpenterRaceSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (27, .2f, .3f), new MarkTaskDone(this))));
 		carpenterRaceSchedule.Add(new TimeTask(1f, new IdleState(this)));
-		carpenterRaceSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (29, .2f, .3f), new MarkTaskDone(this))));
-		carpenterRaceSchedule.Add(new TimeTask(.5f,  new IdleState(this)));
-		carpenterRaceSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (27, .2f, .3f), new MarkTaskDone(this))));
+		Task setOffBeachFlag = new Task((new MoveThenDoState(this, new Vector3 (29, .2f, .3f), new MarkTaskDone(this))));
+		setOffBeachFlag.AddFlagToSet(FlagStrings.RunToBeach);
+		carpenterRaceSchedule.Add(setOffBeachFlag);
+		carpenterRaceSchedule.Add(new TimeTask(.2f, new IdleState(this)));
 		
-		
+		walkToBeach = (new YoungRunIslandToBeachScript(this));
 		/*
 		initialSchedule.Add(new TimeTask(.5f, new IdleState(this)));
 		initialSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (6, .2f, .3f), new MarkTaskDone(this))));
@@ -105,6 +139,36 @@ public class SiblingYoung : NPC {
 				
 				activateWalkToBridgeState.AddAction(new NPCEmotionUpdateAction(toControl, new WalkToBridgeState(toControl)));	
 				activateWalkToBridgeState.AddAction(new NPCCallbackAction(updateFlag));
+				_allChoiceReactions.Add(new Choice("Ready to keep going?", str_readyToRace), new DispositionDependentReaction(activateWalkToBridgeState));		
+				_allChoiceReactions.Add(new Choice("Hold on.", str_readyToRace), new DispositionDependentReaction(activateWalkToBridgeState));
+			}
+		
+			public void updateFlag() {
+				if (!flagSet) {
+					FlagManager.instance.SetFlag(FlagStrings.RunToCarpenter);
+					FlagManager.instance.SetFlag(FlagStrings.StartedRace);
+					flagSet = true;
+					SetDefaultText("I'm going to beat you!!!");
+				}
+			}
+		}
+		#endregion
+	
+		#region Initial Emotion State
+		private class NearCarpenterState : EmotionState {
+			bool flagSet = false;	
+			Reaction activateWalkToBridgeState;
+			Reaction changeDefaultText;
+			string str_readyToRace = "Go!!!";
+		
+			public NearCarpenterState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+				SetDefaultText("These are our neighbors!");
+				activateWalkToBridgeState = new Reaction();
+				//changeDefaultText = new Reaction();
+				//changeDefaultText.AddAction(new NPCCallbackAction(UpdateText));
+				
+				//activateWalkToBridgeState.AddAction(new NPCEmotionUpdateAction(toControl, new WalkToBridgeState(toControl)));	
+				//activateWalkToBridgeState.AddAction(new NPCCallbackAction(updateFlag));
 				_allChoiceReactions.Add(new Choice("You're On!", str_readyToRace), new DispositionDependentReaction(activateWalkToBridgeState));		
 				_allChoiceReactions.Add(new Choice("Hold on.", str_readyToRace), new DispositionDependentReaction(activateWalkToBridgeState));
 			}
@@ -112,12 +176,13 @@ public class SiblingYoung : NPC {
 			public void updateFlag() {
 				if (!flagSet) {
 					//FlagManager.instance.SetFlag(FlagStrings.RunToBridge);
-					flagSet = true;
-					SetDefaultText("I'm going to beat you!!!");
+					//flagSet = true;
+					//SetDefaultText("I'm going to beat you!!!");
 				}
 			}
 		}
 		#endregion
+	
 	#region Toy Quest
 		#region Want Toy State 
 		private class WantToyState : EmotionState {	

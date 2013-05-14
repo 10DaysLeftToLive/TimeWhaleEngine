@@ -101,6 +101,7 @@ public class Schedule {
 	public void AddFlagGroup(string flag) {
 		List<string> newFlagList = new List<string>();
 		newFlagList.Add(flag);
+		flagList.Add(newFlagList); 
 	}
 	
 	public void AddFlagGroup(List<string> flags) {
@@ -110,7 +111,7 @@ public class Schedule {
 	public void RemoveScheduleWithFlag(string flag) {
 		foreach (List<string> fl in flagList) {
 			foreach (string f in fl) {
-				if (f == flag) {
+				if (f ==(flag)) {
 					SetComplete();
 				}
 			}
