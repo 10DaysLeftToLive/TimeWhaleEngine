@@ -26,6 +26,7 @@ public static class FlagStrings {
 	public static string RunToFarmer = "Run To Farmer";
 	public static string RunToLighthouse = "Run To Lighthouse";
 	public static string RunToMarket = "Run To Market";
+	public static string RunToWindmill = "Run To Windmill";
 	public static string RunToReflectionTree = "Run To Reflection Tree";
 	public static string RunToHome = "Run Home";
 	#endregion

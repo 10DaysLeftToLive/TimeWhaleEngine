@@ -23,7 +23,11 @@ public class YoungRunIslandToBeachScript : Schedule {
 			Add(new TimeTask(1f, new IdleState(_toManage)));
 			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (58, -6.5f, .3f), new MarkTaskDone(_toManage)))); // at top staircase
 			Add(new TimeTask(1f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
-			Add(new Task(new MoveThenDoState(_toManage, new Vector3 (51, -.05f, .3f), new MarkTaskDone(_toManage)))); // at top staircase
-			Add(new TimeTask(1f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
+			Task setOffFarmerFlag = new Task(new MoveThenDoState(_toManage, new Vector3 (51, -.05f, .3f), new MarkTaskDone(_toManage))); // at top staircase
+			setOffFarmerFlag.AddFlagToSet(FlagStrings.RunToFarmer);
+			Add(setOffFarmerFlag);
+			Add(new TimeTask(1f, new IdleState(_toManage)));
+			
+			
 	}
 }
