@@ -120,7 +120,7 @@ public abstract class Character : PauseObject {
 			try {
 				animationData.Play(animation);
 			} catch (ArgumentOutOfRangeException e){
-				Debug.LogError("Animation data " + animation + " does not exist for " + name);
+				Debug.LogError("Animation data " + animation + " does not exist for " + name + "\n" + e.StackTrace);
 			}
 		}
 	}

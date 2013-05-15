@@ -44,19 +44,15 @@ public class PassiveChatToPlayer : ManagerSingleton<PassiveChatToPlayer> {
 		switch(Random.Range(1, 3)) {
 			case 1:
 				return "How's it going?";
-				break;
 			
 			case 2:
 				return "Hello";
-				break;
 			
 			case 3:
 				return "Salutations";
-				break;
 			
 			default:
 				return "Hi";
-				break;
 		}
 	}
 		
