@@ -22,14 +22,14 @@ public class CheatListener : MonoBehaviour {
     }
     
     void Update() {
-        Fly();
+        /*Fly();
         MoveFast();
         ToggleSound();
-        KeyboardMovement();
+        KeyboardMovement();*/
     }
     
     void KeyboardMovement(){
-        float verticalMovement = Input.GetAxisRaw(Strings.ButtonVertical);
+        /*float verticalMovement = Input.GetAxisRaw(Strings.ButtonVertical);
         float horizontalMovement = Input.GetAxisRaw(Strings.ButtonHorizontal);	
         
         currentHorizontalSpeed = player.walkSpeed * horizontalMovement;
@@ -38,17 +38,18 @@ public class CheatListener : MonoBehaviour {
             player.currentVerticalSpeed = player.walkSpeed * verticalMovement;	
         }
         
-        MovePlayer();
+        MovePlayer();*/
     }
     void MovePlayer(){
         // Calculate actual motion
+		/*
         Vector3 movement = new Vector3(currentHorizontalSpeed, player.currentVerticalSpeed, 0 );
         movement *= Time.deltaTime;
         
-        player.lastReturnedCollisionFlags = characterController.Move(movement);
+        player.lastReturnedCollisionFlags = characterController.Move(movement);*/
     }
     
-    void Fly() {
+    void Fly() {/*
         if (isFlying){
             player.isAffectedByGravity = false;
         }
@@ -59,7 +60,7 @@ public class CheatListener : MonoBehaviour {
             if (!isFlying) {
                 player.isAffectedByGravity = true;
             }
-        }
+        }*/
     }
     
     void MoveFast() {		

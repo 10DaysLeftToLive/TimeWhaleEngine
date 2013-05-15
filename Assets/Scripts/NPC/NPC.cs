@@ -224,7 +224,6 @@ public abstract class NPC : Character {
 	public int ID{
 		get {return id;}
 	}
-	
 	#endregion
 	
 	#region Utility Methods
@@ -233,8 +232,6 @@ public abstract class NPC : Character {
 	}
 	
 	public void NextTask(){
-		//EventManager.instance.RiseOnNPCInteractionEvent(new NPCEnviromentInteraction(this.gameObject, "Task Done"));
-		Debug.Log(name + " NPC next task");
 		scheduleStack.NextTask();
 	}
 	

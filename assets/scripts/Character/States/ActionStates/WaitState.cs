@@ -17,7 +17,6 @@ public abstract class WaitState : AbstractState {
 	public override void OnEnter(){
 		Debug.Log(character.name + ": WaitState Enter");
 		if (character is Player){
-			Debug.LogWarning("Putting player in a wait state.");
 			character.EnterState(new IdleState(character));
 		}
 	}

@@ -14,7 +14,7 @@ public class ChatMenu : GUIControl {
 	private static float CHATHEIGHT = .2f;
 	
 	public float distAboveHead = 34f;
-	public float distToRightOfHead = -3.7f;
+	public float distToRightOfHead = 60f;
 	public GUIStyle chatBoxStyle;
 	
 	public override void Init(){
@@ -49,26 +49,26 @@ public class ChatMenu : GUIControl {
 	
 	private bool hasSetStyle = false;
 	public override void Render(){
-		if (hasSetStyle){
-			hasSetStyle = !hasSetStyle;
-		}
 		ShowChats();
 	}
 	
 	private void ShowChats(){
 		foreach (ChatInfo chatInfo in _currentChats){
-			GUI.Label(GetRectOverNPC(chatInfo.npcTalking), chatInfo.text, chatBoxStyle);	
+			GUI.Box(GetRectOverNPC(chatInfo.npcTalking), chatInfo.text, chatBoxStyle);	
 		}
 	}
 	
 	private Rect GetRectOverNPC(NPC npc){
 		Vector3 pos = npc.transform.position;
 		pos.y = npc.transform.collider.bounds.max.y;
-		pos.x += npc.transform.collider.bounds.size.x * distToRightOfHead;
-		Vector2 screenPos = Camera.mainCamera.WorldToScreenPoint(pos);
-		screenPos.y += distAboveHead;
-		// invert the y and put it above the npc, kinda arbitrary values
-		Vector2 percentageConvertedPos = new Vector2(screenPos.x/ScreenSetup.screenWidth, 1 - (screenPos.y/ScreenSetup.screenHeight));
+		Vector3 screenPos = Camera.mainCamera.WorldToScreenPoint(pos);
+		screenPos.x -= ScreenSetup.verticalBarWidth;
+		screenPos.y = ScreenSetup.screenHeight - screenPos.y; // flip it because of differences in screen and rect coords
+		screenPos.y -= ScreenSetup.horizontalBarHeight;
+		Vector2 percentageConvertedPos = new Vector2(screenPos.x/ScreenSetup.screenWidth, screenPos.y/ScreenSetup.screenHeight);
+		percentageConvertedPos.y -= CHATHEIGHT;
+		percentageConvertedPos.x -= CHATWIDTH/2;
+
 		return (ScreenRectangle.NewRect(percentageConvertedPos.x, percentageConvertedPos.y, CHATWIDTH, CHATHEIGHT));
 	}
 }

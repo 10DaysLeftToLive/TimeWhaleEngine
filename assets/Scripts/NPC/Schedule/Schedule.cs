@@ -96,7 +96,6 @@ public class Schedule {
 		return (current != null);
 	}
 	
-	
 	#region Flag Handling
 	public void AddFlagGroup(string flag) {
 		List<string> newFlagList = new List<string>();
@@ -128,7 +127,6 @@ public class Schedule {
 		if (HasTask()){
 			current.Decrement(timeSinceLastTick);
 			if (current.IsComplete()){
-				Debug.Log("Completed task");
 				current.Finish();
 				current = null;
 			}

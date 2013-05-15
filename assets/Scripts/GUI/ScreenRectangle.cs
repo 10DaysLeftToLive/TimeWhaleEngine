@@ -44,6 +44,22 @@ public static class ScreenRectangle {
 		return (NewRect(_topLeftXPercentage, _topLeftYPercentage, standardWidthPercent, standardHeightPercent));
 	}
 	
+	private static float screenWidth;
+	private static float screenHeight;
+	private static float horizontalBarHeight;
+	private static float verticalBarWidth;						   
+	
+	// Set the top left point based off of the given percantage
+	private static float topLeftXPoint;
+	private static float topLeftYPoint;
+	
+	// Shift the top left point based on any bar sizes that have been added to the screen
+	private static float shiftedTopLeftX;
+	private static float shiftedTopLeftY;
+	
+	private static float rectWidth;
+	private static float rectHeight;
+	
 	/*
 			Rect NewRect(float topLeftXPercentage, float topLeftYPercentage, 
 						 float screenWidthPercent, float screenHeightPercent)
@@ -75,21 +91,21 @@ public static class ScreenRectangle {
 	public static Rect NewRect(float _topLeftXPercentage, float _topLeftYPercentage, 
 								   float _screenWidthPercent, float _screenHeightPercent){
 		// Retrieve Values from the screen settings manager
-		float screenWidth = ScreenSetup.screenWidth;
-		float screenHeight = ScreenSetup.screenHeight;
-		float horizontalBarHeight = ScreenSetup.horizontalBarHeight;
-		float verticalBarWidth = ScreenSetup.verticalBarWidth;						   
+		screenWidth = ScreenSetup.screenWidth;
+		screenHeight = ScreenSetup.screenHeight;
+		horizontalBarHeight = ScreenSetup.horizontalBarHeight;
+		verticalBarWidth = ScreenSetup.verticalBarWidth;						   
 		
 		// Set the top left point based off of the given percantage
-		float topLeftXPoint = screenWidth * _topLeftXPercentage;
-		float topLeftYPoint = screenHeight * _topLeftYPercentage;
+		topLeftXPoint = screenWidth * _topLeftXPercentage;
+		topLeftYPoint = screenHeight * _topLeftYPercentage;
 		
 		// Shift the top left point based on any bar sizes that have been added to the screen
-		float shiftedTopLeftX = topLeftXPoint + verticalBarWidth;
-		float shiftedTopLeftY = topLeftYPoint + horizontalBarHeight;
+		shiftedTopLeftX = topLeftXPoint + verticalBarWidth;
+		shiftedTopLeftY = topLeftYPoint + horizontalBarHeight;
 		
-		float rectWidth = screenWidth * _screenWidthPercent;
-		float rectHeight = screenHeight * _screenHeightPercent;
+		rectWidth = screenWidth * _screenWidthPercent;
+		rectHeight = screenHeight * _screenHeightPercent;
 								   
 		return (new Rect(shiftedTopLeftX, shiftedTopLeftY, rectWidth, rectHeight));
 	}

@@ -16,10 +16,6 @@ public class LevelManager : MonoBehaviour {
 	
 	public static float levelYOffSetFromCenter = 50;
 	
-	/*public AudioSource youngBGM;
-	public AudioSource middleBGM;
-	public AudioSource oldBGM;*/
-	
 	public LevelLoader levelLoader;
 	
 	public enum CharacterGender{
@@ -67,9 +63,7 @@ public class LevelManager : MonoBehaviour {
 		GUIManager.Instance.AddInGameMenu();
 	}
 	
-	private IEnumerator Init(){		
-		playerCharacter.gravity = 0; // The player will fall through the unloaded floor if gravity exsists at the start
-		
+	private IEnumerator Init(){
 		StartCoroutine(levelLoader.Load("LevelYoung", "LevelMiddle", "LevelOld"));
 		while (!levelLoader.HasLoaded()){ // wait untill the outside scenes have been loaded in.
 			yield return new WaitForSeconds(.1f);
@@ -79,7 +73,8 @@ public class LevelManager : MonoBehaviour {
 		SetUpAges();
 		ManagerLoader.LoadManagers(youngSectionTarget, middleSectionTarget, oldSectionTarget);
 		
-		playerCharacter.gravity = 50;
+		NPCManager.instance.Init();
+		FlagManager.instance.Init();
 		
 		parallaxManager.Init();
 	}
@@ -104,9 +99,7 @@ public class LevelManager : MonoBehaviour {
 		oldSectionTarget.transform.position = new Vector3(0,levelYOffSetFromCenter*2,0);
 	}
 	
-	// Update is called once per frame
 	void Update () {
-		HandleInput();
 	}
 	
 	void SetNPCData(){		
@@ -116,20 +109,6 @@ public class LevelManager : MonoBehaviour {
 	void SaveDispositions(){
 		InteractionManager.instance.SaveNPCDispositions(dispositionDataFile);
 	}
-	
-	void HandleInput(){	
-		if(Input.GetButtonDown(Strings.ButtonAgeShiftDown)
-			&& CanAgeTransition(Strings.ButtonAgeShiftDown)) {
-				fadeShader.DoFade();
-				fadeShader.DoAgeShift(Strings.ButtonAgeShiftDown);
-		}
-		else if(Input.GetButtonDown(Strings.ButtonAgeShiftUp) &&
-			CanAgeTransition(Strings.ButtonAgeShiftUp)) {
-				fadeShader.DoFade();
-				fadeShader.DoAgeShift(Strings.ButtonAgeShiftUp);
-		}
-	}
-	
 	
 	public void ShiftUpAge(){		
 		if (CharacterAgeManager.GetCurrentAgeState() != CharacterAgeState.OLD){
@@ -197,9 +176,6 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	private void SetUpAges(){
-		/*CharacterAgeManager.SetupYoung(genderAnimationInUse.youngBoneAnimation, youngSectionTarget, youngBGM);
-		CharacterAgeManager.SetupMiddle(genderAnimationInUse.middleBoneAnimation, middleSectionTarget, middleBGM);
-		CharacterAgeManager.SetupOld(genderAnimationInUse.oldBoneAnimation, oldSectionTarget, oldBGM);*/
 		CharacterAgeManager.SetupYoung(genderAnimationInUse.youngBoneAnimation, youngSectionTarget);
 		CharacterAgeManager.SetupMiddle(genderAnimationInUse.middleBoneAnimation, middleSectionTarget);
 		CharacterAgeManager.SetupOld(genderAnimationInUse.oldBoneAnimation, oldSectionTarget);

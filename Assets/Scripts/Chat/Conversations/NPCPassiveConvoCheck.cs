@@ -11,6 +11,8 @@ public class NPCPassiveConvoCheck : MonoBehaviour {
 	private Player player;
 	private Action sayHi;
 	private NPC npcToChatWith;
+	private static float UPDATE_TIME_DELAY = .5f; // Delay the running of the passive chat
+	private static float currentDelay = 0;
 	
 	void Start() {
 		npcDict = NPCManager.instance.getNPCDictionary();
@@ -18,7 +20,13 @@ public class NPCPassiveConvoCheck : MonoBehaviour {
 	}
 	
 	void Update() {
-		TryToPassiveChat();
+		if (currentDelay > UPDATE_TIME_DELAY){
+			currentDelay = 0;
+			TryToPassiveChat();
+		} else {
+			currentDelay += Time.deltaTime;
+			return;
+		}
 	}
 	
 	public void TryToPassiveChat(){

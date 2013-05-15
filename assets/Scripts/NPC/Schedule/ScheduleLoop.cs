@@ -24,7 +24,6 @@ public class ScheduleLoop : Schedule {
 		
 		if (_tasksToDo.Count > 0) {
 			current = _tasksToDo.Dequeue();
-			Debug.Log (_toManage.name + " is now switching to " + current.StatePerforming);
 			_toManage.ForceChangeToState(current.StatePerforming);
 			
 			if (current != null) {
