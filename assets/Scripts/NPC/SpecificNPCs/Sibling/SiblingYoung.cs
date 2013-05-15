@@ -162,10 +162,10 @@ public class SiblingYoung : NPC {
 		
 		walkToBeach = (new YoungRunIslandToBeachScript(this));
 		walkToFarmerHouse = (new YoungRunIslandToFarmerScript(this));
-		walkToMarket = (new YoungRunIslandToMarketScript(this));
+		//walkToMarket = (new YoungRunIslandToMarketScript(this));
 		walkToWindmill = (new YoungRunIslandToWindmillScript(this));
-		walkToReflectionTree = (new YoungRunIslandToReflectionTreeScript(this));
-		walkToHome = (new YoungRunIslandToHomeScript(this));
+		//walkToReflectionTree = (new YoungRunIslandToReflectionTreeScript(this));
+//		walkToHome = (new YoungRunIslandToHomeScript(this));
 		
 		/*
 		initialSchedule.Add(new TimeTask(.5f, new IdleState(this)));

@@ -15,7 +15,7 @@ public class CarpenterSonMiddle : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "|||| You can't knock the hustle!"));
+		return (new InitialEmotionState(this, "Just leave me alone."));
 	}
 	
 	protected override Schedule GetSchedule(){
@@ -35,7 +35,6 @@ public class CarpenterSonMiddle : NPC {
 	
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
 			
-		
 		}
 		
 		public override void UpdateEmotionState(){
