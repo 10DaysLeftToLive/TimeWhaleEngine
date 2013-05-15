@@ -11,11 +11,16 @@ public class SeaCaptainMiddle : NPC {
 	}
 	
 	protected override void SetFlagReactions(){
-		
+		#region Fishing rod stolen
+		Reaction fishingRodStolen = new Reaction();
+		fishingRodStolen.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "Don't forget to bring my fishing rod back.")));
+		fishingRodStolen.AddAction(new ShowOneOffChatAction(this, "Make sure to bring that back in one piece", 2f));
+		flagReactions.Add(FlagStrings.StolenFishingRod, fishingRodStolen);
+		#endregion
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "||||ARRRRRR MATEY!"));
+		return (new InitialEmotionState(this, "YARRRRRR MATEY!"));
 	}
 	
 	protected override Schedule GetSchedule(){

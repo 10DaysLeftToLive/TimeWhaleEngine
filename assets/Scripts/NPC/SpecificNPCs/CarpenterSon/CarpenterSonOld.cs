@@ -15,7 +15,7 @@ public class CarpenterSonOld : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "|||| Where my cane at?"));
+		return (new InitialEmotionState(this, "My back aches, my arms are tired and I'm too tired. I wish I never got into this lousy carpentry business."));
 	}
 	
 	protected override Schedule GetSchedule(){
