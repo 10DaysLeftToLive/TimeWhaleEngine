@@ -23,59 +23,31 @@ public class MoveState : AbstractState {
         Vector3 pos = character.transform.position;
         Vector3 movement = Vector3.zero;
         movement = _pathFollowing.GetVectorDirection();
-
         movement *= (speed * Time.deltaTime);
 
-        if (movement.x < 0){
-            character.LookLeft();
-        }else if (movement.x > 0){
-            character.LookRight();
-        }else {
-            // going up/down
-            // character.climb???	
-        }
+        MakeCharacterLookCorrectly(movement.x);
         
         if (NearPoint(_pathFollowing.GetPoint(), _pathFollowing.GetVectorDirection())){
             if (!_pathFollowing.NextNode()){
                 OnGoalReached();
             } else {
                 currentGoal = _pathFollowing.GetPoint();
-                currentMovementState = new WalkToState(character);
             }
         } else {
             Move(movement);
         }
         
-        if (pos.Equals(character.transform.position)){
-            stuckTimer += Time.deltaTime;
-        }else{
-            stuckTimer = 0;	
-        }
-        
-        if (stuckTimer > .5f){
-            OnStuck();
-        }
+        CheckStuck(pos);
     }
     
     public override void OnEnter(){
-        //Debug.Log(character.name + ": MoveState Enter");
-        speed = 5f;
-        if (CalculatePath()){
-            currentGoal = _pathFollowing.GetPoint();
-            currentMovementState = GetGoToStateToPoint(currentGoal);
-        } else {
-            OnNoPath();
-        }
+        CalcMovementPath();
         
         // Needs a check for which area the player is in to switch which
         // walking SFX is loaded.
+        if (character is NPC){
 
-        if (character is NPC)
-        {
-
-        }
-        else
-        {
+        }else{
             SoundManager.instance.PlaySFX("WalkForest");
         }
     }
@@ -92,6 +64,23 @@ public class MoveState : AbstractState {
             SoundManager.instance.StopSFX();
         }
     }
+	
+	public void UpdateGoal(Vector3 newGoal){
+		_goal = newGoal;
+		CalcMovementPath();
+	}
+	
+	private void CalcMovementPath(){
+		speed = 5f;
+		if (CalculatePath()){
+            currentGoal = _pathFollowing.GetPoint();
+			if (currentMovementState == null){
+           		currentMovementState = GetGoToStateToPoint(currentGoal);
+			}
+        } else {
+            OnNoPath();
+        }
+	}
     
     private void Move(Vector3 moveDelta){
         currentMovementState.Move(moveDelta);
@@ -121,11 +110,8 @@ public class MoveState : AbstractState {
         if (Physics.Raycast(_goal, Vector3.down , out hit, 10, mask)) {
             Vector3 hitPos = hit.point;
             hitPos.y += character.transform.localScale.y/2;
-            //Debug.Log("ground at " + hitPos);
             
             if (PathFinding.GetPathForPoints(character.transform.position, hitPos, character.transform.localScale.y/2)){
-			//if (PathFinding.GetPathToNode(character.transform.position, "WayPoint.011", character.transform.localScale.y/2)){
-                _pathFollowing = new Path();
                 _pathFollowing = PathFinding.GetPath();
                 
                 return (true);
@@ -148,13 +134,31 @@ public class MoveState : AbstractState {
     }
     
     private void OnNoPath(){
-        // TODO make a state for "can't do that"
         Debug.Log(character.name + " could not find a path. Returning to idle");
         character.EnterState(new MarkTaskDone(character));
     }
     
+	private void CheckStuck(Vector3 posAtStart){
+		if (posAtStart.Equals(character.transform.position)){
+            stuckTimer += Time.deltaTime;
+        }else{
+            stuckTimer = 0;	
+        }
+        
+        if (stuckTimer > .5f){
+            OnStuck();
+        }
+	}
+	
     protected virtual void OnGoalReached(){
-        // We have reached our goal, let the current movement state determine what to do now
         currentMovementState.OnGoalReached();
     }
+	
+	private void MakeCharacterLookCorrectly(float direction){
+		if (direction < 0){
+            character.LookLeft();
+        } else{
+            character.LookRight();
+        }
+	}
 }

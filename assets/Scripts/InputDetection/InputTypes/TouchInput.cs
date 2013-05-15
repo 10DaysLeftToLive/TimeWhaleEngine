@@ -30,14 +30,17 @@ public class TouchInput : InputType {
 	public override void HandleInput(){
 		touchCount = Input.touchCount;
 	    if ( touchCount == 0 ){
+			if (currentState == ControlState.WaitingForSecondTouch){
+				SingleClickEvent(touch.position); // if the finger was lifted and we were waiting for a second touch then it was a tap	
+			}
 	        ResetControlState();
 	    } else{
 	        i = 0;
 	        touch = new Touch();
 	        theseTouches = Input.touches;
 	        
-	        Touch touch0 = new Touch();
-	        Touch touch1 = new Touch();
+	        touch0 = new Touch();
+	        touch1 = new Touch();
 	        gotTouch0 = false;
 	        gotTouch1 = false;          
 	        
@@ -74,23 +77,22 @@ public class TouchInput : InputType {
 	                        fingerDownFrame[ 1 ] = Time.frameCount;                                         
 	                        break;
 	                    } else if ( touchCount == 1 ) {
-	                        deltaSinceDown = touch.position - fingerDownPosition[ 0 ];
-	                        
 	                        // if we are looking at the right finger
 	                        if (touch.fingerId == fingerDown[ 0 ]) {
+	                        	deltaSinceDown = touch.position - fingerDownPosition[ 0 ];
+								
 		                        // Either the finger is held down long enough to count
-		                        // as a move or it is lifted, which is also a tap. 
-		                        if (Time.time > firstTouchTime + minimumTimeUntilMove || 
-		                            touch.phase == TouchPhase.Ended){
-		                            SingleClickEvent(touch.position);
+		                        // as a hold or it is lifted, which is also a tap. 
+								if (touch.phase == TouchPhase.Ended){
+									SingleClickEvent(touch.position);
 		                            currentState = ControlState.WaitingForNoInput;
+								} else if (Time.time > firstTouchTime + minimumTimeUntilMove){
+		                            currentState = ControlState.HoldingClick;
 		                            break;
 		                        } else if (DragMovementDetected(deltaSinceDown)){ // else if the single touch has moved more than the minimum amount we take it to be a drag
 		                        	currentState = ControlState.DragingCamera;
 		                        	break;
-		                        } else {
-									currentState = ControlState.HoldingClick;
-								}
+		                        }
 		                    }                                           
 	                    }
 	                }
@@ -162,7 +164,6 @@ public class TouchInput : InputType {
 	        	} else {
 		       		deltaSinceDown = touch.position - fingerDownPosition[ 0 ];
 		       		fingerDownPosition[ 0 ] = touch.position;
-		       		// need to do negative in order to give the feeling of pushing the world underneath your finger
 		       		DragEvent(deltaSinceDown);
 		        }
 	        }

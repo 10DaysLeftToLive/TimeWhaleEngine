@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Path {
-	
 	Vector3[] path;
 	Vector3[] vectorDirection;
 	int[] wayPoints;
@@ -33,11 +32,9 @@ public class Path {
 			}			
 		}
 		index++;
-		//Print();
 	}
 	
 	public void Print(){
-
 		for (int i = 0; i < path.Length; i++){
 			Debug.Log("Point " + i + " at " + path[i] + " vector heading " + vectorDirection[i]);
 		}
