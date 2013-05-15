@@ -84,8 +84,9 @@ public class EmotionState {
 			break;
 			}
 		}
-		GUIManager.Instance.UpdateInteractionDisplay(choiceToSetOff._reactionDialog);
+		
 		PerformReactionBasedOnDisposition(_allChoiceReactions[choiceToSetOff]);
+		GUIManager.Instance.UpdateInteractionDisplay(choiceToSetOff._reactionDialog);
 	}
 	
 	/// <summary>

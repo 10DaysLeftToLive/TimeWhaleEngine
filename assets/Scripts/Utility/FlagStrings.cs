@@ -34,4 +34,25 @@ public static class FlagStrings {
 	#region Carpenter	
 	public static string gaveToolsToCarpenterOrSon = "Gave Tools to Carpenter Or Son";
 	#endregion
+	
+	#region CastleMan Only
+	public static string NotInsane = "Not Insane";
+	public static string SavingLighthouseGirl = "Saving Lighthouse Girl";
+	public static string PostSavingLighthouseGirl = "Post Saving Lighthouse Girl";
+	public static string InsaneIntroConvo = "Insane Introduction Conversation";
+	public static string PostInsaneIntroConvo = "Post Insane Introduction Conversation";
+	#endregion
+	
+	#region Lighthouse Girl
+	public static string MarryingCarpenter = "Marrying Carpenter";
+	public static string DatingCarpenter = "Dating Carpenter";
+	public static string PostDatingCarpenter = "Post Dating Carpenter";
+	public static string StoodUp = "Stood Up";
+	public static string NoMarriage = "No Marriage";
+	public static string CastleDate = "Castle Date";
+	public static string PostCastleDate = "Post Castle Date";
+	public static string CastleMarriage = "Castle Marriage";
+	public static string NoteNoMarriage = "Note No Marriage";
+
+	#endregion
 }
