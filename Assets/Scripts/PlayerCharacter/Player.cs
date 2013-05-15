@@ -30,8 +30,10 @@ public class Player : Character {
 	
 	public NPC npcTalkingWith;
 	
-	private float timeSinceLastHold = 0;
-	private static float TIMEBETWEENHOLDMOVES = .2f;
+	private float timeSinceLastHold = 1; // start moving at first moment
+	private static float TIMEBETWEENHOLDMOVES = .35f;
+	private static float HOLDMINDISTANCEX = 2; 
+	private static float HOLDMINDISTANCEY = 1; 
 	
 	// Use this for initialization
 	protected override void Init(){
@@ -99,18 +101,34 @@ public class Player : Character {
 	}
 	
 	private void OnHoldClick(EventManager EM, ClickPositionArgs e){
+		pos = Camera.main.ScreenToWorldPoint(e.position);
+		if (HoldIsTooClose(pos)){
+			timeSinceLastHold = 1;
+			return;
+		}
 		if (timeSinceLastHold > TIMEBETWEENHOLDMOVES){
-			pos = Camera.main.ScreenToWorldPoint(e.position);
 			pos.z = this.transform.position.z;
 			
-			EnterState(new MoveState(this, pos)); // move normaly
+			if (!(currentState is MoveState)){
+				EnterState(new MoveState(this, pos)); // move normaly
+			} else {
+				((MoveState) currentState).UpdateGoal(pos);
+			}
+			
 			timeSinceLastHold = 0;
 		} else {
 			timeSinceLastHold += Time.deltaTime;
 		}
 	}
 	
+	Vector3 playerScreenPos;
+	private bool HoldIsTooClose(Vector3 clickPos){
+		playerScreenPos = transform.position;
+		return (Utils.CalcDistance(playerScreenPos.x, clickPos.x) < HOLDMINDISTANCEX && Utils.CalcDistance(playerScreenPos.y, clickPos.y) < HOLDMINDISTANCEY);
+	}
+	
 	private void OnHoldRelease(EventManager EM){
+		timeSinceLastHold = 1; // Make it so on the next hold we start right up
 		EnterState(new IdleState(this));
 	}
 	
