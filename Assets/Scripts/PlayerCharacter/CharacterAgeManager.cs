@@ -73,7 +73,6 @@ public class CharacterAgeManager {
 	
 	public static void UpdatePlayer(CharacterAge previousAge){
 		playerCharacter.ChangeAge(GetCurrentAge(), previousAge);
-		playerCharacter.DetachObject();
 	}
 	
 	public static void SetupYoung(BoneAnimation _boneAnimation, Transform _sectionTarget)

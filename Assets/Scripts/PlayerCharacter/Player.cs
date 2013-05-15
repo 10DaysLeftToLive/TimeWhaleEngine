@@ -39,13 +39,9 @@ public class Player : Character {
 		// Will need to be changed with later refactoring
 		if (currentState.GetType() == typeof(IdleState) || currentState.GetType() == typeof(ClimbIdleState)){ // if we are idled or climbing idled
 			EnterState(new MoveState(this, pos)); // move normaly
-		} else if (currentState.GetType() == typeof(GrabIdleState)){ // if we are attached to an object 
-			EnterState(new GrabMoveState(this, pos));
 		} else if (currentState.GetType() == typeof(MoveState)){
 			EnterState(new MoveState(this, pos));
-		} else if (currentState.GetType() == typeof(GrabMoveState)){
-			EnterState(new GrabMoveState(this, pos));
-		}
+		} 
 		touchParticleEmitter.transform.localPosition = pos;
 		touchParticleEmitter.Play();
     }
@@ -57,15 +53,6 @@ public class Player : Character {
 		
 		if (tag == Strings.tag_CarriableItem){
 			EnterState(new MoveThenDoState(this, goal, new PickUpItemState(this, e.clickedObject)));
-		} else if (tag == Strings.tag_Pushable){
-			if (currentState.GetType() == typeof(GrabIdleState)){
-				EnterState(new LetGoOfState(this, e.clickedObject));
-			} else {
-				if (Inventory.HasItem()){
-					Inventory.DropItem(GetFeet());
-				}
-				EnterState(new MoveThenDoState(this, goal, new GrabOntoState(this, e.clickedObject)));
-			}
 		} else if (tag == Strings.tag_NPC){
 			NPC toTalkWith = (NPC)e.clickedObject.gameObject.GetComponent<NPC>();
 			Vector3 currentPos = this.transform.position;
