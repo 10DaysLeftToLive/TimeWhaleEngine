@@ -96,7 +96,6 @@ public class Schedule {
 		return (current != null);
 	}
 	
-	
 	#region Flag Handling
 	public void AddFlagGroup(string flag) {
 		List<string> newFlagList = new List<string>();

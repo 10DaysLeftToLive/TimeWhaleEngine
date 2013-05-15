@@ -41,7 +41,7 @@ public class InteractionMenu : GUIControl {
 	private static float CHATBUTTONPADDING = .01f; // padding between chat elements in all directions
 	private static float PORTRAITWIDTH = .2f;
 	private static int GIVEITEMBUTTON = 3; // index in rect list for wher give button should go
-	private static float LEAVEBUTTONHEIGHT = .15f;
+	private static float LEAVEBUTTONHEIGHT = .1f;
 	private static int charPerLine = 45;
 	#endregion
 	
@@ -54,15 +54,7 @@ public class InteractionMenu : GUIControl {
 	}
 	
 	private bool hasInitializedStyles = false;
-	public override void Render(){	
-		if (!hasInitializedStyles){
-			textFieldStyle = new GUIStyle(GUI.skin.textField);
-			textFieldStyle.fontSize = 16; //edited
-			buttonStyle = new GUIStyle(GUI.skin.button);
-			buttonStyle.fontSize = 24;
-			hasInitializedStyles = true;
-		}
-		
+	public override void Render(){		
 		if (npcChattingWith == null){
 			Debug.LogError("Trying to display a chat with no npc.");
 			return;
@@ -86,7 +78,7 @@ public class InteractionMenu : GUIControl {
 				Debug.LogError("Trying to display more than 3 choices");
 				return;
 			}
-			if (ButtonClick(buttonRects[currentButtonIndex], text)){
+			if (ButtonClick(buttonRects[currentButtonIndex], text, buttonStyle)){
 				DoClickOnChoice(text);
 			}
 			currentButtonIndex++;
@@ -103,7 +95,7 @@ public class InteractionMenu : GUIControl {
 	}
 	
 	private void DisplayGiveButton(){
-		if (ButtonClick(buttonRects[GIVEITEMBUTTON], "Give " + player.Inventory.GetItem().name)){
+		if (ButtonClick(buttonRects[GIVEITEMBUTTON], "Give " + player.Inventory.GetItem().name, buttonStyle)){
 			DoGiveClick();
 		}
 	}
@@ -113,11 +105,11 @@ public class InteractionMenu : GUIControl {
 	}
 	
 	private void DrawBackgroundBox(){
-		GUI.Box (mainChatRect, "");
+		GUI.Box (mainChatRect, "", textFieldStyle);
 	}
 	
 	private void DisplayLeaveButton(){
-		if (ButtonClick(leaveButtonRect, "Leave")){
+		if (ButtonClick(leaveButtonRect, "Leave", buttonStyle)){
 			GUIManager.Instance.CloseInteractionMenu();
 		}
 	}
@@ -150,7 +142,7 @@ public class InteractionMenu : GUIControl {
 	}
 	
 	public void UpdateDisplayText(string newText){
-		mainDisplayText = ParseMessage(newText);
+		mainDisplayText = newText;//ParseMessage(newText);
 	}
 	
 	private void GetChoicesFromNPC(){
@@ -188,7 +180,7 @@ public class InteractionMenu : GUIControl {
 	private void SetChatRectangles(){		
 		// Overall Chat variables
 		float chatWidth = 1 - (2f * CHATPADDING);
-		float chatHeight = .5f - (2f * CHATPADDING);
+		float chatHeight = .45f - (2f * CHATPADDING);
 		float chatTopLeftX = CHATPADDING;
 		float chatTopLeftY = CHATPADDING;
 		mainChatRect = ScreenRectangle.NewRect(chatTopLeftX, chatTopLeftY, chatWidth, chatHeight);
