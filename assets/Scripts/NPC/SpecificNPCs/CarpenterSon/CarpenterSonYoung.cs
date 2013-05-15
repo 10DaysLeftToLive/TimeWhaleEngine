@@ -15,7 +15,7 @@ public class CarpenterSonYoung : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "|||| Where in the world are those tools?"));
+		return (new InitialEmotionState(this, "I know my dad wants me to learn carpentry, but I think it's boring. Don't tell him this, but I want to try and be a fisherman. If only I had a fishing rod."));
 	}
 	
 	protected override Schedule GetSchedule(){
@@ -31,7 +31,7 @@ public class CarpenterSonYoung : NPC {
 	#region EmotionStates
 	#region Initial Emotion State
 	private class InitialEmotionState : EmotionState{
-	
+	/*
 		Choice giveToolsChoice = new Choice("Give Tools.", "|||| Thanks for helpping me out broseidon!");
 		Reaction giveToolsReaction = new Reaction();
 		
@@ -43,9 +43,9 @@ public class CarpenterSonYoung : NPC {
 	
 		Choice createToolboxChoice = new Choice ("You Have it.", "You caught me.");
 		Reaction createToolboxReaction = new Reaction();
-		
+		*/
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){			
-			giveToolsReaction.AddAction(new NPCCallbackAction(GiveToolsToCarpenterSon));
+			/*giveToolsReaction.AddAction(new NPCCallbackAction(GiveToolsToCarpenterSon));
 			giveToolsReaction.AddAction(new ShowOneOffChatAction(NPCManager.instance.getNPC(StringsNPC.CarpenterYoung), 
 				"Oh good you found my old tools! " +
 				"Now if  you are to actually start becoming a great carpenter like my father and his before him then you need to start practicing on your own. " +
@@ -58,13 +58,13 @@ public class CarpenterSonYoung : NPC {
 			createToolboxReaction.AddAction(new NPCGiveItemAction(toControl,"toolbox"));
 			createToolboxReaction.AddAction(new NPCCallbackAction(GaveToolbox));
 			_allChoiceReactions.Add (createToolboxChoice, new DispositionDependentReaction(createToolboxReaction));
-		
+		*/
 		}
 		
 		public override void UpdateEmotionState(){
 			
 		}
-	
+	/*
 		private void GaveToolbox() {
 			_allChoiceReactions.Remove(createToolboxChoice);
 			GUIManager.Instance.RefreshInteraction();
@@ -97,7 +97,7 @@ public class CarpenterSonYoung : NPC {
 			_allChoiceReactions.Remove (makeTreeHouseChoice);	
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("|||| MO TREEHOUZ MO PROBLEMS");
-		}
+		}*/
 	}
 	#endregion
 	#endregion

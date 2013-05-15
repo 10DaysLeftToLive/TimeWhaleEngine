@@ -18,7 +18,7 @@ public class CarpenterYoung : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "Hey neighbor kid. My son lost my tools. Care to find them for a small reward?"));
+		return (new InitialEmotionState(this, "Sorry, my son can't play with you today. He's coming with me to learn the family trade."));
 	}
 	
 	protected override Schedule GetSchedule(){
@@ -34,7 +34,7 @@ public class CarpenterYoung : NPC {
 	#region EmotionStates
 	#region Initial Emotion State
 	private class InitialEmotionState : EmotionState{
-	
+	/*
 		
 		bool choiceSureBool = true;
 		bool choiceBusyBool = true;
@@ -48,9 +48,9 @@ public class CarpenterYoung : NPC {
 		
 		public string _carpenterText = "Alright, come back later if you still want to help";
 		
-		NPC carpenterRef;		
+		NPC carpenterRef;	*/	
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
-			carpenterRef = toControl;
+			/*carpenterRef = toControl;
 			
 			giveToolsChoiceSure = new Choice("Sure", "Alright, go find my tools then.");
 			giveToolsChoiceBusy = new Choice("Busy", _carpenterText);
@@ -68,9 +68,9 @@ public class CarpenterYoung : NPC {
 			
 			_allChoiceReactions.Add(giveToolsChoiceSure,new DispositionDependentReaction(changeTextReactionSure));
 			_allChoiceReactions.Add(giveToolsChoiceBusy,new DispositionDependentReaction(changeTextReactionBusy));
-			_allItemReactions.Add("toolbox", new DispositionDependentReaction(giveToolsReaction));
+			_allItemReactions.Add("toolbox", new DispositionDependentReaction(giveToolsReaction));*/
 		}
-
+/*
 		private void GiveToolsToCarpenter() {
 			
 			if (choiceSureBool) {
@@ -152,7 +152,7 @@ public class CarpenterYoung : NPC {
 				_allChoiceReactions.Add (giveToolsChoiceSure, new DispositionDependentReaction(changeTextReactionSure));
 				//SetDefaultText(_carpenterText);
 			}
-		}	
+		}	*/
 	}
 		#endregion
 	#endregion

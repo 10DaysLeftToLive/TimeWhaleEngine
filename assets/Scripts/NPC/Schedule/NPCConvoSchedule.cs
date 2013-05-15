@@ -42,6 +42,10 @@ public class NPCConvoSchedule : Schedule {
 		SetConvoTasks(conversation);
 	}
 	
+	public void SetCanNotInteractWithPlayer() {
+		canInteractWithPlayer = false;
+	}
+	
 	protected void SetConvoTasks(NPCConversation convo) {		
 		foreach (Dialogue textToSay in convo.dialogueList) {
 			if (textToSay._npc == 1) {
@@ -52,17 +56,14 @@ public class NPCConvoSchedule : Schedule {
 				npcTalking = _npcTwo;
 			}
 			
-			float timeToChat = TALK_TIME;
-			chatInfo = new ChatInfo(npcTalking, textToSay._TextToSay, timeToChat);
+			chatInfo = new ChatInfo(npcTalking, textToSay._TextToSay, TALK_TIME);
 			chatInfoList = new List<ChatInfo>();
 			chatInfoList.Add(chatInfo);
 			chatToPerform = new NPCChat(chatInfoList);
 			
-			timeToChat = chatInfo.GetTime();
-			
 			_npcTalkingQueue.Enqueue(npcTalking);
 			
-			Add (new TimeTask(timeToChat - 1.5F, new NPCConvoState((Character)npcTalking, (Character)npcNotTalking, chatToPerform)));	
+			Add (new TimeTask(TALK_TIME, new NPCConvoState((Character)npcTalking, (Character)npcNotTalking, chatToPerform)));	
 		}
 	}
 	
