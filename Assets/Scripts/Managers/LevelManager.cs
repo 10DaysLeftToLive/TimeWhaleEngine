@@ -73,6 +73,9 @@ public class LevelManager : MonoBehaviour {
 		SetUpAges();
 		ManagerLoader.LoadManagers(youngSectionTarget, middleSectionTarget, oldSectionTarget);
 		
+		NPCManager.instance.Init();
+		FlagManager.instance.Init();
+		
 		parallaxManager.Init();
 	}
 	

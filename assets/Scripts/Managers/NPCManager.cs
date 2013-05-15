@@ -29,12 +29,10 @@ public class NPCManager : ManagerSingleton<NPCManager> {
 	
 	public List<Flag> GetFlags(){
 		List<Flag> allNPCFlags = new List<Flag>();
-		
 		foreach (NPC npc in dictNPC.Values){
 			Debug.Log("Getting flags of " + npc.gameObject.name);
 			List<string> currentNPCFlags = npc.GetFlags();
 			foreach (string flag in currentNPCFlags){
-				Debug.Log("Adding flag " + flag);
 				Flag newFlag = new Flag(flag);
 				if (!allNPCFlags.Contains(newFlag)){
 					allNPCFlags.Add(newFlag);
