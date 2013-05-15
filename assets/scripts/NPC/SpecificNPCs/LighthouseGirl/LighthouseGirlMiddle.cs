@@ -20,6 +20,9 @@ public class LighthouseGirlMiddle : NPC {
 		return (initialState);
 	}
 	
+	Schedule openningWaitingSchedule;
+	Schedule postOpenningSchedule;
+	
 	protected override Schedule GetSchedule(){
 		Schedule schedule = new DefaultSchedule(this);
 		return (schedule);
@@ -27,10 +30,28 @@ public class LighthouseGirlMiddle : NPC {
 
 	protected override void SetUpSchedules(){
 		
+		openningWaitingSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
+		openningWaitingSchedule.Add(new TimeTask(30, new WaitTillPlayerCloseState(this, player)));
+		scheduleStack.Add(openningWaitingSchedule);
+		
+		postOpenningSchedule = new Schedule(this,Schedule.priorityEnum.Medium);
+		postOpenningSchedule.Add(new TimeTask(10, new MoveThenDoState(this, new Vector3(transform.position.x - 10, transform.position.y, transform.position.z), new IdleState(this))));
+		postOpenningSchedule.Add(new TimeTask(30, new ChangeEmotionState(this, initialState)));
+		scheduleStack.Add(postOpenningSchedule);
+		
+		
+		scheduleStack.Add(new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerFatherYoung), 
+			new YoungFarmerMotherToFarmerFatherOpenningScriptedDialogue(),Schedule.priorityEnum.High));
+		
 	}
 	
 	
 	#region EmotionStates
+	private class StartingEmotionState : EmotionState{
+		public StartingEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+		}
+	}
+	
 	#region Initial Emotion State
 	private class InitialEmotionState : EmotionState{
 		Choice GoOnChoice = new Choice("Go on", "");
@@ -209,6 +230,78 @@ public class LighthouseGirlMiddle : NPC {
 		#endregion
 	
 	}
+	private class AntiMarriage : EmotionState{
+		Choice GiveUpChoice = new Choice ("Why give up now?", "I'm not!  It just never works.  I wish there was someone who was willing to help me with this...");
+		Choice NotSoBadChoice  = new Choice("Maybe its not so bad?", "Yeah Right!  There is no way  that's happening!  Anyways I'm out of ideas, so I need time to think of more ways to sabotage this marriage.");
+		Choice AnyoneNiceChoice = new Choice("Isn't there anyone who is nice to you?","That's it!  My dad!  He's always been kind to me! But he's too afraid to stand up to my mom...");
+		Choice NiceToMomChoice = new Choice("Have you tried being nice to your mom", "It wouldn't work.  Once she has an idea in mind, she won't change it!");
+		
+		Reaction GiveUpReaction = new Reaction();
+		Reaction NotSoBadReaction = new Reaction();
+		Reaction AnyoneNiceReaction = new Reaction();
+		Reaction NiceToMomReaction = new Reaction();
+		
+		Reaction ToySwordReaction = new Reaction();
+		Reaction CaptainsLogReaction = new Reaction();
+		
+		NPC control;
+		public 	AntiMarriage(NPC toControl, string currentDialogue): base (toControl, "ARRGGHH.  I can't believe that didn't work.  I've tried everything to get out of this!  Why can't it just be like in the stories where the hero always wins!"){
+			control = toControl;
+			
+			SetupReactions();
+			
+			_allChoiceReactions.Add(GiveUpChoice,new DispositionDependentReaction(GiveUpReaction));
+			_allChoiceReactions.Add(NotSoBadChoice,new DispositionDependentReaction(NotSoBadReaction));
+			
+			//_allItemReactions.Add(StringsItem.ToySword, new DispositionDependentReaction(AnyoneNiceResponse));
+			//_allItemReactions.Add(StringsItem.CaptainsLog, new DispositionDependentReaction(AnyoneNiceResponse));
+			
+		}
+		
+		public void SetupReactions(){
+			GiveUpReaction.AddAction(new NPCCallbackAction(GiveUpResponse));
+			NotSoBadReaction.AddAction(new NPCCallbackAction(NotSoBadResponse));
+			AnyoneNiceReaction.AddAction(new NPCCallbackAction(AnyoneNiceResponse));
+			NiceToMomReaction.AddAction(new NPCCallbackAction(NiceToMomResponse));
+			
+			ToySwordReaction.AddAction(new NPCCallbackAction(ToySwordResponse));
+			ToySwordReaction.AddAction(new UpdateCurrentTextAction(control, "A toy sword?  You know I wished I could play with a toy sword when I was a kid so that I could be like the heroes in my dad's stories..."));
+			ToySwordReaction.AddAction(new NPCTakeItemAction(control));
+			
+			CaptainsLogReaction.AddAction(new NPCCallbackAction(CaptainsLogResponse));
+			CaptainsLogReaction.AddAction(new UpdateCurrentTextAction(control, "A captain's log....and then stranded on an island I managed to become friendly with the natives... You know this reminds me of the stories my dad would tell me as a kid..."));
+			CaptainsLogReaction.AddAction(new NPCTakeItemAction(control));
+			
+		}
+		
+		public void ToySwordResponse(){}
+		public void CaptainsLogResponse(){}
+		
+		public void GiveUpResponse(){
+			 _allChoiceReactions.Clear();
+			_allChoiceReactions.Add(AnyoneNiceChoice,new DispositionDependentReaction(AnyoneNiceReaction));
+			_allChoiceReactions.Add(NiceToMomChoice,new DispositionDependentReaction(NiceToMomReaction));
+			GUIManager.Instance.RefreshInteraction();
+			SetDefaultText("I wish there was someone who was willing to help me with this...");
+		}
+		public void NotSoBadResponse(){
+			_allChoiceReactions.Clear();
+			GUIManager.Instance.RefreshInteraction();
+			SetDefaultText("I need time to think of more ways to sabotage this marriage.");
+		}
+		public void AnyoneNiceResponse(){
+			_allChoiceReactions.Clear();
+			GUIManager.Instance.RefreshInteraction();
+			SetDefaultText("My dad is too afraid to stand up to my mom...");
+		}
+		public void NiceToMomResponse(){
+			_allChoiceReactions.Clear();
+			GUIManager.Instance.RefreshInteraction();
+			SetDefaultText("My mom will never back down.");
+		}
+		
+	}
+	
 	#endregion
 	#endregion
 }
