@@ -68,7 +68,9 @@ public abstract class InputType  {
 	}	
 	
 	protected void OnHoldClick(Vector2 inputScreenPos){
-		EventManager.instance.RiseOnClickHoldEvent(new ClickPositionArgs(inputScreenPos));
+		if (!GUIManager.Instance.ClickOnGUI(inputScreenPos)){
+			EventManager.instance.RiseOnClickHoldEvent(new ClickPositionArgs(inputScreenPos));
+		}
 	}
 	
 	protected void OnHoldRelease(){

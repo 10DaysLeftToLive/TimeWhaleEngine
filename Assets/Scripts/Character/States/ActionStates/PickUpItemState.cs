@@ -15,7 +15,11 @@ public class PickUpItemState : AbstractState {
 		
 		Debug.Log("PickupItem does " + (character.Inventory.HasItem() ? ": " + character.Inventory.GetItem().name : "not") + "have an item");
 		
-		character.EnterState(new MarkTaskDone(character));
+		if (character is NPC){
+			character.EnterState(new MarkTaskDone(character));
+		} else {
+			character.EnterState(new IdleState(character));
+		}
 	}
 	
 	public override void OnEnter(){
@@ -24,7 +28,7 @@ public class PickUpItemState : AbstractState {
 	
 	public override void OnExit(){
 		Debug.Log(character.name + ": PickUpItemState Exit");
-		
+		FlagManager.instance.SetFlag(_toPickUp.name);
 		// Shoot off event for having picked up item
 		EventManager.instance.RiseOnPlayerPickupEvent(new PickUpStateArgs(_toPickUp));
 	}

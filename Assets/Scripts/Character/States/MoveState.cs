@@ -72,11 +72,11 @@ public class MoveState : AbstractState {
 	
 	private void CalcMovementPath(){
 		speed = 5f;
+		if (currentMovementState == null){
+       		currentMovementState = GetGoToStateToPoint(currentGoal);
+		}
 		if (CalculatePath()){
             currentGoal = _pathFollowing.GetPoint();
-			if (currentMovementState == null){
-           		currentMovementState = GetGoToStateToPoint(currentGoal);
-			}
         } else {
             OnNoPath();
         }
@@ -113,7 +113,6 @@ public class MoveState : AbstractState {
             
             if (PathFinding.GetPathForPoints(character.transform.position, hitPos, character.transform.localScale.y/2)){
                 _pathFollowing = PathFinding.GetPath();
-                
                 return (true);
             }
         } return (false);
@@ -135,7 +134,7 @@ public class MoveState : AbstractState {
     
     private void OnNoPath(){
         Debug.Log(character.name + " could not find a path. Returning to idle");
-        character.EnterState(new MarkTaskDone(character));
+        currentMovementState.OnGoalReached();
     }
     
 	private void CheckStuck(Vector3 posAtStart){
