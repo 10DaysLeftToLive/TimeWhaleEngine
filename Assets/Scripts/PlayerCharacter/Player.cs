@@ -238,6 +238,9 @@ public class Player : Character {
 		if (IsInteracting()){
 			CloseInteraction();	
 		}
+		if (currentState.GetType() == typeof(MoveState)){
+			EnterState(new IdleState(this));
+		}
 		
 		AgeSwapMover.instance.ChangeAgePosition(newAge, previousAge);
 
