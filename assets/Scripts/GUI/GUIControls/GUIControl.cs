@@ -36,4 +36,12 @@ public abstract class GUIControl : MonoBehaviour {
 		GUI.Box(buttonArea, text);
 		return (false);
 	}
+	
+	protected bool ButtonClick(Rect buttonArea, string text, GUIStyle guiStyle){
+		if (isClickable){	
+			return (GUI.Button(buttonArea, text, guiStyle));	
+		} 
+		GUI.Box(buttonArea, text, guiStyle);
+		return (false);
+	}
 }

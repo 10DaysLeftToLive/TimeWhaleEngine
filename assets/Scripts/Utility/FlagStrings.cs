@@ -35,6 +35,12 @@ public static class FlagStrings {
 	public static string gaveToolsToCarpenterOrSon = "Gave Tools to Carpenter Or Son";
 	#endregion
 	
+	#region Carpenter Son
+	public static string gaveFishingRodToCarpenterSon = "Gave Fishingrod to Carpenter Son";
+	public static string carpenterSonStormOff = "Carpenter Son Storms Off";
+	public static string carpenterSonReconcile = "Carpenter Son Reconcile";
+	#endregion
+	
 	#region CastleMan Only
 	public static string NotInsane = "Not Insane";
 	public static string SavingLighthouseGirl = "Saving Lighthouse Girl";
