@@ -50,7 +50,8 @@ public class TouchInput : InputType {
 	                touch = theseTouches[ i ];
 	
 	                if (touch.phase != TouchPhase.Ended &&
-	                    touch.phase != TouchPhase.Canceled ){
+	                    touch.phase != TouchPhase.Canceled &&
+						!GUIManager.Instance.ClickOnGUI(touch.position)){
 	                    currentState = ControlState.WaitingForSecondTouch;
 	                    firstTouchTime = Time.time;
 	                    fingerDown[ 0 ] = touch.fingerId;

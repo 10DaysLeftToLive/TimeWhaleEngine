@@ -51,6 +51,7 @@ public class Player : Character {
 	private void OnClickToMove (EventManager EM, ClickPositionArgs e){
 		pos = Camera.main.ScreenToWorldPoint(e.position);
 		pos.z = this.transform.position.z;
+		if (currentState.GetType() == typeof(TalkState)) return;
 		
 		// Will need to be changed with later refactoring
 		if (currentState.GetType() == typeof(IdleState) || currentState.GetType() == typeof(ClimbIdleState)){ // if we are idled or climbing idled
@@ -102,7 +103,7 @@ public class Player : Character {
 	
 	private void OnHoldClick(EventManager EM, ClickPositionArgs e){
 		pos = Camera.main.ScreenToWorldPoint(e.position);
-		if (HoldIsTooClose(pos)){
+		if (currentState.GetType() == typeof(TalkState) || HoldIsTooClose(pos)){
 			timeSinceLastHold = 1;
 			return;
 		}
