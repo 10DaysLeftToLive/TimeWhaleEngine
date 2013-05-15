@@ -28,7 +28,7 @@ public class NPCPassiveConvoCheck : MonoBehaviour {
 				SetPassiveChatTimer(npc);
 				if (Random.Range(1, CHANCE_TO_PASSIVE_CHAT) > 1) {
 					if (InPassiveChatDistance(npc.gameObject, player.gameObject)) {
-						sayHi = new ShowOneOffChatAction(npc, PassiveChatToPlayer.instance.GetTextToSay());
+						sayHi = new ShowOneOffChatAction(npc, PassiveChatToPlayer.instance.GetTextToSay(npc));
 						sayHi.Perform();
 					} else {
 						foreach (NPC npcToCheck in npcDict.Values) {

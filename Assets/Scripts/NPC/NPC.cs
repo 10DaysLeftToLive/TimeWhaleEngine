@@ -121,6 +121,7 @@ public abstract class NPC : Character {
 	public void StarTalkingWithPlayer(){
 		currentEmotion.OnInteractionOpens();
 		chatingWithPlayer = true;
+		PassiveChatToPlayer.instance.RemoveNPCChat(this);
 		scheduleStack.Pause();
 		EnterState(new InteractingWithPlayerState(this));
 	}
@@ -164,6 +165,10 @@ public abstract class NPC : Character {
 	
 	// Can be overriden by children. Is recomended to do this.
 	protected virtual void SetUpSchedules(){}
+	
+	public void RemoveScheduleWithFlag(string flag) {
+		scheduleStack.RemoveScheduleWithFlag(flag);
+	}
 	#endregion
 	
 	#region Functions specific to each NPC

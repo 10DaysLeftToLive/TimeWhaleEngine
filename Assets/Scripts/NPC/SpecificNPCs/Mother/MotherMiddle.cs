@@ -74,7 +74,7 @@ public class MotherMiddle : NPC {
 			
 			gaveSeashell.AddAction(new NPCTakeItemAction(toControl));
 			gaveSeashell.AddAction(new NPCCallbackAction(SetSeashell));  
-			gaveSeashell.AddAction(new UpdateCurrentTextAction(toControl, "Your father and I would spend afternoonds looking for shells. He loved to find the shiniest ones he could for me."));
+			gaveSeashell.AddAction(new UpdateCurrentTextAction(toControl, "Your father and I would spend afternoons looking for shells. He loved to find the shiniest ones he could for me."));
 			_allItemReactions.Add("seashell",  new DispositionDependentReaction(gaveRose));
 			
 			
