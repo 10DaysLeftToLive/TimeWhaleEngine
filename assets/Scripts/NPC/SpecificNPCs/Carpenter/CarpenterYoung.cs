@@ -46,10 +46,13 @@ public class CarpenterYoung : NPC {
 		Reaction changeTextReactionSure;
 		Reaction changeTextReactionBusy;
 		
+		
 		public string _carpenterText = "Alright, come back later if you still want to help";
 		
-		NPC carpenterRef;	*/	
+		NPC carpenterRef;	*/
+		
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+			
 			/*carpenterRef = toControl;
 			
 			giveToolsChoiceSure = new Choice("Sure", "Alright, go find my tools then.");
@@ -70,6 +73,7 @@ public class CarpenterYoung : NPC {
 			_allChoiceReactions.Add(giveToolsChoiceBusy,new DispositionDependentReaction(changeTextReactionBusy));
 			_allItemReactions.Add("toolbox", new DispositionDependentReaction(giveToolsReaction));*/
 		}
+		
 /*
 		private void GiveToolsToCarpenter() {
 			

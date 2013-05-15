@@ -11,7 +11,13 @@ public class FortuneTellerMiddle : NPC {
 	}
 	
 	protected override void SetFlagReactions(){
-		
+		Reaction appleReaction = new Reaction();
+		//appleReaction.AddAction()
+			
+		/*Reaction enterHappy = new Reaction();
+		enterHappy.AddAction(new ShowOneOffChatAction(this, "I think there's a good spot over here!"));
+		enterHappy.AddAction(new NPCAddScheduleAction(this, moveMotherHappyState));
+		flagReactions.Add (FlagStrings.EnterHappyState, enterHappy);*/
 	}
 	
 	protected override EmotionState GetInitEmotionState(){

@@ -30,8 +30,12 @@ public class CarpenterSonYoung : NPC {
 	
 	#region EmotionStates
 	#region Initial Emotion State
+	
 	private class InitialEmotionState : EmotionState{
-	/*
+	
+		Reaction giveFishingRodReaction = new Reaction();
+		string gaveFishingRodDialogue = "Oh man, thanks so much!";
+		/*
 		Choice giveToolsChoice = new Choice("Give Tools.", "|||| Thanks for helpping me out broseidon!");
 		Reaction giveToolsReaction = new Reaction();
 		
@@ -44,7 +48,11 @@ public class CarpenterSonYoung : NPC {
 		Choice createToolboxChoice = new Choice ("You Have it.", "You caught me.");
 		Reaction createToolboxReaction = new Reaction();
 		*/
-		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){			
+		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+			giveFishingRodReaction.AddAction(new NPCTakeItemAction(toControl));
+			giveFishingRodReaction.AddAction(new SetOffFlagAction(FlagStrings.gaveFishingRodToCarpenterSon));
+			giveFishingRodReaction.AddAction(new NPCEmotionUpdateAction(toControl, new GaveFishingRodEmotionState(toControl, gaveFishingRodDialogue)));
+			_allItemReactions.Add(StringsItem.FishingRod, new DispositionDependentReaction(giveFishingRodReaction));
 			/*giveToolsReaction.AddAction(new NPCCallbackAction(GiveToolsToCarpenterSon));
 			giveToolsReaction.AddAction(new ShowOneOffChatAction(NPCManager.instance.getNPC(StringsNPC.CarpenterYoung), 
 				"Oh good you found my old tools! " +
@@ -60,6 +68,7 @@ public class CarpenterSonYoung : NPC {
 			_allChoiceReactions.Add (createToolboxChoice, new DispositionDependentReaction(createToolboxReaction));
 		*/
 		}
+		
 		
 		public override void UpdateEmotionState(){
 			
@@ -98,6 +107,20 @@ public class CarpenterSonYoung : NPC {
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("|||| MO TREEHOUZ MO PROBLEMS");
 		}*/
+		
+	}
+	#endregion
+	#region GivenFishingRod
+	private class GaveFishingRodEmotionState : EmotionState{
+	
+		Reaction giveFishingRodReaction;
+		public GaveFishingRodEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+
+		}
+		
+		public override void UpdateEmotionState(){
+			
+		}
 	}
 	#endregion
 	#endregion

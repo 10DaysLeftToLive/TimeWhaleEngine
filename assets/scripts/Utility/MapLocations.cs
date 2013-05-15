@@ -7,20 +7,35 @@ public class MapLocations {
 		get{return _carpenterHouse;}
 	}
 	public static Vector3 CarpenterHouseMiddle{
-		get{return _carpenterHouse * LevelManager.levelYOffSetFromCenter;}
+		get{return new Vector3(_carpenterHouse.x, _carpenterHouse.y + LevelManager.levelYOffSetFromCenter, _carpenterHouse.z);}
 	}
 	public static Vector3 CarpenterHouseOld{
-		get{return _carpenterHouse * LevelManager.levelYOffSetFromCenter * 2;}
+		get{return new Vector3(_carpenterHouse.x, _carpenterHouse.y + (LevelManager.levelYOffSetFromCenter * 2), _carpenterHouse.z);}
 	}
 	
 	static Vector3 _TopOfFirstFloorStairsRight = new Vector3(38.27f, 7.73f, -0.5f);
-	public static Vector3 _TopOfFirstFloorStairsRightYoung{
+	public static Vector3 TopOfFirstFloorStairsRightYoung{
 		get{return _TopOfFirstFloorStairsRight;}
 	}
-	public static Vector3 _TopOfFirstFloorStairsRightMiddle{
-		get{return _TopOfFirstFloorStairsRight * LevelManager.levelYOffSetFromCenter;}
+	
+	public static Vector3 TopOfFirstFloorStairsRightMiddle{
+		get{return new Vector3(_TopOfFirstFloorStairsRight.x, _TopOfFirstFloorStairsRight.y + LevelManager.levelYOffSetFromCenter, _TopOfFirstFloorStairsRight.z);}
 	}
-	public static Vector3 _TopOfFirstFloorStairsRightOld{
-		get{return _TopOfFirstFloorStairsRight * LevelManager.levelYOffSetFromCenter * 2;}
+	
+	public static Vector3 TopOfFirstFloorStairsRightOld{
+		get{return new Vector3(_TopOfFirstFloorStairsRight.x, _TopOfFirstFloorStairsRight.y + (LevelManager.levelYOffSetFromCenter * 2), _TopOfFirstFloorStairsRight.z);}
+	}
+	
+	static Vector3 _baseOfPier = new Vector3(69.0f, -3.5f, -0.5f);
+	public static Vector3 BaseOfPierYoung{
+		get{return _baseOfPier;}
+	}
+	
+	public static Vector3 BaseOfPierMiddle{
+		get{return new Vector3(_baseOfPier.x, _baseOfPier.y + LevelManager.levelYOffSetFromCenter, _baseOfPier.z);}
+	}
+	
+	public static Vector3 BaseOfPierOld{
+		get{return new Vector3(_baseOfPier.x, _baseOfPier.y + (LevelManager.levelYOffSetFromCenter * 2), _baseOfPier.z);}
 	}
 }
