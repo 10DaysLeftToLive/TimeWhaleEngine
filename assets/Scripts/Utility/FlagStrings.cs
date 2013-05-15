@@ -55,4 +55,8 @@ public static class FlagStrings {
 	public static string NoteNoMarriage = "Note No Marriage";
 
 	#endregion
+	
+	#region Sea Captain
+	public static string StolenFishingRod = StringsItem.FishingRod;
+	#endregion
 }
