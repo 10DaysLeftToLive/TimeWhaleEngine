@@ -5,28 +5,11 @@ using SmoothMoves;
 [RequireComponent(typeof(CharacterController))]
 public class Player : Character {
 	public float walkSpeed = 2.0f;
-	public float gravity = 20.0f;
-	public float pushPower = 2.0f;
-	
-	public CollisionFlags lastReturnedCollisionFlags;
-	
-	public bool isAffectedByGravity = false;
-	
-	public bool isTouchingGrowableUp = false;
 	
 	public ParticleSystem touchParticleEmitter;
 	
 	public Capsule smallHitBox;
 	public Capsule bigHitbox;
-	
-	public GameObject CurrentTouchedGrowableUp{
-		get{return currentTouchedGrowableUp;}
-	}
-	private GameObject currentTouchedGrowableUp;
-
-	public bool isTouchingTrigger = false;
-	
-	public float currentVerticalSpeed = 0.0f;
 	
 	public NPC npcTalkingWith;
 	
@@ -133,107 +116,6 @@ public class Player : Character {
 		EnterState(new IdleState(this));
 	}
 	
-	// Update is called once per frame
-	protected override void UpdateObject () {		
-		if(isAffectedByGravity){
-			ApplyGravity();
-		}
-		base.UpdateObject();
-	}
-	
-	public void OnCollisionEnter(Collision collision) {
-		//if (collision.collider == Strings.tag_Ground)
-			Debug.Log("hit ground at collision");// + collision.collider);
-	}
-	
-	public void OnCollisionStay(Collision collision){
-		Debug.Log("hit ground at collision");
-	}
-	
-	public void OnTriggerEnter(Collider trigger) {		
-		isTouchingTrigger = CheckTriggers(trigger);
-	}
-	
-	public void OnTriggerStay(Collider trigger){
-		isTouchingTrigger = CheckTriggers(trigger);
-	}
-	
-	protected bool CheckTriggers(Collider trigger){
-		if(IsClimbable(trigger)){
-			isAffectedByGravity = false;
-			//animationData.Play(Strings.animation_climb);
-
-            if(SoundManager.instance.ClimbLadderSFX.timeSamples == 0){
-                SoundManager.instance.ClimbLadderSFX.Play();
-            }
-			return true;
-		}
-		else if(trigger.tag == Strings.tag_GrowableUp){
-			SetTouchingGrowableUp(true, trigger.gameObject);	
-			return true;
-		}else if (trigger.tag == Strings.tag_Ground){
-			Debug.Log("hit ground at trigger");
-		}
-		return false;
-	}
-	
-	public void OnTriggerExit(Collider trigger){
-		if(IsClimbable(trigger)){
-			//isAffectedByGravity = true;
-		}
-		else if(trigger.tag == Strings.tag_GrowableUp){
-			isTouchingGrowableUp = false;	
-		}
-		
-		isTouchingTrigger = false;
-	}
-	
-	private bool IsClimbable(Collider trigger){
-		return ((trigger.CompareTag(Strings.tag_Climbable)) && trigger.renderer.enabled);
-	}
-	
-	protected void OnControllerColliderHit(ControllerColliderHit hit){
-		if(hit.transform.tag == Strings.tag_Pushable && hit.transform.renderer.enabled == true){
-			PushPushableObject(hit);
-		}
-	}
-	
-	protected void PushPushableObject(ControllerColliderHit pushableObject){
-		//NOTE THIS IS POOR PUSHABLE CODE!
-		if(CharacterAgeManager.GetCurrentAgeState() == CharacterAgeState.MIDDLE){
-		    Rigidbody body = pushableObject.collider.attachedRigidbody;
-		
-		    // no rigidbody
-		    if (body == null || body.isKinematic) { return; }
-		
-		    // We dont want to push objects below us
-		    if (pushableObject.moveDirection.y < -0.3) { return; }
-			
-		    Vector3 pushDir = new Vector3 (pushableObject.moveDirection.x, 0, 0); //Can only push along x-axis
-		
-		    body.velocity = pushDir * pushPower;
-		}
-	}
-
-	protected void ApplyGravity(){
-		if (IsGrounded ()){
-			currentVerticalSpeed = 0.0f;
-			isAffectedByGravity = false;
-		}
-		else{
-			currentVerticalSpeed -= gravity * Time.deltaTime;	
-		}
-	}
-	
-	public bool IsGrounded () {
-		return (lastReturnedCollisionFlags & CollisionFlags.CollidedBelow) != 0;
-	}
-	
-	void SetTouchingGrowableUp(bool flag, GameObject growableUpTransform){
-		isTouchingGrowableUp = flag;
-		currentTouchedGrowableUp = growableUpTransform;
-	}
-	
 	public void ChangeAge(CharacterAge newAge, CharacterAge previousAge){
 		if (IsInteracting()){
 			CloseInteraction();	
@@ -267,7 +149,6 @@ public class Player : Character {
 		Inventory.PickUpObject(toPickUp);
 	}
 	
-	
 	public void DisableHeldItem(){
 		Inventory.DisableHeldItem();
 	}
@@ -294,7 +175,6 @@ public class Player : Character {
 	}
 	
 	private void CloseInteraction(){
-		Debug.Log("Leaving interaction");
 		GUIManager.Instance.CloseInteractionMenu();
 	}
 	

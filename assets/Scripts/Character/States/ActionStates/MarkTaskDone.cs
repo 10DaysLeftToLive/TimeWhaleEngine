@@ -14,16 +14,15 @@ public class MarkTaskDone : AbstractState {
 	}
 	
 	public override void OnEnter(){
-		Debug.Log(character.name + ": MarkTaskDone Enter");
+//		Debug.Log(character.name + ": MarkTaskDone Enter");
 		if (character is NPC) {
 			((NPC)character).NextTask();
 		} else {
-			Debug.LogWarning("Putting player in a mark task done state.");
 			character.EnterState(new IdleState(character));
 		}
 	}
 	
 	public override void OnExit(){
-		Debug.Log(character.name + ": MarkTaskDone Exit");
+		//Debug.Log(character.name + ": MarkTaskDone Exit");
 	}
 }

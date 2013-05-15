@@ -128,7 +128,6 @@ public class Schedule {
 		if (HasTask()){
 			current.Decrement(timeSinceLastTick);
 			if (current.IsComplete()){
-				Debug.Log("Completed task");
 				current.Finish();
 				current = null;
 			}

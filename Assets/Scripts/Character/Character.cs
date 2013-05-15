@@ -18,14 +18,9 @@ public abstract class Character : PauseObject {
 	public bool SpriteLookingLeft;
 	protected State currentState;
 	private Inventory inventory;
-	private GrabableObject attachedObject = null;
 	
 	public BoneAnimation animationData;
 	#endregion
-	
-	public GrabableObject AttachedObject {
-		get {return (attachedObject);}
-	}
 	
 	public Inventory Inventory {
 		get { return inventory; }
@@ -90,19 +85,6 @@ public abstract class Character : PauseObject {
 	
 	public void LookLeft(){
 		this.transform.localScale = new Vector3(LEFT, 1, 1);
-	}
-	
-	public void AttachTo(GameObject toAttachTo){
-		
-		// toAttachTo [box]
-		// this.gameObject [person]
-		attachedObject = toAttachTo.GetComponent<GrabableObject>();
-		attachedObject.AttachToPlayer(this.gameObject);
-	}
-	
-	public void DetachObject() {
-		if (attachedObject != null)
-			DetachFrom(attachedObject.gameObject);
 	}
 	
 	public void DetachFrom(GameObject toDetachFrom){
