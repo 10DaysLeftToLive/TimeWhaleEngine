@@ -97,7 +97,7 @@ public class FarmerFatherMiddle : NPC {
 			//Code for giving the Apple
 			Reaction AppleReaction = new Reaction();
 			AppleReaction.AddAction(new NPCTakeItemAction(toControl));
-			//AppleReaction.AddAction(new NPCCallbackAction(SetSeaShell));
+			//AppleReaction.AddAction(new NPCCallbackAction(UpdateCaptainsLog));
 			AppleReaction.AddAction(new UpdateCurrentTextAction(toControl, "That tasted great.  You'll have to tell me where you got it some time..."));
 			_allItemReactions.Add(StringsItem.Apple,  new DispositionDependentReaction(AppleReaction)); // change item to shell
 			
@@ -110,8 +110,7 @@ public class FarmerFatherMiddle : NPC {
 			
 			//Code for giving the Captains Log
 			Reaction CaptainsLogReaction = new Reaction();
-			//CaptainsLogReaction.AddAction(new NPCTakeItemAction(toControl));
-			//CaptainsLogReaction.AddAction(new NPCCallbackAction(SetSeaShell));
+			CaptainsLogReaction.AddAction(new NPCCallbackAction(UpdateCaptainsLog));
 			CaptainsLogReaction.AddAction(new UpdateCurrentTextAction(toControl, "I wish I had stories like this to give to my daughter earlier...but I guess its okay, she turned out to be very brave anyways..."));
 			_allItemReactions.Add(StringsItem.CaptainsLog,  new DispositionDependentReaction(CaptainsLogReaction)); // change item to shell
 			
@@ -162,6 +161,9 @@ public class FarmerFatherMiddle : NPC {
 			YouHaveItReaction.AddAction(new NPCCallbackAction(UpdateYouHaveIt));
 			YouHaveItReaction.AddAction(new UpdateCurrentTextAction(toControl, "It's going poorly...I just can never find the strength to be a hawk when it comes to business..."));
 			
+		}
+		public void UpdateCaptainsLog(){
+			FlagManager.instance.SetFlag(FlagStrings.ConversationInMiddleFather);	
 		}
 		public void UpdateMarriage(){
 			/*if (MarriageFlag == false){

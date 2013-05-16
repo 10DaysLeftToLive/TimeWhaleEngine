@@ -11,7 +11,9 @@ public class FarmerFatherYoung : NPC {
 	}
 	
 	protected override void SetFlagReactions(){
-		
+		Reaction NewDialogueReaction = new Reaction();
+		NewDialogueReaction.AddAction (new NPCCallbackAction(this.currentEmotion.UpdateEmotionState));
+		flagReactions.Add(FlagStrings.ConversationInMiddleFather, NewDialogueReaction);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
@@ -149,7 +151,19 @@ public class FarmerFatherYoung : NPC {
 			NoStoriesSillyReaction.AddAction(new NPCCallbackAction(UpdateNoStoriesSilly));
 			NoStoriesSillyReaction.AddAction(new UpdateCurrentTextAction(toControl, "I...well...if you find any stories just bring them to me..."));		
 			#endregion
-		
+			
+			AlreadyBraveChoice = new Choice ("She's already brave", "I...I guess you're right.  Maybe my daughter doesn't need stories, maybe she is already brave...thanks for your help!");
+			AlreadyBraveReaction = new Reaction();
+			AlreadyBraveReaction.AddAction(new NPCCallbackAction(UpdateAlreadyBrave));
+			AlreadyBraveReaction.AddAction(new UpdateCurrentTextAction(toControl, "I...I guess you're right.  Maybe my daughter doesn't need stories, maybe she is already brave...thanks for your help!"));
+		}
+		public void UpdateConversationOptions(){
+				
+		}
+		public void UpdateAlreadyBrave(){
+			_allChoiceReactions.Clear();
+			GUIManager.Instance.RefreshInteraction();
+			SetDefaultText("Thanks for your help!  I'm proud of my daughter");
 		}
 		#region UpdatePathOne
 		public void UpdateStandUp(){
@@ -211,7 +225,7 @@ public class FarmerFatherYoung : NPC {
 		}
 		#endregion
 		public override void UpdateEmotionState(){
-			
+			_allChoiceReactions.Add(AlreadyBraveChoice, new DispositionDependentReaction(AlreadyBraveReaction));
 		}
 	
 	}
