@@ -37,7 +37,7 @@ public class WayPoints : MonoBehaviour {
 		if (this.id == 0 && !initialized){
 			Graph.Initialize();	
 		}
-		if ((this.id == 0)&& !setupWayPoints && initialized){
+		if ((this.id == 0)&& !setupWayPoints && initialized && pointAge == Age.young){
 			Graph.StartGraph(this.gameObject);
 			WayPointPath.Initialize();
 			setupWayPoints = true;
