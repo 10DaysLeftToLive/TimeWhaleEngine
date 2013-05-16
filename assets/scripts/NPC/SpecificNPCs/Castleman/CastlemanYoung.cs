@@ -15,7 +15,7 @@ public class CastlemanYoung : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "|||| Holy Camole Batman!"));
+		return (new InitialEmotionState(this, "Hey ..."));
 	}
 	
 	protected override Schedule GetSchedule(){
