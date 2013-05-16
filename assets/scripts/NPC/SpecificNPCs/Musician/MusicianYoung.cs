@@ -15,7 +15,7 @@ public class MusicianYoung : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "|||| Let me play you the song of my people."));
+		return (new InitialEmotionState(this, "Hi there! I'm sorry I can't play you a tune, my strings broke this morning."));
 	}
 	
 	protected override Schedule GetSchedule(){

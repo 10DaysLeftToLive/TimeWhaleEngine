@@ -20,7 +20,7 @@ public class SeaCaptainMiddle : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "YARRRRRR MATEY!"));
+		return (new InitialEmotionState(this, "Ooooy! Good winds we got fer sailing. A pity me ship is in disrepair, but in the meantime there's treasure to be found!"));
 	}
 	
 	protected override Schedule GetSchedule(){

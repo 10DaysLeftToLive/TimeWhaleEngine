@@ -17,7 +17,7 @@ public class LighthouseGirlYoung : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		initialState = new InitialEmotionState(this, "So my mom wants me to learn how to cook...but I'm gonna grow up to be a great warrrio, not a cook! Get some kind of cooked food and I'll rewards you!");
+		initialState = new InitialEmotionState(this, "So my mom wants me to learn how to cook...but I'm gonna grow up to be a great warrior, not a cook! Get some kind of cooked food and I'll reward you!");
 		jesterState = new JesterEmotionState(this, "Your sibling says you are a court jester! i demand that you tell me stories!");
 		return (initialState);
 	}
