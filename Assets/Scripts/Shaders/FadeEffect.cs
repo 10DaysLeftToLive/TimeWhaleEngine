@@ -27,6 +27,9 @@ public class FadeEffect : ShaderBase {
 	public bool isFading = false;
 	
 	private float _angleDelta = 0; 
+	
+	private Vector2 center = new Vector2(0.5f, 0.5f);
+	
 	/// <summary>
 	/// Initialize:
 	/// Sets the initial color of the plain to a completely transparent color and
@@ -76,6 +79,12 @@ public class FadeEffect : ShaderBase {
 	protected virtual void OnDragUp() {
 	}
 	
+	void Update() {
+		if (!isFading) {
+			fadeTarget.enabled = false;
+		}
+	}
+	
 	void OnRenderImage(RenderTexture source, RenderTexture destination) {
 		RenderDistortion (material, source, destination);
 	}
@@ -92,7 +101,9 @@ public class FadeEffect : ShaderBase {
         	FadeIn();
 		}
 		else {
-			material.SetVector("_FrequencyAmplitudeAngleInterp", new Vector4(0f, 0f, 0f, 0f)); 
+			material.SetVector("_CenterFrequencyAmplitude", new Vector4(0f, 0f, 0f, 0f));
+			material.SetFloat("_Angle", 0f);
+			material.SetFloat("_InterpolationFactor", 0f);
 			material.SetTexture("_FadeInTex", fadeTarget.targetTexture);	
 		}
 		
@@ -105,8 +116,11 @@ public class FadeEffect : ShaderBase {
 	/// </summary>
 	protected override void FadeIn() 
 	{
-		material.SetVector("_FrequencyAmplitudeAngleInterp", new Vector4(frequency, amplitude, _angleDelta, interpolationFactor)); 
+		material.SetVector("_CenterFrequencyAmplitude", new Vector4(center.x, center.y, frequency, amplitude)); 
+		material.SetFloat("_Angle", Mathf.Deg2Rad * _angleDelta);
+		material.SetFloat("_InterpolationFactor", interpolationFactor);
 		material.SetTexture("_FadeInTex", fadeTarget.targetTexture);
+		
 		_angleDelta += angle;
 		UpdateInterpolationFator();
 	}
@@ -152,7 +166,7 @@ public class FadeEffect : ShaderBase {
 	/// </summary>
 	public virtual void OnFadeInComplete() {
 		isFading = false;
-		fadeTarget.enabled = false;
+		//fadeTarget.enabled = false;
 		EventManager.instance.RiseOnPauseToggleEvent(new PauseStateArgs(false));
 	}
 

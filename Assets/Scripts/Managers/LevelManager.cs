@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class LevelManager : MonoBehaviour {
 	public Player playerCharacter;
-	public AgeTransitionShader fadeShader;
 	private ParallaxManager parallaxManager;
 	
 	public TimeSwitchObject[] timeSwitchObjects;
