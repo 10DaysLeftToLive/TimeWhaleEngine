@@ -5,8 +5,6 @@ using SmoothMoves;
 
 [RequireComponent (typeof(Camera))]
 public class FadeEffect : ShaderBase {
-	//TODO: Optimize the Update Function so that it is not called every tick
-	//Solution:? NGUI's UpdateManager
 	
 	//Drag distance threshold needed to perform a fade
 	public int minimumDragDistance = 5;
@@ -26,7 +24,7 @@ public class FadeEffect : ShaderBase {
 	
 	//public Camera fadeCamera = null;
 	
-	public RenderTexture test = null;
+	public Camera fadeTarget = null;
 	
 	//A flag that determines if our plane is fading in/out in front of the camera.
 	//NOTE:Will get rid of this only temporary until we optimize.
@@ -42,6 +40,10 @@ public class FadeEffect : ShaderBase {
 		if (fadeDuration <= 0) {
 			fadeDuration = 5;
 		}
+		if (fadeTarget == null) {
+			Debug.LogWarning("Fade Camera not set in FadeEffect.cs under " + Camera.main);
+		}
+		
 		EventManager.instance.mOnDragEvent += new EventManager.mOnDragDelegate (OnDragEvent);
 	}
 	
@@ -80,10 +82,11 @@ public class FadeEffect : ShaderBase {
 	}
 	
 	void OnRenderImage(RenderTexture source, RenderTexture destination) {
-		RenderDistortion (material, source, destination, null, _angleDelta, center);
+		if (
+		RenderDistortion (material, source, destination, _angleDelta, center);
 	}
 	
-	protected void RenderDistortion(Material material, RenderTexture source, RenderTexture fadeInTexture, RenderTexture destination, float angle, Vector2 center) {
+	protected void RenderDistortion(Material material, RenderTexture source, RenderTexture destination, float angle, Vector2 center) {
 		bool invertY = source.texelSize.y < 0.0f;
         if (invertY)
         {
@@ -94,7 +97,7 @@ public class FadeEffect : ShaderBase {
         material.SetVector("_CenterFrequencyAmplitude", new Vector4(center.x, center.y, frequency, amplitude)); 
         material.SetFloat("_Angle", angle * Mathf.Deg2Rad);
 		material.SetFloat("_InterpolationFactor", interpolationFactor);
-		material.SetTexture("_FadeInTex", test);
+		material.SetTexture("_FadeInTex", fadeTarget.targetTexture);
         Graphics.Blit(source, destination, material);
 	}
 
@@ -156,6 +159,7 @@ public class FadeEffect : ShaderBase {
 	{
 		isFading = true;
 		interpolationFactor = 0;
+		fadeTarget.enabled = true;
 		//fadeCamera.transform.position = fadeInLocation;
 		//For optimization later
 		//UpdateManager.AddUpdate(this, 0,FadeUpdate); 
@@ -167,6 +171,7 @@ public class FadeEffect : ShaderBase {
 	/// </summary>
 	public virtual void OnFadeInComplete() {
 		isFading = false;
+		fadeTarget.enabled = false;
 		EventManager.instance.RiseOnPauseToggleEvent(new PauseStateArgs(false));
 	}
 
