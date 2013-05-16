@@ -3,50 +3,45 @@ using System.Collections;
 
 using SmoothMoves;
 
-public class FadeShader : ShaderBase {
+[RequireComponent (typeof(Camera))]
+public class FadeEffect : ShaderBase {
 	//TODO: Optimize the Update Function so that it is not called every tick
 	//Solution:? NGUI's UpdateManager
 	
 	//Drag distance threshold needed to perform a fade
-	public int minimumDragDistance;
-	
-	//Location of the FadePlane if it is not fading
-	public Vector2 idlePosition; 
-	
-	//Denotes the color of the fade
-	public Color fadeColor; 
+	public int minimumDragDistance = 5;
 	
 	//Duration of the fade in and out in ticks
-	public float fadeDuration; 
+	public float fadeDuration = 5; 
 	
-	//The game's camera's position
-	public CameraController cameraController;
+	public float frequency = 6;
+	
+	public float amplitude = 0.4f;
+	
+	public float angle = 20;
+	
+	public Vector2 center = new Vector2(0.4f, 0.4f);
+	
+	public Vector3 fadeInLocation = new Vector3(0f,0f,0f);
+	
+	//public Camera fadeCamera = null;
+	
+	public RenderTexture test = null;
 	
 	//A flag that determines if our plane is fading in/out in front of the camera.
 	//NOTE:Will get rid of this only temporary until we optimize.
-	protected bool isFading = false;
-
-	//Flag that is denotes if the FadePlane should fade in or out.
-	private bool fade = true;
+	public bool isFading = false;
 	
-	private struct FadeShaderConstants {
-	
-		public const int STOPFADE_THRESHOLD = 2;
-		
-		public const float FADEPLANEOFFSET = 0.3f;
-		
-		public const float HIDE_Z_LOC = 1f;
-		
-	}
-	
+	private float _angleDelta = 0; 
 	/// <summary>
 	/// Initialize:
 	/// Sets the initial color of the plain to a completely transparent color and
 	/// moves the FadePlane offscreen.
 	/// </summary>
 	protected override void Initialize() {
-		renderer.material.color = Color.clear;
-		transform.position = new Vector3(idlePosition.x, idlePosition.y, FadeShaderConstants.HIDE_Z_LOC);
+		if (fadeDuration <= 0) {
+			fadeDuration = 5;
+		}
 		EventManager.instance.mOnDragEvent += new EventManager.mOnDragDelegate (OnDragEvent);
 	}
 	
@@ -83,6 +78,25 @@ public class FadeShader : ShaderBase {
 	/// </summary>
 	protected virtual void OnDragUp() {
 	}
+	
+	void OnRenderImage(RenderTexture source, RenderTexture destination) {
+		RenderDistortion (material, source, destination, null, _angleDelta, center);
+	}
+	
+	protected void RenderDistortion(Material material, RenderTexture source, RenderTexture fadeInTexture, RenderTexture destination, float angle, Vector2 center) {
+		bool invertY = source.texelSize.y < 0.0f;
+        if (invertY)
+        {
+            center.y = 1.0f - center.y;
+            angle = -angle;
+        }
+		
+        material.SetVector("_CenterFrequencyAmplitude", new Vector4(center.x, center.y, frequency, amplitude)); 
+        material.SetFloat("_Angle", angle * Mathf.Deg2Rad);
+		material.SetFloat("_InterpolationFactor", interpolationFactor);
+		material.SetTexture("_FadeInTex", test);
+        Graphics.Blit(source, destination, material);
+	}
 
 	/// <summary>
 	/// Update:
@@ -93,26 +107,14 @@ public class FadeShader : ShaderBase {
 	void Update () {
 		if (isFading) {
 			//Moves the FadePlane to the front of the screen.
-			Vector3 cameraPos = cameraController.transform.position;
-			transform.position = new Vector3(cameraPos.x, cameraPos.y, cameraPos.z + FadeShaderConstants.FADEPLANEOFFSET);
 			
 			//Color fades in and out.
-			if (fade) {
-				FadeIn();
-			}
-			else {
-				FadeOut();
-			}
+			FadeIn();
 			
 			//Increments the interpolation factor based on fade speed or resets it to zero.
 			UpdateInterpolationFator();
-			
-			//Stops the fade when the FadePlane has faded in and out once.
-			if (fadeCycle == FadeShaderConstants.STOPFADE_THRESHOLD) 
-			{
-				StopFade();
-			}
 		}
+
 	}
 	
 	/// <summary>
@@ -121,21 +123,9 @@ public class FadeShader : ShaderBase {
 	/// </summary>
 	protected override void FadeIn() 
 	{
-		renderer.material.color = 
-			Color.Lerp(Color.clear, fadeColor, interpolationFactor);
+		_angleDelta += angle;
 	}
-	
-	/// <summary>
-	/// FadeOut;
-	/// Fades out the denoted fade color to a transparent color.
-	/// </summary>		
-	protected override void FadeOut()
-	{
-		renderer.material.color = 
-			Color.Lerp(fadeColor, Color.clear, interpolationFactor);
-	}
-	
-	
+
 	/// <summary>
 	/// UpdateInterpolationFator:
 	/// Increments the interpolation factor based on half the fade speed.  Resets the interpolation
@@ -144,23 +134,12 @@ public class FadeShader : ShaderBase {
 	/// </summary>
 	protected virtual void UpdateInterpolationFator() 
 	{
+		//Debug.Log ("interpolationFactor: " + interpolationFactor);
 		if (interpolationFactor < 1) {
-			interpolationFactor += Time.deltaTime / (fadeDuration/2);
+			interpolationFactor += Time.deltaTime / fadeDuration;
 		}
 		else {
-			interpolationFactor = 0;
-			//Pauses the game until the fade is done.
-			EventManager.instance.RiseOnPauseToggleEvent(new PauseStateArgs(fade));
-			
-			//Switch fade in to fade out.
-			fade = fade ? false : true;
-			fadeCycle++;
-			
-			//We shift the age after the fade in is done.
-			//This way the change in age is completely hidden by the fade.
-			if (fadeCycle == 1) {
-				OnFadeInComplete();
-			}
+			OnFadeInComplete();
 		}
 	}
 	
@@ -175,37 +154,20 @@ public class FadeShader : ShaderBase {
 	/// </param>
 	public virtual void DoFade() 
 	{
-		if (isFading) {
-			renderer.material.color = Color.clear;
-		}
 		isFading = true;
-		fade = true;
 		interpolationFactor = 0;
-		fadeCycle = 0;
-		
+		//fadeCamera.transform.position = fadeInLocation;
 		//For optimization later
 		//UpdateManager.AddUpdate(this, 0,FadeUpdate); 
-	}
-	
-	/// <summary>
-	/// StopFade:
-	/// Stops the fade and moves the FadePlane to the idle position.
-	/// </summary>
-	protected virtual void StopFade()
-	{
-		isFading = false;
-		transform.position = new Vector3(idlePosition.x, idlePosition.y, FadeShaderConstants.HIDE_Z_LOC);
-		fadeCycle = 0;
-		
-		//For optimization later
-		//UpdateManager.RemoveUpdate(FadeUpdate);
+		EventManager.instance.RiseOnPauseToggleEvent(new PauseStateArgs(true));
 	}
 	
 	/// <summary>
 	/// Raises the fade in complete event.
 	/// </summary>
 	public virtual void OnFadeInComplete() {
-		
+		isFading = false;
+		EventManager.instance.RiseOnPauseToggleEvent(new PauseStateArgs(false));
 	}
 
 }

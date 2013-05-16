@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using SmoothMoves;
 
-public class AgeTransitionShader : FadeShader {
+public class AgeTransitionShader : FadeEffect {
 	
 	//Reference to the LevelManager.
 	public LevelManager levelManager;
