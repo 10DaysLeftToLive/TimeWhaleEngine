@@ -172,7 +172,7 @@ public class LevelManager : MonoBehaviour {
 			case CharacterGender.FEMALE:
 				genderAnimationInUse = genderAnimations[(int)CharacterGender.FEMALE];
 				break;		
-		}	
+		}
 	}
 	
 	private void SetUpAges(){

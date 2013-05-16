@@ -18,11 +18,7 @@ public class FadeEffect : ShaderBase {
 	
 	public float angle = 20;
 	
-	public Vector2 center = new Vector2(0.4f, 0.4f);
-	
 	public Vector3 fadeInLocation = new Vector3(0f,0f,0f);
-	
-	//public Camera fadeCamera = null;
 	
 	public Camera fadeTarget = null;
 	
@@ -43,7 +39,6 @@ public class FadeEffect : ShaderBase {
 		if (fadeTarget == null) {
 			Debug.LogWarning("Fade Camera not set in FadeEffect.cs under " + Camera.main);
 		}
-		
 		EventManager.instance.mOnDragEvent += new EventManager.mOnDragDelegate (OnDragEvent);
 	}
 	
@@ -82,42 +77,26 @@ public class FadeEffect : ShaderBase {
 	}
 	
 	void OnRenderImage(RenderTexture source, RenderTexture destination) {
-		if (
-		RenderDistortion (material, source, destination, _angleDelta, center);
+		RenderDistortion (material, source, destination);
 	}
 	
-	protected void RenderDistortion(Material material, RenderTexture source, RenderTexture destination, float angle, Vector2 center) {
+	protected void RenderDistortion(Material material, RenderTexture source, RenderTexture destination) {
+		
 		bool invertY = source.texelSize.y < 0.0f;
         if (invertY)
         {
-            center.y = 1.0f - center.y;
             angle = -angle;
         }
 		
-        material.SetVector("_CenterFrequencyAmplitude", new Vector4(center.x, center.y, frequency, amplitude)); 
-        material.SetFloat("_Angle", angle * Mathf.Deg2Rad);
-		material.SetFloat("_InterpolationFactor", interpolationFactor);
-		material.SetTexture("_FadeInTex", fadeTarget.targetTexture);
-        Graphics.Blit(source, destination, material);
-	}
-
-	/// <summary>
-	/// Update:
-	/// Does nothing unless the FadePlane needs to fade in or out.
-	/// Fades the FadePlane in and out while interpolating the colors from a transparent
-	/// color to the fadeColor based on half the fade speed.
-	/// </summary>
-	void Update () {
 		if (isFading) {
-			//Moves the FadePlane to the front of the screen.
-			
-			//Color fades in and out.
-			FadeIn();
-			
-			//Increments the interpolation factor based on fade speed or resets it to zero.
-			UpdateInterpolationFator();
+        	FadeIn();
 		}
-
+		else {
+			material.SetVector("_FrequencyAmplitudeAngleInterp", new Vector4(0f, 0f, 0f, 0f)); 
+			material.SetTexture("_FadeInTex", fadeTarget.targetTexture);	
+		}
+		
+        Graphics.Blit(source, destination, material);
 	}
 	
 	/// <summary>
@@ -126,7 +105,10 @@ public class FadeEffect : ShaderBase {
 	/// </summary>
 	protected override void FadeIn() 
 	{
+		material.SetVector("_FrequencyAmplitudeAngleInterp", new Vector4(frequency, amplitude, _angleDelta, interpolationFactor)); 
+		material.SetTexture("_FadeInTex", fadeTarget.targetTexture);
 		_angleDelta += angle;
+		UpdateInterpolationFator();
 	}
 
 	/// <summary>
@@ -161,8 +143,7 @@ public class FadeEffect : ShaderBase {
 		interpolationFactor = 0;
 		fadeTarget.enabled = true;
 		//fadeCamera.transform.position = fadeInLocation;
-		//For optimization later
-		//UpdateManager.AddUpdate(this, 0,FadeUpdate); 
+
 		EventManager.instance.RiseOnPauseToggleEvent(new PauseStateArgs(true));
 	}
 	

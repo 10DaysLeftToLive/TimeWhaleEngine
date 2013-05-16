@@ -52,7 +52,7 @@ public class AgeTransitionShader : FadeEffect {
 	/// <param name='ageShiftAction'>
 	/// Age shift action.
 	/// </param>
-	public void DoAgeShift(string ageShiftAction) {
+	private void DoAgeShift(string ageShiftAction) {
 		this.ageShiftAction = ageShiftAction;
 	}
 	
@@ -61,10 +61,13 @@ public class AgeTransitionShader : FadeEffect {
 	/// Transitions up and down ages when the fade color covers the screen.
 	/// </summary>
 	public override void OnFadeInComplete() {
+		base.OnFadeInComplete();
 		if (ageShiftAction.Equals(Strings.ButtonAgeShiftDown)) {
+			Debug.Log ("AGE SHIFTED DOWN");
 			levelManager.ShiftDownAge();
 		}
 		else {
+			Debug.Log ("AGE SHIFTED UP");
 			levelManager.ShiftUpAge();
 		}
 	}

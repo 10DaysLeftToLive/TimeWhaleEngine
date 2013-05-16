@@ -23,9 +23,7 @@ SubShader
 		uniform float4 _MainTex_ST;
 	
 		uniform float4 _MainTex_TexelSize;
-		uniform float _Angle;
-		uniform float4 _CenterFrequencyAmplitude;
-		uniform float _InterpolationFactor;
+		uniform float4 _FrequencyAmplitudeAngleInterp;
 	
 		struct v2f {
 			float4 pos : POSITION;
@@ -37,9 +35,8 @@ SubShader
 		{
 			v2f o;
 			o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
-			float2 uv = v.texcoord.xy - _CenterFrequencyAmplitude.xy;
-			o.uv = TRANSFORM_TEX(uv, _MainTex); //MultiplyUV (UNITY_MATRIX_TEXTURE0, uv);
-			o.uvOrig = uv;
+			o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
+			o.uvOrig = v.texcoord;
 			return o;
 		}
 	
@@ -47,24 +44,21 @@ SubShader
 		{
 			float pi = 3.14159265358979323846264338327;
 			float2 offset = i.uvOrig;
-			//float4 uvFadeIn = tex2D(_FadeInTex, i.uvOrig);
-			//TODO: Need frequency and amplitude coefficients
+
 			float2 uv;
-			offset.x = _CenterFrequencyAmplitude.w * sin(_CenterFrequencyAmplitude.z * i.uvOrig.y * pi + _Angle);
+			offset.x = _FrequencyAmplitudeAngleInterp.y * 
+				sin(_FrequencyAmplitudeAngleInterp.x * i.uvOrig.y * pi + _FrequencyAmplitudeAngleInterp.z);
 			uv.x = i.uvOrig.x + i.uvOrig.x*(offset.x);
 			uv.y = i.uvOrig.y;
 			
-			uv += _CenterFrequencyAmplitude.xy;
-			i.uvOrig += _CenterFrequencyAmplitude.xy;
 			float4 oldColor = tex2D(_MainTex, uv);
-			float4 newColor = tex2D(_FadeInTex, i.uvOrig );
-			
-			newColor.rgb = lerp(oldColor.rgb, newColor.rgb, _InterpolationFactor);
-			return newColor;
+			float4 newColor = tex2D(_FadeInTex, i.uvOrig);
+			return lerp(oldColor, float4(newColor.rgb, 0f), _FrequencyAmplitudeAngleInterp.w);
 		}
 		ENDCG
 	}
+
 	
 }
-	Fallback "Diffuse"
+	//Fallback off
 }
