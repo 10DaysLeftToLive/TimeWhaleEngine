@@ -105,17 +105,33 @@ public class MoveState : AbstractState {
     
     private bool CalculatePath(){
         int mask = (1 << 9);
-        RaycastHit hit;
+        RaycastHit hitDown, hitUp;
+		float distance = 999;
+		Vector3 hitPos = Vector3.zero;
         
-        if (Physics.Raycast(_goal, Vector3.down , out hit, 10, mask)) {
-            Vector3 hitPos = hit.point;
-            hitPos.y += character.transform.localScale.y/2;
-            
-            if (PathFinding.GetPathForPoints(character.transform.position, hitPos, character.transform.localScale.y/2)){
-                _pathFollowing = PathFinding.GetPath();
-                return (true);
-            }
-        } return (false);
+        if (Physics.Raycast(_goal, Vector3.down , out hitDown, 10, mask)) {
+			if (hitDown.distance < distance){
+				distance = hitDown.distance;
+				hitPos = hitDown.point;
+            	hitPos.y += character.transform.localScale.y/2;
+			}
+        } 
+		if (Physics.Raycast(_goal, Vector3.up , out hitUp, 10, mask)) {
+			if (hitUp.distance < distance){
+				distance = hitUp.distance;
+				hitPos = hitUp.point;
+           		hitPos.y += character.transform.localScale.y/2;
+			}
+        }
+		
+		if (distance != 999){
+			if (PathFinding.GetPathForPoints(character.transform.position, hitPos, character.transform.localScale.y/2)){
+	                _pathFollowing = PathFinding.GetPath();
+	                return (true);
+	        }
+		}
+		
+		return (false);
     }
     
     protected virtual bool PathSearch(Vector3 pos, Vector3 hitPos, float height){
