@@ -11,7 +11,7 @@ public class ChatMenu : GUIControl {
 	private List<ChatInfo> _currentChats;
 	
 	private static float CHATWIDTH = .2f;
-	private static float CHATHEIGHT = .2f;
+	private static float CHATHEIGHT = .1f;
 	
 	public float distAboveHead = 34f;
 	public float distToRightOfHead = 60f;
@@ -67,7 +67,6 @@ public class ChatMenu : GUIControl {
 		screenPos.y -= ScreenSetup.horizontalBarHeight;
 		Vector2 percentageConvertedPos = new Vector2(screenPos.x/ScreenSetup.screenWidth, screenPos.y/ScreenSetup.screenHeight);
 		percentageConvertedPos.y -= CHATHEIGHT;
-		percentageConvertedPos.x -= CHATWIDTH/2;
 
 		return (ScreenRectangle.NewRect(percentageConvertedPos.x, percentageConvertedPos.y, CHATWIDTH, CHATHEIGHT));
 	}
