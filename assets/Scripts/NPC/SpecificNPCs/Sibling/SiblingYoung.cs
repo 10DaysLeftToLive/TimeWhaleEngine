@@ -17,7 +17,7 @@ public class SiblingYoung : NPC {
 	protected override void SetFlagReactions() {
 		#region Race To Carpenter House
 		Reaction raceToCarpenterHouse = new Reaction();
-		raceToCarpenterHouse.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "raceToCarpenterHouseFlag set: Line 19!")));
+		raceToCarpenterHouse.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "Careful, the Carpenter is really mean!")));
 		raceToCarpenterHouse.AddAction(new ShowOneOffChatAction(this, "These are our neighbors!", 2f));
 		raceToCarpenterHouse.AddAction(new NPCAddScheduleAction(this, carpenterRaceSchedule));
 		flagReactions.Add(FlagStrings.RunToCarpenter, raceToCarpenterHouse);
@@ -27,7 +27,7 @@ public class SiblingYoung : NPC {
 		#endregion
 		#region Race To Beach House
 		Reaction raceToBeachHouse = new Reaction();
-		raceToBeachHouse.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "raceToCarpenterHouseFlag set: Line 31!")));
+		raceToBeachHouse.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "The beach is beautiful, isn't it?")));
 		raceToBeachHouse.AddAction(new ShowOneOffChatAction(this, "Let's go to the beach!", 2f));
 		raceToBeachHouse.AddAction(new NPCAddScheduleAction(this, walkToBeach));
 		flagReactions.Add(FlagStrings.RunToBeach, raceToBeachHouse);
@@ -37,7 +37,7 @@ public class SiblingYoung : NPC {
 		#endregion
 		#region Race To Farmer House
 		Reaction raceToFarmerHouse = new Reaction();
-		raceToFarmerHouse.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "raceToCarpenterHouseFlag set: Line 40!")));
+		raceToFarmerHouse.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "Careful, the Farmer is really mean!")));
 		raceToFarmerHouse.AddAction(new ShowOneOffChatAction(this, "Follow me!", 2f));
 		raceToFarmerHouse.AddAction(new NPCAddScheduleAction(this, walkToFarmerHouse));
 		flagReactions.Add(FlagStrings.RunToFarmer, raceToFarmerHouse);
@@ -47,8 +47,8 @@ public class SiblingYoung : NPC {
 		#endregion
 		#region Race To Market House
 		Reaction raceToMarket = new Reaction();
-		raceToMarket.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "raceToCarpenterHouseFlag set: Line 50!")));
-		raceToMarket.AddAction(new ShowOneOffChatAction(this, "Follow me!", 2f));
+		raceToMarket.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "Let's trade something!")));
+		raceToMarket.AddAction(new ShowOneOffChatAction(this, "Let's go to the market!", 2f));
 		raceToMarket.AddAction(new NPCAddScheduleAction(this, walkToMarket));
 		flagReactions.Add(FlagStrings.RunToMarket, raceToMarket);
 		
@@ -57,8 +57,8 @@ public class SiblingYoung : NPC {
 		#endregion	
 		#region Race To Windmill
 		Reaction raceToWindmill = new Reaction();
-		raceToWindmill.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "raceToCarpenterHouseFlag set: Line 60!")));
-		raceToWindmill.AddAction(new ShowOneOffChatAction(this, "Follow me!", 2f));
+		raceToWindmill.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "Aww, no music today.")));
+		raceToWindmill.AddAction(new ShowOneOffChatAction(this, "Want to here some music? Over here!", 2f));
 		raceToWindmill.AddAction(new NPCAddScheduleAction(this, walkToWindmill));
 		flagReactions.Add(FlagStrings.RunToWindmill, raceToWindmill);
 		
@@ -67,8 +67,8 @@ public class SiblingYoung : NPC {
 		#endregion
 		#region Race To Reflection Tree
 		Reaction raceToReflectionTree = new Reaction();
-		raceToReflectionTree.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "raceToReflectionTree set: Line 70!")));
-		raceToReflectionTree.AddAction(new ShowOneOffChatAction(this, "Follow me!", 2f));
+		raceToReflectionTree.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "This is the best place on the island! I always come up here!")));
+		raceToReflectionTree.AddAction(new ShowOneOffChatAction(this, "I'm going to beat you!", 2f));
 		raceToReflectionTree.AddAction(new NPCAddScheduleAction(this, walkToReflectionTree));
 		flagReactions.Add(FlagStrings.RunToReflectionTree, raceToReflectionTree);
 		
@@ -77,8 +77,8 @@ public class SiblingYoung : NPC {
 		#endregion
 		#region Race To Home
 		Reaction raceToHome = new Reaction();
-		raceToHome.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "raceToHome set: Line 80!")));
-		raceToHome.AddAction(new ShowOneOffChatAction(this, "Follow me!", 2f));
+		raceToHome.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "Time to go home!")));
+		raceToHome.AddAction(new ShowOneOffChatAction(this, "Race you home!", 2f));
 		raceToHome.AddAction(new NPCAddScheduleAction(this, walkToHome));
 		flagReactions.Add(FlagStrings.RunToHome, raceToHome);
 		
@@ -87,7 +87,7 @@ public class SiblingYoung : NPC {
 		#endregion
 		#region Get in Trouble
 		Reaction getInTrouble = new Reaction();
-		getInTrouble.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "getInTrouble set: Line 91!")));
+		getInTrouble.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "Opps, I forgot mom told us not to go up there.")));
 		getInTrouble.AddAction(new ShowOneOffChatAction(this, "Uh Oh!!!", 2f));
 		//getInTrouble.AddAction(new NPCAddScheduleAction(this, walkToHome));
 		flagReactions.Add(FlagStrings.PostSiblingExplore, getInTrouble);

@@ -44,8 +44,8 @@ public class MotherMiddle : NPC {
 	#region EmotionStates
 	#region Initial Emotion State
 	private class InitialEmotionState : EmotionState{
-		string[] stringList = {"random message 1", "random message 2", "random message 3", "random message 4", "random message 5", "random message 6", "random message 7", "new message added 1", "new message added 2"};
-		int stringCounter = 7;
+		string[] stringList = {"Hello dear... how are you?", "The Garden looks ok... but I wish it was more lively.", "*cough* *cough* *cough*", "Want to hear a story?"};
+		int stringCounter = 5;
 		Reaction gaveRose;
 		Reaction gavePendant;
 		Reaction gaveSeashell;

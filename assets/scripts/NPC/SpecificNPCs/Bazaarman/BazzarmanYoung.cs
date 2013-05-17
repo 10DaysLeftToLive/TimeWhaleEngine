@@ -76,13 +76,13 @@ public class BazzarmanYoung : NPC {
 			gaveTools.AddAction(new NPCCallbackSetStringAction(AddTextToList, toControl, "The construction work going on on the other side of the island really appreciated having such fine tools to work with!"));
 			gaveTools.AddAction(new NPCGiveItemAction(toControl,GiveItem)); // gives random item
 			gaveTools.AddAction(new UpdateCurrentTextAction(toControl, "A pleasure doing business with you my friend!"));
-			_allItemReactions.Add(StringsItem.ToolBox,  new DispositionDependentReaction(gaveTools));
+			_allItemReactions.Add(StringsItem.Toolbox,  new DispositionDependentReaction(gaveTools));
 			
 			gaveSeaShell.AddAction(new NPCTakeItemAction(toControl));
 			gaveSeaShell.AddAction(new NPCCallbackSetStringAction(AddTextToList, toControl, "Some mighty fine sea shells you found!"));
 			gaveSeaShell.AddAction(new NPCGiveItemAction(toControl,GiveItem)); // gives random item
 			gaveSeaShell.AddAction(new UpdateCurrentTextAction(toControl, "A pleasure doing business with you my friend!"));
-			_allItemReactions.Add(StringsItem.SeaShell,  new DispositionDependentReaction(gaveSeaShell));
+			_allItemReactions.Add(StringsItem.Seashell,  new DispositionDependentReaction(gaveSeaShell));
 			
 			gaveRose.AddAction(new NPCTakeItemAction(toControl));
 			gaveRose.AddAction(new NPCCallbackSetStringAction(AddTextToList, toControl, "Unfortunately that rose wilted before I could trade it....oh well you win some and lose some..."));
@@ -164,8 +164,8 @@ public class BazzarmanYoung : NPC {
 					}
 					break;
 				case 2: 
-					if (!inventory.Contains(StringsItem.ToolBox)){
-						inventory.Enqueue(StringsItem.ToolBox);
+					if (!inventory.Contains(StringsItem.Toolbox)){
+						inventory.Enqueue(StringsItem.Toolbox);
 						currentInventory++;
 					}
 					break;

@@ -21,7 +21,7 @@ public class FortuneTellerMiddle : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "|||| BOOM BOOM POW"));
+		return (new InitialEmotionState(this, "Have an item for me to appraise?"));
 	}
 	
 	protected override Schedule GetSchedule(){

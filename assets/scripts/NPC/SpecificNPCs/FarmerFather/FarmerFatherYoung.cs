@@ -75,7 +75,7 @@ public class FarmerFatherYoung : NPC {
 			Reaction SeaShellReaction = new Reaction();
 			SeaShellReaction.AddAction(new NPCTakeItemAction(toControl));
 			SeaShellReaction.AddAction(new UpdateCurrentTextAction(toControl, "This looks pretty nice.."));
-			_allItemReactions.Add(StringsItem.SeaShell,  new DispositionDependentReaction(SeaShellReaction));
+			_allItemReactions.Add(StringsItem.Seashell,  new DispositionDependentReaction(SeaShellReaction));
 		
 			//Code for giving the Toy Puzzle
 			Reaction ToyPuzzleReaction = new Reaction();

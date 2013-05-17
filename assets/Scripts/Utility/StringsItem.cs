@@ -3,8 +3,8 @@ public static class StringsItem {
 	public static string AppleCarpenter = "Apple[Carpenter]";
 	public static string FishingRod = "FishingRod";
 	public static string TimeWhalePlushie = "Plushie";
-	public static string ToolBox = "ToolBox";
-	public static string SeaShell = "SeaShell";
+	public static string Toolbox = "Toolbox";
+	public static string Seashell = "Seashell";
 	public static string Rose = "Rose";
 	public static string CaptainsLog = "Captain's Log";
 	public static string ToySword = "Toy Sword";
@@ -16,8 +16,10 @@ public static class StringsItem {
 	public static string Flute = "Flute";
 	public static string Shovel = "Shovel";
 	public static string ApplePie = "Apple Pie";
+	public static string LilySeeds = "Lily Seeds";
 	public static string TulipSeeds = "Tulip Seeds";
 	public static string SunflowerSeeds = "Sunflower Seeds";
 	public static string Pendant = "Pendant";
 	public static string Note = "Note";
+	public static string Harp = "Harp";
 }
