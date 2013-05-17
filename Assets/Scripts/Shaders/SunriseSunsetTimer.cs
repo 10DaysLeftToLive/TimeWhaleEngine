@@ -43,10 +43,7 @@ public class SunriseSunsetTimer : ShaderBase {
 	// Update is called once per frame
 	protected override void UpdateObject () {
 		float currentTime = sunsetTimer.time;
-		if ((currentTime > sunriseStartTime) && (currentTime < sunriseEndTime) && FullDay) {
-			FadeOut();
-		}
-		else if ((currentTime > sunsetStartTime) && (currentTime < sunsetEndTime)) {
+		if ((currentTime > sunsetStartTime) && (currentTime < sunsetEndTime)) {
 			FadeIn();
 		}
 	}
@@ -107,13 +104,13 @@ public class SunriseSunsetTimer : ShaderBase {
 		if (isSunrise) {
 			if (sunriseDuration <= 0) return minBrightness;
 			currentTime = (Time.time - sunriseStartTime) / sunriseDuration;
-			Debug.Log (currentTime);
+			//Debug.Log (currentTime);
 			return Mathf.Lerp(minBrightness, maxBrightness, currentTime);
 		}
 		else {
 			if (sunsetDuration <= 0) return minBrightness;
 			currentTime = (Time.time - sunsetStartTime) / sunsetDuration;
-			Debug.Log (currentTime);
+			//Debug.Log (currentTime);
 			return Mathf.Lerp(maxBrightness, minBrightness, currentTime);
 		}
 	}
@@ -129,10 +126,5 @@ public class SunriseSunsetTimer : ShaderBase {
 		renderer.material.SetFloat("Saturation", ChangeSaturation(true));
 	}
 	
-	protected override void FadeOut() {
-		renderer.material.SetFloat("Hue", ChangeHue(false));
-		renderer.material.SetFloat("Brightness", ChangeBrightness(false));
-		renderer.material.SetFloat("Saturation", ChangeSaturation(false));
-	}
 
 }

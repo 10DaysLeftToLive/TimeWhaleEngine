@@ -112,7 +112,10 @@ public class Player : Character {
 		}
 		
 		AgeSwapMover.instance.ChangeAgePosition(newAge, previousAge);
-
+		
+		Debug.Log ("Move Player Up");
+		//Move Player Up
+		
 		ChangeHitBox(newAge, previousAge);
 		ChangeAnimation(newAge.boneAnimation);
 		Inventory.SwapItemWithCurrentAge(newAge.boneAnimation);

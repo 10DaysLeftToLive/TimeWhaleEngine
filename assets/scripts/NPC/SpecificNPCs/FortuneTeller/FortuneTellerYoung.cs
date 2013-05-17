@@ -15,7 +15,7 @@ public class FortuneTellerYoung : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "|||| BOOM SHACKALACKA"));
+		return (new InitialEmotionState(this, "Hello~ Please return later for your fortune ... and don't forget."));
 	}
 	
 	protected override Schedule GetSchedule(){
