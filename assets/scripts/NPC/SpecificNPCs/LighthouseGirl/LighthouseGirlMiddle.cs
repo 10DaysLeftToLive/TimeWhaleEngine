@@ -131,7 +131,7 @@ public class LighthouseGirlMiddle : NPC {
 			_allChoiceReactions.Clear();
 			_allItemReactions.Clear();
 			
-			_allItemReactions.Add(StringsItem.ToolBox, new DispositionDependentReaction(ToolsReaction));
+			_allItemReactions.Add(StringsItem.Toolbox, new DispositionDependentReaction(ToolsReaction));
 			GUIManager.Instance.RefreshInteraction();
 		}
 		public void YourRightResponse(){
@@ -139,7 +139,7 @@ public class LighthouseGirlMiddle : NPC {
 			if (planStarted){
 				SetDefaultText("Exactly! There's no time worth wasting. Now to get back to our plan and ruin this marriage!");
 				
-				_allItemReactions.Add(StringsItem.ToolBox, new DispositionDependentReaction(ToolsReaction));
+				_allItemReactions.Add(StringsItem.Toolbox, new DispositionDependentReaction(ToolsReaction));
 				GUIManager.Instance.RefreshInteraction();
 				SetDefaultText("Alright! So see if you can get him to cut down my mother's favorite tree?, or steal his tools and give them to me...");
 			}else {
@@ -214,7 +214,7 @@ public class LighthouseGirlMiddle : NPC {
 			_allItemReactions.Clear();
 			
 			_allItemReactions.Add(StringsItem.Note, new DispositionDependentReaction(NoteReaction));
-			_allItemReactions.Add(StringsItem.ToolBox, new DispositionDependentReaction(ToolsReaction));
+			_allItemReactions.Add(StringsItem.Toolbox, new DispositionDependentReaction(ToolsReaction));
 			
 			GUIManager.Instance.RefreshInteraction();
 		}

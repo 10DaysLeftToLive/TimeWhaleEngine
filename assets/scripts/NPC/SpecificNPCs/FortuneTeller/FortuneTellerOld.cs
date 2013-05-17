@@ -15,7 +15,7 @@ public class FortuneTellerOld : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "|||| BOOM GOES THE DYNAMITE!"));
+		return (new InitialEmotionState(this, "Have the choices in your past affected your present and influenced your future?"));
 	}
 	
 	protected override Schedule GetSchedule(){

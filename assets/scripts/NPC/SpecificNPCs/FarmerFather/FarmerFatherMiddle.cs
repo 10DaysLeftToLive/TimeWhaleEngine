@@ -15,7 +15,7 @@ public class FarmerFatherMiddle : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "||||AW SNAPS I'M OLD"));
+		return (new InitialEmotionState(this, "H-hey there. D-do you have some time to listen? If you do, come back later when my wife isn't around.."));
 	}
 	
 	protected override Schedule GetSchedule(){
@@ -85,7 +85,7 @@ public class FarmerFatherMiddle : NPC {
 			SeaShellReaction.AddAction(new NPCTakeItemAction(toControl));
 			//SeaShellReaction.AddAction(new NPCCallbackAction(SetSeaShell));
 			SeaShellReaction.AddAction(new UpdateCurrentTextAction(toControl, "This looks pretty nice.."));
-			_allItemReactions.Add(StringsItem.SeaShell,  new DispositionDependentReaction(SeaShellReaction)); // change item to shell
+			_allItemReactions.Add(StringsItem.Seashell,  new DispositionDependentReaction(SeaShellReaction)); // change item to shell
 		
 			//Code for giving the Toy Puzzle
 			Reaction ToyPuzzleReaction = new Reaction();

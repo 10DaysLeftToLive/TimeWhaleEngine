@@ -72,7 +72,7 @@ public class CastlemanMiddle : NPC {
 			gaveShell.AddAction(new NPCTakeItemAction(toControl));
 			gaveShell.AddAction(new NPCCallbackAction(SetSeaShell));
 			gaveShell.AddAction(new UpdateCurrentTextAction(toControl, "A piece of the wall of my castle!  Perhaps there is hope for my sufferings!"));
-			_allItemReactions.Add(StringsItem.SeaShell,  new DispositionDependentReaction(gaveShell)); // change item to shell
+			_allItemReactions.Add(StringsItem.Seashell,  new DispositionDependentReaction(gaveShell)); // change item to shell
 			
 			//Code for the giving rose interaction.
 			gaveRose = new Reaction();

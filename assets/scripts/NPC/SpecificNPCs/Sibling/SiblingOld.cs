@@ -15,7 +15,7 @@ public class SiblingOld : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "|||| Hey broooooooooooo"));
+		return (new InitialEmotionState(this, "Do you remember the old times and memories? I feel like we were just kids not too long ago..."));
 	}
 	
 	protected override Schedule GetSchedule(){

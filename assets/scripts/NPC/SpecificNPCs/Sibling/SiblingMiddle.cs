@@ -15,7 +15,7 @@ public class SiblingMiddle : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "Eric is working here!"));
+		return (new InitialEmotionState(this, "Hey! Looking good! Want to go somewhere?"));
 	}
 	
 	protected override Schedule GetSchedule(){

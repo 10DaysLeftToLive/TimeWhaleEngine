@@ -15,7 +15,7 @@ public class FarmerMotherMiddle : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "|||| I better bush this dirt off my shoulders."));
+		return (new InitialEmotionState(this, "What do you want? I'm busy."));
 	}
 	
 	protected override Schedule GetSchedule(){
