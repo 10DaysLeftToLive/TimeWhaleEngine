@@ -17,11 +17,6 @@ public class LevelManager : MonoBehaviour {
 	
 	public LevelLoader levelLoader;
 	
-	public enum CharacterGender{
-		MALE = 0,
-		FEMALE = 1,
-	}
-	
 	public PlayerAnimationContainer[] genderAnimations;
 	public CharacterGender playerGender = CharacterGender.MALE;
 	private PlayerAnimationContainer genderAnimationInUse;
@@ -111,7 +106,10 @@ public class LevelManager : MonoBehaviour {
 	
 	public void ShiftUpAge(){		
 		if (CharacterAgeManager.GetCurrentAgeState() != CharacterAgeState.OLD){
-			if(playerCharacter.CheckTransitionPositionSuccess(CharacterAgeManager.GetAgeTransitionUp(), CharacterAgeManager.GetCurrentAge())){
+			CharacterAge newAge = CharacterAgeManager.GetAgeTransitionUp();
+			CharacterAge currentAge = CharacterAgeManager.GetCurrentAge();
+			
+			if (playerCharacter.CheckTransitionPositionSuccess(newAge, currentAge)){
 				CharacterAgeManager.TransistionUp();
 				UpdateTimeSwitchObjects(CharacterAgeManager.GetCurrentAgeState());
 			}
@@ -123,7 +121,10 @@ public class LevelManager : MonoBehaviour {
 	
 	public void ShiftDownAge(){
 		if (CharacterAgeManager.GetCurrentAgeState() != CharacterAgeState.YOUNG){
-			if(playerCharacter.CheckTransitionPositionSuccess(CharacterAgeManager.GetAgeTransitionDown(), CharacterAgeManager.GetCurrentAge())){
+			CharacterAge newAge = CharacterAgeManager.GetAgeTransitionDown();
+			CharacterAge currentAge = CharacterAgeManager.GetCurrentAge();
+			
+			if (playerCharacter.CheckTransitionPositionSuccess(newAge, currentAge)){
 				CharacterAgeManager.TransistionDown();
 				UpdateTimeSwitchObjects(CharacterAgeManager.GetCurrentAgeState());
 			}
@@ -191,3 +192,8 @@ public class LevelManager : MonoBehaviour {
 		SaveDispositions();
 	}
 }
+
+public enum CharacterGender{
+		MALE = 0,
+		FEMALE = 1,
+	}

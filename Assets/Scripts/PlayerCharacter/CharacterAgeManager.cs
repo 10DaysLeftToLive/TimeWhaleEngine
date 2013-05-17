@@ -23,7 +23,7 @@ public class CharacterAgeManager {
 		return GetAgeOf(tempAge);
 	}
 	
-	public static CharacterAge GetAgeTransitionDown(){	
+	public static CharacterAge GetAgeTransitionDown() {	
 		CharacterAgeState tempAge = currentAge;
 			
 		if (currentAge > CharacterAgeState.YOUNG){
@@ -49,7 +49,7 @@ public class CharacterAgeManager {
 		Transition(previousAge, newAge);
 	}
 	
-	public static void TransistionDown(){
+	public static void TransistionDown() {
 		CharacterAge previousAge = GetCurrentAge();
 		
 		if (currentAge > CharacterAgeState.YOUNG){

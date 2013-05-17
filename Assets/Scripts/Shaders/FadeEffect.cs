@@ -18,17 +18,19 @@ public class FadeEffect : ShaderBase {
 	
 	public float angle = 20;
 	
-	public Vector3 fadeInLocation = new Vector3(0f,0f,0f);
-	
-	public Camera fadeTarget = null;
-	
 	//A flag that determines if our plane is fading in/out in front of the camera.
 	//NOTE:Will get rid of this only temporary until we optimize.
 	public bool isFading = false;
 	
+	private bool wasFading = false;
+	
 	private float _angleDelta = 0; 
 	
 	private Vector2 center = new Vector2(0.5f, 0.5f);
+	
+	private Texture2D transitionTexture;
+	
+	private Rect renderQuad;
 	
 	/// <summary>
 	/// Initialize:
@@ -39,9 +41,8 @@ public class FadeEffect : ShaderBase {
 		if (fadeDuration <= 0) {
 			fadeDuration = 5;
 		}
-		if (fadeTarget == null) {
-			Debug.LogWarning("Fade Camera not set in FadeEffect.cs under " + Camera.main);
-		}
+		transitionTexture = new Texture2D(256, 256);
+		renderQuad = new Rect(0, 0, 256, 256);
 		EventManager.instance.mOnDragEvent += new EventManager.mOnDragDelegate (OnDragEvent);
 	}
 	
@@ -70,7 +71,6 @@ public class FadeEffect : ShaderBase {
 	/// Performs actions when the finger has swiped down.
 	/// </summary>
 	protected virtual void OnDragDown() {
-		
 	}
 	
 	/// <summary>
@@ -80,9 +80,7 @@ public class FadeEffect : ShaderBase {
 	}
 	
 	void Update() {
-		if (!isFading) {
-			fadeTarget.enabled = false;
-		}
+		
 	}
 	
 	void OnRenderImage(RenderTexture source, RenderTexture destination) {
@@ -98,16 +96,34 @@ public class FadeEffect : ShaderBase {
         }
 		
 		if (isFading) {
+			if (!wasFading && isFading) {
+				OnFadeStart(source);
+			}
         	FadeIn();
+			material.SetTexture("_FadeInTex", source);
+			_angleDelta += angle;
+			UpdateInterpolationFactor();
+			Graphics.Blit(transitionTexture, destination, material);
 		}
 		else {
 			material.SetVector("_CenterFrequencyAmplitude", new Vector4(0f, 0f, 0f, 0f));
 			material.SetFloat("_Angle", 0f);
 			material.SetFloat("_InterpolationFactor", 0f);
-			material.SetTexture("_FadeInTex", fadeTarget.targetTexture);	
+			material.SetTexture("_FadeInTex", source);
+			Graphics.Blit(source, destination, material);
 		}
-		
-        Graphics.Blit(source, destination, material);
+		wasFading = isFading;
+      
+	}
+	
+	protected virtual void OnFadeStart(RenderTexture source) {
+		if (transitionTexture.width != source.width || transitionTexture.height != source.height) {
+			transitionTexture.Resize(source.width, source.height);
+			renderQuad.Set(0, 0, source.width, source.height);
+		}
+		RenderTexture.active = source;
+		transitionTexture.ReadPixels(renderQuad, 0, 0);
+		transitionTexture.Apply();
 	}
 	
 	/// <summary>
@@ -119,10 +135,6 @@ public class FadeEffect : ShaderBase {
 		material.SetVector("_CenterFrequencyAmplitude", new Vector4(center.x, center.y, frequency, amplitude)); 
 		material.SetFloat("_Angle", Mathf.Deg2Rad * _angleDelta);
 		material.SetFloat("_InterpolationFactor", interpolationFactor);
-		material.SetTexture("_FadeInTex", fadeTarget.targetTexture);
-		
-		_angleDelta += angle;
-		UpdateInterpolationFator();
 	}
 
 	/// <summary>
@@ -131,9 +143,8 @@ public class FadeEffect : ShaderBase {
 	/// factor to zero when the interpolation factor reaches one which signifys a change from fade
 	/// in to fade out.
 	/// </summary>
-	protected virtual void UpdateInterpolationFator() 
+	protected virtual void UpdateInterpolationFactor() 
 	{
-		//Debug.Log ("interpolationFactor: " + interpolationFactor);
 		if (interpolationFactor < 1) {
 			interpolationFactor += Time.deltaTime / fadeDuration;
 		}
@@ -155,10 +166,6 @@ public class FadeEffect : ShaderBase {
 	{
 		isFading = true;
 		interpolationFactor = 0;
-		fadeTarget.enabled = true;
-		//fadeCamera.transform.position = fadeInLocation;
-
-		EventManager.instance.RiseOnPauseToggleEvent(new PauseStateArgs(true));
 	}
 	
 	/// <summary>
@@ -166,8 +173,6 @@ public class FadeEffect : ShaderBase {
 	/// </summary>
 	public virtual void OnFadeInComplete() {
 		isFading = false;
-		//fadeTarget.enabled = false;
-		EventManager.instance.RiseOnPauseToggleEvent(new PauseStateArgs(false));
 	}
 
 }

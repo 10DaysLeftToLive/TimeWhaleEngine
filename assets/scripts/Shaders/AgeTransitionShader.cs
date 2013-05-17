@@ -10,6 +10,7 @@ public class AgeTransitionShader : FadeEffect {
 	//The age state that the player should transition to after a fade in.
 	protected string ageShiftAction = "";
 	
+	
 	/// <summary>
 	///  Initialize: <see cref="inhert doc"/>
 	/// Checks to see if the LevelManager has been initializes so that the 
@@ -27,10 +28,11 @@ public class AgeTransitionShader : FadeEffect {
 	/// Performs an age shift back in time if able.
 	/// </summary>
 	protected override void OnDragDown() {
-		if (levelManager.CanAgeTransition(Strings.ButtonAgeShiftDown)) {
-			DoFade();
+		if (levelManager.CanAgeTransition(Strings.ButtonAgeShiftDown) && !isFading) {
 			DoAgeShift(Strings.ButtonAgeShiftDown);
+			DoFade();
 		}
+		base.OnDragDown();
 	}
 	
 	/// <summary>
@@ -38,10 +40,28 @@ public class AgeTransitionShader : FadeEffect {
 	/// Performs an age shift back forward through time if able.
 	/// </summary>
 	protected override void OnDragUp() {
-		if (levelManager.CanAgeTransition(Strings.ButtonAgeShiftUp)) {
-			DoFade();
+		
+		if (levelManager.CanAgeTransition(Strings.ButtonAgeShiftUp) && !isFading) {
 			DoAgeShift(Strings.ButtonAgeShiftUp);
+			DoFade();
 		}
+		base.OnDragUp();
+	}
+	
+	protected override void OnFadeStart(RenderTexture source) {
+		base.OnFadeStart(source);
+	}
+	
+	protected override void UpdateInterpolationFactor() {
+		if (interpolationFactor > 0.5) {
+			if (ageShiftAction.Equals(Strings.ButtonAgeShiftDown)) {
+				levelManager.ShiftDownAge();
+			}
+			else {
+				levelManager.ShiftUpAge();
+			}
+		}
+		base.UpdateInterpolationFactor();
 	}
 	
 	/// <summary>
@@ -62,14 +82,6 @@ public class AgeTransitionShader : FadeEffect {
 	/// </summary>
 	public override void OnFadeInComplete() {
 		base.OnFadeInComplete();
-		if (ageShiftAction.Equals(Strings.ButtonAgeShiftDown)) {
-			Debug.Log ("AGE SHIFTED DOWN");
-			levelManager.ShiftDownAge();
-		}
-		else {
-			Debug.Log ("AGE SHIFTED UP");
-			levelManager.ShiftUpAge();
-		}
 	}
 
 }

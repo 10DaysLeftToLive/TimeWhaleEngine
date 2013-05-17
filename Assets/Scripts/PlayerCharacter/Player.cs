@@ -113,7 +113,7 @@ public class Player : Character {
 		
 		AgeSwapMover.instance.ChangeAgePosition(newAge, previousAge);
 		
-		Debug.Log ("Move Player Up");
+		Debug.Log ("CHANGE AGE");
 		//Move Player Up
 		
 		ChangeHitBox(newAge, previousAge);

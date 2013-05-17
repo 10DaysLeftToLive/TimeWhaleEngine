@@ -10,8 +10,8 @@ public class AgeSwapMover : ManagerSingleton<AgeSwapMover> {
 	}
 
 	// calculate new position
-	private Vector3 GetNewAgeWorldPosition(CharacterAge newAge, CharacterAge previousAge, bool isPositionCheck){
-		Vector3 deltaPlayerToCurrentFrame = playerCharacter.transform.position - previousAge.sectionTarget.position;
+	public Vector3 GetNewAgeWorldPosition(Vector3 position, CharacterAge newAge, CharacterAge previousAge, bool isPositionCheck){
+		Vector3 deltaPlayerToCurrentFrame = position - previousAge.sectionTarget.position;
 
 
 		Vector3 newPlayerPosition = new Vector3(newAge.sectionTarget.position.x + deltaPlayerToCurrentFrame.x,
@@ -23,7 +23,7 @@ public class AgeSwapMover : ManagerSingleton<AgeSwapMover> {
 	
 	// check if new position will work
 	public bool CheckTransitionPositionSuccess(CharacterAge newAge, CharacterAge previousAge){
-		Vector3 playerCenter = GetNewAgeWorldPosition(newAge, previousAge, true);
+		Vector3 playerCenter = GetNewAgeWorldPosition(playerCharacter.animationData.transform.position, newAge, previousAge, true);
 
 		CharacterController charControl = playerCharacter.GetComponent<CharacterController>();
 
@@ -32,6 +32,6 @@ public class AgeSwapMover : ManagerSingleton<AgeSwapMover> {
 
 	//	if true, move object and update timeswitchobjects
 	public void ChangeAgePosition(CharacterAge newAge, CharacterAge previousAge){
-		playerCharacter.transform.position = GetNewAgeWorldPosition(newAge, previousAge, false);
+		playerCharacter.transform.position = GetNewAgeWorldPosition(playerCharacter.transform.position, newAge, previousAge, false);
 	}
 }

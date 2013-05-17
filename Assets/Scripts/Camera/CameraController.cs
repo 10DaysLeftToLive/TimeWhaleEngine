@@ -18,7 +18,7 @@ public class CameraController : MonoBehaviour {
 	static private float minYOffset = 1.3f;
 	
 	static public float currentYOffsetRelativeToTarget = 1f;
-	static private float zOffsetFromTarget = -5f;
+	static public float zOffsetFromTarget = -5f;
 	
 	static private Camera thisCamera;
 	static private Player player;
