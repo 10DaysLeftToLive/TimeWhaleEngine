@@ -10,6 +10,8 @@ public class AgeTransitionShader : FadeEffect {
 	//The age state that the player should transition to after a fade in.
 	protected string ageShiftAction = "";
 	
+	private bool ageShiftComplete = false;
+	
 	
 	/// <summary>
 	///  Initialize: <see cref="inhert doc"/>
@@ -54,11 +56,14 @@ public class AgeTransitionShader : FadeEffect {
 	
 	protected override void UpdateInterpolationFactor() {
 		if (interpolationFactor > 0.5) {
-			if (ageShiftAction.Equals(Strings.ButtonAgeShiftDown)) {
-				levelManager.ShiftDownAge();
-			}
-			else {
-				levelManager.ShiftUpAge();
+			if (!ageShiftComplete) {
+				if (ageShiftAction.Equals(Strings.ButtonAgeShiftDown)) {
+					levelManager.ShiftDownAge();
+				}
+				else {
+					levelManager.ShiftUpAge();
+				}
+				ageShiftComplete = true;
 			}
 		}
 		base.UpdateInterpolationFactor();
@@ -82,6 +87,7 @@ public class AgeTransitionShader : FadeEffect {
 	/// </summary>
 	public override void OnFadeInComplete() {
 		base.OnFadeInComplete();
+		ageShiftComplete = false;
 	}
 
 }
