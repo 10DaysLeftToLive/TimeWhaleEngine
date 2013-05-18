@@ -13,7 +13,6 @@ public class NPCConvoState : AbstractState {
 	
 	public override void Update(){
 		// TODO - look at talking target
-		_chatToPerform.UpdateChat(Time.deltaTime);
 	}
 	
 	public override void OnEnter(){
