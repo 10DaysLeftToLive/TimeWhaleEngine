@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 
 using SmoothMoves;
@@ -12,21 +13,44 @@ public class FadeEffect : ShaderBase {
 	//Duration of the fade in and out in ticks
 	public float fadeDuration = 5; 
 	
+	public Color fadeColor = new Color();
+	
+	#region FadePlaneEffects
+	
+	protected float alphaFadeValue = 1.0f;
+	
+	protected float fadeDirection = -1f;
+	
+	public GameObject fadePlane = null;
+	
+	protected bool fade = false;
+	
+	public static class FADEPLANECONSTANTS {
+		public const float planeToCameraOffset = 0.3f;
+		
+	}
+	
+	private Vector3 idlePosition = new Vector3(5000,5000,-3);
+	
+	#endregion
+	
+	#region SwirlShaderEffects
+	public bool isFading = false;
+	
+	private bool wasFading = false;
+	
 	public float frequency = 6;
 	
 	public float amplitude = 0.4f;
 	
 	public float angle = 20;
 	
-	//A flag that determines if our plane is fading in/out in front of the camera.
-	//NOTE:Will get rid of this only temporary until we optimize.
-	public bool isFading = false;
-	
-	private bool wasFading = false;
-	
 	private float _angleDelta = 0; 
 	
 	private Vector2 center = new Vector2(0.5f, 0.5f);
+	
+	
+	#endregion
 	
 	private Texture2D transitionTexture;
 	
@@ -41,8 +65,20 @@ public class FadeEffect : ShaderBase {
 		if (fadeDuration <= 0) {
 			fadeDuration = 5;
 		}
-		transitionTexture = new Texture2D(256, 256);
-		renderQuad = new Rect(0, 0, 256, 256);
+		
+		if (!shaderNotSupported) {
+			transitionTexture = new Texture2D(256, 256);
+			renderQuad = new Rect(0, 0, 256, 256);
+			Destroy(fadePlane);
+		}
+		else {
+			if (fadePlane == null) {
+				Debug.LogError("Please attach the fade plane to this script, thank you.");
+			}
+			fadePlane.transform.position = idlePosition;
+			fadePlane.renderer.material.color = Color.clear;
+			fadeDuration /= 2;
+		}
 		EventManager.instance.mOnDragEvent += new EventManager.mOnDragDelegate (OnDragEvent);
 	}
 	
@@ -79,13 +115,14 @@ public class FadeEffect : ShaderBase {
 	protected virtual void OnDragUp() {
 	}
 	
-	void Update() {
-		
+	void OnRenderImage(RenderTexture source, RenderTexture destination) {
+		RenderDistortion (material, source, destination);
 	}
 	
-	void OnRenderImage(RenderTexture source, RenderTexture destination) {
-		if (shaderNotSupported) return;
-		RenderDistortion (material, source, destination);
+	void Update() {
+		if (shaderNotSupported) {
+			RenderFadePlane();
+		}
 	}
 	
 	protected void RenderDistortion(Material material, RenderTexture source, RenderTexture destination) {
@@ -103,7 +140,7 @@ public class FadeEffect : ShaderBase {
         	FadeIn();
 			material.SetTexture("_FadeInTex", source);
 			_angleDelta += angle;
-			UpdateInterpolationFactor();
+			UpdateInterpolationFactorForShader();
 			Graphics.Blit(transitionTexture, destination, material);
 		}
 		else {
@@ -116,6 +153,21 @@ public class FadeEffect : ShaderBase {
 		wasFading = isFading;
 	}
 	
+	protected void RenderFadePlane() {
+		if (isFading) {
+			
+			fadePlane.transform.position = new Vector3(camera.transform.position.x, camera.transform.position.y, 
+				camera.transform.position.z + FADEPLANECONSTANTS.planeToCameraOffset);
+			if (fade) {
+				FadeIn();
+			}
+			else {
+				FadeOut();
+			}
+			UpdateInterpolationFactorForFadePlane();
+		}
+	}
+	#region FadeStates
 	protected virtual void OnFadeStart(RenderTexture source) {
 		if (transitionTexture.width != source.width || transitionTexture.height != source.height) {
 			transitionTexture.Resize(source.width, source.height);
@@ -132,11 +184,25 @@ public class FadeEffect : ShaderBase {
 	/// </summary>
 	protected override void FadeIn() 
 	{
-		material.SetVector("_CenterFrequencyAmplitude", new Vector4(center.x, center.y, frequency, amplitude)); 
-		material.SetFloat("_Angle", Mathf.Deg2Rad * _angleDelta);
-		material.SetFloat("_InterpolationFactor", interpolationFactor);
+		if (shaderNotSupported) {
+			fadePlane.renderer.material.color = Color.Lerp(Color.clear, fadeColor, interpolationFactor);
+		}
+		else {
+			material.SetVector("_CenterFrequencyAmplitude", new Vector4(center.x, center.y, frequency, amplitude)); 
+			material.SetFloat("_Angle", Mathf.Deg2Rad * _angleDelta);
+			material.SetFloat("_InterpolationFactor", interpolationFactor);
+		}
 	}
-
+	
+	protected virtual void FadeOut() {
+		fadePlane.renderer.material.color = Color.Lerp(fadeColor, Color.clear, interpolationFactor);
+		if (fadePlane.renderer.material.color.Equals(Color.clear)) {
+			OnFadeInComplete();
+		}
+	}
+	#endregion
+	
+	#region UpdatesInterpolationFactor
 	/// <summary>
 	/// UpdateInterpolationFator:
 	/// Increments the interpolation factor based on half the fade speed.  Resets the interpolation
@@ -145,6 +211,18 @@ public class FadeEffect : ShaderBase {
 	/// </summary>
 	protected virtual void UpdateInterpolationFactor() 
 	{
+		if (shaderNotSupported) {
+			UpdateInterpolationFactorForFadePlane();
+		}
+		else {
+			UpdateInterpolationFactorForShader ();
+		}
+	}
+	
+	
+	
+	protected virtual void UpdateInterpolationFactorForShader ()
+	{
 		if (interpolationFactor < 1) {
 			interpolationFactor += Time.deltaTime / fadeDuration;
 		}
@@ -152,6 +230,22 @@ public class FadeEffect : ShaderBase {
 			OnFadeInComplete();
 		}
 	}
+	
+	protected virtual void UpdateInterpolationFactorForFadePlane() {
+		if (interpolationFactor < 1) {
+			interpolationFactor += Time.deltaTime / (fadeDuration / 2);
+		}
+		else if (fade) {
+			interpolationFactor = 0;
+			fade = false;
+		}
+		else {
+			OnFadeInComplete();
+		}
+		
+		
+	}
+	#endregion
 	
 	/// <summary>
 	/// DoFade:
@@ -166,6 +260,9 @@ public class FadeEffect : ShaderBase {
 	{
 		isFading = true;
 		interpolationFactor = 0;
+		if (shaderNotSupported) {
+			fade = true;
+		}
 		EventManager.instance.RiseOnPauseToggleEvent(new PauseStateArgs(true));
 	}
 	
@@ -174,6 +271,9 @@ public class FadeEffect : ShaderBase {
 	/// </summary>
 	public virtual void OnFadeInComplete() {
 		isFading = false;
+		if (shaderNotSupported) {
+			fadePlane.transform.position = idlePosition;
+		}
 		EventManager.instance.RiseOnPauseToggleEvent(new PauseStateArgs(false));
 	}
 

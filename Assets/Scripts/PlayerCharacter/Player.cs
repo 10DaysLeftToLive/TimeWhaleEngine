@@ -113,9 +113,6 @@ public class Player : Character {
 		
 		AgeSwapMover.instance.ChangeAgePosition(newAge, previousAge);
 		
-		Debug.Log ("CHANGE AGE");
-		//Move Player Up
-		
 		ChangeHitBox(newAge, previousAge);
 		ChangeAnimation(newAge.boneAnimation);
 		Inventory.SwapItemWithCurrentAge(newAge.boneAnimation);
@@ -135,7 +132,7 @@ public class Player : Character {
 	}
 	
 	public void PickUpObject(GameObject toPickUp){
-		Debug.Log ("Player transform: " + animationData.mLocalTransform);
+		//Debug.Log ("Player transform: " + animationData.mLocalTransform);
 		Inventory.PickUpObject(toPickUp);
 	}
 	

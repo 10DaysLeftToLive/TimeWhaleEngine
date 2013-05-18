@@ -34,10 +34,7 @@ public class AgeTransitionShader : FadeEffect {
 	/// Performs an age shift back in time if able.
 	/// </summary>
 	protected override void OnDragDown() {
-		if (shaderNotSupported) {
-			levelManager.ShiftDownAge();
-		}
-		else if (levelManager.CanAgeTransition(Strings.ButtonAgeShiftDown) && !isFading) {
+		if (levelManager.CanAgeTransition(Strings.ButtonAgeShiftDown) && !isFading) {
 			DoAgeShift(Strings.ButtonAgeShiftDown);
 			DoFade();
 		}
@@ -49,10 +46,7 @@ public class AgeTransitionShader : FadeEffect {
 	/// Performs an age shift back forward through time if able.
 	/// </summary>
 	protected override void OnDragUp() {
-		if (shaderNotSupported) {
-			levelManager.ShiftUpAge();
-		}
-		else if (levelManager.CanAgeTransition(Strings.ButtonAgeShiftUp) && !isFading) {
+		if (levelManager.CanAgeTransition(Strings.ButtonAgeShiftUp) && !isFading) {
 			DoAgeShift(Strings.ButtonAgeShiftUp);
 			DoFade();
 		}
@@ -63,7 +57,7 @@ public class AgeTransitionShader : FadeEffect {
 		base.OnFadeStart(source);
 	}
 	
-	protected override void UpdateInterpolationFactor() {
+	protected override void UpdateInterpolationFactorForShader() {
 		if (interpolationFactor > 0.5) {
 			if (!ageShiftComplete) {
 				if (ageShiftAction.Equals(Strings.ButtonAgeShiftDown)) {
@@ -75,11 +69,37 @@ public class AgeTransitionShader : FadeEffect {
 				ageShiftComplete = true;
 			}
 		}
-		base.UpdateInterpolationFactor();
+		base.UpdateInterpolationFactorForShader();
+	}
+	
+	protected override void UpdateInterpolationFactorForFadePlane() {
+		base.UpdateInterpolationFactorForFadePlane();
+		
+		if (isFading && fade && !ageShiftComplete) {
+			if (ageShiftAction.Equals(Strings.ButtonAgeShiftDown)) {
+				levelManager.ShiftDownAge();
+			}
+			else {
+				levelManager.ShiftUpAge();
+			}
+			ageShiftComplete = true;
+		}
+	}
+	
+	void Update() {
+		if (shaderNotSupported) {
+			RenderFadePlane();
+		}
+		DebugUpdateAgeTransition();
 	}
 	
 	protected void DebugUpdateAgeTransition() {
-		
+		if (Input.GetKeyDown(KeyCode.Q)) {
+			levelManager.ShiftDownAge();
+		}
+		else if (Input.GetKeyDown(KeyCode.W)){
+			levelManager.ShiftUpAge();
+		}
 	}
 	
 	/// <summary>
