@@ -84,6 +84,7 @@ public class FadeEffect : ShaderBase {
 	}
 	
 	void OnRenderImage(RenderTexture source, RenderTexture destination) {
+		if (shaderNotSupported) return;
 		RenderDistortion (material, source, destination);
 	}
 	
@@ -113,7 +114,6 @@ public class FadeEffect : ShaderBase {
 			Graphics.Blit(source, destination, material);
 		}
 		wasFading = isFading;
-      
 	}
 	
 	protected virtual void OnFadeStart(RenderTexture source) {
@@ -166,6 +166,7 @@ public class FadeEffect : ShaderBase {
 	{
 		isFading = true;
 		interpolationFactor = 0;
+		EventManager.instance.RiseOnPauseToggleEvent(new PauseStateArgs(true));
 	}
 	
 	/// <summary>
@@ -173,6 +174,7 @@ public class FadeEffect : ShaderBase {
 	/// </summary>
 	public virtual void OnFadeInComplete() {
 		isFading = false;
+		EventManager.instance.RiseOnPauseToggleEvent(new PauseStateArgs(false));
 	}
 
 }

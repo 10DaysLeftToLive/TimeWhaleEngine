@@ -9,6 +9,7 @@ public abstract class ShaderBase : PauseObject {
 	protected float interpolationFactor = 0;
 	
 	public Shader   shader;
+	protected bool shaderNotSupported;
 	private Material m_Material;
 	
 	// Use this for initialization
@@ -16,12 +17,14 @@ public abstract class ShaderBase : PauseObject {
 		// Disable if we don't support image effects
 		if (!SystemInfo.supportsImageEffects) {
 			enabled = false;
+			shaderNotSupported = true;
 			return;
 		}
 		
 		// Disable the image effect if the shader can't
 		// run on the users graphics card
 		if (!shader || !shader.isSupported) {
+			shaderNotSupported = true;
 			enabled = false;
 			return;
 		}

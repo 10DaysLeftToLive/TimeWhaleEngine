@@ -2,6 +2,10 @@ using UnityEngine;
 using System.Collections;
 using SmoothMoves;
 
+public static class DebugAgeTransition {
+	public static bool ageTransition = true;
+}
+
 public class AgeTransitionShader : FadeEffect {
 	
 	//Reference to the LevelManager.
@@ -30,7 +34,10 @@ public class AgeTransitionShader : FadeEffect {
 	/// Performs an age shift back in time if able.
 	/// </summary>
 	protected override void OnDragDown() {
-		if (levelManager.CanAgeTransition(Strings.ButtonAgeShiftDown) && !isFading) {
+		if (shaderNotSupported) {
+			levelManager.ShiftDownAge();
+		}
+		else if (levelManager.CanAgeTransition(Strings.ButtonAgeShiftDown) && !isFading) {
 			DoAgeShift(Strings.ButtonAgeShiftDown);
 			DoFade();
 		}
@@ -42,8 +49,10 @@ public class AgeTransitionShader : FadeEffect {
 	/// Performs an age shift back forward through time if able.
 	/// </summary>
 	protected override void OnDragUp() {
-		
-		if (levelManager.CanAgeTransition(Strings.ButtonAgeShiftUp) && !isFading) {
+		if (shaderNotSupported) {
+			levelManager.ShiftUpAge();
+		}
+		else if (levelManager.CanAgeTransition(Strings.ButtonAgeShiftUp) && !isFading) {
 			DoAgeShift(Strings.ButtonAgeShiftUp);
 			DoFade();
 		}
@@ -67,6 +76,10 @@ public class AgeTransitionShader : FadeEffect {
 			}
 		}
 		base.UpdateInterpolationFactor();
+	}
+	
+	protected void DebugUpdateAgeTransition() {
+		
 	}
 	
 	/// <summary>

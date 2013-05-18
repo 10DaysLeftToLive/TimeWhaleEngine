@@ -7,11 +7,7 @@ public class SunriseSunsetTimer : ShaderBase {
 	
 	public bool FullDay = false;
 	
-	public float sunriseStartTime;
-	
 	public float sunsetStartTime;
-	
-	public float sunriseDuration = 100f;
 	
 	public float sunsetDuration = 100f;
 	
@@ -33,9 +29,33 @@ public class SunriseSunsetTimer : ShaderBase {
 	
 	private float greenFilter = 0;
 	
+	private static class HueShaderConstants {
+		public const float GREEN_COLOR_MAX = 350;
+		
+		public const float GREEN_COLOR_MIN = 300;
+		
+		public const float GREEN_FILTER_THRESHOLD = 0.25f;
+		
+		public const float GREEN_FALLOFF = 1f/20;
+		
+		public const float GREEN_FALLOFF_TIME_RATE = 10f;
+		
+		public const float HUE_MAIN_MAX = 300f;
+		
+		public const float HUE_MAIN_MIN = 190f;
+		
+		public const float SUNSET_COLOR_CHANGE_RATE = 1f/80;
+		
+		public const float SUNSET_LAST_THRESHOLD = 150f;
+		
+		public const float SUNSET_TIME_CHANGE_RATE = 5f;
+		
+		public const float REMAINING_FALLOFF = 5f;
+		
+	}
+	
 	// Use this for initialization
 	protected override void Initialize () {
-		sunriseEndTime = sunriseStartTime + sunriseDuration;
 		sunsetEndTime = sunsetStartTime + sunsetDuration;
 		_hue = StartHue;
 	}
@@ -66,53 +86,39 @@ public class SunriseSunsetTimer : ShaderBase {
 	/// Is a sunrise occurring.
 	/// </param>
 	protected virtual float ChangeHue(bool isSunrise) {
-//		interpolationFactor = isSunrise 
-//			? sunsetTimer.time - sunriseStartTime : sunsetTimer.time - sunsetStartTime;
-		
 		interpolationFactor += Time.deltaTime;
-		if (_hue < 350 && _hue > 300) {
-			if (greenFilter < 0.25) {
-				float newVal = Time.deltaTime * (1f/20);
-				greenFilter += newVal;
-				interpolationFactor += Time.deltaTime * 10;
+		if (_hue < HueShaderConstants.GREEN_COLOR_MAX && _hue > HueShaderConstants.GREEN_COLOR_MIN) {
+			if (greenFilter < HueShaderConstants.GREEN_FILTER_THRESHOLD) {
+				float greenFilterRate = Time.deltaTime * HueShaderConstants.GREEN_FALLOFF;
+				greenFilter += greenFilterRate;
+				interpolationFactor += Time.deltaTime * HueShaderConstants.GREEN_FALLOFF_TIME_RATE;
 			}
 		}
-		else if (_hue > 190 && _hue < 300){
+		else if (_hue > HueShaderConstants.HUE_MAIN_MIN && _hue < HueShaderConstants.HUE_MAIN_MAX){
 			if (greenFilter > 0) {
-				float newVal = Time.deltaTime * (1f/80);
+				float newVal = Time.deltaTime * HueShaderConstants.SUNSET_COLOR_CHANGE_RATE;
 				greenFilter -= newVal;
-				interpolationFactor += Time.deltaTime * 5;
+				interpolationFactor += Time.deltaTime * HueShaderConstants.SUNSET_TIME_CHANGE_RATE;
 			}
 			else {
 				greenFilter = 0;
 			}
 		}
 		else {
-			if (_hue > 150) {
-				_hue = StartHue - interpolationFactor / 10;
+			if (_hue > HueShaderConstants.SUNSET_LAST_THRESHOLD) {
+				_hue = StartHue - interpolationFactor / HueShaderConstants.REMAINING_FALLOFF;
 			}
 		}
 		
-		if (_hue > 150) {
-			_hue = StartHue - interpolationFactor;
-		}
 		return _hue;
 	}
 	
 	protected virtual float ChangeBrightness(bool isSunrise) {
 		float currentTime;
-		if (isSunrise) {
-			if (sunriseDuration <= 0) return minBrightness;
-			currentTime = (Time.time - sunriseStartTime) / sunriseDuration;
-			//Debug.Log (currentTime);
-			return Mathf.Lerp(minBrightness, maxBrightness, currentTime);
-		}
-		else {
-			if (sunsetDuration <= 0) return minBrightness;
+		if (sunsetDuration <= 0) return minBrightness;
 			currentTime = (Time.time - sunsetStartTime) / sunsetDuration;
 			//Debug.Log (currentTime);
 			return Mathf.Lerp(maxBrightness, minBrightness, currentTime);
-		}
 	}
 	
 	protected virtual float ChangeSaturation(bool isSunrise) {
