@@ -56,14 +56,14 @@ public class NPCConvoSchedule : Schedule {
 				npcTalking = _npcTwo;
 			}
 			
-			chatInfo = new ChatInfo(npcTalking, textToSay._TextToSay, TALK_TIME);
+			chatInfo = new ChatInfo(npcTalking, textToSay._TextToSay);
 			chatInfoList = new List<ChatInfo>();
 			chatInfoList.Add(chatInfo);
 			chatToPerform = new NPCChat(chatInfoList);
 			
 			_npcTalkingQueue.Enqueue(npcTalking);
 			
-			Add (new TimeTask(TALK_TIME, new NPCConvoState((Character)npcTalking, (Character)npcNotTalking, chatToPerform)));	
+			Add (new TimeTask(chatInfo.GetTime()/2, new NPCConvoState((Character)npcTalking, (Character)npcNotTalking, chatToPerform)));	
 		}
 	}
 	
