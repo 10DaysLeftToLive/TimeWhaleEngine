@@ -17,6 +17,7 @@ public class NPCConvoSchedule : Schedule {
 	protected NPC npcTalking;
 	private static float TALK_TIME = 3.5F;
 	private static float DISTANCE_CLOSE_TO_PLAYER = 8f;
+	private static float TALK_DISTANCE = 2f;
 	
 	public NPCConvoSchedule(NPC npcOne, NPC npcTwo, NPCConversation conversation) : base(npcOne) {
 		Init(npcOne, npcTwo, conversation);
@@ -99,31 +100,40 @@ public class NPCConvoSchedule : Schedule {
 	public override void NextTask(){
 		//Debug.Log(_toManage + " schedule next task");
 		
-		if (_tasksToDo.Count > 0) {
-			if (!_waitForPlayer) {
-				current = _tasksToDo.Dequeue();
-				//Debug.Log("There are " + _tasksToDo.Count + " tasks");
-				npcTalking = _npcTalkingQueue.Dequeue();
-				
-				if (npcTalking == _toManage) {
-					//Debug.Log(_toManage.name + " is now switching to " + current.StatePerforming);
-					_toManage.ForceChangeToState(current.StatePerforming);
-					currentListening = new Task(new IdleState(_npcTwo));
-					//Debug.Log(_npcTwo.name + " is now switching to " + currentListening.StatePerforming);
-					_npcTwo.ForceChangeToState(currentListening.StatePerforming);
+		// Position next to eachother
+		if (!Utils.InDistance(_toManage.gameObject, _npcTwo.gameObject, TALK_DISTANCE)) {
+			// move to talk positions
+			current = new Task(new MoveToObjectState(_toManage, _npcTwo.gameObject, _npcTwo.transform.position));
+			currentListening = new Task(new IdleState(_npcTwo));
+			_toManage.ForceChangeToState(current.StatePerforming);
+			_npcTwo.ForceChangeToState(currentListening.StatePerforming);
+		} else {
+			if (_tasksToDo.Count > 0) {
+				if (!_waitForPlayer) {
+					current = _tasksToDo.Dequeue();
+					//Debug.Log("There are " + _tasksToDo.Count + " tasks");
+					npcTalking = _npcTalkingQueue.Dequeue();
+					
+					if (npcTalking == _toManage) {
+						//Debug.Log(_toManage.name + " is now switching to " + current.StatePerforming);
+						_toManage.ForceChangeToState(current.StatePerforming);
+						currentListening = new Task(new IdleState(_npcTwo));
+						//Debug.Log(_npcTwo.name + " is now switching to " + currentListening.StatePerforming);
+						_npcTwo.ForceChangeToState(currentListening.StatePerforming);
+					} else {
+						//Debug.Log(_npcTwo.name + " is now switching to " + current.StatePerforming);
+						_npcTwo.ForceChangeToState(current.StatePerforming);
+						currentListening = new Task(new IdleState(_toManage));
+						//Debug.Log(_toManage.name + " is now switching to " + currentListening.StatePerforming);
+						_toManage.ForceChangeToState(currentListening.StatePerforming);
+					}
 				} else {
-					//Debug.Log(_npcTwo.name + " is now switching to " + current.StatePerforming);
+					current = new Task(new WaitTillPlayerCloseState(_toManage, _toManage.player, DISTANCE_CLOSE_TO_PLAYER));
+					currentListening = new Task(new WaitTillPlayerCloseState(_npcTwo, _toManage.player, DISTANCE_CLOSE_TO_PLAYER));
+					_toManage.ForceChangeToState(current.StatePerforming);
 					_npcTwo.ForceChangeToState(current.StatePerforming);
-					currentListening = new Task(new IdleState(_toManage));
-					//Debug.Log(_toManage.name + " is now switching to " + currentListening.StatePerforming);
-					_toManage.ForceChangeToState(currentListening.StatePerforming);
+					_waitForPlayer = false;
 				}
-			} else {
-				current = new Task(new WaitTillPlayerCloseState(_toManage, _toManage.player, DISTANCE_CLOSE_TO_PLAYER));
-				currentListening = new Task(new WaitTillPlayerCloseState(_npcTwo, _toManage.player, DISTANCE_CLOSE_TO_PLAYER));
-				_toManage.ForceChangeToState(current.StatePerforming);
-				_npcTwo.ForceChangeToState(current.StatePerforming);
-				_waitForPlayer = false;
 			}
 		}
 	}
