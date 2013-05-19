@@ -15,8 +15,19 @@ public class NPCConvoState : AbstractState {
 		// TODO - look at talking target
 	}
 	
+	public void FaceEachOther() {
+		if (character.transform.position.x > _toTalkWith.transform.position.x) {
+			character.LookLeft();
+			_toTalkWith.LookRight();
+		} else {
+			character.LookRight();
+			_toTalkWith.LookLeft();
+		}
+	}
+	
 	public override void OnEnter(){
 		GUIManager.Instance.AddNPCChat(_chatToPerform);
+		FaceEachOther();
 		
 		Debug.Log(character.name + ": NPCConvoState Enter");
 		character.PlayAnimation(Strings.animation_stand); // Should be a talk animation

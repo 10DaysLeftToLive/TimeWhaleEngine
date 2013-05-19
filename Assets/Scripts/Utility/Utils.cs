@@ -40,4 +40,11 @@ public static class Utils{
 	public static float CalcTimeToDisplayText(string text){
 		return (text.Length * .1f);
 	}
+	
+	public static bool InDistance(GameObject gameObjOne, GameObject gameObjTwo, float distance) {
+		float xDistance = Mathf.Abs(gameObjOne.transform.position.x - gameObjTwo.transform.position.x);
+		float yDistance = Mathf.Abs(gameObjOne.transform.position.y - gameObjTwo.transform.position.y);
+		
+		return (xDistance < distance && yDistance < distance);
+	}
 }
