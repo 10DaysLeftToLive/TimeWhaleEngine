@@ -16,6 +16,11 @@ public class ChatInfo {
 		npcTalking = _npcTalking;
 		text = _text;
 		displayTime = Utils.CalcTimeToDisplayText(text);
+		
+		// Make sure chats don't disapear too quick
+		if (displayTime < 1) {
+			displayTime += 1;
+		}
 	}
 	
 	public ChatInfo(NPC _npcTalking, string _text, float time){
