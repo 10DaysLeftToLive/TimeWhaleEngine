@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class YoungGenericConvos : NPCConvoList {
+public class GenericConvos : NPCConvoList {
 	protected override void BuildList() {
 		
 		#region Conversation One

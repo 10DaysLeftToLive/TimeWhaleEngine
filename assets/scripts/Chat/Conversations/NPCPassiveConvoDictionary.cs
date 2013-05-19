@@ -13,8 +13,9 @@ public class NPCPassiveConvoDictionary : ManagerSingleton<NPCPassiveConvoDiction
 	}
 	
 	protected void AddConversationLists() {
+		convoDict.Add (StringsConvos.GenericConvos, new GenericConvos().GetList());
+		
 		#region Young Conversations
-		convoDict.Add (StringsConvos.YoungGenericConvos, new YoungGenericConvos().GetList());
 		convoDict.Add (StringsConvos.YoungSpecialConvos, new YoungSpecialConvos().GetList());
 		convoDict.Add (StringsNPC.SiblingYoung, new YoungSiblingConvos().GetList());
 		convoDict.Add (StringsNPC.MomYoung, new YoungMotherConvos().GetList());
@@ -31,20 +32,38 @@ public class NPCPassiveConvoDictionary : ManagerSingleton<NPCPassiveConvoDiction
 		#endregion
 		
 		#region Middle Conversations
-		
+		convoDict.Add (StringsConvos.MiddleSpecialConvos, new MiddleSpecialConvos().GetList());
 		#endregion
 		
 		#region Old Conversations
-		
+		convoDict.Add (StringsConvos.OldSpecialConvos, new OldSpecialConvos().GetList());
 		#endregion
 	}
 	
 	public NPCConversation GetConversation(NPC npc) {	
 		// go through special conversations
-		foreach(NPCConvoChance convo in convoDict[StringsConvos.YoungSpecialConvos]) { // TODO - Get from correct age
-			if (IsConvoDrop(convo)) {
-				return (NPCConversation)convo;
-			}
+		switch (CharacterAgeManager.currentAge) {
+			case CharacterAgeState.YOUNG:
+				foreach(NPCConvoChance convo in convoDict[StringsConvos.YoungSpecialConvos]) {
+					if (IsConvoDrop(convo)) {
+						return (NPCConversation)convo;
+					}
+				}
+				break;
+			case CharacterAgeState.MIDDLE:
+				foreach(NPCConvoChance convo in convoDict[StringsConvos.MiddleSpecialConvos]) {
+					if (IsConvoDrop(convo)) {
+						return (NPCConversation)convo;
+					}
+				}
+				break;
+			default:
+				foreach(NPCConvoChance convo in convoDict[StringsConvos.OldSpecialConvos]) {
+					if (IsConvoDrop(convo)) {
+						return (NPCConversation)convo;
+					}
+				}
+				break;
 		}
 		
 		// go through specific conversations
@@ -75,7 +94,7 @@ public class NPCPassiveConvoDictionary : ManagerSingleton<NPCPassiveConvoDiction
 	
 	// TODO - Make generics show up more equally
 	protected NPCConversation ChooseGenericConvo() {
-		convoList = convoDict[StringsConvos.YoungGenericConvos]; // TODO - Get from correct age
+		convoList = convoDict[StringsConvos.GenericConvos]; // TODO - Get from correct age
 		return (NPCConversation)convoList[Random.Range(0, convoList.Count - 1)];
 	}
 }
