@@ -14,6 +14,7 @@ public class MoveState : AbstractState {
     private Vector3 currentGoal;
     private float stuckTimer;
     private AudioSource walkSFX;
+	protected static float NPC_SPEED_RATIO = 0.75f; 
         
     public MoveState(Character toControl, Vector3 goal) : base(toControl){
         _goal = goal;
@@ -47,7 +48,7 @@ public class MoveState : AbstractState {
         // Needs a check for which area the player is in to switch which
         // walking SFX is loaded.
         if (character is NPC){
-			speed = speed*.75f;
+			speed = speed*NPC_SPEED_RATIO;
         }else{
             SoundManager.instance.PlaySFX("WalkForest");
         }
