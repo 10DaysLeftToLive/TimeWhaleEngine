@@ -104,6 +104,18 @@ public class EmotionState {
 		}
 	}
 	
+	public void AddChoice(Choice newChoice, DispositionDependentReaction reaction){
+		_allChoiceReactions.Add(newChoice, reaction);
+	}
+	
+	public void RemoveChoice(Choice choiceToRemove){
+		if (_allChoiceReactions.ContainsKey(choiceToRemove)){
+			_allChoiceReactions.Remove(choiceToRemove);
+		} else {
+			Debug.LogWarning(choiceToRemove._choiceName + " was not in " + this.ToString() + " of " + _npcInState.name);
+		}
+	}
+	
 	/// <summary>
 	/// Performs the reaction based on disposition. If the reaction does not have that type of reaction then it will 
 	/// 	perform the default reaction

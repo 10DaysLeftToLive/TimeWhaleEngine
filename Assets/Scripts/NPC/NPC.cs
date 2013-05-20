@@ -147,6 +147,20 @@ public abstract class NPC : Character {
 			charPortrait = (Texture)Resources.Load(this.name, typeof(Texture));
 		}
 	}
+	
+	/// <summary>
+	/// Adds the choice to the current emotion state
+	/// </summary>
+	public void AddChoice(Choice newChoice, DispositionDependentReaction reaction){
+		currentEmotion.AddChoice(newChoice, reaction);
+	}
+	
+	/// <summary>
+	/// Removes the choice from the current emotion state
+	/// </summary>
+	public void RemoveChoice(Choice choiceToRemove){
+		currentEmotion.RemoveChoice(choiceToRemove);
+	}
 	#endregion	
 	
 	#region Schedule
