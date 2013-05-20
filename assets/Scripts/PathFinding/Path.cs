@@ -17,6 +17,7 @@ public class Path {
 		wayPoints = new int[size];
 		for (int i = 0; i < size; i++){
 			this.path[i] = paths[i];
+			wayPoints[i] = points[i];
 			if (i > 0 && path[i-1].x - path[i].x < 0){
 				vectorDirection[i] = new Vector3(1,0,0);
 				if (path[i-1] != path[i]){

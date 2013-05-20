@@ -40,7 +40,7 @@ public class Player : Character {
 		if (currentState.GetType() == typeof(IdleState) || currentState.GetType() == typeof(ClimbIdleState)){ // if we are idled or climbing idled
 			EnterState(new MoveState(this, pos)); // move normaly
 		} else if (currentState.GetType() == typeof(MoveState)){
-			EnterState(new MoveState(this, pos));
+			((MoveState) currentState).UpdateGoal(pos);
 		} 
 		touchParticleEmitter.transform.localPosition = pos;
 		touchParticleEmitter.Play();

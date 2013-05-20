@@ -2,6 +2,10 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// Debug manager will handle logging for the app through the use of the log function
+/// which can take several string tags and if one of them has been chosen then it will be displayed
+/// </summary>
 public class DebugManager : MonoBehaviour {
 	[SerializeField]
 	public List<string> tagsToDisplay = new List<string>();
@@ -41,7 +45,6 @@ public class DebugManager : MonoBehaviour {
 	/// Log the specified message if all of the given tags should be shown
 	/// </summary>
 	public void Log(string message, params string[] tags){
-		//Debug.Log("Trying to show " + message);
 		if (showLogs && ShouldShow(tags)){
 			Log (message);
 		}
