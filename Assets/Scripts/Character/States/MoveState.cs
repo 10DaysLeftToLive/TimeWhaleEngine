@@ -42,11 +42,12 @@ public class MoveState : AbstractState {
     
     public override void OnEnter(){
         CalcMovementPath();
+
         
         // Needs a check for which area the player is in to switch which
         // walking SFX is loaded.
         if (character is NPC){
-
+			speed = speed*.75f;
         }else{
             SoundManager.instance.PlaySFX("WalkForest");
         }

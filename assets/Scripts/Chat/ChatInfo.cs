@@ -18,8 +18,8 @@ public class ChatInfo {
 		displayTime = Utils.CalcTimeToDisplayText(text);
 		
 		// Make sure chats don't disapear too quick
-		if (displayTime < 1) {
-			displayTime += 1;
+		if (displayTime < 2) {
+			displayTime = 2;
 		}
 	}
 	
