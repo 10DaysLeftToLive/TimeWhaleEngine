@@ -96,13 +96,16 @@ public class FarmerMotherMiddle : NPC {
 		}
 		public void UpdateWhysNot(){
 			_allChoiceReactions.Remove(WhyNotChoice);
+			GUIManager.Instance.RefreshInteraction();
 			FlagManager.instance.SetFlag(FlagStrings.ConversationInMiddleFarmerMother);
 		}
 		public void UpdateCaptainsLog(){
-			if(WhyNotFlag == true){
+			if(WhyNotFlag == false){
 				_allChoiceReactions.Add(WhyNotChoice, new DispositionDependentReaction(WhyNotReaction));
+				GUIManager.Instance.RefreshInteraction();
+				
 			}
-			WhyNotFlag = false;
+			WhyNotFlag = true;
 		}
 		
 		public override void UpdateEmotionState(){

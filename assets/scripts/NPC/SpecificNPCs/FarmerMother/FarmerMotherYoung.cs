@@ -12,8 +12,11 @@ public class FarmerMotherYoung : NPC {
 	
 	protected override void SetFlagReactions(){
 		Reaction NewDialogueReaction = new Reaction();
-		NewDialogueReaction.AddAction (new NPCCallbackAction(this.currentEmotion.UpdateEmotionState));
+		NewDialogueReaction.AddAction (new NPCCallbackAction(UpdateEmotionState));
 		flagReactions.Add(FlagStrings.ConversationInMiddleFarmerMother, NewDialogueReaction);
+	}
+	public void UpdateEmotionState(){
+		this.currentEmotion.UpdateEmotionState();
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
@@ -32,7 +35,7 @@ public class FarmerMotherYoung : NPC {
 		//Wait for player to come before initiating Mother talking to Father
 		openningWaitingSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
 		openningWaitingSchedule.Add(new TimeTask(30, new WaitTillPlayerCloseState(this, player)));
-		openningWaitingSchedule.Add(new TimeTask(10, new MoveThenDoState(this, new Vector3(transform.position.x + 1,transform.position.y, transform.position.z), new IdleState(this))));
+		//openningWaitingSchedule.Add(new TimeTask(10, new MoveThenDoState(this, new Vector3(transform.position.x + 1,transform.position.y, transform.position.z), new IdleState(this))));
 		scheduleStack.Add(openningWaitingSchedule);
 		
 		//After talking to father about daughter
@@ -59,7 +62,7 @@ public class FarmerMotherYoung : NPC {
 		}
 		
 		public override void UpdateEmotionState(){
-			
+			Debug.LogError("This is the wrong emotion state");
 		}
 	
 	}
@@ -306,10 +309,13 @@ public class FarmerMotherYoung : NPC {
 		public override void UpdateEmotionState(){
 			if(updateConversationFarmerMotherYoungFlag == false){
 				if(_allChoiceReactions.ContainsKey(StoriesFunChoice)){
-					_allChoiceReactions.Add(StoriesHelpRelateChoice, new DispositionDependentReaction(StoriesHelpRelateReaction));	
+					_allChoiceReactions.Add(StoriesHelpRelateChoice, new DispositionDependentReaction(StoriesHelpRelateReaction));
+					Debug.LogError("Added the choice to Young Mother");
 				}
 				updateConversationFarmerMotherYoungFlag = true;
+				Debug.LogError("Set ConversationFlag to true");
 			}
+			Debug.LogError("Called Update emotion state");
 		}
 			
 		private void askedWhatAbout(){
