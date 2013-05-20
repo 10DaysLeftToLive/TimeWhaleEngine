@@ -18,13 +18,11 @@ public static class Utils{
 	
 	public static Vector3 GetPointInfrontOf(Vector3 start, GameObject objectToMoveInfront){
 		Vector3 whereToMove = objectToMoveInfront.transform.position;
-		Debug.Log("where to move = " + whereToMove + " - " + objectToMoveInfront.transform.localScale.x/2);
 		if (Utils.CalcDifference(start.x, whereToMove.x) < 0) { // if the target is to the right
 			whereToMove.x = whereToMove.x - objectToMoveInfront.transform.localScale.x/2 - SPACEINFRONT;
 		} else {
 			whereToMove.x = whereToMove.x + objectToMoveInfront.transform.localScale.x/2 + SPACEINFRONT;
 		}
-		Debug.Log("where to move = " + whereToMove);
 		
 		return (whereToMove);
 	}
