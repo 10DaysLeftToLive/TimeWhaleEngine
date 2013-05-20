@@ -11,12 +11,16 @@ public class NPCPassiveConvoCheck : MonoBehaviour {
 	private Player player;
 	private Action sayHi;
 	private NPC npcToChatWith;
+	private float currentTime;
+	private float previousTime;
+	private float timeToDecrement;
 	private static float UPDATE_TIME_DELAY = .5f; // Delay the running of the passive chat
 	private static float currentDelay = 0;
 	
 	void Start() {
 		npcDict = NPCManager.instance.getNPCDictionary();
 		player = GameObject.Find("PlayerCharacter").GetComponent<Player>();
+		currentTime = previousTime = Time.time;
 	}
 	
 	void Update() {
@@ -53,10 +57,14 @@ public class NPCPassiveConvoCheck : MonoBehaviour {
 	
 	private void SetPassiveChatTimer(NPC npc) {
 		npc.timeTillPassiveChatAgain = TIME_INBETWEEN_PASSIVE_CHATS;
+		currentTime = previousTime = Time.time;
 	}
 	
 	private void DecrementPassiveChatTimer(NPC npc) {
-		npc.timeTillPassiveChatAgain -= Time.deltaTime;
+		currentTime = Time.time;
+		timeToDecrement = Mathf.Abs(currentTime - previousTime);
+		npc.timeTillPassiveChatAgain -= timeToDecrement;
+		previousTime = currentTime;
 	}
 	
 	public bool RequestChat(NPC npcToRequest) {
