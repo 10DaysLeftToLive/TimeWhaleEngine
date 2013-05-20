@@ -22,7 +22,7 @@ public class AgeSwapMover : ManagerSingleton<AgeSwapMover> {
 	}
 	
 	// check if new position will work
-	public bool CheckTransitionPositionSuccess(CharacterAge newAge, CharacterAge previousAge){
+	public bool CheckTransitionPositionSuccess(CharacterAge newAge, CharacterAge previousAge) {
 		Vector3 playerCenter = GetNewAgeWorldPosition(playerCharacter.animationData.transform.position, newAge, previousAge, true);
 
 		CharacterController charControl = playerCharacter.GetComponent<CharacterController>();
