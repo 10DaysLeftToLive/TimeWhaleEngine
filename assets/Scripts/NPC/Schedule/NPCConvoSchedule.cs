@@ -15,7 +15,6 @@ public class NPCConvoSchedule : Schedule {
 	protected NPCChat chatToPerform;
 	protected NPC npcNotTalking;
 	protected NPC npcTalking;
-	private static float TALK_TIME = 3.5F;
 	private static float DISTANCE_CLOSE_TO_PLAYER = 6f;
 	private static float TALK_DISTANCE = 2f;
 	
