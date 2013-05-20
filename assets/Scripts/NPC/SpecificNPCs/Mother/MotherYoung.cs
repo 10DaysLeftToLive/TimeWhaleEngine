@@ -109,7 +109,7 @@ public class MotherYoung : NPC {
 				
 				SetOnCloseInteractionReaction(new DispositionDependentReaction(AskToGardenReaction));
 				AskToGardenReaction.AddAction(new NPCGiveItemAction(toControl, StringsItem.LilySeeds)); // supposed to drop apple seeds (brown baggy?)
-				AskToGardenReaction.AddAction(new ShowOneOffChatAction(toControl, "Here are the leftover seeds."));	
+				AskToGardenReaction.AddAction(new ShowOneOffChatAction(toControl, "Here are the leftover seeds.", 10000));	
 				AskToGardenReaction.AddAction(new NPCEmotionUpdateAction(toControl, new AskToGardenState(toControl,"You're such a great help! Can you plant these seeds for me?")));
 				//enterPostInitialEmotionState.AddAction(new NPCCallbackAction(UpdateText));	
 			}	

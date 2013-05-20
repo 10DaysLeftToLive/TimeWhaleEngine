@@ -15,14 +15,15 @@ public abstract class WaitState : AbstractState {
 	}
 	
 	public override void OnEnter(){
-		Debug.Log(character.name + ": WaitState Enter");
+		DebugManager.instance.Log(character.name + ": WaitState Enter", character.name, "State");
+		
 		if (character is Player){
 			character.EnterState(new IdleState(character));
 		}
 	}
 	
 	public override void OnExit(){
-		Debug.Log(character.name + ": WaitState Exit");
+		DebugManager.instance.Log(character.name + ": WaitState Exit", character.name, "State");
 	}
 	
 	/// <summary>

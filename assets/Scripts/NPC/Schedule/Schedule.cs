@@ -145,15 +145,14 @@ public class Schedule {
 	}
 	
 	public virtual void NextTask(){
-		Debug.Log(_toManage + " schedule next task");
+		DebugManager.instance.Log(_toManage + " schedule next task", "Schedule", _toManage.ToString());
 		if (current != null){ // if we are going to skip the current task but it has not finished
 			current.Finish();
 		}
 		
 		if (_tasksToDo.Count > 0) {
 			current = _tasksToDo.Dequeue();
-			Debug.Log("There are " + _tasksToDo.Count + " tasks");
-			Debug.Log(_toManage.name + " is now switching to " + current.StatePerforming);
+			DebugManager.instance.Log(_toManage.name + " is now switching to " + current.StatePerforming, "Schedule", _toManage.ToString());
 			_toManage.ForceChangeToState(current.StatePerforming);
 		}
 	}

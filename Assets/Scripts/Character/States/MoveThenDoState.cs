@@ -13,15 +13,15 @@ public class MoveThenDoState : MoveState {
     }
     
     public override void OnEnter(){
-        Debug.Log(character.name + ": MoveThenDoState Enter");
-        //TODO: Handle case for climb
+		DebugManager.instance.Log(character.name + ": MoveThenDoState Exit", character.name, "State");
+		
         character.PlayAnimation(Strings.animation_walk);
         base.OnEnter();
     }
     
     public override void OnExit(){
         character.PlayAnimation(Strings.animation_stand);
-        Debug.Log(character.name + ": MoveThenDoState Exit");
+		DebugManager.instance.Log(character.name + ": MoveThenDoState Exit", character.name, "State");
 
         if (character is NPC)
         {
@@ -35,7 +35,6 @@ public class MoveThenDoState : MoveState {
     }
     
     protected override void OnGoalReached(){
-        Debug.Log(character.name + " has reached the goal. Swithcing to what to do when done.");
         character.PlayAnimation(Strings.animation_stand);
         character.EnterState(_toDoWhenDone);
     }
