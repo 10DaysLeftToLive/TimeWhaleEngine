@@ -40,7 +40,7 @@ public class LighthouseGirlMiddle : NPC {
 		scheduleStack.Add(postOpenningSchedule);
 		
 		
-		scheduleStack.Add(new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerFatherYoung), 
+		scheduleStack.Add(new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerFatherMiddle), 
 			new YoungFarmerMotherToFarmerFatherOpenningScriptedDialogue(),Schedule.priorityEnum.High));
 		
 	}
