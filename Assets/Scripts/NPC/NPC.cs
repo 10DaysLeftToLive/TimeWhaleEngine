@@ -16,6 +16,8 @@ public abstract class NPC : Character {
 	protected ScheduleStack scheduleStack;
 	protected EmotionState currentEmotion;
 	protected Dictionary<string, Reaction> flagReactions;
+	private Dictionary<int, Reaction> timeReactions;
+	private int truncatedTime;
 	
 	public Player player;
 	private bool chatingWithPlayer = false;
@@ -26,6 +28,7 @@ public abstract class NPC : Character {
 	#endregion
 	
 	#region Set Values
+	private static int TIME_TRUNCATION = 10; // should be a power of 10
 	private static int NEAR_DISTANCE = 8;
 	private static int DISTANCE_TO_CHAT = 4;
 	private static int DISPOSITION_LOW_END = 0;
@@ -45,6 +48,7 @@ public abstract class NPC : Character {
 		currentEmotion = GetInitEmotionState();
 		scheduleStack = new ScheduleStack();
 		flagReactions = new Dictionary<string, Reaction>();
+		timeReactions = new Dictionary<int, Reaction>();
 		scheduleStack.Add(new DefaultSchedule(this)); // Need to add a default schedule that will never end
 		SetUpSchedules();
 		SetFlagReactions();
@@ -195,6 +199,36 @@ public abstract class NPC : Character {
 	public void ReactToFlag(string flagName){
 		Debug.Log(name + " is reacting to the flag " + flagName);
 		flagReactions[flagName].React();
+	}
+	
+	/// <summary>
+	/// timeToReact must be within 0800 - 2000
+	/// </summary>
+	public void AddTimeReaction(int timeToReact, Reaction reaction) {
+		if (timeToReact > 800 && timeToReact < 2000) {
+			timeReactions.Add(TruncateTime(timeToReact), reaction);
+			TimeReactionManager.instance.Add(this);
+		} else {
+			Debug.LogWarning("TimeToReact must be within 0800 - 2000");
+		}
+	}
+	
+	public void ReactToTime(int gameDayTime) {
+		truncatedTime = TruncateTime(gameDayTime);
+		if (timeReactions.ContainsKey(truncatedTime)) {
+			timeReactions[truncatedTime].React();
+			timeReactions.Remove(truncatedTime);
+			if (timeReactions.Count < 1) {
+				TimeReactionManager.instance.Remove(this);
+			}
+		}
+	}
+	
+	/// <summary>
+	/// Used to truncate military time to 10 minute intervals
+	/// </summary>
+	public int TruncateTime(int gameDayTime) {
+		return Mathf.RoundToInt((float)gameDayTime/TIME_TRUNCATION);
 	}
 	
 	public void ReactToChoice(string choice){

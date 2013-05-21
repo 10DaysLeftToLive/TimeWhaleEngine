@@ -8,11 +8,16 @@ public class OneDayClock : PauseObject {
 	public float timeSinceLastPaused { get; private set; }
 	public float time { 
 		get {
-			return Time.time - lostTime;
+			return GamePlayTime();
 		}
 	}
 	private float lostTime = 0;
+	private float timeInHour;
 	
+	public static float GAME_LENGTH = 600f; // seconds
+	public static float START_TIME = 800; // day starts at 8 AM, 0800 military
+	public static float HOURS_IN_DAY = 12;
+	public static float MILITARY_TIME_MULTIPLIER = 100;
 	
 	// Use this for initialization
 	void Start () {
@@ -20,10 +25,11 @@ public class OneDayClock : PauseObject {
 			Instance = new OneDayClock();
 		}
 		timeSinceGameStarted = timeSinceLastPaused = Time.time;
+		timeInHour = GAME_LENGTH/HOURS_IN_DAY;
 	}
 	
 	protected override void UpdateObject() {
-		
+		TimeReactionManager.instance.Update(GetGameDayTime());
 	}
 	
 	protected override void OnPause() {
@@ -35,4 +41,21 @@ public class OneDayClock : PauseObject {
 		timeSinceLastPaused = Time.time - (Time.time - timeSinceLastPaused);
 	}
 	
+	private float GamePlayTime() {
+		return Time.time - lostTime;
+	}
+	
+	/// <summary>
+	/// Returns military time starting at 0800
+	/// </summary>
+	public int GetGameDayTime() {
+		return (Mathf.RoundToInt((((GamePlayTime()/timeInHour) * MILITARY_TIME_MULTIPLIER) + START_TIME)));
+	}
+	
+	public bool IsGameDone() {
+		if (GAME_LENGTH < GamePlayTime()) {
+			return true;
+		}
+		return false;
+	}
 }
