@@ -11,9 +11,12 @@ public class LighthouseGirlYoung : NPC {
 		id = NPCIDs.LIGHTHOUSE_GIRL;
 		base.Init();
 	}
-	
+	private NPCConvoSchedule tellOnLighthouseConversationSchedule;
 	protected override void SetFlagReactions(){
-		
+		Reaction TellOnLighthouseReaction = new Reaction();
+		TellOnLighthouseReaction.AddAction(new ShowOneOffChatAction(this, "Git over here girl.", 2f));
+		TellOnLighthouseReaction.AddAction(new NPCAddScheduleAction(this, tellOnLighthouseConversationSchedule));
+		flagReactions.Add(FlagStrings.TellOnLighthouseConversation, TellOnLighthouseReaction);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
@@ -28,6 +31,8 @@ public class LighthouseGirlYoung : NPC {
 	}
 
 	protected override void SetUpSchedules(){
+		tellOnLighthouseConversationSchedule = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.LighthouseGirlYoung), 
+			new YoungFarmerMotherToLighthouseGirlToldOn(),Schedule.priorityEnum.High);
 		
 	}
 	
@@ -35,13 +40,13 @@ public class LighthouseGirlYoung : NPC {
 	#region EmotionStates
 	#region Initial Emotion State
 	private class InitialEmotionState : EmotionState{
-		Choice OwnChores = new Choice("Do your own chores", "Hmmmpphhh...Great warriors don't need help from other people!");
-		Choice WhatDoYouNeed = new Choice("What do you need?", "Apple pie! My mom wants me to learn how to cook or something stupid like that...");
-		Choice Sure = new Choice("Sure", "My mom wants to bake apple pie! So give me some and we can pretend I baked it!");
+		Choice OwnChoresChoice = new Choice("Do your own chores", "Hmmmpphhh...Great warriors don't need help from other people!");
+		Choice WhatDoYouNeedChoice = new Choice("What do you need?", "Apple pie! My mom wants me to learn how to cook or something stupid like that...");
+		Choice SureChoice = new Choice("Sure", "My mom wants to bake apple pie! So give me some and we can pretend I baked it!");
 		Reaction OwnChoresReaction, WhatDoYouNeedReaction, SureReaction;
-		Choice GetApple = new Choice("I'll get you an apple", "Well...okay...that will help...");
-		Reaction GaveApplePie = new Reaction();
-		Reaction GaveApple = new Reaction();
+		Choice GetAppleChoice = new Choice("I'll get you an apple", "Well...okay...that will help...");
+		Reaction GaveApplePieReaction = new Reaction();
+		Reaction GaveAppleReaction = new Reaction();
 		NPC control;
 	
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
@@ -50,13 +55,15 @@ public class LighthouseGirlYoung : NPC {
 			WhatDoYouNeedReaction = new Reaction(); 
 			SureReaction = new Reaction();
 			
-			_allChoiceReactions.Add(OwnChores,new DispositionDependentReaction(OwnChoresReaction));
 			
-			WhatDoYouNeedReaction.AddAction(new NPCCallbackAction(WhatDoNeed));
-			_allChoiceReactions.Add(WhatDoYouNeed,new DispositionDependentReaction(WhatDoYouNeedReaction));
+			OwnChoresReaction.AddAction(new NPCCallbackAction(UpdateOwnChores));
+			_allChoiceReactions.Add(OwnChoresChoice,new DispositionDependentReaction(OwnChoresReaction));
 			
-			SureReaction.AddAction(new NPCCallbackAction(SureResponse));
-			_allChoiceReactions.Add(Sure,new DispositionDependentReaction(SureReaction));
+			WhatDoYouNeedReaction.AddAction(new NPCCallbackAction(UpdateWhatDoNeed));
+			_allChoiceReactions.Add(WhatDoYouNeedChoice,new DispositionDependentReaction(WhatDoYouNeedReaction));
+			
+			SureReaction.AddAction(new NPCCallbackAction(UpdateSure));
+			_allChoiceReactions.Add(SureChoice,new DispositionDependentReaction(SureReaction));
 			
 			
 		}
@@ -65,36 +72,49 @@ public class LighthouseGirlYoung : NPC {
 			
 		}
 		
-		public void WhatDoNeed(){
-			Reaction GetAppleReaction = new Reaction();
-			GetAppleReaction.AddAction(new NPCCallbackAction(GetAnApple));
-			_allChoiceReactions.Add(GetApple,new DispositionDependentReaction(GetAppleReaction));
-			_allChoiceReactions.Remove(WhatDoYouNeed);
-			_allChoiceReactions.Remove(OwnChores);
-			_allChoiceReactions.Remove(Sure);
-			GUIManager.Instance.RefreshInteraction();
+		public void UpdateOwnChores(){
+			_allChoiceReactions.Remove(OwnChoresChoice);
+			_allChoiceReactions.Remove(WhatDoYouNeedChoice);
+			_allChoiceReactions.Remove(SureChoice);
+			FlagManager.instance.SetFlag(FlagStrings.TellOnLighthouse);	
 		}
 		
-		public void SureResponse(){
-			_allChoiceReactions.Remove(WhatDoYouNeed);
-			_allChoiceReactions.Remove(OwnChores);
-			_allChoiceReactions.Remove(Sure);
+		public void UpdateWhatDoNeed(){
+			Reaction GetAppleReaction = new Reaction();
+			GetAppleReaction.AddAction(new NPCCallbackAction(GetAnApple));
+			_allChoiceReactions.Add(GetAppleChoice,new DispositionDependentReaction(GetAppleReaction));
+			_allChoiceReactions.Remove(WhatDoYouNeedChoice);
+			_allChoiceReactions.Remove(OwnChoresChoice);
+			_allChoiceReactions.Remove(SureChoice);
+			GUIManager.Instance.RefreshInteraction();
+			
+			
+			FlagManager.instance.SetFlag(FlagStrings.TellOnLighthouse);
+		}
+		
+		public void UpdateSure(){
+			_allChoiceReactions.Remove(WhatDoYouNeedChoice);
+			_allChoiceReactions.Remove(OwnChoresChoice);
+			_allChoiceReactions.Remove(SureChoice);
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Have you gotten me that apple pie yet?");
-			GaveApplePie.AddAction(new NPCTakeItemAction(control));
-			GaveApplePie.AddAction(new NPCCallbackAction(GaveApplePieResponse));
-			GaveApplePie.AddAction(new UpdateCurrentTextAction(control, "Thanks! your the best!"));
-			_allItemReactions.Add(StringsItem.Apple,  new DispositionDependentReaction(GaveApplePie));
+			GaveApplePieReaction.AddAction(new NPCTakeItemAction(control));
+			GaveApplePieReaction.AddAction(new NPCCallbackAction(GaveApplePieResponse));
+			GaveApplePieReaction.AddAction(new UpdateCurrentTextAction(control, "Thanks! your the best!"));
+			_allItemReactions.Add(StringsItem.Apple,  new DispositionDependentReaction(GaveApplePieReaction));
+			
+			
+			FlagManager.instance.SetFlag(FlagStrings.TellOnLighthouse);
 		}
 		
 		public void GetAnApple(){
-			_allChoiceReactions.Remove(GetApple);
+			_allChoiceReactions.Remove(GetAppleChoice);
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("So you going to help me out with baking an apple pie?");
-			GaveApple.AddAction(new NPCTakeItemAction(control));
-			GaveApple.AddAction(new NPCCallbackAction(GaveAppleResponse));
-			GaveApple.AddAction(new UpdateCurrentTextAction(control, "Thanks! Now to do this silly cooking thing...real warriors don't cook..."));
-			_allItemReactions.Add(StringsItem.Apple,  new DispositionDependentReaction(GaveApple));
+			GaveAppleReaction.AddAction(new NPCTakeItemAction(control));
+			GaveAppleReaction.AddAction(new NPCCallbackAction(GaveAppleResponse));
+			GaveAppleReaction.AddAction(new UpdateCurrentTextAction(control, "Thanks! Now to do this silly cooking thing...real warriors don't cook..."));
+			_allItemReactions.Add(StringsItem.Apple,  new DispositionDependentReaction(GaveAppleReaction));
 		}
 		
 		public void GaveApplePieResponse(){

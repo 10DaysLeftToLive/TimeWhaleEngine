@@ -59,10 +59,14 @@ public static class FlagStrings {
 	public static string PostCastleDate = "Post Castle Date";
 	public static string CastleMarriage = "Castle Marriage";
 	public static string NoteNoMarriage = "Note No Marriage";
+	public static string TellOnLighthouse = "Tell on Lighthouse";
+	public static string TellOnLighthouseConversation = "Tell on Lighthouse Conversation";
 	#endregion
 	
 	#region FarmerFather
 	public static string ConversationInMiddleFather = "Conversation in Middle Father";
+	public static string BusinessConversation = "Business";
+	public static string BusinessTimer = "Business Timer";
 	#endregion
 	
 	#region FarmerMother
