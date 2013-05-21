@@ -13,6 +13,9 @@ public class OneDayClock : PauseObject {
 	}
 	private float lostTime = 0;
 	private float timeInHour;
+	private float timeOfDay;
+	private float minutes;
+	private float hours;
 	
 	public static float GAME_LENGTH = 600f; // seconds
 	public static float START_TIME = 800; // day starts at 8 AM, 0800 military
@@ -49,7 +52,10 @@ public class OneDayClock : PauseObject {
 	/// Returns military time starting at 0800
 	/// </summary>
 	public int GetGameDayTime() {
-		return (Mathf.RoundToInt((((GamePlayTime()/timeInHour) * MILITARY_TIME_MULTIPLIER) + START_TIME)));
+		timeOfDay = GamePlayTime()/timeInHour;
+		minutes = (timeOfDay - Mathf.Floor(timeOfDay))*60;
+		hours = ((Mathf.Floor(timeOfDay)*MILITARY_TIME_MULTIPLIER) + START_TIME);
+		return (hours + minutes);
 	}
 	
 	public bool IsGameDone() {
