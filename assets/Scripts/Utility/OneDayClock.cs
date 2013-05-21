@@ -55,7 +55,7 @@ public class OneDayClock : PauseObject {
 		timeOfDay = GamePlayTime()/timeInHour;
 		minutes = (timeOfDay - Mathf.Floor(timeOfDay))*60;
 		hours = ((Mathf.Floor(timeOfDay)*MILITARY_TIME_MULTIPLIER) + START_TIME);
-		return (hours + minutes);
+		return ((int)(hours + minutes));
 	}
 	
 	public bool IsGameDone() {
