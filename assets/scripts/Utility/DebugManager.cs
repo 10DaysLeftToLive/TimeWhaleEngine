@@ -8,8 +8,9 @@ using System.Collections.Generic;
 /// </summary>
 public class DebugManager : MonoBehaviour {
 	[SerializeField]
-	public List<string> tagsToDisplay = new List<string>();
+	//public List<string> tagsToDisplay = new List<string>();
 	public bool showLogs = true;
+	public List<DebugTag> debugTagList = new List<DebugTag>();
 	
 	private static DebugManager manager_instance = null;
     
@@ -35,18 +36,30 @@ public class DebugManager : MonoBehaviour {
 	/// <param name='message'>
 	/// Message to display
 	/// </param>
-	public void Log(string message){
+	/*private void Log(string message){
 		if (showLogs){
 			Debug.Log(message);
 		}
-	}
+	}*/
 	
 	/// <summary>
 	/// Log the specified message if all of the given tags should be shown
 	/// </summary>
 	public void Log(string message, params string[] tags){
+		for (int i = 0; i < tags.Length; i++){
+			bool tagFound = false;
+			foreach (DebugTag dt in debugTagList){
+				if (dt.tag == tags[i]){
+					tagFound = true;
+					break;
+				}
+			}
+			if(!tagFound){
+				debugTagList.Add(new DebugTag(tags[i]));	
+			}
+		}
 		if (showLogs && ShouldShow(tags)){
-			Log (message);
+			Debug.Log(message);
 		}
 	}
 	
@@ -58,12 +71,21 @@ public class DebugManager : MonoBehaviour {
 	/// </returns>
 	private bool ShouldShow(params string[] tags){
 		for (int i = 0; i < tags.Length; i++){
-			if (TagSet(tags[i])) return true;
+			foreach (DebugTag dt in debugTagList){
+				if (dt.tag == tags[i] && dt.display){
+					return true;
+				}
+			}
 		}
 		return false;
+		/*
+		for (int i = 0; i < tags.Length; i++){
+			if (TagSet(tags[i])) return true;
+		}
+		return false;*/
 	}
 	
-	private bool TagSet(string tag){
+	/*private bool TagSet(string tag){
 		return (tagsToDisplay.Contains(tag));			
-	}
+	}*/
 }

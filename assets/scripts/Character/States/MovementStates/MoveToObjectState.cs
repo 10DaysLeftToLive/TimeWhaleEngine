@@ -28,7 +28,7 @@ public class MoveToObjectState : MoveState {
 	}
     
     public override void OnEnter(){
-        Debug.Log(character.name + ": MoveToTalkState Enter");
+        DebugManager.instance.Log(character.name + ": MoveToTalkState Enter", character.name);
         //TODO: Handle case for climb
 		UpdateGoal(_toMoveTo.transform.position);
         character.PlayAnimation(Strings.animation_walk);
@@ -37,7 +37,7 @@ public class MoveToObjectState : MoveState {
     
     public override void OnExit(){
         character.PlayAnimation(Strings.animation_stand);
-        Debug.Log(character.name + ": MoveThenDoState Exit");
+        DebugManager.instance.Log(character.name + ": MoveThenDoState Exit", character.name);
 
         if (character is NPC)
         {
@@ -51,7 +51,7 @@ public class MoveToObjectState : MoveState {
     }
     
     protected override void OnGoalReached(){
-        Debug.Log(character.name + " has reached the goal. Swithcing to what to do when done.");
+         DebugManager.instance.Log(character.name + " has reached the goal. Swithcing to what to do when done.", character.name);
         character.PlayAnimation(Strings.animation_stand);
         character.EnterState(new MarkTaskDone(character));
     }
