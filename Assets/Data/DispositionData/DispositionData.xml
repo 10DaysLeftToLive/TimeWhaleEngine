@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="us-ascii"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <NPCCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Npcs>
     <Npcs name="CarpenterYoung">
@@ -37,19 +37,22 @@
     <Npcs name="SiblingMiddle">
       <disposition>0</disposition>
     </Npcs>
-    <Npcs name="FarmerMotherMiddle">
+    <Npcs name="MotherMiddle">
       <disposition>0</disposition>
     </Npcs>
-    <Npcs name="SeaCaptainMiddle">
+    <Npcs name="FarmerFatherMiddle">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="FortuneTellerMiddle">
       <disposition>0</disposition>
     </Npcs>
     <Npcs name="CarpenterMiddle">
       <disposition>0</disposition>
     </Npcs>
-    <Npcs name="LighthouseGirlMiddle">
+    <Npcs name="FarmerMotherMiddle">
       <disposition>0</disposition>
     </Npcs>
-    <Npcs name="FarmerFatherMiddle">
+    <Npcs name="LighthouseGirlMiddle">
       <disposition>0</disposition>
     </Npcs>
     <Npcs name="CastlemanMiddle">
@@ -58,19 +61,10 @@
     <Npcs name="CarpenterSonMiddle">
       <disposition>0</disposition>
     </Npcs>
-    <Npcs name="FortuneTellerMiddle">
-      <disposition>0</disposition>
-    </Npcs>
     <Npcs name="MusicianMiddle">
       <disposition>0</disposition>
     </Npcs>
-    <Npcs name="MotherMiddle">
-      <disposition>0</disposition>
-    </Npcs>
-    <Npcs name="SiblingOld">
-      <disposition>0</disposition>
-    </Npcs>
-    <Npcs name="LighthouseGirlOld">
+    <Npcs name="SeaCaptainMiddle">
       <disposition>0</disposition>
     </Npcs>
     <Npcs name="CarpenterSonOld">
@@ -80,6 +74,12 @@
       <disposition>0</disposition>
     </Npcs>
     <Npcs name="FortuneTellerOld">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="SiblingOld">
+      <disposition>0</disposition>
+    </Npcs>
+    <Npcs name="LighthouseGirlOld">
       <disposition>0</disposition>
     </Npcs>
   </Npcs>
