@@ -4,25 +4,174 @@ for use with Unity3D
 Copyright 2012 echo17
 
 
+IMPORTANT -- READ FIRST !!!!
+
+If you are upgrading from SmoothMoves v 1.x, please be sure to read the "smoothmoves_v2_upgrade_guide.pdf" by going to the menu "SmoothMoves > Documentation > V2 Upgrade Guide".
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!                                                                    !!!!!!!
+!!!!!!! ALWAYS BACKUP YOUR CODE BEFORE IMPORTING NEW SMOOTHMOVES VERSIONS. !!!!!!!
+!!!!!!! Please rebuild your animations after upgrading SmoothMoves.        !!!!!!!
+!!!!!!!                                                                    !!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
 ********************************************************
 * For tutorials and documentation check out echo17.com *
 ********************************************************
 
 
-Video tutorials available that show how to:
 
-- Set up the environment
-- Create atlases
-- Create sprites
-- Create animations
-- Script animations
 
-To read the API documentation on Mac, you can download the free program iChm at:
 
-http://code.google.com/p/ichm/
+
 
 Version History:
 -------------------------------
+
+
+Version 2.2.4
+
+Bug Fixes:
+- Fixed color processing so that keyframe color will not continue to be evaluated after a clip has finished playing.
+
+Features:
+- Added totalFrames to AnimationStateSM class to return the number of frames in an animation state.
+
+
+Version 2.2.3
+
+Bug Fixes:
+- Removed icons for SmoothMoves assets from the Project window to avoid out-of-memory errors and Unity editor crash.
+
+
+Version 2.2.2
+
+
+
+Bug Fixes:
+
+- Keyframe color blending for looping animation clips will now work beyond the first iteration of the loop.
+
+
+
+Features:
+
+- Added "frame" member to AnimationStateSM to get or set the float frame of the clip.
+
+- Added "frameInt" member to AnimationStateSM to get or set the last integer frame passed of a clip. 
+
+
+
+Version 2.2.0
+
+Bug Fixes:
+- Fixed issue of wrong material displaying after calling a swap texture function to a new atlas.
+- If there is an error or warning when building animations, the progress window will now disappear.
+- Put in preprocessor directives based on Unity version in Rise of the Dough scripts to avoid getting warnings in Unity3D 4.x about obsolete code.
+- Atlas will now build atlas textures at full 4096 resolution before resizing to max size set by user. This will prevent unwanted cropping of source textures.
+
+Features:
+- Added "SetTextureName" function to Sprite class to allow selection of sprite at runtime by the source file name.
+- Switched from custom event system to using Unity's animation events for improved performance and reliability with SmoothMoves triggers.
+- Improved startup process of bone animations so that they will load faster.
+- When dragging a prefab to the scene, the mesh will be automatically created if you have the control panel open.
+- Changed the sprite atlas selection to a drop-down list.
+- Added function "GetAnimationClipIndex" to BoneAnimation to return the index of the animation clip, given the name.
+- Added function "GetAnimationClipName" to BoneAnimation to return the name of the animation, given the clip index.
+- Added function "AnimationClipExists" to BoneAnimation to return whether an animation exists with a given name or clip index.
+- Animation Clips are now shown at design time in the inspector of the Unity Animation component. These should not be changed, only used as a reference to the available animation clips.
+- Drop down selection for the animation data. This saves on memory usage by not tying the animation to its source data at load time.
+- Optimization of runtime code: less heap allocations and converted dictionary structures to arrays.
+- Removed references to Replace texture functions. Swap texture functions should be used instead.
+- Added icons to scene hierarchy bone animations, project bone animation data assets, and project texture atlas assets.
+- Modified the Score.cs script in the "Rise of the Dough" minigame to force an animation event when setting the score value in conjunction with the new animation event system. This is done because Unity will not fire animation events for animations running at zero fps.
+- Sped up the pick up weapon animation for the chef in the "Rise of the Dough" minigame.
+- Added a "Delete Texture" button to the atlas editor. The backspace and delete keys will not delete textures from an atlas anymore due to conflicts with the pivot entry fields.
+- Atlases now store max size, padding, and force square options in each atlas data asset file instead of globally.
+- Consolidated the project creation menu under a single "SmoothMoves" group.
+
+Version 2.1.0
+
+
+
+Bug Fixes:
+
+- Atlas default pivots will no longer be lost when assigning new atlases to existing animations.
+- Removed the Object Picker control from the animation editor's keyframe property inspector for the atlas object. Replaced it with a list of atlases in the project. This gets around the bug in Unity 4 which won't display custom class objects in the object selection list.
+- If an atlas is selected in the animation editor for a keyframe where a texture does not exist in that atlas, the texture button will show a blank texture when clicking on a frame in the timeline window.
+
+
+
+
+Features:
+
+- Added a "Force Build This Bone Animation" button to the bone animation inspector. This will build only the selected bone animation (and its associated bone animation data).
+
+
+
+
+
+
+
+Version 2.0.2
+
+
+
+Bug Fixes:
+
+- If a bone animation is inactive when registering user triggers, collisions, or collider triggers, then the registration structures will now properly initialize upon registration.
+
+Features:
+
+- Added unregister functions for the user triggers, collisions, and collider triggers.
+ 
+
+
+Features:
+None
+
+
+Version 2.0.1
+
+Bug Fixes:
+- Fixed texture swapping to only swap on the boneanimation instance.
+
+
+Version 2.0.0
+
+Bug Fixes:
+- Added check when building an atlas to make sure all texture names are unique.
+- Set all source textures to Clamp wrapmode when building atlas to remove artifacts in the animation editor.
+- Fixed RestoreOriginalMaterials to regenerate the mesh automatically.
+- Fixed swapping and replacing textures to properly use the pivot offset override or the built in pivot offset, depending on which function is called.
+- After swapping a texture, the texture should now change immediately instead of at the next trigger point.
+- Fixed bug that would not let you end an animation name with the letter "R".
+- Added better precision on baking the quaternion keys for rotations. You will now see a more instantaneous jump on rotations when using constant tangents.
+- If the last keyframe added in the timeline is a user trigger, the animation clip will now see this keyframe as the final trigger.
+- Fixed a bug that swapped too many texture frames when using the Swapxxx functions.
+
+Features:
+- Complete restructuring of how bone animations are built. Shifted most of the work to the Unity editor instead of at runtime on the device. This shortens load time and improves memory usage. 
+- Added creation of Smooth Moves BoneAnimation to the "GameObject > Create Other" Unity menu
+- Added creation of Smooth Moves BoneAnimation to the "Create" Hierarchy menu
+- Added creation of Smooth Moves Sprite to the "Create" Hierarchy menu
+- Removed the Update Mesh button from the Animation Editor.
+- Removed the "Update Bone Animations in Scene" option from the Tools menu.
+- Created a Control Panel window in the "Smooth Moves > Tools" menu to update meshes automatically or by forcing the update.
+- Added links to open the Control panel from the BoneAnimation and BoneAnimationData inspectors.
+- Foreign child objects attached to bones in a BoneAnimation are now reattached automatically as long as the bone names do not change. If the bone name does change, the children are moved under the BoneAnimation.
+- Added a label to the Atlas builder to show the full path of the selected texture. This helps in determining unique texture names.
+- AnimationBoneCollider scripts are only attached to bones that will have a collider on them at some point in some animation (instead of attaching this script to every bone).
+- Tags for collider events. You can now specify a string when you turn on a collider keyframe. This string is useful for determining how to handle collisions. The tag does not need to be unique, so you can handle multiple events with a single tag. An example of this is assigning the tag "Attack" to each of your attack animations when the collider is turned on. Then in the collision delegate, you can quickly filter all your attack collisions by looking for the "Attack" string in the tag. This is also more flexible than filtering your collision events by the frame since that may change as your animation evolves.
+- Added SwapAnimationTexture functions to swap a texture on all bones within an animation.
+- Added RestoreAnimationTexture functions to return textures on all bones within an animation back to their original state.
+- Added RestoreTextures function to return textures on all animations, all bones back to their original state.
+- Hid inspector variables for BoneAnimationData, TextureAtlas, and BoneAnimation so that they don't clutter the screen when sharing resources.
+- Animation FPS can now be set to zero. This allows you to manually control the progress of the animation clip through the normalizedtime property -- great for progress bar animations.
+- Tooltip shows the full texture name in the texture selection panel of the animation editor when hovering over the texture name.
 
 Version 1.11.0
 
