@@ -11,7 +11,13 @@ public class MusicianYoung : NPC {
 	}
 	
 	protected override void SetFlagReactions(){
-		
+		Choice MuteResponseChoice = new Choice("Is your son mute?", "Oh no!  He's just very shy!");
+		Reaction MuteResponseReaction = new Reaction();
+		MuteResponseReaction.AddAction(new NPCRemoveChoiceAction(this, MuteResponseChoice));
+		MuteResponseReaction.AddAction(new UpdateCurrentTextAction(this, "Oh no!  He's  just very shy!"));
+		Reaction IsHeMuteReaction = new Reaction();
+		IsHeMuteReaction.AddAction(new NPCAddChoiceAction(this, MuteResponseChoice, new DispositionDependentReaction(MuteResponseReaction)));
+		flagReactions.Add(FlagStrings.MusicianCommentOnSon, IsHeMuteReaction);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
@@ -33,7 +39,7 @@ public class MusicianYoung : NPC {
 	private class InitialEmotionState : EmotionState{
 	
 	
-		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, "Hi!  I'm the musician and that's my son over there.  We're new to the island."){
 			
 		
 		}
