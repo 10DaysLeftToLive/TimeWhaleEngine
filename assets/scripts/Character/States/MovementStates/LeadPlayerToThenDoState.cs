@@ -4,7 +4,7 @@ using System.Collections;
 public class LeadPlayerToThenDoState : MoveThenDoState {
 	private Player _player;
 	private ShowOneOffChatAction waitYell;
-	private float timeToYellAgain;
+	private float timeToYellAgain = 0;
 	private static float NEAR_PLAYER = 6f;
 	private static float TIME_TO_YELL_AGAIN = 5f;
 	
