@@ -7,6 +7,8 @@ public float speedOne = 0.075F;
 	public float speedThree = 0.025F;
 	private GameObject[] cloudObjects;
 	private Vector3 newPos;
+	private static int ISLAND_START = -40;
+	private static int ISLAND_END = 65;
 	
 	void Start () {
 		
@@ -39,6 +41,9 @@ public float speedOne = 0.075F;
 	private void moveObject(float speed, GameObject obj) {
 		newPos = obj.transform.position;
 		newPos.x += speed;
+		if (newPos.x > ISLAND_END) {
+			newPos.x = ISLAND_START;
+		}
 		obj.transform.position = newPos;
 	}
 }
