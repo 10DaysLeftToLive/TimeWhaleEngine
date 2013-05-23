@@ -76,4 +76,8 @@ public static class FlagStrings {
 	#region Sea Captain
 	public static string StolenFishingRod = StringsItem.FishingRod;
 	#endregion
+	
+	#region Musician
+	public static string MusicianCommentOnSon = "Is he mute?";
+	#endregion
 }

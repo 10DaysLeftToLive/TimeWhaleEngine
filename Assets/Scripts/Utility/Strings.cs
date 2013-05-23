@@ -61,4 +61,10 @@ public static class Strings{
 	public const string PARALLAXTWO = "ParallaxTwo";
 	public const string PARALLAXTHREE = "ParallaxThree";
 	public const string PARALLAXFOUR = "ParallaxFour";
+	
+	// Clouds
+	public static string CLOUD = "Cloud";
+	public const string CLOUDONE = "CloudOne";
+	public const string CLOUDTWO = "CloudTwo";
+	public const string CLOUDTHREE = "CloudThree";
 }
