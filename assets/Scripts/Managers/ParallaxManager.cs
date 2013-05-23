@@ -6,6 +6,7 @@ public class ParallaxManager : MonoBehaviour {
 	public float speedTwo = 0.1F;
 	public float speedThree = 0.05F;
 	public float speedFour = 0.025F;
+	private Vector3 newPos;
 	private Player player;
 	private Vector3 prevPos;
 	private Vector3 deltaPos;
@@ -50,7 +51,7 @@ public class ParallaxManager : MonoBehaviour {
 	}
 	
 	private void moveObject(float speed, GameObject obj) {
-		Vector3 newPos = obj.transform.position;
+		newPos = obj.transform.position;
 		newPos.x += deltaPos.x * speed;
 		obj.transform.position = newPos;
 	}
