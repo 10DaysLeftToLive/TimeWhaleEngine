@@ -119,7 +119,7 @@ public class MoveState : AbstractState {
 			}
         } 
 		if (Physics.Raycast(_goal, Vector3.up , out hitUp, 10, mask)) {
-			if (hitUp.distance < distance){
+			if (hitUp.distance < distance/2){
 				distance = hitUp.distance;
 				hitPos = hitUp.point;
            		hitPos.y += character.transform.localScale.y/2;
