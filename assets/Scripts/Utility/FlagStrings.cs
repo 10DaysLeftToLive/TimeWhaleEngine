@@ -6,10 +6,14 @@ public static class FlagStrings {
 	
 	#region Mother
 	public static string EnterHappyState = "Enter Happy State";
+	public static string EnterMadState = "Enter Mad State";
+	public static string ExitMadState = "exit Mad State";
 	public static string MoveHome = "Move Home";
 	public static string GaveApple = "Gave Apple";
 	public static string GiveSeeds = "Give Seeds";
 	
+	public static string MoveToMusician = "Move To Musician";
+	public static string FinishMusicianConvo = "Finish Musician Convo";
 	public static string GiveItems = "Give Items";
 	#endregion
 	
