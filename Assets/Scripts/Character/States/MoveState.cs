@@ -48,7 +48,6 @@ public class MoveState : AbstractState {
                 else
                 {
                     lastWay = _pathFollowing.GetLastWayPointName();
-                    Debug.Log("Before any checks, lastWay is " + lastWay);
                     /*DebugManager.instance.Log("lastWay is " + lastWay, "WalkSFX", "SFX");*/
                     NameStartCounter = lastWay.IndexOf(".");
                     NameEndCounter = lastWay.IndexOf("Stair");
@@ -57,7 +56,6 @@ public class MoveState : AbstractState {
                     {
                         Strings.LASTAREA = lastWay.Substring(0, NameStartCounter);
                         Strings.NEXTAREA = lastWay.Substring(NameStartCounter + 5, NameEndCounter - (NameStartCounter + 5));
-                        Debug.Log("Heading towards some stairs, LASTAREA is " + Strings.LASTAREA + " NEXTAREA is " + Strings.NEXTAREA);
                         //DebugManager.instance.Log("LASTAREA is " + Strings.LASTAREA, "WalkSFX", "SFX");
                         towardStair = true;
                     }
@@ -74,7 +72,6 @@ public class MoveState : AbstractState {
                             SoundManager.instance.StartCoroutineFadeDown(Strings.LASTAREA);
                             SoundManager.instance.PlayWalkSFX();
 
-                            Debug.Log("Just started walking up some stairs");
                             
                             // Heading away from the stairs
                             /*if (nextWay.EndsWith("StairBase") || nextWay.EndsWith("StairBaseLeft") || nextWay.EndsWith("StairBaseRight"))
@@ -110,8 +107,6 @@ public class MoveState : AbstractState {
                             Strings.CURRENTAREA = Strings.NEXTAREA;
                             SoundManager.instance.StartCoroutineFadeUp(Strings.CURRENTAREA);
                             SoundManager.instance.PlayWalkSFX();
-
-                            Debug.Log("Just finished walking up some stairs");
                         }
                     }
                 }
