@@ -2,8 +2,13 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// Level manager will handle the initialization of the game and will hold the sections of the map
+/// </summary>
 public class LevelManager : MonoBehaviour {
-	public Player playerCharacter;
+	public static float levelYOffSetFromCenter = 50;
+	public CharacterAgeState initialAge;
+	
 	private ParallaxManager parallaxManager;
 	
 	//Make these private later: Also assign these targets based off prior choices / dispositions
@@ -11,26 +16,13 @@ public class LevelManager : MonoBehaviour {
 	public Transform middleSectionTarget;
 	public Transform oldSectionTarget;
 	
-	public static float levelYOffSetFromCenter = 50;
-	
 	public LevelLoader levelLoader;
 	
 	public PlayerAnimationContainer[] genderAnimations;
 	public CharacterGender playerGender = CharacterGender.MALE;
 	private PlayerAnimationContainer genderAnimationInUse;
-	public string levelDataName;
 	
-	private string dispositionDataFile;
-	
-	void Awake(){
-		if(playerCharacter == null) {
-			Debug.LogWarning("Warning: No PlayerCharacter attached to LevelManager");
-		}
-		
-		if (levelDataName == ""){
-			Debug.LogError("Error: No Level data file given to LevelManager.");
-		}
-		
+	void Awake(){		
 		float genderAsFloat = PlayerPrefs.GetFloat(Strings.Gender);
 		
 		if (genderAsFloat == 0f){
@@ -39,15 +31,12 @@ public class LevelManager : MonoBehaviour {
 			playerGender = CharacterGender.FEMALE;
 		}
 		
-		SetFiles();		
 		SetGender(CharacterGender.MALE);
-		CharacterAgeManager.SetAgeStart(CharacterAgeState.YOUNG);
+		Player playerCharacter = GameObject.Find(Strings.Player).GetComponent<Player>();
 		CharacterAgeManager.SetPlayer(playerCharacter);
 		playerCharacter.ChangeAnimation(genderAnimationInUse.youngBoneAnimation);
-		SetNPCData();	
 	}
 	
-	// Use this for initialization
 	void Start () {
 		parallaxManager = GameObject.Find(Strings.PARALLAXMANAGER).GetComponent<ParallaxManager>();
 		ScreenSetup.CalculateSettings();
@@ -57,7 +46,7 @@ public class LevelManager : MonoBehaviour {
 	
 	private IEnumerator Init(){
 		StartCoroutine(levelLoader.Load("LevelYoung", "LevelMiddle", "LevelOld"));
-		while (!levelLoader.HasLoaded()){ // wait untill the outside scenes have been loaded in.
+		while (levelLoader.HasNotFinished()){ // wait untill the outside scenes have been loaded in.
 			yield return new WaitForSeconds(.1f);
 		}
 		FindSections();
@@ -71,18 +60,13 @@ public class LevelManager : MonoBehaviour {
 		parallaxManager.Init();
 	}
 	
-	private void SetFiles(){
-		dispositionDataFile = Application.dataPath + "/Data/DispositionData/" + Strings.DispositionFile + ".xml";
-		
-		if (!System.IO.File.Exists(dispositionDataFile)){
-			Debug.LogError("Error: " + dispositionDataFile + " was not found.");
-		}
-	}
-	
 	private void FindSections(){
 		youngSectionTarget = GameObject.Find(Strings.YoungAge).transform;
 		middleSectionTarget = GameObject.Find(Strings.MiddleAge).transform;
 		oldSectionTarget = GameObject.Find(Strings.OldAge).transform;
+		if (!youngSectionTarget || !middleSectionTarget || !oldSectionTarget){
+			Debug.LogError("Failed to load a secion");
+		}
 	}
 	
 	// After being loaded in they are all at 0,0,0 so move them apart along the y axis
@@ -91,14 +75,15 @@ public class LevelManager : MonoBehaviour {
 		oldSectionTarget.transform.position = new Vector3(0,levelYOffSetFromCenter*2,0);
 	}
 	
-	void SetNPCData(){		
-		InteractionManager.instance.InitilizeNPCs(dispositionDataFile);
-	}	
-	
-	void SaveDispositions(){
-		InteractionManager.instance.SaveNPCDispositions(dispositionDataFile);
+	/// <summary>
+	/// Moves the player to right initial age.
+	/// </summary>
+	public void MovePlayerToRightAge(CharacterAgeState age){
+		AgeSwapMover.instance.ChangeAgePosition(CharacterAgeManager.GetAgeOf(age), 
+			       		      CharacterAgeManager.GetAgeOf(CharacterAgeState.YOUNG)); // we start at the young int he scene
 	}
 	
+	#region AgeTransition
 	public void ShiftUpAge(){		
 		CharacterAgeManager.TransistionUp();
 	}
@@ -114,6 +99,7 @@ public class LevelManager : MonoBehaviour {
 	public bool CanAgeTransitionUp(){
 		return (CharacterAgeManager.GetCurrentAgeState() != CharacterAgeState.OLD);
 	}
+	#endregion
 	
 	public void SetGender(CharacterGender gender){
 		switch(gender){
@@ -130,17 +116,10 @@ public class LevelManager : MonoBehaviour {
 		CharacterAgeManager.SetupYoung(genderAnimationInUse.youngBoneAnimation, youngSectionTarget);
 		CharacterAgeManager.SetupMiddle(genderAnimationInUse.middleBoneAnimation, middleSectionTarget);
 		CharacterAgeManager.SetupOld(genderAnimationInUse.oldBoneAnimation, oldSectionTarget);
-	}
-
-	private void AllInteractionsComplete() {
-		// To fill in with in with easter egg when the player has no more interactions left before time runs out
-		/* if (InputManager.UPUPDOWNDOWNLEFTRIGHTLEFTRIGHTABDETECTED())
-		 *     TimeWhaleEngine.Begin(); // Needs rewording as there is no begining to Time Whale the glory of Time Whale. It is eternal and does not require a cause
-		 */
-	}
-
-	void OnApplicationQuit(){
-		SaveDispositions();
+		CharacterAgeManager.SetAgeStart(initialAge);
+		if (initialAge != CharacterAgeState.YOUNG){
+			MovePlayerToRightAge(initialAge);
+		}
 	}
 }
 

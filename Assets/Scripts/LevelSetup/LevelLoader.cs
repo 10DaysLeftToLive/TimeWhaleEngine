@@ -2,14 +2,14 @@ using UnityEngine;
 using System.Collections;
 
 public class LevelLoader : MonoBehaviour{
-	private bool _hasLoaded = false;
+	private bool _hasNotFinshed = true;
 	
 	public IEnumerator Load(string youngeAge, string middleAge, string oldAge){
 		yield return StartCoroutine(LoadAges(youngeAge, middleAge, oldAge));
 	}
 	
-	public bool HasLoaded(){
-		return (_hasLoaded);
+	public bool HasNotFinished(){
+		return (_hasNotFinshed);
 	}
 	
 	private IEnumerator LoadAges(string youngeAge, string middleAge, string oldAge){
@@ -17,7 +17,7 @@ public class LevelLoader : MonoBehaviour{
 		StartCoroutine (LoadAge(middleAge));
 		StartCoroutine (LoadAge(oldAge));
 		yield return null; // wait for a tick because unity is dumb
-		_hasLoaded = true;		
+		_hasNotFinshed = false;		
 	}
 	
 	private IEnumerator LoadAge(string age){
