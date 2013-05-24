@@ -32,11 +32,10 @@ public abstract class Character : PauseObject {
 	
 	protected override void Awake() {
 		base.Awake();
+		currentState = new IdleState(this);
 	}
 	
 	void Start () {
-		currentState = new IdleState(this);
-		
 		EnterState(new IdleState(this));
 		
 		Transform rightHand = animationData.GetSpriteTransform("Right Hand");
@@ -93,6 +92,7 @@ public abstract class Character : PauseObject {
 	}
 	
 	public void PlayAnimation(string animation){
+		
 		if (animationData.GetClipCount() > 0) {
 			try {
 				animationData.Play(animation);

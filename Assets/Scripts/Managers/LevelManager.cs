@@ -21,20 +21,15 @@ public class LevelManager : MonoBehaviour {
 	public PlayerAnimationContainer[] genderAnimations;
 	public CharacterGender playerGender = CharacterGender.MALE;
 	private PlayerAnimationContainer genderAnimationInUse;
+	private Player playerCharacter;
 	
-	void Awake(){		
-		float genderAsFloat = PlayerPrefs.GetFloat(Strings.Gender);
-		
-		if (genderAsFloat == 0f){
-			playerGender = CharacterGender.MALE;
-		} else {
-			playerGender = CharacterGender.FEMALE;
-		}
-		
-		SetGender(CharacterGender.MALE);
-		Player playerCharacter = GameObject.Find(Strings.Player).GetComponent<Player>();
+	void Awake(){
+		playerCharacter = GameObject.Find(Strings.Player).GetComponent<Player>();
 		CharacterAgeManager.SetPlayer(playerCharacter);
-		playerCharacter.ChangeAnimation(genderAnimationInUse.youngBoneAnimation);
+		
+		SetGender(playerGender);
+		SetupInitialAgeSettings();
+		playerCharacter.EnterState(new IdleState(playerCharacter));
 	}
 	
 	void Start () {
@@ -58,6 +53,10 @@ public class LevelManager : MonoBehaviour {
 		FlagManager.instance.Init();
 		
 		parallaxManager.Init();
+		
+		if (initialAge != CharacterAgeState.YOUNG){
+			MovePlayerToRightAge(initialAge);
+		}
 	}
 	
 	private void FindSections(){
@@ -79,6 +78,7 @@ public class LevelManager : MonoBehaviour {
 	/// Moves the player to right initial age.
 	/// </summary>
 	public void MovePlayerToRightAge(CharacterAgeState age){
+		if (CharacterAgeManager.GetAgeOf(age) == null) Debug.LogError("hai");
 		AgeSwapMover.instance.ChangeAgePosition(CharacterAgeManager.GetAgeOf(age), 
 			       		      CharacterAgeManager.GetAgeOf(CharacterAgeState.YOUNG)); // we start at the young int he scene
 	}
@@ -101,14 +101,64 @@ public class LevelManager : MonoBehaviour {
 	}
 	#endregion
 	
-	public void SetGender(CharacterGender gender){
+	/// <summary>
+	/// Sets the gender. And will destroy the other gender data to save space
+	/// </summary>
+	private void SetGender(CharacterGender gender){
+		GameObject[] maleAnimations = GetMaleAnimations();
+		GameObject[] femaleAnimations = GetFemaleAnimations();
+		
 		switch(gender){
 			case CharacterGender.MALE:
 				genderAnimationInUse = genderAnimations[(int)CharacterGender.MALE];
+				DestroyAnimations(femaleAnimations);
+				DisableAnimations(maleAnimations);
 				break;
 			case CharacterGender.FEMALE:
 				genderAnimationInUse = genderAnimations[(int)CharacterGender.FEMALE];
+				DestroyAnimations(maleAnimations);
+				DisableAnimations(femaleAnimations);
 				break;		
+		}
+	}
+	
+	private GameObject[] GetFemaleAnimations(){
+		GameObject[] femaleAnimations = new GameObject[3];
+		femaleAnimations[0] = GameObject.Find("FemaleYoungAnimation");
+		femaleAnimations[1] = GameObject.Find("FemaleMiddleAnimation");
+		femaleAnimations[2] = GameObject.Find("FemaleOldAnimation");
+		return (femaleAnimations);
+	}
+	
+	private GameObject[] GetMaleAnimations(){
+		GameObject[] maleAnimations = new GameObject[3];
+		maleAnimations[0] = GameObject.Find("MaleYoungAnimation");
+		maleAnimations[1] = GameObject.Find("MaleMiddleAnimation");
+		maleAnimations[2] = GameObject.Find("MaleOldAnimation");
+		return (maleAnimations);
+	}
+	
+	private void SetupInitialAgeSettings(){
+		if (initialAge != CharacterAgeState.YOUNG){
+			if (initialAge == CharacterAgeState.MIDDLE){
+				playerCharacter.ChangeAnimation(genderAnimationInUse.middleBoneAnimation);
+			} else {
+				playerCharacter.ChangeAnimation(genderAnimationInUse.oldBoneAnimation);
+			}
+		} else {
+			playerCharacter.ChangeAnimation(genderAnimationInUse.youngBoneAnimation);
+		}
+	}
+	
+	private void DestroyAnimations(GameObject[] animationArray){
+		for (int i = 0; i < 3; i++){
+			Destroy(animationArray[i]);
+		}
+	}
+	
+	private void DisableAnimations(GameObject[] animationArray){
+		for (int i = 0; i < 3; i++){
+			Utils.SetActiveRecursively(animationArray[i].gameObject, false);
 		}
 	}
 	
@@ -117,9 +167,6 @@ public class LevelManager : MonoBehaviour {
 		CharacterAgeManager.SetupMiddle(genderAnimationInUse.middleBoneAnimation, middleSectionTarget);
 		CharacterAgeManager.SetupOld(genderAnimationInUse.oldBoneAnimation, oldSectionTarget);
 		CharacterAgeManager.SetAgeStart(initialAge);
-		if (initialAge != CharacterAgeState.YOUNG){
-			MovePlayerToRightAge(initialAge);
-		}
 	}
 }
 

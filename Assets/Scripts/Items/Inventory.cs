@@ -60,10 +60,8 @@ public class Inventory {
 			pickedUpObject.transform.position = rightHandTransform.position;
 			pickedUpObject.transform.parent = rightHandTransform;
 			pickedUpObject.transform.localScale = oldScale;
-			//Debug.Log("Carrying item with us through age: " + pickedUpObject);
 		}
 		else {
-			Debug.Log("rightHandTransform is active?: " + rightHandTransform.gameObject.activeInHierarchy);
 		}
 	}
 	

@@ -23,7 +23,6 @@ public abstract class NPC : Character {
 	public bool chatingWithPlayer = false;
 	public bool chatingWithNPC = false;
 	private Texture charPortrait;
-	private Action sayHi;
 	public float timeTillPassiveChatAgain = 0;
 	#endregion
 	
