@@ -131,16 +131,11 @@ public class Player : Character {
 	}
 	
 	public void PickUpObject(GameObject toPickUp){
-		//Debug.Log ("Player transform: " + animationData.mLocalTransform);
 		Inventory.PickUpObject(toPickUp);
 	}
 	
 	public void DisableHeldItem(){
 		Inventory.DisableHeldItem();
-	}
-	
-	public bool CheckTransitionPositionSuccess(CharacterAge newAge, CharacterAge previousAge){
-		return AgeSwapMover.instance.CheckTransitionPositionSuccess(newAge, previousAge);
 	}
 	
 	public void ChangeAnimation(BoneAnimation newAnimation){

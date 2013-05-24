@@ -6,8 +6,6 @@ public class LevelManager : MonoBehaviour {
 	public Player playerCharacter;
 	private ParallaxManager parallaxManager;
 	
-	public TimeSwitchObject[] timeSwitchObjects;
-	
 	//Make these private later: Also assign these targets based off prior choices / dispositions
 	public Transform youngSectionTarget;
 	public Transform middleSectionTarget;
@@ -93,9 +91,6 @@ public class LevelManager : MonoBehaviour {
 		oldSectionTarget.transform.position = new Vector3(0,levelYOffSetFromCenter*2,0);
 	}
 	
-	void Update () {
-	}
-	
 	void SetNPCData(){		
 		InteractionManager.instance.InitilizeNPCs(dispositionDataFile);
 	}	
@@ -105,63 +100,19 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	public void ShiftUpAge(){		
-		if (CharacterAgeManager.GetCurrentAgeState() != CharacterAgeState.OLD){
-			CharacterAge newAge = CharacterAgeManager.GetAgeTransitionUp();
-			CharacterAge currentAge = CharacterAgeManager.GetCurrentAge();
-			
-			if (playerCharacter.CheckTransitionPositionSuccess(newAge, currentAge)){
-				CharacterAgeManager.TransistionUp();
-				UpdateTimeSwitchObjects(CharacterAgeManager.GetCurrentAgeState());
-			}
-			else{
-				Debug.Log("CAN'T TELEPORT THERE!");	
-			}
-		}
+		CharacterAgeManager.TransistionUp();
 	}
 	
 	public void ShiftDownAge(){
-		if (CharacterAgeManager.GetCurrentAgeState() != CharacterAgeState.YOUNG){
-			CharacterAge newAge = CharacterAgeManager.GetAgeTransitionDown();
-			CharacterAge currentAge = CharacterAgeManager.GetCurrentAge();
-			
-			if (playerCharacter.CheckTransitionPositionSuccess(newAge, currentAge)){
-				CharacterAgeManager.TransistionDown();
-				UpdateTimeSwitchObjects(CharacterAgeManager.GetCurrentAgeState());
-			}
-			else{
-				Debug.Log("CAN'T TELEPORT THERE!");	
-			}
-		}
+		CharacterAgeManager.TransistionDown();
+	}
+
+	public bool CanAgeTransitionDown(){
+		return (CharacterAgeManager.GetCurrentAgeState() != CharacterAgeState.YOUNG);
 	}
 	
-	private void UpdateTimeSwitchObjects(CharacterAgeState newAge){
-		foreach(TimeSwitchObject timeSwitchObject in timeSwitchObjects){
-			timeSwitchObject.ChangeAge(newAge);
-		}
-	}
-	
-	public bool CanAgeTransition(string buttonName) {
-		if (CharacterAgeManager.GetCurrentAgeState() != CharacterAgeState.OLD 
-			&& Strings.ButtonAgeShiftUp.Equals(buttonName)) {
-			if (playerCharacter.CheckTransitionPositionSuccess(CharacterAgeManager.GetAgeTransitionUp(),
-				CharacterAgeManager.GetCurrentAge())) {
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
-		else if (CharacterAgeManager.GetCurrentAgeState() != CharacterAgeState.YOUNG 
-			&& Strings.ButtonAgeShiftDown.Equals(buttonName)) {
-			if (playerCharacter.CheckTransitionPositionSuccess(CharacterAgeManager.GetAgeTransitionDown(),
-				CharacterAgeManager.GetCurrentAge())) {
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
-		return false;
+	public bool CanAgeTransitionUp(){
+		return (CharacterAgeManager.GetCurrentAgeState() != CharacterAgeState.OLD);
 	}
 	
 	public void SetGender(CharacterGender gender){
@@ -194,6 +145,6 @@ public class LevelManager : MonoBehaviour {
 }
 
 public enum CharacterGender{
-		MALE = 0,
-		FEMALE = 1,
-	}
+	MALE = 0,
+	FEMALE = 1,
+}
