@@ -146,7 +146,6 @@ public class GUIManager : MonoBehaviour {
 	}
 	
 	private void UnLoadControl(GUIControl guiControlToUnLoad){
-		Debug.Log("Unloading " + guiControlToUnLoad.ToString());
 		activeControls.Remove(guiControlToUnLoad);	
 	}
 	
