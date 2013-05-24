@@ -2,20 +2,18 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Crossfade: MonoBehaviour {	
+public class Crossfade: MonoBehaviour {
 
-    public AudioSource ForestBGM;
-    public AudioSource ForestAmbient;
     public AudioSource BeachBGM;
     public AudioSource BeachAmbient;
-    public AudioSource FarmBGM;
-    public AudioSource FarmAmbient;
-    public AudioSource LighthouseBGM;
-    public AudioSource LighthouseAmbient;
-    public AudioSource WindmillBGM;
-    public AudioSource WindmillAmbient;
+    public AudioSource ForestBGM;
+    public AudioSource ForestAmbient;
     public AudioSource MarketBGM;
     public AudioSource MarketAmbient;
+    public AudioSource WindmillBGM;
+    public AudioSource WindmillAmbient;
+    public AudioSource LighthouseBGM;
+    public AudioSource LighthouseAmbient;
 
     public static void FadeBetween()
     {
@@ -32,13 +30,13 @@ public class Crossfade: MonoBehaviour {
         Crossfade.CrossfadeInstance = this;
     }
 
-    public static IEnumerator CoroutineFadeDown(string Current)
+    public static IEnumerator CoroutineFadeDown(string AreaName)
     {
         AudioSource CurrentSong;
         AudioSource CurrentAmbient;
         float fTimeCounter = 0f;
 
-        switch (Current)
+        switch (AreaName)
         {
             case "Forest":
                 CurrentSong = CrossfadeInstance.ForestBGM;
@@ -48,21 +46,21 @@ public class Crossfade: MonoBehaviour {
                 CurrentSong = CrossfadeInstance.BeachBGM;
                 CurrentAmbient = CrossfadeInstance.BeachAmbient;
                 break;
-            case "Cliff":
-                CurrentSong = CrossfadeInstance.FarmBGM;
-                CurrentAmbient = CrossfadeInstance.FarmAmbient;
-                break;
-            case "Light":
+            case "Lighthouse":
                 CurrentSong = CrossfadeInstance.LighthouseBGM;
                 CurrentAmbient = CrossfadeInstance.LighthouseAmbient;
                 break;
-            case "Tree":
+            case "Windmill":
                 CurrentSong = CrossfadeInstance.WindmillBGM;
                 CurrentAmbient = CrossfadeInstance.WindmillAmbient;
                 break;
             case "Market":
                 CurrentSong = CrossfadeInstance.MarketBGM;
                 CurrentAmbient = CrossfadeInstance.MarketAmbient;
+                break;
+            case "Tree":
+                CurrentSong = null;
+                CurrentAmbient = null;
                 break;
             default:
                 CurrentSong = null;
@@ -74,9 +72,9 @@ public class Crossfade: MonoBehaviour {
         while (!(Mathf.Approximately(fTimeCounter, 1f)))
         {
             fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
-            CurrentSong.volume = 1f - fTimeCounter;
-            CurrentAmbient.volume = 1f - fTimeCounter;
-            yield return new WaitForSeconds(0.02f);
+            CurrentSong.volume = (1f - fTimeCounter) * CurrentSong.volume;
+            CurrentAmbient.volume = (1f - fTimeCounter) * CurrentAmbient.volume;
+            yield return new WaitForSeconds(0.05f);
         }
 
         CurrentSong.Stop();
@@ -85,13 +83,13 @@ public class Crossfade: MonoBehaviour {
         Crossfade.CrossfadeInstance.StopCoroutine("CoroutineFadeDown");
     }
 
-    public static IEnumerator CoroutineFadeUp(string Current)
+    public static IEnumerator CoroutineFadeUp(string AreaName)
     {
         AudioSource CurrentSong;
         AudioSource CurrentAmbient;
         float fTimeCounter = 0f;
 
-        switch (Current)
+        switch (AreaName)
         {
             case "Forest":
                 CurrentSong = CrossfadeInstance.ForestBGM;
@@ -101,21 +99,21 @@ public class Crossfade: MonoBehaviour {
                 CurrentSong = CrossfadeInstance.BeachBGM;
                 CurrentAmbient = CrossfadeInstance.BeachAmbient;
                 break;
-            case "Cliff":
-                CurrentSong = CrossfadeInstance.FarmBGM;
-                CurrentAmbient = CrossfadeInstance.FarmAmbient;
-                break;
-            case "Light":
+            case "Lighthouse":
                 CurrentSong = CrossfadeInstance.LighthouseBGM;
                 CurrentAmbient = CrossfadeInstance.LighthouseAmbient;
                 break;
-            case "Tree":
+            case "Windmill":
                 CurrentSong = CrossfadeInstance.WindmillBGM;
                 CurrentAmbient = CrossfadeInstance.WindmillAmbient;
                 break;
             case "Market":
                 CurrentSong = CrossfadeInstance.MarketBGM;
                 CurrentAmbient = CrossfadeInstance.MarketAmbient;
+                break;
+            case "Tree":
+                CurrentSong = null;
+                CurrentAmbient = null;
                 break;
             default:
                 CurrentSong = null;
@@ -134,7 +132,7 @@ public class Crossfade: MonoBehaviour {
             fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
             CurrentSong.volume = fTimeCounter;
             CurrentAmbient.volume = fTimeCounter;
-            yield return new WaitForSeconds(0.02f);
+            yield return new WaitForSeconds(0.05f);
         }
 
         Crossfade.CrossfadeInstance.StopCoroutine("CoroutineFadeUp");
@@ -159,14 +157,10 @@ public class Crossfade: MonoBehaviour {
                 CurrentAmbient = CrossfadeInstance.BeachAmbient;
                 break;
             case "Cliff":
-                CurrentSong = CrossfadeInstance.FarmBGM;
-                CurrentAmbient = CrossfadeInstance.FarmAmbient;
-                break;
-            case "Light":
                 CurrentSong = CrossfadeInstance.LighthouseBGM;
                 CurrentAmbient = CrossfadeInstance.LighthouseAmbient;
                 break;
-            case "Tree":
+            case "Windmill":
                 CurrentSong = CrossfadeInstance.WindmillBGM;
                 CurrentAmbient = CrossfadeInstance.WindmillAmbient;
                 break;
@@ -191,14 +185,10 @@ public class Crossfade: MonoBehaviour {
                 NextAmbient = CrossfadeInstance.BeachAmbient;
                 break;
             case "Cliff":
-                NextSong = CrossfadeInstance.FarmBGM;
-                NextAmbient = CrossfadeInstance.FarmAmbient;
-                break;
-            case "Light":
                 NextSong = CrossfadeInstance.LighthouseBGM;
                 NextAmbient = CrossfadeInstance.LighthouseAmbient;
                 break;
-            case "Tree":
+            case "Windmill":
                 NextSong = CrossfadeInstance.WindmillBGM;
                 NextAmbient = CrossfadeInstance.WindmillAmbient;
                 break;

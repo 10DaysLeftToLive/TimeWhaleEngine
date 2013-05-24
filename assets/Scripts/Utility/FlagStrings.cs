@@ -71,6 +71,7 @@ public static class FlagStrings {
 	
 	#region FarmerMother
 	public static string ConversationInMiddleFarmerMother = "Conversation in Middle Farmer Mother";
+	public static string FarmAlive = "Farm Alive";
 	#endregion
 	
 	#region Sea Captain

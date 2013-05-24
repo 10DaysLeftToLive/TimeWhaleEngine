@@ -67,4 +67,9 @@ public static class Strings{
 	public const string CLOUDONE = "CloudOne";
 	public const string CLOUDTWO = "CloudTwo";
 	public const string CLOUDTHREE = "CloudThree";
+
+    // Area Names
+    public static string CURRENTAREA = "Forest";
+    public static string LASTAREA = "Forest";
+    public static string NEXTAREA = "Forest";
 }
