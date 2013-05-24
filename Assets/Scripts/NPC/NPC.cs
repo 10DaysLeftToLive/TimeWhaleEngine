@@ -20,7 +20,7 @@ public abstract class NPC : Character {
 	private int truncatedTime;
 	
 	public Player player;
-	private bool chatingWithPlayer = false;
+	public bool chatingWithPlayer = false;
 	public bool chatingWithNPC = false;
 	private Texture charPortrait;
 	private Action sayHi;
@@ -112,9 +112,9 @@ public abstract class NPC : Character {
 	}
 	
 	public void LeaveInteraction(){
-		chatingWithPlayer = false;
 		scheduleStack.Resume();
 		currentEmotion.OnInteractionCloses();
+		chatingWithPlayer = false;
 	}
 	
 	private void StopTalkingWithPlayer(){

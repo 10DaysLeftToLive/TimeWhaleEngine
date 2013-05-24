@@ -160,6 +160,7 @@ public class Player : Character {
 	}
 	
 	public void LeaveInteraction(){
+		npcTalkingWith = null;
 		EnterState(new IdleState(this));
 	}
 }
