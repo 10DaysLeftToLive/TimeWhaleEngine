@@ -14,43 +14,92 @@ public class MoveState : AbstractState {
     private Vector3 currentGoal;
     private float stuckTimer;
     private AudioSource walkSFX;
-	protected static float NPC_SPEED_RATIO = 0.75f; 
+	protected static float NPC_SPEED_RATIO = 0.75f;
+    private static string lastWay = null;
+    private static int NameStartCounter = 0;
+    private static int NameEndCounter = 0;
+    private static bool traverseStair = false;
+    private static bool towardStair = false;
         
     public MoveState(Character toControl, Vector3 goal) : base(toControl){
         _goal = goal;
     }
     
+	Vector3 pos;
+	Vector3 movement;
     public override void Update(){
-        Vector3 pos = character.transform.position;
-        Vector3 movement = Vector3.zero;
+        pos = character.transform.position;
         movement = _pathFollowing.GetVectorDirection();
         movement *= (speed * Time.deltaTime);
 
-        MakeCharacterLookCorrectly(movement.x);
-        
         if (NearPoint(_pathFollowing.GetPoint(), _pathFollowing.GetVectorDirection())){
             if (!_pathFollowing.NextNode()){
                 OnGoalReached();
             } else {
                 currentGoal = _pathFollowing.GetPoint();
+                if (character is NPC){
+				}
+                else {
+                    lastWay = _pathFollowing.GetLastWayPointName();
+                    //Debug.Log("Before any checks, lastWay is " + lastWay);
+                    /*DebugManager.instance.Log("lastWay is " + lastWay, "WalkSFX", "SFX");*/
+                    NameStartCounter = lastWay.IndexOf(".");
+                    NameEndCounter = lastWay.IndexOf("Stair");
+                    // since we're heading towards the stairs, we need to grab the name of the area we are leaving and the area we're heading towards
+                    if (lastWay.IndexOf("StairBase") > 0 || lastWay.IndexOf("StairTop") > 0){
+                        Strings.LASTAREA = lastWay.Substring(0, NameStartCounter);
+                        Strings.NEXTAREA = lastWay.Substring(NameStartCounter + 5, NameEndCounter - (NameStartCounter + 5));
+                        //Debug.Log("Heading towards some stairs, LASTAREA is " + Strings.LASTAREA + " NEXTAREA is " + Strings.NEXTAREA);
+                        //DebugManager.instance.Log("LASTAREA is " + Strings.LASTAREA, "WalkSFX", "SFX");
+                        towardStair = true;
+                    }
+                    // possibly walking towards stairs
+                    else if (towardStair){
+                        // just started walking up the stairs
+                        if (lastWay.EndsWith("High") || lastWay.EndsWith("Low")){
+                            towardStair = false;
+                            traverseStair = true;
+                            Strings.CURRENTAREA = "Stairs";
+
+                            SoundManager.instance.StartCoroutineFadeDown(Strings.LASTAREA);
+                            SoundManager.instance.PlayWalkSFX();
+
+                            //Debug.Log("Just started walking up some stairs");
+                        }
+                        // passed by the stairs
+                        else if (lastWay.IndexOf("Stair") == -1){
+                            towardStair = false;
+                        }
+                    }
+                    // finished traversing the stairs
+                    else if (traverseStair) {
+                        if (lastWay.EndsWith("High") || lastWay.EndsWith("Low")){
+                            traverseStair = false;
+                            Strings.CURRENTAREA = Strings.NEXTAREA;
+                            SoundManager.instance.StartCoroutineFadeUp(Strings.CURRENTAREA);
+                            SoundManager.instance.PlayWalkSFX();
+
+                            //Debug.Log("Just finished walking up some stairs");
+                        }
+                    }
+                }
             }
         } else {
             Move(movement);
+       		MakeCharacterLookCorrectly(movement.x);
+        	CheckStuck(pos);
         }
-        
-        CheckStuck(pos);
     }
     
     public override void OnEnter(){
         CalcMovementPath();
 
-        
         // Needs a check for which area the player is in to switch which
         // walking SFX is loaded.
         if (character is NPC){
 			speed = speed*NPC_SPEED_RATIO;
         }else{
-            SoundManager.instance.PlaySFX("WalkForest");
+            SoundManager.instance.PlayWalkSFX();
         }
     }
     
@@ -63,7 +112,7 @@ public class MoveState : AbstractState {
         }
         else
         {
-            SoundManager.instance.StopSFX();
+            SoundManager.instance.StopWalkSFX();
         }
     }
 	

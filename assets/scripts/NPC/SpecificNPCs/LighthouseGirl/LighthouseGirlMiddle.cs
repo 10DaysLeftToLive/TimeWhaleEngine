@@ -6,22 +6,36 @@ using System.Collections;
 /// </summary>
 public class LighthouseGirlMiddle : NPC {
 	InitialEmotionState initialState;
+	Vector3 startingPosition;
 	protected override void Init() {
 		id = NPCIDs.LIGHTHOUSE_GIRL;
 		base.Init();
 	}
 	
 	protected override void SetFlagReactions(){
+		Reaction moveAway = new Reaction();
+		moveAway.AddAction(new NPCCallbackAction(ResetPosition));
+		moveAway.AddAction(new NPCEmotionUpdateAction(this, initialState));
+		moveAway.AddAction(new NPCAddScheduleAction(this, openningWaitingSchedule));
+		moveAway.AddAction(new NPCAddScheduleAction(this, postOpenningSchedule));
+		flagReactions.Add(FlagStrings.FarmAlive, moveAway);
 		
+		Reaction antiMarriagePlanInAction = new Reaction();
+		antiMarriagePlanInAction.AddAction(new NPCAddScheduleAction(this, noMarriageSchedule));
+		flagReactions.Add(FlagStrings.ToolsToGirl, antiMarriagePlanInAction);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
 		initialState = new InitialEmotionState(this, "Hi! Would you mind helping me out? I need to get out of my arranged marriage, but need help with distracting my mom to make it work!");
-		return (initialState);
+		startingPosition = transform.position;
+		startingPosition.y += LevelManager.levelYOffSetFromCenter;
+		this.transform.position = new Vector3(200,0,0);
+		return (new GoneEmotionState(this, ""));
 	}
 	
 	Schedule openningWaitingSchedule;
-	Schedule postOpenningSchedule;
+	NPCConvoSchedule postOpenningSchedule;
+	NPCConvoSchedule noMarriageSchedule;
 	
 	protected override Schedule GetSchedule(){
 		Schedule schedule = new DefaultSchedule(this);
@@ -32,17 +46,20 @@ public class LighthouseGirlMiddle : NPC {
 		
 		openningWaitingSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
 		openningWaitingSchedule.Add(new TimeTask(30, new WaitTillPlayerCloseState(this, player)));
-		scheduleStack.Add(openningWaitingSchedule);
+		//scheduleStack.Add(openningWaitingSchedule);
 		
-		postOpenningSchedule = new Schedule(this,Schedule.priorityEnum.Medium);
-		postOpenningSchedule.Add(new TimeTask(10, new MoveThenDoState(this, new Vector3(transform.position.x - 10, transform.position.y, transform.position.z), new IdleState(this))));
-		postOpenningSchedule.Add(new TimeTask(30, new ChangeEmotionState(this, initialState)));
-		scheduleStack.Add(postOpenningSchedule);
+		postOpenningSchedule =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerMotherMiddle),
+			new MiddleFarmerMotherToLighthouseGirl(), Schedule.priorityEnum.High); 
+		postOpenningSchedule.SetCanNotInteractWithPlayer();
 		
+		noMarriageSchedule =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerMotherMiddle),
+			new MiddleLighthouseGirlNoMarriage(), Schedule.priorityEnum.High); 
+		noMarriageSchedule.SetCanNotInteractWithPlayer();
 		
-		scheduleStack.Add(new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerFatherMiddle), 
-			new YoungFarmerMotherToFarmerFatherOpenningScriptedDialogue(),Schedule.priorityEnum.High));
-		
+	}
+	
+	protected void ResetPosition(){
+		this.transform.position = startingPosition;	
 	}
 	
 	
@@ -86,6 +103,7 @@ public class LighthouseGirlMiddle : NPC {
 		
 		bool planStarted = false;
 		bool carpenterPath = false;
+		bool gaveTools = false;
 		NPC control;
 		
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
@@ -125,7 +143,16 @@ public class LighthouseGirlMiddle : NPC {
 		}
 		
 		public void TalkedResponse(){}
-		public void ToolsResponse(){}
+		public void ToolsResponse(){
+			_allChoiceReactions.Clear();
+			
+			if (!gaveTools){
+				gaveTools = true;
+				FlagManager.instance.SetFlag(FlagStrings.ToolsToGirl);
+			}
+			GUIManager.Instance.RefreshInteraction();
+			SetDefaultText("ARRGGHH. I can't believe that didn't work. I've tried everything to get out of this! Why can't it just be like in the stories where the hero always wins!");
+		}
 		public void RopeResponse(){}
 		public void NotBadResponse(){
 			_allChoiceReactions.Clear();
@@ -300,6 +327,12 @@ public class LighthouseGirlMiddle : NPC {
 			SetDefaultText("My mom will never back down.");
 		}
 		
+	}
+	
+	private class GoneEmotionState : EmotionState{
+		public GoneEmotionState(NPC toControl, string currentDialogue) : base(toControl, ""){
+		}
+
 	}
 	
 	#endregion

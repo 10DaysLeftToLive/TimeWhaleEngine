@@ -7,7 +7,10 @@ public class SoundManager : MonoBehaviour {
     public AudioSource GiveItemSFX;
     public AudioSource PickUpItemSFX;
     public AudioSource PutDownItemSFX;
-    public AudioSource WalkForestSFX;
+
+    public AudioSource WalkGrassSFX;
+    public AudioSource WalkSandSFX;
+    public AudioSource WalkWoodSFX;
 
     // Needs to be a monobehavior to be put in scene, so make a singleton here instead of using managersingleton
     // Should be changed to be given these files from the loader
@@ -24,7 +27,7 @@ public class SoundManager : MonoBehaviour {
                 GameObject obj = new GameObject("SoundManager");
                 manager_instance = obj.AddComponent(typeof (SoundManager)) as SoundManager;
             }
-            
+
             return manager_instance;
         }
     }
@@ -35,30 +38,49 @@ public class SoundManager : MonoBehaviour {
     /// </summary>
     /// <param name="SFXName">The name of the walking sound effect
     /// that should be played.</param>
-    public void PlaySFX(string SFXName)
+    public void PlayWalkSFX()
     {
-        switch (SFXName)
+        string Area = null;
+        if (Strings.CURRENTAREA == "Forest" || Strings.CURRENTAREA == "Market" || Strings.CURRENTAREA == "Tree" || Strings.CURRENTAREA == "Farm" || Strings.CURRENTAREA == "Windmill"){
+            Area = "Grass";
+        }
+        else if (Strings.CURRENTAREA == "Beach")
         {
-            case "WalkForest":
-                SoundManager.instance.WalkForestSFX.Play();   
+            Area = "Sand";
+        }
+        else if (Strings.CURRENTAREA == "Bridge" || Strings.CURRENTAREA == "Stairs" || Strings.CURRENTAREA == "Pier")
+        {
+            Area = "Wood";
+        }
+
+        switch (Area)
+        {
+            case "Grass":
+                if (!SoundManager.instance.WalkGrassSFX.isPlaying)
+                {
+                    SoundManager.instance.WalkSandSFX.Stop();
+                    SoundManager.instance.WalkWoodSFX.Stop();
+                    SoundManager.instance.WalkGrassSFX.Play();
+                }
                 break;
-            case "WalkBeach":
+            case "Wood":
+                if (!SoundManager.instance.WalkWoodSFX.isPlaying)
+                {
+                    SoundManager.instance.WalkSandSFX.Stop();
+                    SoundManager.instance.WalkGrassSFX.Stop();
+                    SoundManager.instance.WalkWoodSFX.Play();
+                }
                 break;
-            case "WalkPier":
-                break;
-            case "WalkMarket":
-                break;
-            case "WalkTree":
-                break;
-            case "WalkFarm":
-                break;
-            case "WalkLightHouse":
-                break;
-            case "WalkWindmill":
-                break;
-            case "WalkStairs":
+            case "Sand":
+                if (!SoundManager.instance.WalkSandSFX.isPlaying)
+                {
+                    SoundManager.instance.WalkGrassSFX.Stop();
+                    SoundManager.instance.WalkWoodSFX.Stop();
+                    SoundManager.instance.WalkSandSFX.Play();
+                }
                 break;
             default:
+                DebugManager.instance.Log("No walking sound due to incorrect area specified", "WalkSFX", "SFX");
                 break;
         }
     }
@@ -67,8 +89,20 @@ public class SoundManager : MonoBehaviour {
     /// StopSFX will stop all SFX that have been played using PlaySFX.
     /// These are usually the walking sound effects for different areas.
     /// </summary>
-    public void StopSFX()
+    public void StopWalkSFX()
     {
-        SoundManager.instance.WalkForestSFX.Stop();
+        SoundManager.instance.WalkGrassSFX.Stop();
+        SoundManager.instance.WalkSandSFX.Stop();
+        SoundManager.instance.WalkWoodSFX.Stop();
+    }
+
+    public void StartCoroutineFadeDown(string Area)
+    {
+        StartCoroutine(Crossfade.CoroutineFadeDown(Area));
+    }
+
+    public void StartCoroutineFadeUp(string Area)
+    {
+        StartCoroutine(Crossfade.CoroutineFadeUp(Area));
     }
 }

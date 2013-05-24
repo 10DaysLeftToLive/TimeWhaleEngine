@@ -29,7 +29,7 @@ public class MoveThenDoState : MoveState {
         }
         else
         {
-            SoundManager.instance.StopSFX();
+            SoundManager.instance.StopWalkSFX();
         }
         
     }

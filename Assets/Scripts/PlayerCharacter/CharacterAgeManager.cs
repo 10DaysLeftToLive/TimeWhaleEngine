@@ -102,7 +102,7 @@ public class CharacterAgeManager {
 		return (characterAges[(int)currentAge]);
 	}
 	
-	private static CharacterAge GetAgeOf(CharacterAgeState age){
+	public static CharacterAge GetAgeOf(CharacterAgeState age){
 		return (characterAges[(int) age]);
 	}
 }

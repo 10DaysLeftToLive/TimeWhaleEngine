@@ -9,7 +9,6 @@ public class FarmerMotherYoung : NPC {
 	//Needs to be fixed
 	
 	bool ConversationInMiddleSet = false;
-	bool BusinessSet = false;
 	bool TellOnLighthouseSet = false;
 	
 	
@@ -24,10 +23,6 @@ public class FarmerMotherYoung : NPC {
 		NewDialogueReaction.AddAction (new NPCCallbackAction(UpdateConversationInMiddleFarmerMother));
 		flagReactions.Add(FlagStrings.ConversationInMiddleFarmerMother, NewDialogueReaction);
 		
-		Reaction BusinessReaction = new Reaction();
-		BusinessReaction.AddAction (new NPCCallbackAction(UpdateBusinessFlags));
-		flagReactions.Add(FlagStrings.BusinessConversation, BusinessReaction);
-		
 		Reaction TellOnReaction = new Reaction();
 		TellOnReaction.AddAction (new NPCCallbackAction(UpdateTellOnLighthouse));
 		flagReactions.Add(FlagStrings.TellOnLighthouse, TellOnReaction);
@@ -37,10 +32,6 @@ public class FarmerMotherYoung : NPC {
 	public void UpdateConversationInMiddleFarmerMother(){
 		this.currentEmotion.PassStringToEmotionState(FlagStrings.ConversationInMiddleFarmerMother);
 		ConversationInMiddleSet = true;
-	}
-	public void UpdateBusinessFlags(){
-		this.currentEmotion.PassStringToEmotionState(FlagStrings.BusinessConversation);
-		BusinessSet = true;
 	}
 	public void UpdateTellOnLighthouse(){
 		this.currentEmotion.PassStringToEmotionState(FlagStrings.TellOnLighthouse);
@@ -60,23 +51,6 @@ public class FarmerMotherYoung : NPC {
 	Schedule postOpenningSchedule;
 
 	protected override void SetUpSchedules(){
-		//Wait for player to come before initiating Mother talking to Father
-		openningWaitingSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
-		openningWaitingSchedule.Add(new TimeTask(1, new WaitTillPlayerCloseState(this, player)));
-		//openningWaitingSchedule.Add(new TimeTask(10, new MoveThenDoState(this, new Vector3(transform.position.x + 1,transform.position.y, transform.position.z), new IdleState(this))));
-		scheduleStack.Add(openningWaitingSchedule);
-		
-		//After talking to father about daughter
-		postOpenningSchedule = new Schedule(this,Schedule.priorityEnum.High);
-		postOpenningSchedule.Add(new TimeTask(1, new IdleState(this)));
-		postOpenningSchedule.Add(new TimeTask(1, new MoveThenDoState(this, new Vector3(transform.position.x - 10,transform.position.y, transform.position.z), new IdleState(this))));
-		//postOpenningSchedule.Add(new TimeTask (1, new NPCCallbackAction(UpdateEmotionAfterSchedule)));
-		postOpenningSchedule.Add(new TimeTask(1, new ChangeEmotionState(this, new PostOpenningConvoEmotionState(this, "What do you want? I got lots of work to do!"))));
-		scheduleStack.Add(postOpenningSchedule);
-		
-		//Talks to father about daughter
-		scheduleStack.Add(new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerFatherYoung), 
-			new YoungFarmerMotherToFarmerFatherOpenningScriptedDialogue(),Schedule.priorityEnum.High));
 		
 		
 	}
@@ -100,7 +74,7 @@ public class FarmerMotherYoung : NPC {
 	#endregion
 	
 	#region Post-Openning Conversation Emotion State
-	private class PostOpenningConvoEmotionState : EmotionState{
+	private class StoryStoppingEmotionState : EmotionState{
 		NPC farmerMotherYoung;
 		
 		Reaction reactionToWhatAbout;
@@ -114,36 +88,20 @@ public class FarmerMotherYoung : NPC {
 				"Here in exchange for tha pendant! I'll give ya these sunflower seeds.");
 		
 		bool updateConversationFarmerMotherYoungFlag = false;
-		bool setBusinessConversation = false;
 		bool setTellOn = false;
 		bool FinishedStoriesConversation = false;
-		bool FinishedBusinessConversation = false;
 		bool FinishedGardeningConversation = false;
 		bool FinishedTellOnConversation = false;
 		
 		Choice TellOnDaughterChoice;
 		Reaction TellOnDaughterReaction;
-		
-		
-		Choice BusinessChoice;
-		Reaction BusinessReaction;
-		
-		
-		/*Choice TempChoiceOne;
-		Reaction TempReactionOne;
-		Choice TempChoiceTwo;
-		Reaction TempReactionTwo;
-		Choice TempChoiceThree;
-		Reaction TempReactionThree;*/
-		
-		
+				
 		Choice StoriesHelpRelateChoice;
 		Reaction StoriesHelpRelateReaction;
 		Choice WhyNotChoice;
 		Reaction WhyNotReaction;
 		Choice MyMomChoice;
 		Reaction MyMomReaction;
-		
 		
 		Choice StoriesFunChoice;
 		Reaction StoriesFunReaction;
@@ -169,7 +127,7 @@ public class FarmerMotherYoung : NPC {
 		Choice YouAreRightChoice;
 		Reaction YouAreRightReaction;
 	
-		public PostOpenningConvoEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+		public StoryStoppingEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
 			farmerMotherYoung = toControl;
 			
 			reactionToWhatAbout = new Reaction(new NPCCallbackAction(askedWhatAbout));
@@ -256,19 +214,6 @@ public class FarmerMotherYoung : NPC {
 			TellOnDaughterReaction = new Reaction();
 			TellOnDaughterReaction.AddAction(new NPCCallbackAction(UpdateTellOnDaughter));
 			TellOnDaughterReaction.AddAction(new UpdateCurrentTextAction(toControl, "*Sigh* Thanks fer talking ta me bout this."));
-			
-			BusinessChoice = new Choice ("How's farming?", "Dontcha worry bout it, I've got things under control!");
-			BusinessReaction = new Reaction();
-			BusinessReaction.AddAction(new NPCCallbackAction(UpdateBusinessChoice));
-			BusinessReaction.AddAction(new UpdateCurrentTextAction(toControl, "My silly husband's bad at business, but dontcha worry bout it, I've got things under control!"));
-			
-		}
-		
-		public void UpdateBusinessChoice(){
-			_allChoiceReactions.Remove(BusinessChoice);
-			GUIManager.Instance.RefreshInteraction();
-			SetDefaultText("I'm busy, git outta here!");
-			FinishedBusinessConversation = true;
 		}
 		public void UpdateTellOnDaughter(){
 			_allChoiceReactions.Remove(TellOnDaughterChoice);
@@ -289,9 +234,6 @@ public class FarmerMotherYoung : NPC {
 		public void UpdateWhyNot(){
 			_allChoiceReactions.Remove(WhyNotChoice);
 			_allChoiceReactions.Remove(MyMomChoice);
-			if(setBusinessConversation == true && FinishedBusinessConversation == false){
-				_allChoiceReactions.Add(BusinessChoice, new DispositionDependentReaction(BusinessReaction));
-			}
 			if(setTellOn == true && FinishedTellOnConversation == false){
 				_allChoiceReactions.Add(TellOnDaughterChoice, new DispositionDependentReaction(TellOnDaughterReaction));
 			}
@@ -302,9 +244,6 @@ public class FarmerMotherYoung : NPC {
 		public void UpdateMyMom(){
 			_allChoiceReactions.Remove(WhyNotChoice);
 			_allChoiceReactions.Remove(MyMomChoice);
-			if(setBusinessConversation == true && FinishedBusinessConversation == false){
-				_allChoiceReactions.Add(BusinessChoice, new DispositionDependentReaction(BusinessReaction));
-			}
 			if(setTellOn == true && FinishedTellOnConversation == false){
 				_allChoiceReactions.Add(TellOnDaughterChoice, new DispositionDependentReaction(TellOnDaughterReaction));
 			}
@@ -354,9 +293,6 @@ public class FarmerMotherYoung : NPC {
 		public void UpdateIllConvince(){
 			_allChoiceReactions.Remove(StoriesArentHorribleChoice);
 			_allChoiceReactions.Remove(IllConvinceChoice);
-			if(setBusinessConversation == true && FinishedBusinessConversation == false){
-				_allChoiceReactions.Add(BusinessChoice, new DispositionDependentReaction(BusinessReaction));
-			}
 			if(setTellOn == true && FinishedTellOnConversation == false){
 				_allChoiceReactions.Add(TellOnDaughterChoice, new DispositionDependentReaction(TellOnDaughterReaction));
 			}
@@ -367,9 +303,6 @@ public class FarmerMotherYoung : NPC {
 		public void UpdateCanReadAndWork(){
 			_allChoiceReactions.Remove(CanReadAndWorkChoice);
 			_allChoiceReactions.Remove(SheShouldDecideChoice);
-			if(setBusinessConversation == true && FinishedBusinessConversation == false){
-				_allChoiceReactions.Add(BusinessChoice, new DispositionDependentReaction(BusinessReaction));
-			}
 			if(setTellOn == true && FinishedTellOnConversation == false){
 				_allChoiceReactions.Add(TellOnDaughterChoice, new DispositionDependentReaction(TellOnDaughterReaction));
 			}
@@ -398,9 +331,6 @@ public class FarmerMotherYoung : NPC {
 		public void UpdateNotSilly(){
 			_allChoiceReactions.Remove(NotSillyChoice);
 			_allChoiceReactions.Remove(YouAreRightChoice);
-			if(setBusinessConversation == true && FinishedBusinessConversation == false){
-				_allChoiceReactions.Add(BusinessChoice, new DispositionDependentReaction(BusinessReaction));
-			}
 			if(setTellOn == true && FinishedTellOnConversation == false){
 				_allChoiceReactions.Add(TellOnDaughterChoice, new DispositionDependentReaction(TellOnDaughterReaction));
 			}
@@ -412,9 +342,6 @@ public class FarmerMotherYoung : NPC {
 			_allChoiceReactions.Remove(YouAreRightChoice);
 			if(_allChoiceReactions.ContainsKey(NotSillyChoice)){
 				_allChoiceReactions.Remove(NotSillyChoice);	
-			}
-			if(setBusinessConversation == true && FinishedBusinessConversation == false){
-				_allChoiceReactions.Add(BusinessChoice, new DispositionDependentReaction(BusinessReaction));
 			}
 			if(setTellOn == true && FinishedTellOnConversation == false){
 				_allChoiceReactions.Add(TellOnDaughterChoice, new DispositionDependentReaction(TellOnDaughterReaction));
@@ -440,9 +367,6 @@ public class FarmerMotherYoung : NPC {
 			
 		private void askedWhatAbout(){
 			_allChoiceReactions.Remove(whatAboutChoice);
-			if (_allChoiceReactions.ContainsKey(BusinessChoice)){
-				_allChoiceReactions.Remove(BusinessChoice);	
-			}
 			if (_allChoiceReactions.ContainsKey(TellOnDaughterChoice)){
 				_allChoiceReactions.Remove(TellOnDaughterChoice);
 			}
@@ -490,12 +414,6 @@ public class FarmerMotherYoung : NPC {
 						_allChoiceReactions.Add(StoriesHelpRelateChoice, new DispositionDependentReaction(StoriesHelpRelateReaction));
 					}
 					updateConversationFarmerMotherYoungFlag = true;
-				}
-			}
-			else if (text == FlagStrings.BusinessConversation){
-				setBusinessConversation = true;
-				if(_allChoiceReactions.ContainsKey(whatAboutChoice)){
-					_allChoiceReactions.Add(BusinessChoice, new DispositionDependentReaction(BusinessReaction));
 				}
 			}
 			else if (text == FlagStrings.TellOnLighthouse){

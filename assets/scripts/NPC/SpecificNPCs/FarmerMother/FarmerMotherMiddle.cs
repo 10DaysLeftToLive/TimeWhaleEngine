@@ -5,17 +5,26 @@ using System.Collections;
 /// FarmerMotherMiddle specific scripting values
 /// </summary>
 public class FarmerMotherMiddle : NPC {	
+	InitialEmotionState initialState;
+	Vector3 startingPosition;
 	protected override void Init() {
 		id = NPCIDs.FARMER_MOTHER;
 		base.Init();
 	}
 	
 	protected override void SetFlagReactions(){
-		
+		Reaction moveAway = new Reaction();
+		moveAway.AddAction(new NPCCallbackAction(ResetPosition));
+		moveAway.AddAction(new NPCEmotionUpdateAction(this, initialState));
+		flagReactions.Add(FlagStrings.FarmAlive, moveAway);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "What do you want? I'm busy."));
+		initialState = new InitialEmotionState(this,"What do you want? I'm busy." );
+		startingPosition = transform.position;
+		startingPosition.y += LevelManager.levelYOffSetFromCenter;
+		this.transform.position = new Vector3(200,0,0);
+		return (new GoneEmotionState(this, ""));
 	}
 	
 	protected override Schedule GetSchedule(){
@@ -25,6 +34,10 @@ public class FarmerMotherMiddle : NPC {
 
 	protected override void SetUpSchedules(){
 		
+	}
+	
+	protected void ResetPosition(){
+		this.transform.position = startingPosition;	
 	}
 	
 	
@@ -114,5 +127,10 @@ public class FarmerMotherMiddle : NPC {
 	
 	}
 	#endregion
+	
+	private class GoneEmotionState : EmotionState{
+		public GoneEmotionState(NPC toControl, string currentDialogue) : base(toControl, ""){
+		}
+	}
 	#endregion
 }

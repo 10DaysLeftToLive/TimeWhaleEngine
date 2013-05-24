@@ -64,6 +64,14 @@ public class Path {
 		}
 		return null;
 	}
+
+    public string GetLastWayPointName(){
+        if (index > 0)
+        {
+            return Graph.FindWayPointById(wayPoints[index - 1]).name;
+        }
+        return null;
+    }
 	
 	public GameObject GetNextWayPoint(){
 		if (index < path.Length){
@@ -71,7 +79,7 @@ public class Path {
 		}
 		return null;
 	}
-	
+    
 	public bool NextNode(){
 		index++;
 		return index < path.Length;	

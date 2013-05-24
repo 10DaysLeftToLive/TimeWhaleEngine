@@ -32,11 +32,10 @@ public class Player : Character {
 	private Vector3 pos;
 	// We want to be able to switch to move at any state when the player clicks
 	private void OnClickToMove (EventManager EM, ClickPositionArgs e){
+		if (currentState.GetType() == typeof(TalkState)) return;
 		pos = Camera.main.ScreenToWorldPoint(e.position);
 		pos.z = this.transform.position.z;
-		if (currentState.GetType() == typeof(TalkState)) return;
 		
-		// Will need to be changed with later refactoring
 		if (currentState.GetType() == typeof(IdleState) || currentState.GetType() == typeof(ClimbIdleState)){ // if we are idled or climbing idled
 			EnterState(new MoveState(this, pos)); // move normaly
 		} else if (currentState.GetType() == typeof(MoveState)){
@@ -132,16 +131,11 @@ public class Player : Character {
 	}
 	
 	public void PickUpObject(GameObject toPickUp){
-		//Debug.Log ("Player transform: " + animationData.mLocalTransform);
 		Inventory.PickUpObject(toPickUp);
 	}
 	
 	public void DisableHeldItem(){
 		Inventory.DisableHeldItem();
-	}
-	
-	public bool CheckTransitionPositionSuccess(CharacterAge newAge, CharacterAge previousAge){
-		return AgeSwapMover.instance.CheckTransitionPositionSuccess(newAge, previousAge);
 	}
 	
 	public void ChangeAnimation(BoneAnimation newAnimation){
@@ -166,6 +160,7 @@ public class Player : Character {
 	}
 	
 	public void LeaveInteraction(){
+		npcTalkingWith = null;
 		EnterState(new IdleState(this));
 	}
 }

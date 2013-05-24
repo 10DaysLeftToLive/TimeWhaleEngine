@@ -20,7 +20,7 @@ public abstract class NPC : Character {
 	private int truncatedTime;
 	
 	public Player player;
-	private bool chatingWithPlayer = false;
+	public bool chatingWithPlayer = false;
 	public bool chatingWithNPC = false;
 	private Texture charPortrait;
 	private Action sayHi;
@@ -76,8 +76,6 @@ public abstract class NPC : Character {
 		if (chatingWithPlayer && !NearPlayerToChat()){
 			CloseChat();
 			StopTalkingWithPlayer();
-		} else {
-			//PassiveChat();
 		}
 		scheduleStack.Run(Time.deltaTime);
 	}
@@ -100,9 +98,11 @@ public abstract class NPC : Character {
 		return InDistance(player.gameObject, NEAR_DISTANCE);
 	}
 	
+	static float xDistance;
+	static float yDistance;
 	private bool InDistance(GameObject gameObject, float distance) {
-		float xDistance = Mathf.Abs(this.transform.position.x - gameObject.transform.position.x);
-		float yDistance = Mathf.Abs(this.transform.position.y - gameObject.transform.position.y);
+		xDistance = Mathf.Abs(this.transform.position.x - gameObject.transform.position.x);
+		yDistance = Mathf.Abs(this.transform.position.y - gameObject.transform.position.y);
 		
 		return (xDistance < distance && yDistance < distance);
 	}
@@ -112,9 +112,9 @@ public abstract class NPC : Character {
 	}
 	
 	public void LeaveInteraction(){
-		chatingWithPlayer = false;
 		scheduleStack.Resume();
 		currentEmotion.OnInteractionCloses();
+		chatingWithPlayer = false;
 	}
 	
 	private void StopTalkingWithPlayer(){
@@ -197,7 +197,8 @@ public abstract class NPC : Character {
 	
 	#region Reactions
 	public void ReactToFlag(string flagName){
-		Debug.Log(name + " is reacting to the flag " + flagName);
+		DebugManager.instance.Log(name + " is reacting to the flag " + flagName, "Flag", name, flagName, "NPC");
+		
 		flagReactions[flagName].React();
 	}
 	

@@ -20,15 +20,6 @@ public class AgeSwapMover : ManagerSingleton<AgeSwapMover> {
 
 		return newPlayerPosition;
 	}
-	
-	// check if new position will work
-	public bool CheckTransitionPositionSuccess(CharacterAge newAge, CharacterAge previousAge) {
-		Vector3 playerCenter = GetNewAgeWorldPosition(playerCharacter.animationData.transform.position, newAge, previousAge, true);
-
-		CharacterController charControl = playerCharacter.GetComponent<CharacterController>();
-
-		return (AgeSwapDetector.CheckTransitionPositionSuccess(playerCenter, charControl));
-	}
 
 	//	if true, move object and update timeswitchobjects
 	public void ChangeAgePosition(CharacterAge newAge, CharacterAge previousAge){

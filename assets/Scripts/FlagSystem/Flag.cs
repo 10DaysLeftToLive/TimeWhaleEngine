@@ -20,7 +20,7 @@ public class Flag : IEquatable<Flag>{ // needs to implement IEquatable to play n
 	
 	public void SetOff(){
 		if (_isSetOff) Debug.LogWarning("Flag " + _name + " was already set off");
-		Debug.Log("Setting off " + _name);
+		DebugManager.instance.Log("Setting off " + _name, "Flag", _name);
 		foreach (NPC npc in npcsThatCareAboutFlag){
 			npc.ReactToFlag(_name);	
 		}
@@ -28,7 +28,7 @@ public class Flag : IEquatable<Flag>{ // needs to implement IEquatable to play n
 	}
 	
 	public void UnSet(){
-		Debug.Log("Unsetting " + _name);
+		DebugManager.instance.Log("Unsetting " + _name, "Flag", _name);
 		_isSetOff = false;
 	}
 	
