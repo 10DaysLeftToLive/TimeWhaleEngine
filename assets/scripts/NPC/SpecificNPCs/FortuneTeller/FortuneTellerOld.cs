@@ -11,7 +11,15 @@ public class FortuneTellerOld : NPC {
 	}
 	
 	protected override void SetFlagReactions(){
-		
+		#region Race To Carpenter House
+		/*
+		Reaction raceToCarpenterHouse = new Reaction();
+		raceToCarpenterHouse.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "Careful, the Carpenter is really mean!")));
+		raceToCarpenterHouse.AddAction(new ShowOneOffChatAction(this, "These are our neighbors!", 2f));
+		raceToCarpenterHouse.AddAction(new NPCAddScheduleAction(this, carpenterRaceSchedule));
+		flagReactions.Add(FlagStrings.RunToCarpenter, raceToCarpenterHouse);
+		*/
+		#endregion
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
