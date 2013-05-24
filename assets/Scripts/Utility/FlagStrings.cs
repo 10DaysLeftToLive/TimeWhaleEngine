@@ -61,6 +61,8 @@ public static class FlagStrings {
 	public static string NoteNoMarriage = "Note No Marriage";
 	public static string TellOnLighthouse = "Tell on Lighthouse";
 	public static string TellOnLighthouseConversation = "Tell on Lighthouse Conversation";
+	
+	public static string ToolsToGirl = "Tools to girl";
 	#endregion
 	
 	#region FarmerFather
