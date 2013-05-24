@@ -197,7 +197,8 @@ public abstract class NPC : Character {
 	
 	#region Reactions
 	public void ReactToFlag(string flagName){
-		Debug.Log(name + " is reacting to the flag " + flagName);
+		DebugManager.instance.Log(name + " is reacting to the flag " + flagName, "Flag", name, flagName, "NPC");
+		
 		flagReactions[flagName].React();
 	}
 	
