@@ -76,8 +76,6 @@ public abstract class NPC : Character {
 		if (chatingWithPlayer && !NearPlayerToChat()){
 			CloseChat();
 			StopTalkingWithPlayer();
-		} else {
-			//PassiveChat();
 		}
 		scheduleStack.Run(Time.deltaTime);
 	}
@@ -100,9 +98,11 @@ public abstract class NPC : Character {
 		return InDistance(player.gameObject, NEAR_DISTANCE);
 	}
 	
+	static float xDistance;
+	static float yDistance;
 	private bool InDistance(GameObject gameObject, float distance) {
-		float xDistance = Mathf.Abs(this.transform.position.x - gameObject.transform.position.x);
-		float yDistance = Mathf.Abs(this.transform.position.y - gameObject.transform.position.y);
+		xDistance = Mathf.Abs(this.transform.position.x - gameObject.transform.position.x);
+		yDistance = Mathf.Abs(this.transform.position.y - gameObject.transform.position.y);
 		
 		return (xDistance < distance && yDistance < distance);
 	}
