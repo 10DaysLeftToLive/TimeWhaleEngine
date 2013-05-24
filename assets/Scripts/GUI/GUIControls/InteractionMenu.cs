@@ -120,17 +120,14 @@ public class InteractionMenu : GUIControl {
 	}
 	
 	public void DoClickOnChoice(string choice){
-		Debug.Log("Doing click on " + choice);
 		npcChattingWith.ReactToChoice(choice);
 	}
 	
 	private void DoGiveClick(){
-		Debug.Log("Doing give click");
 		npcChattingWith.ReactToBeingGivenItem(player.Inventory.GetItem());
 	}
 
 	public void OpenChatForNPC(NPC _newNpcChatting){
-		Debug.Log("Opening interaction with " + _newNpcChatting);
 		npcChattingWith = _newNpcChatting;
 		Refresh();
 	}

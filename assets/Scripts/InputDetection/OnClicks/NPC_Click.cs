@@ -23,7 +23,7 @@ public class NPC_Click : OnClickNextToPlayer {
 		} else if (npcAttachedTo.IsInteracting()) {
 			GUIManager.Instance.CloseInteractionMenu();
 		} else {
-			Debug.Log("Tried to talk to " + npcAttachedTo + " but it didn't want to talk");	
+			DebugManager.instance.Log("Tried to talk to " + npcAttachedTo + " but it didn't want to talk", "NPC", npcAttachedTo.name);	
 		}	
 	}
 	

@@ -7,8 +7,8 @@ using System.Collections.Generic;
  * 	responsible for displaying the given npc chats above the head of each npc
  */
 public class ChatMenu : GUIControl {
-	private List<NPCChat> _npcsChats;
-	private List<ChatInfo> _currentChats;
+	private List<NPCChat> _npcsChats = new List<NPCChat>();
+	private List<ChatInfo> _currentChats = new List<ChatInfo>();
 	
 	private static float CHATWIDTH = .2f;
 	private static float CHATHEIGHT = .1f;
@@ -18,8 +18,6 @@ public class ChatMenu : GUIControl {
 	public GUIStyle chatBoxStyle;
 	
 	public override void Init(){
-		_npcsChats = new List<NPCChat>();
-		_currentChats = new List<ChatInfo>();
 	}
 	
 	private List<NPCChat> toRemove = new List<NPCChat>();

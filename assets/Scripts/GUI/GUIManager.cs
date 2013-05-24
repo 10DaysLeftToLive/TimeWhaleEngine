@@ -43,7 +43,7 @@ public class GUIManager : MonoBehaviour {
 	
 	public void AddNPCChat(NPCChat npcChatToAdd){
 		if (!ControlActive(chatMenu)){
-			LoadControl(chatMenu);
+			MarkControlForAdding(chatMenu);
 		}
 		chatMenu.AddChat(npcChatToAdd);
 	}
@@ -111,7 +111,7 @@ public class GUIManager : MonoBehaviour {
 	
 	public void CloseInteractionMenu(){
 		if (!ControlActive(interactionMenu)){
-			Debug.LogError("Can't close interaction display when it is not up.");
+			Debug.LogError("Trying to close interaction menu when it was not up.");
 			return;
 		}
 		interactionMenu.Close();
