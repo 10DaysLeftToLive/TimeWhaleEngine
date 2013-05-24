@@ -51,6 +51,9 @@ public class MotherMiddle : NPC {
 		Reaction gaveSeashell;
 		Reaction randomMessage;
 		bool rose = false, pendant = false, seashell = false;
+		
+		Choice TempFarmerReturnChoice = new Choice("Please mother, bring back the farmers!", "Fine...with a twirl of my wrist..poof, the farmers have returned!");
+		Reaction TempFarmerReturnReaction = new Reaction();
 	
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
 			gaveRose = new Reaction();
@@ -81,6 +84,13 @@ public class MotherMiddle : NPC {
 			randomMessage.AddAction(new NPCCallbackAction(RandomMessage));
 			
 			SetOnOpenInteractionReaction(new DispositionDependentReaction(randomMessage));
+			
+			TempFarmerReturnReaction.AddAction(new NPCCallbackAction(TempResponse));
+			_allChoiceReactions.Add(TempFarmerReturnChoice,new DispositionDependentReaction(TempFarmerReturnReaction));
+		}
+		
+		public void TempResponse(){
+			FlagManager.instance.SetFlag(FlagStrings.FarmAlive);
 		}
 		
 		public void UpdateText() {

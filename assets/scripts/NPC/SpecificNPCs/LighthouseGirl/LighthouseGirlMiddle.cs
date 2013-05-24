@@ -6,18 +6,25 @@ using System.Collections;
 /// </summary>
 public class LighthouseGirlMiddle : NPC {
 	InitialEmotionState initialState;
+	Vector3 startingPosition;
 	protected override void Init() {
 		id = NPCIDs.LIGHTHOUSE_GIRL;
 		base.Init();
 	}
 	
 	protected override void SetFlagReactions(){
-		
+		Reaction moveAway = new Reaction();
+		moveAway.AddAction(new NPCCallbackAction(ResetPosition));
+		moveAway.AddAction(new NPCEmotionUpdateAction(this, initialState));
+		flagReactions.Add(FlagStrings.FarmAlive, moveAway);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
 		initialState = new InitialEmotionState(this, "Hi! Would you mind helping me out? I need to get out of my arranged marriage, but need help with distracting my mom to make it work!");
-		return (initialState);
+		startingPosition = transform.position;
+		startingPosition.y += LevelManager.levelYOffSetFromCenter;
+		this.transform.position = new Vector3(200,0,0);
+		return (new GoneEmotionState(this, ""));
 	}
 	
 	Schedule openningWaitingSchedule;
@@ -30,19 +37,23 @@ public class LighthouseGirlMiddle : NPC {
 
 	protected override void SetUpSchedules(){
 		
-		openningWaitingSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
+		/*openningWaitingSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
 		openningWaitingSchedule.Add(new TimeTask(30, new WaitTillPlayerCloseState(this, player)));
-		scheduleStack.Add(openningWaitingSchedule);
+		scheduleStack.Add(openningWaitingSchedule);*/
 		
-		postOpenningSchedule = new Schedule(this,Schedule.priorityEnum.Medium);
+		/*postOpenningSchedule = new Schedule(this,Schedule.priorityEnum.Medium);
 		postOpenningSchedule.Add(new TimeTask(10, new MoveThenDoState(this, new Vector3(transform.position.x - 10, transform.position.y, transform.position.z), new IdleState(this))));
 		postOpenningSchedule.Add(new TimeTask(30, new ChangeEmotionState(this, initialState)));
-		scheduleStack.Add(postOpenningSchedule);
+		scheduleStack.Add(postOpenningSchedule);*/
 		
 		
-		scheduleStack.Add(new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerFatherMiddle), 
-			new YoungFarmerMotherToFarmerFatherOpenningScriptedDialogue(),Schedule.priorityEnum.High));
+		//scheduleStack.Add(new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerFatherMiddle), 
+		//	new YoungFarmerMotherToFarmerFatherOpenningScriptedDialogue(),Schedule.priorityEnum.High));
 		
+	}
+	
+	protected void ResetPosition(){
+		this.transform.position = startingPosition;	
 	}
 	
 	
@@ -300,6 +311,12 @@ public class LighthouseGirlMiddle : NPC {
 			SetDefaultText("My mom will never back down.");
 		}
 		
+	}
+	
+	private class GoneEmotionState : EmotionState{
+		public GoneEmotionState(NPC toControl, string currentDialogue) : base(toControl, ""){
+		}
+
 	}
 	
 	#endregion

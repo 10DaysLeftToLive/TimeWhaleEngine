@@ -4,18 +4,27 @@ using System.Collections;
 /// <summary>
 /// FarmerFatherMiddle specific scripting values
 /// </summary>
-public class FarmerFatherMiddle : NPC {	
+public class FarmerFatherMiddle : NPC {
+	InitialEmotionState initialState;
+	Vector3 startingPosition;
 	protected override void Init() {
 		id = NPCIDs.FARMER_FATHER;
 		base.Init();
 	}
 	
 	protected override void SetFlagReactions(){
-		
+		Reaction moveAway = new Reaction();
+		moveAway.AddAction(new NPCCallbackAction(ResetPosition));
+		moveAway.AddAction(new NPCEmotionUpdateAction(this, initialState));
+		flagReactions.Add(FlagStrings.FarmAlive, moveAway);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "H-hey there. D-do you have some time to listen? If you do, come back later when my wife isn't around.."));
+		initialState = new InitialEmotionState(this, "H-hey there. D-do you have some time to listen? If you do, come back later when my wife isn't around..");
+		startingPosition = transform.position;
+		startingPosition.y += LevelManager.levelYOffSetFromCenter;
+		this.transform.position = new Vector3(200,0,0);
+		return (new GoneEmotionState(this, ""));
 	}
 	
 	protected override Schedule GetSchedule(){
@@ -25,6 +34,10 @@ public class FarmerFatherMiddle : NPC {
 
 	protected override void SetUpSchedules(){
 		
+	}
+	
+	protected void ResetPosition(){
+		this.transform.position = startingPosition;	
 	}
 	
 	
@@ -237,6 +250,12 @@ public class FarmerFatherMiddle : NPC {
 			
 		}
 	
+	}
+	
+	private class GoneEmotionState : EmotionState{
+		public GoneEmotionState(NPC toControl, string currentDialogue) : base(toControl, ""){
+		}
+		
 	}
 	#endregion
 	#endregion
