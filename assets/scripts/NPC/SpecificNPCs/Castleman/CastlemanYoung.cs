@@ -5,16 +5,20 @@ using System.Collections;
 /// CastlemanYoung specific scripting values
 /// </summary>
 public class CastlemanYoung : NPC {
+	MeetFamily BecomingFriends;
 	protected override void Init() {
 		id = NPCIDs.CASTLE_MAN;
 		base.Init();
 	}
 	
 	protected override void SetFlagReactions(){
-		
+		Reaction ChangeToTalkingState = new Reaction();
+		//ChangeToTalkingState.AddAction(new NPCEmotionUpdateAction(this, new MeetFamily(this, "")));
+		flagReactions.Add(FlagStrings.MusicianCommentOnSon, ChangeToTalkingState);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
+		BecomingFriends = new MeetFamily(this, "");
 		return (new InitialEmotionState(this, "..."));
 	}
 	
@@ -69,9 +73,6 @@ public class CastlemanYoung : NPC {
 			WellTellMeReaction = new Reaction();
 			WellTellMeReaction.AddAction(new NPCCallbackAction(UpdateWellTellMe));
 			WellTellMeReaction.AddAction(new UpdateCurrentTextAction(toControl, "...................."));
-			
-
-		
 		}
 		public void UpdateDontYouSpeak(){
 			_allChoiceReactions.Remove(DontYouSpeakChoice);

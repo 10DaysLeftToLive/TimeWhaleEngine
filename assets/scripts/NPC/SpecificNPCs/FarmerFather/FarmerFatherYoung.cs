@@ -11,24 +11,11 @@ public class FarmerFatherYoung : NPC {
 	protected override void Init() {
 		id = NPCIDs.FARMER_FATHER;
 		base.Init();
-	}
-	
-	private Schedule BusinessTimerSchedule;
-	private NPCConvoSchedule BusinessTalk;
-	
+	}	
 	protected override void SetFlagReactions(){
 		Reaction NewDialogueReaction = new Reaction();
 		NewDialogueReaction.AddAction (new NPCCallbackAction(UpdateConversation));
 		flagReactions.Add(FlagStrings.ConversationInMiddleFather, NewDialogueReaction);
-		
-		Reaction Business = new Reaction();
-		Business.AddAction(new NPCAddScheduleAction(this, BusinessTalk));
-		Business.AddAction(new NPCCallbackAction(UpdateBusiness));
-		flagReactions.Add(FlagStrings.BusinessConversation, Business);
-		
-		Reaction timer = new Reaction();
-		timer.AddAction(new NPCAddScheduleAction(this, BusinessTimerSchedule));
-		flagReactions.Add(FlagStrings.BusinessTimer, timer);
 	}
 	public void UpdateBusiness(){
 		currentEmotion.PassStringToEmotionState(FlagStrings.BusinessConversation);
@@ -37,7 +24,7 @@ public class FarmerFatherYoung : NPC {
 		currentEmotion.PassStringToEmotionState(FlagStrings.ConversationInMiddleFather);
 	}
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "||||PUT IT UP PUT IT UP YO"));
+		return (new InitialEmotionState(this, "We need help running the farm!"));
 	}
 	
 	protected override Schedule GetSchedule(){
@@ -46,16 +33,6 @@ public class FarmerFatherYoung : NPC {
 	}
 
 	protected override void SetUpSchedules(){
-		BusinessTimerSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
-		Task setOffBusinessConvoFlag = (new Task(new MoveThenDoState(this, this.gameObject.transform.position , new MarkTaskDone(this))));
-		setOffBusinessConvoFlag.AddFlagToSet(FlagStrings.BusinessConversation);
-		BusinessTimerSchedule.Add(setOffBusinessConvoFlag);
-		BusinessTimerSchedule.Add(new TimeTask(1, new WaitTillPlayerCloseState(this, player)));
-		BusinessTimerSchedule.Add(new TimeTask(1, new IdleState(this)));
-		
-		//BusinessTalk = new NPCConvoSchedule();
-		BusinessTalk = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerMotherYoung), 
-			new YoungFarmerFatherToFarmerMotherBusinessTalk(),Schedule.priorityEnum.High);
 		
 	}
 	
@@ -63,6 +40,19 @@ public class FarmerFatherYoung : NPC {
 	#region EmotionStates
 	#region Initial Emotion State
 	private class InitialEmotionState : EmotionState{
+	
+	
+		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+			
+		
+		}
+		
+		public override void UpdateEmotionState(){
+			
+		}
+	
+	}
+	private class StoryEmotionState : EmotionState{
 		bool startedConversation = false;
 		Reaction ToyPuzzleReaction;
 		Reaction SeaShellReaction;
@@ -96,17 +86,8 @@ public class FarmerFatherYoung : NPC {
 		Choice AlreadyBraveChoice;
 		Reaction AlreadyBraveReaction;
 		
-		Choice HowsBusinessChoice;
-		Reaction HowsBusinessReaction;
-		Choice IllDoItForYouChoice;
-		Reaction IllDoItForYouReaction;
-		Choice WhyNotChoice;
-		Reaction WhyNotReaction;
-		Choice TheyllUnderstandChoice;
-		Reaction TheyllUnderstandReaction;
-		Choice IDontHateYouChoice;
-		Reaction IDontHateYouReaction;
-		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, "Do you have any books on you?  I..I don't want to disobey my wife, but I want my daughter to grow up learning about stories of bravery..."){
+		
+		public StoryEmotionState(NPC toControl, string currentDialogue) : base(toControl, "Do you have any books on you?  I..I don't want to disobey my wife, but I want my daughter to grow up learning about stories of bravery..."){
 			//Code for giving the Portrait
 			Reaction PortraitReaction = new Reaction();
 			PortraitReaction.AddAction(new NPCTakeItemAction(toControl));
@@ -198,70 +179,6 @@ public class FarmerFatherYoung : NPC {
 			AlreadyBraveReaction = new Reaction();
 			AlreadyBraveReaction.AddAction(new NPCCallbackAction(UpdateAlreadyBrave));
 			AlreadyBraveReaction.AddAction(new UpdateCurrentTextAction(toControl, "I...I guess you're right.  Maybe my daughter doesn't need stories, maybe she is already brave...thanks for your help!"));
-			
-			#region Business Talk
-			HowsBusinessChoice = new Choice ("How's business?", "*sigh*  It's not going well...whenever I go to the market I can never find the strength to charge enough.");
-			HowsBusinessReaction = new Reaction();
-			HowsBusinessReaction.AddAction(new NPCCallbackAction(UpdateHowsBusiness));
-			HowsBusinessReaction.AddAction(new UpdateCurrentTextAction(toControl, "*sigh*  It's not going well...whenever I go to the market I can never find the strength to charge enough."));
-			
-			IllDoItForYouChoice = new Choice ("I'll do it for you!", "Really?  You sure?  Okay...take these to the market and see if you can get replacement shovel!  Ours broke.");
-			IllDoItForYouReaction = new Reaction();
-			IllDoItForYouReaction.AddAction(new NPCCallbackAction(UpdateIllDoItForYou));
-			IllDoItForYouReaction.AddAction(new NPCGiveItemAction(toControl,StringsItem.Vegetable));
-			IllDoItForYouReaction.AddAction(new UpdateCurrentTextAction(toControl, "Really?  You sure?  Okay...take these to the market and see if you can get replacement shovel!  Ours broke."));
-			
-			WhyNotChoice = new Choice ("Why not?", "Because...I...I'm too scared of people hating me if I haggle");
-			WhyNotReaction = new Reaction();
-			WhyNotReaction.AddAction(new NPCCallbackAction(UpdateWhyNot));
-			WhyNotReaction.AddAction(new UpdateCurrentTextAction(toControl, "Because...I...I'm too scared of people hating me if I haggle"));
-			
-			TheyllUnderstandChoice = new Choice ("They'll understand.", " I...I can't do it...");
-			TheyllUnderstandReaction = new Reaction();
-			TheyllUnderstandReaction.AddAction(new NPCCallbackAction(UpdateTheyllUnderstand));
-			TheyllUnderstandReaction.AddAction(new UpdateCurrentTextAction(toControl, " I...I can't do it..."));
-			
-			IDontHateYouChoice = new Choice ("I don't hate you.", "Thanks...I don't think it changes anything though..");
-			IDontHateYouReaction = new Reaction();
-			IDontHateYouReaction.AddAction(new NPCCallbackAction(UpdateIDontHateYou));
-			IDontHateYouReaction.AddAction(new UpdateCurrentTextAction(toControl, "Thanks...I don't think it changes anything though.."));
-			
-			
-			
-			#endregion Business Talk
-		}
-		
-		public void UpdateHowsBusiness(){
-			_allChoiceReactions.Remove(HowsBusinessChoice);
-			_allChoiceReactions.Add(IllDoItForYouChoice, new DispositionDependentReaction(IllDoItForYouReaction));
-			_allChoiceReactions.Add(WhyNotChoice, new DispositionDependentReaction(WhyNotReaction));
-			GUIManager.Instance.RefreshInteraction();
-		}
-		public void UpdateIllDoItForYou(){
-			_allChoiceReactions.Remove(IllDoItForYouChoice);
-			_allChoiceReactions.Remove(WhyNotChoice);
-			GUIManager.Instance.RefreshInteraction();
-		}
-		public void UpdateWhyNot(){
-			_allChoiceReactions.Remove(IllDoItForYouChoice);
-			_allChoiceReactions.Remove(WhyNotChoice);
-			_allChoiceReactions.Add(TheyllUnderstandChoice, new DispositionDependentReaction(TheyllUnderstandReaction));
-			_allChoiceReactions.Add(IDontHateYouChoice, new DispositionDependentReaction(IDontHateYouReaction));
-			GUIManager.Instance.RefreshInteraction();
-		}
-		public void UpdateTheyllUnderstand(){
-			_allChoiceReactions.Remove(TheyllUnderstandChoice);
-			_allChoiceReactions.Remove(IDontHateYouChoice);
-			GUIManager.Instance.RefreshInteraction();
-		}
-		public void UpdateIDontHateYou(){
-			_allChoiceReactions.Remove(TheyllUnderstandChoice);
-			_allChoiceReactions.Remove(IDontHateYouChoice);
-			GUIManager.Instance.RefreshInteraction();
-		}
-		
-		public void UpdateConversationOptions(){
-				
 		}
 		public void UpdateAlreadyBrave(){
 			_allChoiceReactions.Clear();
@@ -339,9 +256,6 @@ public class FarmerFatherYoung : NPC {
 			
 		}
 		public override void PassStringToEmotionState(string text){
-			if(text == FlagStrings.BusinessConversation){
-				_allChoiceReactions.Add(HowsBusinessChoice, new DispositionDependentReaction(HowsBusinessReaction));
-			}
 			if(text == FlagStrings.ConversationInMiddleFather){
 				if (startedConversation == false){
 				_allChoiceReactions.Add(AlreadyBraveChoice, new DispositionDependentReaction(AlreadyBraveReaction));
