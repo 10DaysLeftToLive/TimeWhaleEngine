@@ -1,6 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Pick up item state. Will grab a given item and put it itno the player's invetory
+/// Will also set out a flag with the name of the item being picked up
+/// </summary>
 public class PickUpItemState : AbstractState {
 	GameObject _toPickUp;
 	
@@ -9,25 +13,20 @@ public class PickUpItemState : AbstractState {
 	}
 	
 	public override void Update(){
-		Debug.Log(character.name + ": PickUpItemState Update");
-		Debug.Log ("Player transform: " + character.animationData.mLocalTransform);
-		character.Inventory.PickUpObject(_toPickUp);
-		
-		Debug.Log("PickupItem does " + (character.Inventory.HasItem() ? ": " + character.Inventory.GetItem().name : "not") + "have an item");
-		
 		if (character is NPC){
 			character.EnterState(new MarkTaskDone(character));
 		} else {
 			character.EnterState(new IdleState(character));
+			((Player) character).Inventory.PickUpObject(_toPickUp);
 		}
 	}
 	
 	public override void OnEnter(){
-		Debug.Log(character.name + ": PickUpItemState Enter to pickup " + _toPickUp.name);
+		DebugManager.instance.Log(character.name + ": PickUpItemState Enter to pickup " + _toPickUp.name, "State", character.name);
 	}
 	
 	public override void OnExit(){
-		Debug.Log(character.name + ": PickUpItemState Exit");
+		DebugManager.instance.Log(character.name + ": PickUpItemState Exit", "State", character.name);
 		FlagManager.instance.SetFlag(_toPickUp.name);
 		// Shoot off event for having picked up item
 		EventManager.instance.RiseOnPlayerPickupEvent(new PickUpStateArgs(_toPickUp));

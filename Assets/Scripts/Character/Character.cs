@@ -17,14 +17,9 @@ public abstract class Character : PauseObject {
 	
 	public bool SpriteLookingLeft;
 	protected State currentState;
-	private Inventory inventory;
 	
 	public BoneAnimation animationData;
 	#endregion
-	
-	public Inventory Inventory {
-		get { return inventory; }
-	}
 	
 	public State State {
 		get {return currentState;}
@@ -37,9 +32,6 @@ public abstract class Character : PauseObject {
 	
 	void Start () {
 		EnterState(new IdleState(this));
-		
-		Transform rightHand = animationData.GetSpriteTransform("Right Hand");
-		inventory = new Inventory(rightHand);
 		InitializeSpriteLookDirections();
 		Init();
 	}
@@ -68,7 +60,7 @@ public abstract class Character : PauseObject {
 	}
 	
 	private void ToggleAnimationPlaying(bool isPaused){
-		int speed = (isPaused ? 0 : 1);
+		//int speed = (isPaused ? 0 : 1);
 		// TODO by Brent
 	}
 	

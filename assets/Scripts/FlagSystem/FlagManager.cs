@@ -20,7 +20,7 @@ public class FlagManager : ManagerSingleton<FlagManager> {
 				return;
 			}
 		}
-		Debug.LogWarning("Flag " + name + " was not found");
+		DebugManager.instance.Log("Flag " + name + " was not found", "Flag", "Warning");
 	}
 	
 	public void UnSetFlag(string name){
@@ -30,6 +30,6 @@ public class FlagManager : ManagerSingleton<FlagManager> {
 				return;
 			}
 		}
-		Debug.LogWarning("Flag " + name + " was not found");
+		DebugManager.instance.Log("Flag " + name + " was not found", "Flag", "Warning");
 	}	
 }

@@ -28,7 +28,6 @@ public class Inventory {
 			
 			pickedUpObject.GetComponent<InteractableOnClick>().Disable();
 		}
-		Debug.Log("PickUpObject does " + (HasItem() ? "" : "not ") + "have an item");
 		
         SoundManager.instance.PickUpItemSFX.Play();
 	}
@@ -80,13 +79,11 @@ public class Inventory {
 	}
 	
 	private void SwapItems(GameObject toSwapIn) {
-		
 		Vector3 positionToPlace = toSwapIn.transform.position;
 		//Vector3 oldScale = pickedUpObject.transform.localScale;
 		
 		DropItem(positionToPlace);
 		//oldPickedUpObject.transform.localScale = oldScale;
 		PickUpObject(toSwapIn);
-		
 	}
 }

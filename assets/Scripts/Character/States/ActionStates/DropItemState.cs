@@ -10,18 +10,16 @@ public class DropItemState : AbstractState {
 	}
 	
 	public override void Update(){
-		Debug.Log(character.name + ": DropItemState Update");
-		
-		character.Inventory.DropItem(character.GetFeet()); // TODO better implementation.
+		((Player) character).Inventory.DropItem(character.GetFeet());
 		
 		character.EnterState(new MarkTaskDone(character));
 	}
 	
 	public override void OnEnter(){
-		Debug.Log(character.name + ": DropItemState Enter to pickup ");
+		DebugManager.instance.Log(character.name + ": DropItemState Enter to pickup", "State", character.name);
 	}
 	
 	public override void OnExit(){
-		Debug.Log(character.name + ": DropItemState Exit");
+		DebugManager.instance.Log(character.name + ": DropItemState Exit", "State", character.name);
 	}
 }

@@ -12,11 +12,17 @@ public class Player : Character {
 	public Capsule bigHitbox;
 	
 	public NPC npcTalkingWith;
+	private Inventory inventory;
 	
 	private float timeSinceLastHold = 1; // start moving at first moment
 	private static float TIMEBETWEENHOLDMOVES = .35f;
 	private static float HOLDMINDISTANCEX = 2; 
-	private static float HOLDMINDISTANCEY = 1; 
+	private static float HOLDMINDISTANCEY = 1;
+	
+	public Inventory Inventory {
+		get { return inventory; }
+	}
+	
 	
 	// Use this for initialization
 	protected override void Init(){
@@ -27,6 +33,9 @@ public class Player : Character {
 		EventManager.instance.mOnClickHoldReleaseEvent += new EventManager.mOnClickHoldReleaseDelegate(OnHoldRelease);
 		
 		AgeSwapMover.instance.SetPlayer(this);
+		
+		Transform rightHand = animationData.GetSpriteTransform("Right Hand");
+		inventory = new Inventory(rightHand);
 	}
 	
 	private Vector3 pos;

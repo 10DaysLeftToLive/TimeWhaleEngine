@@ -39,7 +39,7 @@ public class OneDayClock : PauseObject {
 		timeSinceLastPaused = Time.time;
 	}
 	
-	protected virtual void OnResume() {
+	protected override void OnResume() {
 		lostTime += (Time.time - timeSinceLastPaused);
 		timeSinceLastPaused = Time.time - (Time.time - timeSinceLastPaused);
 	}

@@ -53,7 +53,6 @@ public class InteractionMenu : GUIControl {
 		mainDisplayText = null;
 	}
 	
-	private bool hasInitializedStyles = false;
 	public override void Render(){		
 		if (npcChattingWith == null){
 			Debug.LogError("Trying to display a chat with no npc.");
