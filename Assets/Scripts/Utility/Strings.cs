@@ -70,6 +70,7 @@ public static class Strings{
 
     // Area Names
     public static string CURRENTAREA = "Forest";
-    public static string LASTAREA = "Forest";
-    public static string NEXTAREA = "Forest";
+    public static string CURRENTFADING = "Forest";
+    public static string TOPOFSTAIRS = "Forest";
+    public static string BOTTOMOFSTAIRS = "Forest";
 }

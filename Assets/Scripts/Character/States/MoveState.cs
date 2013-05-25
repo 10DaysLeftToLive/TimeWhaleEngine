@@ -47,23 +47,41 @@ public class MoveState : AbstractState {
                     NameEndCounter = lastWay.IndexOf("Stair");
                     // since we're heading towards the stairs, we need to grab the name of the area we are leaving and the area we're heading towards
                     if (lastWay.IndexOf("StairBase") > 0 || lastWay.IndexOf("StairTop") > 0){
-                        Strings.LASTAREA = lastWay.Substring(0, NameStartCounter);
-                        Strings.NEXTAREA = lastWay.Substring(NameStartCounter + 5, NameEndCounter - (NameStartCounter + 5));
+                        
+                        /*Strings.LASTAREA = lastWay.Substring(0, NameStartCounter);
+                        Strings.NEXTAREA = lastWay.Substring(NameStartCounter + 5, NameEndCounter - (NameStartCounter + 5));*/
                         //Debug.Log("Heading towards some stairs, LASTAREA is " + Strings.LASTAREA + " NEXTAREA is " + Strings.NEXTAREA);
                         //DebugManager.instance.Log("LASTAREA is " + Strings.LASTAREA, "WalkSFX", "SFX");
+
+                        if (lastWay.IndexOf("StairBase") > 0)
+                        {
+                            Strings.BOTTOMOFSTAIRS = lastWay.Substring(0, NameStartCounter);
+                            Strings.TOPOFSTAIRS = lastWay.Substring(NameStartCounter + 5, NameEndCounter - (NameStartCounter + 5));
+                        }
+                        else
+                        {
+                            Strings.TOPOFSTAIRS = lastWay.Substring(0, NameStartCounter);
+                            Strings.BOTTOMOFSTAIRS = lastWay.Substring(NameStartCounter + 5, NameEndCounter - (NameStartCounter + 5));
+                        }
+
                         towardStair = true;
                     }
                     // possibly walking towards stairs
                     else if (towardStair){
                         // just started walking up the stairs
                         if (lastWay.EndsWith("High") || lastWay.EndsWith("Low")){
+                            if (lastWay.IndexOf("Low") > 0)
+                            {
+                                SoundManager.instance.StartCoroutineFadeDown(Strings.BOTTOMOFSTAIRS);
+                            }
+                            else
+                            {
+                                SoundManager.instance.StartCoroutineFadeDown(Strings.TOPOFSTAIRS);
+                            }
                             towardStair = false;
                             traverseStair = true;
                             Strings.CURRENTAREA = "Stairs";
-
-                            SoundManager.instance.StartCoroutineFadeDown(Strings.LASTAREA);
                             SoundManager.instance.PlayWalkSFX();
-
                             //Debug.Log("Just started walking up some stairs");
                         }
                         // passed by the stairs
@@ -75,11 +93,23 @@ public class MoveState : AbstractState {
                     else if (traverseStair) {
                         if (lastWay.EndsWith("High") || lastWay.EndsWith("Low")){
                             traverseStair = false;
-                            Strings.CURRENTAREA = Strings.NEXTAREA;
+                            towardStair = true;
+
+                            if (lastWay.EndsWith("High"))
+                            {
+                                Strings.CURRENTAREA = Strings.TOPOFSTAIRS;
+                            }
+                            else
+                            {
+                                Strings.CURRENTAREA = Strings.BOTTOMOFSTAIRS;
+                            }
+                            /*Strings.CURRENTAREA = Strings.NEXTAREA;
+                            Strings.NEXTAREA = Strings.LASTAREA;
+                            Strings.LASTAREA = Strings.CURRENTAREA;*/
                             SoundManager.instance.StartCoroutineFadeUp(Strings.CURRENTAREA);
                             SoundManager.instance.PlayWalkSFX();
 
-                            //Debug.Log("Just finished walking up some stairs");
+                            Debug.Log("Just finished walking up some stairs and CURRENTAREA is "+Strings.CURRENTAREA);
                         }
                     }
                 }

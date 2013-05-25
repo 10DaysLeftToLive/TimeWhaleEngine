@@ -32,6 +32,8 @@ public class Crossfade: MonoBehaviour {
 
     public static IEnumerator CoroutineFadeDown(string AreaName)
     {
+        Strings.CURRENTFADING = AreaName;
+
         AudioSource CurrentSong;
         AudioSource CurrentAmbient;
         float fTimeCounter = 0f;
@@ -58,33 +60,50 @@ public class Crossfade: MonoBehaviour {
                 CurrentSong = CrossfadeInstance.MarketBGM;
                 CurrentAmbient = CrossfadeInstance.MarketAmbient;
                 break;
-            case "Tree":
+            case "ReflectionTree":
                 CurrentSong = null;
-                CurrentAmbient = null;
+                CurrentAmbient = CrossfadeInstance.LighthouseAmbient;
                 break;
             default:
                 CurrentSong = null;
                 CurrentAmbient = null;
                 break;
         }
-        
-        // 1f will need to be changed to match the final volume used
-        while (!(Mathf.Approximately(fTimeCounter, 1f)))
-        {
-            fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
-            CurrentSong.volume = (1f - fTimeCounter) * CurrentSong.volume;
-            CurrentAmbient.volume = (1f - fTimeCounter) * CurrentAmbient.volume;
-            yield return new WaitForSeconds(0.05f);
-        }
 
-        CurrentSong.Stop();
-        CurrentAmbient.Stop();
+        if (CurrentSong != null && CurrentAmbient != null)
+        {
+            // 1f will need to be changed to match the final volume used
+            while (!(Mathf.Approximately(fTimeCounter, 1f)))
+            {
+                fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
+                CurrentSong.volume = (1f - fTimeCounter) * CurrentSong.volume;
+                CurrentAmbient.volume = (1f - fTimeCounter) * CurrentAmbient.volume;
+                yield return new WaitForSeconds(0.05f);
+            }
+
+            CurrentSong.Stop();
+            CurrentAmbient.Stop();
+        }
+        else if (CurrentSong == null && CurrentAmbient != null)
+        {
+            // 1f will need to be changed to match the final volume used
+            while (!(Mathf.Approximately(fTimeCounter, 1f)))
+            {
+                fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
+                CurrentAmbient.volume = (1f - fTimeCounter) * CurrentAmbient.volume;
+                yield return new WaitForSeconds(0.05f);
+            }
+
+            CurrentAmbient.Stop();
+        }
 
         Crossfade.CrossfadeInstance.StopCoroutine("CoroutineFadeDown");
     }
 
     public static IEnumerator CoroutineFadeUp(string AreaName)
     {
+        Strings.CURRENTFADING = AreaName;
+
         AudioSource CurrentSong;
         AudioSource CurrentAmbient;
         float fTimeCounter = 0f;
@@ -111,9 +130,9 @@ public class Crossfade: MonoBehaviour {
                 CurrentSong = CrossfadeInstance.MarketBGM;
                 CurrentAmbient = CrossfadeInstance.MarketAmbient;
                 break;
-            case "Tree":
+            case "ReflectionTree":
                 CurrentSong = null;
-                CurrentAmbient = null;
+                CurrentAmbient = CrossfadeInstance.LighthouseAmbient;
                 break;
             default:
                 CurrentSong = null;
@@ -121,18 +140,36 @@ public class Crossfade: MonoBehaviour {
                 break;
         }
 
-        CurrentSong.volume = 0;
-        CurrentSong.Play();
-        CurrentAmbient.volume = 0;
-        CurrentAmbient.Play();
-
-        // 1f will need to be changed to match the final volume used
-        while (!(Mathf.Approximately(fTimeCounter, 1f)))
+        if (CurrentSong != null)
         {
-            fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
-            CurrentSong.volume = fTimeCounter;
-            CurrentAmbient.volume = fTimeCounter;
-            yield return new WaitForSeconds(0.05f);
+            CurrentSong.volume = 0;
+            CurrentSong.Play();
+        }
+        if (CurrentAmbient != null)
+        {
+            CurrentAmbient.volume = 0;
+            CurrentAmbient.Play();
+        }
+
+        if (CurrentSong != null && CurrentAmbient != null)
+        {
+            // 1f will need to be changed to match the final volume used
+            while (!(Mathf.Approximately(fTimeCounter, 1f)))
+            {
+                fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
+                CurrentSong.volume = fTimeCounter;
+                CurrentAmbient.volume = fTimeCounter;
+                yield return new WaitForSeconds(0.05f);
+            }
+        }
+        else if (CurrentSong == null && CurrentAmbient != null)
+        {
+            while (!(Mathf.Approximately(fTimeCounter, 1f)))
+            {
+                fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
+                CurrentAmbient.volume = fTimeCounter;
+                yield return new WaitForSeconds(0.05f);
+            }
         }
 
         Crossfade.CrossfadeInstance.StopCoroutine("CoroutineFadeUp");

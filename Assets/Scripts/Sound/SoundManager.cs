@@ -41,7 +41,7 @@ public class SoundManager : MonoBehaviour {
     public void PlayWalkSFX()
     {
         string Area = null;
-        if (Strings.CURRENTAREA == "Forest" || Strings.CURRENTAREA == "Market" || Strings.CURRENTAREA == "Tree" || Strings.CURRENTAREA == "Farm" || Strings.CURRENTAREA == "Windmill"){
+        if (Strings.CURRENTAREA == "Forest" || Strings.CURRENTAREA == "Market" || Strings.CURRENTAREA == "ReflectionTree" || Strings.CURRENTAREA == "Lighthouse" || Strings.CURRENTAREA == "Windmill"){
             Area = "Grass";
         }
         else if (Strings.CURRENTAREA == "Beach")
