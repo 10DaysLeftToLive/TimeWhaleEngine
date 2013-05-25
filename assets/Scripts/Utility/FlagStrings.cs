@@ -87,4 +87,8 @@ public static class FlagStrings {
 	#region Musician
 	public static string MusicianCommentOnSon = "Is he mute?";
 	#endregion
+	
+	#region CastleMan
+	public static string ConvinceToTalkWithCarpenterSonRoundOne = "Talk CSON Round One.";
+	#endregion
 }
