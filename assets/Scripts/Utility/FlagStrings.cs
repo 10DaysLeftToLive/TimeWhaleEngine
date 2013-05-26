@@ -67,6 +67,7 @@ public static class FlagStrings {
 	public static string TellOnLighthouseConversation = "Tell on Lighthouse Conversation";
 	
 	public static string ToolsToGirl = "Tools to girl";
+	public static string WaitForPlayerBeforeRope = "Wait for player before rope";
 	public static string WaitingForDate = "Waiting for date";
 	public static string EndOfDate = "End of date";
 	public static string ToolsForMarriage = "Tools for marriage";
