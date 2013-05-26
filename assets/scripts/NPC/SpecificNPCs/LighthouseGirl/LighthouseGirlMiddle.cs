@@ -6,6 +6,8 @@ using System.Collections;
 /// </summary>
 public class LighthouseGirlMiddle : NPC {
 	InitialEmotionState initialState;
+	ProMarriageEmotionState marriageState;
+	AntiMarriageEmotionState noMarriageState;
 	Vector3 startingPosition;
 	protected override void Init() {
 		id = NPCIDs.LIGHTHOUSE_GIRL;
@@ -22,20 +24,43 @@ public class LighthouseGirlMiddle : NPC {
 		
 		Reaction antiMarriagePlanInAction = new Reaction();
 		antiMarriagePlanInAction.AddAction(new NPCAddScheduleAction(this, noMarriageSchedule));
+		antiMarriagePlanInAction.AddAction(new NPCEmotionUpdateAction(this, noMarriageState));
 		flagReactions.Add(FlagStrings.ToolsToGirl, antiMarriagePlanInAction);
+		
+		Reaction marriageToCastleMan = new Reaction();
+		antiMarriagePlanInAction.AddAction(new NPCEmotionUpdateAction(this, noMarriageState));
+		marriageToCastleMan.AddAction(new NPCAddScheduleAction(this, marriageToCastleManSchedule));
+		flagReactions.Add(FlagStrings.ToolsForMarriage, marriageToCastleMan);
+		
+		Reaction castleboyNotInsane = new Reaction();
+		castleboyNotInsane.AddAction(new NPCCallbackAction(SendNotInsaneToState));
+		flagReactions.Add(FlagStrings.NotInsane, castleboyNotInsane);
+		
+		Reaction waitingForDate = new Reaction();
+		waitingForDate.AddAction(new NPCCallbackAction(MoveToBeach)); // teleport to beach
+		waitingForDate.AddAction(new NPCAddScheduleAction(this, waitingOnDate));
+		flagReactions.Add(FlagStrings.WaitingForDate, waitingForDate);
+		
+		Reaction endOfDate = new Reaction();
+		endOfDate.AddAction(new NPCAddScheduleAction(this, backToFarmSchedule)); // move back to farm
+		endOfDate.AddAction(new NPCEmotionUpdateAction(this, initialState));
+		endOfDate.AddAction(new NPCCallbackAction(SendDateOverToState));
+		flagReactions.Add(FlagStrings.EndOfDate, endOfDate);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		initialState = new InitialEmotionState(this, "Hi! Would you mind helping me out? I need to get out of my arranged marriage, but need help with distracting my mom to make it work!");
+		initialState = new InitialEmotionState(this, "Hi!  Would you mind helping me out?  I need to get out of my arranged marriage, but need help with distracting my mom to make it work!");
+		marriageState = new ProMarriageEmotionState(this, "");
+		noMarriageState = new AntiMarriageEmotionState(this, "");
 		startingPosition = transform.position;
 		startingPosition.y += LevelManager.levelYOffSetFromCenter;
 		this.transform.position = new Vector3(200,0,0);
 		return (new GoneEmotionState(this, ""));
 	}
 	
-	Schedule openningWaitingSchedule;
+	Schedule openningWaitingSchedule, waitingOnDate, backToFarmSchedule;
 	NPCConvoSchedule postOpenningSchedule;
-	NPCConvoSchedule noMarriageSchedule;
+	NPCConvoSchedule noMarriageSchedule, marriageToCastleManSchedule;
 	
 	protected override Schedule GetSchedule(){
 		Schedule schedule = new DefaultSchedule(this);
@@ -45,8 +70,17 @@ public class LighthouseGirlMiddle : NPC {
 	protected override void SetUpSchedules(){
 		
 		openningWaitingSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
-		openningWaitingSchedule.Add(new TimeTask(30, new WaitTillPlayerCloseState(this, player)));
-		//scheduleStack.Add(openningWaitingSchedule);
+		openningWaitingSchedule.Add(new TimeTask(30, new WaitTillPlayerCloseState(this, player)));	
+		
+		backToFarmSchedule = new Schedule(this, Schedule.priorityEnum.High);
+		backToFarmSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (62, 67, .5f), new MarkTaskDone(this))));
+		
+		waitingOnDate = new Schedule(this, Schedule.priorityEnum.High);
+		waitingOnDate.Add(new TimeTask(100f, new IdleState(this)));
+		Task dateTimer = new Task(new IdleState(this));
+		dateTimer.AddFlagToSet(FlagStrings.EndOfDate);
+		waitingOnDate.Add(dateTimer);
+		waitingOnDate.Add(new TimeTask(.2f, new IdleState(this)));
 		
 		postOpenningSchedule =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerMotherMiddle),
 			new MiddleFarmerMotherToLighthouseGirl(), Schedule.priorityEnum.High); 
@@ -56,10 +90,26 @@ public class LighthouseGirlMiddle : NPC {
 			new MiddleLighthouseGirlNoMarriage(), Schedule.priorityEnum.High); 
 		noMarriageSchedule.SetCanNotInteractWithPlayer();
 		
+		marriageToCastleManSchedule =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerMotherMiddle),
+			new MiddleLighthouseGirlCastleManMarriage(), Schedule.priorityEnum.High); 
+		marriageToCastleManSchedule.SetCanNotInteractWithPlayer();
+		
 	}
 	
 	protected void ResetPosition(){
 		this.transform.position = startingPosition;	
+	}
+	
+	protected void MoveToBeach(){
+		this.transform.position = new Vector3(62,44.5f,.5f);	
+	}
+	
+	protected void SendNotInsaneToState(){
+		initialState.PassStringToEmotionState(FlagStrings.NotInsane);
+	}
+	
+	protected void SendDateOverToState(){
+		marriageState.PassStringToEmotionState(FlagStrings.NotInsane);
 	}
 	
 	
@@ -104,6 +154,9 @@ public class LighthouseGirlMiddle : NPC {
 		bool planStarted = false;
 		bool carpenterPath = false;
 		bool gaveTools = false;
+		bool waitingDateFlag = false;
+		bool castleBoyInsane = true;
+		
 		NPC control;
 		
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
@@ -111,23 +164,25 @@ public class LighthouseGirlMiddle : NPC {
 			SetupInteractions();
 			
 			_allChoiceReactions.Add(PlanChoice,new DispositionDependentReaction(PlanReaction));
-			
 			_allChoiceReactions.Add(MarriageChoice,new DispositionDependentReaction(MarriageReaction));
 			
 			_allItemReactions.Add(StringsItem.Note, new DispositionDependentReaction(NoteReaction));
 		}
 		
 		public void SetupInteractions(){
+			OkReaction.AddAction(new NPCCallbackAction(OkResponse));
+			ContinueReaction.AddAction(new NPCCallbackAction(ContinueResponse));
 			PlanReaction.AddAction(new NPCCallbackAction(PlanResponse));
 			MarriageReaction.AddAction(new NPCCallbackAction(MarriageResponse));
-			NotBadReaction.AddAction(new NPCCallbackAction(NotBadResponse));
-			YourRightReaction.AddAction(new NPCCallbackAction(YourRightResponse));
+			YesReaction.AddAction(new NPCCallbackAction(YesResponse));
+			AnotherTimeReaction.AddAction(new NPCCallbackAction(AnotherTimeResponse));
 			CarpenterReaction.AddAction(new NPCCallbackAction(CarpenterResponse));
 			CastleManReaction.AddAction(new NPCCallbackAction(CastleManResponse));
-			ContinueReaction.AddAction(new NPCCallbackAction(ContinueResponse));
-			AnotherTimeReaction.AddAction(new NPCCallbackAction(AnotherTimeResponse));
-			YesReaction.AddAction(new NPCCallbackAction(YesResponse));
-			OkReaction.AddAction(new NPCCallbackAction(OkResponse));
+			NotBadReaction.AddAction(new NPCCallbackAction(NotBadResponse));
+			YourRightReaction.AddAction(new NPCCallbackAction(YourRightResponse));
+			TalkedReaction.AddAction(new NPCCallbackAction(TalkedResponse));
+
+
 			
 			NoteReaction.AddAction(new NPCCallbackAction(NoteResponse));
 			NoteReaction.AddAction(new UpdateCurrentTextAction(control, "A romantic note? Perhaps there is hope! Who wrote this?"));
@@ -142,7 +197,16 @@ public class LighthouseGirlMiddle : NPC {
 			ToolsReaction.AddAction(new NPCTakeItemAction(control));
 		}
 		
-		public void TalkedResponse(){}
+		public override void PassStringToEmotionState(string text){
+			if (text == FlagStrings.NotInsane)
+				castleBoyInsane = false;
+		}
+		
+		public void TalkedResponse(){
+			_allChoiceReactions.Clear();
+			_allItemReactions.Add(StringsItem.Rope, new DispositionDependentReaction(RopeReaction));
+			GUIManager.Instance.RefreshInteraction();
+		}
 		public void ToolsResponse(){
 			_allChoiceReactions.Clear();
 			
@@ -153,12 +217,20 @@ public class LighthouseGirlMiddle : NPC {
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("ARRGGHH. I can't believe that didn't work. I've tried everything to get out of this! Why can't it just be like in the stories where the hero always wins!");
 		}
-		public void RopeResponse(){}
+		public void RopeResponse(){
+			if (carpenterPath)
+				SetDefaultText("Tell the carpenter's son to meet me at the beach!");
+			else
+				SetDefaultText("Tell the castleboy to meet me at the beach!");
+			
+			if (!waitingDateFlag)
+				FlagManager.instance.SetFlag(FlagStrings.WaitingForDate);
+		}
 		public void NotBadResponse(){
 			_allChoiceReactions.Clear();
 			_allItemReactions.Clear();
 			
-			_allItemReactions.Add(StringsItem.Toolbox, new DispositionDependentReaction(ToolsReaction));
+			_allChoiceReactions.Add(TalkedChoice,new DispositionDependentReaction(TalkedReaction));
 			GUIManager.Instance.RefreshInteraction();
 		}
 		public void YourRightResponse(){
@@ -170,7 +242,7 @@ public class LighthouseGirlMiddle : NPC {
 				GUIManager.Instance.RefreshInteraction();
 				SetDefaultText("Alright! So see if you can get him to cut down my mother's favorite tree?, or steal his tools and give them to me...");
 			}else {
-				SetDefaultText("So, now that  you understand me a bit better, how bout we go back to that plan of mine?");
+				SetDefaultText("So, now that you understand me a bit better, how bout we go back to that plan of mine?");
 				_allChoiceReactions.Add(MarriageChoice,new DispositionDependentReaction(MarriageReaction));
 				_allChoiceReactions.Add(PlanChoice,new DispositionDependentReaction(PlanReaction));
 				GUIManager.Instance.RefreshInteraction();
@@ -178,7 +250,6 @@ public class LighthouseGirlMiddle : NPC {
 			}
 			
 		}
-		#region response func
 		public void CarpenterResponse(){
 			_allChoiceReactions.Clear();
 			
@@ -187,13 +258,20 @@ public class LighthouseGirlMiddle : NPC {
 			_allChoiceReactions.Add(YourRightChoice,new DispositionDependentReaction(YourRightReaction));
 			
 			GUIManager.Instance.RefreshInteraction();
-			//if castleman is insane go somewhere
 		}
 		public void CastleManResponse(){
-			RopeReaction.AddAction(new UpdateCurrentTextAction(control, "Okay. I'll sneak off the farm using the rope to scale down the cliff. You go tell the Castle Man to go meet me on the beach."));
-			//if castleman is insane go somewhere
-			
+			_allChoiceReactions.Clear();
+			_allItemReactions.Clear();
+			if (castleBoyInsane){
+				SetDefaultText("Such a nice letter. Too bad hes crazy.");
+				YourRightResponse();
+			}else {
+				_allItemReactions.Add(StringsItem.Rope, new DispositionDependentReaction(RopeReaction));
+				SetDefaultText("Aww...how sweet. He's such a nice guy. I wish my parents had promised me for him not the carpenter's son.. I'm gonna meet with him! The only castch is I need a way to sneak out. Lets see if we can figure something out...");
+			}
+			GUIManager.Instance.RefreshInteraction();
 		}
+		#region response func
 		public void NoteResponse(){
 			_allChoiceReactions.Clear();
 			
@@ -257,7 +335,7 @@ public class LighthouseGirlMiddle : NPC {
 		#endregion
 	
 	}
-	private class AntiMarriage : EmotionState{
+	private class AntiMarriageEmotionState : EmotionState{
 		Choice GiveUpChoice = new Choice ("Why give up now?", "I'm not!  It just never works.  I wish there was someone who was willing to help me with this...");
 		Choice NotSoBadChoice  = new Choice("Maybe its not so bad?", "Yeah Right!  There is no way  that's happening!  Anyways I'm out of ideas, so I need time to think of more ways to sabotage this marriage.");
 		Choice AnyoneNiceChoice = new Choice("Isn't there anyone who is nice to you?","That's it!  My dad!  He's always been kind to me! But he's too afraid to stand up to my mom...");
@@ -272,7 +350,7 @@ public class LighthouseGirlMiddle : NPC {
 		Reaction CaptainsLogReaction = new Reaction();
 		
 		NPC control;
-		public 	AntiMarriage(NPC toControl, string currentDialogue): base (toControl, "ARRGGHH.  I can't believe that didn't work.  I've tried everything to get out of this!  Why can't it just be like in the stories where the hero always wins!"){
+		public 	AntiMarriageEmotionState(NPC toControl, string currentDialogue): base (toControl, "ARRGGHH.  I can't believe that didn't work.  I've tried everything to get out of this!  Why can't it just be like in the stories where the hero always wins!"){
 			control = toControl;
 			
 			SetupReactions();
@@ -280,8 +358,8 @@ public class LighthouseGirlMiddle : NPC {
 			_allChoiceReactions.Add(GiveUpChoice,new DispositionDependentReaction(GiveUpReaction));
 			_allChoiceReactions.Add(NotSoBadChoice,new DispositionDependentReaction(NotSoBadReaction));
 			
-			//_allItemReactions.Add(StringsItem.ToySword, new DispositionDependentReaction(AnyoneNiceResponse));
-			//_allItemReactions.Add(StringsItem.CaptainsLog, new DispositionDependentReaction(AnyoneNiceResponse));
+			_allItemReactions.Add(StringsItem.ToySword, new DispositionDependentReaction(ToySwordReaction));
+			_allItemReactions.Add(StringsItem.CaptainsLog, new DispositionDependentReaction(CaptainsLogReaction));
 			
 		}
 		
@@ -325,6 +403,30 @@ public class LighthouseGirlMiddle : NPC {
 			_allChoiceReactions.Clear();
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("My mom will never back down.");
+		}
+		
+	}
+	
+	private class ProMarriageEmotionState : EmotionState {
+		bool gaveTools = false;
+		
+		Reaction ToolsReaction = new Reaction();
+		public ProMarriageEmotionState( NPC toControl, string currentDialogue): base (toControl, "That was amazing! True love like in the stories! All I have to do is convince my parents that this is a good idea...Hmm...well time to sabotage the marriage!"){
+			
+			ToolsReaction.AddAction(new NPCCallbackAction(ToolsResponse));
+			ToolsReaction.AddAction(new UpdateCurrentTextAction(toControl, "Everything's finished! Time to put this plan into effect!"));
+			ToolsReaction.AddAction(new NPCTakeItemAction(toControl));
+			
+			_allItemReactions.Add(StringsItem.Toolbox, new DispositionDependentReaction(ToolsReaction));
+		}
+		
+		public void ToolsResponse(){
+			_allChoiceReactions.Clear();
+			_allItemReactions.Clear();
+			if (!gaveTools){
+				gaveTools = true;
+				FlagManager.instance.SetFlag(FlagStrings.ToolsForMarriage);
+			}
 		}
 		
 	}

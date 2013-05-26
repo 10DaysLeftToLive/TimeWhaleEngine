@@ -105,7 +105,7 @@ public class CastlemanMiddle : NPC {
 			}
 		}
 		public void LastSeenResponse(){
-					FlagManager.instance.SetFlag(FlagStrings.NotInsane);
+			FlagManager.instance.SetFlag(FlagStrings.NotInsane);
 
 		}
 		public override void UpdateEmotionState(){
@@ -115,56 +115,43 @@ public class CastlemanMiddle : NPC {
 	}
 	//This is the basic path for the CastleMan if the LG is still open to marriage.
 	private class SaneState: EmotionState{
-		Choice say;
-		Reaction SayWhat;
-		Choice writing;
-		Reaction writingWhat;
-		Choice LetHer;
-		Reaction LetHerJudge;
+		Choice SayChoice = new Choice("What does it say?", "It's never right.  I mean look at this: 'Roses are red'?  How pedestrian can you get?  The farmer's daughter will never like me with garbage like that...");
+		Choice WhatWritingChoice = new Choice("What are you writing?","It's a love letter for the farmer's daughter...it's just all wrong.  I mean 'Roses are red'?  So simplistic.");
+		Choice JudgeItChoice = new Choice("Have you tried letting her judge it?","But what if its not perfect? Hold on.  Maybe you have a point.  Here, you try and deliver it to her.  The farmer never lets me anywhere near her daughter.");
+		Choice DateChoice = new Choice("You have a date!", "Really? This...this...this is the most beauteous day of my life! Hurry to the beach. I cannot tarry!");
 		
+		Reaction SayReaction = new Reaction();
+		Reaction WhatWritingReaction = new Reaction();
+		Reaction JudgeItReaction = new Reaction();
+		Reaction DateReaction = new Reaction();		
+		
+		NPC control;
 		public SaneState (NPC toControl, string currentDialogue): base(toControl, "Hello good sir!  Could you read this note for me?  Wait...never mind.  Its never going to be good enough..."){
-			say = new Choice("What does it say?", "It's never right.  I mean look at this: 'Roses are red'?  How pedestrian can you get?  The farmer's daughter will never like me with garbage like that...");
-			writing = new Choice("What are you writing?", "It's a love letter for the farmer's daughter...it's just all wrong.  I mean 'Roses are red'?  So simplistic.");
-			SayWhat = new Reaction();
-			writingWhat = new Reaction();
+			control = toControl;
 			
-			//SayWhat.AddAction(new UpdateCurrentTextAction(toControl, "It's never right.  I mean look at this: 'Roses are red'?  How pedestrian can you get?  The farmer's daughter will never like me with garbage like that..."));
-			SayWhat.AddAction(new NPCCallbackAction(changeChoicesOne));
-			//writingWhat.AddAction(new UpdateCurrentTextAction(toControl, "What are you writing? It's a love letter for the farmer's daughter...it's just all wrong.  I mean 'Roses are red'?  So simplistic."));
-			writingWhat.AddAction(new NPCCallbackAction(changeChoicesTwo));
-			
-			LetHer = new Choice("Have you tried letting her judge it?", "But what if its not perfect? Hold on.  Maybe you have a point.  Here, you try and deliver it to her.  The farmer never lets me anywhere near her daughter.");
-			LetHerJudge = new Reaction();
-			LetHerJudge.AddAction(new NPCGiveItemAction(toControl,StringsItem.Apple));//Change this to note
-			//LetHerJudge.AddAction(new UpdateCurrentTextAction(toControl, "But what if its not perfect? Hold on.  Maybe you have a point.  Here, you try and deliver it to her.  The farmer never lets me anywhere near her daughter."));
-			LetHerJudge.AddAction(new NPCCallbackAction(removeChoices));
-			
-			_allChoiceReactions.Add(say, new DispositionDependentReaction(SayWhat));
-			_allChoiceReactions.Add(writing, new DispositionDependentReaction(writingWhat));
+			_allChoiceReactions.Add(SayChoice, new DispositionDependentReaction(SayReaction));
+			_allChoiceReactions.Add(WhatWritingChoice, new DispositionDependentReaction(WhatWritingReaction));
 			
 		}
-		public void changeChoicesOne(){
-			_allChoiceReactions.Remove(say);
-			_allChoiceReactions.Remove(writing);
-			_allChoiceReactions.Add(LetHer, new DispositionDependentReaction(LetHerJudge));
-			SetDefaultText("It doesn't say anything right that's what it says!.  I mean look at this: 'Roses are red'?  How pedestrian can you get?  The farmer's daughter will never like me with garbage like that...");
+		public void SetupInteractions(){
+			SayReaction.AddAction(new NPCCallbackAction(WhatResponse));
+			WhatWritingReaction.AddAction(new NPCCallbackAction(WhatResponse));
+			JudgeItReaction.AddAction(new NPCCallbackAction(JudgeItResponse));
+			JudgeItReaction.AddAction(new NPCGiveItemAction(control,StringsItem.Note));
+		}
+		
+		public void JudgeItResponse(){
+			_allChoiceReactions.Clear();
+			SetDefaultText("So...What did she think of the letter?");
+			GUIManager.Instance.RefreshInteraction();
+		}
+		
+		public void WhatResponse(){
+			_allChoiceReactions.Clear();
+			_allChoiceReactions.Add(JudgeItChoice, new DispositionDependentReaction(JudgeItReaction));
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Sigh...the farmer's daughter will never like me with a letter like this...");
-		}
-		public void changeChoicesTwo(){
-			_allChoiceReactions.Remove(say);
-			_allChoiceReactions.Remove(writing);
-			_allChoiceReactions.Add(LetHer, new DispositionDependentReaction(LetHerJudge));
-			SetDefaultText("It's a love letter for the farmer's daughter...it's just all wrong.  I mean 'Roses are red'?  So simplistic.");
 			GUIManager.Instance.RefreshInteraction();
-			SetDefaultText("Sigh...the farmer's daughter will never like me with a letter like this...");
-		}
-		public void removeChoices(){
-			_allChoiceReactions.Remove(LetHer);	
-			SetDefaultText("But what if its not perfect? Hold on.  Maybe you have a point.  Here, you try and deliver it to her.  The farmer never lets me anywhere near her daughter.");
-			GUIManager.Instance.RefreshInteraction();
-			SetDefaultText("Thank you so much good sir!");
-			
 		}
 	}
 	

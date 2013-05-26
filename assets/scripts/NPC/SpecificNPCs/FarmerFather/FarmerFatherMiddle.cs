@@ -61,20 +61,20 @@ public class FarmerFatherMiddle : NPC {
 		Reaction MarriageReaction;
 		
 		Choice DontLikeItChoice;
-		Reaction DontLikeItReaction;
 		Choice YouSureChoice;
-		Reaction YouSureReaction;
 		Choice StandUpChoice;
-		Reaction StandUpReaction;
 		Choice HelpHerChoice;
-		Reaction HelpHerReaction;
 		Choice SoundSureChoice;
-		Reaction SoundSureReaction;
 		Choice YouCanChoice;
-		Reaction YouCanReaction;
 		Choice YouHaveItChoice;
-		Reaction YouHaveItReaction;
 		
+		Reaction DontLikeItReaction;
+		Reaction YouSureReaction;
+		Reaction StandUpReaction;
+		Reaction HelpHerReaction;
+		Reaction SoundSureReaction;
+		Reaction YouCanReaction;
+		Reaction YouHaveItReaction;
 		
 		Reaction ToyPuzzleReaction;
 		Reaction SeaShellReaction;
