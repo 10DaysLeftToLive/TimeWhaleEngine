@@ -16,7 +16,6 @@ Shader "Custom/BackgroundShader" {
 	SubShader {
 		Tags { "RenderType"="Opaque" "IgnoreProjector" = "True" "RenderType" = "Transparent"}
 		LOD 200
-		ColorMask RGBA
 		Pass {
 			CGPROGRAM
 			#pragma vertex vert

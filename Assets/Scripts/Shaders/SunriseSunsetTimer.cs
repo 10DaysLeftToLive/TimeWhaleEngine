@@ -7,6 +7,8 @@ public class SunriseSunsetTimer : ShaderBase {
 	
 	public bool FullDay = false;
 	
+	public Light ColorSaturationSpotlight;
+	
 	public float sunsetStartTime;
 	
 	public float sunsetDuration = 100f;
@@ -64,6 +66,7 @@ public class SunriseSunsetTimer : ShaderBase {
 	protected override void UpdateObject () {
 		float currentTime = sunsetTimer.time;
 		if ((currentTime > sunsetStartTime) && (currentTime < sunsetEndTime)) {
+			Debug.Log ("Current time: " + currentTime);
 			FadeIn();
 		}
 	}
@@ -89,13 +92,16 @@ public class SunriseSunsetTimer : ShaderBase {
 		interpolationFactor += Time.deltaTime;
 		if (_hue < HueShaderConstants.GREEN_COLOR_MAX && _hue > HueShaderConstants.GREEN_COLOR_MIN) {
 			if (greenFilter < HueShaderConstants.GREEN_FILTER_THRESHOLD) {
+				//Debug.Log ("Green threshold");
 				float greenFilterRate = Time.deltaTime * HueShaderConstants.GREEN_FALLOFF;
 				greenFilter += greenFilterRate;
 				interpolationFactor += Time.deltaTime * HueShaderConstants.GREEN_FALLOFF_TIME_RATE;
 			}
+			_hue -= interpolationFactor;
 		}
 		else if (_hue > HueShaderConstants.HUE_MAIN_MIN && _hue < HueShaderConstants.HUE_MAIN_MAX){
 			if (greenFilter > 0) {
+				//Debug.Log ("Hue Threshold");
 				float newVal = Time.deltaTime * HueShaderConstants.SUNSET_COLOR_CHANGE_RATE;
 				greenFilter -= newVal;
 				interpolationFactor += Time.deltaTime * HueShaderConstants.SUNSET_TIME_CHANGE_RATE;
@@ -105,10 +111,15 @@ public class SunriseSunsetTimer : ShaderBase {
 			}
 		}
 		else {
+			//Debug.Log ("Last Threshold");
 			if (_hue > HueShaderConstants.SUNSET_LAST_THRESHOLD) {
 				_hue = StartHue - interpolationFactor / HueShaderConstants.REMAINING_FALLOFF;
 			}
 		}
+		
+		if (_hue > HueShaderConstants.SUNSET_LAST_THRESHOLD) {
+				_hue = StartHue - interpolationFactor;
+			}
 		
 		return _hue;
 	}
