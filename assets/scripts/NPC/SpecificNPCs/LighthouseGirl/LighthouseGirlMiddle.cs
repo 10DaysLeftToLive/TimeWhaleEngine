@@ -36,6 +36,11 @@ public class LighthouseGirlMiddle : NPC {
 		castleboyNotInsane.AddAction(new NPCCallbackAction(SendNotInsaneToState));
 		flagReactions.Add(FlagStrings.NotInsane, castleboyNotInsane);
 		
+		#region date
+		Reaction waitForPlayer = new Reaction();
+		waitForPlayer.AddAction(new NPCAddScheduleAction(this, ropeDownSchedule));
+		flagReactions.Add(FlagStrings.WaitForPlayerBeforeRope, waitForPlayer);
+		
 		Reaction waitingForDate = new Reaction();
 		waitingForDate.AddAction(new NPCCallbackAction(MoveToBeach)); // teleport to beach
 		waitingForDate.AddAction(new NPCAddScheduleAction(this, waitingOnDate));
@@ -46,6 +51,8 @@ public class LighthouseGirlMiddle : NPC {
 		endOfDate.AddAction(new NPCEmotionUpdateAction(this, initialState));
 		endOfDate.AddAction(new NPCCallbackAction(SendDateOverToState));
 		flagReactions.Add(FlagStrings.EndOfDate, endOfDate);
+		
+		#endregion
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
@@ -58,7 +65,7 @@ public class LighthouseGirlMiddle : NPC {
 		return (new GoneEmotionState(this, ""));
 	}
 	
-	Schedule openningWaitingSchedule, waitingOnDate, backToFarmSchedule;
+	Schedule openningWaitingSchedule, waitingOnDate, backToFarmSchedule, ropeDownSchedule;
 	NPCConvoSchedule postOpenningSchedule;
 	NPCConvoSchedule noMarriageSchedule, marriageToCastleManSchedule;
 	
@@ -69,15 +76,23 @@ public class LighthouseGirlMiddle : NPC {
 
 	protected override void SetUpSchedules(){
 		
+		float dateTime = 50;
+		
 		openningWaitingSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
 		openningWaitingSchedule.Add(new TimeTask(30, new WaitTillPlayerCloseState(this, player)));	
 		
 		backToFarmSchedule = new Schedule(this, Schedule.priorityEnum.High);
 		backToFarmSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (62, 67, .5f), new MarkTaskDone(this))));
 		
+		ropeDownSchedule = new Schedule(this, Schedule.priorityEnum.High);
+		ropeDownSchedule.Add(new TimeTask(30, new WaitTillPlayerGoneState(this, player)));
+		Task setFlag = new Task( new MoveThenDoState(this, new Vector3 (startingPosition.x, startingPosition.y +50, .5f), new MarkTaskDone(this)));
+		setFlag.AddFlagToSet(FlagStrings.WaitingForDate);
+		ropeDownSchedule.Add(setFlag);
+		
 		waitingOnDate = new Schedule(this, Schedule.priorityEnum.High);
-		waitingOnDate.Add(new TimeTask(100f, new IdleState(this)));
-		Task dateTimer = new Task(new IdleState(this));
+		waitingOnDate.Add(new TimeTask(dateTime, new IdleState(this)));
+		Task dateTimer = new Task( new MoveThenDoState(this, new Vector3 (startingPosition.x, startingPosition.y +50,.5f), new MarkTaskDone(this)));
 		dateTimer.AddFlagToSet(FlagStrings.EndOfDate);
 		waitingOnDate.Add(dateTimer);
 		waitingOnDate.Add(new TimeTask(.2f, new IdleState(this)));
@@ -109,7 +124,15 @@ public class LighthouseGirlMiddle : NPC {
 	}
 	
 	protected void SendDateOverToState(){
-		marriageState.PassStringToEmotionState(FlagStrings.NotInsane);
+		Debug.Log("date over");
+		if (initialState.carpenterPath){ //date success with carpenter
+			FlagManager.instance.SetFlag(FlagStrings.PostDatingCarpenter);
+			marriageState.PassStringToEmotionState("carpenter");
+		}else { //date success with castleboy
+			FlagManager.instance.SetFlag(FlagStrings.PostCastleDate);
+			marriageState.PassStringToEmotionState("castleboy");
+		}
+
 	}
 	
 	
@@ -152,7 +175,7 @@ public class LighthouseGirlMiddle : NPC {
 		Reaction ToolsReaction = new Reaction();
 		
 		bool planStarted = false;
-		bool carpenterPath = false;
+		public bool carpenterPath = false;
 		bool gaveTools = false;
 		bool waitingDateFlag = false;
 		bool castleBoyInsane = true;
@@ -167,6 +190,7 @@ public class LighthouseGirlMiddle : NPC {
 			_allChoiceReactions.Add(MarriageChoice,new DispositionDependentReaction(MarriageReaction));
 			
 			_allItemReactions.Add(StringsItem.Note, new DispositionDependentReaction(NoteReaction));
+			
 		}
 		
 		public void SetupInteractions(){
@@ -206,6 +230,7 @@ public class LighthouseGirlMiddle : NPC {
 			_allChoiceReactions.Clear();
 			_allItemReactions.Add(StringsItem.Rope, new DispositionDependentReaction(RopeReaction));
 			GUIManager.Instance.RefreshInteraction();
+			SetDefaultText("I need a way to sneak out without my parents seeing.");
 		}
 		public void ToolsResponse(){
 			_allChoiceReactions.Clear();
@@ -224,7 +249,8 @@ public class LighthouseGirlMiddle : NPC {
 				SetDefaultText("Tell the castleboy to meet me at the beach!");
 			
 			if (!waitingDateFlag)
-				FlagManager.instance.SetFlag(FlagStrings.WaitingForDate);
+				FlagManager.instance.SetFlag(FlagStrings.WaitForPlayerBeforeRope);
+				//FlagManager.instance.SetFlag(FlagStrings.WaitingForDate);
 		}
 		public void NotBadResponse(){
 			_allChoiceReactions.Clear();
@@ -232,6 +258,7 @@ public class LighthouseGirlMiddle : NPC {
 			
 			_allChoiceReactions.Add(TalkedChoice,new DispositionDependentReaction(TalkedReaction));
 			GUIManager.Instance.RefreshInteraction();
+			SetDefaultText("The carpenter is a thick headed barbarian. I'll have nothing to do with him!");
 		}
 		public void YourRightResponse(){
 			_allChoiceReactions.Clear();
@@ -258,6 +285,7 @@ public class LighthouseGirlMiddle : NPC {
 			_allChoiceReactions.Add(YourRightChoice,new DispositionDependentReaction(YourRightReaction));
 			
 			GUIManager.Instance.RefreshInteraction();
+			SetDefaultText("I don't believe the carpenter wrote this letter.");
 		}
 		public void CastleManResponse(){
 			_allChoiceReactions.Clear();
@@ -279,6 +307,7 @@ public class LighthouseGirlMiddle : NPC {
 			_allChoiceReactions.Add(CastleManChoice,new DispositionDependentReaction(CastleManReaction));
 			
 			GUIManager.Instance.RefreshInteraction();
+			SetDefaultText("So who wrote the note?");
 		}
 		
 		public void GoOnResponse(){		}
@@ -288,6 +317,7 @@ public class LighthouseGirlMiddle : NPC {
 			_allChoiceReactions.Add(ContinueChoice,new DispositionDependentReaction(ContinueReaction));
 			
 			GUIManager.Instance.RefreshInteraction();
+			SetDefaultText("I want you to try and find ways to get the carpenter and my mom upset with each other");
 		}
 		public void ContinueResponse(){
 			_allChoiceReactions.Remove(ContinueChoice);
@@ -296,6 +326,7 @@ public class LighthouseGirlMiddle : NPC {
 			_allChoiceReactions.Add(YesChoice,new DispositionDependentReaction(YesReaction));
 			
 			GUIManager.Instance.RefreshInteraction();
+			SetDefaultText("You on board with this plan?");
 		}
 		public void PlanResponse(){
 			_allChoiceReactions.Clear();
@@ -305,6 +336,7 @@ public class LighthouseGirlMiddle : NPC {
 			_allChoiceReactions.Add(OkChoice,new DispositionDependentReaction(OkReaction));
 			
 			GUIManager.Instance.RefreshInteraction();
+			SetDefaultText("Promise you don't tell anyone about this?");
 		}
 		public void MarriageResponse(){	
 			_allChoiceReactions.Remove(PlanChoice);
@@ -320,6 +352,7 @@ public class LighthouseGirlMiddle : NPC {
 			
 			_allItemReactions.Add(StringsItem.Note, new DispositionDependentReaction(NoteReaction));
 			_allItemReactions.Add(StringsItem.Toolbox, new DispositionDependentReaction(ToolsReaction));
+			SetDefaultText("Steal the carpenter's tools for me...");
 			
 			GUIManager.Instance.RefreshInteraction();
 		}
@@ -426,6 +459,13 @@ public class LighthouseGirlMiddle : NPC {
 			if (!gaveTools){
 				gaveTools = true;
 				FlagManager.instance.SetFlag(FlagStrings.ToolsForMarriage);
+			}
+		}
+		
+		public override void PassStringToEmotionState(string text){
+			if (text == "carpenter"){
+				_allItemReactions.Clear();
+				SetDefaultText("That was amazing! True love like in the stories!");
 			}
 		}
 		
