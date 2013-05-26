@@ -102,7 +102,7 @@ public class NPCConvoSchedule : Schedule {
 		// Position next to eachother
 		if (!Utils.InDistance(_toManage.gameObject, _npcTwo.gameObject, TALK_DISTANCE)) {
 			// move to talk positions
-			current = new Task(new MoveToObjectState(_toManage, _npcTwo.gameObject, _npcTwo.transform.position));
+			current = new Task(new MoveToObjectState(_toManage, _npcTwo.gameObject));
 			currentListening = new Task(new IdleState(_npcTwo));
 			_toManage.ForceChangeToState(current.StatePerforming);
 			_npcTwo.ForceChangeToState(currentListening.StatePerforming);
