@@ -8,7 +8,7 @@ Shader "Custom/BackgroundShader" {
 		//Don't mess with this variable the values of these variables will be computed in a script.
 		//_Hue("Hue", Range(0, 360)) = 0
 		_GreenFilter("GreenFilter", Range(0,1)) = 0.25
-		_Hue("Hue", Float) = 360
+		_Hue("Hue", half) = 360
 		_Saturation("Saturation", Range(0,1)) = 0.5820895
 		_TimeFactor("InterpolationFactor", Range(0,1)) = 0
 	}
@@ -23,12 +23,12 @@ Shader "Custom/BackgroundShader" {
 			
 			uniform sampler2D _MainTex;
 			uniform sampler2D _GradientMap;
-			uniform float _Hue;
-			uniform float _Saturation;
-			uniform float _TimeFactor;
-			uniform float _Contrast;
-			uniform float _Brightness;
-			uniform float _GreenFilter;
+			uniform half _Hue;
+			uniform half _Saturation;
+			uniform half _TimeFactor;
+			uniform half _Contrast;
+			uniform half _Brightness;
+			uniform half _GreenFilter;
 			
 			const half3 lumCoeff = half3(0.2125, 0.7154, 0.0721);
 			
@@ -70,7 +70,7 @@ Shader "Custom/BackgroundShader" {
 			
 			half3 ComputeHue(half4 texColor) {
 				half3 root3 = half3(0.57735, 0.57735, 0.57735);
-				float half_angle = 0.5 * radians(_Hue); // Hue is radians of 0 to 360 degrees
+				half half_angle = 0.5 * radians(_Hue); // Hue is radians of 0 to 360 degrees
         		half4 rot_quat = half4( (root3 * sin(half_angle)), cos(half_angle));
         		half3x3 rot_Matrix = QuaternionToMatrix(rot_quat);     
         		texColor.rgb = mul(rot_Matrix, texColor.rgb);
@@ -95,8 +95,8 @@ Shader "Custom/BackgroundShader" {
 				half4 texColor = tex2D(_MainTex, In.uv);
 				half4 gradientMapColor = tex2D(_GradientMap, In.uv);
 				
-//				float VSU = _Value*_Saturation*cos(_Hue*3.14159/180);
-//				float VSW = _Value*_Saturation*sin(_Hue*3.14159/180);
+//				half VSU = _Value*_Saturation*cos(_Hue*3.14159/180);
+//				half VSW = _Value*_Saturation*sin(_Hue*3.14159/180);
 //				texColor.r = ((0.299*_Value+0.701*VSU+0.168*VSW)*texColor.r +
 //						     (0.587*-0.587*VSU+0.330*VSW)*texColor.g +
 //						     (0.114*_Value-0.114*VSU+0.497*VSW)*texColor.b);
@@ -125,7 +125,7 @@ Shader "Custom/BackgroundShader" {
  				gradientMapColor.rgb = lerp(half3(0,0,0), gradientMapColor.rgb, _TimeFactor);
 
         		
-//        		float colMix = dot(texColor.rgb, gradientMapColor.rgb);
+//        		half colMix = dot(texColor.rgb, gradientMapColor.rgb);
 //        		
         		//texColor.r += gradientMapColor.r * colMix;
         		//texColor.g += gradientMapColor.g * colMix;

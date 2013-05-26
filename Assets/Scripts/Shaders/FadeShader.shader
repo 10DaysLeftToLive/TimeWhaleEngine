@@ -20,17 +20,17 @@ SubShader
 		uniform sampler2D _MainTex;
 		uniform sampler2D _FadeInTex;
 	
-		uniform float4 _MainTex_ST;
+		uniform half4 _MainTex_ST;
 	
-		uniform float4 _MainTex_TexelSize;
-		uniform float _Angle;
-		uniform float _InterpolationFactor;
-		uniform float4 _CenterFrequencyAmplitude;
+		uniform half4 _MainTex_TexelSize;
+		uniform half _Angle;
+		uniform half _InterpolationFactor;
+		uniform half4 _CenterFrequencyAmplitude;
 	
 		struct v2f {
-			float4 pos : POSITION;
-			float2 uv : TEXCOORD0;
-			float2 uvOrig : TEXCOORD1;
+			half4 pos : POSITION;
+			half2 uv : TEXCOORD0;
+			half2 uvOrig : TEXCOORD1;
 		};
 	
 		v2f vert (appdata_img v)
@@ -43,12 +43,12 @@ SubShader
 			return o;
 		}
 	
-		float4 frag (v2f i) : COLOR
+		half4 frag (v2f i) : COLOR
 		{
-			float pi = 3.14159265358979323846264338327;
-			float2 offset = i.uvOrig;
+			half pi = 3.14159265358979323846264338327;
+			half2 offset = i.uvOrig;
 
-			float2 uv;
+			half2 uv;
 			offset.x = _CenterFrequencyAmplitude.w * 
 				sin(_CenterFrequencyAmplitude.z * i.uvOrig.y * pi + _Angle);
 			uv.x = i.uvOrig.x + i.uvOrig.x*(offset.x);
@@ -56,9 +56,9 @@ SubShader
 			
 			//uv += _CenterFrequencyAmplitude.xy;
 			
-			float4 oldColor = tex2D(_MainTex, uv);
-			float4 newColor = tex2D(_FadeInTex, i.uvOrig);
-			return lerp(oldColor, float4(newColor.rgb, 0f), _InterpolationFactor);
+			half4 oldColor = tex2D(_MainTex, uv);
+			half4 newColor = tex2D(_FadeInTex, i.uvOrig);
+			return lerp(oldColor, half4(newColor.rgb, 0f), _InterpolationFactor);
 		}
 		ENDCG
 	}

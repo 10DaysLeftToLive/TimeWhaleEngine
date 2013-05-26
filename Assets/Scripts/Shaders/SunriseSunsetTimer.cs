@@ -107,7 +107,7 @@ public class SunriseSunsetTimer : ShaderBase {
 				interpolationFactor += Time.deltaTime * HueShaderConstants.SUNSET_TIME_CHANGE_RATE;
 				gradientInterpolationFactor = ((HueShaderConstants.HUE_MAIN_MAX - _hue)  + HueShaderConstants.HUE_MAIN_MIN)
 					/ HueShaderConstants.HUE_MAIN_MAX;
-				Debug.Log ("Gradient Interpolation Factor: " + gradientInterpolationFactor);
+				//Debug.Log ("Gradient Interpolation Factor: " + gradientInterpolationFactor);
 			}
 			else {
 				greenFilter = 0;
