@@ -7,8 +7,6 @@ public class SunriseSunsetTimer : ShaderBase {
 	
 	public bool FullDay = false;
 	
-	public Light ColorSaturationSpotlight;
-	
 	public float sunsetStartTime;
 	
 	public float sunsetDuration = 100f;
@@ -53,24 +51,27 @@ public class SunriseSunsetTimer : ShaderBase {
 		public const float SUNSET_TIME_CHANGE_RATE = 5f;
 		
 		public const float REMAINING_FALLOFF = 5f;
+	
 		
 	}
+	
+	private float gradientInterpolationFactor = 0f;
 	
 	// Use this for initialization
 	protected override void Initialize () {
 		sunsetEndTime = sunsetStartTime + sunsetDuration;
 		_hue = StartHue;
+		AudioListener.volume = 0;
 	}
 	
 	// Update is called once per frame
 	protected override void UpdateObject () {
-		float currentTime = sunsetTimer.time;
+		float currentTime = OneDayClock.Instance.time;
 		if ((currentTime > sunsetStartTime) && (currentTime < sunsetEndTime)) {
-			Debug.Log ("Current time: " + currentTime);
+			//Debug.Log ("Current time: " + currentTime);
 			FadeIn();
 		}
 	}
-	
 	
 	//TODO: 1. Refactor to use OneDayClock instead of Timer so that sunset sunrise times don't
 	//      get screwed up during scene changes and pauses.
@@ -105,6 +106,9 @@ public class SunriseSunsetTimer : ShaderBase {
 				float newVal = Time.deltaTime * HueShaderConstants.SUNSET_COLOR_CHANGE_RATE;
 				greenFilter -= newVal;
 				interpolationFactor += Time.deltaTime * HueShaderConstants.SUNSET_TIME_CHANGE_RATE;
+				gradientInterpolationFactor = ((HueShaderConstants.HUE_MAIN_MAX - _hue)  + HueShaderConstants.HUE_MAIN_MIN)
+					/ HueShaderConstants.HUE_MAIN_MAX;
+				Debug.Log ("Gradient Interpolation Factor: " + gradientInterpolationFactor);
 			}
 			else {
 				greenFilter = 0;
@@ -120,6 +124,9 @@ public class SunriseSunsetTimer : ShaderBase {
 		if (_hue > HueShaderConstants.SUNSET_LAST_THRESHOLD) {
 				_hue = StartHue - interpolationFactor;
 			}
+		else {
+			Debug.Log ("Interpolation Factor after Hue change: " + interpolationFactor);
+		}
 		
 		return _hue;
 	}
@@ -141,6 +148,7 @@ public class SunriseSunsetTimer : ShaderBase {
 		renderer.material.SetFloat("_GreenFilter", greenFilter);
 		renderer.material.SetFloat("Brightness", ChangeBrightness(true));
 		renderer.material.SetFloat("Saturation", ChangeSaturation(true));
+		renderer.material.SetFloat("InterpolationFactor", gradientInterpolationFactor);
 	}
 	
 

@@ -3,7 +3,6 @@ using System.Collections;
 
 public class OneDayClock : PauseObject {
 	
-	public OneDayClock Instance = null;
 	public float timeSinceGameStarted { get; private set; }
 	public float timeSinceLastPaused { get; private set; }
 	public float time { 
@@ -11,6 +10,7 @@ public class OneDayClock : PauseObject {
 			return GamePlayTime();
 		}
 	}
+	private static OneDayClock managerInstance;
 	private float lostTime = 0;
 	private float timeInHour;
 	private float timeOfDay;
@@ -23,10 +23,24 @@ public class OneDayClock : PauseObject {
 	public static float MILITARY_TIME_MULTIPLIER = 100;
 	
 	// Use this for initialization
+	
+	 public static OneDayClock Instance{
+        get { 
+           if (managerInstance == null) {
+                managerInstance = FindObjectOfType(typeof (OneDayClock)) as OneDayClock;
+            }
+ 
+            // If it is still null, create a new instance
+            if (managerInstance == null) {
+                GameObject obj = new GameObject("OneDayClock");
+                managerInstance = obj.AddComponent(typeof (OneDayClock)) as OneDayClock;
+            }
+            
+            return managerInstance;
+        }
+    }
+	
 	void Start () {
-		if (Instance != null) {
-			Instance = new OneDayClock();
-		}
 		timeSinceGameStarted = timeSinceLastPaused = Time.time;
 		timeInHour = GAME_LENGTH/HOURS_IN_DAY;
 	}

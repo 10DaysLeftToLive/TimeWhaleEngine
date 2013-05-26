@@ -3,14 +3,14 @@ Shader "Custom/BackgroundShader" {
 		//Emission variables for testing, will get rid of them when I decide what a good sun location and color is.
 		_MainTex ("Texture", 2D) = "white" {}
 		_GradinetMap ("Texture", 2D) = "white" {}
-		_Contrast("Contrast", Range(0, 1)) = 1
-		_Brightness("Brightness", Range(0,1)) = 1
+		_Contrast("Contrast", Range(0,1)) = 1
+		_Brightness("Brightness", Range(0,1)) = 0.4328358
 		//Don't mess with this variable the values of these variables will be computed in a script.
 		//_Hue("Hue", Range(0, 360)) = 0
-		_GreenFilter("GreenFilter", Float) = 0
-		_Hue("Hue", Float) = 0
-		_Saturation("Saturation", Range(0,1)) = 0
-		_TimeFactor("InterpolationFactor", Range(0,1)) = 1
+		_GreenFilter("GreenFilter", Range(0,1)) = 0.25
+		_Hue("Hue", Float) = 360
+		_Saturation("Saturation", Range(0,1)) = 0.5820895
+		_TimeFactor("InterpolationFactor", Range(0,1)) = 0
 	}
 	
 	SubShader {
@@ -111,22 +111,29 @@ Shader "Custom/BackgroundShader" {
 //        		
 //        		texColor.rgb = fmod(texColor.rgb, float3(1,1,1));
 //        		texColor.rgb = abs(texColor.rgb);
- 				
- 				texColor.rgb = ComputeHue(texColor);
- 				gradientMapColor.rgb = lerp(float3(0,0,0), gradientMapColor.rgb, _TimeFactor);
 
-        		//Contrast
+				//Contrast
         		texColor.rgb = ComputeContrast(texColor.rgb);
         		//Brightness  
         		texColor.rgb = texColor.rgb + _Brightness;         
         		float3 intensity = float3(dot(texColor.rgb, lumCoeff));
         		//Color saturate between the old color and the new color
         		texColor.rgb = lerp(intensity, texColor.rgb, _Saturation );
+ 				
+ 				texColor.rgb = ComputeHue(texColor);
+ 				
+ 				gradientMapColor.rgb = lerp(float3(0,0,0), gradientMapColor.rgb, _TimeFactor);
+
+        		
 //        		float colMix = dot(texColor.rgb, gradientMapColor.rgb);
 //        		
-//        		texColor.r += gradientMapColor.r * colMix;
-//        		texColor.g += gradientMapColor.g * colMix;
-//        		texColor.b += gradientMapColor.b * colMix;
+        		//texColor.r += gradientMapColor.r * colMix;
+        		//texColor.g += gradientMapColor.g * colMix;
+        		
+        		
+        		texColor.rgb += gradientMapColor.rgb;
+        		
+        		
 				texColor.g = texColor.g - _GreenFilter;
 				return texColor;
 				
