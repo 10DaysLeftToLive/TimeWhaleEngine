@@ -61,7 +61,6 @@ public class SunriseSunsetTimer : ShaderBase {
 	protected override void Initialize () {
 		sunsetEndTime = sunsetStartTime + sunsetDuration;
 		_hue = StartHue;
-		AudioListener.volume = 0;
 	}
 	
 	// Update is called once per frame

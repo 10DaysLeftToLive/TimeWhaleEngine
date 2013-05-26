@@ -30,49 +30,49 @@ Shader "Custom/BackgroundShader" {
 			uniform float _Brightness;
 			uniform float _GreenFilter;
 			
-			const float3 lumCoeff = float3(0.2125, 0.7154, 0.0721);
+			const half3 lumCoeff = half3(0.2125, 0.7154, 0.0721);
 			
 			struct a2v
 			{
-				float4 vertex : POSITION;
-				float2 texcoord : TEXCOORD0;
-				float4 color : COLOR;
+				half4 vertex : POSITION;
+				half2 texcoord : TEXCOORD0;
+				half4 color : COLOR;
 			};
 			
 			struct v2f
 			{
-				float4 position: POSITION;
-				float2 uv : TEXCOORD0;
-				float4 color : COLOR;
+				half4 position: POSITION;
+				half2 uv : TEXCOORD0;
+				half4 color : COLOR;
 			};
 			
-			float3x3 QuaternionToMatrix(float4 quat)
+			half3x3 QuaternionToMatrix(half4 quat)
 			{
-    			float3 cross = quat.yzx * quat.zxy;
-    			float3 square= quat.xyz * quat.xyz;
-    			float3 wimag = quat.w * quat.xyz;
+    			half3 cross = quat.yzx * quat.zxy;
+    			half3 square= quat.xyz * quat.xyz;
+    			half3 wimag = quat.w * quat.xyz;
 
     			square = square.xyz + square.yzx;
 
-    			float3 diag = 0.5 - square;
-    			float3 a = (cross + wimag);
-    			float3 b = (cross - wimag);
+    			half3 diag = 0.5 - square;
+    			half3 a = (cross + wimag);
+    			half3 b = (cross - wimag);
 
-    			return float3x3(
-    			2.0 * float3(diag.x, b.z, a.y),
-    			2.0 * float3(a.z, diag.y, b.x),
-    			2.0 * float3(b.y, a.x, diag.z));
+    			return half3x3(
+    			2.0 * half3(diag.x, b.z, a.y),
+    			2.0 * half3(a.z, diag.y, b.x),
+    			2.0 * half3(b.y, a.x, diag.z));
 			}
 			
-			float3 ComputeContrast(float3 texColor) {
+			half3 ComputeContrast(half3 texColor) {
 				return (texColor.xyz - 0.5) *(_Contrast + 1.0) + 0.5;
 			}
 			
-			float3 ComputeHue(float4 texColor) {
-				float3 root3 = float3(0.57735, 0.57735, 0.57735);
+			half3 ComputeHue(half4 texColor) {
+				half3 root3 = half3(0.57735, 0.57735, 0.57735);
 				float half_angle = 0.5 * radians(_Hue); // Hue is radians of 0 to 360 degrees
-        		float4 rot_quat = float4( (root3 * sin(half_angle)), cos(half_angle));
-        		float3x3 rot_Matrix = QuaternionToMatrix(rot_quat);     
+        		half4 rot_quat = half4( (root3 * sin(half_angle)), cos(half_angle));
+        		half3x3 rot_Matrix = QuaternionToMatrix(rot_quat);     
         		texColor.rgb = mul(rot_Matrix, texColor.rgb);
         		return texColor.rgb;
 			} 
@@ -86,14 +86,14 @@ Shader "Custom/BackgroundShader" {
 				return output;
 			}
         	
-			float4 frag (v2f In) : COLOR
+			half4 frag (v2f In) : COLOR
 			{
-				float3 darkness = float3(0.22, 0.77, 0.061);
+				half3 darkness = half3(0.22, 0.77, 0.061);
 				
 				
 				//Gets the real texture color and stores it for later use.
-				float4 texColor = tex2D(_MainTex, In.uv);
-				float4 gradientMapColor = tex2D(_GradientMap, In.uv);
+				half4 texColor = tex2D(_MainTex, In.uv);
+				half4 gradientMapColor = tex2D(_GradientMap, In.uv);
 				
 //				float VSU = _Value*_Saturation*cos(_Hue*3.14159/180);
 //				float VSW = _Value*_Saturation*sin(_Hue*3.14159/180);
@@ -109,20 +109,20 @@ Shader "Custom/BackgroundShader" {
 //        					 (0.587*_Value-0.588*VSU-1.05*VSW)*texColor.g +
 //        				     (0.114*_Value+0.886*VSU-0.203*VSW)*texColor.b);
 //        		
-//        		texColor.rgb = fmod(texColor.rgb, float3(1,1,1));
+//        		texColor.rgb = fmod(texColor.rgb, half3(1,1,1));
 //        		texColor.rgb = abs(texColor.rgb);
 
 				//Contrast
         		texColor.rgb = ComputeContrast(texColor.rgb);
         		//Brightness  
         		texColor.rgb = texColor.rgb + _Brightness;         
-        		float3 intensity = float3(dot(texColor.rgb, lumCoeff));
+        		half3 intensity = half3(dot(texColor.rgb, lumCoeff));
         		//Color saturate between the old color and the new color
         		texColor.rgb = lerp(intensity, texColor.rgb, _Saturation );
  				
  				texColor.rgb = ComputeHue(texColor);
  				
- 				gradientMapColor.rgb = lerp(float3(0,0,0), gradientMapColor.rgb, _TimeFactor);
+ 				gradientMapColor.rgb = lerp(half3(0,0,0), gradientMapColor.rgb, _TimeFactor);
 
         		
 //        		float colMix = dot(texColor.rgb, gradientMapColor.rgb);
