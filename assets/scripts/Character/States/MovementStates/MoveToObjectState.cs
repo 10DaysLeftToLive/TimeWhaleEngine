@@ -7,7 +7,7 @@ public class MoveToObjectState : MoveState {
 	private static int TICKS_TILL_UPDATE = 5;
 	private static float DISTANCE_TO_STOP = 1.5f;
 	
-	public MoveToObjectState(Character toControl, GameObject toMoveTo, Vector3 goal) : base(toControl, goal){
+	public MoveToObjectState(Character toControl, GameObject toMoveTo) : base(toControl, toMoveTo.transform.position){
 		_toMoveTo = toMoveTo;
     }
 	
