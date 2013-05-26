@@ -1,14 +1,14 @@
 using UnityEngine;
 using System.Collections;
 
-public class LeadPlayerToThenDoState : MoveThenDoState {
+public class LeadPlayerToState : MoveThenDoState {
 	private Player _player;
 	private ShowOneOffChatAction waitYell;
 	private float timeToYellAgain = 0;
 	private static float NEAR_PLAYER = 6f;
 	private static float TIME_TO_YELL_AGAIN = 5f;
 	
-	public LeadPlayerToThenDoState(Character toControl, Player player, Vector3 goal) : base(toControl, goal, new MarkTaskDone(toControl)){
+	public LeadPlayerToState(Character toControl, Player player, Vector3 goal) : base(toControl, goal, new MarkTaskDone(toControl)){
 		_player = player;
 		if (toControl is NPC) {
 			waitYell = new ShowOneOffChatAction((NPC)toControl, "Come back. I'm leading the way.");
