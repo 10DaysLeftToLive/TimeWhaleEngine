@@ -41,10 +41,21 @@ public static class StringsNPC {
 	public static string FortuneTellerOld = "FortuneTellerOld";
 	#endregion
 	
+	#region Special Characters
+	public static string Fish = "Fish";
+	public static string Crazy = "Crazy";
+	public static string Male = "Male";
+	#endregion
+	
 	#region Emotions
 	public static string Default = "";
 	public static string Happy = "Happy";
 	public static string Angry = "Angry";
+	public static string Sad = "Sad";
+	public static string Blink = "Blink";
+	public static string Yelling = "Yelling";
+	public static string Smile = "Smile";
+	public static string Embarassed = "Embarassed";
 	
 	#endregion
 }
