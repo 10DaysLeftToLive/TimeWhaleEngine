@@ -84,12 +84,16 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	#region AgeTransition
-	public void ShiftUpAge(){		
-		CharacterAgeManager.TransistionUp();
+	public void ShiftUpAge(){
+		if (CanAgeTransitionUp()) {
+			CharacterAgeManager.TransistionUp();
+		}
 	}
 	
 	public void ShiftDownAge(){
-		CharacterAgeManager.TransistionDown();
+		if (CanAgeTransitionDown()) {
+			CharacterAgeManager.TransistionDown();
+		}
 	}
 
 	public bool CanAgeTransitionDown(){

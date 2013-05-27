@@ -35,7 +35,7 @@ public class CharacterAgeManager {
 		return GetAgeOf(tempAge);
 	}
 	
-	public static void TransistionUp(){
+	public static void TransistionUp() {
 		CharacterAge previousAge = GetCurrentAge();
 		
 		if (currentAge < CharacterAgeState.OLD){

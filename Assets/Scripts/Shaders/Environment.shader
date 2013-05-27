@@ -21,6 +21,8 @@ Shader "Custom/BackgroundShader" {
 			#pragma vertex vert
 			#pragma fragment frag
 			
+			#include "UnityCG.cginc"
+			
 			uniform sampler2D _MainTex;
 			uniform sampler2D _GradientMap;
 			uniform half _Hue;
