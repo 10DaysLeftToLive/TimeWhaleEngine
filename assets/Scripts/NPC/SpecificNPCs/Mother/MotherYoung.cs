@@ -49,8 +49,8 @@ public class MotherYoung : NPC {
 		flagReactions.Add (FlagStrings.ExitMadState, exitMadMother);
 		
 		Reaction moveToMusicianReaction = new Reaction();
-		moveToMusicianReaction.AddAction(new ShowOneOffChatAction(this, "Follow me. They live up here.", 4f));
-		moveToMusicianReaction.AddAction(new NPCAddScheduleAction(this, moveToMusicianSchedule));
+		moveToMusicianReaction.AddAction(new ShowOneOffChatAction(this, "Follow me. They live up here.", 3f));
+		//moveToMusicianReaction.AddAction(new NPCAddScheduleAction(this, moveToMusicianSchedule));
 		moveToMusicianReaction.AddAction(new NPCAddScheduleAction(this, new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.MusicianYoung), 
 			new YoungFarmerMotherToFarmerFatherOpenningScriptedDialogue(),Schedule.priorityEnum.DoNow)));
 		flagReactions.Add(FlagStrings.MoveToMusician, moveToMusicianReaction);
@@ -89,30 +89,29 @@ public class MotherYoung : NPC {
 		
 		moveMotherHappyState = new Schedule(this, Schedule.priorityEnum.DoNow);
 		moveMotherHappyState.Add (new TimeTask(1.5f, new IdleState(this)));
-		moveMotherHappyState.Add(new Task(new MoveThenDoState(this, new Vector3(-20f, -1f, -.5f), new MarkTaskDone(this))));
+//BUG, MOM ALWAYS FLOATS TO PLATFORM BEFORE REACHING DESTINATION
+		moveMotherHappyState.Add(new Task(new MoveThenDoState(this, new Vector3(-20f, -1.5f, -.5f), new MarkTaskDone(this))));
 		
 		postRaceSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
 		postRaceSchedule.Add(new Task(new IdleState(this)));
 		
 		moveHomeSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
 		moveHomeSchedule.Add(new TimeTask(.5f, new IdleState(this)));
-		moveHomeSchedule.Add(new Task(new MoveThenDoState(this, new Vector3(0, -1f,.3f), new MarkTaskDone(this))));
+		//moveHomeSchedule.Add(new Task(new MoveThenDoState(this, new Vector3(0, -1f,.3f), new MarkTaskDone(this))));
 		moveHomeSchedule.Add(new Task(new MoveThenDoState(this, new Vector3(-.9f, -1f,.3f), new MarkTaskDone(this))));
-		moveHomeSchedule.SetCanChat(true);
+
+/*		
 		enterMadSchedule = new Schedule (this, Schedule.priorityEnum.DoNow);
-		//madSchedule.SetCanNotInteractWithPlayer();
-		enterMadSchedule.SetCanChat(false);
 		enterMadSchedule.Add(new Task(new MoveThenDoState(this, new Vector3(-2, -1f,.3f), new MarkTaskDone(this))));
 		enterMadSchedule.Add (new TimeTask(10f, new IdleState(this)));
-		enterMadSchedule.SetCanChat(true);
 		Task setNotAngryFlag = (new Task(new MoveThenDoState(this, new Vector3 (0, .2f, .3f), new MarkTaskDone(this))));
 		setNotAngryFlag.AddFlagToSet(FlagStrings.ExitMadState);
 		enterMadSchedule.Add(setNotAngryFlag);
 		enterMadSchedule.Add (new TimeTask(.5f, new IdleState(this)));
-		
+*/
+
 		moveToMusicianSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
 		moveToMusicianSchedule.Add(new TimeTask(2f, new IdleState(this)));//this.transform.position
-		//moveToMusicianSchedule.Add(new Task(new MoveThenDoState(this, new Vector3(5f, -1f,.3f), new MarkTaskDone(this))));
 		Task setFlag = (new Task(new MoveThenDoState(this, new Vector3 (5, -1f, .3f), new MarkTaskDone(this))));
 		setFlag.AddFlagToSet(FlagStrings.FinishMusicianConvo);
 		moveToMusicianSchedule.Add(setFlag);
@@ -129,12 +128,10 @@ public class MotherYoung : NPC {
 		#region Initial Emotion State
 		private class InitialEmotionState : EmotionState {
 			Reaction GaveAppleReaction = new Reaction(); 
-			//Reaction otherState;
 	
 			public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue) {
 				GaveAppleReaction = new Reaction();
 				GaveAppleReaction.AddAction(new NPCEmotionUpdateAction(toControl, new GaveAppleState(toControl," ")));
-				//enterAppleState.AddAction(new NPCCallbackAction(UpdateText)); // ACTIVATING GaveApple Flag CREATES AN ERROR (From OneOffChat I believe)
 				GaveAppleReaction.AddAction(new NPCTakeItemAction(toControl));
 				_allItemReactions.Add("apple",  new DispositionDependentReaction(GaveAppleReaction));
 			}	
@@ -152,20 +149,14 @@ public class MotherYoung : NPC {
 		
 			public GaveAppleState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue) {
 				SetDefaultText("Thanks so much! Now I can start baking!");
-				
 				SetOnCloseInteractionReaction(new DispositionDependentReaction(AskToGardenReaction));
 				AskToGardenReaction.AddAction(new NPCGiveItemAction(toControl, StringsItem.LilySeeds)); // supposed to drop apple seeds (brown baggy?)
 				AskToGardenReaction.AddAction(new ShowOneOffChatAction(toControl, "Here are the leftover seeds.", 3f));	
 				AskToGardenReaction.AddAction(new NPCEmotionUpdateAction(toControl, new AskToGardenState(toControl,"I'm going to get the pie ready. Plant these seeds for me, ok?")));
-				//enterPostInitialEmotionState.AddAction(new NPCCallbackAction(UpdateText));	
 			}	
 		
 		public void UpdateText() {
-			//FlagManager.instance.SetFlag(FlagStrings.GiveSeeds);
-			//_allChoiceReactions.Remove(giveToolsChoiceSure);
 			SetOnOpenInteractionReaction(new DispositionDependentReaction(otherState));
-			//GUIManager.Instance.RefreshInteraction();
-			//SetDefaultText("Care you dance?");
 		}
 	}
 		#endregion
@@ -186,64 +177,70 @@ public class MotherYoung : NPC {
 				enterMadReaction.AddAction(new NPCEmotionUpdateAction(toControl, new MadEmotionState(toControl)));
 				enterHappyReaction.AddAction(new NPCEmotionUpdateAction(toControl, new HappyEmotionState(toControl)));
 				changeDefaultText.AddAction(new NPCCallbackAction(UpdateText));
-				firstTimeBusy = new Choice("I'm Busy!", currentDefaultText);		
+				firstTimeBusy = new Choice("I'm Busy!","Ok, come back when you have some time! Remember, don't go near the cliffs!");		
 				_allChoiceReactions.Add(okChoice, new DispositionDependentReaction(enterHappyReaction));
 				_allChoiceReactions.Add((firstTimeBusy), new DispositionDependentReaction(changeDefaultText));		
 			}
 //Framework for a responsive yes/no system
-			
+		#region UpdateText
 			public void UpdateText() {
 				numberOfTimesBuggedMother++;
 				if (numberOfTimesBuggedMother == 1) {
+					GUIManager.Instance.RefreshInteraction();
 					SetDefaultText("Are you free now?");
 					_allChoiceReactions.Remove(okChoice);
-					okChoice = new Choice("I'm free!", "Great! Could you plant these in the backyard? I'll be right back.");
-					_allChoiceReactions.Add(okChoice, new DispositionDependentReaction(enterHappyReaction));
+					_allChoiceReactions.Remove(firstTimeBusy);
 					GUIManager.Instance.RefreshInteraction();
-					currentDefaultText = "Alright, I need your help, so come back soon.";
+					okChoice = new Choice("I'm free!", "Great! Could you plant these in the backyard? I'll be right back.");
+					firstTimeBusy = new Choice("I'm Busy!","Alright, I need your help, so come back soon.");	
+					_allChoiceReactions.Add((firstTimeBusy), new DispositionDependentReaction(changeDefaultText));
+					_allChoiceReactions.Add(okChoice, new DispositionDependentReaction(enterHappyReaction));
+					//currentDefaultText = "Alright, I need your help, so come back soon.";
 				}
 			
 				if (numberOfTimesBuggedMother == 2) {
-					SetDefaultText("Oh good, you're back!!");
-					currentDefaultText = "This isn't a game, I really do need help.";
-					//FlagManager.instance.SetFlag(FlagStrings.SiblingExplore);
+					_allChoiceReactions.Remove(okChoice);
+					_allChoiceReactions.Remove(firstTimeBusy);
+					SetDefaultText("This isn't a game, I really do need help.");
+					GUIManager.Instance.RefreshInteraction();	
+					firstTimeBusy = new Choice ("Busy mom!!", "There isn't much time, I need your help soon.");
+					_allChoiceReactions.Add((firstTimeBusy), new DispositionDependentReaction(changeDefaultText));
+					_allChoiceReactions.Add(okChoice, new DispositionDependentReaction(enterHappyReaction));
 				}
 			
 				if (numberOfTimesBuggedMother == 3) {
+					_allChoiceReactions.Remove(okChoice);
+					_allChoiceReactions.Remove(firstTimeBusy);
 					SetDefaultText("Good you're back, the seeds are over there.");
-					currentDefaultText = "If you're busy, stop bugging me.";
-					_allChoiceReactions.Remove(firstTimeBusy);
-					firstTimeBusy = new Choice ("I'm Busy!!", currentDefaultText);
-					_allChoiceReactions.Add((firstTimeBusy), new DispositionDependentReaction(changeDefaultText));
-					GUIManager.Instance.RefreshInteraction();
 					
-// FIX THIS LINE
-					FlagManager.instance.SetFlag(FlagStrings.EnterMadState);
-//					
-					_allChoiceReactions.Remove(firstTimeBusy);
-					_allChoiceReactions.Add((firstTimeBusy), new DispositionDependentReaction(enterMadReaction));
-				}
-			
-				if (numberOfTimesBuggedMother >= 1 && numberOfTimesBuggedMother <= 2) { 
-					_allChoiceReactions.Remove(firstTimeBusy);
-					firstTimeBusy = new Choice ("Busy mom!!", currentDefaultText);
+					GUIManager.Instance.RefreshInteraction();	
+					
+					//_allChoiceReactions.Remove(firstTimeBusy);
+					firstTimeBusy = new Choice ("I'm Busy!!", "If you're busy, stop bugging me.");
 					_allChoiceReactions.Add((firstTimeBusy), new DispositionDependentReaction(changeDefaultText));
-					GUIManager.Instance.RefreshInteraction();
-				}
+					_allChoiceReactions.Add(okChoice, new DispositionDependentReaction(enterHappyReaction));
+				}	
+				if (numberOfTimesBuggedMother == 4) {
+					_allChoiceReactions.Remove(okChoice);
+					_allChoiceReactions.Remove(firstTimeBusy);
+					SetDefaultText("If you don't want to help ... Just go away please.");
+					GUIManager.Instance.RefreshInteraction();	
+					
+					//_allChoiceReactions.Remove(firstTimeBusy);
+					//firstTimeBusy = new Choice ("I'm Busy!!", "If you're busy, stop bugging me.");
+					//_allChoiceReactions.Add((firstTimeBusy), new DispositionDependentReaction(changeDefaultText));
+					//GUIManager.Instance.RefreshInteraction();	
+// FIX THIS LINE
+					//FlagManager.instance.SetFlag(FlagStrings.EnterMadState);
+//					
+					//_allChoiceReactions.Remove(firstTimeBusy);
+					//_allChoiceReactions.Add((firstTimeBusy), new DispositionDependentReaction(enterMadReaction));
+				}	
 			}
+		#endregion
 		}
 	#endregion
-	
-		#region MadEmotionState
-	private class MadEmotionState : EmotionState {
-		Action evokeDisplayMad;
-		
-		public MadEmotionState(NPC toControl) : base(toControl, "I've had enough of your behavior today. Keep this up and you won't be getting dinner tonight."){
-	
-		}
-	}
-		#endregion
-		#region HappyEmotionState
+	#region HappyEmotionState
 	private class HappyEmotionState : EmotionState {
 		
 		bool flagSet = false;
@@ -254,17 +251,14 @@ public class MotherYoung : NPC {
 		
 		public HappyEmotionState(NPC toControl) : base(toControl, "Do you want me to show you where to plant them?"){;
 			testing = new Choice ("Where?", "Follow me, There's a good spot over here.");
-			postSeedReaction.AddAction(new NPCEmotionUpdateAction(toControl, new PlantTreeState(toControl)));
-			//postSeed.AddAction(new NPCTakeItemAction(toControl));
+			postSeedReaction.AddAction(new NPCCallbackAction(refreshGUI));
+			postSeedReaction.AddAction(new NPCEmotionUpdateAction(toControl, new PlantTreeState(toControl)));;
 			changeFlagReaction.AddAction(new NPCCallbackAction(UpdateFlag));
 			_allChoiceReactions.Add((testing), new DispositionDependentReaction(changeFlagReaction));
-			//GUIManager.Instance.RefreshInteraction();
 		}
 		
-		public void UpdateFlag() {
-			
+		public void UpdateFlag() {	
 			if (!flagSet) {
-				//FlagManager.instance.SetFlag(FlagStrings.SiblingExplore);
 				FlagManager.instance.SetFlag(FlagStrings.EnterHappyState);	
 				flagSet = true;
 				_allChoiceReactions.Remove(testing);
@@ -272,8 +266,13 @@ public class MotherYoung : NPC {
 				testing = new Choice ("*plant seed*", "You looked like you were having fun with that!");
 				_allChoiceReactions.Add((testing), new DispositionDependentReaction(postSeedReaction));
 				GUIManager.Instance.RefreshInteraction();
+				GUIManager.Instance.CloseInteractionMenu();
 			}
 		}
+		public void refreshGUI() {
+			GUIManager.Instance.RefreshInteraction();		
+		}
+		
 	}
 	#endregion
 	#region PLantTreeState
@@ -281,20 +280,12 @@ public class MotherYoung : NPC {
 		Action evokeUpdatePosition;
 		bool flagSet = false;
 		bool piePlaced = false;
-		//Choice goBackHome = new Choice("Mm hmm!", "Here, I'm afraid money is a little scarce, but you might be able to exchange this pendant for some seeds.");
 		Choice goBackHome = new Choice("Mm hmm!", "I think the pie should be done, let's go back to check!");
 		Choice otherChoice;
-		//Reaction changeFlag;
 		Reaction otherReaction;
 		
 		public PlantTreeState(NPC toControl) : base(toControl, "I can't wait to see how beautiful this tree will be in a few years!"){
-			//evokeUpdatePosition = new NPCCallbackAction(UpdatePosition);
-			//evokeUpdatePosition.Perform();
-			//changeFlag = new Reaction();
 			otherReaction = new Reaction();
-
-			//changeFlag.AddAction(new NPCCallbackAction(UpdatePosition));
-			//SetOnCloseInteractionReaction(new DispositionDependentReaction(otherReaction));
 			otherReaction.AddAction(new NPCCallbackOnNPCAction(InitiatePieQuest, toControl));
 			otherReaction.AddAction(new NPCEmotionUpdateAction(toControl, new PieQuestState(toControl)));
 			//otherReaction.AddAction(new NPCGiveItemAction(toControl,"apple")); //switch to pendant later
@@ -310,44 +301,8 @@ public class MotherYoung : NPC {
 				GUIManager.Instance.RefreshInteraction();
 				GUIManager.Instance.CloseInteractionMenu();
 			}
-			//goBackHome = new Choice("Sure!", "Looks like you had fun!");
-			//otherChoice = new Choice("(X.X)", "Shouldn't be able to see this initialization");
-			//_allChoiceReactions.Add(goBackHome, new DispositionDependentReaction(changeFlag));
-			//_allChoiceReactions.Add(otherChoice, new DispositionDependentReaction(changeFlag));
-			
-			//FlagManager.instance.SetFlag(FlagStrings.MoveHome);
-			//SetDefaultText("Get the seeds, then I'll tell you the story");
-			//_allChoiceReactions.Remove(goBackHome);
-			//_allChoiceReactions.Remove(otherChoice);
-			//GUIManager.Instance.RefreshInteraction();
-			//_allItemReactions.Add("", new DispositionDependentReaction(otherReaction));
 		}
 	}
-		
-		/*
-		public void UpdatePosition() {
-			if (!flagSet) {
-				FlagManager.instance.SetFlag(FlagStrings.MoveHome);
-				flagSet = true;
-				//SetDefaultText("If you go into the market and buy mommy some more seeds, I'll tell you a story when you get back.");
-				_allChoiceReactions.Remove(goBackHome);
-				//goBackHome = new Choice("Ok!", "The story is a secret till you come back with more seeds to plant.");
-				GUIManager.Instance.RefreshInteraction();
-				
-				otherChoice = new Choice("Not now", "Ok, well if you change your mind, I'll be here for a little while.");
-				//otherReaction.Add();
-				_allChoiceReactions.Add(goBackHome, new DispositionDependentReaction(otherReaction));
-				_allChoiceReactions.Add(otherChoice, new DispositionDependentReaction(changeFlag));
-				
-			}
-			
-			//Schedule moveMyMomma = new Schedule(_npcInState, Schedule.priorityEnum.High);
-			//moveMyMomma.Add(new Task(new MoveThenDoState(_npcInState, new Vector3(10, -1f,.3f), new MarkTaskDone(_npcInState))));
-			//_npcInState.AddSchedule(moveMyMomma);
-		
-		}
-		*/
-		
 		#endregion
 	private class PieQuestState : EmotionState {
 		bool flagSet = false;
@@ -359,12 +314,6 @@ public class MotherYoung : NPC {
 			
 			moveToMusicianReaction.AddAction(new NPCCallbackAction(SetWalkToMusicianFlag));
 			SetOnOpenInteractionReaction(new DispositionDependentReaction(moveToMusicianReaction));
-			//evokeUpdatePosition = new NPCCallbackAction(UpdatePosition);
-			//evokeUpdatePosition.Perform();
-			//SetOnCloseInteractionReaction(new DispositionDependentReaction(otherReaction));
-			//otherReaction.AddAction(new NPCCallbackOnNPCAction(InitiatePieQuest, toControl));
-			//otherReaction.AddAction(new NPCGiveItemAction(toControl,"apple")); //switch to pendant later
-			//_allChoiceReactions.Add(goBackHome, new DispositionDependentReaction(otherReaction));
 		}
 		
 		public void SetWalkToMusicianFlag() {
@@ -375,4 +324,16 @@ public class MotherYoung : NPC {
 		}
 }
 	#endregion
+	
+	
+//Add functionality so Mother will eventually get out of Mad State (25 seconds?)
+	#region MadEmotionState
+	private class MadEmotionState : EmotionState {
+		Action evokeDisplayMad;
+		
+		public MadEmotionState(NPC toControl) : base(toControl, "I've had enough of your behavior today. Keep this up and you won't be getting dinner tonight."){
+	
+		}
+	}
+		#endregion
 }
