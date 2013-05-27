@@ -28,7 +28,8 @@ public class Schedule {
 	public int schedulePriority; // high 1 - 10 low
 	
 	public enum priorityEnum {
-		DoNow=1,
+		DoConvo=1,
+		DoNow,
 		High,
 		Medium,
 		Low,
