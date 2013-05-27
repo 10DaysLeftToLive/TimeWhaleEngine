@@ -197,7 +197,7 @@ public class Schedule {
 	public virtual void OnInterrupt() {	
 	}
 	
-	protected void SetComplete() {
+	public void SetComplete() {
 		_tasksToDo.Clear();
 		current = null;
 	}
