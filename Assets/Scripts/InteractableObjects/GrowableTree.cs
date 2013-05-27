@@ -11,7 +11,7 @@ public class GrowableTree: InteractableObject {
 			tree.youngTimeObject.SetActive(true);
 			tree.middleTimeObject.SetActive(true);
 			tree.oldTimeObject.SetActive(true);
-			playerCharacter.DisableHeldItem();	
+			player.DisableHeldItem();	
 		}
 	}
 }

@@ -42,7 +42,7 @@ public class ResolutionManager {
 			
 			heightShift = rect.y;
 	        
-	        camera.rect = rect;
+	        //camera.rect = rect;
 	    } 
 		else // add pillarbox
 	    {
@@ -58,7 +58,7 @@ public class ResolutionManager {
 			
 			widthShift = rect.x;
 	
-	        camera.rect = rect;
+	        //camera.rect = rect;
 	    }
 	}
 }

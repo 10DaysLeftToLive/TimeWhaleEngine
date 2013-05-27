@@ -16,6 +16,18 @@ public static class Utils{
 		return (point > -minimumDistance && point < minimumDistance);
 	}
 	
+	static float xDistance;
+	static float yDistance;
+	public static float GetDistance(GameObject gameObjOne, GameObject gameObjTwo){
+		xDistance = Mathf.Abs(gameObjOne.transform.position.x - gameObjTwo.transform.position.x);
+		yDistance = Mathf.Abs(gameObjOne.transform.position.y - gameObjTwo.transform.position.y);
+		return (Mathf.Sqrt(Mathf.Pow(xDistance, 2.0f) + Mathf.Pow(yDistance, 2.0f)));
+	}
+	
+	public static bool InDistance(GameObject gameObjOne, GameObject gameObjTwo, float distance) {
+		return (GetDistance(gameObjOne, gameObjTwo) < distance);
+	}
+	
 	public static Vector3 GetPointInfrontOf(Vector3 start, GameObject objectToMoveInfront){
 		Vector3 whereToMove = objectToMoveInfront.transform.position;
 		if (Utils.CalcDifference(start.x, whereToMove.x) < 0) { // if the target is to the right
@@ -37,12 +49,5 @@ public static class Utils{
 	// returns the amount of time in ms
 	public static float CalcTimeToDisplayText(string text){
 		return (text.Length * .1f);
-	}
-	
-	public static bool InDistance(GameObject gameObjOne, GameObject gameObjTwo, float distance) {
-		float xDistance = Mathf.Abs(gameObjOne.transform.position.x - gameObjTwo.transform.position.x);
-		float yDistance = Mathf.Abs(gameObjOne.transform.position.y - gameObjTwo.transform.position.y);
-		
-		return (xDistance < distance && yDistance < distance);
 	}
 }

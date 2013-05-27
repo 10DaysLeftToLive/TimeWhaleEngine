@@ -8,7 +8,6 @@ using System.Collections;
  */
 
 public class OnClickNextToPlayer : OnClick {
-	protected Player playerCharacter;
 	public float minimumDistance = 1.5f;
 	protected Player player;
 	
@@ -16,8 +15,7 @@ public class OnClickNextToPlayer : OnClick {
 		FindPlayer ();
 	}
 	
-	public void FindPlayer(){
-		playerCharacter = FindObjectOfType(typeof(Player)) as Player;		
+	public void FindPlayer(){	
 		player = FindObjectOfType(typeof(Player)) as Player;		
 	}
 
@@ -28,10 +26,10 @@ public class OnClickNextToPlayer : OnClick {
 	protected virtual void DoClickNextToPlayer(){}
 	
 	protected override void DoClick(ClickPositionArgs e){
-		Vector3 player = playerCharacter.transform.position;
+		Vector3 playerPos = player.transform.position;
 		Vector3 position = transform.position;
 		
-		Vector2 flatPlayerPos = new Vector2(player.x, player.y);
+		Vector2 flatPlayerPos = new Vector2(playerPos.x, playerPos.y);
 		Vector2 flatPos = new Vector2(position.x, position.y);
 		
 		if (Vector2.Distance(flatPlayerPos, flatPos) < minimumDistance){

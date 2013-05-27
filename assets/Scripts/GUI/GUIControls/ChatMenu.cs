@@ -7,8 +7,11 @@ using System.Collections.Generic;
  * 	responsible for displaying the given npc chats above the head of each npc
  */
 public class ChatMenu : GUIControl {
+	private static int DISTANCE_TO_CHAT = 4;
+	private static int DISTANCE_NEAR_PLAYER = 9;
 	private List<NPCChat> _npcsChats = new List<NPCChat>();
 	private List<ChatInfo> _currentChats = new List<ChatInfo>();
+	private Player player;
 	
 	private static float CHATWIDTH = .2f;
 	private static float CHATHEIGHT = .1f;
@@ -16,6 +19,7 @@ public class ChatMenu : GUIControl {
 	public GUIStyle chatBoxStyle;
 	
 	public override void Init(){
+		player = FindObjectOfType(typeof(Player)) as Player;		
 	}
 	
 	private List<NPCChat> toRemove = new List<NPCChat>();
@@ -49,8 +53,30 @@ public class ChatMenu : GUIControl {
 	
 	private void ShowChats(){
 		foreach (ChatInfo chatInfo in _currentChats){
-			GUI.Box(GetRectOverNPC(chatInfo.npcTalking), chatInfo.text, chatBoxStyle);	
+			if (IsVisibleToPlayer(chatInfo.npcTalking)){
+				GUI.color = new Color(1,1,1, 1);
+				GUI.Box(GetRectOverNPC(chatInfo.npcTalking), chatInfo.text, chatBoxStyle);	
+			} else if (IsNearPlayer(chatInfo.npcTalking)) {
+				FadeChatBox(chatInfo);
+			}
 		}
+	}
+	
+	float distance;
+	float distancePercent;
+	private void FadeChatBox(ChatInfo chatInfo){
+		distance = Utils.GetDistance(chatInfo.npcTalking.gameObject, player.gameObject);
+		distancePercent = 1 - distance/DISTANCE_NEAR_PLAYER;
+		GUI.color = new Color(1,1,1,distancePercent);
+		GUI.Box(GetRectOverNPC(chatInfo.npcTalking), chatInfo.text, chatBoxStyle);	
+	}
+	
+	private bool IsVisibleToPlayer(NPC npc){
+		return (Utils.InDistance(npc.gameObject, player.gameObject, DISTANCE_TO_CHAT));
+	}
+		
+	private bool IsNearPlayer(NPC npc){
+		return (Utils.InDistance(npc.gameObject, player.gameObject, DISTANCE_NEAR_PLAYER));
 	}
 	
 	private static Vector3 pos;

@@ -72,17 +72,10 @@ public class NPCPassiveConvoCheck : MonoBehaviour {
 	}
 	
 	private bool InPassiveChatDistance(GameObject gameObjOne, GameObject gameObjTwo) {
-		return InDistance(gameObjOne, gameObjTwo, DISTANCE_TO_CHAT);
+		return Utils.InDistance(gameObjOne, gameObjTwo, DISTANCE_TO_CHAT);
 	}
 	
 	private bool InSight(GameObject gameObjOne, GameObject gameObjTwo) {
-		return (InDistance(gameObjOne, gameObjTwo, DISTANCE_TO_SEE)); 
-	}
-	
-	private bool InDistance(GameObject gameObjOne, GameObject gameObjTwo, float distance) {
-		float xDistance = Mathf.Abs(gameObjOne.transform.position.x - gameObjTwo.transform.position.x);
-		float yDistance = Mathf.Abs(gameObjOne.transform.position.y - gameObjTwo.transform.position.y);
-		
-		return (xDistance < distance && yDistance < distance);
+		return (Utils.InDistance(gameObjOne, gameObjTwo, DISTANCE_TO_SEE)); 
 	}
 }
