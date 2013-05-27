@@ -47,7 +47,7 @@ public class FadeEffect : ShaderBase {
 	
 	private float _angleDelta = 0; 
 	
-	private Vector2 center = new Vector2(0.5f, 0.5f);
+	public Vector2 center = new Vector2(0.5f, 0.5f);
 	
 	
 	#endregion
