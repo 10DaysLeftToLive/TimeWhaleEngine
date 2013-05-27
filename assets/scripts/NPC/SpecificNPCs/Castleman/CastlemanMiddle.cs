@@ -12,6 +12,7 @@ public class CastlemanMiddle : NPC {
 	SaneState saneState;
 	Date dateState;
 	StoodUp stoodUpState;
+	Vector3 startingPosition;
 	bool carpenterDateSuccess = false;
 	bool dateForMe = false;
 	bool successfulDate = false;
@@ -44,6 +45,7 @@ public class CastlemanMiddle : NPC {
 		
 		Reaction endOfDate = new Reaction();
 		endOfDate.AddAction(new NPCCallbackAction(dateOver));
+		endOfDate.AddAction(new NPCAddScheduleAction(this, moveBack));
 		flagReactions.Add(FlagStrings.EndOfDate, endOfDate);
 		
 		Reaction stoodUpLG = new Reaction();
@@ -65,18 +67,24 @@ public class CastlemanMiddle : NPC {
 		stoodUpState = new StoodUp(this, "");
 		saneState = new SaneState(this, "");
 		dateState = new Date(this, "");
+		
+		startingPosition = transform.position;
+		startingPosition.y += LevelManager.levelYOffSetFromCenter;
 		return (initialState);
 	}
 	protected override Schedule GetSchedule(){
 		Schedule schedule = new DefaultSchedule(this);
 		return (schedule);
 	}
-	Schedule moveToBeach;
+	Schedule moveToBeach, moveBack;
 	NPCConvoSchedule dateWithLG;
 	protected override void SetUpSchedules(){
 		
 		moveToBeach = new Schedule(this, Schedule.priorityEnum.DoNow);
-		moveToBeach.Add(new Task(new MoveThenDoState(this, new Vector3 (60,44.5f,.5f), new MarkTaskDone(this))));
+		moveToBeach.Add(new Task(new MoveThenDoState(this, new Vector3 (58,44.5f,.5f), new MarkTaskDone(this))));
+		
+		moveBack = new Schedule(this, Schedule.priorityEnum.DoNow);
+		moveBack.Add(new Task(new MoveThenDoState(this, startingPosition, new MarkTaskDone(this))));
 		
 		dateWithLG =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.LighthouseGirlMiddle),
 			new MiddleCastleManToLighthouseGirl(), Schedule.priorityEnum.DoNow); 

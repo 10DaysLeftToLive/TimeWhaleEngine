@@ -11,9 +11,24 @@ public class LighthouseGirlMiddle : NPC {
 	StoodUpEmotionState stoodUpState;
 	Vector3 startingPosition;
 	bool successfulDate= false;
+	bool waitingOnDateTimer = false;
+	bool dateOver = false;
+	float time;
 	protected override void Init() {
 		id = NPCIDs.LIGHTHOUSE_GIRL;
 		base.Init();
+	}
+	
+	protected override void CharacterUpdate ()
+	{
+		if (waitingOnDateTimer && !dateOver)
+			time -= Time.deltaTime;
+			if (time < 0 && !dateOver){
+				FlagManager.instance.SetFlag(FlagStrings.EndOfDate);
+				dateOver = true;
+			}
+		
+		base.CharacterUpdate ();
 	}
 	
 	protected override void SetFlagReactions(){
@@ -53,7 +68,8 @@ public class LighthouseGirlMiddle : NPC {
 		
 		Reaction waitingForDate = new Reaction();
 		waitingForDate.AddAction(new NPCCallbackAction(MoveToBeach)); // teleport to beach
-		waitingForDate.AddAction(new NPCAddScheduleAction(this, waitingOnDate));
+		waitingForDate.AddAction(new NPCCallbackAction(WaitingOnDate));
+		//waitingForDate.AddAction(new NPCAddScheduleAction(this, waitingOnDate));
 		flagReactions.Add(FlagStrings.WaitingForDate, waitingForDate);
 		
 		Reaction endOfDate = new Reaction();
@@ -97,6 +113,7 @@ public class LighthouseGirlMiddle : NPC {
 		openningWaitingSchedule.Add(new TimeTask(30, new WaitTillPlayerCloseState(this, player)));	
 		
 		backToFarmSchedule = new Schedule(this, Schedule.priorityEnum.High);
+		backToFarmSchedule.Add(new TimeTask(8f, new IdleState(this)));
 		backToFarmSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (62, 67, .5f), new MarkTaskDone(this))));
 		
 		ropeDownSchedule = new Schedule(this, Schedule.priorityEnum.High);
@@ -105,12 +122,12 @@ public class LighthouseGirlMiddle : NPC {
 		setFlag.AddFlagToSet(FlagStrings.WaitingForDate);
 		ropeDownSchedule.Add(setFlag);
 		
-		waitingOnDate = new Schedule(this, Schedule.priorityEnum.High);
+		/*waitingOnDate = new Schedule(this, Schedule.priorityEnum.High);
 		waitingOnDate.Add(new TimeTask(dateTime, new IdleState(this)));
 		Task dateTimer = new Task( new MoveThenDoState(this, new Vector3 (startingPosition.x, startingPosition.y,.5f), new MarkTaskDone(this)));
 		dateTimer.AddFlagToSet(FlagStrings.EndOfDate);
 		waitingOnDate.Add(dateTimer);
-		waitingOnDate.Add(new TimeTask(8f, new IdleState(this)));
+		waitingOnDate.Add(new TimeTask(8f, new IdleState(this)));*/
 		
 		postOpenningSchedule =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerMotherMiddle),
 			new MiddleFarmerMotherToLighthouseGirl(), Schedule.priorityEnum.High); 
@@ -124,6 +141,11 @@ public class LighthouseGirlMiddle : NPC {
 			new MiddleLighthouseGirlCastleManMarriage(), Schedule.priorityEnum.High); 
 		marriageToCastleManSchedule.SetCanNotInteractWithPlayer();
 		
+	}
+	
+	protected void WaitingOnDate(){
+		waitingOnDateTimer = true;
+		time = 50;
 	}
 	
 	protected void DateSuccess(){
@@ -314,6 +336,7 @@ public class LighthouseGirlMiddle : NPC {
 		public void CastleManResponse(){
 			_allChoiceReactions.Clear();
 			_allItemReactions.Clear();
+			FlagManager.instance.SetFlag(FlagStrings.NotInsane);
 			if (castleBoyInsane){
 				SetDefaultText("Such a nice letter. Too bad hes crazy.");
 				YourRightResponse();
