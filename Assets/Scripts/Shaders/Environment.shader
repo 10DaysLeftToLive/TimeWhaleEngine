@@ -143,5 +143,5 @@ Shader "Custom/BackgroundShader" {
 			ENDCG
 		}
 	} 
-	FallBack "Diffuse"
+	FallBack "BackgroundShaderBackupGodus"
 }
