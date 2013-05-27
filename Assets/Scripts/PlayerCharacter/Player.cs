@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections;
 using SmoothMoves;
 
-[RequireComponent(typeof(CharacterController))]
 public class Player : Character {
 	public float walkSpeed = 2.0f;
 	
@@ -119,10 +118,10 @@ public class Player : Character {
 			EnterState(new IdleState(this));
 		}
 		
+		ChangeAnimation(newAge.boneAnimation);
 		AgeSwapMover.instance.ChangeAgePosition(newAge, previousAge);
 		
-		ChangeHitBox(newAge, previousAge);
-		ChangeAnimation(newAge.boneAnimation);
+		//ChangeHitBox(newAge, previousAge);
 		Inventory.SwapItemWithCurrentAge(newAge.boneAnimation);
 	}
 	
