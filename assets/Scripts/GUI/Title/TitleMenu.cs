@@ -16,6 +16,10 @@ public class TitleMenu : MonoBehaviour {
 	public UIPanel[] autoPlayPanels;
 	private int autoPlayPanelsIndex = 0;
 	
+	
+	public UIPanel chooseGenderPanel;
+	public UISprite genderPickFilter;
+	
 	public Arrow[] arrows;
 	
 	public FadeToBlackTransition fadeToBlackSprite;
@@ -40,7 +44,7 @@ public class TitleMenu : MonoBehaviour {
 		if(timerStarted) TickFadeTimer();
 		if(sceneTimer > holdTimeInSeconds && !fadedOpeningScene){
 			ArrayList disable = new ArrayList();
-			disable.Add(tree.gameObject);
+			//disable.Add(tree.gameObject);
 			disable.Add(openingScenePanel.gameObject);
 			fadeToBlackSprite.StartFadeToBlack(disable,autoPlayPanels[autoPlayPanelsIndex].gameObject);
 			fadedOpeningScene = true;
@@ -63,7 +67,6 @@ public class TitleMenu : MonoBehaviour {
 			titleMenuSlider.sliderValue = 0;
 		}
 		if(titleMenuSlider.sliderValue == 1){
-			tree.Play("WaveMiddle");
 			TransitionPanels(titleMenuPanel, mainMenuPanel);
 			foreach(Arrow arrow in arrows){
 				arrow.DisableArrow();
@@ -76,7 +79,6 @@ public class TitleMenu : MonoBehaviour {
 			newGameSlider.sliderValue = 0;
 		}
 		if(newGameSlider.sliderValue == 1){
-			tree.Play("WaveOld");
 			TransitionPanels(mainMenuPanel, openingScenePanel);
 			FadeToText();
 		}
@@ -104,9 +106,25 @@ public class TitleMenu : MonoBehaviour {
 		timerStarted = false;
 	}
 	
-	void FadeToNextTextPanel(){
+	void FadeToNextAutoPanel(){
 		autoPlayPanelsIndex++;
 		BeginFadeTimer();
+	}
+	
+	public void ChoseGenderMale(){
+		UnfadeGenderFilter();
+		//STUFF
+		FadeToNextAutoPanel();
+	}
+	
+	public void ChoseGenderFemale(){
+		UnfadeGenderFilter();
+		//STUFF
+		FadeToNextAutoPanel();
+	}
+	
+	void UnfadeGenderFilter(){
+		genderPickFilter.alpha = 0.0f;	
 	}
 	
 }
