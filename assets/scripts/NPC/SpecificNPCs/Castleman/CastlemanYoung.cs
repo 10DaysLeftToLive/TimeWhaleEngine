@@ -10,11 +10,38 @@ public class CastlemanYoung : NPC {
 		id = NPCIDs.CASTLE_MAN;
 		base.Init();
 	}
-	
+	Schedule CastleManFollowSchedule;
 	protected override void SetFlagReactions(){
 		Reaction ChangeToTalkingState = new Reaction();
 		ChangeToTalkingState.AddAction(new NPCEmotionUpdateAction(this, new MeetFamily(this, "")));
-		flagReactions.Add(FlagStrings.MusicianCommentOnSon, ChangeToTalkingState);
+		//ChangeToTalkingState.AddAction(new NPCAddScheduleAction(this, testSchedule));
+		flagReactions.Add(FlagStrings.FinishMusicianConvo, ChangeToTalkingState);
+		
+		//Schedule to start the castleman following the player when he is friends
+		Reaction FriendsWithPlayer = new Reaction ();
+		FriendsWithPlayer.AddAction(new NPCAddScheduleAction(this, CastleManFollowSchedule));
+		FriendsWithPlayer.AddAction(new NPCEmotionUpdateAction(this, new CastleManTraveling(this, "")));
+		flagReactions.Add(FlagStrings.PlayerAndCastleFriends, FriendsWithPlayer);
+		
+		#region Asfriends
+		Reaction AfterIntroConversationCarpenterSon = new Reaction();
+		AfterIntroConversationCarpenterSon.AddAction(new NPCEmotionUpdateAction(this, new VisitCarpenterSonAsFriend(this, "")));
+		flagReactions.Add(FlagStrings.FinishedInitialConversationWithCSONFriend, AfterIntroConversationCarpenterSon);
+		
+		Reaction AfterSecondConversationCarpenterSon = new Reaction ();
+		AfterSecondConversationCarpenterSon.AddAction(new NPCEmotionUpdateAction(this, new TalkWithCarpenterSonAsFriendRoundTwo(this, "")));
+		flagReactions.Add(FlagStrings.FinishedSecondConversationWithCSONFriend, AfterSecondConversationCarpenterSon);
+		
+		Reaction ReadyForBeachFriends = new Reaction ();
+		ReadyForBeachFriends.AddAction(new NPCEmotionUpdateAction(this, new WaitingAtBeachFriend(this, "")));
+		//Add in a new schedule here!
+		flagReactions.Add(FlagStrings.BeachBeforeConvoFriendsString, ReadyForBeachFriends);
+		#endregion
+		//Schedule to start the Castleman following the player When not friends.
+		Reaction NOTFriendsWithPlayer = new Reaction ();
+		NOTFriendsWithPlayer.AddAction(new NPCAddScheduleAction(this, CastleManFollowSchedule));
+		NOTFriendsWithPlayer.AddAction(new NPCEmotionUpdateAction(this, new CastleManTraveling(this, "")));
+		flagReactions.Add(FlagStrings.PlayerAndCastleNOTFriends, NOTFriendsWithPlayer);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
@@ -24,11 +51,14 @@ public class CastlemanYoung : NPC {
 	
 	protected override Schedule GetSchedule(){
 		Schedule schedule = new DefaultSchedule(this);
+		//schedule.Add(new Task(new MoveToObjectState(this, this.gameObject)));
 		return (schedule);
 	}
 
 	protected override void SetUpSchedules(){
-		
+		CastleManFollowSchedule = new Schedule(this);
+		CastleManFollowSchedule.Add(new Task(new FollowObjectState(this, player.gameObject)));
+		CastleManFollowSchedule.Add(new TimeTask(2f, new IdleState(this)));
 	}
 	
 
@@ -254,6 +284,12 @@ public class CastlemanYoung : NPC {
 	
 	}
 	#endregion
+	private class CastleManTraveling : EmotionState{
+	
+		public CastleManTraveling(NPC toControl, string currentDialogue) : base(toControl, "This is stupid."){
+			
+		}
+	}
 	#region Meet the Family	
 	private class MeetFamily : EmotionState{
 		int FriendshipTally = 0;

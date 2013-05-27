@@ -99,5 +99,32 @@ public static class FlagStrings {
 	
 	#region CastleMan
 	public static string ConvinceToTalkWithCarpenterSonRoundOne = "Talk CSON Round One.";
+	public static string FinishedLightHouseConversation = "Finished lighthouse conversation.";
+	public static string FinishedBothConversations = "Finished Lighthouse and Carpenter's Son conversations.";
+	
+	public static string InitialConversationWithCSONNOTFriend = "Initial conversation with the carpenter's son NotFriend.";
+	public static string FinishedInitialConversationWithCSONNOTFriend = "Finished initial conversation with the carpenter's son NotFriend.";
+	public static string SecondConversationWithCSONNOTFriend = "Second conversation with the carpenter's son NotFriend.";
+	public static string FinishedSecondConversationWithCSONNOTFriend = "Finished second conversation with the carpenter's son NotFriend.";
+	public static string ThirdConvoWithCSONNOTFriend = "Third conversation with the carpenter's son NotFriend.";
+	public static string FinishedThirdConvoWithCSONNOTFriend = "Finished third conversation with the carpenter's son NotFriend.";
+	
+	public static string InitialConversationWithCSONFriend = "Initial conversation with the carpenter's son Friend.";
+	public static string FinishedInitialConversationWithCSONFriend = "Finished initial conversation with the carpenter's son Friend.";
+	public static string SecondConversationWithCSONFriend = "Second conversation with the carpenter's son Friend.";
+	public static string FinishedSecondConversationWithCSONFriend = "Finished second conversation with the carpenter's son Friend.";
+	public static string ThirdConvoWithCSONFriend = "Third conversation with the carpenter's son Friend.";
+	public static string FinishedThirdConvoWithCSONFriend = "Finished third conversation with the carpenter's son Friend.";
+	
+	public static string CSONAndCastleNOTFriends = "CSON and Castle not friends";
+	public static string CSONAndCastleFriends = "CSON and Castle Friends.";
+	public static string PlayerAndCastleFriends = "Player and Castle Friends";
+	public static string PlayerAndCastleNOTFriends = "Player and Castle NOT friends.";
+	
+	public static string BeachBeforeConvoFriendsString = "Beach before conversation friends.";
+	public static string BeachBeforeConvoNotFriendsString = "Beach before conversation not as friends.";
+	public static string BeachPreparedForConvo = "Beach Prepared for Conversation.";
+	public static string BeachAfterConvoGood = "Beach After Conversation good.";
+	public static string BeachAfterConvoBad = "Beach after conversation bad.";
 	#endregion
 }
