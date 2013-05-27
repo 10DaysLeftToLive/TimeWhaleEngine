@@ -53,8 +53,8 @@ public class CastlemanMiddle : NPC {
 		flagReactions.Add(FlagStrings.CastleManNoShow, stoodUpLG);
 		
 		Reaction moveToDate = new Reaction();
-		moveToDate.AddAction(new NPCAddScheduleAction(this, dateWithLG));
 		moveToDate.AddAction(new NPCAddScheduleAction(this, moveToBeach));
+		moveToDate.AddAction(new NPCAddScheduleAction(this, dateWithLG));
 		flagReactions.Add(FlagStrings.CastleManDating, moveToDate);
 		
 	}
@@ -87,7 +87,7 @@ public class CastlemanMiddle : NPC {
 		moveBack.Add(new Task(new MoveThenDoState(this, startingPosition, new MarkTaskDone(this))));
 		
 		dateWithLG =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.LighthouseGirlMiddle),
-			new MiddleCastleManToLighthouseGirl(), Schedule.priorityEnum.DoNow); 
+			new MiddleCastleManToLighthouseGirl(), Schedule.priorityEnum.High); 
 		dateWithLG.SetCanNotInteractWithPlayer();
 	}
 	
