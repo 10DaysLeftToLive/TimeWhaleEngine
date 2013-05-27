@@ -26,11 +26,11 @@ public class FadeEffect : ShaderBase {
 	protected bool fade = false;
 	
 	public static class FADEPLANECONSTANTS {
-		public const float planeToCameraOffset = 0.3f;
+		public const float planeToCameraOffset = 0.31f;
 		
 	}
 	
-	private Vector3 idlePosition = new Vector3(5000,5000,-3);
+	private Vector3 idlePosition = new Vector3(5000,5000,-2);
 	
 	#endregion
 	
@@ -152,11 +152,10 @@ public class FadeEffect : ShaderBase {
 		}
 		wasFading = isFading;
 	}
-	
+
 	protected void RenderFadePlane() {
 		if (isFading) {
-			
-			fadePlane.transform.position = new Vector3(camera.transform.position.x, camera.transform.position.y, 
+			fadePlane.transform.position = new Vector3(camera.transform.position.x, camera.transform.position.y  + FADEPLANECONSTANTS.planeToCameraOffset, 
 				camera.transform.position.z + FADEPLANECONSTANTS.planeToCameraOffset);
 			if (fade) {
 				FadeIn();

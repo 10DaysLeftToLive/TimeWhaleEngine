@@ -124,7 +124,7 @@ public class SunriseSunsetTimer : ShaderBase {
 				_hue = StartHue - interpolationFactor;
 			}
 		else {
-			Debug.Log ("Interpolation Factor after Hue change: " + interpolationFactor);
+			//Debug.Log ("Interpolation Factor after Hue change: " + interpolationFactor);
 		}
 		
 		return _hue;
