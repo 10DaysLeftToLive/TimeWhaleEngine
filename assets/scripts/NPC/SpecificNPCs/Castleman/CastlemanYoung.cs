@@ -55,7 +55,7 @@ public class CastlemanYoung : NPC {
 		Reaction ReadyForBeachNOTAsFriends = new Reaction ();
 		ReadyForBeachNOTAsFriends.AddAction(new NPCEmotionUpdateAction(this, new WaitingAtBeachNotAsFriend(this, "")));
 		//Add in a new schedule here!
-		flagReactions.Add(FlagStrings.BeachBeforeConvoFriendsString, ReadyForBeachNOTAsFriends);
+		flagReactions.Add(FlagStrings.BeachBeforeConvoNotFriendsString, ReadyForBeachNOTAsFriends);
 		
 		
 		Reaction TalkWithLighthouseFirstTime = new Reaction();

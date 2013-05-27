@@ -10,7 +10,7 @@ public class MotherYoung : NPC {
 		base.Init();
 	}
 	#region SetFlagReactions	
-	protected override void SetFlagReactions(){		
+	protected override void SetFlagReactions() {	
 		Reaction enterHappy = new Reaction();
 		enterHappy.AddAction(new ShowOneOffChatAction(this, "I think there's a good spot over here!"));
 		enterHappy.AddAction(new NPCAddScheduleAction(this, moveMotherHappyState));
@@ -59,8 +59,8 @@ public class MotherYoung : NPC {
 	#endregion
 	
 	protected override EmotionState GetInitEmotionState(){
-		//return (new InitialEmotionState(this, "Morning! I think we're out of apples, could you get one for me?"));
-		return (new GaveAppleState(this, "Thanks! Time to bake the pie! In the meantime, could you plant this for me?"));
+		return (new InitialEmotionState(this, "Morning! I think we're out of apples, could you get one for me?"));
+		//return (new GaveAppleState(this, "Thanks! Time to bake the pie! In the meantime, could you plant this for me?"));
 	}
 	
 	protected override Schedule GetSchedule(){
