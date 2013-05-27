@@ -11,11 +11,12 @@ public class CastlemanYoung : NPC {
 		base.Init();
 	}
 	Schedule CastleManFollowSchedule;
+	NPCConvoSchedule CastleManMeetsLighthouse;
 	protected override void SetFlagReactions(){
 		Reaction ChangeToTalkingState = new Reaction();
 		ChangeToTalkingState.AddAction(new NPCEmotionUpdateAction(this, new MeetFamily(this, "")));
 		//ChangeToTalkingState.AddAction(new NPCAddScheduleAction(this, testSchedule));
-		flagReactions.Add(FlagStrings.FinishMusicianConvo, ChangeToTalkingState);
+		flagReactions.Add(FlagStrings.MoveToMusician, ChangeToTalkingState);
 		
 		//Schedule to start the castleman following the player when he is friends
 		Reaction FriendsWithPlayer = new Reaction ();
@@ -42,6 +43,24 @@ public class CastlemanYoung : NPC {
 		NOTFriendsWithPlayer.AddAction(new NPCAddScheduleAction(this, CastleManFollowSchedule));
 		NOTFriendsWithPlayer.AddAction(new NPCEmotionUpdateAction(this, new CastleManTraveling(this, "")));
 		flagReactions.Add(FlagStrings.PlayerAndCastleNOTFriends, NOTFriendsWithPlayer);
+		
+		Reaction AfterIntroConversationNOTFriendsCarpenterSon = new Reaction();
+		AfterIntroConversationNOTFriendsCarpenterSon.AddAction(new NPCEmotionUpdateAction(this, new VisitCarpenterSonNotAsFriend(this, "")));
+		flagReactions.Add(FlagStrings.FinishedInitialConversationWithCSONNOTFriend, AfterIntroConversationNOTFriendsCarpenterSon);
+		
+		Reaction AfterSecondConversationNOTFriendsCarpenterSon = new Reaction ();
+		AfterSecondConversationNOTFriendsCarpenterSon.AddAction(new NPCEmotionUpdateAction(this, new TalkWithCarpenterSonNotAsFriendRoundTwo(this, "")));
+		flagReactions.Add(FlagStrings.FinishedSecondConversationWithCSONNOTFriend, AfterSecondConversationNOTFriendsCarpenterSon);
+		
+		Reaction ReadyForBeachNOTAsFriends = new Reaction ();
+		ReadyForBeachNOTAsFriends.AddAction(new NPCEmotionUpdateAction(this, new WaitingAtBeachNotAsFriend(this, "")));
+		//Add in a new schedule here!
+		flagReactions.Add(FlagStrings.BeachBeforeConvoFriendsString, ReadyForBeachNOTAsFriends);
+		
+		
+		Reaction TalkWithLighthouseFirstTime = new Reaction();
+		TalkWithLighthouseFirstTime.AddAction(new NPCAddScheduleAction(this, CastleManMeetsLighthouse));
+		flagReactions.Add(FlagStrings.StartTalkingToLighthouse, TalkWithLighthouseFirstTime);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
@@ -56,9 +75,12 @@ public class CastlemanYoung : NPC {
 	}
 
 	protected override void SetUpSchedules(){
-		CastleManFollowSchedule = new Schedule(this);
+		CastleManFollowSchedule = new Schedule(this, Schedule.priorityEnum.High);
 		CastleManFollowSchedule.Add(new Task(new FollowObjectState(this, player.gameObject)));
 		CastleManFollowSchedule.Add(new TimeTask(2f, new IdleState(this)));
+		
+		CastleManMeetsLighthouse = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.LighthouseGirlYoung), 
+			new CastleManToLighthouseFirstMeeting(),Schedule.priorityEnum.DoNow);
 	}
 	
 
@@ -399,18 +421,18 @@ public class CastlemanYoung : NPC {
 			
 			ItsBecauseYourStupidChoice = new Choice ("It's because you're stupid.","I trusted you...I'm not going to make that mistake again...");
 			ItsBecauseYourStupidReaction = new Reaction();
-			ImSorryReaction.AddAction(new NPCCallbackAction(UpdateItsBecauseYourStupid));
-			ImSorryReaction.AddAction(new UpdateCurrentTextAction(toControl, "I trusted you...I'm not going to make that mistake again..."));
+			ItsBecauseYourStupidReaction.AddAction(new NPCCallbackAction(UpdateItsBecauseYourStupid));
+			ItsBecauseYourStupidReaction.AddAction(new UpdateCurrentTextAction(toControl, "I trusted you...I'm not going to make that mistake again..."));
 			
 			ImReallyReallySorryChoice = new Choice ("I'm really really sorry.", "");
 			ImReallyReallySorryReaction = new Reaction();
-			ImSorryReaction.AddAction(new NPCCallbackAction(UpdateImReallyReallySorry));
-			ImSorryReaction.AddAction(new UpdateCurrentTextAction(toControl, ""));
+			ImReallyReallySorryReaction.AddAction(new NPCCallbackAction(UpdateImReallyReallySorry));
+			ImReallyReallySorryReaction.AddAction(new UpdateCurrentTextAction(toControl, ""));
 			
 			YouGotMeIWasLyingChoice = new Choice ("You got me!\nI was lying.", "I trusted you...I'm not going to make that mistake again...");
 			YouGotMeIWasLyingReaction = new Reaction();
-			ImSorryReaction.AddAction(new NPCCallbackAction(UpdateYouGotMeIWasLying));
-			ImSorryReaction.AddAction(new UpdateCurrentTextAction(toControl, "I trusted you...I'm not going to make that mistake again..."));
+			YouGotMeIWasLyingReaction.AddAction(new NPCCallbackAction(UpdateYouGotMeIWasLying));
+			YouGotMeIWasLyingReaction.AddAction(new UpdateCurrentTextAction(toControl, "I trusted you...I'm not going to make that mistake again..."));
 		}
 		public void UpdateWhatDoYouLikeToDo(){
 			if (_allChoiceReactions.ContainsKey(WhereDidYouUseToLiveChoice)){
@@ -522,12 +544,15 @@ public class CastlemanYoung : NPC {
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("You should apologize!");
 		}
+		//Ending one here
 		public void UpdateItsBecauseYourStupid(){
 			_allChoiceReactions.Remove(ImSorryChoice);
 			_allChoiceReactions.Remove(ItsBecauseYourStupidChoice);
 			GUIManager.Instance.RefreshInteraction();
+			GUIManager.Instance.CloseInteractionMenu();
 			SetDefaultText("I hate you!");
-			//This is where we add a flag update?
+			FlagManager.instance.SetFlag(FlagStrings.PlayerAndCastleNOTFriends);
+			Debug.Log ("This is where the bug is happening.");
 		}
 		public void UpdateImReallyReallySorry(){
 			_allChoiceReactions.Remove(YouGotMeIWasLyingChoice);
@@ -536,12 +561,13 @@ public class CastlemanYoung : NPC {
 			SetDefaultText("I guess I believe you...");
 			FriendshipTally += 1;
 		}
+		//Ending one here.
 		public void UpdateYouGotMeIWasLying(){
 			_allChoiceReactions.Remove(YouGotMeIWasLyingChoice);
 			_allChoiceReactions.Remove(ImReallyReallySorryChoice);
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("I hate you!");
-			//Flag update goes here!!!!!!!
+			FlagManager.instance.SetFlag(FlagStrings.PlayerAndCastleNOTFriends);
 		}
 		public override void UpdateEmotionState(){
 			

@@ -7,6 +7,7 @@ using System.Collections;
 public class LighthouseGirlYoung : NPC {
 	InitialEmotionState initialState;
 	JesterEmotionState jesterState;
+	Schedule TalkWithCastleman;
 	protected override void Init() {
 		id = NPCIDs.LIGHTHOUSE_GIRL;
 		base.Init();
@@ -17,8 +18,16 @@ public class LighthouseGirlYoung : NPC {
 		TellOnLighthouseReaction.AddAction(new ShowOneOffChatAction(this, "Git over here girl.", 2f));
 		TellOnLighthouseReaction.AddAction(new NPCAddScheduleAction(this, tellOnLighthouseConversationSchedule));
 		flagReactions.Add(FlagStrings.TellOnLighthouseConversation, TellOnLighthouseReaction);
+		
+		Reaction ReactToCastleMan = new Reaction();
+		ReactToCastleMan.AddAction(new NPCAddScheduleAction(this, TalkWithCastleman));
+		flagReactions.Add(FlagStrings.PlayerAndCastleFriends , ReactToCastleMan);
+		
+		Reaction ReactToCastleManNotFriends = new Reaction();
+		ReactToCastleManNotFriends.AddAction(new NPCAddScheduleAction(this, TalkWithCastleman));
+		flagReactions.Add(FlagStrings.PlayerAndCastleNOTFriends , ReactToCastleManNotFriends);
+		
 	}
-	
 	protected override EmotionState GetInitEmotionState(){
 		initialState = new InitialEmotionState(this, "So my mom wants me to learn how to cook...but I'm gonna grow up to be a great warrior, not a cook! Get some kind of cooked food and I'll reward you!");
 		jesterState = new JesterEmotionState(this, "Your sibling says you are a court jester! i demand that you tell me stories!");
@@ -33,6 +42,11 @@ public class LighthouseGirlYoung : NPC {
 	protected override void SetUpSchedules(){
 		tellOnLighthouseConversationSchedule = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.LighthouseGirlYoung), 
 			new YoungFarmerMotherToLighthouseGirlToldOn(),Schedule.priorityEnum.High);
+		TalkWithCastleman = new Schedule (this, Schedule.priorityEnum.DoNow);
+		Task setFlag = (new Task(new MoveThenDoState(this, this.gameObject.transform.position, new MarkTaskDone(this))));
+		setFlag.AddFlagToSet(FlagStrings.StartTalkingToLighthouse);
+		TalkWithCastleman.Add(setFlag);
+		TalkWithCastleman.Add(new TimeTask(30, new WaitTillPlayerCloseState(this, player)));
 		
 	}
 	

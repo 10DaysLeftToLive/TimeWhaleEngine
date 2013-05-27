@@ -126,5 +126,7 @@ public static class FlagStrings {
 	public static string BeachPreparedForConvo = "Beach Prepared for Conversation.";
 	public static string BeachAfterConvoGood = "Beach After Conversation good.";
 	public static string BeachAfterConvoBad = "Beach after conversation bad.";
+	
+	public static string StartTalkingToLighthouse = "Start talking to lighthouse.";
 	#endregion
 }
