@@ -225,12 +225,14 @@ public class MoveState : AbstractState {
     }
     
     public virtual void OnStuck(){
-        Debug.Log(character.name + " got stuck.");
+        SoundManager.instance.StopWalkSFX();
+		
         currentMovementState.OnStuck();
     }
     
     private void OnNoPath(){
-        Debug.Log(character.name + " could not find a path. Returning to idle");
+        SoundManager.instance.StopWalkSFX();
+		
         currentMovementState.OnGoalReached();
     }
     
