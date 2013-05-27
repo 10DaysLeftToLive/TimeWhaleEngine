@@ -21,12 +21,15 @@ public class LighthouseGirlMiddle : NPC {
 	
 	protected override void CharacterUpdate ()
 	{
-		if (waitingOnDateTimer && !dateOver)
+		if (waitingOnDateTimer && !dateOver){
 			time -= Time.deltaTime;
+			Debug.Log(time);
 			if (time < 0 && !dateOver){
 				FlagManager.instance.SetFlag(FlagStrings.EndOfDate);
 				dateOver = true;
+				this.RemoveScheduleWithFlag("a");
 			}
+		}
 		
 		base.CharacterUpdate ();
 	}
@@ -112,15 +115,16 @@ public class LighthouseGirlMiddle : NPC {
 		openningWaitingSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
 		openningWaitingSchedule.Add(new TimeTask(30, new WaitTillPlayerCloseState(this, player)));	
 		
-		backToFarmSchedule = new Schedule(this, Schedule.priorityEnum.High);
+		backToFarmSchedule = new Schedule(this, Schedule.priorityEnum.Medium);
 		backToFarmSchedule.Add(new TimeTask(8f, new IdleState(this)));
-		backToFarmSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (62, 67, .5f), new MarkTaskDone(this))));
+		backToFarmSchedule.Add(new Task(new MoveThenDoState(this, new Vector3(startingPosition.x, startingPosition.y, .5f), new MarkTaskDone(this))));
 		
 		ropeDownSchedule = new Schedule(this, Schedule.priorityEnum.High);
 		ropeDownSchedule.Add(new TimeTask(30, new WaitTillPlayerGoneState(this, player)));
-		Task setFlag = new Task( new MoveThenDoState(this, new Vector3 (startingPosition.x, startingPosition.y +50, .5f), new MarkTaskDone(this)));
+		Task setFlag = new Task( new MoveThenDoState(this, new Vector3 (startingPosition.x, startingPosition.y, .5f), new MarkTaskDone(this)));
 		setFlag.AddFlagToSet(FlagStrings.WaitingForDate);
 		ropeDownSchedule.Add(setFlag);
+		ropeDownSchedule.AddFlagGroup("a");
 		
 		/*waitingOnDate = new Schedule(this, Schedule.priorityEnum.High);
 		waitingOnDate.Add(new TimeTask(dateTime, new IdleState(this)));
@@ -145,7 +149,7 @@ public class LighthouseGirlMiddle : NPC {
 	
 	protected void WaitingOnDate(){
 		waitingOnDateTimer = true;
-		time = 50;
+		time = 30;
 	}
 	
 	protected void DateSuccess(){
@@ -384,6 +388,9 @@ public class LighthouseGirlMiddle : NPC {
 			
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Promise you don't tell anyone about this?");
+			
+			FlagManager.instance.SetFlag(FlagStrings.CastleDate);	//test
+			FlagManager.instance.SetFlag(FlagStrings.WaitForPlayerBeforeRope); //test
 		}
 		public void MarriageResponse(){	
 			_allChoiceReactions.Remove(PlanChoice);
