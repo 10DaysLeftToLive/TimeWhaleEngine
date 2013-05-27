@@ -5,6 +5,16 @@ using System.Collections;
 /// CastlemanMiddle specific scripting values
 /// </summary>
 public class CastlemanMiddle : NPC {
+	CarpenterFight carpenterFightState;
+	DateSuccess dateSuccessState;
+	MarriedCarpenter marriedCarpenterState;
+	InitialEmotionState initialState;
+	SaneState saneState;
+	Date dateState;
+	StoodUp stoodUpState;
+	bool carpenterDateSuccess = false;
+	bool dateForMe = false;
+	bool successfulDate = false;
 	protected override void Init() {
 		id = NPCIDs.CASTLE_MAN;
 		base.Init();
@@ -12,22 +22,81 @@ public class CastlemanMiddle : NPC {
 	
 	protected override void SetFlagReactions(){
 		Reaction notInsane = new Reaction();
-		notInsane.AddAction(new NPCEmotionUpdateAction(this, new SaneState(this, "")));
+		notInsane.AddAction(new NPCEmotionUpdateAction(this, saneState));
 		flagReactions.Add(FlagStrings.NotInsane, notInsane);
+		
+		Reaction waitingForDate = new Reaction();
+		waitingForDate.AddAction(new NPCEmotionUpdateAction(this, dateState));
+		flagReactions.Add(FlagStrings.WaitingForDate, waitingForDate);
+		
+		Reaction datingThyEnemy = new Reaction();
+		datingThyEnemy.AddAction(new NPCCallbackAction(setFlagCarpenterDateSuccess));
+		datingThyEnemy.AddAction(new NPCEmotionUpdateAction(this, marriedCarpenterState));
+		flagReactions.Add(FlagStrings.PostDatingCarpenter, datingThyEnemy);
+		
+		Reaction gotTheGirl = new Reaction();
+		gotTheGirl.AddAction(new NPCEmotionUpdateAction(this, dateSuccessState));
+		flagReactions.Add(FlagStrings.PostCastleDate, gotTheGirl);
+		
+		Reaction iBeDating = new Reaction();
+		iBeDating.AddAction(new NPCCallbackAction(setFlagDateForMe));
+		flagReactions.Add(FlagStrings.CastleDate, iBeDating);
+		
+		Reaction endOfDate = new Reaction();
+		endOfDate.AddAction(new NPCCallbackAction(dateOver));
+		flagReactions.Add(FlagStrings.EndOfDate, endOfDate);
+		
+		Reaction stoodUpLG = new Reaction();
+		stoodUpLG.AddAction(new NPCEmotionUpdateAction(this, stoodUpState));
+		flagReactions.Add(FlagStrings.CastleManNoShow, stoodUpLG);
+		
+		Reaction moveToDate = new Reaction();
+		moveToDate.AddAction(new NPCAddScheduleAction(this, dateWithLG));
+		moveToDate.AddAction(new NPCAddScheduleAction(this, moveToBeach));
+		flagReactions.Add(FlagStrings.CastleManDating, moveToDate);
 		
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "Are you looking for a Castle too?"));
+		initialState = new InitialEmotionState(this, "Are you looking for a Castle too?");
+		dateSuccessState = new DateSuccess(this, "");
+		marriedCarpenterState = new MarriedCarpenter(this, "");
+		carpenterFightState = new CarpenterFight(this, "");
+		stoodUpState = new StoodUp(this, "");
+		saneState = new SaneState(this, "");
+		dateState = new Date(this, "");
+		return (initialState);
 	}
-	
 	protected override Schedule GetSchedule(){
 		Schedule schedule = new DefaultSchedule(this);
 		return (schedule);
 	}
-
+	Schedule moveToBeach;
+	NPCConvoSchedule dateWithLG;
 	protected override void SetUpSchedules(){
 		
+		moveToBeach = new Schedule(this, Schedule.priorityEnum.DoNow);
+		moveToBeach.Add(new Task(new MoveThenDoState(this, new Vector3 (60,44.5f,.5f), new MarkTaskDone(this))));
+		
+		dateWithLG =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.LighthouseGirlMiddle),
+			new MiddleCastleManToLighthouseGirl(), Schedule.priorityEnum.DoNow); 
+		dateWithLG.SetCanNotInteractWithPlayer();
+	}
+	
+	protected void dateOver(){
+		if (dateForMe)
+			FlagManager.instance.SetFlag(FlagStrings.CastleManNoShow);
+	}
+	
+	protected void setFlagDateForMe(){
+		dateForMe = true;
+	}
+	
+	protected void setFlagCarpenterDateSuccess(){
+		carpenterDateSuccess = true;
+	}
+	
+	protected void letCastleManKnowOfDate(){
 	}
 	
 	
@@ -118,12 +187,10 @@ public class CastlemanMiddle : NPC {
 		Choice SayChoice = new Choice("What does it say?", "It's never right.  I mean look at this: 'Roses are red'?  How pedestrian can you get?  The farmer's daughter will never like me with garbage like that...");
 		Choice WhatWritingChoice = new Choice("What are you writing?","It's a love letter for the farmer's daughter...it's just all wrong.  I mean 'Roses are red'?  So simplistic.");
 		Choice JudgeItChoice = new Choice("Have you tried letting her judge it?","But what if its not perfect? Hold on.  Maybe you have a point.  Here, you try and deliver it to her.  The farmer never lets me anywhere near her daughter.");
-		Choice DateChoice = new Choice("You have a date!", "Really? This...this...this is the most beauteous day of my life! Hurry to the beach. I cannot tarry!");
 		
 		Reaction SayReaction = new Reaction();
 		Reaction WhatWritingReaction = new Reaction();
-		Reaction JudgeItReaction = new Reaction();
-		Reaction DateReaction = new Reaction();		
+		Reaction JudgeItReaction = new Reaction();		
 		
 		NPC control;
 		public SaneState (NPC toControl, string currentDialogue): base(toControl, "Hello good sir!  Could you read this note for me?  Wait...never mind.  Its never going to be good enough..."){
@@ -155,8 +222,29 @@ public class CastlemanMiddle : NPC {
 		}
 	}
 	
+	private class Date: EmotionState{
+		Choice DateChoice = new Choice("You have a date!", "Really? This...this...this is the most beauteous day of my life! Hurry to the beach. I cannot tarry!");
+		
+		Reaction DateReaction = new Reaction();
+		
+		bool flagSet = false;
+		public Date (NPC toControl, string currentDialogue):base (toControl, "Have you delievered the letter yet?"){
+			_allChoiceReactions.Clear();
+			
+			DateReaction.AddAction(new NPCCallbackAction(DateResponse));
+			_allChoiceReactions.Add(DateChoice, new DispositionDependentReaction(DateReaction));
+		}
+		
+		public void DateResponse(){
+			if (!flagSet){
+				FlagManager.instance.SetFlag(FlagStrings.CastleManDating);
+			}
+		}
+		
+	}
+	
 	private class StoodUp: EmotionState{
-		public StoodUp (NPC toControl, string currentDialogue):base (toControl, currentDialogue){
+		public StoodUp (NPC toControl, string currentDialogue):base (toControl, "Why did you not tell me that the lighthouse girl wanted to meet. I would gladly have run there to meet with her at a moment's notice. Now all has been lost!"){
 			
 		}
 	}

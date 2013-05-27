@@ -8,7 +8,9 @@ public class LighthouseGirlMiddle : NPC {
 	InitialEmotionState initialState;
 	ProMarriageEmotionState marriageState;
 	AntiMarriageEmotionState noMarriageState;
+	StoodUpEmotionState stoodUpState;
 	Vector3 startingPosition;
+	bool successfulDate= false;
 	protected override void Init() {
 		id = NPCIDs.LIGHTHOUSE_GIRL;
 		base.Init();
@@ -37,6 +39,14 @@ public class LighthouseGirlMiddle : NPC {
 		flagReactions.Add(FlagStrings.NotInsane, castleboyNotInsane);
 		
 		#region date
+		Reaction dateCarpenterNotified = new Reaction();
+		dateCarpenterNotified.AddAction(new NPCCallbackAction(DateSuccess));
+		flagReactions.Add(FlagStrings.CarpenterDating, dateCarpenterNotified);
+		
+		Reaction dateCastleManNotified = new Reaction();
+		dateCastleManNotified.AddAction(new NPCCallbackAction(DateSuccess));
+		flagReactions.Add(FlagStrings.CastleManDating, dateCastleManNotified);
+		
 		Reaction waitForPlayer = new Reaction();
 		waitForPlayer.AddAction(new NPCAddScheduleAction(this, ropeDownSchedule));
 		flagReactions.Add(FlagStrings.WaitForPlayerBeforeRope, waitForPlayer);
@@ -52,6 +62,10 @@ public class LighthouseGirlMiddle : NPC {
 		endOfDate.AddAction(new NPCCallbackAction(SendDateOverToState));
 		flagReactions.Add(FlagStrings.EndOfDate, endOfDate);
 		
+		Reaction stoodUp = new Reaction();
+		stoodUp.AddAction(new NPCEmotionUpdateAction(this, stoodUpState));
+		flagReactions.Add(FlagStrings.StoodUp, stoodUp);
+		
 		#endregion
 	}
 	
@@ -59,6 +73,7 @@ public class LighthouseGirlMiddle : NPC {
 		initialState = new InitialEmotionState(this, "Hi!  Would you mind helping me out?  I need to get out of my arranged marriage, but need help with distracting my mom to make it work!");
 		marriageState = new ProMarriageEmotionState(this, "");
 		noMarriageState = new AntiMarriageEmotionState(this, "");
+		stoodUpState = new StoodUpEmotionState(this, "");
 		startingPosition = transform.position;
 		startingPosition.y += LevelManager.levelYOffSetFromCenter;
 		this.transform.position = new Vector3(200,0,0);
@@ -92,10 +107,10 @@ public class LighthouseGirlMiddle : NPC {
 		
 		waitingOnDate = new Schedule(this, Schedule.priorityEnum.High);
 		waitingOnDate.Add(new TimeTask(dateTime, new IdleState(this)));
-		Task dateTimer = new Task( new MoveThenDoState(this, new Vector3 (startingPosition.x, startingPosition.y +50,.5f), new MarkTaskDone(this)));
+		Task dateTimer = new Task( new MoveThenDoState(this, new Vector3 (startingPosition.x, startingPosition.y,.5f), new MarkTaskDone(this)));
 		dateTimer.AddFlagToSet(FlagStrings.EndOfDate);
 		waitingOnDate.Add(dateTimer);
-		waitingOnDate.Add(new TimeTask(.2f, new IdleState(this)));
+		waitingOnDate.Add(new TimeTask(8f, new IdleState(this)));
 		
 		postOpenningSchedule =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerMotherMiddle),
 			new MiddleFarmerMotherToLighthouseGirl(), Schedule.priorityEnum.High); 
@@ -109,6 +124,10 @@ public class LighthouseGirlMiddle : NPC {
 			new MiddleLighthouseGirlCastleManMarriage(), Schedule.priorityEnum.High); 
 		marriageToCastleManSchedule.SetCanNotInteractWithPlayer();
 		
+	}
+	
+	protected void DateSuccess(){
+		successfulDate = true;	
 	}
 	
 	protected void ResetPosition(){
@@ -125,12 +144,15 @@ public class LighthouseGirlMiddle : NPC {
 	
 	protected void SendDateOverToState(){
 		Debug.Log("date over");
-		if (initialState.carpenterPath){ //date success with carpenter
+		if (initialState.carpenterPath && successfulDate){ //date success with carpenter
 			FlagManager.instance.SetFlag(FlagStrings.PostDatingCarpenter);
 			marriageState.PassStringToEmotionState("carpenter");
-		}else { //date success with castleboy
+		}else if (successfulDate){ //date success with castleboy
 			FlagManager.instance.SetFlag(FlagStrings.PostCastleDate);
 			marriageState.PassStringToEmotionState("castleboy");
+		}else {
+			Debug.Log("lighthouse girl stoodup!");
+			FlagManager.instance.SetFlag(FlagStrings.StoodUp);
 		}
 
 	}
@@ -154,7 +176,7 @@ public class LighthouseGirlMiddle : NPC {
 		Choice CarpenterChoice = new Choice("Carpenter's Son", "Oh. Him...I'm shocked he could even muster up the ability to write two words, much less this letter.");
 		Choice CastleManChoice = new Choice("Castle man", "If you're seeing this...you have entered..the twilight zone!!!");
 		Choice NotBadChoice = new Choice("He's not THAT bad...", "Hmmph. Yeah right! He's just a thick headed barbarian, just like Genghis Khan in all of the stories I've read. I'll have nothing to do with him!");
-		Choice YourRightChoice = new Choice("You're right", "If you're seeing this...you have entered..the twilight zone!!!");
+		Choice YourRightChoice = new Choice("You're right", "Such a nice letter.");
 		Choice TalkedChoice = new Choice("Have you even talked with him?", "No...But I'm sure that I'm right! My books have never proved me worng! In fact if you help me find a way to sneak out without my parents seeing, I'll prive it to you!");
 		
 		Reaction GoOnReaction = new Reaction();
@@ -243,11 +265,13 @@ public class LighthouseGirlMiddle : NPC {
 			SetDefaultText("ARRGGHH. I can't believe that didn't work. I've tried everything to get out of this! Why can't it just be like in the stories where the hero always wins!");
 		}
 		public void RopeResponse(){
-			if (carpenterPath)
+			if (carpenterPath){
 				SetDefaultText("Tell the carpenter's son to meet me at the beach!");
-			else
+				FlagManager.instance.SetFlag(FlagStrings.CarpenterDate);
+			}else{
 				SetDefaultText("Tell the castleboy to meet me at the beach!");
-			
+				FlagManager.instance.SetFlag(FlagStrings.CastleDate);
+			}
 			if (!waitingDateFlag)
 				FlagManager.instance.SetFlag(FlagStrings.WaitForPlayerBeforeRope);
 				//FlagManager.instance.SetFlag(FlagStrings.WaitingForDate);
@@ -469,6 +493,40 @@ public class LighthouseGirlMiddle : NPC {
 			}
 		}
 		
+	}
+	
+	private class StoodUpEmotionState : EmotionState{
+		Reaction ToolsReaction = new Reaction();
+		Reaction randomMessage;
+		bool gaveTools = false;
+		public StoodUpEmotionState(NPC toControl, string currentDialogue) : base(toControl, "He stood me up! I can't believe it! That's what you get for trusting men. I'm definitely not going to marry now!"){
+		
+			ToolsReaction.AddAction(new NPCCallbackAction(ToolsResponse));
+			ToolsReaction.AddAction(new UpdateCurrentTextAction(toControl, "Everything's finished! Time to put this plan into effect!"));
+			ToolsReaction.AddAction(new NPCTakeItemAction(toControl));
+			
+			_allItemReactions.Add(StringsItem.Toolbox, new DispositionDependentReaction(ToolsReaction));
+			
+			//randomMessage.AddAction(new NPCCallbackAction(RandomMessage));
+			//SetOnOpenInteractionReaction(new DispositionDependentReaction(randomMessage));
+			
+		}
+		
+		public void RandomMessage(){
+			SetDefaultText("Get me some tools so I can sabotage this marriage!");
+		}
+		
+		public void ToolsResponse(){
+			_allChoiceReactions.Clear();
+			
+			if (!gaveTools){
+				gaveTools = true;
+				FlagManager.instance.SetFlag(FlagStrings.ToolsToGirl);
+			}
+			GUIManager.Instance.RefreshInteraction();
+			SetDefaultText("ARRGGHH. I can't believe that didn't work. I've tried everything to get out of this! Why can't it just be like in the stories where the hero always wins!");
+		}
+
 	}
 	
 	private class GoneEmotionState : EmotionState{

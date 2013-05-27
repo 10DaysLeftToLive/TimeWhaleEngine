@@ -43,6 +43,8 @@ public static class FlagStrings {
 	public static string gaveFishingRodToCarpenterSon = "Gave Fishingrod to Carpenter Son";
 	public static string carpenterSonStormOff = "Carpenter Son Storms Off";
 	public static string carpenterSonReconcile = "Carpenter Son Reconcile";
+	
+	public static string CarpenterDating = "Carpenter dating";
 	#endregion
 	
 	#region CastleMan Only
@@ -51,11 +53,14 @@ public static class FlagStrings {
 	public static string PostSavingLighthouseGirl = "Post Saving Lighthouse Girl";
 	public static string InsaneIntroConvo = "Insane Introduction Conversation";
 	public static string PostInsaneIntroConvo = "Post Insane Introduction Conversation";
+	
+	public static string CastleManDating = "Castleman dating";
+	public static string CastleManNoShow = "Castleman no show";
 	#endregion
 	
 	#region Lighthouse Girl
 	public static string MarryingCarpenter = "Marrying Carpenter";
-	public static string DatingCarpenter = "Dating Carpenter";
+	public static string CarpenterDate = "Carpenter Date";
 	public static string PostDatingCarpenter = "Post Dating Carpenter";
 	public static string StoodUp = "Stood Up";
 	public static string NoMarriage = "No Marriage";
