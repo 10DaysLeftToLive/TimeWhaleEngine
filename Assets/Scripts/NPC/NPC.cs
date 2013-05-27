@@ -73,7 +73,6 @@ public abstract class NPC : Character {
 	#region Update
 	protected override void CharacterUpdate(){
 		if (chatingWithPlayer && !NearPlayerToChat()){
-			CloseChat();
 			StopTalkingWithPlayer();
 		}
 		scheduleStack.Run(Time.deltaTime);
@@ -118,7 +117,6 @@ public abstract class NPC : Character {
 	
 	private void StopTalkingWithPlayer(){
 		GUIManager.Instance.CloseInteractionMenu();
-		LeaveInteraction();
 	}
 	
 	public void StarTalkingWithPlayer(){

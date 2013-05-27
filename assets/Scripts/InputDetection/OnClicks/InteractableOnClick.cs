@@ -13,7 +13,11 @@ public class InteractableOnClick : OnClickNextToPlayer {
 	}
 	
 	protected virtual void InteractWithPlayer(){
-		player.EnterState(new PickUpItemState(player, this.gameObject));
+		if (player.Inventory.HasItem() && player.Inventory.GetItem() == this.gameObject){
+			player.EnterState(new DropItemState(player));
+		} else {
+			player.EnterState(new PickUpItemState(player, this.gameObject));
+		}
 	}
 	
 	public void Enable(){

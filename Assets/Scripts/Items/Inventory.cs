@@ -19,7 +19,7 @@ public class Inventory {
 			
 			toPickUp.transform.position = new Vector3(rightHandTransform.position.x, 
 													  rightHandTransform.position.y, 
-													  rightHandTransform.position.z);
+													  0);
 			
 			
 			toPickUp.transform.parent = rightHandTransform;
