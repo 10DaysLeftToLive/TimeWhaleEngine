@@ -99,6 +99,7 @@ public static class FlagStrings {
 	
 	#region CastleMan
 	public static string ConvinceToTalkWithCarpenterSonRoundOne = "Talk CSON Round One.";
+	public static string FinishedCSONConversation = "Finished Carpenter Son conversation";
 	public static string FinishedLightHouseConversation = "Finished lighthouse conversation.";
 	public static string FinishedBothConversations = "Finished Lighthouse and Carpenter's Son conversations.";
 	
@@ -124,6 +125,7 @@ public static class FlagStrings {
 	public static string BeachBeforeConvoFriendsString = "Beach before conversation friends.";
 	public static string BeachBeforeConvoNotFriendsString = "Beach before conversation not as friends.";
 	public static string BeachPreparedForConvo = "Beach Prepared for Conversation.";
+	public static string BeachNotPreparedForConvo = "Beach not prepared for conversation";
 	public static string BeachAfterConvoGood = "Beach After Conversation good.";
 	public static string BeachAfterConvoBad = "Beach after conversation bad.";
 	

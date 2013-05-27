@@ -42,11 +42,12 @@ public class LighthouseGirlYoung : NPC {
 	protected override void SetUpSchedules(){
 		tellOnLighthouseConversationSchedule = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.LighthouseGirlYoung), 
 			new YoungFarmerMotherToLighthouseGirlToldOn(),Schedule.priorityEnum.High);
-		TalkWithCastleman = new Schedule (this, Schedule.priorityEnum.DoNow);
+		TalkWithCastleman = new Schedule (this, Schedule.priorityEnum.High);
+		TalkWithCastleman.Add(new TimeTask(30, new WaitTillPlayerCloseState(this, player)));
 		Task setFlag = (new Task(new MoveThenDoState(this, this.gameObject.transform.position, new MarkTaskDone(this))));
 		setFlag.AddFlagToSet(FlagStrings.StartTalkingToLighthouse);
 		TalkWithCastleman.Add(setFlag);
-		TalkWithCastleman.Add(new TimeTask(30, new WaitTillPlayerCloseState(this, player)));
+		//TalkWithCastleman.Add(new TimeTask(300, new WaitTillPlayerCloseState(this, player)));
 		
 	}
 	
