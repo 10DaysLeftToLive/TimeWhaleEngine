@@ -50,11 +50,11 @@ public class MotherYoung : NPC {
 		
 		Reaction moveToMusicianReaction = new Reaction();
 		moveToMusicianReaction.AddAction(new ShowOneOffChatAction(this, "Follow me. They live up here.", 3f));
-		//moveToMusicianReaction.AddAction(new NPCAddScheduleAction(this, moveToMusicianSchedule));
-		moveToMusicianReaction.AddAction(new NPCAddScheduleAction(this, new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.MusicianYoung), 
-			new YoungFarmerMotherToFarmerFatherOpenningScriptedDialogue(),Schedule.priorityEnum.DoNow)));
-		flagReactions.Add(FlagStrings.MoveToMusician, moveToMusicianReaction);
-		
+		NPCConvoSchedule momToMusician = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.MusicianYoung), new YoungFarmerMotherToFarmerFatherOpenningScriptedDialogue(),Schedule.priorityEnum.DoNow);
+		momToMusician.SetCanNotInteractWithPlayer();
+		moveToMusicianReaction.AddAction(new NPCAddScheduleAction(this, moveToMusicianSchedule));
+		moveToMusicianReaction.AddAction(new NPCAddScheduleAction(this, momToMusician));
+		flagReactions.Add(FlagStrings.MoveToMusician, moveToMusicianReaction);		
 	}
 	#endregion
 	
@@ -313,7 +313,7 @@ public class MotherYoung : NPC {
 		public PieQuestState(NPC toControl) : base(toControl, "Let's bring the pie to our new neighbors! Follow me.") {
 			
 			moveToMusicianReaction.AddAction(new NPCCallbackAction(SetWalkToMusicianFlag));
-			SetOnOpenInteractionReaction(new DispositionDependentReaction(moveToMusicianReaction));
+			SetOnCloseInteractionReaction(new DispositionDependentReaction(moveToMusicianReaction));
 		}
 		
 		public void SetWalkToMusicianFlag() {
