@@ -170,14 +170,10 @@ public abstract class NPC : Character {
 	public void AddSchedule(Schedule scheduleToAdd){
 		// Special case since conversation schedules are shared
 		if (scheduleToAdd is NPCConvoSchedule) {
-			((NPCConvoSchedule)scheduleToAdd)._npcTwo.AddSharedSchedule((NPCConvoSchedule)scheduleToAdd);
+			((NPCConvoSchedule)scheduleToAdd).AddOtherNPCSchedule();
 		}
 		
 		scheduleStack.Add(scheduleToAdd);	
-	}
-	
-	public void AddSharedSchedule(NPCConvoSchedule scheduleToAdd){
-		scheduleStack.Add(scheduleToAdd);
 	}
 	
 	// Can be overriden by children. Is recomended to do this.
