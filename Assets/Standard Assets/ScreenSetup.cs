@@ -31,12 +31,12 @@ public class ScreenSetup {
 	
 	// will calulate the screen's width and height with respect to resolution changes
 	private static void CalulateScreenDimensions(){
-		screenWidth = Screen.width * ResolutionManager.scaleWidth;
-		screenHeight = Screen.height * ResolutionManager.scaleHeight;
+		screenWidth = Screen.width;// * ResolutionManager.scaleWidth;
+		screenHeight = Screen.height;// * ResolutionManager.scaleHeight;
 	}
 	
 	private static void CalculateBarSizes(){
-		verticalBarWidth = Screen.width * ResolutionManager.widthShift;
-		horizontalBarHeight = Screen.height * ResolutionManager.heightShift;
+		//verticalBarWidth = Screen.width * ResolutionManager.widthShift;
+		//horizontalBarHeight = Screen.height * ResolutionManager.heightShift;
 	}
 }
