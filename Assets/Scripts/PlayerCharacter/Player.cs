@@ -48,12 +48,14 @@ public class Player : Character {
 			EnterState(new MoveState(this, pos)); // move normaly
 		} else if (currentState.GetType() == typeof(MoveState)){
 			((MoveState) currentState).UpdateGoal(pos);
-		} 
+		}
 		touchParticleEmitter.transform.localPosition = pos;
 		touchParticleEmitter.Play();
     }
 	
 	private void OnClickToInteract(EventManager EM, ClickedObjectArgs e){
+		if (currentState.GetType() == typeof(TalkState)) return;
+		
 		string tag = e.clickedObject.tag;
 		Vector3 goal = e.clickedObject.transform.position;
 		goal.z = this.transform.position.z;
@@ -62,6 +64,7 @@ public class Player : Character {
 			EnterState(new MoveThenDoState(this, goal, new PickUpItemState(this, e.clickedObject)));
 		} else if (tag == Strings.tag_NPC){
 			NPC toTalkWith = (NPC)e.clickedObject.gameObject.GetComponent<NPC>();
+			
 			Vector3 currentPos = this.transform.position;
 			Vector3 goalPosInfront = Utils.GetPointInfrontOf(currentPos, toTalkWith.gameObject);
 			EnterState(new MoveThenDoState(this, goalPosInfront, new TalkState(this, toTalkWith)));
