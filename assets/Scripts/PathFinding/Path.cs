@@ -42,10 +42,16 @@ public class Path {
 	}
 	
 	public Vector3 GetPoint(){
+		if (index > path.Length - 1)
+			return path[path.Length-1];
 		return path[index];	
 	}
 	
 	public Vector3 GetVectorDirection(){
+		if (index > path.Length - 1){
+			Debug.Log("path is over but you still want to move!");
+			return vectorDirection[path.Length-1];
+		}
 		return vectorDirection[index];	
 	}
 	
