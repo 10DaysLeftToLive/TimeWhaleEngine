@@ -12,9 +12,10 @@ public class FollowObjectState : MoveToObjectState {
 			if (isStanding) {
 				character.PlayAnimation(Strings.animation_walk);
 			}
+			base.Update();
+		} else {
+			OnGoalReached();
 		}
-		
-		base.Update();
 	}
 	
 	protected override void OnGoalReached(){
