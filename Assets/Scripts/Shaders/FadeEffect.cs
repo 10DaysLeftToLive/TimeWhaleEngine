@@ -17,10 +17,6 @@ public class FadeEffect : ShaderBase {
 	
 	#region FadePlaneEffects
 	
-	protected float alphaFadeValue = 1.0f;
-	
-	protected float fadeDirection = -1f;
-	
 	public GameObject fadePlane = null;
 	
 	protected bool fade = false;
@@ -107,12 +103,18 @@ public class FadeEffect : ShaderBase {
 	/// Performs actions when the finger has swiped down.
 	/// </summary>
 	protected virtual void OnDragDown() {
+		if (!isFading) {
+			DoFade();
+		}
 	}
 	
 	/// <summary>
 	/// Peforms actions when the finger has swiped up.
 	/// </summary>
 	protected virtual void OnDragUp() {
+		if (!isFading) {
+			DoFade();
+		}
 	}
 	
 	void OnRenderImage(RenderTexture source, RenderTexture destination) {
