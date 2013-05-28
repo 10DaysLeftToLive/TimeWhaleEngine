@@ -10,6 +10,9 @@ public class CastlemanYoung : NPC {
 		id = NPCIDs.CASTLE_MAN;
 		base.Init();
 	}
+	bool talkedToLighthouse = false;
+	bool talkedToCSON = false;
+	bool friends = false;
 	Schedule CastleManTalksFirstFriends;
 	Schedule CastleManTalksFirstNOTFriends;
 	Schedule CastleManFollowSchedule;
@@ -17,6 +20,7 @@ public class CastlemanYoung : NPC {
 	Schedule SetFinishedTalkingFlagForThirdConvoFriends;
 	Schedule SetFinishedTalkingFlagForSecondConvoNOTFriends;
 	Schedule SetFinishedTalkingFlagForThirdConvoNOTFriends;
+	Schedule CastlemanWalkToBeachSchedule;
 	NPCConvoSchedule CastleManMeetsLighthouse;
 	NPCConvoSchedule CastleManTalksToCSON;
 	NPCConvoSchedule CastleManTalksToCSONTwice;
@@ -38,6 +42,7 @@ public class CastlemanYoung : NPC {
 		Reaction FriendsWithPlayer = new Reaction ();
 		FriendsWithPlayer.AddAction(new NPCAddScheduleAction(this, CastleManFollowSchedule));
 		FriendsWithPlayer.AddAction(new NPCEmotionUpdateAction(this, new CastleManTraveling(this, "")));
+		FriendsWithPlayer.AddAction(new NPCCallbackAction(setFriends));
 		flagReactions.Add(FlagStrings.PlayerAndCastleFriends, FriendsWithPlayer);
 		
 		//Schedule to start talking to carpenter as friends
@@ -71,16 +76,19 @@ public class CastlemanYoung : NPC {
 		Reaction StartConversationThreeFriends = new Reaction ();
 		StartConversationThreeFriends.AddAction(new NPCAddScheduleAction(this, SetFinishedTalkingFlagForThirdConvoFriends));
 		StartConversationThreeFriends.AddAction(new NPCAddScheduleAction(this, CastleManTalksToCSONThrice));
+		StartConversationThreeFriends.AddAction(new NPCCallbackAction(testStartGoingToBeachAfterCarpenterSonTalk));
 		flagReactions.Add(FlagStrings.ThirdConvoWithCSONFriend, StartConversationThreeFriends);
 		//Moves the Castleman to the beach
 		//
 		Reaction ReadyForBeachFriends = new Reaction ();
 		ReadyForBeachFriends.AddAction(new NPCEmotionUpdateAction(this, new WaitingAtBeachFriend(this, "")));
 		//Add in a new schedule here!
+		ReadyForBeachFriends.AddAction(new NPCAddScheduleAction(this, CastlemanWalkToBeachSchedule));
 		flagReactions.Add(FlagStrings.BeachBeforeConvoFriendsString, ReadyForBeachFriends);
 		
 		#endregion
 		
+		#region NOT Friends with Castleman
 		//Schedule to start the Castleman following the player When not friends.
 		Reaction NOTFriendsWithPlayer = new Reaction ();
 		NOTFriendsWithPlayer.AddAction(new NPCCallbackAction(testFunction));
@@ -115,20 +123,55 @@ public class CastlemanYoung : NPC {
 		Reaction StartConversationThreeNOTFriends = new Reaction ();
 		StartConversationThreeNOTFriends.AddAction(new NPCAddScheduleAction(this, SetFinishedTalkingFlagForThirdConvoNOTFriends));
 		StartConversationThreeNOTFriends.AddAction(new NPCAddScheduleAction(this, CastleManTalksToCSONThrice));
+		StartConversationThreeNOTFriends.AddAction(new NPCCallbackAction(testStartGoingToBeachAfterCarpenterSonTalk));
 		flagReactions.Add(FlagStrings.ThirdConvoWithCSONNOTFriend, StartConversationThreeNOTFriends);
 		
 		Reaction ReadyForBeachNOTAsFriends = new Reaction ();
 		ReadyForBeachNOTAsFriends.AddAction(new NPCEmotionUpdateAction(this, new WaitingAtBeachNotAsFriend(this, "")));
 		//Add in a new schedule here!
+		ReadyForBeachNOTAsFriends.AddAction(new NPCAddScheduleAction(this, CastlemanWalkToBeachSchedule));
 		flagReactions.Add(FlagStrings.BeachBeforeConvoNotFriendsString, ReadyForBeachNOTAsFriends);
+		#endregion
+		/*Reaction FinishedWithCSON = new Reaction();
+		FinishedWithCSON.AddAction(new NPCCallbackAction(*/
 		
+		Reaction FinishedTalkingWithCSON = new Reaction ();
+		FinishedTalkingWithCSON.AddAction(new NPCCallbackAction(testStartGoingToBeachAfterCarpenterSonTalk));
+		flagReactions.Add(FlagStrings.FinishedCSONConversation, FinishedTalkingWithCSON);
 		
 		Reaction TalkWithLighthouseFirstTime = new Reaction();
 		TalkWithLighthouseFirstTime.AddAction(new NPCAddScheduleAction(this, CastleManMeetsLighthouse));
+		TalkWithLighthouseFirstTime.AddAction(new NPCEmotionUpdateAction(this, new AfterLighthouse(this, "")));
+		TalkWithLighthouseFirstTime.AddAction(new NPCCallbackAction(testStartGoingtoBeachAfterLighthouseTalk));
 		flagReactions.Add(FlagStrings.StartTalkingToLighthouse, TalkWithLighthouseFirstTime);
 		
 		
 		
+	}
+	public void setFriends(){
+		friends = true;	
+	}
+	public void testStartGoingToBeachAfterCarpenterSonTalk(){
+		talkedToCSON = true;
+		if(talkedToLighthouse == true){
+			if(friends == true){
+				FlagManager.instance.SetFlag(FlagStrings.BeachBeforeConvoFriendsString);
+			}
+			else{
+				FlagManager.instance.SetFlag(FlagStrings.BeachBeforeConvoNotFriendsString);
+			}
+		}
+	}
+	public void testStartGoingtoBeachAfterLighthouseTalk(){
+		talkedToLighthouse = true;
+		if(talkedToCSON == true){
+			if(friends == true){
+				FlagManager.instance.SetFlag(FlagStrings.BeachBeforeConvoFriendsString);
+			}
+			else{
+				FlagManager.instance.SetFlag(FlagStrings.BeachBeforeConvoNotFriendsString);
+			}
+		}
 	}
 	public void testFunction(){
 		Debug.Log("Test");
@@ -148,6 +191,10 @@ public class CastlemanYoung : NPC {
 		CastleManFollowSchedule = new Schedule(this, Schedule.priorityEnum.High);
 		CastleManFollowSchedule.Add(new TimeTask(2f, new IdleState(this)));
 		CastleManFollowSchedule.Add(new Task(new FollowObjectState(this, player.gameObject)));
+		
+		CastlemanWalkToBeachSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
+		CastlemanWalkToBeachSchedule.Add(new TimeTask(2f, new IdleState(this)));
+		CastlemanWalkToBeachSchedule.Add(new Task(new MoveThenMarkDoneState(this, MapLocations.MiddleOfBeachYoung)));
 		
 		
 		#region Friends
@@ -185,19 +232,25 @@ public class CastlemanYoung : NPC {
 		#region Conversations
 		CastleManMeetsLighthouse = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.LighthouseGirlYoung), 
 			new CastleManToLighthouseFirstMeeting(),Schedule.priorityEnum.DoConvo);
+		CastleManMeetsLighthouse.SetCanNotInteractWithPlayer();
 		
 		CastleManTalksToCSON = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterSonYoung), 
 			new CastleManToCarpenterFirstConvo(),Schedule.priorityEnum.DoConvo);
+		CastleManTalksToCSON.SetCanNotInteractWithPlayer();
 		CastleManTalksToCSONTwice = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterSonYoung), 
 			new CastleManToCarpenterSecondConvo(),Schedule.priorityEnum.DoConvo);
+		CastleManTalksToCSONTwice.SetCanNotInteractWithPlayer();
 		CastleManTalksToCSONThrice = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterSonYoung), 
 			new CastleManToCarpenterThirdConvo(),Schedule.priorityEnum.DoConvo);
+		CastleManTalksToCSONThrice.SetCanNotInteractWithPlayer();
 		
 		
 		CastleManTalksToLighthouseOnBeachFriends = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.LighthouseGirlYoung), 
 			new CastleManToLightHouseFriends(),Schedule.priorityEnum.DoConvo);
+		CastleManTalksToLighthouseOnBeachFriends.SetCanNotInteractWithPlayer();
 		CastleManTalksToLighthouseOnBeachNOTFriends = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.LighthouseGirlYoung), 
 			new CastlemanToLighthouseNotFriends(),Schedule.priorityEnum.DoConvo);
+		CastleManTalksToLighthouseOnBeachNOTFriends.SetCanNotInteractWithPlayer();
 		#endregion
 	}
 	
@@ -469,6 +522,8 @@ public class CastlemanYoung : NPC {
 		Reaction ImReallyReallySorryReaction;
 		Choice YouGotMeIWasLyingChoice;
 		Reaction YouGotMeIWasLyingReaction;
+		
+		
 		public MeetFamily(NPC toControl, string currentDialogue) : base(toControl, "Hey..."){
 			WhatDoYouLikeToDoChoice = new Choice("What do you like to do?", "I dunno...stuff.");
 			WhatDoYouLikeToDoReaction = new Reaction();
@@ -774,7 +829,7 @@ public class CastlemanYoung : NPC {
 		}
 		public void UpdateJustTalkAboutFish(){
 			if(_allChoiceReactions.ContainsKey(DontBeSoScaredChoice)){
-				_allChoiceReactions.Remove(JustTalkAboutFishChoice);	
+				_allChoiceReactions.Remove(DontBeSoScaredChoice);	
 			}
 			_allChoiceReactions.Remove(JustTalkAboutFishChoice);
 			_allChoiceReactions.Add(NotToHimChoice, new DispositionDependentReaction(NotToHimReaction));
@@ -1031,7 +1086,7 @@ public class CastlemanYoung : NPC {
 		}
 		public void UpdateJustTalkAboutFish(){
 			if(_allChoiceReactions.ContainsKey(WhyWouldIWantToTrickYouChoice)){
-				_allChoiceReactions.Remove(JustTalkAboutFishChoice);	
+				_allChoiceReactions.Remove(WhyWouldIWantToTrickYouChoice);	
 			}
 			_allChoiceReactions.Remove(JustTalkAboutFishChoice);
 			_allChoiceReactions.Add(JustTalkToHimChoice, new DispositionDependentReaction(JustTalkToHimReaction));
