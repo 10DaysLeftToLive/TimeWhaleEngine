@@ -257,6 +257,10 @@ public class FadeEffect : ShaderBase {
 	/// </param>
 	public virtual void DoFade() 
 	{
+        if (SoundManager.instance.AudioOn && SoundManager.instance.SFXOn)
+        {
+            SoundManager.instance.AgeTranstionSFX.Play();
+        }
 		isFading = true;
 		interpolationFactor = 0;
 		if (shaderNotSupported) {
