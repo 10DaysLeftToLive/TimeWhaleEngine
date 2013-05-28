@@ -152,33 +152,33 @@ public class CastlemanYoung : NPC {
 		
 		#region Friends
 		CastleManTalksFirstFriends = new Schedule(this, Schedule.priorityEnum.DoNow);
-		Task setFlagFriendsFirstConvo = (new Task(new MoveThenDoState(this, this.gameObject.transform.position, new MarkTaskDone(this))));
+		Task setFlagFriendsFirstConvo = (new TimeTask(2f, new IdleState(this)));
 		setFlagFriendsFirstConvo.AddFlagToSet(FlagStrings.FinishedInitialConversationWithCSONFriend);
 		CastleManTalksFirstFriends.Add(setFlagFriendsFirstConvo);
 		
 		SetFinishedTalkingFlagForSecondConvoFriends = new Schedule(this, Schedule.priorityEnum.DoNow);
-		Task setFlagFriendsSecondConvo = (new Task(new MoveThenDoState(this, this.gameObject.transform.position, new MarkTaskDone(this))));
+		Task setFlagFriendsSecondConvo = (new TimeTask(2f, new IdleState(this)));
 		setFlagFriendsSecondConvo.AddFlagToSet(FlagStrings.FinishedSecondConversationWithCSONFriend);
 		SetFinishedTalkingFlagForSecondConvoFriends.Add(setFlagFriendsSecondConvo);
 		
 		SetFinishedTalkingFlagForThirdConvoFriends = new Schedule(this, Schedule.priorityEnum.DoNow);
-		Task setFlagFriendsThirdConvo = (new Task(new MoveThenDoState(this, this.gameObject.transform.position, new MarkTaskDone(this))));
+		Task setFlagFriendsThirdConvo = (new TimeTask(2f, new IdleState(this)));
 		setFlagFriendsThirdConvo.AddFlagToSet(FlagStrings.FinishedThirdConvoWithCSONFriend);
 		SetFinishedTalkingFlagForThirdConvoFriends.Add(setFlagFriendsThirdConvo);
 		# endregion
 		#region NotFriends
 		CastleManTalksFirstNOTFriends = new Schedule(this, Schedule.priorityEnum.DoNow);
-		Task setFlagNOTFriendsFirstConvo = (new Task(new MoveThenDoState(this, this.gameObject.transform.position, new MarkTaskDone(this))));
+		Task setFlagNOTFriendsFirstConvo = (new TimeTask(2f, new IdleState(this)));
 		setFlagNOTFriendsFirstConvo.AddFlagToSet(FlagStrings.FinishedInitialConversationWithCSONNOTFriend);
 		CastleManTalksFirstNOTFriends.Add(setFlagNOTFriendsFirstConvo);
 		
 		SetFinishedTalkingFlagForSecondConvoNOTFriends = new Schedule(this, Schedule.priorityEnum.DoNow);
-		Task setFlagNOTFriendsSecondConvo = (new Task(new MoveThenDoState(this, this.gameObject.transform.position, new MarkTaskDone(this))));
+		Task setFlagNOTFriendsSecondConvo = (new TimeTask(2f, new IdleState(this)));
 		setFlagNOTFriendsSecondConvo.AddFlagToSet(FlagStrings.FinishedSecondConversationWithCSONNOTFriend);
 		SetFinishedTalkingFlagForSecondConvoNOTFriends.Add(setFlagNOTFriendsSecondConvo);
 		
 		SetFinishedTalkingFlagForThirdConvoNOTFriends = new Schedule(this, Schedule.priorityEnum.DoNow);
-		Task setFlagNOTFriendsThirdConvo = (new Task(new MoveThenDoState(this, this.gameObject.transform.position, new MarkTaskDone(this))));
+		Task setFlagNOTFriendsThirdConvo = (new TimeTask(2f, new IdleState(this)));
 		setFlagNOTFriendsThirdConvo.AddFlagToSet(FlagStrings.FinishedThirdConvoWithCSONNOTFriend);
 		SetFinishedTalkingFlagForThirdConvoNOTFriends.Add(setFlagNOTFriendsThirdConvo);
 		#endregion
