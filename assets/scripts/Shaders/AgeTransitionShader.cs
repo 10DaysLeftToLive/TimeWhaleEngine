@@ -26,6 +26,7 @@ public class AgeTransitionShader : FadeEffect {
 		if (levelManager == null) {
 			Debug.LogError("LevelManager not set in AgeTransitionShader");
 		}
+		AudioListener.volume = 0;
 		base.Initialize();
 	}
 	
