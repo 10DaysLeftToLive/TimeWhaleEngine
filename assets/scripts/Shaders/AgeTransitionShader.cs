@@ -26,6 +26,7 @@ public class AgeTransitionShader : FadeEffect {
 		if (levelManager == null) {
 			Debug.LogError("LevelManager not set in AgeTransitionShader");
 		}
+		AudioListener.volume = 0;
 		base.Initialize();
 	}
 	
@@ -38,7 +39,6 @@ public class AgeTransitionShader : FadeEffect {
 			DoAgeShift(Strings.ButtonAgeShiftDown);
 			DoFade();
 		}
-		base.OnDragDown();
 	}
 	
 	/// <summary>
@@ -50,7 +50,6 @@ public class AgeTransitionShader : FadeEffect {
 			DoAgeShift(Strings.ButtonAgeShiftUp);
 			DoFade();
 		}
-		base.OnDragUp();
 	}
 	
 	protected override void OnFadeStart(RenderTexture source) {
