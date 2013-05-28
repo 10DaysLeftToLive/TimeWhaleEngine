@@ -5,11 +5,9 @@ using System.Collections;
 //STILL WORKING ON THIS!!! NO TOUCHY!!!
 public class SunriseSunsetTimer : ShaderBase {
 	
-	public bool FullDay = false;
-	
 	public float sunsetStartTime;
 	
-	public float sunsetDuration = 100f;
+	public float sunsetDuration = 400f;
 	
 	public float minBrightness = 0.35f;
 	
@@ -59,6 +57,7 @@ public class SunriseSunsetTimer : ShaderBase {
 	
 	// Use this for initialization
 	protected override void Initialize () {
+		//sunsetStartTime = OneDayClock.MIDDAY;
 		sunsetEndTime = sunsetStartTime + sunsetDuration;
 		_hue = StartHue;
 	}
@@ -89,6 +88,7 @@ public class SunriseSunsetTimer : ShaderBase {
 	/// Is a sunrise occurring.
 	/// </param>
 	protected virtual float ChangeHue(bool isSunrise) {
+		if (!isSunrise) return _hue;
 		interpolationFactor += Time.deltaTime;
 		if (_hue < HueShaderConstants.GREEN_COLOR_MAX && _hue > HueShaderConstants.GREEN_COLOR_MIN) {
 			if (greenFilter < HueShaderConstants.GREEN_FILTER_THRESHOLD) {

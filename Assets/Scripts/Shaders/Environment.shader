@@ -7,9 +7,9 @@ Shader "Custom/BackgroundShader" {
 		_Brightness("Brightness", Range(0,1)) = 0.4328358
 		//Don't mess with this variable the values of these variables will be computed in a script.
 		//_Hue("Hue", Range(0, 360)) = 0
-		_GreenFilter("GreenFilter", Range(0,1)) = 0.25
+		_GreenFilter("GreenFilter", Range(0,1)) = 0
 		_Hue("Hue", Float) = 360
-		_Saturation("Saturation", Range(0,1)) = 0.5820895
+		_Saturation("Saturation", Range(0,1)) = 0.5
 		_TimeFactor("InterpolationFactor", Range(0,1)) = 0
 	}
 	
@@ -145,5 +145,5 @@ Shader "Custom/BackgroundShader" {
 			ENDCG
 		}
 	} 
-	FallBack "BackgroundShaderBackupGodus"
+	FallBack "VertexLit Blended"
 }
