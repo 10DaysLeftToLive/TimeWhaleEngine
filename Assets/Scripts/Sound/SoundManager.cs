@@ -2,6 +2,10 @@ using UnityEngine;
 using System.Collections;
 
 public class SoundManager : MonoBehaviour {
+    public bool AudioOn = true;
+    public bool BGMOn = true;
+    public bool SFXOn = true;
+
     public AudioSource ClimbLadderSFX;
     public AudioSource DoorCloseSFX;
     public AudioSource GiveItemSFX;
@@ -52,7 +56,6 @@ public class SoundManager : MonoBehaviour {
         {
             Area = "Wood";
         }
-
         switch (Area)
         {
             case "Grass":

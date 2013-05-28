@@ -29,7 +29,10 @@ public class MoveThenDoState : MoveState {
         }
         else
         {
-            SoundManager.instance.StopWalkSFX();
+            if (SoundManager.instance.AudioOn)
+            {
+                SoundManager.instance.StopWalkSFX();
+            }
         }
         
     }

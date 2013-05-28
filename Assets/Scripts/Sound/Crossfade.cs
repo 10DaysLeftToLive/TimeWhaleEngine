@@ -14,6 +14,7 @@ public class Crossfade: MonoBehaviour {
     public AudioSource WindmillAmbient;
     public AudioSource LighthouseBGM;
     public AudioSource LighthouseAmbient;
+    private static float delay = 0.02f;
 
     public static void FadeBetween()
     {
@@ -70,7 +71,7 @@ public class Crossfade: MonoBehaviour {
                 break;
         }
 
-        if (CurrentSong != null && CurrentAmbient != null)
+        if (CurrentSong != null && CurrentAmbient != null && SoundManager.instance.SFXOn && SoundManager.instance.BGMOn)
         {
             // 1f will need to be changed to match the final volume used
             while (!(Mathf.Approximately(fTimeCounter, 1f)))
@@ -78,20 +79,44 @@ public class Crossfade: MonoBehaviour {
                 fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
                 CurrentSong.volume = (1f - fTimeCounter) * CurrentSong.volume;
                 CurrentAmbient.volume = (1f - fTimeCounter) * CurrentAmbient.volume;
-                yield return new WaitForSeconds(0.05f);
+                yield return new WaitForSeconds(delay);
             }
 
             CurrentSong.Stop();
             CurrentAmbient.Stop();
         }
-        else if (CurrentSong == null && CurrentAmbient != null)
+        else if (CurrentSong != null && CurrentAmbient != null && !SoundManager.instance.SFXOn && SoundManager.instance.BGMOn)
+        {
+            // 1f will need to be changed to match the final volume used
+            while (!(Mathf.Approximately(fTimeCounter, 1f)))
+            {
+                fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
+                CurrentSong.volume = (1f - fTimeCounter) * CurrentSong.volume;
+                yield return new WaitForSeconds(delay);
+            }
+
+            CurrentSong.Stop();
+        }
+        else if (CurrentSong != null && CurrentAmbient != null && SoundManager.instance.SFXOn && !SoundManager.instance.BGMOn)
         {
             // 1f will need to be changed to match the final volume used
             while (!(Mathf.Approximately(fTimeCounter, 1f)))
             {
                 fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
                 CurrentAmbient.volume = (1f - fTimeCounter) * CurrentAmbient.volume;
-                yield return new WaitForSeconds(0.05f);
+                yield return new WaitForSeconds(delay);
+            }
+
+            CurrentAmbient.Stop();
+        }
+        else if (CurrentSong == null && CurrentAmbient != null && SoundManager.instance.SFXOn)
+        {
+            // 1f will need to be changed to match the final volume used
+            while (!(Mathf.Approximately(fTimeCounter, 1f)))
+            {
+                fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
+                CurrentAmbient.volume = (1f - fTimeCounter) * CurrentAmbient.volume;
+                yield return new WaitForSeconds(delay);
             }
 
             CurrentAmbient.Stop();
@@ -140,18 +165,18 @@ public class Crossfade: MonoBehaviour {
                 break;
         }
 
-        if (CurrentSong != null)
+        if (CurrentSong != null && SoundManager.instance.BGMOn)
         {
             CurrentSong.volume = 0;
             CurrentSong.Play();
         }
-        if (CurrentAmbient != null)
+        if (CurrentAmbient != null && SoundManager.instance.SFXOn)
         {
             CurrentAmbient.volume = 0;
             CurrentAmbient.Play();
         }
 
-        if (CurrentSong != null && CurrentAmbient != null)
+        if (CurrentSong != null && CurrentAmbient != null && SoundManager.instance.SFXOn && SoundManager.instance.BGMOn)
         {
             // 1f will need to be changed to match the final volume used
             while (!(Mathf.Approximately(fTimeCounter, 1f)))
@@ -159,16 +184,36 @@ public class Crossfade: MonoBehaviour {
                 fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
                 CurrentSong.volume = fTimeCounter;
                 CurrentAmbient.volume = fTimeCounter;
-                yield return new WaitForSeconds(0.05f);
+                yield return new WaitForSeconds(delay);
             }
         }
-        else if (CurrentSong == null && CurrentAmbient != null)
+        else if (CurrentSong != null && CurrentAmbient != null && !SoundManager.instance.SFXOn && SoundManager.instance.BGMOn)
+        {
+            // 1f will need to be changed to match the final volume used
+            while (!(Mathf.Approximately(fTimeCounter, 1f)))
+            {
+                fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
+                CurrentSong.volume = fTimeCounter;
+                yield return new WaitForSeconds(delay);
+            }
+        }
+        else if (CurrentSong != null && CurrentAmbient != null && SoundManager.instance.SFXOn && !SoundManager.instance.BGMOn)
+        {
+            // 1f will need to be changed to match the final volume used
+            while (!(Mathf.Approximately(fTimeCounter, 1f)))
+            {
+                fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
+                CurrentAmbient.volume = fTimeCounter;
+                yield return new WaitForSeconds(delay);
+            }
+        }
+        else if (CurrentSong == null && CurrentAmbient != null && SoundManager.instance.SFXOn)
         {
             while (!(Mathf.Approximately(fTimeCounter, 1f)))
             {
                 fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
                 CurrentAmbient.volume = fTimeCounter;
-                yield return new WaitForSeconds(0.05f);
+                yield return new WaitForSeconds(delay);
             }
         }
 

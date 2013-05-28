@@ -19,7 +19,7 @@ public class MoveState : AbstractState {
     private static int NameStartCounter = 0;
     private static int NameEndCounter = 0;
     private static bool traverseStair = false;
-    private static bool towardStair = false;
+    private static bool towardStair = true;
         
     public MoveState(Character toControl, Vector3 goal) : base(toControl){
         _goal = goal;
@@ -33,83 +33,148 @@ public class MoveState : AbstractState {
         movement *= (speed * Time.deltaTime);
 
         if (NearPoint(_pathFollowing.GetPoint(), _pathFollowing.GetVectorDirection())){
-            if (!_pathFollowing.NextNode()){
+            if (!_pathFollowing.NextNode())
+            {
                 OnGoalReached();
-            } else {
+            }
+            else
+            {
                 currentGoal = _pathFollowing.GetPoint();
-                if (character is NPC){
-				}
-                else {
-                    lastWay = _pathFollowing.GetLastWayPointName();
-                    //Debug.Log("Before any checks, lastWay is " + lastWay);
-                    /*DebugManager.instance.Log("lastWay is " + lastWay, "WalkSFX", "SFX");*/
-                    NameStartCounter = lastWay.IndexOf(".");
-                    NameEndCounter = lastWay.IndexOf("Stair");
-                    // since we're heading towards the stairs, we need to grab the name of the area we are leaving and the area we're heading towards
-                    if (lastWay.IndexOf("StairBase") > 0 || lastWay.IndexOf("StairTop") > 0){
-                        
-                        /*Strings.LASTAREA = lastWay.Substring(0, NameStartCounter);
-                        Strings.NEXTAREA = lastWay.Substring(NameStartCounter + 5, NameEndCounter - (NameStartCounter + 5));*/
-                        //Debug.Log("Heading towards some stairs, LASTAREA is " + Strings.LASTAREA + " NEXTAREA is " + Strings.NEXTAREA);
-                        //DebugManager.instance.Log("LASTAREA is " + Strings.LASTAREA, "WalkSFX", "SFX");
+                if (character is NPC)
+                {
+                }
+                else
+                {
+                    if (SoundManager.instance.AudioOn)
+                    {
+                        lastWay = _pathFollowing.GetLastWayPointName();
 
-                        if (lastWay.IndexOf("StairBase") > 0)
+                        Debug.Log("Before any checks, lastWay is " + lastWay);
+                        /*DebugManager.instance.Log("lastWay is " + lastWay, "WalkSFX", "SFX");*/
+                        NameStartCounter = lastWay.IndexOf(".");
+                        NameEndCounter = lastWay.IndexOf("Stair");
+                        // since we're heading towards the stairs, we need to grab the name of the area we are leaving and the area we're heading towards
+                        if (lastWay.IndexOf("StairBase") > 0 || lastWay.IndexOf("StairTop") > 0 || lastWay == "Forest.010")
                         {
-                            Strings.BOTTOMOFSTAIRS = lastWay.Substring(0, NameStartCounter);
-                            Strings.TOPOFSTAIRS = lastWay.Substring(NameStartCounter + 5, NameEndCounter - (NameStartCounter + 5));
-                        }
-                        else
-                        {
-                            Strings.TOPOFSTAIRS = lastWay.Substring(0, NameStartCounter);
-                            Strings.BOTTOMOFSTAIRS = lastWay.Substring(NameStartCounter + 5, NameEndCounter - (NameStartCounter + 5));
-                        }
 
-                        towardStair = true;
-                    }
-                    // possibly walking towards stairs
-                    else if (towardStair){
-                        // just started walking up the stairs
-                        if (lastWay.EndsWith("High") || lastWay.EndsWith("Low")){
-                            if (lastWay.IndexOf("Low") > 0)
+                            /*Strings.LASTAREA = lastWay.Substring(0, NameStartCounter);
+                            Strings.NEXTAREA = lastWay.Substring(NameStartCounter + 5, NameEndCounter - (NameStartCounter + 5));*/
+                            Debug.Log("Heading towards some stairs");
+                            //DebugManager.instance.Log("LASTAREA is " + Strings.LASTAREA, "WalkSFX", "SFX");
+
+                            if (lastWay.IndexOf("StairBase") > 0)
                             {
-                                SoundManager.instance.StartCoroutineFadeDown(Strings.BOTTOMOFSTAIRS);
+                                Strings.BOTTOMOFSTAIRS = lastWay.Substring(0, NameStartCounter);
+                                Strings.TOPOFSTAIRS = lastWay.Substring(NameStartCounter + 5, NameEndCounter - (NameStartCounter + 5));
                             }
-                            else
+                            else if (lastWay.IndexOf("StairTop") > 0)
                             {
-                                SoundManager.instance.StartCoroutineFadeDown(Strings.TOPOFSTAIRS);
+                                Strings.TOPOFSTAIRS = lastWay.Substring(0, NameStartCounter);
+                                Strings.BOTTOMOFSTAIRS = lastWay.Substring(NameStartCounter + 5, NameEndCounter - (NameStartCounter + 5));
                             }
-                            towardStair = false;
-                            traverseStair = true;
-                            Strings.CURRENTAREA = "Stairs";
-                            SoundManager.instance.PlayWalkSFX();
-                            //Debug.Log("Just started walking up some stairs");
-                        }
-                        // passed by the stairs
-                        else if (lastWay.IndexOf("Stair") == -1){
-                            towardStair = false;
-                        }
-                    }
-                    // finished traversing the stairs
-                    else if (traverseStair) {
-                        if (lastWay.EndsWith("High") || lastWay.EndsWith("Low")){
-                            traverseStair = false;
+
                             towardStair = true;
-
-                            if (lastWay.EndsWith("High"))
+                        }
+                        // possibly walking towards stairs
+                        else if (towardStair)
+                        {
+                            // just started walking up the stairs
+                            if (lastWay.EndsWith("High") || lastWay.EndsWith("Low"))
                             {
-                                Strings.CURRENTAREA = Strings.TOPOFSTAIRS;
+                                Debug.Log("Walking up or down the stairs.");
+                                if (lastWay.IndexOf("Low") > 0)
+                                {
+                                    SoundManager.instance.StartCoroutineFadeDown(Strings.BOTTOMOFSTAIRS);
+                                }
+                                else
+                                {
+                                    SoundManager.instance.StartCoroutineFadeDown(Strings.TOPOFSTAIRS);
+                                }
+                                towardStair = false;
+                                traverseStair = true;
+                                Strings.CURRENTAREA = "Stairs";
+                                if (SoundManager.instance.SFXOn)
+                                {
+                                    SoundManager.instance.PlayWalkSFX();
+                                }
+                                //Debug.Log("Just started walking up some stairs");
                             }
-                            else
+                            // walking on the pier or the bridge
+                            else if (lastWay.IndexOf("Pier") > 0 || lastWay.IndexOf("Bridge") > 0)
                             {
-                                Strings.CURRENTAREA = Strings.BOTTOMOFSTAIRS;
+                                Debug.Log("Walking on the pier or the bridge.");
+                                towardStair = false;
+                                traverseStair = true;
+                                Strings.CURRENTAREA = "Stairs";
+                                if (SoundManager.instance.SFXOn)
+                                {
+                                    SoundManager.instance.PlayWalkSFX();
+                                }
                             }
-                            /*Strings.CURRENTAREA = Strings.NEXTAREA;
-                            Strings.NEXTAREA = Strings.LASTAREA;
-                            Strings.LASTAREA = Strings.CURRENTAREA;*/
-                            SoundManager.instance.StartCoroutineFadeUp(Strings.CURRENTAREA);
-                            SoundManager.instance.PlayWalkSFX();
+                            // passed by the stairs, rather than going up them
+                            else if (lastWay.IndexOf("Stair") == -1 && lastWay.IndexOf("Pier") == -1 && lastWay.IndexOf("Bridge") == -1)
+                            {
+                                Debug.Log("Passed by stairs, rather than going up them.");
+                                towardStair = false;
+                            }
+                        }
+                        // finished traversing the stairs
+                        else if (traverseStair)
+                        {
+                            if (lastWay.EndsWith("High") || lastWay.EndsWith("Low"))
+                            {
+                                Debug.Log("Finished traversing the stairs");
+                                traverseStair = false;
+                                towardStair = true;
 
-                            Debug.Log("Just finished walking up some stairs and CURRENTAREA is "+Strings.CURRENTAREA);
+                                if (lastWay.EndsWith("High"))
+                                {
+                                    Strings.CURRENTAREA = Strings.TOPOFSTAIRS;
+                                }
+                                else
+                                {
+                                    Strings.CURRENTAREA = Strings.BOTTOMOFSTAIRS;
+                                }
+                                /*Strings.CURRENTAREA = Strings.NEXTAREA;
+                                Strings.NEXTAREA = Strings.LASTAREA;
+                                Strings.LASTAREA = Strings.CURRENTAREA;*/
+                                if (SoundManager.instance.SFXOn)
+                                {
+                                    SoundManager.instance.PlayWalkSFX();
+                                }
+                                SoundManager.instance.StartCoroutineFadeUp(Strings.CURRENTAREA);
+
+                                //Debug.Log("Just finished walking up some stairs and CURRENTAREA is "+Strings.CURRENTAREA);
+                                DebugManager.instance.Log("Just finished walking up some stairs and CURRENTAREA is " + Strings.CURRENTAREA, "Audio");
+                            }
+                            else if (lastWay.IndexOf("Bridge") > 0)
+                            {
+                                if (lastWay.EndsWith("Left") || lastWay.EndsWith("Right"))
+                                {
+                                    Debug.Log("Finished traversing bridge.");
+                                    traverseStair = false;
+                                    towardStair = true;
+                                    Strings.CURRENTAREA = "Forest";
+                                    if (SoundManager.instance.SFXOn)
+                                    {
+                                        SoundManager.instance.PlayWalkSFX();
+                                    }
+                                }
+                            }
+                            else if (lastWay.IndexOf("Pier") > 0)
+                            {
+                                if (lastWay.EndsWith("Left"))
+                                {
+                                    Debug.Log("Finished traversing the pier.");
+                                    traverseStair = false;
+                                    towardStair = true;
+                                    Strings.CURRENTAREA = "Beach";
+                                    if (SoundManager.instance.SFXOn)
+                                    {
+                                        SoundManager.instance.PlayWalkSFX();
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -129,7 +194,10 @@ public class MoveState : AbstractState {
         if (character is NPC){
 			speed = speed*NPC_SPEED_RATIO;
         }else{
-            SoundManager.instance.PlayWalkSFX();
+            if (SoundManager.instance.AudioOn && SoundManager.instance.SFXOn)
+            {
+                SoundManager.instance.PlayWalkSFX();
+            }
         }
     }
     
@@ -142,7 +210,10 @@ public class MoveState : AbstractState {
         }
         else
         {
-            SoundManager.instance.StopWalkSFX();
+            if (SoundManager.instance.AudioOn && SoundManager.instance.SFXOn)
+            {
+                SoundManager.instance.StopWalkSFX();
+            }
         }
     }
 	
@@ -225,13 +296,19 @@ public class MoveState : AbstractState {
     }
     
     public virtual void OnStuck(){
-        SoundManager.instance.StopWalkSFX();
+        if (SoundManager.instance.AudioOn && SoundManager.instance.SFXOn)
+        {
+            SoundManager.instance.StopWalkSFX();
+        }
 		
         currentMovementState.OnStuck();
     }
     
     private void OnNoPath(){
-        SoundManager.instance.StopWalkSFX();
+        if (SoundManager.instance.AudioOn && SoundManager.instance.SFXOn)
+        {
+            SoundManager.instance.StopWalkSFX();
+        }
 		
         currentMovementState.OnGoalReached();
     }
