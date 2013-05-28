@@ -54,11 +54,6 @@ public class WayPointPath {
 		startRightScript = GetScript(startRight);
 		endLeftScript = GetScript(endLeft);
 		endRightScript = GetScript(endRight);
-		
-		if (startLeft == null || startRight == null){
-			startLeft = GetPoint(new Vector3(startPos.x - heading.x*.2f, startPos.y + ht/2 - heading.y*.2f, startPos.z), mask, heading);
-			startRight = GetPoint(new Vector3(startPos.x + heading.x*.2f, startPos.y + ht/2 + heading.y*.2f, startPos.z), mask, heading*-1);
-		}
 
 		/*if (startLeft != null) Debug.Log("startLeft " + startLeft.name);
 		if (startRight != null) Debug.Log("startRight " + startRight.name);
@@ -179,8 +174,9 @@ public class WayPointPath {
 
 	private static GameObject GetPoint(Vector3 pos, int mask, Vector3 heading){
 		RaycastHit hit;
+		Vector3 rayStart = new Vector3(pos.x-.2f, pos.y, pos.z);
 		//Debug.DrawRay(pos,heading,Color.red,20);
-		if (Physics.Raycast(pos, heading , out hit, Mathf.Infinity, mask)){
+		if (Physics.Raycast(rayStart, heading , out hit, Mathf.Infinity, mask)){
 			GameObject wayPoint = hit.collider.gameObject;
 			return wayPoint;
 		}
