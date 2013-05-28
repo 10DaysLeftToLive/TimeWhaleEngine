@@ -23,6 +23,7 @@ public class CastlemanYoung : NPC {
 	NPCConvoSchedule CastleManTalksToCSONThrice;
 	NPCConvoSchedule CastleManTalksToLighthouseOnBeachFriends;
 	NPCConvoSchedule CastleManTalksToLighthouseOnBeachNOTFriends;
+	
 	protected override void SetFlagReactions(){
 		
 		Reaction ChangeToTalkingState = new Reaction();
@@ -47,6 +48,7 @@ public class CastlemanYoung : NPC {
 		//Sets up the new emotion after the first conversation
 		//
 		Reaction AfterIntroConversationCarpenterSon = new Reaction();
+		AfterIntroConversationCarpenterSon.AddAction(new NPCAddScheduleAction(this, CastleManFollowSchedule));
 		AfterIntroConversationCarpenterSon.AddAction(new NPCEmotionUpdateAction(this, new VisitCarpenterSonAsFriend(this, "")));
 		flagReactions.Add(FlagStrings.FinishedInitialConversationWithCSONFriend, AfterIntroConversationCarpenterSon);
 		//Sets up the second conversation
@@ -58,6 +60,7 @@ public class CastlemanYoung : NPC {
 		
 		//
 		Reaction AfterSecondConversationCarpenterSon = new Reaction ();
+		AfterSecondConversationCarpenterSon.AddAction(new NPCAddScheduleAction(this, CastleManFollowSchedule));
 		AfterSecondConversationCarpenterSon.AddAction(new NPCEmotionUpdateAction(this, new TalkWithCarpenterSonAsFriendRoundTwo(this, "")));
 		flagReactions.Add(FlagStrings.FinishedSecondConversationWithCSONFriend, AfterSecondConversationCarpenterSon);
 		
@@ -92,6 +95,7 @@ public class CastlemanYoung : NPC {
 		
 		//Schedule for the second emotion state
 		Reaction AfterIntroConversationNOTFriendsCarpenterSon = new Reaction();
+		AfterIntroConversationNOTFriendsCarpenterSon.AddAction(new NPCAddScheduleAction(this, CastleManFollowSchedule));
 		AfterIntroConversationNOTFriendsCarpenterSon.AddAction(new NPCEmotionUpdateAction(this, new VisitCarpenterSonNotAsFriend(this, "")));
 		flagReactions.Add(FlagStrings.FinishedInitialConversationWithCSONNOTFriend, AfterIntroConversationNOTFriendsCarpenterSon);
 		//Schedule for the second conversation
@@ -103,6 +107,7 @@ public class CastlemanYoung : NPC {
 		//Schedule for setting up the third emotion state
 		//
 		Reaction AfterSecondConversationNOTFriendsCarpenterSon = new Reaction ();
+		AfterSecondConversationNOTFriendsCarpenterSon.AddAction(new NPCAddScheduleAction(this, CastleManFollowSchedule));
 		AfterSecondConversationNOTFriendsCarpenterSon.AddAction(new NPCEmotionUpdateAction(this, new TalkWithCarpenterSonNotAsFriendRoundTwo(this, "")));
 		flagReactions.Add(FlagStrings.FinishedSecondConversationWithCSONNOTFriend, AfterSecondConversationNOTFriendsCarpenterSon);
 		
@@ -381,6 +386,7 @@ public class CastlemanYoung : NPC {
 			FlagManager.instance.SetFlag(FlagStrings.MusicianCommentOnSon);
 		}
 		public void UpdateWhatsYourName(){
+			FlagManager.instance.SetFlag(FlagStrings.PlayerAndCastleNOTFriends);
 			_allChoiceReactions.Remove(WhatsYourNameChoice);
 			_allChoiceReactions.Remove(AreYouNewChoice);
 			_allChoiceReactions.Add(FineHaveItYourWayChoice, new DispositionDependentReaction(FineHaveItYourWayReaction));
