@@ -95,6 +95,8 @@ public static class FlagStrings {
 	
 	#region Musician
 	public static string MusicianCommentOnSon = "Is he mute?";
+	public static string MusicianFinishedTalkingFriends = "Musician finished talking friends.";
+	public static string MusicianFinishedTalkingNOTFriends = "Musician finished talking not friends";
 	#endregion
 	
 	#region CastleMan
