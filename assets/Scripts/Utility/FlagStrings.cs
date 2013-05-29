@@ -45,6 +45,7 @@ public static class FlagStrings {
 	public static string carpenterSonReconcile = "Carpenter Son Reconcile";
 	
 	public static string CarpenterDating = "Carpenter dating";
+	public static string CarpenterNoShow = "Carpenter no show";
 	#endregion
 	
 	#region CastleMan Only
