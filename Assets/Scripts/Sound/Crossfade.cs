@@ -18,7 +18,7 @@ public class Crossfade: MonoBehaviour {
     public float WindmillAmbientVolume = 0.5f;
     public AudioSource LighthouseBGM;
     public AudioSource LighthouseAmbient;
-    public float LighthouseAmbientVolume = 0.5f;
+    public float LighthouseAmbientVolume = 1.0f;
     private static float delay = 0.02f;
 
     public static void FadeBetween()
