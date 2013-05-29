@@ -15,6 +15,8 @@ public class CarpenterSonMiddle : NPC {
 		stormOffReaction.AddAction(new NPCEmotionUpdateAction(this, new StormOffEmotionState(this, "Why can my father never let up? He knows my dream is to fish but at every turn he stifles me and makes me want to just stop doing anything.")));
 		stormOffReaction.AddAction(new NPCAddScheduleAction(this, stormOffSchedule));
 		flagReactions.Add(FlagStrings.carpenterSonStormOff, stormOffReaction);
+		Reaction IdleReaction = new Reaction();
+		//IdleReaction.AddAction(new NPCAddScheduleAction (this, ));
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
@@ -27,11 +29,18 @@ public class CarpenterSonMiddle : NPC {
 	}
 	
 	Schedule stormOffSchedule;
+	//Schedule IdleSchedule;
 
 	protected override void SetUpSchedules(){
 		stormOffSchedule = new Schedule(this,Schedule.priorityEnum.DoNow);
 		stormOffSchedule.Add(new Task(new MoveState(this, MapLocations.BaseOfPierMiddle)));
 		stormOffSchedule.Add(new TimeTask(1.0f, new IdleState(this)));
+		
+		//IdleSchedule = new Schedule(this, Schedule.priorityEnum.High);
+		//IdleSchedule.Add(new Task(new MoveState(this, transform.position.x - 5)));
+		//IdleSchedule.Add(new TimeTask(5, new WaitState(this)));
+		//IdleSchedule.Add(new Task(new MoveState(this, transform.position.x + 5)));
+		//IdleSchedule.Add(new TimeTask(5, new WaitState(this)));
 	}
 	
 	
