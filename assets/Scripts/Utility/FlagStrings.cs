@@ -45,6 +45,7 @@ public static class FlagStrings {
 	public static string carpenterSonReconcile = "Carpenter Son Reconcile";
 	
 	public static string CarpenterDating = "Carpenter dating";
+	public static string CarpenterNoShow = "Carpenter no show";
 	#endregion
 	
 	#region CastleMan Only
@@ -95,6 +96,8 @@ public static class FlagStrings {
 	
 	#region Musician
 	public static string MusicianCommentOnSon = "Is he mute?";
+	public static string MusicianFinishedTalkingFriends = "Musician finished talking friends.";
+	public static string MusicianFinishedTalkingNOTFriends = "Musician finished talking not friends";
 	#endregion
 	
 	#region CastleMan

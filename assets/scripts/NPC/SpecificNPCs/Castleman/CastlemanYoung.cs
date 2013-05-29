@@ -28,7 +28,19 @@ public class CastlemanYoung : NPC {
 	NPCConvoSchedule CastleManTalksToLighthouseOnBeachFriends;
 	NPCConvoSchedule CastleManTalksToLighthouseOnBeachNOTFriends;
 	
+	public void testingMctester(){
+		Debug.Log("The second flag has been tripped");	
+	}
 	protected override void SetFlagReactions(){
+		Reaction testOne = new Reaction();
+		testOne.AddAction(new NPCAddScheduleAction(this, CastleManFollowSchedule));
+		flagReactions.Add(FlagStrings.MusicianFinishedTalkingFriends, testOne);
+		
+		Reaction testTwo = new Reaction();
+		testTwo.AddAction(new NPCAddScheduleAction(this, CastleManFollowSchedule));
+		testTwo.AddAction(new NPCCallbackAction(testingMctester));
+		flagReactions.Add(FlagStrings.MusicianFinishedTalkingNOTFriends, testTwo);
+		
 		
 		Reaction ChangeToTalkingState = new Reaction();
 		ChangeToTalkingState.AddAction(new NPCEmotionUpdateAction(this, new MeetFamily(this, "")));
@@ -189,11 +201,11 @@ public class CastlemanYoung : NPC {
 
 	protected override void SetUpSchedules(){
 		CastleManFollowSchedule = new Schedule(this, Schedule.priorityEnum.High);
-		CastleManFollowSchedule.Add(new TimeTask(2f, new IdleState(this)));
+		CastleManFollowSchedule.Add(new TimeTask(1f, new IdleState(this)));
 		CastleManFollowSchedule.Add(new Task(new FollowObjectState(this, player.gameObject)));
 		
 		CastlemanWalkToBeachSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
-		CastlemanWalkToBeachSchedule.Add(new TimeTask(2f, new IdleState(this)));
+		CastlemanWalkToBeachSchedule.Add(new TimeTask(1f, new IdleState(this)));
 		CastlemanWalkToBeachSchedule.Add(new Task(new MoveThenMarkDoneState(this, MapLocations.MiddleOfBeachYoung)));
 		
 		
@@ -996,7 +1008,7 @@ public class CastlemanYoung : NPC {
 		}
 		public void UpdateFineLiveInFear(){
 			_allChoiceReactions.Remove(IfImYourFriendThenHeCanBeTooChoice);
-			_allChoiceReactions.Remove(IfImYourFriendThenHeCanBeTooChoice);
+			_allChoiceReactions.Remove(FineLiveInFearChoice);
 			GUIManager.Instance.CloseInteractionMenu();
 			SetDefaultText("Everyone I meet doesn't like me...");
 			//Set flags here
@@ -1252,7 +1264,7 @@ public class CastlemanYoung : NPC {
 		}
 		public void IveHadEnough(){
 			_allChoiceReactions.Remove(BeYourselfChoice);
-			_allChoiceReactions.Remove(BeYourselfChoice);
+			_allChoiceReactions.Remove(IveHadEnoughChoice);
 			GUIManager.Instance.CloseInteractionMenu();
 			SetDefaultText("Everyone I meet doesn't like me...");
 			//Set flags here
