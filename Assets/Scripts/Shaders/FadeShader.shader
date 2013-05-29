@@ -46,7 +46,7 @@ SubShader
 		fixed4 frag (v2f i) : COLOR
 		{
 			fixed2 uv = fixed2(i.uvOrig.x + i.uvOrig.y * _CenterFrequencyAmplitude.w * 
-				sin(_CenterFrequencyAmplitude.z * i.uvOrig.y * 3.14159265358979323846264338327 + _Angle),
+				sin(_CenterFrequencyAmplitude.z * i.uvOrig.y * 3.14 + _Angle),
 				 i.uvOrig.y);
 
 			//uv.xy -= _CenterFrequencyAmplitude.xy;

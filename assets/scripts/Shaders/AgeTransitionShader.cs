@@ -11,6 +11,8 @@ public class AgeTransitionShader : FadeEffect {
 	//Reference to the LevelManager.
 	public LevelManager levelManager;
 	
+	public Player playerCharacter;
+	
 	//The age state that the player should transition to after a fade in.
 	protected string ageShiftAction = "";
 	
@@ -34,7 +36,8 @@ public class AgeTransitionShader : FadeEffect {
 	/// Performs an age shift back in time if able.
 	/// </summary>
 	protected override void OnDragDown() {
-		if (levelManager.CanAgeTransitionDown() && !isFading) {
+		if (levelManager.CanAgeTransitionDown() && !isFading && !isGamePaused() 
+			&& playerCharacter.State != typeof(MoveState)) {
 			DoAgeShift(Strings.ButtonAgeShiftDown);
 			DoFade();
 		}
@@ -45,7 +48,8 @@ public class AgeTransitionShader : FadeEffect {
 	/// Performs an age shift back forward through time if able.
 	/// </summary>
 	protected override void OnDragUp() {
-		if (levelManager.CanAgeTransitionUp() && !isFading) {
+		if (levelManager.CanAgeTransitionUp() && !isFading 
+			&& !isGamePaused() && playerCharacter.State != typeof(MoveState)) {
 			DoAgeShift(Strings.ButtonAgeShiftUp);
 			DoFade();
 		}
