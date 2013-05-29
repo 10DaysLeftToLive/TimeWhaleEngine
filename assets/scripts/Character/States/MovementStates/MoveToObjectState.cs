@@ -4,7 +4,7 @@ using System.Collections;
 public class MoveToObjectState : MoveState {
 	protected int ticksTillUpdate = 0;
 	protected GameObject _toMoveTo;
-	protected static int TICKS_TILL_UPDATE = 5;
+	protected static int TICKS_TILL_UPDATE = 30;
 	protected static float DISTANCE_TO_STOP = 1.5f;
 	
 	public MoveToObjectState(Character toControl, GameObject toMoveTo) : base(toControl, toMoveTo.transform.position){
@@ -13,6 +13,7 @@ public class MoveToObjectState : MoveState {
 	
 	// Don't want to calculate a new path every tick
 	public override void Update() {
+		//UpdateGoal(_toMoveTo.transform.position);
 		if (ticksTillUpdate < 1) {
 			ticksTillUpdate = TICKS_TILL_UPDATE;
 			UpdateGoal(_toMoveTo.transform.position);

@@ -20,6 +20,7 @@ public class OneDayClock : PauseObject {
 	public static float GAME_LENGTH = 600f; // seconds
 	public static float START_TIME = 800; // day starts at 8 AM, 0800 military
 	public static float HOURS_IN_DAY = 12;
+	public static float MIDDAY = START_TIME + GAME_LENGTH / 2;
 	public static float MILITARY_TIME_MULTIPLIER = 100;
 	
 	// Use this for initialization
