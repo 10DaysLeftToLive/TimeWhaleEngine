@@ -49,19 +49,17 @@ public class MoveState : AbstractState {
                     {
                         lastWay = _pathFollowing.GetLastWayPointName();
 
-                        Debug.Log("Before any checks, lastWay is " + lastWay);
+                        //Debug.Log("Before any checks, lastWay is " + lastWay);
                         /*DebugManager.instance.Log("lastWay is " + lastWay, "WalkSFX", "SFX");*/
                         NameStartCounter = lastWay.IndexOf(".");
                         NameEndCounter = lastWay.IndexOf("Stair");
                         // since we're heading towards the stairs, we need to grab the name of the area we are leaving and the area we're heading towards
                         if (lastWay.IndexOf("StairBase") > 0 || lastWay.IndexOf("StairTop") > 0 || lastWay == "Forest.010")
                         {
-
                             /*Strings.LASTAREA = lastWay.Substring(0, NameStartCounter);
                             Strings.NEXTAREA = lastWay.Substring(NameStartCounter + 5, NameEndCounter - (NameStartCounter + 5));*/
-                            Debug.Log("Heading towards some stairs");
+                            //Debug.Log("Heading towards some stairs");
                             //DebugManager.instance.Log("LASTAREA is " + Strings.LASTAREA, "WalkSFX", "SFX");
-
                             if (lastWay.IndexOf("StairBase") > 0)
                             {
                                 Strings.BOTTOMOFSTAIRS = lastWay.Substring(0, NameStartCounter);
@@ -72,7 +70,6 @@ public class MoveState : AbstractState {
                                 Strings.TOPOFSTAIRS = lastWay.Substring(0, NameStartCounter);
                                 Strings.BOTTOMOFSTAIRS = lastWay.Substring(NameStartCounter + 5, NameEndCounter - (NameStartCounter + 5));
                             }
-
                             towardStair = true;
                         }
                         // possibly walking towards stairs
@@ -81,7 +78,7 @@ public class MoveState : AbstractState {
                             // just started walking up the stairs
                             if (lastWay.EndsWith("High") || lastWay.EndsWith("Low"))
                             {
-                                Debug.Log("Walking up or down the stairs.");
+                                //Debug.Log("Walking up or down the stairs.");
                                 if (lastWay.IndexOf("Low") > 0)
                                 {
                                     SoundManager.instance.StartCoroutineFadeDown(Strings.BOTTOMOFSTAIRS);
@@ -102,7 +99,7 @@ public class MoveState : AbstractState {
                             // walking on the pier or the bridge
                             else if (lastWay.IndexOf("Pier") > 0 || lastWay.IndexOf("Bridge") > 0)
                             {
-                                Debug.Log("Walking on the pier or the bridge.");
+                                //Debug.Log("Walking on the pier or the bridge.");
                                 towardStair = false;
                                 traverseStair = true;
                                 Strings.CURRENTAREA = "Stairs";
@@ -114,7 +111,7 @@ public class MoveState : AbstractState {
                             // passed by the stairs, rather than going up them
                             else if (lastWay.IndexOf("Stair") == -1 && lastWay.IndexOf("Pier") == -1 && lastWay.IndexOf("Bridge") == -1)
                             {
-                                Debug.Log("Passed by stairs, rather than going up them.");
+                                //Debug.Log("Passed by stairs, rather than going up them.");
                                 towardStair = false;
                             }
                         }
@@ -123,7 +120,7 @@ public class MoveState : AbstractState {
                         {
                             if (lastWay.EndsWith("High") || lastWay.EndsWith("Low"))
                             {
-                                Debug.Log("Finished traversing the stairs");
+                                //Debug.Log("Finished traversing the stairs");
                                 traverseStair = false;
                                 towardStair = true;
 
@@ -145,13 +142,13 @@ public class MoveState : AbstractState {
                                 SoundManager.instance.StartCoroutineFadeUp(Strings.CURRENTAREA);
 
                                 //Debug.Log("Just finished walking up some stairs and CURRENTAREA is "+Strings.CURRENTAREA);
-                                DebugManager.instance.Log("Just finished walking up some stairs and CURRENTAREA is " + Strings.CURRENTAREA, "Audio");
+                                //DebugManager.instance.Log("Just finished walking up some stairs and CURRENTAREA is " + Strings.CURRENTAREA, "Audio");
                             }
                             else if (lastWay.IndexOf("Bridge") > 0)
                             {
                                 if (lastWay.EndsWith("Left") || lastWay.EndsWith("Right"))
                                 {
-                                    Debug.Log("Finished traversing bridge.");
+                                    //Debug.Log("Finished traversing bridge.");
                                     traverseStair = false;
                                     towardStair = true;
                                     Strings.CURRENTAREA = "Forest";
@@ -165,7 +162,7 @@ public class MoveState : AbstractState {
                             {
                                 if (lastWay.EndsWith("Left"))
                                 {
-                                    Debug.Log("Finished traversing the pier.");
+                                    //Debug.Log("Finished traversing the pier.");
                                     traverseStair = false;
                                     towardStair = true;
                                     Strings.CURRENTAREA = "Beach";

@@ -44,26 +44,32 @@ public class Crossfade: MonoBehaviour {
             case "Forest":
                 CurrentSong = CrossfadeInstance.ForestBGM;
                 CurrentAmbient = CrossfadeInstance.ForestAmbient;
+                delay = 0.075f;
                 break;
             case "Beach":
                 CurrentSong = CrossfadeInstance.BeachBGM;
                 CurrentAmbient = CrossfadeInstance.BeachAmbient;
+                delay = 0.075f;
                 break;
             case "Lighthouse":
                 CurrentSong = CrossfadeInstance.LighthouseBGM;
                 CurrentAmbient = CrossfadeInstance.LighthouseAmbient;
+                delay = 0.1f;
                 break;
             case "Windmill":
                 CurrentSong = CrossfadeInstance.WindmillBGM;
                 CurrentAmbient = CrossfadeInstance.WindmillAmbient;
+                delay = 0.02f;
                 break;
             case "Market":
                 CurrentSong = CrossfadeInstance.MarketBGM;
                 CurrentAmbient = CrossfadeInstance.MarketAmbient;
+                delay = 0.1f;
                 break;
             case "ReflectionTree":
                 CurrentSong = null;
                 CurrentAmbient = CrossfadeInstance.LighthouseAmbient;
+                delay = 0.1f;
                 break;
             default:
                 CurrentSong = null;
@@ -127,6 +133,8 @@ public class Crossfade: MonoBehaviour {
 
     public static IEnumerator CoroutineFadeUp(string AreaName)
     {
+        delay = 0.02f;
+
         Strings.CURRENTFADING = AreaName;
 
         AudioSource CurrentSong;

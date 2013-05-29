@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
+[System.Serializable]
 public class Flag : IEquatable<Flag>{ // needs to implement IEquatable to play nice with list operations 
-	private string _name;
+	public string _name;
 	private List<NPC> npcsThatCareAboutFlag;
-	private bool _isSetOff;
+	public bool _isSetOff;
 	
 	public Flag(string name){
 		_name = name;

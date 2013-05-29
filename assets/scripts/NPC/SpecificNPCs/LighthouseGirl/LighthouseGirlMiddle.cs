@@ -115,7 +115,7 @@ public class LighthouseGirlMiddle : NPC {
 		openningWaitingSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
 		openningWaitingSchedule.Add(new TimeTask(30, new WaitTillPlayerCloseState(this, player)));	
 		
-		backToFarmSchedule = new Schedule(this, Schedule.priorityEnum.Medium);
+		backToFarmSchedule = new Schedule(this, Schedule.priorityEnum.High);
 		backToFarmSchedule.Add(new TimeTask(8f, new IdleState(this)));
 		backToFarmSchedule.Add(new Task(new MoveThenDoState(this, new Vector3(startingPosition.x, startingPosition.y, .5f), new MarkTaskDone(this))));
 		
@@ -149,7 +149,7 @@ public class LighthouseGirlMiddle : NPC {
 	
 	protected void WaitingOnDate(){
 		waitingOnDateTimer = true;
-		time = 30;
+		time = 40;
 	}
 	
 	protected void DateSuccess(){
