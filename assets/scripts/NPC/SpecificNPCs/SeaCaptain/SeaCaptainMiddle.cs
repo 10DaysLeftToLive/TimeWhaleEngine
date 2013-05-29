@@ -5,6 +5,9 @@ using System.Collections;
 /// SeaCaptainMiddle specific scripting values
 /// </summary>
 public class SeaCaptainMiddle : NPC {	
+	Vector3 startingPosition, farmDigPos, reflectDigPos, carpenterDigPos, beachDigPos;
+	Schedule treasureHuntSched;
+	
 	protected override void Init() {
 		id = NPCIDs.SEA_CAPTAIN;
 		base.Init();
@@ -66,7 +69,8 @@ public class SeaCaptainMiddle : NPC {
 			
 			Reaction shovelReaction = new Reaction();
 			shovelReaction.AddAction(new NPCTakeItemAction(toControl));
-			shovelReaction.AddAction(new UpdateCurrentTextAction(toControl, "Thanks laddie! I can now go and dig for treasure."));
+			shovelReaction.AddAction(new UpdateCurrentTextAction(toControl, "Thanks matey! I can now go and dig for treasure."));
+			shovelReaction.AddAction(new NPCAddScheduleAction(_npcInState, new SeaCaptainTreasureHuntSchedule(_npcInState)));
 			_allItemReactions.Add(StringsItem.Shovel,  new DispositionDependentReaction(shovelReaction));
 			
 			Reaction toyShipReaction = new Reaction();
@@ -79,7 +83,7 @@ public class SeaCaptainMiddle : NPC {
 			whyHereChoice = new Choice("Why are you here?", "I am searching for great treasure said to be buried on this island, but I can not figure out what the map is saying.");
 			whyHereReaction = new Reaction();
 			whyHereReaction.AddAction(new NPCCallbackAction(UpdateWhyHere));
-			whyHereReaction.AddAction(new UpdateCurrentTextAction(toControl, "How 'ave ye been laddie?"));
+			whyHereReaction.AddAction(new UpdateCurrentTextAction(toControl, "How 'ave ye been matey?"));
 			_allChoiceReactions.Add(whyHereChoice, new DispositionDependentReaction(whyHereReaction));
 			
 			whereShipChoice = new Choice("Where is your ship?", "Well... I might have forgot to drop the anchor before commin' ashore.");
@@ -92,15 +96,17 @@ public class SeaCaptainMiddle : NPC {
 		}
 		
 		public override void UpdateEmotionState(){
-			
+
 		}
 		
 		#region update methods
 		public void UpdateWhyHere(){
+			_allChoiceReactions.Remove(whyHereChoice);
 			GUIManager.Instance.RefreshInteraction();
 		}
 		
 		public void UpdateWhereShip(){
+			_allChoiceReactions.Remove(whereShipChoice);
 			GUIManager.Instance.RefreshInteraction();
 		}
 		#endregion
