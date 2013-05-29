@@ -17,20 +17,16 @@ public class FadeEffect : ShaderBase {
 	
 	#region FadePlaneEffects
 	
-	protected float alphaFadeValue = 1.0f;
-	
-	protected float fadeDirection = -1f;
-	
 	public GameObject fadePlane = null;
 	
 	protected bool fade = false;
 	
 	public static class FADEPLANECONSTANTS {
-		public const float planeToCameraOffset = 0.3f;
+		public const float planeToCameraOffset = 0.31f;
 		
 	}
 	
-	private Vector3 idlePosition = new Vector3(5000,5000,-3);
+	private Vector3 idlePosition = new Vector3(5000,5000,-2);
 	
 	#endregion
 	
@@ -107,12 +103,18 @@ public class FadeEffect : ShaderBase {
 	/// Performs actions when the finger has swiped down.
 	/// </summary>
 	protected virtual void OnDragDown() {
+		if (!isFading) {
+			DoFade();
+		}
 	}
 	
 	/// <summary>
 	/// Peforms actions when the finger has swiped up.
 	/// </summary>
 	protected virtual void OnDragUp() {
+		if (!isFading) {
+			DoFade();
+		}
 	}
 	
 	void OnRenderImage(RenderTexture source, RenderTexture destination) {
@@ -152,11 +154,10 @@ public class FadeEffect : ShaderBase {
 		}
 		wasFading = isFading;
 	}
-	
+
 	protected void RenderFadePlane() {
 		if (isFading) {
-			
-			fadePlane.transform.position = new Vector3(camera.transform.position.x, camera.transform.position.y, 
+			fadePlane.transform.position = new Vector3(camera.transform.position.x, camera.transform.position.y  + FADEPLANECONSTANTS.planeToCameraOffset, 
 				camera.transform.position.z + FADEPLANECONSTANTS.planeToCameraOffset);
 			if (fade) {
 				FadeIn();
@@ -258,6 +259,10 @@ public class FadeEffect : ShaderBase {
 	/// </param>
 	public virtual void DoFade() 
 	{
+        if (SoundManager.instance.AudioOn && SoundManager.instance.SFXOn)
+        {
+            SoundManager.instance.AgeTranstionSFX.Play();
+        }
 		isFading = true;
 		interpolationFactor = 0;
 		if (shaderNotSupported) {

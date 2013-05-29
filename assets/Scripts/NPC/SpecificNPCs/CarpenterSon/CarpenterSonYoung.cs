@@ -9,8 +9,17 @@ public class CarpenterSonYoung : NPC {
 		id = NPCIDs.CARPENTER_SON;
 		base.Init();
 	}
-	
+	Schedule TalkWithCastleman;
+	Schedule TalkWithCastlemanNotFriend;
 	protected override void SetFlagReactions(){
+		
+		Reaction ReactToCastleMan = new Reaction();
+		ReactToCastleMan.AddAction(new NPCAddScheduleAction(this, TalkWithCastleman));
+		flagReactions.Add(FlagStrings.PlayerAndCastleFriends , ReactToCastleMan);
+		
+		Reaction ReactToCastleManNotFriends = new Reaction();
+		ReactToCastleManNotFriends.AddAction(new NPCAddScheduleAction(this, TalkWithCastlemanNotFriend));
+		flagReactions.Add(FlagStrings.PlayerAndCastleNOTFriends , ReactToCastleManNotFriends);
 		
 	}
 	
@@ -24,6 +33,20 @@ public class CarpenterSonYoung : NPC {
 	}
 
 	protected override void SetUpSchedules(){
+		TalkWithCastleman = new Schedule (this, Schedule.priorityEnum.High);
+		TalkWithCastleman.Add(new TimeTask(300, new WaitTillPlayerCloseState(this, player)));
+		Task setFlag = (new Task(new MoveThenDoState(this, this.gameObject.transform.position, new MarkTaskDone(this))));
+		setFlag.AddFlagToSet(FlagStrings.InitialConversationWithCSONFriend);
+		TalkWithCastleman.Add(setFlag);
+		//TalkWithCastleman.AddFlagGroup("Talk with Castleman");
+		
+		
+		TalkWithCastlemanNotFriend = new Schedule (this, Schedule.priorityEnum.High);
+		TalkWithCastlemanNotFriend.Add(new TimeTask(300, new WaitTillPlayerCloseState(this, player)));
+		Task setFlagNOT = (new Task(new MoveThenDoState(this, this.gameObject.transform.position, new MarkTaskDone(this))));
+		setFlagNOT.AddFlagToSet(FlagStrings.InitialConversationWithCSONNOTFriend);
+		TalkWithCastlemanNotFriend.Add(setFlagNOT);
+		//TalkWithCastleman.AddFlagGroup("Talk with Castleman NOT Friends");
 		
 	}
 	

@@ -2,6 +2,10 @@ using UnityEngine;
 using System.Collections;
 
 public class SoundManager : MonoBehaviour {
+    public bool AudioOn = true;
+    public bool BGMOn = true;
+    public bool SFXOn = true;
+
     public AudioSource ClimbLadderSFX;
     public AudioSource DoorCloseSFX;
     public AudioSource GiveItemSFX;
@@ -11,6 +15,8 @@ public class SoundManager : MonoBehaviour {
     public AudioSource WalkGrassSFX;
     public AudioSource WalkSandSFX;
     public AudioSource WalkWoodSFX;
+
+    public AudioSource AgeTranstionSFX;
 
     // Needs to be a monobehavior to be put in scene, so make a singleton here instead of using managersingleton
     // Should be changed to be given these files from the loader
@@ -52,7 +58,6 @@ public class SoundManager : MonoBehaviour {
         {
             Area = "Wood";
         }
-
         switch (Area)
         {
             case "Grass":

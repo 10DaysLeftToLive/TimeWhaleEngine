@@ -74,8 +74,7 @@ public class FortuneTellerYoung : NPC {
 			acceptFortuneState.AddAction(new NPCEmotionUpdateAction(toControl, new BeginFortuneState(toControl, "Your path lay with several important decisions. Take a moment to reflect~")));
 			acceptFortuneState.AddAction(new NPCCallbackAction(UpdateAcceptedChoices));
 			
-			acceptReluctantState.AddAction(new NPCEmotionUpdateAction(toControl, new BeginFortuneState(toControl, "Your path lay with several important decisions. Take a moment to reflect~")));
-			
+			acceptReluctantState.AddAction(new NPCEmotionUpdateAction(toControl, new BeginFortuneState(toControl, "Your path lay with several important decisions. Take a moment to reflect~")));	
 			declineFortuneState.AddAction(new NPCCallbackAction(UpdateDeclinedChoices));
 			
 			fullDeclineState.AddAction(new NPCEmotionUpdateAction(toControl, new StillConvincingState(toControl,"Ready for your fortune now?")));
@@ -89,14 +88,12 @@ public class FortuneTellerYoung : NPC {
 			_allChoiceReactions.Remove(declineFortuneChoice);
 			GUIManager.Instance.RefreshInteraction();
 		}
-		
 		public void setCurrentText(NPC toControl) {
 			SetDefaultText("Comeback Later, k?");
 			_allChoiceReactions.Remove(acceptReluctantChoice);
 			_allChoiceReactions.Remove(declineFortuneChoice);
 			GUIManager.Instance.RefreshInteraction();
 		}
-		
 		public void UpdateDeclinedChoices() {
 			_allChoiceReactions.Remove(declineFortuneChoice);
 			_allChoiceReactions.Remove(acceptFortuneChoice);
@@ -130,21 +127,32 @@ public class FortuneTellerYoung : NPC {
 							Choice stillSaveLifeChoice = new Choice ("I would", "You are a selfless and humble soul.." +"\n\n" + "Don't forget your own worth as well!~");//
 							Choice changeSaveLifeChoice = new Choice ("No", "A valid choice.. Why sacrifice for a stranger when you already know yourself?" +"\n\n" + "Stay well and healthy~");//
 						Choice maybeSaveLifeChoice = new Choice ("Depends", "Questioning.. What if your own life was at risk?");
-							//stillSaveLifeChoice
-							//changeSaveLifeChoice
+							//stillSaveLifeChoice //
+							//changeSaveLifeChoice //
 						Choice dontSaveLifeChoice = new Choice ("Never", "I see.. You are your utmost priority." +"\n\n" + "Stay well and healthy~");//
-				Choice questionChoice = new Choice ("Question their motive", "Mm. Seeking clarity." + "\n\n" + "They want a friend, do you allow them to follow?");
-						//keepSecretChoice
-						//tellSecretChoice
-							//leaveSecretChoice
-							//dontLeaveSecretChoice
-				Choice nothingChoice = new Choice ("Do nothing", "Mm. More important endeavors to attend?" + "\n\n" + "What if they were in tears?");
-					Choice yesToTearsChoice = new Choice ("I'd help", "You carry sympathy.. " + "\n\n" + "They ask you to share their burden, do you share it?");
-						Choice shareBurdenChoice = new Choice ("I'd help", "You carry sympathy.. " + "\n\n" + "They ask you to share their burden, do you share it?");
-						Choice dontShareBurdenChoice = new Choice ("I'd help", "Burden for a stranger" + "\n\n" + "They ask you to share their burden, do you share it?");
-					Choice noToTearsChoice = new Choice ("No", "True to your intentions.." + "\n\n" + "You are strong willed~");
-			Choice togetherChoice = new Choice ("With Others", "Mm, friendships are important." + "\n\n" + "If you could only save one person, who would it be?");
-			
+				Choice questionChoice = new Choice ("Question their motive", "Mm. Seeking clarity." + "\n\n" + "They want a friend, do you allow them to follow?");//
+						//keepSecretChoice //
+						//tellSecretChoice //
+							//leaveSecretChoice //
+							//dontLeaveSecretChoice //
+				Choice nothingChoice = new Choice ("Do nothing", "Mm. More important endeavors to attend?" + "\n\n" + "What if they were in tears?"); //
+					Choice yesToTearsChoice = new Choice ("I'd help", "You carry sympathy.. " + "\n\n" + "They ask you to share their burden, do you share it?"); //
+						Choice shareBurdenChoice = new Choice ("I'd help", "You carry sympathy.. " + "\n\n" + "They ask you to share their burden, do you share it?"); //
+						Choice dontShareBurdenChoice = new Choice ("I'd help", "Burden for a stranger" + "\n\n" + "They ask you to share their burden, do you share it?"); //
+					Choice noToTearsChoice = new Choice ("No", "True to your intentions.." + "\n\n" + "You are strong willed~"); //
+		
+			Choice togetherChoice = new Choice ("With Others", "Mm, friendships are important." + "\n\n" + "If you could only save one person, who would it be?"); //
+				Choice saveLoverChoice = new Choice ("A Lover", "The one true love... worth more than anything in world." + "\n\n" + "Would you risk your life for them?"); //
+					Choice loverRiskLifeChoice = new Choice ("Always","Mmm..." + "\n\n" + "But what if it would cause them grief knowing you gave your own life to save them?"); //
+						Choice yesRiskLifeChoice = new Choice ("I Still Would", "True love prevails over the odds." + "\n\n" + "May they be a lucky one~");
+						Choice noRiskLifeChoice = new Choice ("I don't know.", "It's ok not to know now ..." + "\n\n" +"but what would happen if such an event were to occur?~");
+					Choice loverUnsureLifeChoice = new Choice ("Depends","It's ok not to know... Perhaps they wouldn't want that either~");
+					Choice loverNeverLifeChoice = new Choice ("No","You trust in yourself first.. Perhaps that is the right answer~");
+				Choice saveFamilyChoice = new Choice ("A Sibling", "Family first... an unwritten trust.");
+					Choice FamilyQuestion = new Choice ("","");
+				Choice saveMentorChoice = new Choice ("A Mentor","Noble...a stranger with potential.");
+					Choice MentorQuestion = new Choice ("","");
+		
 			//Choice itemOne = new Choice ("itemOne","");
 			//Choice itemTwo = new Choice ("itemTwo","");
 			//Choice itemThree = new Choice ("itemThree","");
@@ -153,10 +161,8 @@ public class FortuneTellerYoung : NPC {
 			//Choice itemSix =  new Choice ("itemSix","");
 				
 		Choice rightChoice = new Choice("Right", "I see.." + "\n\n" + "Do you prefer being right or hearing how you might be wrong?");
+			
 		
-		Choice saveLoverChoice = new Choice ("Lover", "The one true love... worth more than the world.");
-		Choice saveFamilyChoice = new Choice ("Sibling", "Family first... an unwritten trust.");
-		Choice saveLeaderChoice = new Choice ("Leader","Noble...a stranger with potential.");
 //Add more choices 
 		
 		Reaction leftReaction = new Reaction();
@@ -175,12 +181,24 @@ public class FortuneTellerYoung : NPC {
 						Reaction dontSaveLifeReaction = new Reaction();
 				Reaction questionReaction = new Reaction();
 				Reaction nothingReaction = new Reaction();
+					Reaction shareBurdenReaction = new Reaction();
+						Reaction yesToTearsReaction = new Reaction();
+						Reaction noToTearsReaction = new Reaction();
+					Reaction dontShareBurdenReaction = new Reaction();
 			Reaction togetherReaction = new Reaction();
+				Reaction saveLoverReaction = new Reaction();
+					Reaction loverRiskLifeReaction = new Reaction();
+						Reaction yesRiskLifeReaction = new Reaction();
+						Reaction noRiskLifeReaction  = new Reaction();
+					Reaction loverUnsureLifeReaction = new Reaction();
+					Reaction loverNeverLifeReaction = new Reaction();
+				Reaction saveFamilyReaction = new Reaction();
+					Reaction familyQuestion = new Reaction();
+				Reaction saveMentorReaction = new Reaction();
+					Reaction mentorQuestion = new Reaction();
+		
 		
 		Reaction rightReaction = new Reaction();
-		Reaction saveLoverReaction = new Reaction();
-		Reaction saveFamilyReaction = new Reaction();
-		Reaction saveLeaderReaction = new Reaction();
 		
 		public BeginFortuneState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue) {
 			
@@ -200,12 +218,24 @@ public class FortuneTellerYoung : NPC {
 							dontSaveLifeReaction.AddAction(new NPCCallbackAction(UpdateDontSaveLifeChoice));
 					questionReaction.AddAction(new NPCCallbackAction(UpdateQuestionChoice));
 					nothingReaction.AddAction(new NPCCallbackAction(UpdateNothingChoice));
+						shareBurdenReaction.AddAction(new NPCCallbackAction(UpdateShareBurdenChoice));
+							yesToTearsReaction.AddAction(new NPCCallbackAction(UpdateYesToTearsChoice));
+							noToTearsReaction.AddAction(new NPCCallbackAction(UpdateNoToTearsChoice));
+						dontShareBurdenReaction.AddAction(new NPCCallbackAction(UpdateDontShareBurdenChoice));
 				togetherReaction.AddAction(new NPCCallbackAction(UpdateTogetherChoice));
+					saveLoverReaction.AddAction(new NPCCallbackAction(UpdateSaveLoverChoice));
+						loverRiskLifeReaction.AddAction(new NPCCallbackAction(UpdateLoverRiskLifeChoice));
+							yesRiskLifeReaction.AddAction(new NPCCallbackAction(UpdateYesRiskLifeChoice));
+							noRiskLifeReaction.AddAction(new NPCCallbackAction(UpdateNoRiskLifeChoice));
+						loverUnsureLifeReaction.AddAction(new NPCCallbackAction(UpdateLoverUnsureLifeChoice));
+						loverNeverLifeReaction.AddAction(new NPCCallbackAction(UpdateLoverNeverLifeChoice));
+					saveFamilyReaction.AddAction(new NPCCallbackAction(UpdateSaveFamilyChoice));
+						
+					saveMentorReaction.AddAction(new NPCCallbackAction(UpdateSaveMentorChoice));			
+						
 			
 			rightReaction.AddAction(new NPCCallbackAction(UpdateRightChoice));
-			saveLoverReaction.AddAction(new NPCCallbackAction(UpdateSaveChoice));
-			saveFamilyReaction.AddAction(new NPCCallbackAction(UpdateSaveChoice));
-			saveLeaderReaction.AddAction(new NPCCallbackAction(UpdateSaveChoice));
+
 			
 			_allChoiceReactions.Add(leftChoice, new DispositionDependentReaction(leftReaction));
 			_allChoiceReactions.Add(rightChoice, new DispositionDependentReaction(rightReaction));
@@ -320,8 +350,7 @@ public class FortuneTellerYoung : NPC {
 			//_allChoiceReactions.Add(dontSaveLifeChoice, new DispositionDependentReaction(dontSaveLifeReaction));
 			GUIManager.Instance.RefreshInteraction();
 		}
-		
-		
+			
 		public void UpdateQuestionChoice() {
 			_allChoiceReactions.Remove(aidChoice);
 			_allChoiceReactions.Remove(questionChoice);
@@ -337,9 +366,35 @@ public class FortuneTellerYoung : NPC {
 			_allChoiceReactions.Remove(questionChoice);
 			_allChoiceReactions.Remove(nothingChoice);
 		
-			_allChoiceReactions.Add(saveLoverChoice, new DispositionDependentReaction(saveLoverReaction));
-			_allChoiceReactions.Add(saveFamilyChoice, new DispositionDependentReaction(saveFamilyReaction));
-			_allChoiceReactions.Add(saveLeaderChoice, new DispositionDependentReaction(saveLeaderReaction));
+			_allChoiceReactions.Add(noToTearsChoice, new DispositionDependentReaction(noToTearsReaction));
+			_allChoiceReactions.Add(yesToTearsChoice, new DispositionDependentReaction(yesToTearsReaction));
+			GUIManager.Instance.RefreshInteraction();
+		}
+		
+		public void UpdateYesToTearsChoice() {
+			_allChoiceReactions.Remove(yesToTearsChoice);
+			_allChoiceReactions.Remove(noToTearsChoice);
+		
+			_allChoiceReactions.Add(dontShareBurdenChoice, new DispositionDependentReaction(dontShareBurdenReaction));
+			_allChoiceReactions.Add(shareBurdenChoice, new DispositionDependentReaction(shareBurdenReaction));
+			GUIManager.Instance.RefreshInteraction();
+		}
+		
+		public void UpdateShareBurdenChoice() {
+			_allChoiceReactions.Remove(shareBurdenChoice);
+			_allChoiceReactions.Remove(dontShareBurdenChoice);
+			GUIManager.Instance.RefreshInteraction();
+		}
+		
+		public void UpdateDontShareBurdenChoice() {
+			_allChoiceReactions.Remove(shareBurdenChoice);
+			_allChoiceReactions.Remove(dontShareBurdenChoice);
+			GUIManager.Instance.RefreshInteraction();
+		}
+		
+		public void UpdateNoToTearsChoice() {
+			_allChoiceReactions.Remove(yesToTearsChoice);
+			_allChoiceReactions.Remove(noToTearsChoice);
 			GUIManager.Instance.RefreshInteraction();
 		}
 		
@@ -350,11 +405,84 @@ public class FortuneTellerYoung : NPC {
 			//NotYetChoice = new Choice ("Not yet.", "Ok, come back soon! Predictions come and go you know!");
 			_allChoiceReactions.Add(saveLoverChoice, new DispositionDependentReaction(saveLoverReaction));
 			_allChoiceReactions.Add(saveFamilyChoice, new DispositionDependentReaction(saveFamilyReaction));
-			_allChoiceReactions.Add(saveLeaderChoice, new DispositionDependentReaction(saveLeaderReaction));
+			_allChoiceReactions.Add(saveMentorChoice, new DispositionDependentReaction(saveMentorReaction));
 			//toControl.UpdateDefaultText("");
+			GUIManager.Instance.RefreshInteraction();	
+		}
+		#region SavePeople
+		public void UpdateSaveLoverChoice() {
+			_allChoiceReactions.Remove(saveLoverChoice);
+			_allChoiceReactions.Remove(saveFamilyChoice);
+			_allChoiceReactions.Remove(saveMentorChoice);
+			_allChoiceReactions.Add(loverNeverLifeChoice, new DispositionDependentReaction(loverNeverLifeReaction));
+			_allChoiceReactions.Add(loverUnsureLifeChoice, new DispositionDependentReaction(loverUnsureLifeReaction));
+			_allChoiceReactions.Add(loverRiskLifeChoice, new DispositionDependentReaction(loverRiskLifeReaction));
 			GUIManager.Instance.RefreshInteraction();
 			
 		}
+		
+		public void UpdateLoverRiskLifeChoice() {
+			_allChoiceReactions.Remove(loverRiskLifeChoice);
+			_allChoiceReactions.Remove(loverUnsureLifeChoice);
+			_allChoiceReactions.Remove(loverNeverLifeChoice);
+			
+			_allChoiceReactions.Add(noRiskLifeChoice, new DispositionDependentReaction(noRiskLifeReaction));
+			_allChoiceReactions.Add(yesRiskLifeChoice, new DispositionDependentReaction(yesRiskLifeReaction));
+
+			GUIManager.Instance.RefreshInteraction();
+		}
+		
+		
+		public void UpdateYesRiskLifeChoice() {
+			_allChoiceReactions.Remove(yesRiskLifeChoice);
+			_allChoiceReactions.Remove(noRiskLifeChoice);
+			GUIManager.Instance.RefreshInteraction();
+		}
+		
+		public void UpdateNoRiskLifeChoice() {
+			_allChoiceReactions.Remove(yesRiskLifeChoice);
+			_allChoiceReactions.Remove(noRiskLifeChoice);
+			GUIManager.Instance.RefreshInteraction();
+		}
+		
+		public void UpdateLoverUnsureLifeChoice() {
+			_allChoiceReactions.Remove(loverRiskLifeChoice);
+			_allChoiceReactions.Remove(loverUnsureLifeChoice);
+			_allChoiceReactions.Remove(loverNeverLifeChoice);
+			GUIManager.Instance.RefreshInteraction();
+		}
+		
+		public void UpdateLoverNeverLifeChoice() {
+			_allChoiceReactions.Remove(loverRiskLifeChoice);
+			_allChoiceReactions.Remove(loverUnsureLifeChoice);
+			_allChoiceReactions.Remove(loverNeverLifeChoice);
+			GUIManager.Instance.RefreshInteraction();
+		}
+		
+		public void UpdateSaveFamilyChoice() {
+			_allChoiceReactions.Remove(saveLoverChoice);
+			_allChoiceReactions.Remove(saveFamilyChoice);
+			_allChoiceReactions.Remove(saveMentorChoice);
+			
+			//_allChoiceReactions.Add(aloneChoice, new DispositionDependentReaction(saveFamilyReaction));
+			//_allChoiceReactions.Add(togetherChoice, new DispositionDependentReaction(togetherReaction));
+			
+			GUIManager.Instance.RefreshInteraction();
+			
+		}
+		
+		public void UpdateSaveMentorChoice() {
+			_allChoiceReactions.Remove(saveLoverChoice);
+			_allChoiceReactions.Remove(saveFamilyChoice);
+			_allChoiceReactions.Remove(saveMentorChoice);
+			
+			//_allChoiceReactions.Add(aloneChoice, new DispositionDependentReaction(declineFortuneState));
+			//_allChoiceReactions.Add(togetherChoice, new DispositionDependentReaction(acceptFortuneState));
+			
+			GUIManager.Instance.RefreshInteraction();
+			
+		}
+		#endregion
 		
 		public void UpdateRightChoice() {
 			_allChoiceReactions.Remove(leftChoice);
@@ -362,22 +490,7 @@ public class FortuneTellerYoung : NPC {
 			_allChoiceReactions.Add(togetherChoice, new DispositionDependentReaction(togetherReaction));
 			_allChoiceReactions.Add(aloneChoice, new DispositionDependentReaction(aloneReaction));
 			GUIManager.Instance.RefreshInteraction();
-		}
-		
-		public void UpdateSaveChoice() {
-			_allChoiceReactions.Remove(saveLoverChoice);
-			_allChoiceReactions.Remove(saveFamilyChoice);
-			_allChoiceReactions.Remove(saveLeaderChoice);
-			
-			//NotYetChoice = new Choice ("Not yet.", "Ok, come back soon! Predictions come and go you know!");
-			//_allChoiceReactions.Add(aloneChoice, new DispositionDependentReaction(declineFortuneState));
-			//_allChoiceReactions.Add(togetherChoice, new DispositionDependentReaction(acceptFortuneState));
-			
-			//toControl.UpdateDefaultText("");
-			GUIManager.Instance.RefreshInteraction();
-			
-		}
-		
+		}	
 	}
 	#endregion				
 	#region Initial Emotion State

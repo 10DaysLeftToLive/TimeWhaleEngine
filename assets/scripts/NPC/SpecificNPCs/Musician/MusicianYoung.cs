@@ -19,7 +19,13 @@ public class MusicianYoung : NPC {
 		IsHeMuteReaction.AddAction(new NPCAddChoiceAction(this, MuteResponseChoice, new DispositionDependentReaction(MuteResponseReaction)));
 		flagReactions.Add(FlagStrings.MusicianCommentOnSon, IsHeMuteReaction);
 		
+		Reaction RespondToCMANAndYouFriends = new Reaction();
+		RespondToCMANAndYouFriends.AddAction(new ShowOneOffChatAction(this, "Why don't you introduce my son to your friends in town!\nIt'll help him meet new people."));
+		flagReactions.Add(FlagStrings.PlayerAndCastleFriends, RespondToCMANAndYouFriends);
 		
+		Reaction RespondToCMANAndYouNOTFriends = new Reaction();
+		RespondToCMANAndYouNOTFriends.AddAction(new ShowOneOffChatAction(this, "Why don't you introduce my son to your friends in town!\nIt'll help him meet new people."));
+		flagReactions.Add(FlagStrings.PlayerAndCastleNOTFriends, RespondToCMANAndYouNOTFriends);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){

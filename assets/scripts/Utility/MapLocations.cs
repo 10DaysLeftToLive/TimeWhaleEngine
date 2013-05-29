@@ -38,4 +38,15 @@ public class MapLocations {
 	public static Vector3 BaseOfPierOld{
 		get{return new Vector3(_baseOfPier.x, _baseOfPier.y + (LevelManager.levelYOffSetFromCenter * 2), _baseOfPier.z);}
 	}
+	static Vector3 _middleOfBeach = new Vector3(49.7f, -7.4f, -0.5f);
+	public static Vector3 MiddleOfBeachYoung{
+		get{return _middleOfBeach;}
+	}
+	public static Vector3 MiddleOfBeachMiddle{
+		get{return new Vector3(_middleOfBeach.x, _middleOfBeach.y + LevelManager.levelYOffSetFromCenter, _middleOfBeach.z);}
+	}
+	
+	public static Vector3 MiddleOfBeachOld{
+		get{return new Vector3(_middleOfBeach.x, _middleOfBeach.y + (LevelManager.levelYOffSetFromCenter * 2), _middleOfBeach.z);}
+	}
 }

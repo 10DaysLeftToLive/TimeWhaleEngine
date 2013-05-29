@@ -38,7 +38,6 @@ public class AgeTransitionShader : FadeEffect {
 			DoAgeShift(Strings.ButtonAgeShiftDown);
 			DoFade();
 		}
-		base.OnDragDown();
 	}
 	
 	/// <summary>
@@ -50,7 +49,6 @@ public class AgeTransitionShader : FadeEffect {
 			DoAgeShift(Strings.ButtonAgeShiftUp);
 			DoFade();
 		}
-		base.OnDragUp();
 	}
 	
 	protected override void OnFadeStart(RenderTexture source) {
