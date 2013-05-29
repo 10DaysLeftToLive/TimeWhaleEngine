@@ -37,7 +37,7 @@ SubShader
 		{
 			v2f o;
 			o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
-			//o.uv = v.texcoord - _CenterFrequencyAmplitude.xy;
+			//o.uv = v.texcoord + _CenterFrequencyAmplitude.xy;
 			o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
 			o.uvOrig = v.texcoord;
 			return o;
@@ -51,10 +51,10 @@ SubShader
 			half2 uv;
 			offset.x = _CenterFrequencyAmplitude.w * 
 				sin(_CenterFrequencyAmplitude.z * i.uvOrig.y * pi + _Angle);
-			uv.x = i.uvOrig.x + i.uvOrig.x*(offset.x);
+			uv.x = i.uvOrig.x + i.uvOrig.y*(offset.x);
 			uv.y = i.uvOrig.y;
-			
-			//uv += _CenterFrequencyAmplitude.xy;
+
+			//uv.xy -= _CenterFrequencyAmplitude.xy;
 			
 			half4 oldColor = tex2D(_MainTex, uv);
 			half4 newColor = tex2D(_FadeInTex, i.uvOrig);

@@ -21,7 +21,6 @@ public class SunsetLight : PauseObject {
 			CrossFadeForeground ();
 		}
 		else if (OneDayClock.Instance.GetGameDayTime() > OneDayClock.MIDDAY) {
-			Debug.Log ("DOING FOREGROUND FADE");
 			doFade = true;
 		}
 	}
@@ -36,7 +35,6 @@ public class SunsetLight : PauseObject {
 			sunsetLightColor.g -= (OneDayClock.Instance.GetGameDayTime() - OneDayClock.MIDDAY)  * 2 * 1f/255 / sunsetFadeDuration;
 			sunsetLightColor.b -= (OneDayClock.Instance.GetGameDayTime() - OneDayClock.MIDDAY)  * 2 * 1f/255 / sunsetFadeDuration;
 		}
-		Debug.Log ("LightColor: " + light.color);
 		light.color = sunsetLightColor;
 	}
 }

@@ -23,7 +23,6 @@ public class FadeEffect : ShaderBase {
 	
 	public static class FADEPLANECONSTANTS {
 		public const float planeToCameraOffset = 0.31f;
-		
 	}
 	
 	private Vector3 idlePosition = new Vector3(5000,5000,-2);
@@ -64,6 +63,10 @@ public class FadeEffect : ShaderBase {
 		
 		if (!shaderNotSupported) {
 			transitionTexture = new Texture2D(256, 256);
+			transitionTexture.wrapMode = TextureWrapMode.Repeat;
+			//transitionTexture.texelSize = new Vector2(0.5f, 0.5f);
+			transitionTexture.filterMode = FilterMode.Point;
+			transitionTexture.anisoLevel = 2;
 			renderQuad = new Rect(0, 0, 256, 256);
 			Destroy(fadePlane);
 		}
