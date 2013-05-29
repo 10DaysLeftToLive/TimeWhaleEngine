@@ -100,7 +100,7 @@ public class InteractionMenu : GUIControl {
 	}
 	
 	private void DisplayPortrait(){
-		GUI.Box (portraitRect, charPortrait);	
+		GUI.Box (portraitRect, charPortrait, textFieldStyle);	
 	}
 	
 	private void DrawBackgroundBox(){
