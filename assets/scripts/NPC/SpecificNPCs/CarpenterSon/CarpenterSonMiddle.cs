@@ -29,18 +29,18 @@ public class CarpenterSonMiddle : NPC {
 	}
 	
 	Schedule stormOffSchedule;
-	Schedule IdleSchedule;
+	//Schedule IdleSchedule;
 
 	protected override void SetUpSchedules(){
 		stormOffSchedule = new Schedule(this,Schedule.priorityEnum.DoNow);
 		stormOffSchedule.Add(new Task(new MoveState(this, MapLocations.BaseOfPierMiddle)));
 		stormOffSchedule.Add(new TimeTask(1.0f, new IdleState(this)));
 		
-		IdleSchedule = new Schedule(this, Schedule.priorityEnum.High);
-		IdleSchedule.Add(new Task(new MoveState(this, transform.position.x - 5)));
-		IdleSchedule.Add(new TimeTask(5, new WaitState(this)));
-		IdleSchedule.Add(new Task(new MoveState(this, transform.position.x + 5)));
-		IdleSchedule.Add(new TimeTask(5, new WaitState(this)));
+		//IdleSchedule = new Schedule(this, Schedule.priorityEnum.High);
+		//IdleSchedule.Add(new Task(new MoveState(this, transform.position.x - 5)));
+		//IdleSchedule.Add(new TimeTask(5, new WaitState(this)));
+		//IdleSchedule.Add(new Task(new MoveState(this, transform.position.x + 5)));
+		//IdleSchedule.Add(new TimeTask(5, new WaitState(this)));
 	}
 	
 	
