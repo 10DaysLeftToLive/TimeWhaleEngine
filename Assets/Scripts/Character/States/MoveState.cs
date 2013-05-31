@@ -83,7 +83,7 @@ public class MoveState : AbstractState {
 			} else {
 				GoToNearestNode();
 			}
-        }
+		}
 	}
     
     private void Move(Vector3 moveDelta){
@@ -176,7 +176,13 @@ public class MoveState : AbstractState {
 	}
 	
 	private void GoToNearestNode(){
-		UpdateGoal(GetNearestNodeToGoal(_goal));
+		Vector3 newGoal = GetNearestNodeToGoal(_goal);
+		// if we are already at the nearest node don't move
+		if (Utils.CalcDistance(newGoal.x, character.transform.position.x) < speed*Time.deltaTime){
+			OnNoPath();
+		} else {
+			UpdateGoal(newGoal);
+		}
 	}
 	
 	private Vector3 GetNearestNodeToGoal(Vector3 goalCantReach){
