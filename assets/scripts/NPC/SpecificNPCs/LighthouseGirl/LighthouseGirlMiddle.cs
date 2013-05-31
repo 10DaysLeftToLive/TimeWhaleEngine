@@ -117,11 +117,11 @@ public class LighthouseGirlMiddle : NPC {
 		
 		backToFarmSchedule = new Schedule(this, Schedule.priorityEnum.High);
 		backToFarmSchedule.Add(new TimeTask(8f, new IdleState(this)));
-		backToFarmSchedule.Add(new Task(new MoveThenDoState(this, new Vector3(startingPosition.x, startingPosition.y, .5f), new MarkTaskDone(this))));
+		backToFarmSchedule.Add(new Task(new MoveThenDoState(this, startingPosition, new MarkTaskDone(this))));
 		
 		ropeDownSchedule = new Schedule(this, Schedule.priorityEnum.High);
 		ropeDownSchedule.Add(new TimeTask(30, new WaitTillPlayerGoneState(this, player)));
-		Task setFlag = new Task( new MoveThenDoState(this, new Vector3 (startingPosition.x, startingPosition.y, .5f), new MarkTaskDone(this)));
+		Task setFlag = new Task( new MoveThenDoState(this, startingPosition, new MarkTaskDone(this)));
 		setFlag.AddFlagToSet(FlagStrings.WaitingForDate);
 		ropeDownSchedule.Add(setFlag);
 		ropeDownSchedule.AddFlagGroup("a");
