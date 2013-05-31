@@ -17,7 +17,21 @@ public class FarmerMotherYoung : NPC {
 		id = NPCIDs.FARMER_MOTHER;
 		base.Init();
 	}
-	
+	protected void setAngry(){
+		this.SetCharacterPortrait(StringsNPC.Angry);
+	}
+	protected void setSad(){
+		this.SetCharacterPortrait(StringsNPC.Sad);
+	}
+	protected void setBlink(){
+		this.SetCharacterPortrait(StringsNPC.Blink);
+	}
+	protected void setDefault(){
+		this.SetCharacterPortrait(StringsNPC.Default);
+	}
+	protected void setHappy(){
+		this.SetCharacterPortrait(StringsNPC.Smile);	
+	}
 	protected override void SetFlagReactions(){
 		Reaction NewDialogueReaction = new Reaction();
 		NewDialogueReaction.AddAction (new NPCCallbackAction(UpdateConversationInMiddleFarmerMother));

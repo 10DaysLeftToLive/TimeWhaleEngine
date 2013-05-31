@@ -12,6 +12,24 @@ public class LighthouseGirlYoung : NPC {
 		id = NPCIDs.LIGHTHOUSE_GIRL;
 		base.Init();
 	}
+	protected void setAngry(){
+		this.SetCharacterPortrait(StringsNPC.Angry);
+	}
+	protected void setSad(){
+		this.SetCharacterPortrait(StringsNPC.Sad);
+	}
+	protected void setBlink(){
+		this.SetCharacterPortrait(StringsNPC.Blink);
+	}
+	protected void setDefault(){
+		this.SetCharacterPortrait(StringsNPC.Default);
+	}
+	protected void setEmbarrased(){
+		this.SetCharacterPortrait(StringsNPC.Embarassed);
+	}
+	protected void setHappy(){
+		this.SetCharacterPortrait(StringsNPC.Smile);	
+	}
 	private NPCConvoSchedule tellOnLighthouseConversationSchedule;
 	protected override void SetFlagReactions(){
 		Reaction TellOnLighthouseReaction = new Reaction();
