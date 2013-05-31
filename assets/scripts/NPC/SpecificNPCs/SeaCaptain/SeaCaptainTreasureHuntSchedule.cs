@@ -7,11 +7,11 @@ public class SeaCaptainTreasureHuntSchedule : Schedule {
 	
 	protected override void Init ()
 	{
-		Vector3 startingPosition = new Vector3(74f, -3f, .05f);
-		Vector3 farmDigPos = new Vector3(52.5f, 16f, .05f);
-		Vector3 reflectDigPos = new Vector3(-28f, 18f, .05f);
-		Vector3 carpenterDigPos = new Vector3(16f, -1f, .05f);
-		Vector3 beachDigPos = new Vector3(43f, -7.5f, .05f);
+		Vector3 startingPosition = new Vector3(74f, -3f + LevelManager.levelYOffSetFromCenter, .05f);
+		Vector3 farmDigPos = new Vector3(52.5f, 16f + LevelManager.levelYOffSetFromCenter, .05f);
+		Vector3 reflectDigPos = new Vector3(-28f, 18f + LevelManager.levelYOffSetFromCenter, .05f);
+		Vector3 carpenterDigPos = new Vector3(16f, -1f + LevelManager.levelYOffSetFromCenter, .05f);
+		Vector3 beachDigPos = new Vector3(43f, -7.5f + LevelManager.levelYOffSetFromCenter, .05f);
 		
 		SetCanInteract(false);
 		Add(new Task(new MoveThenMarkDoneState(_toManage, farmDigPos), _toManage, 0, "Let's go find me some treasure!"));

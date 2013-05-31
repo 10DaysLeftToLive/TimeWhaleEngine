@@ -45,7 +45,7 @@ public class MotherMiddle : NPC {
 	#region Initial Emotion State
 	private class InitialEmotionState : EmotionState{
 		string[] stringList = {"Hello dear... how are you?", "The Garden looks ok... but I wish it was more lively.", "*cough* *cough* *cough*", "Want to hear a story?"};
-		int stringCounter = 5;
+		int stringCounter = 4;
 		Reaction gaveRose;
 		Reaction gavePendant;
 		Reaction gaveSeashell;
@@ -85,6 +85,7 @@ public class MotherMiddle : NPC {
 			
 			SetOnOpenInteractionReaction(new DispositionDependentReaction(randomMessage));
 			
+			TempFarmerReturnReaction.AddAction(new UpdateCurrentTextAction(toControl, "Blah"));
 			TempFarmerReturnReaction.AddAction(new NPCCallbackAction(TempResponse));
 			_allChoiceReactions.Add(TempFarmerReturnChoice,new DispositionDependentReaction(TempFarmerReturnReaction));
 		}

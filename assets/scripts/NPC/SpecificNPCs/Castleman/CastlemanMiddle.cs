@@ -53,7 +53,6 @@ public class CastlemanMiddle : NPC {
 		flagReactions.Add(FlagStrings.CastleManNoShow, stoodUpLG);
 		
 		Reaction moveToDate = new Reaction();
-		//moveToDate.AddAction(new NPCAddScheduleAction(this, moveToBeach));
 		moveToDate.AddAction(new NPCAddScheduleAction(this, dateWithLG));
 		flagReactions.Add(FlagStrings.CastleManDating, moveToDate);
 		
@@ -79,9 +78,6 @@ public class CastlemanMiddle : NPC {
 	Schedule moveToBeach, moveBack;
 	NPCConvoSchedule dateWithLG;
 	protected override void SetUpSchedules(){
-		
-		moveToBeach = new Schedule(this, Schedule.priorityEnum.High);
-		moveToBeach.Add(new Task(new MoveThenDoState(this, new Vector3 (58,44.5f,.5f), new MarkTaskDone(this))));
 		
 		moveBack = new Schedule(this, Schedule.priorityEnum.High);
 		moveBack.Add(new Task(new MoveThenDoState(this, startingPosition, new MarkTaskDone(this))));

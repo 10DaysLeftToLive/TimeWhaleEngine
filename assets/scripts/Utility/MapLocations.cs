@@ -49,4 +49,15 @@ public class MapLocations {
 	public static Vector3 MiddleOfBeachOld{
 		get{return new Vector3(_middleOfBeach.x, _middleOfBeach.y + (LevelManager.levelYOffSetFromCenter * 2), _middleOfBeach.z);}
 	}
+	
+	static Vector3 _upperMiddleBeach = new Vector3(62f, -6f, -.5f);
+	public static Vector3 UpperMiddleBeachYoung{
+		get{return _upperMiddleBeach;}	
+	}
+	public static Vector3 UpperMiddleBeachMiddle{
+		get{return new Vector3(_upperMiddleBeach.x, _upperMiddleBeach.y + LevelManager.levelYOffSetFromCenter, _upperMiddleBeach.z);}	
+	}
+	public static Vector3 UpperMiddleBeachOld{
+		get{return new Vector3(_upperMiddleBeach.x, _upperMiddleBeach.y + (LevelManager.levelYOffSetFromCenter * 2), _upperMiddleBeach.z);}	
+	}
 }

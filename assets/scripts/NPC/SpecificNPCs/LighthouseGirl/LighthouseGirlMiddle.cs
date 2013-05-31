@@ -161,7 +161,7 @@ public class LighthouseGirlMiddle : NPC {
 	}
 	
 	protected void MoveToBeach(){
-		this.transform.position = new Vector3(62,44.5f,.5f);	
+		this.transform.position = MapLocations.MiddleOfBeachMiddle;	
 	}
 	
 	protected void SendNotInsaneToState(){

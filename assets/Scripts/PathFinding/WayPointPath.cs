@@ -157,7 +157,7 @@ public class WayPointPath {
 		Vector3[] temp = Search.GetVectors(stop, start);
 		int[] wayPointTemp = Search.GetWayPointIndices(stop, start);
 		for (int i = 0; i < Search.index; i++)
-			AddPoint(new Vector3 (temp[i].x, temp[i].y + height + 50*currentAge,temp[i].z), wayPointTemp[i]);
+			AddPoint(new Vector3 (temp[i].x, temp[i].y + height + LevelManager.levelYOffSetFromCenter*currentAge,temp[i].z), wayPointTemp[i]);
 		AddPoint(destination, -1);
 		return true;
 	}
@@ -166,7 +166,7 @@ public class WayPointPath {
 		Vector3[] temp = Search.GetVectors(stop, start);
 		int[] wayPointTemp = Search.GetWayPointIndices(stop, start);
 		for (int i = 0; i < Search.index; i++)
-			AddPoint(new Vector3 (temp[i].x, temp[i].y + height + 50*currentAge,temp[i].z), wayPointTemp[i]);
+			AddPoint(new Vector3 (temp[i].x, temp[i].y + height + LevelManager.levelYOffSetFromCenter*currentAge,temp[i].z), wayPointTemp[i]);
 		return true;
 	}
 
