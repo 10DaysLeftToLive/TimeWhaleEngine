@@ -75,7 +75,6 @@ public class WayPointPath {
 		currentAge = (int)start.pointAge;
 		if (minDistance == 999){
 			noPath = true;
-			//Debug.Log("min distance of " + minDistance);
 		}
 	}
 	
