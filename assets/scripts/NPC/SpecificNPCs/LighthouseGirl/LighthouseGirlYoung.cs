@@ -184,6 +184,28 @@ public class LighthouseGirlYoung : NPC {
 		Reaction UhOnceUponReaction = new Reaction();
 		Reaction LittleGirlReaction = new Reaction();
 		
+		
+		Choice ThereWasAWarriorChoice;
+		Reaction ThereWasAWarriorReaction;
+		Choice ImSupposedToTellItChoice;
+		Reaction ImSupposedToTellItReaction;
+		Choice ButIChoice;
+		Reaction ButIReaction;
+		Choice GrumbleChoice;
+		Reaction GrumbleReaction;
+		Choice LaLaLaLaChoice;
+		Reaction LaLaLaLaReaction;
+		Choice YouArentDoneYetChoice;
+		Reaction YouArentDoneYetReaction;
+		Choice ThisIsBoringChoice;
+		Reaction ThisIsBoringReaction;
+		Choice SayNothingOneChoice;
+		Reaction SayNothingOneReaction;
+		Choice SayNothingTwoChoice;
+		Reaction SayNothingTwoReaction;
+		Choice HappilyEverAfterChoice;
+		Reaction HappilyEverAfterReaction;
+		
 		public JesterEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
 			
 			SureReaction.AddAction(new NPCCallbackAction(SureResponse));
