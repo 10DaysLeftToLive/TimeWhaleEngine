@@ -6,7 +6,7 @@ using System.Collections.Generic;
 /// Level manager will handle the initialization of the game and will hold the sections of the map
 /// </summary>
 public class LevelManager : MonoBehaviour {
-	public static float levelYOffSetFromCenter = 50;
+	public static float levelYOffSetFromCenter = 100;
 	public CharacterAgeState initialAge;
 	
 	private ParallaxManager parallaxManager;
