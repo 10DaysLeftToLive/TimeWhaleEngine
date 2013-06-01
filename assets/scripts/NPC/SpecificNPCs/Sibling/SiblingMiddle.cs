@@ -21,7 +21,7 @@ public class SiblingMiddle : NPC {
 	protected override Schedule GetSchedule(){
 		Schedule schedule = new DefaultSchedule(this);
 		Task initialSchedule = new TimeTask(.25f , new IdleState(this));
-		Task moveToBridge = new Task(new MoveThenDoState(this, new Vector3(5, .2f, .3f), new MarkTaskDone(this)));
+		Task moveToBridge = new Task(new MoveThenDoState(this, new Vector3(5, .2f + LevelManager.levelYOffSetFromCenter, .3f), new MarkTaskDone(this)));
 		schedule.Add(initialSchedule);
 		schedule.Add (moveToBridge);
 		return (schedule);

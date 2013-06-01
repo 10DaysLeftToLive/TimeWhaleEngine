@@ -28,14 +28,38 @@ public class CastlemanYoung : NPC {
 	NPCConvoSchedule CastleManTalksToLighthouseOnBeachFriends;
 	NPCConvoSchedule CastleManTalksToLighthouseOnBeachNOTFriends;
 	
+	protected void setAngry(){
+		this.SetCharacterPortrait(StringsNPC.Angry);
+	}
+	protected void setSad(){
+		this.SetCharacterPortrait(StringsNPC.Sad);
+	}
+	protected void setBlink(){
+		this.SetCharacterPortrait(StringsNPC.Blink);
+	}
+	protected void setDefault(){
+		this.SetCharacterPortrait(StringsNPC.Default);
+	}
+	protected void setEmbarrased(){
+		this.SetCharacterPortrait(StringsNPC.Embarassed);
+	}
+	protected void setHappy(){
+		this.SetCharacterPortrait(StringsNPC.Smile);	
+	}
 	protected override void SetFlagReactions(){
+		Reaction testOne = new Reaction();
+		testOne.AddAction(new NPCAddScheduleAction(this, CastleManFollowSchedule));
+		flagReactions.Add(FlagStrings.MusicianFinishedTalkingFriends, testOne);
+		
+		Reaction testTwo = new Reaction();
+		testTwo.AddAction(new NPCAddScheduleAction(this, CastleManFollowSchedule));
+		flagReactions.Add(FlagStrings.MusicianFinishedTalkingNOTFriends, testTwo);
+		
 		
 		Reaction ChangeToTalkingState = new Reaction();
 		ChangeToTalkingState.AddAction(new NPCEmotionUpdateAction(this, new MeetFamily(this, "")));
-		//ChangeToTalkingState.AddAction(new NPCAddScheduleAction(this, testSchedule));
+		//ChangeToTalkingState.AddAction(new NPCCallbackAction(setAngry));
 		flagReactions.Add(FlagStrings.MoveToMusician, ChangeToTalkingState);
-		
-		
 		
 		#region Asfriends
 		//Schedule to start the castleman following the player when he is friends
@@ -43,49 +67,50 @@ public class CastlemanYoung : NPC {
 		FriendsWithPlayer.AddAction(new NPCAddScheduleAction(this, CastleManFollowSchedule));
 		FriendsWithPlayer.AddAction(new NPCEmotionUpdateAction(this, new CastleManTraveling(this, "")));
 		FriendsWithPlayer.AddAction(new NPCCallbackAction(setFriends));
+		FriendsWithPlayer.AddAction(new NPCCallbackAction(setHappy));
 		flagReactions.Add(FlagStrings.PlayerAndCastleFriends, FriendsWithPlayer);
 		
 		//Schedule to start talking to carpenter as friends
 		Reaction IntroConversationCarpenterSonFriend = new Reaction ();
 		IntroConversationCarpenterSonFriend.AddAction(new NPCAddScheduleAction(this, CastleManTalksFirstFriends));
 		IntroConversationCarpenterSonFriend.AddAction(new NPCAddScheduleAction(this, CastleManTalksToCSON));
+		IntroConversationCarpenterSonFriend.AddAction(new NPCCallbackAction(setSad));
 		flagReactions.Add(FlagStrings.InitialConversationWithCSONFriend, IntroConversationCarpenterSonFriend);
 		//Sets up the new emotion after the first conversation
 		//
 		Reaction AfterIntroConversationCarpenterSon = new Reaction();
 		AfterIntroConversationCarpenterSon.AddAction(new NPCAddScheduleAction(this, CastleManFollowSchedule));
 		AfterIntroConversationCarpenterSon.AddAction(new NPCEmotionUpdateAction(this, new VisitCarpenterSonAsFriend(this, "")));
+		AfterIntroConversationCarpenterSon.AddAction(new NPCCallbackAction(setSad));
 		flagReactions.Add(FlagStrings.FinishedInitialConversationWithCSONFriend, AfterIntroConversationCarpenterSon);
 		//Sets up the second conversation
 		Reaction StartConversationTwoFriends = new Reaction ();
 		StartConversationTwoFriends.AddAction(new NPCAddScheduleAction(this, SetFinishedTalkingFlagForSecondConvoFriends));
 		StartConversationTwoFriends.AddAction(new NPCAddScheduleAction(this, CastleManTalksToCSONTwice));
+		StartConversationTwoFriends.AddAction(new NPCCallbackAction(setSad));
 		flagReactions.Add(FlagStrings.SecondConversationWithCSONFriend, StartConversationTwoFriends);
 		//Sets up the emotion after the second conversation
-		
 		//
 		Reaction AfterSecondConversationCarpenterSon = new Reaction ();
 		AfterSecondConversationCarpenterSon.AddAction(new NPCAddScheduleAction(this, CastleManFollowSchedule));
 		AfterSecondConversationCarpenterSon.AddAction(new NPCEmotionUpdateAction(this, new TalkWithCarpenterSonAsFriendRoundTwo(this, "")));
+		AfterSecondConversationCarpenterSon.AddAction(new NPCCallbackAction(setSad));
 		flagReactions.Add(FlagStrings.FinishedSecondConversationWithCSONFriend, AfterSecondConversationCarpenterSon);
-		
-		
-		
 		
 		//Sets up the third conversation
 		Reaction StartConversationThreeFriends = new Reaction ();
 		StartConversationThreeFriends.AddAction(new NPCAddScheduleAction(this, SetFinishedTalkingFlagForThirdConvoFriends));
 		StartConversationThreeFriends.AddAction(new NPCAddScheduleAction(this, CastleManTalksToCSONThrice));
 		StartConversationThreeFriends.AddAction(new NPCCallbackAction(testStartGoingToBeachAfterCarpenterSonTalk));
+		StartConversationThreeFriends.AddAction(new NPCCallbackAction(setSad));
 		flagReactions.Add(FlagStrings.ThirdConvoWithCSONFriend, StartConversationThreeFriends);
 		//Moves the Castleman to the beach
 		//
 		Reaction ReadyForBeachFriends = new Reaction ();
 		ReadyForBeachFriends.AddAction(new NPCEmotionUpdateAction(this, new WaitingAtBeachFriend(this, "")));
-		//Add in a new schedule here!
 		ReadyForBeachFriends.AddAction(new NPCAddScheduleAction(this, CastlemanWalkToBeachSchedule));
+		ReadyForBeachFriends.AddAction(new NPCCallbackAction(setEmbarrased));
 		flagReactions.Add(FlagStrings.BeachBeforeConvoFriendsString, ReadyForBeachFriends);
-		
 		#endregion
 		
 		#region NOT Friends with Castleman
@@ -94,41 +119,43 @@ public class CastlemanYoung : NPC {
 		NOTFriendsWithPlayer.AddAction(new NPCCallbackAction(testFunction));
 		NOTFriendsWithPlayer.AddAction(new NPCEmotionUpdateAction(this, new CastleManTraveling(this, "")));
 		NOTFriendsWithPlayer.AddAction(new NPCAddScheduleAction(this, CastleManFollowSchedule));
+		NOTFriendsWithPlayer.AddAction(new NPCCallbackAction(setAngry));
 		flagReactions.Add(FlagStrings.PlayerAndCastleNOTFriends, NOTFriendsWithPlayer);
 		//Schedule for first convo with carpenter not friends
 		Reaction IntroConversationCarpenterSonNOTFriend = new Reaction ();
 		IntroConversationCarpenterSonNOTFriend.AddAction(new NPCAddScheduleAction(this, CastleManTalksFirstNOTFriends));
 		IntroConversationCarpenterSonNOTFriend.AddAction(new NPCAddScheduleAction(this, CastleManTalksToCSON));
+		IntroConversationCarpenterSonNOTFriend.AddAction(new NPCCallbackAction(setAngry));
 		flagReactions.Add(FlagStrings.InitialConversationWithCSONNOTFriend, IntroConversationCarpenterSonNOTFriend);
-		
 		//Schedule for the second emotion state
 		Reaction AfterIntroConversationNOTFriendsCarpenterSon = new Reaction();
 		AfterIntroConversationNOTFriendsCarpenterSon.AddAction(new NPCAddScheduleAction(this, CastleManFollowSchedule));
 		AfterIntroConversationNOTFriendsCarpenterSon.AddAction(new NPCEmotionUpdateAction(this, new VisitCarpenterSonNotAsFriend(this, "")));
+		AfterIntroConversationNOTFriendsCarpenterSon.AddAction(new NPCCallbackAction(setAngry));
 		flagReactions.Add(FlagStrings.FinishedInitialConversationWithCSONNOTFriend, AfterIntroConversationNOTFriendsCarpenterSon);
 		//Schedule for the second conversation
 		Reaction StartConversationTwoNOTFriends = new Reaction ();
 		StartConversationTwoNOTFriends.AddAction(new NPCAddScheduleAction(this, SetFinishedTalkingFlagForSecondConvoNOTFriends));
 		StartConversationTwoNOTFriends.AddAction(new NPCAddScheduleAction(this, CastleManTalksToCSONTwice));
+		StartConversationTwoNOTFriends.AddAction(new NPCCallbackAction(setAngry));
 		flagReactions.Add(FlagStrings.SecondConversationWithCSONNOTFriend, StartConversationTwoNOTFriends);
-		
 		//Schedule for setting up the third emotion state
-		//
 		Reaction AfterSecondConversationNOTFriendsCarpenterSon = new Reaction ();
 		AfterSecondConversationNOTFriendsCarpenterSon.AddAction(new NPCAddScheduleAction(this, CastleManFollowSchedule));
 		AfterSecondConversationNOTFriendsCarpenterSon.AddAction(new NPCEmotionUpdateAction(this, new TalkWithCarpenterSonNotAsFriendRoundTwo(this, "")));
+		AfterSecondConversationNOTFriendsCarpenterSon.AddAction(new NPCCallbackAction(setAngry));
 		flagReactions.Add(FlagStrings.FinishedSecondConversationWithCSONNOTFriend, AfterSecondConversationNOTFriendsCarpenterSon);
-		
 		//Schedule for Starting the third conversation
 		Reaction StartConversationThreeNOTFriends = new Reaction ();
 		StartConversationThreeNOTFriends.AddAction(new NPCAddScheduleAction(this, SetFinishedTalkingFlagForThirdConvoNOTFriends));
 		StartConversationThreeNOTFriends.AddAction(new NPCAddScheduleAction(this, CastleManTalksToCSONThrice));
 		StartConversationThreeNOTFriends.AddAction(new NPCCallbackAction(testStartGoingToBeachAfterCarpenterSonTalk));
+		StartConversationThreeNOTFriends.AddAction(new NPCCallbackAction(setAngry));
 		flagReactions.Add(FlagStrings.ThirdConvoWithCSONNOTFriend, StartConversationThreeNOTFriends);
 		
 		Reaction ReadyForBeachNOTAsFriends = new Reaction ();
 		ReadyForBeachNOTAsFriends.AddAction(new NPCEmotionUpdateAction(this, new WaitingAtBeachNotAsFriend(this, "")));
-		//Add in a new schedule here!
+		ReadyForBeachNOTAsFriends.AddAction(new NPCCallbackAction(setEmbarrased));
 		ReadyForBeachNOTAsFriends.AddAction(new NPCAddScheduleAction(this, CastlemanWalkToBeachSchedule));
 		flagReactions.Add(FlagStrings.BeachBeforeConvoNotFriendsString, ReadyForBeachNOTAsFriends);
 		#endregion
@@ -143,6 +170,7 @@ public class CastlemanYoung : NPC {
 		TalkWithLighthouseFirstTime.AddAction(new NPCAddScheduleAction(this, CastleManMeetsLighthouse));
 		TalkWithLighthouseFirstTime.AddAction(new NPCEmotionUpdateAction(this, new AfterLighthouse(this, "")));
 		TalkWithLighthouseFirstTime.AddAction(new NPCCallbackAction(testStartGoingtoBeachAfterLighthouseTalk));
+		TalkWithLighthouseFirstTime.AddAction(new NPCCallbackAction(setEmbarrased));
 		flagReactions.Add(FlagStrings.StartTalkingToLighthouse, TalkWithLighthouseFirstTime);
 		
 		
@@ -189,11 +217,11 @@ public class CastlemanYoung : NPC {
 
 	protected override void SetUpSchedules(){
 		CastleManFollowSchedule = new Schedule(this, Schedule.priorityEnum.High);
-		CastleManFollowSchedule.Add(new TimeTask(2f, new IdleState(this)));
+		CastleManFollowSchedule.Add(new TimeTask(1f, new IdleState(this)));
 		CastleManFollowSchedule.Add(new Task(new FollowObjectState(this, player.gameObject)));
 		
 		CastlemanWalkToBeachSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
-		CastlemanWalkToBeachSchedule.Add(new TimeTask(2f, new IdleState(this)));
+		CastlemanWalkToBeachSchedule.Add(new TimeTask(1f, new IdleState(this)));
 		CastlemanWalkToBeachSchedule.Add(new Task(new MoveThenMarkDoneState(this, MapLocations.MiddleOfBeachYoung)));
 		
 		
@@ -996,7 +1024,7 @@ public class CastlemanYoung : NPC {
 		}
 		public void UpdateFineLiveInFear(){
 			_allChoiceReactions.Remove(IfImYourFriendThenHeCanBeTooChoice);
-			_allChoiceReactions.Remove(IfImYourFriendThenHeCanBeTooChoice);
+			_allChoiceReactions.Remove(FineLiveInFearChoice);
 			GUIManager.Instance.CloseInteractionMenu();
 			SetDefaultText("Everyone I meet doesn't like me...");
 			//Set flags here
@@ -1252,7 +1280,7 @@ public class CastlemanYoung : NPC {
 		}
 		public void IveHadEnough(){
 			_allChoiceReactions.Remove(BeYourselfChoice);
-			_allChoiceReactions.Remove(BeYourselfChoice);
+			_allChoiceReactions.Remove(IveHadEnoughChoice);
 			GUIManager.Instance.CloseInteractionMenu();
 			SetDefaultText("Everyone I meet doesn't like me...");
 			//Set flags here

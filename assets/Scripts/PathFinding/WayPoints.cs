@@ -95,6 +95,5 @@ public class WayPoints : MonoBehaviour {
 		if (CheckRight()) rightDistance = Vector3.Distance(pos, RightWayPoint.transform.position);
 		if (CheckUp()) upDistance = Vector3.Distance(pos, UpWayPoint.transform.position);
 		if (CheckDown()) downDistance = Vector3.Distance(pos, DownWayPoint.transform.position);
-	}
-	
+	}	
 }

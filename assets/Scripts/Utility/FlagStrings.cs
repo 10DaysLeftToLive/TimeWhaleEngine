@@ -45,6 +45,7 @@ public static class FlagStrings {
 	public static string carpenterSonReconcile = "Carpenter Son Reconcile";
 	
 	public static string CarpenterDating = "Carpenter dating";
+	public static string CarpenterNoShow = "Carpenter no show";
 	#endregion
 	
 	#region CastleMan Only
@@ -76,6 +77,12 @@ public static class FlagStrings {
 	public static string WaitingForDate = "Waiting for date";
 	public static string EndOfDate = "End of date";
 	public static string ToolsForMarriage = "Tools for marriage";
+	
+	public static string CounterTellOn = "Counter Tell on to farmer father.";
+	public static string MakePieFromScratch = "Make Pie from scratch.";
+	public static string MakePieFromApple = "Make Pie from apple.";
+	public static string GoDownToBeach = "Go down to beach";
+	public static string WaitForItem = "Wait for pie or apple.";
 	#endregion
 	
 	#region FarmerFather
@@ -95,6 +102,8 @@ public static class FlagStrings {
 	
 	#region Musician
 	public static string MusicianCommentOnSon = "Is he mute?";
+	public static string MusicianFinishedTalkingFriends = "Musician finished talking friends.";
+	public static string MusicianFinishedTalkingNOTFriends = "Musician finished talking not friends";
 	#endregion
 	
 	#region CastleMan

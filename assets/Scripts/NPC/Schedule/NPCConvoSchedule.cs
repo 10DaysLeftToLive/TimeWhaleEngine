@@ -7,6 +7,8 @@ public class NPCConvoSchedule : Schedule {
 	public NPC _npcTwo;
 	protected NPC _npcTalking;
 	protected bool _waitForPlayer = true;
+	public bool isWaitingForPlayer = false;
+	public bool isMovingToNPC = false;
 	protected List<ChatInfo> chatInfoList;
 	protected ChatInfo chatInfo;
 	protected NPCChat chatToPerform;
@@ -21,6 +23,7 @@ public class NPCConvoSchedule : Schedule {
 	public NPCConvoSchedule(NPC npcOne, NPC npcTwo, NPCConversation conversation, bool dontWaitForPlayer) : base(npcOne) {
 		Init(npcOne, npcTwo, conversation, Schedule.priorityEnum.Low);
 		_waitForPlayer = (!dontWaitForPlayer);
+		
 	}
 	
 	public NPCConvoSchedule(NPC npcOne, NPC npcTwo, NPCConversation conversation, Enum priority) : base(npcOne, priority) {
@@ -33,6 +36,7 @@ public class NPCConvoSchedule : Schedule {
 	}
 	
 	protected void Init(NPC npcOne, NPC npcTwo, NPCConversation conversation, Enum priority) {
+		isWaitingForPlayer = _waitForPlayer;
 		_npcTwo = npcTwo;
 		toTalkWithSchedule = new ToTalkWithSchedule(_npcTwo, priority, this);
 		SetConvoTasks(conversation);
@@ -44,7 +48,7 @@ public class NPCConvoSchedule : Schedule {
 	}
 	
 	protected void SetConvoTasks(NPCConversation convo) {
-		CheckWithinDistanceOfEachOther();
+		isMovingToNPC = CheckWithinDistanceOfEachOther();
 		CheckWaitForPlayer();
 		
 		foreach (Dialogue textToSay in convo.dialogueList) {
@@ -70,10 +74,6 @@ public class NPCConvoSchedule : Schedule {
 		if (HasTask()){
 			current.Decrement(timeSinceLastTick);
 			if (current.IsComplete()){
-				//Debug.Log("Completed task");
-				if (current.StatePerforming is WaitTillPlayerCloseState) {
-					_waitForPlayer = false;
-				}
 				current.Finish();
 				current = null;
 			}
@@ -92,6 +92,12 @@ public class NPCConvoSchedule : Schedule {
 	}
 	
 	public override void NextTask(){	
+		if (isMovingToNPC) {
+			isMovingToNPC = false;
+		} else if (!isMovingToNPC && isWaitingForPlayer) {
+			isWaitingForPlayer = false;
+		}
+		
 		if (current != null){ // if we are going to skip the current task but it has not finished
 			current.Finish();
 		}
@@ -102,15 +108,13 @@ public class NPCConvoSchedule : Schedule {
 			_toManage.ForceChangeToState(current.StatePerforming);
 		}
 		
-		if (!_waitForPlayer) {
-			toTalkWithSchedule.NextTask();
-		}
+		toTalkWithSchedule.NextTask();
 	}
 	
 	private bool CheckWithinDistanceOfEachOther() {
 		if (!Utils.InDistance(_toManage.gameObject, _npcTwo.gameObject, TALK_DISTANCE)) {
 			Add(new Task(new MoveToObjectState(_toManage, _npcTwo.gameObject))); // move to talk positions
-			toTalkWithSchedule.Add(new Task(new IdleState(_toManage)));
+			toTalkWithSchedule.WaitForNPC();
 			return false;
 		}
 		return true;
@@ -124,10 +128,15 @@ public class NPCConvoSchedule : Schedule {
 	}
 	
 	public void DoneWaitingForPlayer() {
-		if(_waitForPlayer) {
-			NextTask();
+		if (current != null){ // if we are going to skip the current task but it has not finished
+			current.Finish();
 		}
-		_waitForPlayer = false;
+		
+		if (_tasksToDo.Count > 0) {
+			current = _tasksToDo.Dequeue();
+			DebugManager.instance.Log(_toManage.name + " is now switching to " + current.StatePerforming, "Schedule", _toManage.name);
+			_toManage.ForceChangeToState(current.StatePerforming);
+		}
 	}
 	
 	public override void OnInterrupt() {
@@ -142,6 +151,7 @@ public class NPCConvoSchedule : Schedule {
 	#region Other Npc's special schedule
 	public class ToTalkWithSchedule : Schedule {
 		private NPCConvoSchedule _convoSchedule;
+		public bool isWaitingForNPC = false;
 		public bool isWaitingForPlayer = false;
 		
 		public ToTalkWithSchedule(NPC npc, Enum priority, NPCConvoSchedule convoSchedule) : base(npc, priority) {
@@ -150,6 +160,11 @@ public class NPCConvoSchedule : Schedule {
 		
 		public void SetCanNotInteractWithPlayer() {
 			canInteractWithPlayer = false;
+		}
+		
+		public void WaitForNPC() {
+			isWaitingForNPC = true;
+			Add(new Task(new IdleState(_toManage)));
 		}
 		
 		public void WaitForPlayer() {
@@ -178,11 +193,23 @@ public class NPCConvoSchedule : Schedule {
 		
 		public override void NextTask(){
 			DebugManager.instance.Log(_toManage.name + " schedule next task", "Schedule", _toManage.name);
-			if (isWaitingForPlayer) {
+			
+			if (isWaitingForNPC && !_convoSchedule.isMovingToNPC) {
+				GetNextTask();
+				isWaitingForNPC = false;
+			} else if (!isWaitingForNPC && isWaitingForPlayer && !_convoSchedule.isWaitingForPlayer) {
+				GetNextTask();
+				isWaitingForPlayer = false;
+			} else if (!isWaitingForNPC && isWaitingForPlayer && _convoSchedule.isWaitingForPlayer) {
+				GetNextTask();
 				isWaitingForPlayer = false;
 				_convoSchedule.DoneWaitingForPlayer();
+			} else if (!isWaitingForNPC && !isWaitingForPlayer) {
+				GetNextTask();
 			}
-			
+		}
+		
+		private void GetNextTask() {
 			if (current != null){ // if we are going to skip the current task but it has not finished
 				current.Finish();
 			}

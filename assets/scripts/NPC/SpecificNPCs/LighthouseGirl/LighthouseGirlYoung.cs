@@ -8,17 +8,38 @@ public class LighthouseGirlYoung : NPC {
 	InitialEmotionState initialState;
 	JesterEmotionState jesterState;
 	Schedule TalkWithCastleman;
+	Schedule WalkToBeach;
 	protected override void Init() {
 		id = NPCIDs.LIGHTHOUSE_GIRL;
 		base.Init();
 	}
+	public void setAngry(){
+		this.SetCharacterPortrait(StringsNPC.Angry);
+	}
+	public void setSad(){
+		this.SetCharacterPortrait(StringsNPC.Sad);
+	}
+	public void setBlink(){
+		this.SetCharacterPortrait(StringsNPC.Blink);
+	}
+	public void setDefault(){
+		this.SetCharacterPortrait(StringsNPC.Default);
+	}
+	public void setEmbarrased(){
+		this.SetCharacterPortrait(StringsNPC.Embarassed);
+	}
+	public void setHappy(){
+		this.SetCharacterPortrait(StringsNPC.Smile);	
+	}
 	private NPCConvoSchedule tellOnLighthouseConversationSchedule;
+	private NPCConvoSchedule AttemptToTellOnLighthouse;
 	protected override void SetFlagReactions(){
 		Reaction TellOnLighthouseReaction = new Reaction();
 		TellOnLighthouseReaction.AddAction(new ShowOneOffChatAction(this, "Git over here girl.", 2f));
 		TellOnLighthouseReaction.AddAction(new NPCAddScheduleAction(this, tellOnLighthouseConversationSchedule));
 		flagReactions.Add(FlagStrings.TellOnLighthouseConversation, TellOnLighthouseReaction);
 		
+		#region Castle man
 		Reaction ReactToCastleMan = new Reaction();
 		ReactToCastleMan.AddAction(new NPCAddScheduleAction(this, TalkWithCastleman));
 		flagReactions.Add(FlagStrings.PlayerAndCastleFriends , ReactToCastleMan);
@@ -26,6 +47,14 @@ public class LighthouseGirlYoung : NPC {
 		Reaction ReactToCastleManNotFriends = new Reaction();
 		ReactToCastleManNotFriends.AddAction(new NPCAddScheduleAction(this, TalkWithCastleman));
 		flagReactions.Add(FlagStrings.PlayerAndCastleNOTFriends , ReactToCastleManNotFriends);
+		#endregion
+		
+		Reaction CounterTellOn = new Reaction();
+		CounterTellOn.AddAction(new NPCAddScheduleAction(this, AttemptToTellOnLighthouse));
+		flagReactions.Add(FlagStrings.CounterTellOn, CounterTellOn);
+		
+		//Reaction WaitingForPlayer = new Reaction();
+		//WaitingForPlayer.AddAction(new NPCAddScheduleAction(this, WalkToBeach));
 		
 	}
 	protected override EmotionState GetInitEmotionState(){
@@ -35,19 +64,31 @@ public class LighthouseGirlYoung : NPC {
 	}
 	
 	protected override Schedule GetSchedule(){
-		Schedule schedule = new DefaultSchedule(this);
-		return (schedule);
+		//Schedule schedule = new DefaultSchedule(this);
+		return (InitialSchedule);
 	}
-
+	Schedule InitialSchedule;
 	protected override void SetUpSchedules(){
+		InitialSchedule = new Schedule(this, Schedule.priorityEnum.Medium);
+		InitialSchedule.Add(new TimeTask(1500, new WaitTillPlayerCloseState(this, player)));
+		InitialSchedule.Add(new Task(new IdleState(this), this, 0.1f, "Psst!  Come over here!"));
+		
+		AttemptToTellOnLighthouse = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerFatherYoung), 
+			new LightHouseToFarmerFather(),Schedule.priorityEnum.DoConvo);
+		AttemptToTellOnLighthouse.SetCanNotInteractWithPlayer();
 		tellOnLighthouseConversationSchedule = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.LighthouseGirlYoung), 
-			new YoungFarmerMotherToLighthouseGirlToldOn(),Schedule.priorityEnum.High);
+			new YoungFarmerMotherToLighthouseGirlToldOn(),Schedule.priorityEnum.DoConvo);
+		
+		
 		TalkWithCastleman = new Schedule (this, Schedule.priorityEnum.High);
 		TalkWithCastleman.Add(new TimeTask(3000, new WaitTillPlayerCloseState(this, player)));
 		Task setFlag = (new Task(new MoveThenDoState(this, this.gameObject.transform.position, new MarkTaskDone(this))));
 		setFlag.AddFlagToSet(FlagStrings.StartTalkingToLighthouse);
 		TalkWithCastleman.Add(setFlag);
-		//TalkWithCastleman.Add(new TimeTask(300, new WaitTillPlayerCloseState(this, player)));
+		
+		
+		
+		
 		
 	}
 	
@@ -55,89 +96,366 @@ public class LighthouseGirlYoung : NPC {
 	#region EmotionStates
 	#region Initial Emotion State
 	private class InitialEmotionState : EmotionState{
-		Choice OwnChoresChoice = new Choice("Do your own chores", "Hmmmpphhh...Great warriors don't need help from other people!");
-		Choice WhatDoYouNeedChoice = new Choice("What do you need?", "Apple pie! My mom wants me to learn how to cook or something stupid like that...");
-		Choice SureChoice = new Choice("Sure", "My mom wants to bake apple pie! So give me some and we can pretend I baked it!");
-		Reaction OwnChoresReaction, WhatDoYouNeedReaction, SureReaction;
-		Choice GetAppleChoice = new Choice("I'll get you an apple", "Well...okay...that will help...");
-		Reaction GaveApplePieReaction = new Reaction();
-		Reaction GaveAppleReaction = new Reaction();
 		NPC control;
-	
-		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+		string appleString = "An apple...I can use that to cook...but a full pie would be better.";
+		string pieString = "A pie!  Perfect!  How did you know I needed that to dodge my chores?";
+		Reaction TakeAppleReaction;
+		Reaction DenyAppleReaction;
+		Reaction TakePieReaction;
+		
+		
+		Choice EvilPlanChoice;
+			Choice HowDoWeStopHerChoice;
+				Choice NoDoYourChoresChoice;
+					Choice OkayFineChoice;
+					Choice NoChoice;
+						Choice NoMeansNoChoice;
+						Choice OkayOneAppleChoice;
+						Choice ImTellingOnYouChoice;
+							Choice ThisOneTimeChoice;
+								Choice SighYouWinChoice;
+								Choice NOOChoice;
+							Choice ImGonnaTellNowChoice;
+				Choice OnItChoice;
+			Choice StopBeingLazyChoice;
+				Choice ImTellingChoice;
+					Choice OkayIGuessChoice;
+					Choice NoImTellingChoice;
+				Choice ThisIsSilllyChoice;
+				Choice WarriorsCookChoice;
+					Choice FairEnoughChoice;
+					Choice WhatIfYouTravelChoice;
+				
+		
+		Reaction ImGonnaTellNowReaction;
+		Reaction ThisOneTimeReaction;
+		Reaction NOOReaction;
+		Reaction SighYouWinReaction;
+		Reaction EvilPlanReaction;
+		Reaction HowDoWeStopHerReaction;
+		Reaction StopBeingLazyReaction;
+		Reaction ImTellingReaction;
+		Reaction OkayIGuessReaction;
+		Reaction NoImTellingReaction;
+		Reaction ThisIsSillyReaction;
+		Reaction WarriorsCookReaction;
+		Reaction NoDoYourChoresReaction;
+		Reaction OnItReaction;
+		Reaction OkayFineReaction;
+		Reaction NoReaction;
+		Reaction NoMeansNoReaction;
+		Reaction OkayOneAppleReaction;
+		Reaction ImTellingOnYouReaction;
+		Reaction WhatIfYouTravelReaction;
+		Reaction FairEnoughReaction;
+		
+		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, "My mom is a slave driver!  Help me defeat her evil plan and I will reward you noble knight!"){
 			control = toControl;
-			OwnChoresReaction = new Reaction(); 
-			WhatDoYouNeedReaction = new Reaction(); 
-			SureReaction = new Reaction();
+			TakePieReaction = new Reaction();
+			TakePieReaction.AddAction(new NPCTakeItemAction(toControl));
+			TakePieReaction.AddAction(new NPCCallbackAction(UpdateTakeApplePie));
+			_allItemReactions.Add(StringsItem.ApplePie, new DispositionDependentReaction(TakePieReaction));
+			
+			TakeAppleReaction = new Reaction();
+			TakeAppleReaction.AddAction(new NPCTakeItemAction(toControl));
+			TakeAppleReaction.AddAction(new NPCCallbackAction(UpdateTakeApple));
+			
+			DenyAppleReaction = new Reaction();
+			DenyAppleReaction.AddAction(new NPCCallbackAction(UpdateDenyApple));
+			_allItemReactions.Add(StringsItem.Apple, new DispositionDependentReaction(TakePieReaction));
 			
 			
-			OwnChoresReaction.AddAction(new NPCCallbackAction(UpdateOwnChores));
-			_allChoiceReactions.Add(OwnChoresChoice,new DispositionDependentReaction(OwnChoresReaction));
+			EvilPlanChoice = new Choice ("What evil plan?", "She wants to drain my strength through constant chores!\n But I'm a great warrior and can see through her cunning schemes to make me cook!");
+			EvilPlanReaction = new Reaction ();
+			EvilPlanReaction.AddAction(new NPCCallbackAction(UpdateEvilPlan));
+			EvilPlanReaction.AddAction(new UpdateCurrentTextAction(toControl, "She wants to drain my strength through constant chores!\n But I'm a great warrior and can see through her cunning schemes to make me cook!"));
+			_allChoiceReactions.Add(EvilPlanChoice, new DispositionDependentReaction(EvilPlanReaction));
 			
-			WhatDoYouNeedReaction.AddAction(new NPCCallbackAction(UpdateWhatDoNeed));
-			_allChoiceReactions.Add(WhatDoYouNeedChoice,new DispositionDependentReaction(WhatDoYouNeedReaction));
+				StopBeingLazyChoice = new Choice ("Stop being lazy!", "I'm not lazy!  I just have better things to do, like build sand castles on the beach.  Someone needs to prepare for an invasion of the island!");
+				StopBeingLazyReaction = new Reaction ();
+				StopBeingLazyReaction.AddAction(new NPCCallbackAction(UpdateStopBeingLazy));
+				StopBeingLazyReaction.AddAction(new UpdateCurrentTextAction(toControl, "I'm not lazy!  I just have better things to do, like build sand castles on the beach.  Someone needs to prepare for an invasion of the island!"));
+				
+					ImTellingChoice = new Choice ("I'm telling!", "NO!  Please don't!  I promise I'll be good!  Just don't tell on me!");
+					ImTellingReaction = new Reaction ();
+					ImTellingReaction.AddAction(new NPCCallbackAction(UpdateImTelling));
+					ImTellingReaction.AddAction(new UpdateCurrentTextAction(toControl, "NO!  Please don't!  I promise I'll be good!  Just don't tell on me!"));
 			
-			SureReaction.AddAction(new NPCCallbackAction(UpdateSure));
-			_allChoiceReactions.Add(SureChoice,new DispositionDependentReaction(SureReaction));
+						OkayIGuessChoice = new Choice ("That's okay, I guess...", "Yay!  So about that apple pie?  No?  Okay fine...");
+						OkayIGuessReaction = new Reaction();
+						OkayIGuessReaction.AddAction(new NPCCallbackAction(UpdateOkayIGuess));
+						OkayIGuessReaction.AddAction(new ShowOneOffChatAction(toControl, "Yay!  So about that apple pie?  No?  Okay fine..."));
+						
+						NoImTellingChoice = new Choice ("No, I'm telling!", "Fine...DAD!  HELP!  I'M BEING BULLIED!");
+						NoImTellingReaction = new Reaction();
+						NoImTellingReaction.AddAction(new NPCCallbackAction(UpdateNoImTelling));
+					
+					ThisIsSilllyChoice = new Choice("This is silly.", "Hmmph!  I don't need  you!  On your way peasant!");
+					ThisIsSillyReaction = new Reaction();
+					ThisIsSillyReaction.AddAction(new NPCCallbackAction(UpdateThisIsSilly));
+					ThisIsSillyReaction.AddAction(new ShowOneOffChatAction(toControl, "Hmmph!  I don't need  you!  On your way peasant!"));
+					
+					WarriorsCookChoice = new Choice ("Warrior's cook!", "What?!?  That's not true!  Warriors get food by saving the village and having a banquet in their honor!");
+					WarriorsCookReaction = new Reaction();
+					WarriorsCookReaction.AddAction(new NPCCallbackAction(UpdateWarriorsCook));
+					WarriorsCookReaction.AddAction(new UpdateCurrentTextAction(toControl, "What?!?  That's not true!  Warriors get food by saving the village and having a banquet in their honor!"));
+				
+						WhatIfYouTravelChoice = new Choice ("What if you travel?", "Well...I guess I would need to know how to cook if I got lost in a mountain chasing a villain...");
+						WhatIfYouTravelReaction = new Reaction();
+						WhatIfYouTravelReaction.AddAction(new NPCCallbackAction(UpdateWhatIfYouTravel));
+						WhatIfYouTravelReaction.AddAction(new ShowOneOffChatAction(toControl, "Well...I guess I would need to know how to cook if I got lost in a mountain chasing a villain...I guess I'll do it."));
+					
+						FairEnoughChoice = new Choice ("Fair Enough", "Good to see you agree!  Now aquire apple pie for me!");
+						FairEnoughReaction = new Reaction();
+						FairEnoughReaction.AddAction(new NPCCallbackAction(UpdateFairEnough));
+						FairEnoughReaction.AddAction(new ShowOneOffChatAction(toControl, "Good to see you agree!  Now aquire apple pie for me!"));
+					
+				HowDoWeStopHerChoice = new Choice ("How do we stop her?", "Get me some apple pie...so that I don't have to cook it myself!");
+				HowDoWeStopHerReaction = new Reaction();
+				HowDoWeStopHerReaction.AddAction(new NPCCallbackAction(UpdateStopHer));
+				HowDoWeStopHerReaction.AddAction(new UpdateCurrentTextAction(toControl, "Get me some apple pie...preferrably poisoned...so that I don't have to cook it myself!"));
 			
+					NoDoYourChoresChoice = new Choice("No do your chores.", "Please, just help me out this one time!  I want to play on the beach, and I can't do that if I have to bake!");
+					NoDoYourChoresReaction = new Reaction();
+					NoDoYourChoresReaction.AddAction(new NPCCallbackAction(UpdateDoYourOwnChores));
+					NoDoYourChoresReaction.AddAction(new UpdateCurrentTextAction(toControl, "Please, just help me out this one time!  I want to play on the beach, and I can't do that if I have to bake!"));
 			
+						NoChoice = new Choice("No!", "Okay...fine no apple pie.  Just get me an apple. Pllleeeaaassee!");
+						NoReaction = new Reaction();
+						NoReaction.AddAction(new NPCCallbackAction(UpdateNo));
+						NoReaction.AddAction(new UpdateCurrentTextAction(toControl, "Okay...fine no apple pie.  Just get me an apple. Pllleeeaaassee!"));
+					
+							NoMeansNoChoice = new Choice("No means no!", "Hmmph!  I don't need  you!  On your way peasant!");
+							NoMeansNoReaction = new Reaction();
+							NoMeansNoReaction.AddAction(new NPCCallbackAction(UpdateNoMeansNo));
+							NoMeansNoReaction.AddAction(new ShowOneOffChatAction(toControl, "Hmmph!  I don't need  you!  On your way peasant!"));
+			
+							OkayOneAppleChoice = new Choice("Okay. One Apple.", "Then go forth on your noble quest!");
+							OkayOneAppleReaction = new Reaction();
+							OkayOneAppleReaction.AddAction(new NPCCallbackAction(UpdateOkayOneMoreApple));
+							OkayOneAppleReaction.AddAction(new ShowOneOffChatAction(toControl, "Then go on your noble quest!"));
+			
+							ImTellingOnYouChoice = new Choice ("I'm telling on you!", "No!  I'd be grounded for weeks!  Please, Please, Please don't do it!");
+							ImTellingOnYouReaction = new Reaction();
+							ImTellingOnYouReaction.AddAction(new NPCCallbackAction(UpdateTellingOnYou));
+							ImTellingOnYouReaction.AddAction(new UpdateCurrentTextAction(toControl, "No!  I'd be grounded for weeks!  Please, Please, Please don't do it!"));
+				
+								ThisOneTimeChoice = new Choice ("This one time...", "Thank you thank you!  So about that apple?");
+								ThisOneTimeReaction = new Reaction();
+								ThisOneTimeReaction.AddAction(new NPCCallbackAction(UpdateThisOneTime));
+								ThisOneTimeReaction.AddAction(new UpdateCurrentTextAction(toControl, "Thank you thank you!  So about that apple?"));
+								
+									SighYouWinChoice = new Choice ("*Sigh* You win.", "Yes!  Now Sir Knight, go out and findeth the apple!");
+									SighYouWinReaction = new Reaction();
+									SighYouWinReaction.AddAction(new NPCCallbackAction(UpdateSighYouWin));
+									SighYouWinReaction.AddAction(new ShowOneOffChatAction(toControl, "Yes!  Now Sir Knight, go out and findeth the apple!"));
+												
+									NOOChoice = new Choice ("NO!", "Okay fine.  Be that way, see if I care!");
+									NOOReaction = new Reaction();
+									NOOReaction.AddAction(new NPCCallbackAction(UpdateNOO));
+									NOOReaction.AddAction(new ShowOneOffChatAction(toControl, "Okay fine.  Be that way, see if I care!"));
+								
+								ImGonnaTellNowChoice = new Choice("I'm telling now!", "Fine...DAD!  HELP!  I'M BEING BULLIED!");
+								ImGonnaTellNowReaction = new Reaction();
+								ImGonnaTellNowReaction.AddAction(new NPCCallbackAction(UpdateImTellingNow));
+			
+						OkayFineChoice = new Choice("Okay..Fine", "Then onwards!  For apple pie!");
+						OkayFineReaction = new Reaction();
+						OkayFineReaction.AddAction(new NPCCallbackAction(UpdateOkayFine));
+						OkayFineReaction.AddAction(new ShowOneOffChatAction(toControl, "Then onwards!  For apple pie!"));		
+			
+					OnItChoice = new Choice("On it!", "Hurry, with the pie I can stop her evil scheme!");
+					OnItReaction = new Reaction();
+					OnItReaction.AddAction(new NPCCallbackAction(UpdateOnIt));
+					OnItReaction.AddAction(new ShowOneOffChatAction(toControl, "Hurry, with the pie I can stop here evil scheme!"));
+								
+		}
+		public void UpdateDenyApple(){
+			SetDefaultText(appleString);
+			GUIManager.Instance.RefreshInteraction();
+		}
+		public void UpdateTakeApple(){
+			SetDefaultText("Thanks for the apple...I guess...");
+			GUIManager.Instance.RefreshInteraction();
+			SetDefaultText("Thanks for the apple...too bad you couldn't give me pie...");
+		}
+		public void UpdateTakeApplePie(){
+			SetDefaultText(pieString);
+			GUIManager.Instance.RefreshInteraction();
+			SetDefaultText("Next stop: the beach!");
 		}
 		
+		public void UpdateEvilPlan (){
+			_allChoiceReactions.Remove(EvilPlanChoice);
+			_allChoiceReactions.Add(StopBeingLazyChoice, new DispositionDependentReaction(StopBeingLazyReaction));
+			_allChoiceReactions.Add(HowDoWeStopHerChoice, new DispositionDependentReaction(HowDoWeStopHerReaction));
+			GUIManager.Instance.RefreshInteraction();
+			SetDefaultText("My mom...is...draining...my strength...please...help!");
+		}
+				public void UpdateStopHer(){
+					_allChoiceReactions.Remove(HowDoWeStopHerChoice);
+					_allChoiceReactions.Remove(StopBeingLazyChoice);
+					_allChoiceReactions.Add(NoDoYourChoresChoice, new DispositionDependentReaction(NoDoYourChoresReaction));
+					_allChoiceReactions.Add(OnItChoice, new DispositionDependentReaction(OnItReaction));
+					GUIManager.Instance.RefreshInteraction();
+					SetDefaultText("Help me cook to stop her evil plan!");
+					pieString = "Pie!  Perfect, exactly what I needed!";
+				}
+						public void UpdateOnIt(){
+							_allChoiceReactions.Remove(OnItChoice);
+							_allChoiceReactions.Remove(NoDoYourChoresChoice);
+							GUIManager.Instance.CloseInteractionMenu();
+							SetDefaultText("Hurry!  I need you to get apple pie!");
+							pieString = "Pie!  Perfect, exactly what I needed!";
+						}
+						public void UpdateDoYourOwnChores(){
+							_allChoiceReactions.Remove(OnItChoice);
+							_allChoiceReactions.Remove(NoDoYourChoresChoice);
+							_allChoiceReactions.Add(NoChoice, new DispositionDependentReaction(NoReaction));
+							_allChoiceReactions.Add(OkayFineChoice, new DispositionDependentReaction(OkayFineReaction));
+							GUIManager.Instance.RefreshInteraction();
+							SetDefaultText("Please help a girl play on the beach!");
+							pieString = "See!  It wasn't that hard to give me some pie!";
+						}
+								public void UpdateOkayFine(){
+									_allChoiceReactions.Remove(NoChoice);
+									_allChoiceReactions.Remove(OkayFineChoice);
+									GUIManager.Instance.CloseInteractionMenu();
+									SetDefaultText("Did you find apple pie.");
+									pieString = "See!  It wasn't that hard to give me some pie!";
+									FlagManager.instance.SetFlag(FlagStrings.WaitForItem);
+								}
+								public void UpdateNo(){
+									_allChoiceReactions.Remove(NoChoice);
+									_allChoiceReactions.Remove(OkayFineChoice);
+									_allChoiceReactions.Add(ImTellingOnYouChoice, new DispositionDependentReaction(ImTellingOnYouReaction));
+									_allChoiceReactions.Add(NoMeansNoChoice, new DispositionDependentReaction(NoMeansNoReaction));
+									_allChoiceReactions.Add(OkayOneAppleChoice, new DispositionDependentReaction(OkayOneAppleReaction));
+									//Add anotherone here.
+									GUIManager.Instance.RefreshInteraction();
+									SetDefaultText("Okay fine!  Just get me an apple!");
+									pieString = "See!  It wasn't that hard to give me some pie!";
+								}
+										public void UpdateOkayOneMoreApple(){
+											_allChoiceReactions.Remove(NoMeansNoChoice);
+											_allChoiceReactions.Remove(OkayOneAppleChoice);
+											_allChoiceReactions.Remove(ImTellingOnYouChoice);
+											GUIManager.Instance.CloseInteractionMenu();
+											SetDefaultText("Have you got an apple yet?");
+											FlagManager.instance.SetFlag(FlagStrings.WaitForItem);
+											pieString = "See!  It wasn't that hard to give me some pie!";
+										}
+										public void UpdateNoMeansNo(){
+											_allChoiceReactions.Remove(NoMeansNoChoice);
+											_allChoiceReactions.Remove(OkayOneAppleChoice);
+											_allChoiceReactions.Remove(ImTellingOnYouChoice);
+											GUIManager.Instance.CloseInteractionMenu();
+											SetDefaultText("Go away peasant!");
+											FlagManager.instance.SetFlag(FlagStrings.MakePieFromScratch);
+										}
+										public void UpdateTellingOnYou(){
+											_allChoiceReactions.Remove(NoMeansNoChoice);
+											_allChoiceReactions.Remove(OkayOneAppleChoice);
+											_allChoiceReactions.Remove(ImTellingOnYouChoice);
+											_allChoiceReactions.Add(ThisOneTimeChoice,new DispositionDependentReaction(ThisOneTimeReaction));
+											_allChoiceReactions.Add(ImGonnaTellNowChoice, new DispositionDependentReaction(ImGonnaTellNowReaction));
+											GUIManager.Instance.RefreshInteraction();
+											SetDefaultText("Please, please, please don't tell on them!");
+										}
+												public void UpdateThisOneTime(){
+													_allChoiceReactions.Remove(ThisOneTimeChoice);
+													_allChoiceReactions.Add(SighYouWinChoice,new DispositionDependentReaction(SighYouWinReaction));
+													_allChoiceReactions.Add(NOOChoice, new DispositionDependentReaction(NOOReaction));
+													GUIManager.Instance.RefreshInteraction();
+													SetDefaultText("So an apple?");
+												
+												}
+														public void UpdateSighYouWin(){
+															_allChoiceReactions.Remove(ImGonnaTellNowChoice);
+															_allChoiceReactions.Remove(SighYouWinChoice);
+															_allChoiceReactions.Remove(NOOChoice);
+															GUIManager.Instance.CloseInteractionMenu();
+															SetDefaultText("Now go and aquire that apple!");
+															FlagManager.instance.SetFlag(FlagStrings.WaitForItem);
+														}
+														public void UpdateNOO(){
+															_allChoiceReactions.Remove(ImGonnaTellNowChoice);
+															_allChoiceReactions.Remove(SighYouWinChoice);
+															_allChoiceReactions.Remove(NOOChoice);
+															GUIManager.Instance.CloseInteractionMenu();
+															SetDefaultText("Go away!  I don't like you!");
+															FlagManager.instance.SetFlag(FlagStrings.MakePieFromScratch);
+														}
+			public void UpdateStopBeingLazy (){
+				_allChoiceReactions.Remove(StopBeingLazyChoice);
+				_allChoiceReactions.Remove(HowDoWeStopHerChoice);
+				_allChoiceReactions.Add(ImTellingChoice, new DispositionDependentReaction(ImTellingReaction));
+				_allChoiceReactions.Add(ThisIsSilllyChoice, new DispositionDependentReaction(ThisIsSillyReaction));
+				_allChoiceReactions.Add(WarriorsCookChoice, new DispositionDependentReaction(WarriorsCookReaction));
+				//control
+				GUIManager.Instance.RefreshInteraction();
+				SetDefaultText("Hmmph.  I'm never lazy!");
+			}
+				public void UpdateImTelling (){
+					_allChoiceReactions.Remove(ImTellingChoice);
+					_allChoiceReactions.Remove(ThisIsSilllyChoice);
+					_allChoiceReactions.Remove(WarriorsCookChoice);
+					_allChoiceReactions.Add(OkayIGuessChoice, new DispositionDependentReaction(OkayIGuessReaction));
+					_allChoiceReactions.Add(NoImTellingChoice, new DispositionDependentReaction(NoImTellingReaction));
+					GUIManager.Instance.RefreshInteraction();
+					SetDefaultText("Please don't tell!");
+				}
+						public void UpdateOkayIGuess(){
+							_allChoiceReactions.Remove(OkayIGuessChoice);
+							_allChoiceReactions.Remove(NoImTellingChoice);
+							GUIManager.Instance.CloseInteractionMenu();
+							FlagManager.instance.SetFlag(FlagStrings.MakePieFromScratch);
+							SetDefaultText("Apple Pie?  No?  okay...");
+						}
+						public void UpdateNoImTelling(){
+							_allChoiceReactions.Remove(OkayIGuessChoice);
+							_allChoiceReactions.Remove(NoImTellingChoice);
+							GUIManager.Instance.CloseInteractionMenu();
+							FlagManager.instance.SetFlag(FlagStrings.CounterTellOn);
+							SetDefaultText("Dad said to stop talking to me!");
+						}
+				public void UpdateThisIsSilly (){
+					_allChoiceReactions.Remove(ImTellingChoice);
+					_allChoiceReactions.Remove(ThisIsSilllyChoice);
+					_allChoiceReactions.Remove(WarriorsCookChoice);
+					GUIManager.Instance.CloseInteractionMenu();
+					SetDefaultText("On your way peasant!");
+					FlagManager.instance.SetFlag(FlagStrings.MakePieFromScratch);
+				}
+				public void UpdateWarriorsCook(){
+					_allChoiceReactions.Remove(WarriorsCookChoice);
+					_allChoiceReactions.Remove(ThisIsSilllyChoice);
+					_allChoiceReactions.Remove(ImTellingChoice);
+					_allChoiceReactions.Add(WhatIfYouTravelChoice, new DispositionDependentReaction(WhatIfYouTravelReaction));
+					_allChoiceReactions.Add(FairEnoughChoice, new DispositionDependentReaction(FairEnoughReaction));
+					GUIManager.Instance.RefreshInteraction();
+					SetDefaultText("Warrior's don't cook!");
+				}
+						public void UpdateWhatIfYouTravel(){
+							_allChoiceReactions.Remove(WhatIfYouTravelChoice);
+							_allChoiceReactions.Remove(FairEnoughChoice);
+							GUIManager.Instance.CloseInteractionMenu();
+							SetDefaultText("I guess warrior's should know how to cook...");
+						}
+						public void UpdateFairEnough(){
+							_allChoiceReactions.Remove(FairEnoughChoice);
+							_allChoiceReactions.Remove(WhatIfYouTravelChoice);
+							GUIManager.Instance.CloseInteractionMenu();
+							SetDefaultText("Go findeth me apple pie!");
+						}
+		public void UpdateImTellingNow(){
+			_allChoiceReactions.Clear();
+			GUIManager.Instance.CloseInteractionMenu();
+			FlagManager.instance.SetFlag(FlagStrings.CounterTellOn);
+			SetDefaultText("My dad told you to leave me alone!");
+		}
 		public override void UpdateEmotionState(){
 			
-		}
-		
-		public void UpdateOwnChores(){
-			_allChoiceReactions.Remove(OwnChoresChoice);
-			_allChoiceReactions.Remove(WhatDoYouNeedChoice);
-			_allChoiceReactions.Remove(SureChoice);
-			FlagManager.instance.SetFlag(FlagStrings.TellOnLighthouse);	
-		}
-		
-		public void UpdateWhatDoNeed(){
-			Reaction GetAppleReaction = new Reaction();
-			GetAppleReaction.AddAction(new NPCCallbackAction(GetAnApple));
-			_allChoiceReactions.Add(GetAppleChoice,new DispositionDependentReaction(GetAppleReaction));
-			_allChoiceReactions.Remove(WhatDoYouNeedChoice);
-			_allChoiceReactions.Remove(OwnChoresChoice);
-			_allChoiceReactions.Remove(SureChoice);
-			GUIManager.Instance.RefreshInteraction();
-			
-			
-			FlagManager.instance.SetFlag(FlagStrings.TellOnLighthouse);
-		}
-		
-		public void UpdateSure(){
-			_allChoiceReactions.Remove(WhatDoYouNeedChoice);
-			_allChoiceReactions.Remove(OwnChoresChoice);
-			_allChoiceReactions.Remove(SureChoice);
-			GUIManager.Instance.RefreshInteraction();
-			SetDefaultText("Have you gotten me that apple pie yet?");
-			GaveApplePieReaction.AddAction(new NPCTakeItemAction(control));
-			GaveApplePieReaction.AddAction(new NPCCallbackAction(GaveApplePieResponse));
-			GaveApplePieReaction.AddAction(new UpdateCurrentTextAction(control, "Thanks! your the best!"));
-			_allItemReactions.Add(StringsItem.Apple,  new DispositionDependentReaction(GaveApplePieReaction));
-			
-			
-			FlagManager.instance.SetFlag(FlagStrings.TellOnLighthouse);
-		}
-		
-		public void GetAnApple(){
-			_allChoiceReactions.Remove(GetAppleChoice);
-			GUIManager.Instance.RefreshInteraction();
-			SetDefaultText("So you going to help me out with baking an apple pie?");
-			GaveAppleReaction.AddAction(new NPCTakeItemAction(control));
-			GaveAppleReaction.AddAction(new NPCCallbackAction(GaveAppleResponse));
-			GaveAppleReaction.AddAction(new UpdateCurrentTextAction(control, "Thanks! Now to do this silly cooking thing...real warriors don't cook..."));
-			_allItemReactions.Add(StringsItem.Apple,  new DispositionDependentReaction(GaveAppleReaction));
-		}
-		
-		public void GaveApplePieResponse(){
-			SetDefaultText("Thanks for the apple pie!");
-		}
-		
-		public void GaveAppleResponse(){
-			SetDefaultText("Thanks for the apple!");
 		}
 	}
 	#endregion
@@ -165,6 +483,28 @@ public class LighthouseGirlYoung : NPC {
 		Reaction PrincessReaction = new Reaction();
 		Reaction UhOnceUponReaction = new Reaction();
 		Reaction LittleGirlReaction = new Reaction();
+		
+		
+		Choice ThereWasAWarriorChoice;
+		Reaction ThereWasAWarriorReaction;
+		Choice ImSupposedToTellItChoice;
+		Reaction ImSupposedToTellItReaction;
+		Choice ButIChoice;
+		Reaction ButIReaction;
+		Choice GrumbleChoice;
+		Reaction GrumbleReaction;
+		Choice LaLaLaLaChoice;
+		Reaction LaLaLaLaReaction;
+		Choice YouArentDoneYetChoice;
+		Reaction YouArentDoneYetReaction;
+		Choice ThisIsBoringChoice;
+		Reaction ThisIsBoringReaction;
+		Choice SayNothingOneChoice;
+		Reaction SayNothingOneReaction;
+		Choice SayNothingTwoChoice;
+		Reaction SayNothingTwoReaction;
+		Choice HappilyEverAfterChoice;
+		Reaction HappilyEverAfterReaction;
 		
 		public JesterEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
 			

@@ -124,6 +124,10 @@ public class Schedule {
 		canPassiveChat = _canChat;
 	}
 	
+	public void SetCanInteract(bool _canInteract) {
+		canInteractWithPlayer = _canInteract;
+	}
+	
 	public virtual void Run(float timeSinceLastTick){
 		if (HasTask()){
 			current.Decrement(timeSinceLastTick);

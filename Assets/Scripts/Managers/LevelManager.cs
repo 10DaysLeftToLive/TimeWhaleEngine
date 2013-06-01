@@ -6,15 +6,15 @@ using System.Collections.Generic;
 /// Level manager will handle the initialization of the game and will hold the sections of the map
 /// </summary>
 public class LevelManager : MonoBehaviour {
-	public static float levelYOffSetFromCenter = 50;
+	public static float levelYOffSetFromCenter = 100;
 	public CharacterAgeState initialAge;
 	
 	private ParallaxManager parallaxManager;
 	
 	//Make these private later: Also assign these targets based off prior choices / dispositions
-	public Transform youngSectionTarget;
-	public Transform middleSectionTarget;
-	public Transform oldSectionTarget;
+	private static Transform youngSectionTarget;
+	private static Transform middleSectionTarget;
+	private static Transform oldSectionTarget;
 	
 	public LevelLoader levelLoader;
 	
@@ -104,6 +104,16 @@ public class LevelManager : MonoBehaviour {
 		return (CharacterAgeManager.GetCurrentAgeState() != CharacterAgeState.OLD);
 	}
 	#endregion
+	
+	public static WayPoints[] GetCurrentAgeWaypoints(){
+		if (CharacterAgeManager.currentAge == CharacterAgeState.YOUNG){
+			return (youngSectionTarget.GetComponentsInChildren<WayPoints>());
+		} else if (CharacterAgeManager.currentAge == CharacterAgeState.MIDDLE){
+			return (middleSectionTarget.GetComponentsInChildren<WayPoints>());
+		} else {
+			return (oldSectionTarget.GetComponentsInChildren<WayPoints>());
+		}
+	}
 	
 	/// <summary>
 	/// Sets the gender. And will destroy the other gender data to save space

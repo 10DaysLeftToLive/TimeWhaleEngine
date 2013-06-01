@@ -115,13 +115,13 @@ public class LighthouseGirlMiddle : NPC {
 		openningWaitingSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
 		openningWaitingSchedule.Add(new TimeTask(30, new WaitTillPlayerCloseState(this, player)));	
 		
-		backToFarmSchedule = new Schedule(this, Schedule.priorityEnum.Medium);
+		backToFarmSchedule = new Schedule(this, Schedule.priorityEnum.High);
 		backToFarmSchedule.Add(new TimeTask(8f, new IdleState(this)));
-		backToFarmSchedule.Add(new Task(new MoveThenDoState(this, new Vector3(startingPosition.x, startingPosition.y, .5f), new MarkTaskDone(this))));
+		backToFarmSchedule.Add(new Task(new MoveThenDoState(this, startingPosition, new MarkTaskDone(this))));
 		
 		ropeDownSchedule = new Schedule(this, Schedule.priorityEnum.High);
 		ropeDownSchedule.Add(new TimeTask(30, new WaitTillPlayerGoneState(this, player)));
-		Task setFlag = new Task( new MoveThenDoState(this, new Vector3 (startingPosition.x, startingPosition.y, .5f), new MarkTaskDone(this)));
+		Task setFlag = new Task( new MoveThenDoState(this, startingPosition, new MarkTaskDone(this)));
 		setFlag.AddFlagToSet(FlagStrings.WaitingForDate);
 		ropeDownSchedule.Add(setFlag);
 		ropeDownSchedule.AddFlagGroup("a");
@@ -149,7 +149,7 @@ public class LighthouseGirlMiddle : NPC {
 	
 	protected void WaitingOnDate(){
 		waitingOnDateTimer = true;
-		time = 30;
+		time = 40;
 	}
 	
 	protected void DateSuccess(){
@@ -161,7 +161,7 @@ public class LighthouseGirlMiddle : NPC {
 	}
 	
 	protected void MoveToBeach(){
-		this.transform.position = new Vector3(62,44.5f,.5f);	
+		this.transform.position = MapLocations.MiddleOfBeachMiddle;	
 	}
 	
 	protected void SendNotInsaneToState(){
