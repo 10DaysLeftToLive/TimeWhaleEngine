@@ -73,6 +73,14 @@ public class FortuneTellerYoung : NPC {
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue) {
 			acceptFortuneState.AddAction(new NPCEmotionUpdateAction(toControl, new BeginFortuneState(toControl, "Your path lay with several important decisions. Take a moment to reflect~")));
 			acceptFortuneState.AddAction(new NPCCallbackAction(UpdateAcceptedChoices));
+			ShowMultipartChatAction action = new ShowMultipartChatAction(toControl);
+			action.AddChat("Hai1", 2f);
+			action.AddChat("Hai2", 2f);
+			action.AddChat("Hai3", 2f);
+			action.AddChat("Hai4", 2f);
+			
+			
+			acceptFortuneState.AddAction(action);
 			
 			acceptReluctantState.AddAction(new NPCEmotionUpdateAction(toControl, new BeginFortuneState(toControl, "Your path lay with several important decisions. Take a moment to reflect~")));	
 			declineFortuneState.AddAction(new NPCCallbackAction(UpdateDeclinedChoices));
