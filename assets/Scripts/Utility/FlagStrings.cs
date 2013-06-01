@@ -77,6 +77,12 @@ public static class FlagStrings {
 	public static string WaitingForDate = "Waiting for date";
 	public static string EndOfDate = "End of date";
 	public static string ToolsForMarriage = "Tools for marriage";
+	
+	public static string CounterTellOn = "Counter Tell on to farmer father.";
+	public static string MakePieFromScratch = "Make Pie from scratch.";
+	public static string MakePieFromApple = "Make Pie from apple.";
+	public static string GoDownToBeach = "Go down to beach";
+	public static string WaitForItem = "Wait for pie or apple.";
 	#endregion
 	
 	#region FarmerFather
