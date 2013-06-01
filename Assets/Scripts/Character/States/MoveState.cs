@@ -129,7 +129,12 @@ public class MoveState : AbstractState {
         }
 		
 		if (distance != MIN_DISTANCE_TO_POINT){
-			if (PathFinding.GetPathForPoints(character.transform.position, hitPos, character.transform.localScale.y/2)){
+			float height = character.transform.localScale.y/2;
+			if (character is Player && hitPos.y > 70){
+				hitPos.y += character.transform.localScale.y/2.5f;
+				height += character.transform.localScale.y/2.5f;
+			}
+			if (PathFinding.GetPathForPoints(character.transform.position, hitPos, height)){
                 _pathFollowing = PathFinding.GetPath();
                 return (true);
 	        }
