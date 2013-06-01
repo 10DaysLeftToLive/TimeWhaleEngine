@@ -116,7 +116,7 @@ public class LighthouseGirlMiddle : NPC {
 		openningWaitingSchedule.Add(new TimeTask(30, new WaitTillPlayerCloseState(this, player)));	
 		
 		backToFarmSchedule = new Schedule(this, Schedule.priorityEnum.High);
-		backToFarmSchedule.Add(new TimeTask(8f, new IdleState(this)));
+		//backToFarmSchedule.Add(new TimeTask(8f, new IdleState(this)));
 		backToFarmSchedule.Add(new Task(new MoveThenDoState(this, startingPosition, new MarkTaskDone(this))));
 		
 		ropeDownSchedule = new Schedule(this, Schedule.priorityEnum.High);
@@ -126,24 +126,17 @@ public class LighthouseGirlMiddle : NPC {
 		ropeDownSchedule.Add(setFlag);
 		ropeDownSchedule.AddFlagGroup("a");
 		
-		/*waitingOnDate = new Schedule(this, Schedule.priorityEnum.High);
-		waitingOnDate.Add(new TimeTask(dateTime, new IdleState(this)));
-		Task dateTimer = new Task( new MoveThenDoState(this, new Vector3 (startingPosition.x, startingPosition.y,.5f), new MarkTaskDone(this)));
-		dateTimer.AddFlagToSet(FlagStrings.EndOfDate);
-		waitingOnDate.Add(dateTimer);
-		waitingOnDate.Add(new TimeTask(8f, new IdleState(this)));*/
-		
 		postOpenningSchedule =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerMotherMiddle),
-			new MiddleFarmerMotherToLighthouseGirl(), Schedule.priorityEnum.High); 
-		postOpenningSchedule.SetCanNotInteractWithPlayer();
+			new MiddleFarmerMotherToLighthouseGirl(), Schedule.priorityEnum.DoConvo); 
+		//postOpenningSchedule.SetCanNotInteractWithPlayer();
 		
 		noMarriageSchedule =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerMotherMiddle),
-			new MiddleLighthouseGirlNoMarriage(), Schedule.priorityEnum.High); 
-		noMarriageSchedule.SetCanNotInteractWithPlayer();
+			new MiddleLighthouseGirlNoMarriage(), Schedule.priorityEnum.DoConvo); 
+		//noMarriageSchedule.SetCanNotInteractWithPlayer();
 		
 		marriageToCastleManSchedule =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerMotherMiddle),
-			new MiddleLighthouseGirlCastleManMarriage(), Schedule.priorityEnum.High); 
-		marriageToCastleManSchedule.SetCanNotInteractWithPlayer();
+			new MiddleLighthouseGirlCastleManMarriage(), Schedule.priorityEnum.DoConvo); 
+		//marriageToCastleManSchedule.SetCanNotInteractWithPlayer();
 		
 	}
 	
@@ -414,6 +407,8 @@ public class LighthouseGirlMiddle : NPC {
 			_allChoiceReactions.Remove(YesChoice);
 			_allChoiceReactions.Remove(AnotherTimeChoice);
 			GUIManager.Instance.RefreshInteraction();
+			_allChoiceReactions.Add(YesChoice, new DispositionDependentReaction(YesReaction));
+			_allChoiceReactions.Add(AnotherTimeChoice, new DispositionDependentReaction(AnotherTimeReaction));
 		}
 		
 		public override void UpdateEmotionState(){

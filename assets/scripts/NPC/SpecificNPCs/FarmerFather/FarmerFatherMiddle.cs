@@ -7,15 +7,29 @@ using System.Collections;
 public class FarmerFatherMiddle : NPC {
 	InitialEmotionState initialState;
 	Vector3 startingPosition;
+	int disposition = 50;
+	bool farmerHelped = false;
+	bool flagSet = false;
 	protected override void Init() {
 		id = NPCIDs.FARMER_FATHER;
 		base.Init();
 	}
 	
+	Reaction moveAway = new Reaction();
+	
+	Reaction sillyStories = new Reaction();
+	Reaction yourCoward = new Reaction();
+	Reaction alreadyBrave = new Reaction();
+	Reaction illDoIt = new Reaction();
+	Reaction illSellForYou = new Reaction();
+	
+	Reaction apple = new Reaction();
+	Reaction applePie = new Reaction();
+	Reaction shovel = new Reaction();
+	Reaction rope = new Reaction();
+	
 	protected override void SetFlagReactions(){
-		Reaction moveAway = new Reaction();
-		moveAway.AddAction(new NPCCallbackAction(ResetPosition));
-		moveAway.AddAction(new NPCEmotionUpdateAction(this, initialState));
+		SetupReactions();
 		flagReactions.Add(FlagStrings.FarmAlive, moveAway);
 	}
 	
@@ -38,6 +52,41 @@ public class FarmerFatherMiddle : NPC {
 	
 	protected void ResetPosition(){
 		this.transform.position = startingPosition;	
+	}
+	
+	protected void ChangeDisposition(NPC npc, string disp){
+		disposition += int.Parse(disp);
+		if (disposition > 70 && farmerHelped && !flagSet){
+			FlagManager.instance.SetFlag(FlagStrings.HusbandOnBoard);
+			flagSet = true;
+		}
+	}
+	
+	protected void FarmerHelped(){
+		farmerHelped = true;
+		if (disposition > 70 && !flagSet){
+			FlagManager.instance.SetFlag(FlagStrings.HusbandOnBoard);
+			flagSet = true;
+		}
+	}
+	
+	protected void SetupReactions(){
+		moveAway.AddAction(new NPCCallbackAction(ResetPosition));
+		moveAway.AddAction(new NPCEmotionUpdateAction(this, initialState));
+		
+		sillyStories.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "-10"));
+		yourCoward.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "-15"));
+		
+		alreadyBrave.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "10"));
+		
+		illDoIt.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "5"));
+		
+		illSellForYou.AddAction(new NPCCallbackAction(FarmerHelped));
+		
+		apple.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "5"));
+		applePie.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "15"));
+		shovel.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "5"));
+		rope.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "5"));
 	}
 	
 	

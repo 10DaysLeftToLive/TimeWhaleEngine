@@ -7,16 +7,36 @@ using System.Collections;
 public class FarmerMotherMiddle : NPC {	
 	InitialEmotionState initialState;
 	Vector3 startingPosition;
+	int disposition = 50;
+	bool flagSet = false;
+	bool husbandReady = false;
 	protected override void Init() {
 		id = NPCIDs.FARMER_MOTHER;
 		base.Init();
 	}
-	
+	Reaction moveAway = new Reaction();
+	Reaction notSilly = new Reaction();
+	Reaction tellOn = new Reaction();
+	Reaction workandRead = new Reaction();
+	Reaction sillyStories = new Reaction();
+	Reaction yourRight = new Reaction();
+	Reaction apple = new Reaction();
+	Reaction applePie = new Reaction();
+	Reaction shovel = new Reaction();
+	Reaction rope = new Reaction();
+	Reaction husbandOnBoard = new Reaction();
 	protected override void SetFlagReactions(){
-		Reaction moveAway = new Reaction();
-		moveAway.AddAction(new NPCCallbackAction(ResetPosition));
-		moveAway.AddAction(new NPCEmotionUpdateAction(this, initialState));
+		SetupReactions();
 		flagReactions.Add(FlagStrings.FarmAlive, moveAway);
+		flagReactions.Add(FlagStrings.NotSilly, notSilly);
+		flagReactions.Add(FlagStrings.TellOnDaughter, tellOn);
+		flagReactions.Add(FlagStrings.StoriesAreSilly, sillyStories);
+		flagReactions.Add(FlagStrings.YourRight, yourRight);
+		flagReactions.Add(FlagStrings.WorkAndStories, workandRead);
+		flagReactions.Add(FlagStrings.GiveAppleToFarmer, apple);
+		flagReactions.Add(FlagStrings.GiveApplePieToFarmer, applePie);
+		flagReactions.Add(FlagStrings.GiveShovelToFarmer, shovel);
+		flagReactions.Add(FlagStrings.GiveRopeToFarmer, rope);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
@@ -38,6 +58,41 @@ public class FarmerMotherMiddle : NPC {
 	
 	protected void ResetPosition(){
 		this.transform.position = startingPosition;	
+	}
+	
+	protected void ChangeDisposition(NPC npc, string disp){
+		disposition += int.Parse(disp);
+		if (disposition > 70 && husbandReady && !flagSet){
+			FlagManager.instance.SetFlag(FlagStrings.FarmerOnBoard);
+			flagSet = true;
+		}
+	}
+	
+	protected void ChangeHusbandStatus(){
+		husbandReady = true;
+		if (disposition > 70 && !flagSet){
+			FlagManager.instance.SetFlag(FlagStrings.FarmerOnBoard);
+			flagSet = true;
+		}
+	}
+	
+	protected void SetupReactions(){
+		moveAway.AddAction(new NPCCallbackAction(ResetPosition));
+		moveAway.AddAction(new NPCEmotionUpdateAction(this, initialState));
+		
+		notSilly.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "-15"));
+		workandRead.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "-5"));
+		
+		tellOn.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "10"));
+		
+		sillyStories.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "5"));
+		yourRight.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "10"));
+		
+		apple.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "5"));
+		applePie.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "10"));
+		shovel.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "15"));
+		rope.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "10"));
+		husbandOnBoard.AddAction(new NPCCallbackAction(ChangeHusbandStatus));
 	}
 	
 	

@@ -89,11 +89,37 @@ public static class FlagStrings {
 	public static string ConversationInMiddleFather = "Conversation in Middle Father";
 	public static string BusinessConversation = "Business";
 	public static string BusinessTimer = "Business Timer";
+	//young
+	public static string GiveSeaShellToFarmerHusband = "Give SeaShell to Farmer";
+	public static string GiveAppleToFarmerHusband = "Give Apple to Farmer";
+	public static string GiveApplePieToFarmerHusband = "Give ApplePie to Farmer";
+	public static string GivePortraitToFarmerHusband = "Give Portrait to Farmer";
+	public static string GiveToyPuzzleToFarmerHusband = "Give Toy Puzzle to Farmer";
+	public static string GiveToySwordToFarmerHusband = "Give Toy Sword to Farmer";
+	public static string GiveCaptainsLogToFarmerHusband = "Give Captains Log to Farmer";
+	public static string HusbandSillyStories = "Husband silly stories";
+	public static string YourCoward = "Your Coward";
+	public static string IllDoIt = "Ill Do it";
+	public static string AlreadyBrave = "Already Brave";
+	public static string IllSellForYou = "Ill sell for you";
+	public static string HusbandOnBoard = "Husband on board";
 	#endregion
 	
 	#region FarmerMother
 	public static string ConversationInMiddleFarmerMother = "Conversation in Middle Farmer Mother";
 	public static string FarmAlive = "Farm Alive";
+	//young
+	public static string NotSilly = "Not Silly";
+	public static string WorkAndStories = "Work and Stories";
+	public static string TellOnDaughter = "Tell on Daughter";
+	public static string StoriesAreSilly = "Stories are silly";
+	public static string YourRight = "Your Right";
+	public static string GivePendantToFarmer = "Give Pendant to Farmer";
+	public static string GiveAppleToFarmer = "Give Apple to Farmer";
+	public static string GiveApplePieToFarmer = "Give Apple pie to Farmer";
+	public static string GiveShovelToFarmer = "Give Shovel to Farmer";
+	public static string GiveRopeToFarmer = "Give Rope to Farmer";
+	public static string FarmerOnBoard = "Farmer on Board";
 	#endregion
 	
 	#region Sea Captain
