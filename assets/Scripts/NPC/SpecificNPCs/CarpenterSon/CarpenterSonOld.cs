@@ -78,7 +78,7 @@ public class CarpenterSonOld : NPC {
 		Reaction uh = new Reaction();
 		public WantAppleState(NPC toControl, string currentDialogue) : base (toControl, currentDialogue) {
 			uh.AddAction(new NPCCallbackAction(Uhh));
-			uh.AddAction(new NPCEmotionUpdateAction(this, new GaveAppleState(this, "")));
+			uh.AddAction(new NPCEmotionUpdateAction(toControl, new GaveAppleState(toControl, "hey!")));
 			_allItemReactions.Add("apple", new DispositionDependentReaction(uh));
 			_allChoiceReactions.Add(new Choice ("I don't", "Ohh ok.."), new DispositionDependentReaction(uh));
 		}
