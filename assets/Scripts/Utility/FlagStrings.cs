@@ -33,8 +33,27 @@ public static class FlagStrings {
 	public static string RunToWindmill = "Run To Windmill";
 	public static string RunToReflectionTree = "Run To Reflection Tree";
 	public static string RunToHome = "Run Home";
-	#endregion
+		#region sibling middle
+		#endregion
 	
+		#region sibling old
+		public static string oldSiblingIntroChatFlag = "old Sibling Introduction Chat";
+		public static string siblingOldIntroRaceChatPartOneFlag = "Sibling Old Intro Race Chat Part One";
+		public static string siblingOldIntroRaceChatPartTwoFlag = "Sibling Old Intro Race Chat Part Two";
+		public static string siblingOldIntroRaceChatPartThreeFlag = "Sibling Old Intro Race Chat Part Three";
+		public static string siblingOldIntroRaceChatPartFourFlag = "Sibling Old Intro Race Chat Part Four";
+		public static string siblingOldIntroRaceChatPartFiveFlag = "Sibling Old Intro Race Chat Part Five";
+		public static string siblingOldIntroRaceChatPartSixFlag = "Sibling Old Intro Race Chat Part Six";
+	
+		public static string oldSiblingIntroStoryOnePartOneFlag = "Sibling Story One Part One";
+		public static string oldSiblingIntroStoryOnePartTwoFlag = "Sibling Story One Part Two";
+		
+		public static string siblingOldReachedCarpenterSonFlag = "Sibling Old Reached Carpenter Son";
+		public static string siblingOldGreetCarpenterSonOldPartOneFlag = "Sibling Old Greet CarpenterSon Part One";
+		public static string siblingOldGreetCarpenterSonOldPartTwoFlag = "Sibling Old Greet CarpenterSon Part Two";
+		#endregion
+	#endregion
+
 	#region Carpenter	
 	public static string gaveToolsToCarpenterOrSon = "Gave Tools to Carpenter Or Son";
 	#endregion
@@ -46,6 +65,11 @@ public static class FlagStrings {
 	
 	public static string CarpenterDating = "Carpenter dating";
 	public static string CarpenterNoShow = "Carpenter no show";
+	
+		#region old
+		public static string oldCarpenterGreetSiblingPartOneFlag = "Carpenter Greet Sibling Part One";
+		public static string oldCarpenterGreetSiblingPartTwoFlag = "Carpenter Greet Sibling Part Two";
+		#endregion
 	#endregion
 	
 	#region CastleMan Only

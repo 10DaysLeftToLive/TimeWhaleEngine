@@ -60,4 +60,17 @@ public class MapLocations {
 	public static Vector3 UpperMiddleBeachOld{
 		get{return new Vector3(_upperMiddleBeach.x, _upperMiddleBeach.y + (LevelManager.levelYOffSetFromCenter * 2), _upperMiddleBeach.z);}	
 	}
+	
+	#region SiblingOld
+	static Vector3 _playerHouseWaterWell = new Vector3 (-2.4f, -2.4f, 0);
+	public static Vector3 PlayerHouseWaterWellOld {
+		get	{return new Vector3 (_playerHouseWaterWell.x, _playerHouseWaterWell.y + (LevelManager.levelYOffSetFromCenter * 2), _playerHouseWaterWell.z);}
+	}
+	
+	static Vector3 _MiddleOfHauntedForest = new Vector3 (-28.25f, -2.4f, 0);
+	public static Vector3 MiddleOfHauntedForestOld {
+		get	{return new Vector3 (_MiddleOfHauntedForest.x, _MiddleOfHauntedForest.y + (LevelManager.levelYOffSetFromCenter * 2), _MiddleOfHauntedForest.z);}
+	}
+	
+	#endregion
 }

@@ -38,6 +38,7 @@ public class Crossfade: MonoBehaviour {
 
     public static IEnumerator CoroutineFadeDown(string AreaName)
     {
+    
         Strings.CURRENTFADING = AreaName;
 
         AudioSource CurrentSong;
