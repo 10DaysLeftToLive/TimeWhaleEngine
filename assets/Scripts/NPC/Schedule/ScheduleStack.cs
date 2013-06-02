@@ -84,6 +84,19 @@ public class ScheduleStack {
 		}
 	}
 	
+	public void AddShared(Schedule schedule) {		
+		if (current == null) {
+			current = schedule;
+		} 
+		else if (schedule.CheckPriorityTo(current) >= 0) {
+			current.OnInterrupt();
+			_schedulesToDo.Push(current);
+			current = schedule;
+		} else {
+			_schedulesToDo.Push(schedule);
+		}
+	}
+	
 	public void Pause() {
 		isPaused = true;
 		if (current != null) {

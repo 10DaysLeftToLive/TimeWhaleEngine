@@ -7,15 +7,30 @@ using System.Collections;
 public class FarmerFatherMiddle : NPC {
 	InitialEmotionState initialState;
 	Vector3 startingPosition;
+	int disposition = 50;
+	bool farmerHelped = false;
+	bool flagSet = false;
 	protected override void Init() {
 		id = NPCIDs.FARMER_FATHER;
 		base.Init();
 	}
 	
+	Reaction moveAway = new Reaction();
+	
+	Reaction sillyStories = new Reaction();
+	Reaction yourCoward = new Reaction();
+	Reaction alreadyBrave = new Reaction();
+	Reaction illDoIt = new Reaction();
+	Reaction illSellForYou = new Reaction();
+	Reaction postDateCastle = new Reaction();
+	
+	Reaction apple = new Reaction();
+	Reaction applePie = new Reaction();
+	Reaction shovel = new Reaction();
+	Reaction rope = new Reaction();
+	
 	protected override void SetFlagReactions(){
-		Reaction moveAway = new Reaction();
-		moveAway.AddAction(new NPCCallbackAction(ResetPosition));
-		moveAway.AddAction(new NPCEmotionUpdateAction(this, initialState));
+		SetupReactions();
 		flagReactions.Add(FlagStrings.FarmAlive, moveAway);
 	}
 	
@@ -40,141 +55,155 @@ public class FarmerFatherMiddle : NPC {
 		this.transform.position = startingPosition;	
 	}
 	
+	protected void ChangeDisposition(NPC npc, string disp){
+		disposition += int.Parse(disp);
+		if (disposition > 70 && farmerHelped && !flagSet){
+			initialState.PassStringToEmotionState("happy");
+			flagSet = true;
+		}
+	}
+	
+	protected void FarmerHelped(){
+		farmerHelped = true;
+		if (disposition > 70 && !flagSet){
+			initialState.PassStringToEmotionState("happy");
+			flagSet = true;
+		}
+	}
+	
+	protected void SetupReactions(){
+		moveAway.AddAction(new NPCCallbackAction(ResetPosition));
+		moveAway.AddAction(new NPCEmotionUpdateAction(this, initialState));
+		
+		sillyStories.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "-10"));
+		yourCoward.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "-15"));
+		
+		alreadyBrave.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "10"));
+		
+		illDoIt.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "5"));
+		
+		illSellForYou.AddAction(new NPCCallbackAction(FarmerHelped));
+		
+		apple.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "5"));
+		applePie.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "15"));
+		shovel.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "5"));
+		rope.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "5"));
+		
+		postDateCastle.AddAction(new NPCEmotionUpdateAction(this, new HateEmotionState(this, "")));
+		postDateCastle.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "-100"));
+	}
+	
 	
 	#region EmotionStates
 	#region Initial Emotion State
 	private class InitialEmotionState : EmotionState{
 		bool MarriageFlag = false;
-		//Toy Puzzle
-		//SeaShell
-		//Apple or Apple Pie
-		//Portrait
-		//Toy Puzzle
-		//Captain's Log
+		bool convinceFlag = false;
+		Choice BusinessChoice = new Choice("How's your business?", "It's going poorly...I just can never find the strength to be a hawk when it comes to business...");
+		Choice MarriageChoice = new Choice("So about this marriage?", "I...I don't like it...but I'm sure my wife knows what she's doing.");
+		Reaction BusinessReaction = new Reaction();
+		Reaction MarriageReaction = new Reaction();
 		
-		//Choices
-		//Business
-		//Marriage
-		Choice BusinessChoice;
-		Choice MarriageChoice;
-		Reaction BusinessReaction;
-		Reaction MarriageReaction;
+		Choice DontLikeItChoice = new Choice("Why don't you like it?", "I dunno...I...think my daughter should be allowed to think for herself..");
+		Choice YouSureChoice = new Choice("Are you sure?", "She's always dealt with things.  I'm sure she knows what she's doing...");
+		Choice StandUpChoice = new Choice("Then stand up for her!", "But...I can't!  Its too hard...it's too hard..");
+		Choice HelpHerChoice = new Choice("Help her think then!", "But...I can't!  Its too hard...it's too hard..");
+		Choice SoundSureChoice = new Choice("You don't sound sure.", "I dunno...I...think my daughter should be allowed to think for herself..");
+		Choice YouCanChoice = new Choice("If she can do it you can!", "It's going poorly...I just can never find the strength to be a hawk when it comes to business...");
+		Choice YouHaveItChoice = new Choice("I know you have it in you!", "It's going poorly...I just can never find the strength to be a hawk when it comes to business...");
+		Choice MarriageIdeaChoice = new Choice("I have an idea about the marriage.", "I'm listening");
+		Choice ConvinceDaughterChoice = new Choice("Convince daughter to marry", "I have tried that before with no luck but if you want to give it a try then go ahead.");
+		Choice WorkingOnItChoice = new Choice("I'm still working on it", "Give up now..");
+		Choice NoChoice = new Choice("No", "It's no hope.");
 		
-		Choice DontLikeItChoice;
-		Choice YouSureChoice;
-		Choice StandUpChoice;
-		Choice HelpHerChoice;
-		Choice SoundSureChoice;
-		Choice YouCanChoice;
-		Choice YouHaveItChoice;
+		Reaction DontLikeItReaction = new Reaction();
+		Reaction YouSureReaction = new Reaction();
+		Reaction StandUpReaction = new Reaction();
+		Reaction HelpHerReaction = new Reaction();
+		Reaction SoundSureReaction = new Reaction();
+		Reaction YouCanReaction = new Reaction();
+		Reaction YouHaveItReaction = new Reaction();
+		Reaction MarriageIdeaReaction = new Reaction();
+		Reaction ConvinceDaughterReaction = new Reaction();
+		Reaction WorkingOnItReaction = new Reaction();
+		Reaction NoReaction = new Reaction();
 		
-		Reaction DontLikeItReaction;
-		Reaction YouSureReaction;
-		Reaction StandUpReaction;
-		Reaction HelpHerReaction;
-		Reaction SoundSureReaction;
-		Reaction YouCanReaction;
-		Reaction YouHaveItReaction;
-		
-		Reaction ToyPuzzleReaction;
-		Reaction SeaShellReaction;
-		Reaction AppleReaction;
-		Reaction ApplePieReaction;
-		Reaction CaptainsLogReaction;
-		Reaction PortraitReaction;
+		Reaction ToyPuzzleReaction = new Reaction();
+		Reaction SeaShellReaction = new Reaction();
+		Reaction AppleReaction = new Reaction();
+		Reaction ApplePieReaction = new Reaction();
+		Reaction CaptainsLogReaction = new Reaction();
+		Reaction PortraitReaction = new Reaction();
 	
+		NPC control;
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, "Hello there!  How's it going?"){
-			
-			
-			//Code for giving the Portrait
-			Reaction PortraitReaction = new Reaction();
-			PortraitReaction.AddAction(new NPCTakeItemAction(toControl));
-			//PortraitReaction.AddAction(new NPCCallbackAction(SetSeaShell));
-			PortraitReaction.AddAction(new UpdateCurrentTextAction(toControl, "Thanks a ton this will make a great addition to my study.  Can't let my wife see it though...she'll have me throw it out."));
+			control = toControl;
 			_allItemReactions.Add(StringsItem.Portrait,  new DispositionDependentReaction(PortraitReaction)); // change item to shell
-			
-			//Code for giving the seashell
-			Reaction SeaShellReaction = new Reaction();
-			SeaShellReaction.AddAction(new NPCTakeItemAction(toControl));
-			//SeaShellReaction.AddAction(new NPCCallbackAction(SetSeaShell));
-			SeaShellReaction.AddAction(new UpdateCurrentTextAction(toControl, "This looks pretty nice.."));
 			_allItemReactions.Add(StringsItem.Seashell,  new DispositionDependentReaction(SeaShellReaction)); // change item to shell
-		
-			//Code for giving the Toy Puzzle
-			Reaction ToyPuzzleReaction = new Reaction();
-			ToyPuzzleReaction.AddAction(new NPCTakeItemAction(toControl));
-			//ToyPuzzleReaction.AddAction(new NPCCallbackAction(SetSeaShell));
-			ToyPuzzleReaction.AddAction(new UpdateCurrentTextAction(toControl, "Heh...this looks like an interesting problem...I'm gonna try and solve it."));
 			_allItemReactions.Add(StringsItem.ToyPuzzle,  new DispositionDependentReaction(ToyPuzzleReaction)); // change item to shell
-			
-			//Code for giving the Apple
-			Reaction AppleReaction = new Reaction();
-			AppleReaction.AddAction(new NPCTakeItemAction(toControl));
-			//AppleReaction.AddAction(new NPCCallbackAction(UpdateCaptainsLog));
-			AppleReaction.AddAction(new UpdateCurrentTextAction(toControl, "That tasted great.  You'll have to tell me where you got it some time..."));
 			_allItemReactions.Add(StringsItem.Apple,  new DispositionDependentReaction(AppleReaction)); // change item to shell
-			
-			//Code for giving the Apple Pie
-			Reaction ApplePieReaction = new Reaction();
-			ApplePieReaction.AddAction(new NPCTakeItemAction(toControl));
-			//ApplePieReaction.AddAction(new NPCCallbackAction(SetSeaShell));
-			ApplePieReaction.AddAction(new UpdateCurrentTextAction(toControl, "That tasted great.  You'll have to tell me where you got it some time..."));
 			_allItemReactions.Add(StringsItem.ApplePie,  new DispositionDependentReaction(ApplePieReaction)); // change item to shell
-			
-			//Code for giving the Captains Log
-			Reaction CaptainsLogReaction = new Reaction();
-			CaptainsLogReaction.AddAction(new NPCCallbackAction(UpdateCaptainsLog));
-			CaptainsLogReaction.AddAction(new UpdateCurrentTextAction(toControl, "I wish I had stories like this to give to my daughter earlier...but I guess its okay, she turned out to be very brave anyways..."));
 			_allItemReactions.Add(StringsItem.CaptainsLog,  new DispositionDependentReaction(CaptainsLogReaction)); // change item to shell
 			
-			MarriageChoice = new Choice("So about this marriage?", "I...I don't like it...but I'm sure my wife knows what she's doing.");
-			MarriageReaction = new Reaction();
-			MarriageReaction.AddAction(new NPCCallbackAction(UpdateMarriage));
 			_allChoiceReactions.Add(MarriageChoice, new DispositionDependentReaction(MarriageReaction));
-			//MarriageReaction.AddAction(new UpdateCurrentTextAction(toControl, "I...I don't like it...but I'm sure my wife knows what she's doing."));
-			
-			BusinessChoice = new Choice("How's your business?", "It's going poorly...I just can never find the strength to be a hawk when it comes to business...");
-			BusinessReaction = new Reaction();
-			BusinessReaction.AddAction(new UpdateCurrentTextAction(toControl, "It's going poorly...I just can never find the strength to be a hawk when it comes to business..."));
 			_allChoiceReactions.Add(BusinessChoice, new DispositionDependentReaction(BusinessReaction));
 			
-			//The Convincing him to marry path.
-			DontLikeItChoice = new Choice("Why don't you like it?", "I dunno...I...think my daughter should be allowed to think for herself..");
-			DontLikeItReaction = new Reaction();
-			DontLikeItReaction.AddAction(new NPCCallbackAction(UpdateDontLikeIt));
-			DontLikeItReaction.AddAction(new UpdateCurrentTextAction(toControl, "I dunno...I...think my daughter should be allowed to think for herself.."));
-			
-			YouSureChoice = new Choice("Are you sure?", "She's always dealt with things.  I'm sure she knows what she's doing...");
-			YouSureReaction = new Reaction();
-			YouSureReaction.AddAction(new NPCCallbackAction(UpdateYouSure));
-			YouSureReaction.AddAction(new UpdateCurrentTextAction(toControl, "She's always dealt with things.  I'm sure she knows what she's doing..."));
-			
-			StandUpChoice = new Choice("Then stand up for her!", "But...I can't!  Its too hard...it's too hard..");
-			StandUpReaction = new Reaction();
-			StandUpReaction.AddAction(new NPCCallbackAction(UpdateStandUp));
-			StandUpReaction.AddAction(new UpdateCurrentTextAction(toControl, "But...I can't!  Its too hard...it's too hard.."));
-			
-			HelpHerChoice = new Choice("Help her think then!", "But...I can't!  Its too hard...it's too hard..");
-			HelpHerReaction = new Reaction();
-			HelpHerReaction.AddAction(new NPCCallbackAction(UpdateHelpHer));
-			HelpHerReaction.AddAction(new UpdateCurrentTextAction(toControl, "But...I can't!  Its too hard...it's too hard.."));
-			
-			SoundSureChoice = new Choice("You don't sound sure.", "I dunno...I...think my daughter should be allowed to think for herself..");
-			SoundSureReaction = new Reaction();
-			SoundSureReaction.AddAction(new NPCCallbackAction(UpdateSoundSure));
-			SoundSureReaction.AddAction(new UpdateCurrentTextAction(toControl, "I dunno...I...think my daughter should be allowed to think for herself.."));
-			
-			YouCanChoice = new Choice("If she can do it you can!", "It's going poorly...I just can never find the strength to be a hawk when it comes to business...");
-			YouCanReaction = new Reaction();
-			YouCanReaction.AddAction(new NPCCallbackAction(UpdateYouCan));
-			YouCanReaction.AddAction(new UpdateCurrentTextAction(toControl, "It's going poorly...I just can never find the strength to be a hawk when it comes to business..."));
-			
-			YouHaveItChoice = new Choice("I know you have it in you!", "It's going poorly...I just can never find the strength to be a hawk when it comes to business...");
-			YouHaveItReaction = new Reaction();
-			YouHaveItReaction.AddAction(new NPCCallbackAction(UpdateYouHaveIt));
-			YouHaveItReaction.AddAction(new UpdateCurrentTextAction(toControl, "It's going poorly...I just can never find the strength to be a hawk when it comes to business..."));
-			
+
 		}
+		
+		public void SetupReactions(){
+			PortraitReaction.AddAction(new NPCTakeItemAction(control));
+			PortraitReaction.AddAction(new UpdateCurrentTextAction(control, "Thanks a ton this will make a great addition to my study.  Can't let my wife see it though...she'll have me throw it out."));
+			SeaShellReaction.AddAction(new NPCTakeItemAction(control));
+			SeaShellReaction.AddAction(new UpdateCurrentTextAction(control, "This looks pretty nice.."));
+			ToyPuzzleReaction.AddAction(new NPCTakeItemAction(control));
+			ToyPuzzleReaction.AddAction(new UpdateCurrentTextAction(control, "Heh...this looks like an interesting problem...I'm gonna try and solve it."));
+			AppleReaction.AddAction(new NPCTakeItemAction(control));
+			AppleReaction.AddAction(new UpdateCurrentTextAction(control, "That tasted great.  You'll have to tell me where you got it some time..."));
+			ApplePieReaction.AddAction(new NPCTakeItemAction(control));
+			ApplePieReaction.AddAction(new UpdateCurrentTextAction(control, "That tasted great.  You'll have to tell me where you got it some time..."));
+			CaptainsLogReaction.AddAction(new NPCCallbackAction(UpdateCaptainsLog));
+			CaptainsLogReaction.AddAction(new UpdateCurrentTextAction(control, "I wish I had stories like this to give to my daughter earlier...but I guess its okay, she turned out to be very brave anyways..."));
+			
+			
+			MarriageIdeaReaction.AddAction(new NPCCallbackAction(MarriageIdeaResponse));
+			ConvinceDaughterReaction.AddAction(new NPCCallbackAction(ConvinceDaughterResponse));
+			
+			MarriageReaction.AddAction(new NPCCallbackAction(UpdateMarriage));
+			//The Convincing him to marry path.
+			DontLikeItReaction.AddAction(new NPCCallbackAction(UpdateDontLikeIt));
+			YouSureReaction.AddAction(new NPCCallbackAction(UpdateYouSure));
+			StandUpReaction.AddAction(new NPCCallbackAction(UpdateStandUp));
+			HelpHerReaction.AddAction(new NPCCallbackAction(UpdateHelpHer));
+			SoundSureReaction.AddAction(new NPCCallbackAction(UpdateSoundSure));
+			YouCanReaction.AddAction(new NPCCallbackAction(UpdateYouCan));
+			YouHaveItReaction.AddAction(new NPCCallbackAction(UpdateYouHaveIt));
+		}
+		
+		public void NoResponse(){
+			_allChoiceReactions.Clear();
+			_allChoiceReactions.Add(MarriageChoice, new DispositionDependentReaction(MarriageReaction));
+			_allChoiceReactions.Add(BusinessChoice, new DispositionDependentReaction(BusinessReaction));
+			SetDefaultText("Hello there!  How's it going?");
+			GUIManager.Instance.RefreshInteraction();
+		}
+		
+		public void ConvinceDaughterResponse(){
+			_allChoiceReactions.Clear();
+			SetDefaultText("Any luck convincing my daughter?");
+			if (!convinceFlag){
+				FlagManager.instance.SetFlag(FlagStrings.HusbandOnBoard);	
+			}
+			GUIManager.Instance.RefreshInteraction();
+		}
+		
+		public void MarriageIdeaResponse(){
+			_allChoiceReactions.Clear();
+			_allChoiceReactions.Add(ConvinceDaughterChoice, new DispositionDependentReaction(ConvinceDaughterReaction));
+			SetDefaultText("So what was your marriage idea?");
+			GUIManager.Instance.RefreshInteraction();
+		}
+		
 		public void UpdateCaptainsLog(){
 			FlagManager.instance.SetFlag(FlagStrings.ConversationInMiddleFather);	
 		}
@@ -249,11 +278,23 @@ public class FarmerFatherMiddle : NPC {
 		public override void UpdateEmotionState(){
 			
 		}
+		
+		public override void PassStringToEmotionState(string text){
+			if (text == "happy"){
+				_allChoiceReactions.Add(MarriageIdeaChoice, new DispositionDependentReaction(MarriageIdeaReaction));
+			}
+		}
 	
 	}
 	
 	private class GoneEmotionState : EmotionState{
 		public GoneEmotionState(NPC toControl, string currentDialogue) : base(toControl, ""){
+		}
+		
+	}
+	
+	private class HateEmotionState : EmotionState{
+		public HateEmotionState(NPC toControl, string currentDialogue) : base(toControl, "Do not talk to me."){
 		}
 		
 	}

@@ -12,7 +12,11 @@ public class NPCConvoState : AbstractState {
 	}
 	
 	public override void Update(){
-		// TODO - look at talking target
+		if (_chatToPerform.GetCurrentInfo().GetTime() <= 0) {
+			if (character is NPC) {
+				((NPC)character).NextTask();
+			} 
+		}
 	}
 	
 	public void FaceEachOther() {

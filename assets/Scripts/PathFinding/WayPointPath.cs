@@ -156,8 +156,9 @@ public class WayPointPath {
 	private static bool AddArray(int start, int stop, Vector3 destination){
 		Vector3[] temp = Search.GetVectors(stop, start);
 		int[] wayPointTemp = Search.GetWayPointIndices(stop, start);
-		for (int i = 0; i < Search.index; i++)
+		for (int i = 0; i < Search.index; i++){
 			AddPoint(new Vector3 (temp[i].x, temp[i].y + height + LevelManager.levelYOffSetFromCenter*currentAge,temp[i].z), wayPointTemp[i]);
+		}
 		AddPoint(destination, -1);
 		return true;
 	}
@@ -173,7 +174,13 @@ public class WayPointPath {
 
 	private static GameObject GetPoint(Vector3 pos, int mask, Vector3 heading){
 		RaycastHit hit;
-		Vector3 rayStart = new Vector3(pos.x-.2f, pos.y, pos.z);
+		float offset;
+		if (heading.x == 0){
+			offset = 0;
+		} else {
+			offset = heading.x*.1f;	
+		}
+		Vector3 rayStart = new Vector3(pos.x-offset, pos.y, pos.z);
 		//Debug.DrawRay(pos,heading,Color.red,20);
 		if (Physics.Raycast(rayStart, heading , out hit, Mathf.Infinity, mask)){
 			GameObject wayPoint = hit.collider.gameObject;

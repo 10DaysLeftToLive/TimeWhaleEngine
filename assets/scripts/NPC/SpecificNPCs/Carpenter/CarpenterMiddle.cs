@@ -39,7 +39,7 @@ public class CarpenterMiddle : NPC {
 		NPCConvoSchedule angryAtSonDefault =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), new MiddleCarpenterToSonDefaultScriptedConvo(), Schedule.priorityEnum.High); // CHANGE THIS CONVERSATION TO THE ONE WE WANT TO USE!
 		angryAtSonDefault.SetCanNotInteractWithPlayer();
 		angryAtSonDefault.AddFlagGroup(FlagStrings.gaveFishingRodToCarpenterSon);
-		scheduleStack.Add(angryAtSonDefault);
+		this.AddSchedule(angryAtSonDefault);
 
 		angryAtSonFishing =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), new MiddleCarpenterToSonFishingScriptedConvo(), Schedule.priorityEnum.High); // CHANGE THIS CONVERSATION TO THE ONE WE WANT TO USE!
 		angryAtSonFishing.SetCanNotInteractWithPlayer();
