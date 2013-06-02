@@ -51,7 +51,7 @@ public class CarpenterSonYoung : NPC {
 		
 		
 		Woodworking = new Schedule( this, Schedule.priorityEnum.Medium);
-		Woodworking.Add (new TimeTask(300, new WaitState(this)));
+		//Woodworking.Add (new TimeTask(300, new WaitState(this)));
 	}
 	
 	
@@ -122,7 +122,8 @@ public class CarpenterSonYoung : NPC {
 			SetDefaultText("Hey, now that I have my tools back I need to make something. Do you have any suggestions?");
 			
 			makeFishingRodReaction.AddAction(new NPCCallbackAction(TellToMakeFishingRod));
-			makeTreeHouseReaction.AddAction(new NPCCallbackAction(TellToMakeTreeHouse));
+			makeSwordReaction.AddAction(new NPCCallbackAction(TellToMakeSword));
+			makeDollReaction.AddAction(new NPCCallbackAction(TellToMakeDoll));
 			
 			_allChoiceReactions.Add(makeFishingRodChoice, new DispositionDependentReaction(makeFishingRodReaction));
 			_allChoiceReactions.Add(makeSwordChoice, new DispositionDependentReaction(makeSwordReaction));
