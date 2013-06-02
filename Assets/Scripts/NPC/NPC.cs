@@ -169,8 +169,8 @@ public abstract class NPC : Character {
 		scheduleStack.Add(scheduleToAdd);	
 	}
 	
-	public void AddSharedSchedule(NPCConvoSchedule scheduleToAdd) {
-		scheduleStack.Add(scheduleToAdd);
+	public void AddSharedSchedule(Schedule scheduleToAdd){
+		scheduleStack.AddShared(scheduleToAdd);	
 	}
 	
 	// Can be overriden by children. Is recomended to do this.

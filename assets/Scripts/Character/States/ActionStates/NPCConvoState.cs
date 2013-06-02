@@ -5,17 +5,14 @@ public class NPCConvoState : AbstractState {
 	Character _toTalkWith;
 	string _textToShow;
 	NPCChat _chatToPerform;
-	float timeLeft;
 	
 	public NPCConvoState(Character toControl, Character toTalkWith, NPCChat chatToPerform) : base(toControl){
 		_toTalkWith = toTalkWith;
 		_chatToPerform = chatToPerform;
-		timeLeft = chatToPerform.GetCurrentInfo().GetTime();
 	}
 	
 	public override void Update(){
-		timeLeft -= Time.deltaTime;
-		if (timeLeft <= 0) {
+		if (_chatToPerform.GetCurrentInfo().GetTime() <= 0) {
 			if (character is NPC) {
 				((NPC)character).NextTask();
 			} 
