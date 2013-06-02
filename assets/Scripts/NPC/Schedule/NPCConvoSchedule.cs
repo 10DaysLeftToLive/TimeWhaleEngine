@@ -7,6 +7,7 @@ public class NPCConvoSchedule : Schedule {
 	public NPC _npcTwo;
 	protected NPC _npcTalking;
 	protected bool _waitForPlayer = true;
+	protected bool hasResumed = false;
 	protected List<ChatInfo> chatInfoList;
 	protected ChatInfo chatInfo;
 	protected NPCChat chatToPerform;

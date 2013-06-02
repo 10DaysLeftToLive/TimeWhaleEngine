@@ -85,6 +85,10 @@ public class LighthouseGirlMiddle : NPC {
 		stoodUp.AddAction(new NPCEmotionUpdateAction(this, stoodUpState));
 		flagReactions.Add(FlagStrings.StoodUp, stoodUp);
 		
+		
+		Reaction farmerOnBoard = new Reaction();
+		farmerOnBoard.AddAction(new NPCCallbackAction(SendFarmerOnBoard));
+		flagReactions.Add(FlagStrings.FarmerOnBoard, farmerOnBoard);
 		#endregion
 	}
 	
@@ -176,6 +180,9 @@ public class LighthouseGirlMiddle : NPC {
 
 	}
 	
+	protected void SendFarmerOnBoard(){
+		initialState.PassStringToEmotionState(FlagStrings.FarmerOnBoard);
+	}
 	
 	#region EmotionStates
 	private class StartingEmotionState : EmotionState{
@@ -264,7 +271,16 @@ public class LighthouseGirlMiddle : NPC {
 		
 		public override void PassStringToEmotionState(string text){
 			if (text == FlagStrings.NotInsane)
+				CastleManChoice = new Choice("Castle man", "Aww...how sweet. He's such a nice guy. I wish my parents had promised me for him no the carpenter's son...I'm gonna meet with him! The only castch is I need a way to sneak out. Lets see if we can figure something out...");
 				castleBoyInsane = false;
+			if (text == FlagStrings.FarmerOnBoard){ //bypass rope requirement
+				CastleManChoice = new Choice("Castle man", "Aww...how sweet. He's such a nice guy. I wish my parents had promised me for him no the carpenter's son...I'm gonna meet with him! Go tell the Castle Man to go meet me on the beach.");
+				CastleManReaction.Clear();
+				CastleManReaction.AddAction(new NPCCallbackAction(RopeResponse));
+				Choice TalkedChoice = new Choice("Have you even talked with him?", "No...But I'm sure that I'm right! My books have never proved me worng! I'll prove it to you! Go tell the Carpenter's son to go meet me on the beach.");
+				TalkedReaction.Clear();
+				TalkedReaction.AddAction(new NPCCallbackAction(RopeResponse));
+			}
 		}
 		
 		public void TalkedResponse(){
