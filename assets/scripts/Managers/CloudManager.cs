@@ -2,9 +2,9 @@ using UnityEngine;
 using System.Collections;
 
 public class CloudManager : MonoBehaviour {
-public float speedOne = 0.075F;
-	public float speedTwo = 0.05F;
-	public float speedThree = 0.025F;
+public float speedOne = 0.015F;
+	public float speedTwo = 0.01F;
+	public float speedThree = 0.005F;
 	private GameObject[] cloudObjects;
 	private Vector3 newPos;
 	private static int ISLAND_START = -40;
