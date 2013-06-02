@@ -9,6 +9,9 @@ public class LighthouseGirlYoung : NPC {
 	JesterEmotionState jesterState;
 	Schedule TalkWithCastleman;
 	Schedule WalkToBeach;
+	Schedule GaveApple;
+	Schedule GaveNothingSchedule;
+	NPCConvoSchedule LighthouseGoingToBeach;
 	protected override void Init() {
 		id = NPCIDs.LIGHTHOUSE_GIRL;
 		base.Init();
@@ -53,9 +56,21 @@ public class LighthouseGirlYoung : NPC {
 		CounterTellOn.AddAction(new NPCAddScheduleAction(this, AttemptToTellOnLighthouse));
 		flagReactions.Add(FlagStrings.CounterTellOn, CounterTellOn);
 		
-		//Reaction WaitingForPlayer = new Reaction();
-		//WaitingForPlayer.AddAction(new NPCAddScheduleAction(this, WalkToBeach));
+		Reaction ReadyToGoToBeach = new Reaction();
+		ReadyToGoToBeach.AddAction(new NPCAddScheduleAction(this, WalkToBeach));
+		ReadyToGoToBeach.AddAction(new NPCAddScheduleAction(this, LighthouseGoingToBeach));
+		ReadyToGoToBeach.AddAction(new NPCEmotionUpdateAction(this, new AtBeachState(this, "")));
+		flagReactions.Add(FlagStrings.GoDownToBeach, ReadyToGoToBeach);
 		
+		Reaction MakingApplePieFromApple = new Reaction();
+		MakingApplePieFromApple.AddAction(new NPCAddScheduleAction(this, GaveApple));
+		flagReactions.Add(FlagStrings.MakePieFromApple, MakingApplePieFromApple);
+		
+		
+		
+		Reaction MakingApplePieFromScratch = new Reaction();
+		MakingApplePieFromApple.AddAction(new NPCAddScheduleAction(this, GaveApple));
+		flagReactions.Add(FlagStrings.MakePieFromScratch, MakingApplePieFromScratch);
 	}
 	protected override EmotionState GetInitEmotionState(){
 		initialState = new InitialEmotionState(this, "So my mom wants me to learn how to cook...but I'm gonna grow up to be a great warrior, not a cook! Get some kind of cooked food and I'll reward you!");
@@ -65,7 +80,7 @@ public class LighthouseGirlYoung : NPC {
 	
 	protected override Schedule GetSchedule(){
 		//Schedule schedule = new DefaultSchedule(this);
-		return (InitialSchedule);
+		return (GaveApple);
 	}
 	Schedule InitialSchedule;
 	protected override void SetUpSchedules(){
@@ -79,6 +94,8 @@ public class LighthouseGirlYoung : NPC {
 		tellOnLighthouseConversationSchedule = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.LighthouseGirlYoung), 
 			new YoungFarmerMotherToLighthouseGirlToldOn(),Schedule.priorityEnum.DoConvo);
 		
+		Task SetFlagToBeach = (new Task(new MoveThenDoState(this, this.gameObject.transform.position, new MarkTaskDone(this))));
+		SetFlagToBeach.AddFlagToSet(FlagStrings.GoDownToBeach);
 		
 		TalkWithCastleman = new Schedule (this, Schedule.priorityEnum.High);
 		TalkWithCastleman.Add(new TimeTask(3000, new WaitTillPlayerCloseState(this, player)));
@@ -86,14 +103,27 @@ public class LighthouseGirlYoung : NPC {
 		setFlag.AddFlagToSet(FlagStrings.StartTalkingToLighthouse);
 		TalkWithCastleman.Add(setFlag);
 		
+		GaveApple = new Schedule(this, Schedule.priorityEnum.High);
+		GaveApple.Add(new TimeTask(500f, new IdleState(this)));
+		GaveApple.Add(SetFlagToBeach);
 		
+		GaveNothingSchedule = new Schedule(this, Schedule.priorityEnum.High);
+		GaveNothingSchedule.Add(new TimeTask(750f, new IdleState(this)));
+		GaveNothingSchedule.Add(SetFlagToBeach);
 		
+		WalkToBeach = new Schedule(this, Schedule.priorityEnum.DoNow);
+		WalkToBeach.Add(new Task(new MoveThenMarkDoneState(this, MapLocations.MiddleOfBeachYoung)));
 		
-		
+		LighthouseGoingToBeach = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerMotherYoung), 
+			new LighthouseToFarmerMother(),Schedule.priorityEnum.DoConvo);
 	}
 	
 	
 	#region EmotionStates
+	private class AtBeachState: EmotionState{
+		public AtBeachState(NPC toControl, string currentDialogue) : base(toControl, "Don't bother me I'm off to build sand castles to protect the island!"){
+		}
+	}
 	#region Initial Emotion State
 	private class InitialEmotionState : EmotionState{
 		NPC control;
@@ -275,11 +305,13 @@ public class LighthouseGirlYoung : NPC {
 			GUIManager.Instance.RefreshInteraction();
 		}
 		public void UpdateTakeApple(){
+			FlagManager.instance.SetFlag(FlagStrings.MakePieFromApple);
 			SetDefaultText("Thanks for the apple...I guess...");
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Thanks for the apple...too bad you couldn't give me pie...");
 		}
 		public void UpdateTakeApplePie(){
+			FlagManager.instance.SetFlag(FlagStrings.GoDownToBeach);
 			SetDefaultText(pieString);
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Next stop: the beach!");
@@ -307,6 +339,7 @@ public class LighthouseGirlYoung : NPC {
 							GUIManager.Instance.CloseInteractionMenu();
 							SetDefaultText("Hurry!  I need you to get apple pie!");
 							pieString = "Pie!  Perfect, exactly what I needed!";
+							//Placeholder for an extra flag
 						}
 						public void UpdateDoYourOwnChores(){
 							_allChoiceReactions.Remove(OnItChoice);
@@ -323,7 +356,7 @@ public class LighthouseGirlYoung : NPC {
 									GUIManager.Instance.CloseInteractionMenu();
 									SetDefaultText("Did you find apple pie.");
 									pieString = "See!  It wasn't that hard to give me some pie!";
-									FlagManager.instance.SetFlag(FlagStrings.WaitForItem);
+									//FlagManager.instance.SetFlag(FlagStrings.WaitForItem);
 								}
 								public void UpdateNo(){
 									_allChoiceReactions.Remove(NoChoice);
@@ -342,7 +375,7 @@ public class LighthouseGirlYoung : NPC {
 											_allChoiceReactions.Remove(ImTellingOnYouChoice);
 											GUIManager.Instance.CloseInteractionMenu();
 											SetDefaultText("Have you got an apple yet?");
-											FlagManager.instance.SetFlag(FlagStrings.WaitForItem);
+											//FlagManager.instance.SetFlag(FlagStrings.WaitForItem);
 											pieString = "See!  It wasn't that hard to give me some pie!";
 										}
 										public void UpdateNoMeansNo(){
@@ -376,7 +409,7 @@ public class LighthouseGirlYoung : NPC {
 															_allChoiceReactions.Remove(NOOChoice);
 															GUIManager.Instance.CloseInteractionMenu();
 															SetDefaultText("Now go and aquire that apple!");
-															FlagManager.instance.SetFlag(FlagStrings.WaitForItem);
+															//FlagManager.instance.SetFlag(FlagStrings.WaitForItem);
 														}
 														public void UpdateNOO(){
 															_allChoiceReactions.Remove(ImGonnaTellNowChoice);
