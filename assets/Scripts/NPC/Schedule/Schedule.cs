@@ -163,7 +163,7 @@ public class Schedule {
 	}
 	
 	// Schedule is complete if the current task is complete and there are no other tasks to complete
-	public bool IsComplete(){
+	public virtual bool IsComplete(){
 		if (current == null && _tasksToDo.Count == 0) {
 			return true;
 		} else {
