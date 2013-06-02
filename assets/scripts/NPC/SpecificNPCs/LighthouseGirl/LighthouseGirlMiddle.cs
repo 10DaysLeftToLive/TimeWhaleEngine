@@ -25,71 +25,87 @@ public class LighthouseGirlMiddle : NPC {
 			time -= Time.deltaTime;
 			Debug.Log(time);
 			if (time < 0 && !dateOver){
-				FlagManager.instance.SetFlag(FlagStrings.EndOfDate);
+				//FlagManager.instance.SetFlag(FlagStrings.EndOfDate);
 				dateOver = true;
 				this.RemoveScheduleWithFlag("a");
+				this.RemoveScheduleWithFlag("b");
 			}
 		}
 		
 		base.CharacterUpdate ();
 	}
+	#region ReactionInstantiate
+	Reaction moveAway = new Reaction();
+	Reaction antiMarriagePlanInAction = new Reaction();
+	Reaction marriageToCastleMan = new Reaction();
+	Reaction castleboyNotInsane = new Reaction();
+	Reaction dateCarpenterNotified = new Reaction();
+	Reaction dateCastleManNotified = new Reaction();
+	Reaction waitForPlayer = new Reaction();
+	Reaction waitingForDate = new Reaction();
+	Reaction endOfDate = new Reaction();
+	Reaction stoodUp = new Reaction();
+	Reaction farmerOnBoard = new Reaction();
 	
+	//chat
+	Reaction castleDateStart = new Reaction();
+	Reaction castleDateOne = new Reaction();
+	Reaction castleDateTwo = new Reaction();
+	Reaction castleDateThree = new Reaction();
+	Reaction castleDateFour = new Reaction();
+	Reaction castleDateFive = new Reaction();
+	Reaction castleDateSix = new Reaction();
+	#endregion
 	protected override void SetFlagReactions(){
-		Reaction moveAway = new Reaction();
+		SetupReactions();
 		moveAway.AddAction(new NPCCallbackAction(ResetPosition));
 		moveAway.AddAction(new NPCEmotionUpdateAction(this, initialState));
 		moveAway.AddAction(new NPCAddScheduleAction(this, openningWaitingSchedule));
-		moveAway.AddAction(new NPCAddScheduleAction(this, postOpenningSchedule));
+		//moveAway.AddAction(new NPCAddScheduleAction(this, postOpenningSchedule));
 		flagReactions.Add(FlagStrings.FarmAlive, moveAway);
 		
-		Reaction antiMarriagePlanInAction = new Reaction();
 		antiMarriagePlanInAction.AddAction(new NPCAddScheduleAction(this, noMarriageSchedule));
 		antiMarriagePlanInAction.AddAction(new NPCEmotionUpdateAction(this, noMarriageState));
 		flagReactions.Add(FlagStrings.ToolsToGirl, antiMarriagePlanInAction);
 		
-		Reaction marriageToCastleMan = new Reaction();
-		antiMarriagePlanInAction.AddAction(new NPCEmotionUpdateAction(this, noMarriageState));
 		marriageToCastleMan.AddAction(new NPCAddScheduleAction(this, marriageToCastleManSchedule));
 		flagReactions.Add(FlagStrings.ToolsForMarriage, marriageToCastleMan);
 		
-		Reaction castleboyNotInsane = new Reaction();
 		castleboyNotInsane.AddAction(new NPCCallbackAction(SendNotInsaneToState));
 		flagReactions.Add(FlagStrings.NotInsane, castleboyNotInsane);
 		
 		#region date
-		Reaction dateCarpenterNotified = new Reaction();
 		dateCarpenterNotified.AddAction(new NPCCallbackAction(DateSuccess));
 		flagReactions.Add(FlagStrings.CarpenterDating, dateCarpenterNotified);
 		
-		Reaction dateCastleManNotified = new Reaction();
 		dateCastleManNotified.AddAction(new NPCCallbackAction(DateSuccess));
 		flagReactions.Add(FlagStrings.CastleManDating, dateCastleManNotified);
 		
-		Reaction waitForPlayer = new Reaction();
 		waitForPlayer.AddAction(new NPCAddScheduleAction(this, ropeDownSchedule));
 		flagReactions.Add(FlagStrings.WaitForPlayerBeforeRope, waitForPlayer);
 		
-		Reaction waitingForDate = new Reaction();
 		waitingForDate.AddAction(new NPCCallbackAction(MoveToBeach)); // teleport to beach
 		waitingForDate.AddAction(new NPCCallbackAction(WaitingOnDate));
-		//waitingForDate.AddAction(new NPCAddScheduleAction(this, waitingOnDate));
 		flagReactions.Add(FlagStrings.WaitingForDate, waitingForDate);
 		
-		Reaction endOfDate = new Reaction();
 		endOfDate.AddAction(new NPCAddScheduleAction(this, backToFarmSchedule)); // move back to farm
 		endOfDate.AddAction(new NPCEmotionUpdateAction(this, initialState));
 		endOfDate.AddAction(new NPCCallbackAction(SendDateOverToState));
 		flagReactions.Add(FlagStrings.EndOfDate, endOfDate);
 		
-		Reaction stoodUp = new Reaction();
 		stoodUp.AddAction(new NPCEmotionUpdateAction(this, stoodUpState));
 		flagReactions.Add(FlagStrings.StoodUp, stoodUp);
 		
-		
-		Reaction farmerOnBoard = new Reaction();
 		farmerOnBoard.AddAction(new NPCCallbackAction(SendFarmerOnBoard));
 		flagReactions.Add(FlagStrings.FarmerOnBoard, farmerOnBoard);
 		#endregion
+		//castleDateStart.AddAction(new NPCAddScheduleAction(this, dateConvo)); 
+		castleDateStart.AddAction(new NPCAddScheduleAction(this, turnAround)); // turn around
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleDateOne, castleDateStart);
+		
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleDateTwo, castleDateOne);
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleDateFour, castleDateTwo);
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleDateSix, castleDateThree);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
@@ -103,7 +119,7 @@ public class LighthouseGirlMiddle : NPC {
 		return (new GoneEmotionState(this, ""));
 	}
 	
-	Schedule openningWaitingSchedule, waitingOnDate, backToFarmSchedule, ropeDownSchedule;
+	Schedule openningWaitingSchedule, waitingOnDate, backToFarmSchedule, ropeDownSchedule, dateConvo, turnAround;
 	NPCConvoSchedule postOpenningSchedule;
 	NPCConvoSchedule noMarriageSchedule, marriageToCastleManSchedule;
 	
@@ -119,8 +135,8 @@ public class LighthouseGirlMiddle : NPC {
 		openningWaitingSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
 		openningWaitingSchedule.Add(new TimeTask(30, new WaitTillPlayerCloseState(this, player)));	
 		
-		backToFarmSchedule = new Schedule(this, Schedule.priorityEnum.High);
-		//backToFarmSchedule.Add(new TimeTask(8f, new IdleState(this)));
+		backToFarmSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
+		backToFarmSchedule.Add(new TimeTask(6f, new IdleState(this)));
 		backToFarmSchedule.Add(new Task(new MoveThenDoState(this, startingPosition, new MarkTaskDone(this))));
 		
 		ropeDownSchedule = new Schedule(this, Schedule.priorityEnum.High);
@@ -130,8 +146,11 @@ public class LighthouseGirlMiddle : NPC {
 		ropeDownSchedule.Add(setFlag);
 		ropeDownSchedule.AddFlagGroup("a");
 		
-		postOpenningSchedule =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerMotherMiddle),
-			new MiddleFarmerMotherToLighthouseGirl(), Schedule.priorityEnum.DoConvo); 
+		turnAround = new Schedule(this, Schedule.priorityEnum.DoNow);
+		turnAround.Add(new Task(new MoveThenDoState(this, new Vector3(MapLocations.MiddleOfBeachMiddle.x+.1f, MapLocations.MiddleOfBeachMiddle.y, MapLocations.MiddleOfBeachMiddle.z), new MarkTaskDone(this))));
+		turnAround.AddFlagGroup("b");
+		/*postOpenningSchedule =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerMotherMiddle),
+			new MiddleFarmerMotherToLighthouseGirl(), Schedule.priorityEnum.DoConvo); */
 		//postOpenningSchedule.SetCanNotInteractWithPlayer();
 		
 		noMarriageSchedule =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerMotherMiddle),
@@ -142,6 +161,8 @@ public class LighthouseGirlMiddle : NPC {
 			new MiddleLighthouseGirlCastleManMarriage(), Schedule.priorityEnum.DoConvo); 
 		//marriageToCastleManSchedule.SetCanNotInteractWithPlayer();
 		
+		dateConvo = new Schedule(this, Schedule.priorityEnum.High);
+		dateConvo.Add(new TimeTask(30f, new IdleState(this)));
 	}
 	
 	protected void WaitingOnDate(){
@@ -151,6 +172,7 @@ public class LighthouseGirlMiddle : NPC {
 	
 	protected void DateSuccess(){
 		successfulDate = true;	
+		Debug.Log("date success for LG");
 	}
 	
 	protected void ResetPosition(){
@@ -182,6 +204,20 @@ public class LighthouseGirlMiddle : NPC {
 	
 	protected void SendFarmerOnBoard(){
 		initialState.PassStringToEmotionState(FlagStrings.FarmerOnBoard);
+	}
+	
+	protected void SetupReactions(){
+		ShowMultipartChatAction castleDateOneDialogue = new ShowMultipartChatAction(this);
+		castleDateOneDialogue.AddChat("Fair lady? Come now pretending to like the stoires my dad read to me won't make you endaearing.", 7f);
+		castleDateOne.AddAction(castleDateOneDialogue);
+		
+		ShowMultipartChatAction castleDateTwoDialogue = new ShowMultipartChatAction(this);
+		castleDateTwoDialogue.AddChat("Wait...I remember you! You were the one I used to play with on the beach and build sand castles!", 6f);
+		castleDateTwo.AddAction(castleDateTwoDialogue);
+		
+		ShowMultipartChatAction castleDateThreeDialogue = new ShowMultipartChatAction(this);
+		castleDateThreeDialogue.AddChat("Of course I do! You were really sweet to me!", 4f);
+		castleDateThree.AddAction(castleDateThreeDialogue);
 	}
 	
 	#region EmotionStates

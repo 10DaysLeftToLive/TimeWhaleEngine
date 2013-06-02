@@ -10,11 +10,12 @@ public class FarmerFatherMiddle : NPC {
 	int disposition = 50;
 	bool farmerHelped = false;
 	bool flagSet = false;
+	bool carpenterDate = true;
 	protected override void Init() {
 		id = NPCIDs.FARMER_FATHER;
 		base.Init();
 	}
-	
+	#region ReactionInstantiate
 	Reaction moveAway = new Reaction();
 	
 	Reaction sillyStories = new Reaction();
@@ -23,15 +24,32 @@ public class FarmerFatherMiddle : NPC {
 	Reaction illDoIt = new Reaction();
 	Reaction illSellForYou = new Reaction();
 	Reaction postDateCastle = new Reaction();
+	Reaction postDateCarpenter = new Reaction();
+	Reaction castleDate = new Reaction();
 	
 	Reaction apple = new Reaction();
 	Reaction applePie = new Reaction();
 	Reaction shovel = new Reaction();
 	Reaction rope = new Reaction();
+	#endregion
 	
 	protected override void SetFlagReactions(){
 		SetupReactions();
 		flagReactions.Add(FlagStrings.FarmAlive, moveAway);
+		flagReactions.Add(FlagStrings.HusbandSillyStories, sillyStories);
+		flagReactions.Add(FlagStrings.YourCoward, yourCoward);
+		flagReactions.Add(FlagStrings.AlreadyBrave, alreadyBrave);
+		flagReactions.Add(FlagStrings.IllDoIt, illDoIt);
+		flagReactions.Add(FlagStrings.IllSellForYou, illSellForYou);
+		flagReactions.Add(FlagStrings.PostCastleDate, postDateCastle);
+		flagReactions.Add(FlagStrings.PostDatingCarpenter, postDateCarpenter);
+		flagReactions.Add(FlagStrings.CastleDate, castleDate);
+		
+		
+		flagReactions.Add(FlagStrings.GiveAppleToFarmer, apple);
+		flagReactions.Add(FlagStrings.GiveApplePieToFarmer, applePie);
+		flagReactions.Add(FlagStrings.GiveShovelToFarmer, shovel);
+		flagReactions.Add(FlagStrings.GiveRopeToFarmer, rope);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
@@ -71,6 +89,12 @@ public class FarmerFatherMiddle : NPC {
 		}
 	}
 	
+	protected void FlagToNPC(NPC npc, string text){
+		if (text == "castle"){
+			carpenterDate = false;	
+		}
+	}
+	
 	protected void SetupReactions(){
 		moveAway.AddAction(new NPCCallbackAction(ResetPosition));
 		moveAway.AddAction(new NPCEmotionUpdateAction(this, initialState));
@@ -91,6 +115,8 @@ public class FarmerFatherMiddle : NPC {
 		
 		postDateCastle.AddAction(new NPCEmotionUpdateAction(this, new HateEmotionState(this, "")));
 		postDateCastle.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "-100"));
+		
+		castleDate.AddAction(new NPCCallbackSetStringAction(FlagToNPC, this, "castle"));
 	}
 	
 	

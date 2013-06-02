@@ -10,10 +10,12 @@ public class FarmerMotherMiddle : NPC {
 	int disposition = 50;
 	bool flagSet = false;
 	bool husbandReady = false;
+	bool carpenterDate = true;
 	protected override void Init() {
 		id = NPCIDs.FARMER_MOTHER;
 		base.Init();
 	}
+	#region ReactionInstantiate
 	Reaction moveAway = new Reaction();
 	Reaction notSilly = new Reaction();
 	Reaction tellOn = new Reaction();
@@ -26,6 +28,10 @@ public class FarmerMotherMiddle : NPC {
 	Reaction rope = new Reaction();
 	Reaction husbandOnBoard = new Reaction();
 	Reaction postDateCastle = new Reaction();
+	Reaction postDateCarpenter = new Reaction();
+	Reaction castleDate = new Reaction();
+	#endregion
+	
 	protected override void SetFlagReactions(){
 		SetupReactions();
 		flagReactions.Add(FlagStrings.FarmAlive, moveAway);
@@ -78,6 +84,12 @@ public class FarmerMotherMiddle : NPC {
 		}
 	}
 	
+	protected void FlagToNPC(NPC npc, string text){
+		if (text == "castle"){
+			carpenterDate = false;	
+		}
+	}
+	
 	protected void SetupReactions(){
 		moveAway.AddAction(new NPCCallbackAction(ResetPosition));
 		moveAway.AddAction(new NPCEmotionUpdateAction(this, initialState));
@@ -96,6 +108,7 @@ public class FarmerMotherMiddle : NPC {
 		husbandOnBoard.AddAction(new NPCCallbackAction(ChangeHusbandStatus));
 		postDateCastle.AddAction(new NPCEmotionUpdateAction(this, new HateEmotionState(this, "")));
 		postDateCastle.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "-100"));
+		castleDate.AddAction(new NPCCallbackSetStringAction(FlagToNPC, this, "castle"));
 	}
 	
 	
