@@ -7,8 +7,8 @@ public float speedOne = 0.015F;
 	public float speedThree = 0.005F;
 	private GameObject[] cloudObjects;
 	private Vector3 newPos;
-	private static int ISLAND_START = -40;
-	private static int ISLAND_END = 65;
+	private static int ISLAND_START = -58;
+	private static int ISLAND_END = 83;
 	
 	void Start () {
 		
