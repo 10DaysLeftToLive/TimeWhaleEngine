@@ -85,6 +85,10 @@ public class LighthouseGirlMiddle : NPC {
 		stoodUp.AddAction(new NPCEmotionUpdateAction(this, stoodUpState));
 		flagReactions.Add(FlagStrings.StoodUp, stoodUp);
 		
+		
+		Reaction farmerOnBoard = new Reaction();
+		farmerOnBoard.AddAction(new NPCCallbackAction(SendFarmerOnBoard));
+		flagReactions.Add(FlagStrings.FarmerOnBoard, farmerOnBoard);
 		#endregion
 	}
 	
@@ -116,7 +120,7 @@ public class LighthouseGirlMiddle : NPC {
 		openningWaitingSchedule.Add(new TimeTask(30, new WaitTillPlayerCloseState(this, player)));	
 		
 		backToFarmSchedule = new Schedule(this, Schedule.priorityEnum.High);
-		backToFarmSchedule.Add(new TimeTask(8f, new IdleState(this)));
+		//backToFarmSchedule.Add(new TimeTask(8f, new IdleState(this)));
 		backToFarmSchedule.Add(new Task(new MoveThenDoState(this, startingPosition, new MarkTaskDone(this))));
 		
 		ropeDownSchedule = new Schedule(this, Schedule.priorityEnum.High);
@@ -126,24 +130,17 @@ public class LighthouseGirlMiddle : NPC {
 		ropeDownSchedule.Add(setFlag);
 		ropeDownSchedule.AddFlagGroup("a");
 		
-		/*waitingOnDate = new Schedule(this, Schedule.priorityEnum.High);
-		waitingOnDate.Add(new TimeTask(dateTime, new IdleState(this)));
-		Task dateTimer = new Task( new MoveThenDoState(this, new Vector3 (startingPosition.x, startingPosition.y,.5f), new MarkTaskDone(this)));
-		dateTimer.AddFlagToSet(FlagStrings.EndOfDate);
-		waitingOnDate.Add(dateTimer);
-		waitingOnDate.Add(new TimeTask(8f, new IdleState(this)));*/
-		
 		postOpenningSchedule =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerMotherMiddle),
-			new MiddleFarmerMotherToLighthouseGirl(), Schedule.priorityEnum.High); 
-		postOpenningSchedule.SetCanNotInteractWithPlayer();
+			new MiddleFarmerMotherToLighthouseGirl(), Schedule.priorityEnum.DoConvo); 
+		//postOpenningSchedule.SetCanNotInteractWithPlayer();
 		
 		noMarriageSchedule =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerMotherMiddle),
-			new MiddleLighthouseGirlNoMarriage(), Schedule.priorityEnum.High); 
-		noMarriageSchedule.SetCanNotInteractWithPlayer();
+			new MiddleLighthouseGirlNoMarriage(), Schedule.priorityEnum.DoConvo); 
+		//noMarriageSchedule.SetCanNotInteractWithPlayer();
 		
 		marriageToCastleManSchedule =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerMotherMiddle),
-			new MiddleLighthouseGirlCastleManMarriage(), Schedule.priorityEnum.High); 
-		marriageToCastleManSchedule.SetCanNotInteractWithPlayer();
+			new MiddleLighthouseGirlCastleManMarriage(), Schedule.priorityEnum.DoConvo); 
+		//marriageToCastleManSchedule.SetCanNotInteractWithPlayer();
 		
 	}
 	
@@ -183,6 +180,9 @@ public class LighthouseGirlMiddle : NPC {
 
 	}
 	
+	protected void SendFarmerOnBoard(){
+		initialState.PassStringToEmotionState(FlagStrings.FarmerOnBoard);
+	}
 	
 	#region EmotionStates
 	private class StartingEmotionState : EmotionState{
@@ -271,7 +271,16 @@ public class LighthouseGirlMiddle : NPC {
 		
 		public override void PassStringToEmotionState(string text){
 			if (text == FlagStrings.NotInsane)
+				CastleManChoice = new Choice("Castle man", "Aww...how sweet. He's such a nice guy. I wish my parents had promised me for him no the carpenter's son...I'm gonna meet with him! The only castch is I need a way to sneak out. Lets see if we can figure something out...");
 				castleBoyInsane = false;
+			if (text == FlagStrings.FarmerOnBoard){ //bypass rope requirement
+				CastleManChoice = new Choice("Castle man", "Aww...how sweet. He's such a nice guy. I wish my parents had promised me for him no the carpenter's son...I'm gonna meet with him! Go tell the Castle Man to go meet me on the beach.");
+				CastleManReaction.Clear();
+				CastleManReaction.AddAction(new NPCCallbackAction(RopeResponse));
+				Choice TalkedChoice = new Choice("Have you even talked with him?", "No...But I'm sure that I'm right! My books have never proved me worng! I'll prove it to you! Go tell the Carpenter's son to go meet me on the beach.");
+				TalkedReaction.Clear();
+				TalkedReaction.AddAction(new NPCCallbackAction(RopeResponse));
+			}
 		}
 		
 		public void TalkedResponse(){
@@ -414,6 +423,8 @@ public class LighthouseGirlMiddle : NPC {
 			_allChoiceReactions.Remove(YesChoice);
 			_allChoiceReactions.Remove(AnotherTimeChoice);
 			GUIManager.Instance.RefreshInteraction();
+			_allChoiceReactions.Add(YesChoice, new DispositionDependentReaction(YesReaction));
+			_allChoiceReactions.Add(AnotherTimeChoice, new DispositionDependentReaction(AnotherTimeReaction));
 		}
 		
 		public override void UpdateEmotionState(){

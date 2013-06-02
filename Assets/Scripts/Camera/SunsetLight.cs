@@ -29,6 +29,7 @@ public class SunsetLight : PauseObject {
 				if(fadeInProgressIndex < colorFades.Length){
 					startColor = colorFades[fadeInProgressIndex].color;
 					lerpTime = 0.0f;
+					if (fadeInProgressIndex < 255)
 					fadeInProgressIndex++;
 				}
 				else{
