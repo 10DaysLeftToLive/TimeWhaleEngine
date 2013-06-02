@@ -155,14 +155,14 @@ public class FarmerMotherMiddle : NPC {
 				_allChoiceReactions.Remove(ConvinceDaughterChoice);
 			}else {
 				_allChoiceReactions.Remove(ConvinceDaughterChoice);
-				_allChoiceReactions.Add(MarriageIdeaChoice);
+				_allChoiceReactions.Add(MarriageIdeaChoice, new DispositionDependentReaction(MarriageIdeaReaction));
 			}
 			GUIManager.Instance.RefreshInteraction();
 		}
 		
 		public void MarriageIdeaResponse(){
 			_allChoiceReactions.Remove(MarriageIdeaChoice);
-			_allChoiceReactions.Add(ConvinceDaughterChoice);
+			_allChoiceReactions.Add(ConvinceDaughterChoice, new DispositionDependentReaction(ConvinceDaughterReaction));
 			GUIManager.Instance.RefreshInteraction();
 		}
 		

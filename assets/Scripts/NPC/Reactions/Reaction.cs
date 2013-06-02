@@ -37,7 +37,7 @@ public class Reaction {
 		actionsToPerform.Add(actionToAdd);	
 	}
 	
-	public void Clear(Action actionToAdd){
+	public void Clear(){
 		actionsToPerform.Clear();
 	}
 	
