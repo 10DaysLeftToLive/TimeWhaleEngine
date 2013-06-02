@@ -10,6 +10,7 @@ public class LevelManager : MonoBehaviour {
 	public CharacterAgeState initialAge;
 	
 	private ParallaxManager parallaxManager;
+	private CloudManager cloudManager;
 	
 	//Make these private later: Also assign these targets based off prior choices / dispositions
 	private static Transform youngSectionTarget;
@@ -34,6 +35,7 @@ public class LevelManager : MonoBehaviour {
 	
 	void Start () {
 		parallaxManager = GameObject.Find(Strings.PARALLAXMANAGER).GetComponent<ParallaxManager>();
+		cloudManager = GameObject.Find(Strings.CLOUDMANAGER).GetComponent<CloudManager>();
 		ScreenSetup.CalculateSettings();
 		StartCoroutine(Init());
 		GUIManager.Instance.AddInGameMenu();
@@ -53,6 +55,7 @@ public class LevelManager : MonoBehaviour {
 		FlagManager.instance.Init();
 		
 		parallaxManager.Init();
+		cloudManager.Init();
 		
 		if (initialAge != CharacterAgeState.YOUNG){
 			MovePlayerToRightAge(initialAge);
