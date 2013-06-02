@@ -37,6 +37,10 @@ public class Reaction {
 		actionsToPerform.Add(actionToAdd);	
 	}
 	
+	public void Clear(Action actionToAdd){
+		actionsToPerform.Clear();
+	}
+	
 	/// <summary>
 	/// Performs all of the actions stored in this reaction
 	/// </summary>
