@@ -46,14 +46,14 @@ public class SunsetLight : PauseObject {
 	/// Fade this instance. Returns true when color is reached (done)
 	/// </summary>
 	bool Fade(){
-		fadeSprite.color = Color.Lerp(startColor, colorFades[fadeInProgressIndex].color, lerpTime);
-		if(lerpTime < 1){
-			lerpTime += Time.deltaTime/colorFades[fadeInProgressIndex].durationForFade;
+		//fadeSprite.color = Color.Lerp(startColor, colorFades[fadeInProgressIndex].color, lerpTime);
+		//if(lerpTime < 1){
+			//lerpTime += Time.deltaTime/colorFades[fadeInProgressIndex].durationForFade;
 			return false;
-		}
-		else{
-			return true;
-		}
+		//}
+		//else{
+		//	return true;
+		//}
 	}
 	
 	/*

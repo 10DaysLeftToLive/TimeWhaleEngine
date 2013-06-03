@@ -90,9 +90,10 @@ public class NPCConvoSchedule : Schedule {
 		if (current == null || currentTwo == null) {
 			NextTask();
 		}
-		
-		_toManage.ForceChangeToState(current.StatePerforming);
-		_npcTwo.ForceChangeToState(currentTwo.StatePerforming);
+		else{
+			_toManage.ForceChangeToState(current.StatePerforming);
+			_npcTwo.ForceChangeToState(currentTwo.StatePerforming);
+		}
 	}
 	
 	public override void NextTask(){	
