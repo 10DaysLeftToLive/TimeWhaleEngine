@@ -85,8 +85,11 @@ public abstract class Character : PauseObject {
 		
 		if (animationData.GetClipCount() > 0) {
 			try {
-				animationData.Play(animation);
-			} catch (ArgumentOutOfRangeException e){
+				if (!animationData.isPlaying) {
+					animationData.Play(animation);
+				}
+				animationData.CrossFade(animation);
+			} catch (Exception e){
 				Debug.LogError("Animation data for " + name + " " + animation + " does not exist for " + name + "\n" + e.StackTrace);
 			}
 		}
