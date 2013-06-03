@@ -7,19 +7,20 @@ using System.Collections.Generic;
  * 	responsible for displaying the given npc chats above the head of each npc
  */
 public class ChatMenu : GUIControl {
-	private static int DISTANCE_TO_CHAT = 4;
-	private static int DISTANCE_NEAR_PLAYER = 9;
+	public int DISTANCE_TO_CHAT = 4;
+	public int DISTANCE_NEAR_PLAYER = 9;
 	private List<NPCChat> _npcsChats = new List<NPCChat>();
 	private List<ChatInfo> _currentChats = new List<ChatInfo>();
 	private Player player;
 	
-	private static float CHATWIDTH = .2f;
-	private static float CHATHEIGHT = .1f;
+	public float CHATWIDTH = .2f;
+	public float CHATHEIGHT = .1f;
 	
 	public GUIStyle chatBoxStyle;
 	
 	public override void Init(){
-		player = FindObjectOfType(typeof(Player)) as Player;		
+		player = FindObjectOfType(typeof(Player)) as Player;	
+		//Screen.currentResolution
 	}
 	
 	private List<NPCChat> toRemove = new List<NPCChat>();
@@ -91,6 +92,7 @@ public class ChatMenu : GUIControl {
 		screenPos.y -= ScreenSetup.horizontalBarHeight;
 		percentageConvertedPos.x = screenPos.x/ScreenSetup.screenWidth;
 		percentageConvertedPos.y = screenPos.y/ScreenSetup.screenHeight;
+		percentageConvertedPos.x -= CHATWIDTH/2;
 		percentageConvertedPos.y -= CHATHEIGHT;
 
 		return (ScreenRectangle.NewRect(percentageConvertedPos.x, percentageConvertedPos.y, CHATWIDTH, CHATHEIGHT));
