@@ -9,6 +9,7 @@ public class FarmerFatherMiddle : NPC {
 	Vector3 startingPosition;
 	int disposition = 50;
 	bool farmerHelped = false;
+	bool farmersOnBoard = false;
 	bool flagSet = false;
 	bool carpenterDate = true;
 	protected override void Init() {
@@ -26,6 +27,8 @@ public class FarmerFatherMiddle : NPC {
 	Reaction postDateCastle = new Reaction();
 	Reaction postDateCarpenter = new Reaction();
 	Reaction castleDate = new Reaction();
+	Reaction stoodUp = new Reaction();
+	Reaction farmer = new Reaction();
 	
 	Reaction apple = new Reaction();
 	Reaction applePie = new Reaction();
@@ -44,7 +47,8 @@ public class FarmerFatherMiddle : NPC {
 		flagReactions.Add(FlagStrings.PostCastleDate, postDateCastle);
 		flagReactions.Add(FlagStrings.PostDatingCarpenter, postDateCarpenter);
 		flagReactions.Add(FlagStrings.CastleDate, castleDate);
-		
+		flagReactions.Add(FlagStrings.FarmerOnBoard, farmer);
+		flagReactions.Add(FlagStrings.StoodUp, stoodUp);
 		
 		flagReactions.Add(FlagStrings.GiveAppleToFarmer, apple);
 		flagReactions.Add(FlagStrings.GiveApplePieToFarmer, applePie);
@@ -93,6 +97,16 @@ public class FarmerFatherMiddle : NPC {
 		if (text == "castle"){
 			carpenterDate = false;	
 		}
+		if (text == "carpenterSuccess" && farmersOnBoard){
+			initialState.PassStringToEmotionState("carpenterSuccess");
+		}
+		if (text == "stoodUp" && farmersOnBoard){
+			initialState.PassStringToEmotionState("stoodUp");
+			disposition -= 20;
+		}
+		if (text == "farmerMotherOnBoard"){
+			farmersOnBoard = true;	
+		}
 	}
 	
 	protected void SetupReactions(){
@@ -113,10 +127,15 @@ public class FarmerFatherMiddle : NPC {
 		shovel.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "5"));
 		rope.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "5"));
 		
+		farmer.AddAction(new NPCCallbackSetStringAction(FlagToNPC, this, "farmerMotherOnBoard"));
 		postDateCastle.AddAction(new NPCEmotionUpdateAction(this, new HateEmotionState(this, "")));
 		postDateCastle.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "-100"));
 		
+		postDateCarpenter.AddAction(new NPCCallbackSetStringAction(FlagToNPC, this, "carpenterSuccess"));
+		
 		castleDate.AddAction(new NPCCallbackSetStringAction(FlagToNPC, this, "castle"));
+		
+		stoodUp.AddAction(new NPCCallbackSetStringAction(FlagToNPC, this, "stoodUp"));
 	}
 	
 	
@@ -308,6 +327,12 @@ public class FarmerFatherMiddle : NPC {
 		public override void PassStringToEmotionState(string text){
 			if (text == "happy"){
 				_allChoiceReactions.Add(MarriageIdeaChoice, new DispositionDependentReaction(MarriageIdeaReaction));
+			}
+			if (text == "carpenterSuccess"){
+				SetDefaultText("I've heard what you did for my daughter. Your idea worked!");
+			}
+			if (text == "stoodUp"){
+				SetDefaultText("Went through all that trouble...for nothing.");
 			}
 		}
 	
