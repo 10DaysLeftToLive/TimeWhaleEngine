@@ -11,7 +11,7 @@ public class YoungRunIslandToReflectionTreeScript : Schedule {
 	protected override void Init() {
 		Add(new TimeTask(.2f, new IdleState(_toManage))); //or self-triggering
 		Add(new Task(new MoveThenDoState(_toManage, new Vector3 (-24f, 18.2f, .3f), new MarkTaskDone(_toManage))));
-		Add(new TimeTask(10f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
+		Add(new TimeTask(10f, new WaitTillPlayerCloseState(_toManage, ref _toManage.player)));
 		Add(new Task(new MoveThenDoState(_toManage, new Vector3 (-40f, 18.2f, .3f), new MarkTaskDone(_toManage))));
 		Task setOffHomeFlagTask = new Task(new MoveThenDoState(_toManage, new Vector3 (-35f, 18.2f, .3f), new MarkTaskDone(_toManage)));
 		setOffHomeFlagTask.AddFlagToSet(FlagStrings.RunToHome);

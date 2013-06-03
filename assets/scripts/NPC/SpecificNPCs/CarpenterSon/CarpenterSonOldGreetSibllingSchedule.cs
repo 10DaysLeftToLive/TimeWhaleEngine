@@ -20,7 +20,7 @@ public class CarpenterSonOldGreetSibllingSchedule : Schedule {
 
 //Wait for 4 hard seconds, then till player is near or if 6 more seconds pass
 		//Add(new TimeTask(3f, new IdleState(_toManage)));
-		Add(new TimeTask(4f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
+		Add(new TimeTask(4f, new WaitTillPlayerCloseState(_toManage, ref _toManage.player)));
 		//Add(new TimeTask(3f, new IdleState(_toManage)));
 	}
 }

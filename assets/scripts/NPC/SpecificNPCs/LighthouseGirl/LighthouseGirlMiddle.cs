@@ -133,7 +133,7 @@ public class LighthouseGirlMiddle : NPC {
 		float dateTime = 50;
 		
 		openningWaitingSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
-		openningWaitingSchedule.Add(new TimeTask(30, new WaitTillPlayerCloseState(this, player)));	
+		openningWaitingSchedule.Add(new TimeTask(30, new WaitTillPlayerCloseState(this, ref player)));	
 		
 		backToFarmSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
 		backToFarmSchedule.Add(new TimeTask(6f, new IdleState(this)));

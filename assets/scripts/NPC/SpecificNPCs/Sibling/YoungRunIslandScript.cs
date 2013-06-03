@@ -14,7 +14,7 @@ public class YoungRunIslandScript : Schedule {
 		Add(new Task(new MoveThenDoState(_toManage, new Vector3 (12, .2f, .3f), new MarkTaskDone(_toManage))));
 		Add(new TimeTask(.2f, new IdleState(_toManage)));
 		Add(new Task(new MoveThenDoState(_toManage, new Vector3 (11.8f, .2f, .3f), new MarkTaskDone(_toManage)))); // at bridge
-		Add(new TimeTask(10f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
+		Add(new TimeTask(10f, new WaitTillPlayerCloseState(_toManage, ref _toManage.player)));
 		Task reachCarpenterTask = new Task(new MoveThenDoState(_toManage, new Vector3 (28, .2f, .3f), new MarkTaskDone(_toManage))); // at carpenter
 		reachCarpenterTask.AddFlagToSet(FlagStrings.RunToCarpenter);
 		Add(reachCarpenterTask);
@@ -24,9 +24,9 @@ public class YoungRunIslandScript : Schedule {
 		//Add(new Task(new ChangeEmotionState(_toManage,(SiblingYoung.EMOTIONSTATENAME);
 	
 		Add(new Task(new MoveThenDoState(_toManage, new Vector3 (59, .2f, .3f), new MarkTaskDone(_toManage)))); // at base staircase
-		Add(new TimeTask(2f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
+		Add(new TimeTask(2f, new WaitTillPlayerCloseState(_toManage, ref _toManage.player)));
 		Add(new Task(new MoveThenDoState(_toManage, new Vector3 (66, -7.6f, .3f), new MarkTaskDone(_toManage))));
-		Add(new TimeTask(2f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
+		Add(new TimeTask(2f, new WaitTillPlayerCloseState(_toManage, ref _toManage.player)));
 		Add(new Task(new MoveThenDoState(_toManage, new Vector3 (70, -8f, .3f), new MarkTaskDone(_toManage)))); // at Beach
 		Add(new TimeTask(8f, new IdleState(_toManage)));
 		//PIER (79,-5.1)
@@ -34,15 +34,15 @@ public class YoungRunIslandScript : Schedule {
 		Add(new Task(new MoveThenDoState(_toManage, new Vector3 (66, -7.6f, .3f), new MarkTaskDone(_toManage))));
 		Add(new TimeTask(.25f, new IdleState(_toManage)));
 		Add(new Task(new MoveThenDoState(_toManage, new Vector3 (59, .2f, .3f), new MarkTaskDone(_toManage))));
-		Add(new TimeTask(2f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
+		Add(new TimeTask(2f, new WaitTillPlayerCloseState(_toManage, ref _toManage.player)));
 		Add(new Task(new MoveThenDoState(_toManage, new Vector3 (47, -1f, .3f), new MarkTaskDone(_toManage))));
-		Add(new TimeTask(2f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
+		Add(new TimeTask(2f, new WaitTillPlayerCloseState(_toManage, ref _toManage.player)));
 		Add(new Task(new MoveThenDoState(_toManage, new Vector3 (53, 5f, .3f), new MarkTaskDone(_toManage))));
-		Add(new TimeTask(2f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
+		Add(new TimeTask(2f, new WaitTillPlayerCloseState(_toManage, ref _toManage.player)));
 		Add(new Task(new MoveThenDoState(_toManage, new Vector3 (50, 10f, .3f), new MarkTaskDone(_toManage))));
-		Add(new TimeTask(2f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
+		Add(new TimeTask(2f, new WaitTillPlayerCloseState(_toManage, ref _toManage.player)));
 		Add(new Task(new MoveThenDoState(_toManage, new Vector3 (55, 16f, .3f), new MarkTaskDone(_toManage))));
-		Add(new TimeTask(2f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
+		Add(new TimeTask(2f, new WaitTillPlayerCloseState(_toManage, ref _toManage.player)));
 		Add(new Task(new MoveThenDoState(_toManage, new Vector3 (63, 16f, .3f), new MarkTaskDone(_toManage))));
 		Add(new TimeTask(15f, new IdleState(_toManage)));
 		Add(new Task(new MoveThenDoState(_toManage, new Vector3 (75, 16f, .3f), new MarkTaskDone(_toManage))));
