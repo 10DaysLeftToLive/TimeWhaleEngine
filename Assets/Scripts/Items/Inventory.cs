@@ -3,11 +3,11 @@ using System.Collections;
 
 public class Inventory {
 	private GameObject pickedUpObject = null; // Can only hold one item in inventory
-	private Transform rightHandTransform;
+	private Transform leftHandTransform;
 	private Vector3 originalLocalScale;
 	
 	public Inventory(Transform rightHand){
-		rightHandTransform = rightHand;
+		leftHandTransform = rightHand;
 	}
 	
 	public void PickUpObject(GameObject toPickUp){
@@ -17,13 +17,13 @@ public class Inventory {
 			originalLocalScale = toPickUp.transform.localScale;
 			pickedUpObject = toPickUp;
 			
-			toPickUp.transform.position = new Vector3(rightHandTransform.position.x, 
-													  rightHandTransform.position.y, 
-													  0);
+			toPickUp.transform.position = new Vector3(leftHandTransform.position.x, 
+													  leftHandTransform.position.y, 
+													  leftHandTransform.position.z);
 			
 			
-			toPickUp.transform.parent = rightHandTransform;
-			Utils.SetActiveRecursively(rightHandTransform.gameObject, true);
+			toPickUp.transform.parent = leftHandTransform;
+			Utils.SetActiveRecursively(leftHandTransform.gameObject, true);
 			Utils.SetActiveRecursively(pickedUpObject.gameObject, true);
 			
 			pickedUpObject.GetComponent<InteractableOnClick>().Disable();
@@ -54,10 +54,10 @@ public class Inventory {
 		if (HasItem()) {
 			Vector3 oldScale = pickedUpObject.transform.localScale;
 			pickedUpObject.transform.parent = null;
-			rightHandTransform = animationData.GetSpriteTransform("Right Hand");
+			leftHandTransform = animationData.GetSpriteTransform("Left Hand");
 			Utils.SetActiveRecursively(pickedUpObject, true);
-			pickedUpObject.transform.position = rightHandTransform.position;
-			pickedUpObject.transform.parent = rightHandTransform;
+			pickedUpObject.transform.position = leftHandTransform.position;
+			pickedUpObject.transform.parent = leftHandTransform;
 			pickedUpObject.transform.localScale = oldScale;
 		}
 		else {
@@ -75,7 +75,7 @@ public class Inventory {
 			Debug.LogWarning("Invetory.cs: RIGHT HAND BEING SET TO NULL!");
 			return;
 		}
-		rightHandTransform = newRightHand;
+		leftHandTransform = newRightHand;
 	}
 	
 	private void SwapItems(GameObject toSwapIn) {
