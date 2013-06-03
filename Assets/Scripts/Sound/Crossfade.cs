@@ -6,14 +6,19 @@ public class Crossfade: MonoBehaviour {
 
     public AudioSource BeachBGM;
     public AudioSource BeachAmbient;
+    public float BeachAmbientVolume = 0.25f;
     public AudioSource ForestBGM;
     public AudioSource ForestAmbient;
+    public float ForestAmbientVolume = 0.5f;
     public AudioSource MarketBGM;
     public AudioSource MarketAmbient;
+    public float MarketAmbientVolume = 0.5f;
     public AudioSource WindmillBGM;
     public AudioSource WindmillAmbient;
+    public float WindmillAmbientVolume = 0.5f;
     public AudioSource LighthouseBGM;
     public AudioSource LighthouseAmbient;
+    public float LighthouseAmbientVolume = 1.0f;
     private static float delay = 0.02f;
 
     public static void FadeBetween()
@@ -33,6 +38,7 @@ public class Crossfade: MonoBehaviour {
 
     public static IEnumerator CoroutineFadeDown(string AreaName)
     {
+    
         Strings.CURRENTFADING = AreaName;
 
         AudioSource CurrentSong;
@@ -139,6 +145,7 @@ public class Crossfade: MonoBehaviour {
 
         AudioSource CurrentSong;
         AudioSource CurrentAmbient;
+        float CurrentAmbientVolume;
         float fTimeCounter = 0f;
 
         switch (AreaName)
@@ -146,30 +153,37 @@ public class Crossfade: MonoBehaviour {
             case "Forest":
                 CurrentSong = CrossfadeInstance.ForestBGM;
                 CurrentAmbient = CrossfadeInstance.ForestAmbient;
+                CurrentAmbientVolume = CrossfadeInstance.ForestAmbientVolume;
                 break;
             case "Beach":
                 CurrentSong = CrossfadeInstance.BeachBGM;
                 CurrentAmbient = CrossfadeInstance.BeachAmbient;
+                CurrentAmbientVolume = CrossfadeInstance.BeachAmbientVolume;
                 break;
             case "Lighthouse":
                 CurrentSong = CrossfadeInstance.LighthouseBGM;
                 CurrentAmbient = CrossfadeInstance.LighthouseAmbient;
+                CurrentAmbientVolume = CrossfadeInstance.LighthouseAmbientVolume;
                 break;
             case "Windmill":
                 CurrentSong = CrossfadeInstance.WindmillBGM;
                 CurrentAmbient = CrossfadeInstance.WindmillAmbient;
+                CurrentAmbientVolume = CrossfadeInstance.WindmillAmbientVolume;
                 break;
             case "Market":
                 CurrentSong = CrossfadeInstance.MarketBGM;
                 CurrentAmbient = CrossfadeInstance.MarketAmbient;
+                CurrentAmbientVolume = CrossfadeInstance.MarketAmbientVolume;
                 break;
             case "ReflectionTree":
                 CurrentSong = null;
                 CurrentAmbient = CrossfadeInstance.LighthouseAmbient;
+                CurrentAmbientVolume = CrossfadeInstance.LighthouseAmbientVolume;
                 break;
             default:
                 CurrentSong = null;
                 CurrentAmbient = null;
+                CurrentAmbientVolume = 0;
                 break;
         }
 
@@ -191,7 +205,7 @@ public class Crossfade: MonoBehaviour {
             {
                 fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
                 CurrentSong.volume = fTimeCounter;
-                CurrentAmbient.volume = fTimeCounter;
+                CurrentAmbient.volume = (fTimeCounter * CurrentAmbientVolume);
                 yield return new WaitForSeconds(delay);
             }
         }
@@ -211,7 +225,7 @@ public class Crossfade: MonoBehaviour {
             while (!(Mathf.Approximately(fTimeCounter, 1f)))
             {
                 fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
-                CurrentAmbient.volume = fTimeCounter;
+                CurrentAmbient.volume = (fTimeCounter * CurrentAmbientVolume);
                 yield return new WaitForSeconds(delay);
             }
         }
@@ -220,7 +234,7 @@ public class Crossfade: MonoBehaviour {
             while (!(Mathf.Approximately(fTimeCounter, 1f)))
             {
                 fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
-                CurrentAmbient.volume = fTimeCounter;
+                CurrentAmbient.volume = (fTimeCounter * CurrentAmbientVolume);
                 yield return new WaitForSeconds(delay);
             }
         }

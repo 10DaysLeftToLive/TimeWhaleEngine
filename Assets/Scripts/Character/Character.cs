@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using SmoothMoves;
+using System.Collections.Generic;
 
 /*
  *  Character.cs
@@ -14,10 +15,8 @@ public abstract class Character : PauseObject {
 	private float RIGHT = 1;
 	private static bool PAUSED = true;
 	private static bool UPPAUSED = false;
-	
 	public bool SpriteLookingLeft;
 	protected State currentState;
-	
 	public BoneAnimation animationData;
 	#endregion
 	
@@ -60,8 +59,7 @@ public abstract class Character : PauseObject {
 	}
 	
 	private void ToggleAnimationPlaying(bool isPaused){
-		//int speed = (isPaused ? 0 : 1);
-		// TODO by Brent
+		animationData.animation.enabled = isPaused ? false : true;
 	}
 	
 	public void EnterState(State newState){		
@@ -94,7 +92,7 @@ public abstract class Character : PauseObject {
 		}
 	}
 	
-	public Vector3 GetFeet(){
+	public Vector3 GetFeet() {
 		Vector3 feetPos = this.transform.position;
 		feetPos.y = this.transform.position.y - this.collider.bounds.size.y/2;
 		return (feetPos);

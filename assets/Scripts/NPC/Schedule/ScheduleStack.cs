@@ -15,7 +15,7 @@ public class ScheduleStack {
       this._schedulesToDo = new PriorityStack();
     }
 	
-	protected bool HasSchedule() {
+	public bool HasSchedule() {
 		return (current != null);
 	}
 	
@@ -79,6 +79,19 @@ public class ScheduleStack {
 			_schedulesToDo.Push(current);
 			current = schedule;
 			current.Resume();
+		} else {
+			_schedulesToDo.Push(schedule);
+		}
+	}
+	
+	public void AddShared(Schedule schedule) {		
+		if (current == null) {
+			current = schedule;
+		} 
+		else if (schedule.CheckPriorityTo(current) >= 0) {
+			current.OnInterrupt();
+			_schedulesToDo.Push(current);
+			current = schedule;
 		} else {
 			_schedulesToDo.Push(schedule);
 		}

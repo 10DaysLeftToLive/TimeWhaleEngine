@@ -2,9 +2,9 @@ using UnityEngine;
 using System.Collections;
 
 public class SoundManager : MonoBehaviour {
-    public bool AudioOn = true;
-    public bool BGMOn = true;
-    public bool SFXOn = true;
+    public bool AudioOn = false;
+    public bool BGMOn = false;
+    public bool SFXOn = false;
 
     public AudioSource ClimbLadderSFX;
     public AudioSource DoorCloseSFX;
@@ -44,50 +44,52 @@ public class SoundManager : MonoBehaviour {
     /// </summary>
     /// <param name="SFXName">The name of the walking sound effect
     /// that should be played.</param>
-    public void PlayWalkSFX()
+	public void PlayWalkSFX()
     {
-        string Area = null;
-        if (Strings.CURRENTAREA == "Forest" || Strings.CURRENTAREA == "Market" || Strings.CURRENTAREA == "ReflectionTree" || Strings.CURRENTAREA == "Lighthouse" || Strings.CURRENTAREA == "Windmill"){
-            Area = "Grass";
-        }
-        else if (Strings.CURRENTAREA == "Beach")
-        {
-            Area = "Sand";
-        }
-        else if (Strings.CURRENTAREA == "Bridge" || Strings.CURRENTAREA == "Stairs" || Strings.CURRENTAREA == "Pier")
-        {
-            Area = "Wood";
-        }
-        switch (Area)
-        {
-            case "Grass":
-                if (!SoundManager.instance.WalkGrassSFX.isPlaying)
-                {
-                    SoundManager.instance.WalkSandSFX.Stop();
-                    SoundManager.instance.WalkWoodSFX.Stop();
-                    SoundManager.instance.WalkGrassSFX.Play();
-                }
-                break;
-            case "Wood":
-                if (!SoundManager.instance.WalkWoodSFX.isPlaying)
-                {
-                    SoundManager.instance.WalkSandSFX.Stop();
-                    SoundManager.instance.WalkGrassSFX.Stop();
-                    SoundManager.instance.WalkWoodSFX.Play();
-                }
-                break;
-            case "Sand":
-                if (!SoundManager.instance.WalkSandSFX.isPlaying)
-                {
-                    SoundManager.instance.WalkGrassSFX.Stop();
-                    SoundManager.instance.WalkWoodSFX.Stop();
-                    SoundManager.instance.WalkSandSFX.Play();
-                }
-                break;
-            default:
-                DebugManager.instance.Log("No walking sound due to incorrect area specified", "WalkSFX", "SFX");
-                break;
-        }
+		if (AudioOn) {
+	        string Area = null;
+	        if (Strings.CURRENTAREA == "Forest" || Strings.CURRENTAREA == "Market" || Strings.CURRENTAREA == "ReflectionTree" || Strings.CURRENTAREA == "Lighthouse" || Strings.CURRENTAREA == "Windmill"){
+	            Area = "Grass";
+	        }
+	        else if (Strings.CURRENTAREA == "Beach")
+	        {
+	            Area = "Sand";
+	        }
+	        else if (Strings.CURRENTAREA == "Bridge" || Strings.CURRENTAREA == "Stairs" || Strings.CURRENTAREA == "Pier")
+	        {
+	            Area = "Wood";
+	        }
+	        switch (Area)
+	        {
+	            case "Grass":
+	                if (!SoundManager.instance.WalkGrassSFX.isPlaying)
+	                {
+	                    SoundManager.instance.WalkSandSFX.Stop();
+	                    SoundManager.instance.WalkWoodSFX.Stop();
+	                    SoundManager.instance.WalkGrassSFX.Play();
+	                }
+	                break;
+	            case "Wood":
+	                if (!SoundManager.instance.WalkWoodSFX.isPlaying)
+	                {
+	                    SoundManager.instance.WalkSandSFX.Stop();
+	                    SoundManager.instance.WalkGrassSFX.Stop();
+	                    SoundManager.instance.WalkWoodSFX.Play();
+	                }
+	                break;
+	            case "Sand":
+	                if (!SoundManager.instance.WalkSandSFX.isPlaying)
+	                {
+	                    SoundManager.instance.WalkGrassSFX.Stop();
+	                    SoundManager.instance.WalkWoodSFX.Stop();
+	                    SoundManager.instance.WalkSandSFX.Play();
+	                }
+	                break;
+	            default:
+	                DebugManager.instance.Log("No walking sound due to incorrect area specified", "WalkSFX", "SFX");
+	                break;
+	        }
+		}
     }
 
     /// <summary>
@@ -96,18 +98,22 @@ public class SoundManager : MonoBehaviour {
     /// </summary>
     public void StopWalkSFX()
     {
-        SoundManager.instance.WalkGrassSFX.Stop();
-        SoundManager.instance.WalkSandSFX.Stop();
-        SoundManager.instance.WalkWoodSFX.Stop();
+		if (SFXOn) {
+	        SoundManager.instance.WalkGrassSFX.Stop();
+	        SoundManager.instance.WalkSandSFX.Stop();
+	        SoundManager.instance.WalkWoodSFX.Stop();
+		}
     }
 
     public void StartCoroutineFadeDown(string Area)
     {
+		if (AudioOn)
         StartCoroutine(Crossfade.CoroutineFadeDown(Area));
     }
 
     public void StartCoroutineFadeUp(string Area)
     {
+		if (AudioOn)
         StartCoroutine(Crossfade.CoroutineFadeUp(Area));
     }
 }

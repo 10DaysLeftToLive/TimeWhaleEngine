@@ -11,6 +11,8 @@ public class CarpenterSonYoung : NPC {
 	}
 	Schedule TalkWithCastleman;
 	Schedule TalkWithCastlemanNotFriend;
+	Schedule Woodworking;
+	Reaction CreatedFishingRod;
 	protected override void SetFlagReactions(){
 		
 		Reaction ReactToCastleMan = new Reaction();
@@ -21,10 +23,14 @@ public class CarpenterSonYoung : NPC {
 		ReactToCastleManNotFriends.AddAction(new NPCAddScheduleAction(this, TalkWithCastlemanNotFriend));
 		flagReactions.Add(FlagStrings.PlayerAndCastleNOTFriends , ReactToCastleManNotFriends);
 		
+		CreatedFishingRod = new Reaction();
+		flagReactions.Add(FlagStrings.carpenterSonMakesFishingRod, CreatedFishingRod);
+		//CreatedFishingRod.Add
+		
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "I know my dad wants me to learn carpentry, but I think it's boring. Don't tell him this, but I want to try and be a fisherman. If only I had a fishing rod."));
+		return (new InitialEmotionState(this, "Hey! Can you help me find my tools?"));
 	}
 	
 	protected override Schedule GetSchedule(){
@@ -48,6 +54,9 @@ public class CarpenterSonYoung : NPC {
 		TalkWithCastlemanNotFriend.Add(setFlagNOT);
 		//TalkWithCastleman.AddFlagGroup("Talk with Castleman NOT Friends");
 		
+		
+		Woodworking = new Schedule( this, Schedule.priorityEnum.Medium);
+		//Woodworking.Add (new TimeTask(300, new WaitState(this)));
 	}
 	
 	
@@ -55,19 +64,34 @@ public class CarpenterSonYoung : NPC {
 	#region Initial Emotion State
 	
 	private class InitialEmotionState : EmotionState{
-	
+		
+		
 		Reaction giveFishingRodReaction = new Reaction();
 		string gaveFishingRodDialogue = "Oh man, thanks so much!";
-		/*
-		Choice giveToolsChoice = new Choice("Give Tools.", "|||| Thanks for helpping me out broseidon!");
+		
+		Reaction whittlingItem = new Reaction();
+		
+		Reaction gaveTools = new Reaction();
+		
+		Choice giveToolsChoice = new Choice("Give Tools.", "Thanks for finding my tools!");
 		Reaction giveToolsReaction = new Reaction();
 		
-		Choice makeFishingRodChoice = new Choice("Make Fishing Rod.", "|||| Chyeah, I'm going for it G Skillet. Fish-E-I-AH");
+		Choice makeFishingRodChoice = new Choice("Make Fishing Rod.", "You know, I always wanted to try fishing");
 		Reaction makeFishingRodReaction = new Reaction();
 		
-		Choice makeTreeHouseChoice = new Choice("Make TreeHouse.", "|||| Chu be right broski, I maka ze treehouz");
-		Reaction makeTreeHouseReaction = new Reaction();
-	
+		Choice makeSwordChoice = new Choice("Make Sword.", "That sounds cool, I'll get right on it!");
+		Reaction makeSwordReaction = new Reaction();
+		
+		Choice makeDollChoice = new Choice("Make Doll", "That's kind of lame, but it's something");
+		Reaction makeDollReaction = new Reaction();
+		
+		Choice EncourageFishingChoice = new Choice("Try fishing with it", "Huh? Oh yeah, I totally should.");
+		Reaction EncourageFishingReaction = new Reaction();
+		
+		Choice ComplimentWorkChoice = new Choice("Oh man this is so cool", "I know right?");
+		Choice CritisizeWorkChoice = new Choice("You could use some work", "Uh, alright. Guess I'll just have to make myself better.");
+		Reaction EncourageCarpentryReaction = new Reaction();
+		/*
 		Choice createToolboxChoice = new Choice ("You Have it.", "You caught me.");
 		Reaction createToolboxReaction = new Reaction();
 		*/
@@ -76,42 +100,49 @@ public class CarpenterSonYoung : NPC {
 			giveFishingRodReaction.AddAction(new SetOffFlagAction(FlagStrings.gaveFishingRodToCarpenterSon));
 			giveFishingRodReaction.AddAction(new NPCEmotionUpdateAction(toControl, new GaveFishingRodEmotionState(toControl, gaveFishingRodDialogue)));
 			_allItemReactions.Add(StringsItem.FishingRod, new DispositionDependentReaction(giveFishingRodReaction));
-			/*giveToolsReaction.AddAction(new NPCCallbackAction(GiveToolsToCarpenterSon));
-			giveToolsReaction.AddAction(new ShowOneOffChatAction(NPCManager.instance.getNPC(StringsNPC.CarpenterYoung), 
-				"Oh good you found my old tools! " +
-				"Now if  you are to actually start becoming a great carpenter like my father and his before him then you need to start practicing on your own. " +
-				"Why don't you start with a treehouse?"));	
 			
-			giveToolsReaction.AddAction(new NPCGiveItemAction(NPCManager.instance.getNPC(StringsNPC.CarpenterYoung),"apple"));
+			giveToolsReaction.AddAction(new NPCCallbackAction(GiveToolsToCarpenterSon));
+			giveToolsReaction.AddAction(new NPCTakeItemAction(toControl));
+			//giveToolsReaction.AddAction(new ShowOneOffChatAction(NPCManager.instance.getNPC(StringsNPC.CarpenterYoung),
+			//	"Oh! You founds your tools? " +
+			//	"You should get started on something then. You'll need to practice if you want to be a Carpenter one day."));
 			
-			_allChoiceReactions.Add(giveToolsChoice,new DispositionDependentReaction(giveToolsReaction));
-			//TEMP
-			createToolboxReaction.AddAction(new NPCGiveItemAction(toControl,"toolbox"));
-			createToolboxReaction.AddAction(new NPCCallbackAction(GaveToolbox));
-			_allChoiceReactions.Add (createToolboxChoice, new DispositionDependentReaction(createToolboxReaction));
-		*/
+			//EncourageCarpentryReaction.AddAction(SetDefaultText("I'll be sure to work more on my carpentry."));
+			EncourageCarpentryReaction.AddAction(new SetOffFlagAction(FlagStrings.carpenterSonEncouragedCarpentry));
+			EncourageCarpentryReaction.AddAction(new NPCCallbackAction(EncouragedCarpentryResult));
+			
+			//EncourageFishingReaction.AddAction(SetDefaultText("I think I'll go try out fishing tomorrow."));
+			EncourageFishingReaction.AddAction(new SetOffFlagAction(FlagStrings.carpenterSonEncouragedFishing));
+			EncourageFishingReaction.AddAction(new NPCCallbackAction(EncouragedFishingResult));
+
+			_allItemReactions.Add(StringsItem.Toolbox,  new DispositionDependentReaction(giveToolsReaction));
+			//giveToolsReaction.AddAction
+			
+			
+
 		}
 		
 		
 		public override void UpdateEmotionState(){
 			
 		}
-	/*
-		private void GaveToolbox() {
+		/*private void GaveToolbox() {
 			_allChoiceReactions.Remove(createToolboxChoice);
 			GUIManager.Instance.RefreshInteraction();
-		}
+		}*/
 		
 		private void GiveToolsToCarpenterSon(){
 			_allChoiceReactions.Remove(giveToolsChoice);
 			GUIManager.Instance.RefreshInteraction();
-			SetDefaultText("Man I wish I could build a fishing rod. Everyone in the town has one...but I'm not good enough yet.");
+			SetDefaultText("Hey, now that I have my tools back I need to make something. Do you have any suggestions?");
 			
 			makeFishingRodReaction.AddAction(new NPCCallbackAction(TellToMakeFishingRod));
-			makeTreeHouseReaction.AddAction(new NPCCallbackAction(TellToMakeTreeHouse));
+			makeSwordReaction.AddAction(new NPCCallbackAction(TellToMakeSword));
+			makeDollReaction.AddAction(new NPCCallbackAction(TellToMakeDoll));
 			
 			_allChoiceReactions.Add(makeFishingRodChoice, new DispositionDependentReaction(makeFishingRodReaction));
-			_allChoiceReactions.Add(makeTreeHouseChoice, new DispositionDependentReaction(makeTreeHouseReaction));
+			_allChoiceReactions.Add(makeSwordChoice, new DispositionDependentReaction(makeSwordReaction));
+			_allChoiceReactions.Add(makeDollChoice, new DispositionDependentReaction(makeDollReaction));
 			
 			//Need carpenter to come back, to start scriptd schedule chat
 			
@@ -119,17 +150,53 @@ public class CarpenterSonYoung : NPC {
 				
 		private void TellToMakeFishingRod(){
 			_allChoiceReactions.Remove(makeFishingRodChoice);
-			_allChoiceReactions.Remove (makeTreeHouseChoice);
+			_allChoiceReactions.Remove(makeSwordChoice);
+			_allChoiceReactions.Remove(makeDollChoice);
+			//_allItemReactions.Remove(giveToolsChoice);
 			GUIManager.Instance.RefreshInteraction();
-			SetDefaultText("|||| MO FISH MO PROBLEMS");
+			WhittleItem();
+			FlagManager.instance.SetFlag(FlagStrings.carpenterSonMakesFishingRod);
+			SetDefaultText("I wonder how it will turn out.");
 		}
 			
-		private void TellToMakeTreeHouse(){
+		private void TellToMakeSword(){
 			_allChoiceReactions.Remove(makeFishingRodChoice);
-			_allChoiceReactions.Remove (makeTreeHouseChoice);	
+			_allChoiceReactions.Remove(makeSwordChoice);
+			_allChoiceReactions.Remove(makeDollChoice);
+			//_allItemReactions.Remove(giveToolsChoice);
 			GUIManager.Instance.RefreshInteraction();
-			SetDefaultText("|||| MO TREEHOUZ MO PROBLEMS");
-		}*/
+			WhittleItem();
+			SetDefaultText("This is going to be so cool when I'm done.");
+		}
+		
+		private void TellToMakeDoll(){
+			_allChoiceReactions.Remove(makeFishingRodChoice);
+			_allChoiceReactions.Remove(makeSwordChoice);
+			_allChoiceReactions.Remove(makeDollChoice);
+			//_allItemReactions.Remove(giveToolsChoice);
+			GUIManager.Instance.RefreshInteraction();
+			WhittleItem();
+			SetDefaultText("The more I whittle this, the creepier it looks.");
+		}
+		
+		private void WhittleItem(){
+			//Whittling Animation for a period of time
+			_allChoiceReactions.Add(ComplimentWorkChoice, new DispositionDependentReaction(EncourageCarpentryReaction));
+			_allChoiceReactions.Add(CritisizeWorkChoice, new DispositionDependentReaction(EncourageCarpentryReaction));
+		}
+		
+		private void EncouragedCarpentryResult(){
+			_allChoiceReactions.Remove(CritisizeWorkChoice);
+			_allChoiceReactions.Remove(ComplimentWorkChoice);
+			SetDefaultText("Alright, now I just need to work on my carpentry.");
+		}
+		
+		private void EncouragedFishingResult(){
+			_allChoiceReactions.Remove(CritisizeWorkChoice);
+			_allChoiceReactions.Remove(ComplimentWorkChoice);
+			_allChoiceReactions.Remove(EncourageFishingChoice);
+			SetDefaultText("I think I'll try to go fishing tomorrow. Thanks!");
+		}
 		
 	}
 	#endregion

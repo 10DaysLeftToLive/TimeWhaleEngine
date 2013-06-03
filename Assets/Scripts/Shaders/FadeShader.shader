@@ -5,7 +5,7 @@ Properties {
 
 SubShader
 {
-	ZTest Always Cull Off ZWrite Off ColorMask RGBA
+	ZTest Always Cull Off ZWrite Off
 	Fog { Mode off }
 	
 	Pass
@@ -24,13 +24,13 @@ SubShader
 	
 		uniform half4 _MainTex_TexelSize;
 		uniform half _Angle;
-		uniform half _InterpolationFactor;
+		uniform fixed _InterpolationFactor;
 		uniform half4 _CenterFrequencyAmplitude;
 	
 		struct v2f {
 			half4 pos : POSITION;
-			half2 uv : TEXCOORD0;
-			half2 uvOrig : TEXCOORD1;
+			fixed2 uv : TEXCOORD0;
+			fixed2 uvOrig : TEXCOORD1;
 		};
 	
 		v2f vert (appdata_img v)
@@ -43,27 +43,21 @@ SubShader
 			return o;
 		}
 	
-		half4 frag (v2f i) : COLOR
+		fixed4 frag (v2f i) : COLOR
 		{
-			half pi = 3.14159265358979323846264338327;
-			half2 offset = i.uvOrig;
-
-			half2 uv;
-			offset.x = _CenterFrequencyAmplitude.w * 
-				sin(_CenterFrequencyAmplitude.z * i.uvOrig.y * pi + _Angle);
-			uv.x = i.uvOrig.x + i.uvOrig.y*(offset.x);
-			uv.y = i.uvOrig.y;
+			fixed2 uv = fixed2(i.uvOrig.x + i.uvOrig.y * _CenterFrequencyAmplitude.w * 
+				sin(_CenterFrequencyAmplitude.z * i.uvOrig.y * 3.14 + _Angle),
+				 i.uvOrig.y);
 
 			//uv.xy -= _CenterFrequencyAmplitude.xy;
 			
-			half4 oldColor = tex2D(_MainTex, uv);
-			half4 newColor = tex2D(_FadeInTex, i.uvOrig);
-			return lerp(oldColor, half4(newColor.rgb, 0f), _InterpolationFactor);
+			fixed4 oldColor = tex2D(_MainTex, uv);
+			fixed4 newColor = tex2D(_FadeInTex, i.uvOrig);
+			return lerp(oldColor, fixed4(newColor.rgb, 0), _InterpolationFactor);
 		}
 		ENDCG
 	}
 
 	
 }
-	//Fallback off
 }

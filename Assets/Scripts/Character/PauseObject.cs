@@ -9,6 +9,10 @@ using System.Collections;
 public abstract class PauseObject : MonoBehaviour {
 	private bool gamePaused = false;
 	
+	protected bool isGamePaused() {
+		return gamePaused;
+	}
+	
 	protected virtual void Awake() {
 		EventManager.instance.mOnPauseToggleEvent += new EventManager.mOnPauseToggleDelegate (TogglePauseEvent);
 	}

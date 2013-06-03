@@ -3,7 +3,7 @@ using System.Collections;
 
 public class WaitTillPlayerGoneState : WaitState {
 	private Player _player;
-	private float _distance = 8f;
+	private float _distance = 6f;
 	
 	public WaitTillPlayerGoneState(NPC toControl, Player player) : base (toControl){
 		_player = player;

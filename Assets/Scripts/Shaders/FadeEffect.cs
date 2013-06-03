@@ -106,7 +106,7 @@ public class FadeEffect : ShaderBase {
 	/// Performs actions when the finger has swiped down.
 	/// </summary>
 	protected virtual void OnDragDown() {
-		if (!isFading) {
+		if (!isFading && !isGamePaused()) {
 			DoFade();
 		}
 	}
@@ -115,7 +115,7 @@ public class FadeEffect : ShaderBase {
 	/// Peforms actions when the finger has swiped up.
 	/// </summary>
 	protected virtual void OnDragUp() {
-		if (!isFading) {
+		if (!isFading && !isGamePaused()) {
 			DoFade();
 		}
 	}

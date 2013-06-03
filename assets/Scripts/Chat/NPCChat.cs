@@ -32,6 +32,10 @@ public class NPCChat {
 		_chatTexts = chatTexts;	
 	}
 	
+	public void AddChatInfo(ChatInfo chatToAdd){
+		_chatTexts.Add(chatToAdd);
+	}
+	
 	public float AddUpTimeToChat(){
 		float timeTotal = 0;
 		foreach (ChatInfo chatInfo in _chatTexts){

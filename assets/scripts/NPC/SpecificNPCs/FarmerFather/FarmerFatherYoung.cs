@@ -12,6 +12,21 @@ public class FarmerFatherYoung : NPC {
 		id = NPCIDs.FARMER_FATHER;
 		base.Init();
 	}	
+	protected void setAngry(){
+		this.SetCharacterPortrait(StringsNPC.Angry);
+	}
+	protected void setSad(){
+		this.SetCharacterPortrait(StringsNPC.Sad);
+	}
+	protected void setBlink(){
+		this.SetCharacterPortrait(StringsNPC.Blink);
+	}
+	protected void setDefault(){
+		this.SetCharacterPortrait(StringsNPC.Default);
+	}
+	protected void setHappy(){
+		this.SetCharacterPortrait(StringsNPC.Smile);	
+	}
 	protected override void SetFlagReactions(){
 		Reaction NewDialogueReaction = new Reaction();
 		NewDialogueReaction.AddAction (new NPCCallbackAction(UpdateConversation));
@@ -186,6 +201,7 @@ public class FarmerFatherYoung : NPC {
 			startedConversation = true;
 			SetDefaultText("Thanks for your help!  I'm proud of my daughter");
 			FlagManager.instance.SetFlag(FlagStrings.BusinessTimer);
+			FlagManager.instance.SetFlag(FlagStrings.AlreadyBrave);
 		}
 		#region UpdatePathOne
 		public void UpdateStandUp(){
@@ -212,7 +228,7 @@ public class FarmerFatherYoung : NPC {
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("I'd rather not talk anymore.");
 			FlagManager.instance.SetFlag(FlagStrings.BusinessTimer);
-			
+			FlagManager.instance.SetFlag(FlagStrings.YourCoward);
 		}
 		public void UpdateDoIt(){
 			_allChoiceReactions.Remove(DoItChoice);
@@ -220,6 +236,7 @@ public class FarmerFatherYoung : NPC {
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("I doubt you'll get anywhere talking with my wife.");
 			FlagManager.instance.SetFlag(FlagStrings.BusinessTimer);
+			FlagManager.instance.SetFlag(FlagStrings.IllDoIt);
 		}
 		public void UpdateOnYourOwn(){
 			_allChoiceReactions.Remove(DoItChoice);
@@ -237,6 +254,7 @@ public class FarmerFatherYoung : NPC {
 			_allChoiceReactions.Add(DoYouMeanChoice, new DispositionDependentReaction(DoYouMeanReaction));
 			_allChoiceReactions.Add(NoStoriesSillyChoice, new DispositionDependentReaction(NoStoriesSillyReaction));
 			GUIManager.Instance.RefreshInteraction();
+			FlagManager.instance.SetFlag(FlagStrings.HusbandSillyStories);
 			//SetDefaultDialogue();
 		}
 		public void UpdateDoYouMean(){

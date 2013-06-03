@@ -40,7 +40,6 @@ public class CarpenterSonMiddle : NPC {
 		flagReactions.Add(FlagStrings.CarpenterNoShow, stoodUpLG);*/
 		
 		Reaction moveToDate = new Reaction();
-		//moveToDate.AddAction(new NPCAddScheduleAction(this, moveToBeach));
 		moveToDate.AddAction(new NPCAddScheduleAction(this, dateWithLG));
 		flagReactions.Add(FlagStrings.CarpenterDating, moveToDate);
 		
@@ -73,8 +72,6 @@ public class CarpenterSonMiddle : NPC {
 	//Schedule IdleSchedule;
 
 	protected override void SetUpSchedules(){
-		moveToBeach = new Schedule(this, Schedule.priorityEnum.High);
-		moveToBeach.Add(new Task(new MoveThenDoState(this, new Vector3 (58,44.5f,.5f), new MarkTaskDone(this))));
 		
 		moveBack = new Schedule(this, Schedule.priorityEnum.High);
 		moveBack.Add(new Task(new MoveThenDoState(this, startingPosition, new MarkTaskDone(this))));

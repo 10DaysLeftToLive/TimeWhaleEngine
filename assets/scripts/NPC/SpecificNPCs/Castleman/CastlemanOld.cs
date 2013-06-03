@@ -8,6 +8,7 @@ public class CastlemanOld : NPC {
 	protected override void Init() {
 		id = NPCIDs.CASTLE_MAN;
 		base.Init();
+		this.SetCharacterPortrait(StringsNPC.Crazy);
 	}
 	
 	protected override void SetFlagReactions(){

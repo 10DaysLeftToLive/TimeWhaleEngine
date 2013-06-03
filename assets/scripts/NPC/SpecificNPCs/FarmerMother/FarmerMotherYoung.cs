@@ -17,7 +17,21 @@ public class FarmerMotherYoung : NPC {
 		id = NPCIDs.FARMER_MOTHER;
 		base.Init();
 	}
-	
+	protected void setAngry(){
+		this.SetCharacterPortrait(StringsNPC.Angry);
+	}
+	protected void setSad(){
+		this.SetCharacterPortrait(StringsNPC.Sad);
+	}
+	protected void setBlink(){
+		this.SetCharacterPortrait(StringsNPC.Blink);
+	}
+	protected void setDefault(){
+		this.SetCharacterPortrait(StringsNPC.Default);
+	}
+	protected void setHappy(){
+		this.SetCharacterPortrait(StringsNPC.Smile);	
+	}
 	protected override void SetFlagReactions(){
 		Reaction NewDialogueReaction = new Reaction();
 		NewDialogueReaction.AddAction (new NPCCallbackAction(UpdateConversationInMiddleFarmerMother));
@@ -221,6 +235,7 @@ public class FarmerMotherYoung : NPC {
 			SetDefaultText("Thanks fer talkin to me bout that.  That girl needs ta learn responsibility.");
 			FinishedTellOnConversation = true;
 			FlagManager.instance.SetFlag(FlagStrings.TellOnLighthouseConversation);
+			FlagManager.instance.SetFlag(FlagStrings.TellOnDaughter);
 		}
 		
 		public void UpdateStoriesHelpRelate(){
@@ -268,6 +283,7 @@ public class FarmerMotherYoung : NPC {
 			_allChoiceReactions.Add(StoriesArentHorribleChoice, new DispositionDependentReaction(StoriesArentHorribleReaction));
 			_allChoiceReactions.Add(IllConvinceChoice, new DispositionDependentReaction(IllConvinceReaction));
 			GUIManager.Instance.RefreshInteraction();
+			FlagManager.instance.SetFlag(FlagStrings.StoriesAreSilly);
 		}
 		public void UpdateStoriesUseful(){
 			_allChoiceReactions.Remove(StoriesUsefulChoice);
@@ -309,6 +325,7 @@ public class FarmerMotherYoung : NPC {
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Stop botherin me I got work ta do!");
 			FinishedStoriesConversation = true;
+			FlagManager.instance.SetFlag(FlagStrings.WorkAndStories);
 		}
 		public void UpdateSheShouldDecide(){
 			_allChoiceReactions.Remove(SheShouldDecideChoice);
@@ -337,6 +354,7 @@ public class FarmerMotherYoung : NPC {
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Stop botherin me I got work ta do!");
 			FinishedStoriesConversation = true;
+			FlagManager.instance.SetFlag(FlagStrings.NotSilly);
 		}
 		public void UpdateYouAreRight(){
 			_allChoiceReactions.Remove(YouAreRightChoice);
@@ -349,6 +367,7 @@ public class FarmerMotherYoung : NPC {
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Stop botherin me I got work ta do!");
 			FinishedStoriesConversation = true;
+			FlagManager.instance.SetFlag(FlagStrings.YourRight);
 		}
 		
 		

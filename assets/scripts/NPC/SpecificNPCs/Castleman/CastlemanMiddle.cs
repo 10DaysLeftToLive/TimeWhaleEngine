@@ -21,41 +21,55 @@ public class CastlemanMiddle : NPC {
 		base.Init();
 	}
 	
+	#region ReactionInstantiate
+	Reaction notInsane = new Reaction();
+	Reaction waitingForDate = new Reaction();
+	Reaction datingThyEnemy = new Reaction();
+	Reaction gotTheGirl = new Reaction();
+	Reaction iBeDating = new Reaction();
+	Reaction endOfDate = new Reaction();
+	Reaction stoodUpLG = new Reaction();
+	Reaction moveToDate = new Reaction();
+	
+	//chat stuff
+	Reaction castleDateOne = new Reaction();
+	Reaction castleDateTwo = new Reaction();
+	Reaction castleDateThree = new Reaction();
+	Reaction castleDateFour = new Reaction();
+	Reaction castleDateFive = new Reaction();
+	Reaction castleDateSix = new Reaction();
+	#endregion
+	
 	protected override void SetFlagReactions(){
-		Reaction notInsane = new Reaction();
 		notInsane.AddAction(new NPCEmotionUpdateAction(this, saneState));
 		flagReactions.Add(FlagStrings.NotInsane, notInsane);
 		
-		Reaction waitingForDate = new Reaction();
 		waitingForDate.AddAction(new NPCEmotionUpdateAction(this, dateState));
 		flagReactions.Add(FlagStrings.WaitingForDate, waitingForDate);
 		
-		Reaction datingThyEnemy = new Reaction();
 		datingThyEnemy.AddAction(new NPCCallbackAction(setFlagCarpenterDateSuccess));
 		datingThyEnemy.AddAction(new NPCEmotionUpdateAction(this, marriedCarpenterState));
 		flagReactions.Add(FlagStrings.PostDatingCarpenter, datingThyEnemy);
 		
-		Reaction gotTheGirl = new Reaction();
 		gotTheGirl.AddAction(new NPCEmotionUpdateAction(this, dateSuccessState));
 		flagReactions.Add(FlagStrings.PostCastleDate, gotTheGirl);
 		
-		Reaction iBeDating = new Reaction();
 		iBeDating.AddAction(new NPCCallbackAction(setFlagDateForMe));
 		flagReactions.Add(FlagStrings.CastleDate, iBeDating);
 		
-		Reaction endOfDate = new Reaction();
 		endOfDate.AddAction(new NPCCallbackAction(dateOver));
 		endOfDate.AddAction(new NPCAddScheduleAction(this, moveBack));
 		flagReactions.Add(FlagStrings.EndOfDate, endOfDate);
 		
-		Reaction stoodUpLG = new Reaction();
 		stoodUpLG.AddAction(new NPCEmotionUpdateAction(this, stoodUpState));
 		flagReactions.Add(FlagStrings.CastleManNoShow, stoodUpLG);
 		
-		Reaction moveToDate = new Reaction();
-		//moveToDate.AddAction(new NPCAddScheduleAction(this, moveToBeach));
-		moveToDate.AddAction(new NPCAddScheduleAction(this, dateWithLG));
+		moveToDate.AddAction(new NPCAddScheduleAction(this, moveToBeach));
 		flagReactions.Add(FlagStrings.CastleManDating, moveToDate);
+		
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleDateOne, castleDateOne);
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleDateThree, castleDateTwo);
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleDateFive, castleDateThree);
 		
 	}
 	
@@ -76,19 +90,55 @@ public class CastlemanMiddle : NPC {
 		Schedule schedule = new DefaultSchedule(this);
 		return (schedule);
 	}
-	Schedule moveToBeach, moveBack;
-	NPCConvoSchedule dateWithLG;
+	Schedule moveToBeach, moveBack, dateWithLG;
+	//NPCConvoSchedule dateWithLG;
 	protected override void SetUpSchedules(){
-		
-		moveToBeach = new Schedule(this, Schedule.priorityEnum.High);
-		moveToBeach.Add(new Task(new MoveThenDoState(this, new Vector3 (58,44.5f,.5f), new MarkTaskDone(this))));
-		
+		SetupReactions();
 		moveBack = new Schedule(this, Schedule.priorityEnum.High);
 		moveBack.Add(new Task(new MoveThenDoState(this, startingPosition, new MarkTaskDone(this))));
 		
-		dateWithLG =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.LighthouseGirlMiddle),
+		moveToBeach = new Schedule(this, Schedule.priorityEnum.DoNow);
+		moveToBeach.Add(new Task(new MoveThenDoState(this, new Vector3(MapLocations.MiddleOfBeachMiddle.x+1.5f, MapLocations.MiddleOfBeachMiddle.y, MapLocations.MiddleOfBeachMiddle.z), new MarkTaskDone(this))));
+		Task reachedBeach = new Task(new MoveThenDoState(this, new Vector3 (MapLocations.MiddleOfBeachMiddle.x+1.5f, MapLocations.MiddleOfBeachMiddle.y, MapLocations.MiddleOfBeachMiddle.z), new MarkTaskDone(this))); // at top staircase
+		reachedBeach.AddFlagToSet(FarmerFamilyFlagStrings.GirlCastleDateOne);
+		moveToBeach.Add(reachedBeach);
+		moveToBeach.Add(new TimeTask(5.3f, new IdleState(this)));
+		
+		Task reachedBeachTwo = new Task(new MoveThenDoState(this, new Vector3 (MapLocations.MiddleOfBeachMiddle.x+1.5f, MapLocations.MiddleOfBeachMiddle.y, MapLocations.MiddleOfBeachMiddle.z), new MarkTaskDone(this))); // at top staircase
+		reachedBeachTwo.AddFlagToSet(FarmerFamilyFlagStrings.GirlCastleDateTwo);
+		moveToBeach.Add(reachedBeachTwo);
+		moveToBeach.Add(new TimeTask(7.3f, new IdleState(this)));
+		
+		Task reachedBeachThree = new Task(new MoveThenDoState(this, new Vector3 (MapLocations.MiddleOfBeachMiddle.x+1.5f, MapLocations.MiddleOfBeachMiddle.y, MapLocations.MiddleOfBeachMiddle.z), new MarkTaskDone(this))); // at top staircase
+		reachedBeachThree.AddFlagToSet(FarmerFamilyFlagStrings.GirlCastleDateThree);
+		moveToBeach.Add(reachedBeachThree);
+		moveToBeach.Add(new TimeTask(3.3f, new IdleState(this)));
+		
+		
+		Task reachedBeachFour = new Task(new MoveThenDoState(this, new Vector3 (MapLocations.MiddleOfBeachMiddle.x+1.5f, MapLocations.MiddleOfBeachMiddle.y, MapLocations.MiddleOfBeachMiddle.z), new MarkTaskDone(this))); // at top staircase
+		reachedBeachFour.AddFlagToSet(FarmerFamilyFlagStrings.GirlCastleDateFour);
+		moveToBeach.Add(reachedBeachFour);
+		moveToBeach.Add(new TimeTask(6.3f, new IdleState(this)));
+		
+		Task reachedBeachFive = new Task(new MoveThenDoState(this, new Vector3 (MapLocations.MiddleOfBeachMiddle.x+1.5f, MapLocations.MiddleOfBeachMiddle.y, MapLocations.MiddleOfBeachMiddle.z), new MarkTaskDone(this))); // at top staircase
+		reachedBeachFive.AddFlagToSet(FarmerFamilyFlagStrings.GirlCastleDateFive);
+		moveToBeach.Add(reachedBeachFive);
+		moveToBeach.Add(new TimeTask(2.3f, new IdleState(this)));
+		
+		Task reachedBeachSix = new Task(new MoveThenDoState(this, new Vector3 (MapLocations.MiddleOfBeachMiddle.x+1.5f, MapLocations.MiddleOfBeachMiddle.y, MapLocations.MiddleOfBeachMiddle.z), new MarkTaskDone(this))); // at top staircase
+		reachedBeachSix.AddFlagToSet(FarmerFamilyFlagStrings.GirlCastleDateSix);
+		moveToBeach.Add(reachedBeachSix);
+		moveToBeach.Add(new TimeTask(6f, new IdleState(this)));
+		
+		Task reachedBeachEnd = new Task(new MoveThenDoState(this, new Vector3 (MapLocations.MiddleOfBeachMiddle.x+1.5f, MapLocations.MiddleOfBeachMiddle.y, MapLocations.MiddleOfBeachMiddle.z), new MarkTaskDone(this))); // at top staircase
+		reachedBeachEnd.AddFlagToSet(FlagStrings.EndOfDate);
+		moveToBeach.Add(reachedBeachEnd);
+		moveToBeach.Add(new TimeTask(3f, new IdleState(this)));
+		
+		
+		/*dateWithLG =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.LighthouseGirlMiddle),
 			new MiddleCastleManToLighthouseGirl(), Schedule.priorityEnum.DoConvo); 
-		//dateWithLG.SetCanNotInteractWithPlayer();
+		dateWithLG.SetCanNotInteractWithPlayer();*/
 	}
 	
 	protected void dateOver(){
@@ -105,6 +155,20 @@ public class CastlemanMiddle : NPC {
 	}
 	
 	protected void letCastleManKnowOfDate(){
+	}
+	
+	protected void SetupReactions(){
+		ShowMultipartChatAction castleDateOneDialogue = new ShowMultipartChatAction(this);
+		castleDateOneDialogue.AddChat("*Out of Breath* At long last I get to try and court you my fair lady!", 5f);
+		castleDateOne.AddAction(castleDateOneDialogue);
+		
+		ShowMultipartChatAction castleDateTwoDialogue = new ShowMultipartChatAction(this);
+		castleDateTwoDialogue.AddChat("Endearing? My dear woman, I always speak this way!", 3f);
+		castleDateTwo.AddAction(castleDateTwoDialogue);
+		
+		ShowMultipartChatAction castleDateThreeDialogue = new ShowMultipartChatAction(this);
+		castleDateThreeDialogue.AddChat("You remember me!", 2f);
+		castleDateThree.AddAction(castleDateThreeDialogue);
 	}
 	
 	
@@ -246,6 +310,7 @@ public class CastlemanMiddle : NPC {
 		public void DateResponse(){
 			if (!flagSet){
 				FlagManager.instance.SetFlag(FlagStrings.CastleManDating);
+				flagSet = true;
 			}
 		}
 		

@@ -75,6 +75,8 @@ public abstract class NPC : Character {
 		if (chatingWithPlayer && !NearPlayerToChat()){
 			StopTalkingWithPlayer();
 		}
+		Debug.Log(scheduleStack);
+		Debug.Log(scheduleStack.HasSchedule());
 		scheduleStack.Run(Time.deltaTime);
 	}
 	#endregion
@@ -166,12 +168,11 @@ public abstract class NPC : Character {
 	
 	#region Schedule
 	public void AddSchedule(Schedule scheduleToAdd){
-		// Special case since conversation schedules are shared
-		if (scheduleToAdd is NPCConvoSchedule) {
-			((NPCConvoSchedule)scheduleToAdd).AddOtherNPCSchedule();
-		}
-		
 		scheduleStack.Add(scheduleToAdd);	
+	}
+	
+	public void AddSharedSchedule(Schedule scheduleToAdd){
+		scheduleStack.AddShared(scheduleToAdd);	
 	}
 	
 	// Can be overriden by children. Is recomended to do this.

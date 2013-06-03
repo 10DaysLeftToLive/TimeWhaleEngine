@@ -34,6 +34,7 @@ public static class Strings{
 	public static string animation_walk = "Walk";
 	public static string animation_climb = "Climb";
 	public static string animation_stand = "Idle";
+	public static string animation_pickup = "Pick Up";
 	
 	public static string NextLevel = "NextLevelToLoad";
 	public static string LoadingScreen = "LoadingScreen";
@@ -63,6 +64,7 @@ public static class Strings{
 	public const string PARALLAXFOUR = "ParallaxFour";
 	
 	// Clouds
+	public static string CLOUDMANAGER = "CloudManager";
 	public static string CLOUD = "Cloud";
 	public const string CLOUDONE = "CloudOne";
 	public const string CLOUDTWO = "CloudTwo";
