@@ -14,13 +14,11 @@ public class ChatMenu : GUIControl {
 	private Player player;
 	
 	public float CHATWIDTH = .2f;
-	public float CHATHEIGHT = .1f;
 	
 	public GUIStyle chatBoxStyle;
 	
 	public override void Init(){
 		player = FindObjectOfType(typeof(Player)) as Player;	
-		//Screen.currentResolution
 	}
 	
 	private List<NPCChat> toRemove = new List<NPCChat>();
@@ -56,7 +54,7 @@ public class ChatMenu : GUIControl {
 		foreach (ChatInfo chatInfo in _currentChats){
 			if (IsVisibleToPlayer(chatInfo.npcTalking)){
 				GUI.color = new Color(1,1,1, 1);
-				GUI.Box(GetRectOverNPC(chatInfo.npcTalking), chatInfo.text, chatBoxStyle);	
+				MakeBox(chatInfo, chatBoxStyle);	
 			} else if (IsNearPlayer(chatInfo.npcTalking)) {
 				FadeChatBox(chatInfo);
 			}
@@ -69,7 +67,30 @@ public class ChatMenu : GUIControl {
 		distance = Utils.GetDistance(chatInfo.npcTalking.gameObject, player.gameObject);
 		distancePercent = 1 - distance/DISTANCE_NEAR_PLAYER;
 		GUI.color = new Color(1,1,1,distancePercent);
-		GUI.Box(GetRectOverNPC(chatInfo.npcTalking), chatInfo.text, chatBoxStyle);	
+		MakeBox(chatInfo, chatBoxStyle);	
+	}
+	
+	string text;
+	GUIContent boxContent;
+	Vector2 boxSize;
+	float boxWidth;
+	Vector2 topLeftPos;
+	private void MakeBox(ChatInfo infoToDisplay, GUIStyle boxStyle){
+		text = infoToDisplay.text;
+		boxContent = new GUIContent(text);
+		boxSize.x = CHATWIDTH * ScreenSetup.screenWidth; // convert into screen space for gui checking
+		boxStyle.wordWrap = false; // need to check the length of the line
+		boxWidth = boxStyle.CalcSize(boxContent).x;
+		if (boxWidth < boxSize.x){
+			boxSize.x = boxWidth;
+		}
+		boxStyle.wordWrap = true;
+		
+		boxSize.y = boxStyle.CalcHeight(boxContent, boxSize.x);//need to use calc height to account for word wrapping
+		boxSize.x = boxSize.x/ScreenSetup.screenWidth;
+		boxSize.y = boxSize.y/ScreenSetup.screenHeight;
+		topLeftPos = GetRectTopLeftPoint(infoToDisplay.npcTalking.transform, boxSize);
+		GUI.Box(ScreenRectangle.NewRect(topLeftPos.x, topLeftPos.y, boxSize.x, boxSize.y), boxContent, boxStyle);
 	}
 	
 	private bool IsVisibleToPlayer(NPC npc){
@@ -83,18 +104,18 @@ public class ChatMenu : GUIControl {
 	private static Vector3 pos;
 	private static Vector3 screenPos;
 	private static Vector2 percentageConvertedPos = new Vector2();
-	private Rect GetRectOverNPC(NPC npc){
-		pos = npc.transform.position;
-		pos.y = npc.transform.collider.bounds.max.y;
+	private Vector2 GetRectTopLeftPoint(Transform npcTransform, Vector2 rectSize){
+		pos = npcTransform.position;
+		pos.y = npcTransform.collider.bounds.max.y;
 		screenPos = Camera.mainCamera.WorldToScreenPoint(pos);
 		screenPos.x -= ScreenSetup.verticalBarWidth;
 		screenPos.y = ScreenSetup.screenHeight - screenPos.y; // flip it because of differences in screen and rect coords
 		screenPos.y -= ScreenSetup.horizontalBarHeight;
 		percentageConvertedPos.x = screenPos.x/ScreenSetup.screenWidth;
 		percentageConvertedPos.y = screenPos.y/ScreenSetup.screenHeight;
-		percentageConvertedPos.x -= CHATWIDTH/2;
-		percentageConvertedPos.y -= CHATHEIGHT;
+		percentageConvertedPos.x -= rectSize.x/2;
+		percentageConvertedPos.y -= rectSize.y;
 
-		return (ScreenRectangle.NewRect(percentageConvertedPos.x, percentageConvertedPos.y, CHATWIDTH, CHATHEIGHT));
+		return (percentageConvertedPos);
 	}
 }
