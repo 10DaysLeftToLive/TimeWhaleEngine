@@ -33,8 +33,8 @@ public class Player : Character {
 		
 		AgeSwapMover.instance.SetPlayer(this);
 		
-		Transform rightHand = animationData.GetSpriteTransform("Right Hand");
-		inventory = new Inventory(rightHand);
+		Transform leftHand = animationData.GetSpriteTransform("Left Hand");
+		inventory = new Inventory(leftHand);
 	}
 	
 	private Vector3 pos;
@@ -53,14 +53,14 @@ public class Player : Character {
 		touchParticleEmitter.Play();
     }
 	
-	private void OnClickToInteract(EventManager EM, ClickedObjectArgs e){
+	private void OnClickToInteract(EventManager EM, ClickedObjectArgs e) {
 		if (currentState.GetType() == typeof(TalkState)) return;
 		
 		string tag = e.clickedObject.tag;
 		Vector3 goal = e.clickedObject.transform.position;
 		goal.z = this.transform.position.z;
 		
-		if (tag == Strings.tag_CarriableItem){
+		if (tag == Strings.tag_CarriableItem) {
 			EnterState(new MoveThenDoState(this, goal, new PickUpItemState(this, e.clickedObject)));
 		} else if (tag == Strings.tag_NPC){
 			NPC toTalkWith = (NPC)e.clickedObject.gameObject.GetComponent<NPC>();
@@ -83,7 +83,7 @@ public class Player : Character {
 	
 	private void OnHoldClick(EventManager EM, ClickPositionArgs e){
 		pos = Camera.main.ScreenToWorldPoint(e.position);
-		if (currentState.GetType() == typeof(TalkState) || HoldIsTooClose(pos)){
+		if (currentState.GetType() == typeof(TalkState) || HoldIsTooClose(pos)) {
 			timeSinceLastHold = 1;
 			return;
 		}
@@ -117,13 +117,13 @@ public class Player : Character {
 		if (IsInteracting()){
 			CloseInteraction();	
 		}
-		if (currentState.GetType() == typeof(MoveState)){
+		if (currentState.GetType() == typeof(MoveState)) {
 			EnterState(new IdleState(this));
 		}
 		
 		ChangeAnimation(newAge.boneAnimation);
 		AgeSwapMover.instance.ChangeAgePosition(newAge, previousAge);
-		
+		DebugManager.instance.Log("Transition to: " + newAge.stateName + ", from " + previousAge.stateName, "Player");
 		//ChangeHitBox(newAge, previousAge);
 		Inventory.SwapItemWithCurrentAge(newAge.boneAnimation);
 	}
@@ -150,27 +150,27 @@ public class Player : Character {
 	}
 	
 	public void ChangeAnimation(BoneAnimation newAnimation){
-		if (animationData != null){
+		if (animationData != null) {
 			Utils.SetActiveRecursively(animationData.gameObject, false);
 		}
 		
 		animationData = newAnimation;
 		Utils.SetActiveRecursively(animationData.gameObject, true);
 		if (Inventory != null) {
-			Transform rightHand = animationData.GetSpriteTransform("Right Hand");
-			Inventory.ChangeRightHand(rightHand);
+			Transform leftHand = animationData.GetSpriteTransform("Right Hand");
+			Inventory.ChangeRightHand(leftHand);
 		}
 	}
 	
-	private bool IsInteracting(){
+	private bool IsInteracting() {
 		return (currentState is TalkState);	
 	}
 	
-	private void CloseInteraction(){
+	private void CloseInteraction() {
 		GUIManager.Instance.CloseInteractionMenu();
 	}
 	
-	public void LeaveInteraction(){
+	public void LeaveInteraction() {
 		npcTalkingWith = null;
 		EnterState(new IdleState(this));
 	}
