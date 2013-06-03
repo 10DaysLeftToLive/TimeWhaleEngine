@@ -33,24 +33,25 @@ public class CarpenterMiddle : NPC {
 
 	protected override void SetUpSchedules(){
 		openningWaitingSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
-		openningWaitingSchedule.Add(new TimeTask(30, new WaitTillPlayerCloseState(this, player)));
+		openningWaitingSchedule.Add(new TimeTask(30, new WaitTillPlayerCloseState(this, ref player)));
 		this.AddSchedule(openningWaitingSchedule);
 		
 //CONVERSATION SCHEDULE BUG!!!! PLEASE FIX		
-		//NPCConvoSchedule angryAtSonDefault =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), new MiddleCarpenterToSonDefaultScriptedConvo(), Schedule.priorityEnum.High); // CHANGE THIS CONVERSATION TO THE ONE WE WANT TO USE!
-		//angryAtSonDefault.SetCanNotInteractWithPlayer();
-		//angryAtSonDefault.AddFlagGroup(FlagStrings.gaveFishingRodToCarpenterSon);
-		//this.AddSchedule(angryAtSonDefault);
+		NPCConvoSchedule angryAtSonDefault =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), new MiddleCarpenterToSonDefaultScriptedConvo(), Schedule.priorityEnum.High); // CHANGE THIS CONVERSATION TO THE ONE WE WANT TO USE!
+		angryAtSonDefault.SetCanNotInteractWithPlayer();
+		angryAtSonDefault.AddFlagGroup(FlagStrings.gaveFishingRodToCarpenterSon);
+		this.AddSchedule(angryAtSonDefault);
 
-		//angryAtSonFishing =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), new MiddleCarpenterToSonFishingScriptedConvo(), Schedule.priorityEnum.High); // CHANGE THIS CONVERSATION TO THE ONE WE WANT TO USE!
-		//angryAtSonFishing.SetCanNotInteractWithPlayer();		
+		angryAtSonFishing =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), new MiddleCarpenterToSonFishingScriptedConvo(), Schedule.priorityEnum.High); // CHANGE THIS CONVERSATION TO THE ONE WE WANT TO USE!
+		angryAtSonFishing.SetCanNotInteractWithPlayer();		
 //CONVERSATION SCHEDULE BUG!!!! PLEASE FIX		
 
 		afterAngryAtSonFishing = new Schedule(this, Schedule.priorityEnum.Medium);
 		Task setOffStormOffFlag = (new TimeTask(1.0f,new IdleState(this)));
 		setOffStormOffFlag.AddFlagToSet(FlagStrings.carpenterSonStormOff);
-		afterAngryAtSonFishing.Add(setOffStormOffFlag);
+		
 		afterAngryAtSonFishing.Add(new TimeTask(1.0f, new IdleState(this)));
+		afterAngryAtSonFishing.Add(setOffStormOffFlag);
 	}
 	
 	
@@ -60,7 +61,7 @@ public class CarpenterMiddle : NPC {
 	
 	
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
-			
+
 		}
 		
 		public override void UpdateEmotionState(){

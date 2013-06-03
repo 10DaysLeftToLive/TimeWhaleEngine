@@ -75,8 +75,6 @@ public abstract class NPC : Character {
 		if (chatingWithPlayer && !NearPlayerToChat()){
 			StopTalkingWithPlayer();
 		}
-		Debug.Log(scheduleStack);
-		Debug.Log(scheduleStack.HasSchedule());
 		scheduleStack.Run(Time.deltaTime);
 	}
 	#endregion

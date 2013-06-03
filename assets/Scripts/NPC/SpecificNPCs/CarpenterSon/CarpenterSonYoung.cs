@@ -40,7 +40,7 @@ public class CarpenterSonYoung : NPC {
 
 	protected override void SetUpSchedules(){
 		TalkWithCastleman = new Schedule (this, Schedule.priorityEnum.High);
-		TalkWithCastleman.Add(new TimeTask(300, new WaitTillPlayerCloseState(this, player)));
+		TalkWithCastleman.Add(new TimeTask(300, new WaitTillPlayerCloseState(this, ref player)));
 		Task setFlag = (new Task(new MoveThenDoState(this, this.gameObject.transform.position, new MarkTaskDone(this))));
 		setFlag.AddFlagToSet(FlagStrings.InitialConversationWithCSONFriend);
 		TalkWithCastleman.Add(setFlag);
@@ -48,7 +48,7 @@ public class CarpenterSonYoung : NPC {
 		
 		
 		TalkWithCastlemanNotFriend = new Schedule (this, Schedule.priorityEnum.High);
-		TalkWithCastlemanNotFriend.Add(new TimeTask(300, new WaitTillPlayerCloseState(this, player)));
+		TalkWithCastlemanNotFriend.Add(new TimeTask(300, new WaitTillPlayerCloseState(this, ref player)));
 		Task setFlagNOT = (new Task(new MoveThenDoState(this, this.gameObject.transform.position, new MarkTaskDone(this))));
 		setFlagNOT.AddFlagToSet(FlagStrings.InitialConversationWithCSONNOTFriend);
 		TalkWithCastlemanNotFriend.Add(setFlagNOT);

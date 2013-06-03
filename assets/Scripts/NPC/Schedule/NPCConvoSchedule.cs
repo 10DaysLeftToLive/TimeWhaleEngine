@@ -119,8 +119,8 @@ public class NPCConvoSchedule : Schedule {
 	
 	private void CheckWaitForPlayer() {
 		if (_waitForPlayer) {
-			Add(new ConvoTask(new Task(new WaitTillPlayerCloseState(_toManage, _toManage.player, DISTANCE_CLOSE_TO_PLAYER)), 
-				new Task(new WaitTillPlayerCloseState(_npcTwo, _npcTwo.player, DISTANCE_CLOSE_TO_PLAYER))));
+			Add(new ConvoTask(new Task(new WaitTillPlayerCloseState(_toManage, ref _toManage.player, DISTANCE_CLOSE_TO_PLAYER)), 
+				new Task(new WaitTillPlayerCloseState(_npcTwo, ref _npcTwo.player, DISTANCE_CLOSE_TO_PLAYER))));
 		}
 	}
 	

@@ -85,7 +85,7 @@ public class LighthouseGirlYoung : NPC {
 	Schedule InitialSchedule;
 	protected override void SetUpSchedules(){
 		InitialSchedule = new Schedule(this, Schedule.priorityEnum.Medium);
-		InitialSchedule.Add(new TimeTask(1500, new WaitTillPlayerCloseState(this, player)));
+		InitialSchedule.Add(new TimeTask(1500, new WaitTillPlayerCloseState(this, ref player)));
 		InitialSchedule.Add(new Task(new IdleState(this), this, 0.1f, "Psst!  Come over here!"));
 		
 		AttemptToTellOnLighthouse = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerFatherYoung), 
@@ -98,7 +98,7 @@ public class LighthouseGirlYoung : NPC {
 		SetFlagToBeach.AddFlagToSet(FlagStrings.GoDownToBeach);
 		
 		TalkWithCastleman = new Schedule (this, Schedule.priorityEnum.High);
-		TalkWithCastleman.Add(new TimeTask(3000, new WaitTillPlayerCloseState(this, player)));
+		TalkWithCastleman.Add(new TimeTask(3000, new WaitTillPlayerCloseState(this, ref player)));
 		Task setFlag = (new Task(new MoveThenDoState(this, this.gameObject.transform.position, new MarkTaskDone(this))));
 		setFlag.AddFlagToSet(FlagStrings.StartTalkingToLighthouse);
 		TalkWithCastleman.Add(setFlag);

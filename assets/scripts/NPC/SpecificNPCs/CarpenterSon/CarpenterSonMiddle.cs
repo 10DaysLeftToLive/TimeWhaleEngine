@@ -12,6 +12,10 @@ public class CarpenterSonMiddle : NPC {
 	bool castlemanDateSuccess = false;
 	bool dateForMe = false;
 	bool successfulDate = false;
+	
+	Schedule stormOffSchedule, moveToBeach, moveBack;
+	NPCConvoSchedule dateWithLG;
+	
 	protected override void Init() {
 		id = NPCIDs.CARPENTER_SON;
 		base.Init();
@@ -35,24 +39,25 @@ public class CarpenterSonMiddle : NPC {
 		endOfDate.AddAction(new NPCAddScheduleAction(this, moveBack));
 		flagReactions.Add(FlagStrings.EndOfDate, endOfDate);
 		
-		/*Reaction stoodUpLG = new Reaction();
-		stoodUpLG.AddAction(new NPCEmotionUpdateAction(this, stoodUpState));
-		flagReactions.Add(FlagStrings.CarpenterNoShow, stoodUpLG);*/
+//		Reaction stoodUpLG = new Reaction();
+//		stoodUpLG.AddAction(new NPCEmotionUpdateAction(this, StoodUpState));
+//		flagReactions.Add(FlagStrings.CarpenterNoShow, stoodUpLG);
 		
 		Reaction moveToDate = new Reaction();
 		moveToDate.AddAction(new NPCAddScheduleAction(this, dateWithLG));
 		flagReactions.Add(FlagStrings.CarpenterDating, moveToDate);
 		
-		
 		Reaction stormOffReaction = new Reaction();
 		stormOffReaction.AddAction(new NPCEmotionUpdateAction(this, stormoffState));
 		stormOffReaction.AddAction(new NPCAddScheduleAction(this, stormOffSchedule));
 		flagReactions.Add(FlagStrings.carpenterSonStormOff, stormOffReaction);
+		
+		
 		Reaction IdleReaction = new Reaction();
 		//IdleReaction.AddAction(new NPCAddScheduleAction (this, ));
 	}
 	
-	protected override EmotionState GetInitEmotionState(){
+	protected override EmotionState GetInitEmotionState() {
 		dateState = new Date(this, "Date is over...shes alright, little wierd.");
 		stormoffState = new StormOffEmotionState(this, "Why can my father never let up? He knows my dream is to fish but at every turn he stifles me and makes me want to just stop doing anything.");
 		initialState = new InitialEmotionState(this, "");
@@ -67,8 +72,7 @@ public class CarpenterSonMiddle : NPC {
 		return (schedule);
 	}
 	
-	Schedule stormOffSchedule, moveToBeach, moveBack;
-	NPCConvoSchedule dateWithLG;
+	
 	//Schedule IdleSchedule;
 
 	protected override void SetUpSchedules(){
@@ -83,7 +87,8 @@ public class CarpenterSonMiddle : NPC {
 		
 		stormOffSchedule = new Schedule(this,Schedule.priorityEnum.DoNow);
 		stormOffSchedule.Add(new Task(new MoveState(this, MapLocations.BaseOfPierMiddle)));
-		stormOffSchedule.Add(new TimeTask(1.0f, new IdleState(this)));
+		stormOffSchedule.Add(new TimeTask(2.0f, new IdleState(this)));
+		stormOffSchedule.Add(new Task(new MoveThenDoState(this, MapLocations.BaseOfPierMiddle, new MarkTaskDone(this))));
 		
 		//IdleSchedule = new Schedule(this, Schedule.priorityEnum.High);
 		//IdleSchedule.Add(new Task(new MoveState(this, transform.position.x - 5)));
@@ -97,6 +102,7 @@ public class CarpenterSonMiddle : NPC {
 			FlagManager.instance.SetFlag(FlagStrings.CarpenterNoShow);
 	}
 	
+	
 	protected void setFlagDateForMe(){
 		dateForMe = true;
 	}
@@ -104,12 +110,9 @@ public class CarpenterSonMiddle : NPC {
 	
 	#region EmotionStates
 	#region Initial Emotion State
-	private class InitialEmotionState : EmotionState{
-	
-		
+	private class InitialEmotionState : EmotionState {
 	
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
-			
 		}
 		
 		public override void UpdateEmotionState(){
@@ -144,7 +147,7 @@ public class CarpenterSonMiddle : NPC {
 			
 		}
 			
-		void removeChoices(){
+		void removeChoices() {
 			_allChoiceReactions.Clear();
 			GUIManager.Instance.RefreshInteraction();
 		}
@@ -172,5 +175,6 @@ public class CarpenterSonMiddle : NPC {
 		}
 		
 	}
+	
 	#endregion
 }

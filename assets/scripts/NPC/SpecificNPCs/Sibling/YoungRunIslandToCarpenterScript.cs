@@ -15,7 +15,7 @@ public class YoungRunIslandToCarpenterScript : Schedule {
 		Add(new Task(new MoveThenDoState(_toManage, new Vector3 (12, .2f, .3f), new MarkTaskDone(_toManage))));
 		Add(new TimeTask(.2f, new IdleState(_toManage)));
 		Add(new Task(new MoveThenDoState(_toManage, new Vector3 (11.8f, .2f, .3f), new MarkTaskDone(_toManage)))); // at bridge
-		Add(new TimeTask(10f, new WaitTillPlayerCloseState(_toManage, _toManage.player)));
+		Add(new TimeTask(10f, new WaitTillPlayerCloseState(_toManage, ref _toManage.player)));
 		Task setOffCarpenterFlagTask = new Task(new MoveThenDoState(_toManage, new Vector3 (28, .2f, .3f), new MarkTaskDone(_toManage))); // at carpenter
 		setOffCarpenterFlagTask.AddFlagToSet(FlagStrings.RunToCarpenter);
 		Add(setOffCarpenterFlagTask);

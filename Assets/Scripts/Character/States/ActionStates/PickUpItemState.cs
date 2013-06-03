@@ -7,32 +7,36 @@ using System.Collections;
 /// </summary>
 public class PickUpItemState : AbstractState {
 	GameObject _toPickUp;
-	
-	public PickUpItemState(Character toControl, GameObject toPickUp) : base(toControl){
+
+	public PickUpItemState(Character toControl, GameObject toPickUp) : base(toControl) {
 		_toPickUp = toPickUp;
 	}
 	
-	public override void Update(){
+	public override void Update() {
 		if (character is NPC){
 			character.EnterState(new MarkTaskDone(character));
-		} else {
+		}
+		else if (!character.animationData.IsPlaying(Strings.animation_pickup)) {
 			character.EnterState(new IdleState(character));
 			((Player) character).Inventory.PickUpObject(_toPickUp);
 		}
 	}
 	
-	public override void OnEnter(){
-		DebugManager.instance.Log(character.name + ": PickUpItemState Enter to pickup " + _toPickUp.name, "State", character.name);
+	public override void OnEnter() {
+		character.PlayAnimation(Strings.animation_pickup);;
+		DebugManager.instance.Log(character.name + 
+			": PickUpItemState Enter to pickup " + _toPickUp.name, "State", character.name);
 	}
 	
-	public override void OnExit(){
+	public override void OnExit() {
 		DebugManager.instance.Log(character.name + ": PickUpItemState Exit", "State", character.name);
 		FlagManager.instance.SetFlag(_toPickUp.name);
+		
 		// Shoot off event for having picked up item
 		EventManager.instance.RiseOnPlayerPickupEvent(new PickUpStateArgs(_toPickUp));
 	}
 	
-	private void OnPickUpItem(EventManager Em, PickUpItemState pickedUpItem){
+	private void OnPickUpItem(EventManager Em, PickUpItemState pickedUpItem) {
 		
 	}
 }
