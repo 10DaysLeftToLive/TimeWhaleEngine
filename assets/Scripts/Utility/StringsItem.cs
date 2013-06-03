@@ -3,7 +3,7 @@ public static class StringsItem {
 	public static string AppleCarpenter = "Apple[Carpenter]";
 	public static string FishingRod = "FishingRod";
 	public static string TimeWhalePlushie = "Plushie";
-	public static string Toolbox = "Toolbox";
+	public static string Toolbox = "toolbox";
 	public static string Seashell = "Seashell";
 	public static string Rose = "Rose";
 	public static string CaptainsLog = "Captain's Log";
