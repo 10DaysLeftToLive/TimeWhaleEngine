@@ -15,7 +15,7 @@ public class ScheduleStack {
       this._schedulesToDo = new PriorityStack();
     }
 	
-	protected bool HasSchedule() {
+	public bool HasSchedule() {
 		return (current != null);
 	}
 	

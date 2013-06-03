@@ -61,7 +61,12 @@ public static class FlagStrings {
 	#region Carpenter Son
 	public static string gaveFishingRodToCarpenterSon = "Gave Fishingrod to Carpenter Son";
 	public static string carpenterSonStormOff = "Carpenter Son Storms Off";
-	public static string carpenterSonReconcile = "Carpenter Son Reconcile";
+	public static string carpenterSonReconcile = "Carpenter Son Reconcile"; // Leads to Old Age Reconcile with Father on the Interaction Chart
+	public static string carpenterSonIndependant = "Carpenter Son Independant"; //Leads to Old Age Independant on the Interaction Chart
+	public static string carpenterSonMakesFatherProud = "Carpenter Son Makes Father Proud"; //Leads to Old Age Father Proud on the Interaction Chart
+	public static string carpenterSonMakesFishingRod = "Carpenter Son Makes Fishing Rod";
+	public static string carpenterSonEncouragedFishing = "Caprenter Son Encouraged Fishing"; // Leads to Middle Fishing on the Interaction Chart
+	public static string carpenterSonEncouragedCarpentry = "Carpenter Son Encouraged Carpentry"; // Leads to Middle Carpentry on the Interaction Chart
 	
 	public static string CarpenterDating = "Carpenter dating";
 	public static string CarpenterNoShow = "Carpenter no show";

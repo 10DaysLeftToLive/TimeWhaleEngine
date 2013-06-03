@@ -53,23 +53,23 @@ public class LighthouseGirlYoung : NPC {
 		#endregion
 		
 		Reaction CounterTellOn = new Reaction();
+		CounterTellOn.AddAction(new NPCEmotionUpdateAction(this, new EmptyEmotion(this, "Leave me!  My dad said he would get you in trouble if you didn't go!")));
 		CounterTellOn.AddAction(new NPCAddScheduleAction(this, AttemptToTellOnLighthouse));
 		flagReactions.Add(FlagStrings.CounterTellOn, CounterTellOn);
 		
 		Reaction ReadyToGoToBeach = new Reaction();
 		ReadyToGoToBeach.AddAction(new NPCAddScheduleAction(this, WalkToBeach));
 		ReadyToGoToBeach.AddAction(new NPCAddScheduleAction(this, LighthouseGoingToBeach));
-		ReadyToGoToBeach.AddAction(new NPCEmotionUpdateAction(this, new AtBeachState(this, "")));
+		ReadyToGoToBeach.AddAction(new NPCEmotionUpdateAction(this, new EmptyEmotion(this, "Don't bother me I'm off to build sand castles to protect the island!")));
 		flagReactions.Add(FlagStrings.GoDownToBeach, ReadyToGoToBeach);
 		
 		Reaction MakingApplePieFromApple = new Reaction();
 		MakingApplePieFromApple.AddAction(new NPCAddScheduleAction(this, GaveApple));
 		flagReactions.Add(FlagStrings.MakePieFromApple, MakingApplePieFromApple);
 		
-		
-		
 		Reaction MakingApplePieFromScratch = new Reaction();
-		MakingApplePieFromApple.AddAction(new NPCAddScheduleAction(this, GaveApple));
+		MakingApplePieFromScratch.AddAction(new NPCEmotionUpdateAction(this, new EmptyEmotion(this, "Leave peasant!  I have work to attend to!")));
+		MakingApplePieFromScratch.AddAction(new NPCAddScheduleAction(this, GaveNothingSchedule));
 		flagReactions.Add(FlagStrings.MakePieFromScratch, MakingApplePieFromScratch);
 	}
 	protected override EmotionState GetInitEmotionState(){
@@ -80,7 +80,7 @@ public class LighthouseGirlYoung : NPC {
 	
 	protected override Schedule GetSchedule(){
 		//Schedule schedule = new DefaultSchedule(this);
-		return (GaveApple);
+		return (InitialSchedule);
 	}
 	Schedule InitialSchedule;
 	protected override void SetUpSchedules(){
@@ -104,8 +104,9 @@ public class LighthouseGirlYoung : NPC {
 		TalkWithCastleman.Add(setFlag);
 		
 		GaveApple = new Schedule(this, Schedule.priorityEnum.High);
-		GaveApple.Add(new TimeTask(500f, new IdleState(this)));
+		GaveApple.Add(new TimeTask(10f, new IdleState(this)));
 		GaveApple.Add(SetFlagToBeach);
+		//GaveApple.Add(new TimeTask(500f, new IdleState(this)));
 		
 		GaveNothingSchedule = new Schedule(this, Schedule.priorityEnum.High);
 		GaveNothingSchedule.Add(new TimeTask(750f, new IdleState(this)));
@@ -120,14 +121,18 @@ public class LighthouseGirlYoung : NPC {
 	
 	
 	#region EmotionStates
-	private class AtBeachState: EmotionState{
-		public AtBeachState(NPC toControl, string currentDialogue) : base(toControl, "Don't bother me I'm off to build sand castles to protect the island!"){
+	private class EmptyEmotion: EmotionState{
+		public EmptyEmotion(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+			
 		}
 	}
+	
 	#region Initial Emotion State
 	private class InitialEmotionState : EmotionState{
 		NPC control;
-		string appleString = "An apple...I can use that to cook...but a full pie would be better.";
+		int tries = 0;
+		string appleString = "An apple...I guess that would work...but could you get me a pie instead?";
+		string SecondAppleString = "";
 		string pieString = "A pie!  Perfect!  How did you know I needed that to dodge my chores?";
 		Reaction TakeAppleReaction;
 		Reaction DenyAppleReaction;
@@ -189,10 +194,11 @@ public class LighthouseGirlYoung : NPC {
 			TakeAppleReaction = new Reaction();
 			TakeAppleReaction.AddAction(new NPCTakeItemAction(toControl));
 			TakeAppleReaction.AddAction(new NPCCallbackAction(UpdateTakeApple));
+			TakeAppleReaction.AddAction(new ShowOneOffChatAction(toControl, "*Sigh*  time to bake I guess..."));
 			
 			DenyAppleReaction = new Reaction();
 			DenyAppleReaction.AddAction(new NPCCallbackAction(UpdateDenyApple));
-			_allItemReactions.Add(StringsItem.Apple, new DispositionDependentReaction(TakePieReaction));
+			_allItemReactions.Add(StringsItem.Apple, new DispositionDependentReaction(DenyAppleReaction));
 			
 			
 			EvilPlanChoice = new Choice ("What evil plan?", "She wants to drain my strength through constant chores!\n But I'm a great warrior and can see through her cunning schemes to make me cook!");
@@ -302,19 +308,36 @@ public class LighthouseGirlYoung : NPC {
 		}
 		public void UpdateDenyApple(){
 			SetDefaultText(appleString);
+			_allChoiceReactions.Clear();
+			if (tries == 0){
+				appleString = "Okay...I know an apple is what I need for pie, but could you just get me a full pie?";
+				tries++;
+			}
+			else if (tries == 1){
+				appleString = "Look. Apple Pie. Apple P. I. E.  Not just apple!";
+				tries++;
+			}
+			else if (tries == 2){
+				tries++;
+				appleString = "*Gasp**Choke*  I can't live without a trip to the beach!  Please get me apple pie!";
+			}
+			else if (tries == 3){
+				_allItemReactions.Remove(StringsItem.Apple);
+				_allItemReactions.Add(StringsItem.Apple, new DispositionDependentReaction(TakeAppleReaction));
+			}
 			GUIManager.Instance.RefreshInteraction();
 		}
 		public void UpdateTakeApple(){
+			GUIManager.Instance.CloseInteractionMenu();
 			FlagManager.instance.SetFlag(FlagStrings.MakePieFromApple);
 			SetDefaultText("Thanks for the apple...I guess...");
-			GUIManager.Instance.RefreshInteraction();
-			SetDefaultText("Thanks for the apple...too bad you couldn't give me pie...");
+			//SetDefaultText("Thanks for the apple...too bad you couldn't give me pie...");
 		}
 		public void UpdateTakeApplePie(){
+			GUIManager.Instance.CloseInteractionMenu();
 			FlagManager.instance.SetFlag(FlagStrings.GoDownToBeach);
 			SetDefaultText(pieString);
-			GUIManager.Instance.RefreshInteraction();
-			SetDefaultText("Next stop: the beach!");
+			SetDefaultText("Next stop, the beach!");
 		}
 		
 		public void UpdateEvilPlan (){
@@ -332,6 +355,7 @@ public class LighthouseGirlYoung : NPC {
 					GUIManager.Instance.RefreshInteraction();
 					SetDefaultText("Help me cook to stop her evil plan!");
 					pieString = "Pie!  Perfect, exactly what I needed!";
+					appleString = "I guess I could use the apples to cook, but a full pie would be better...";
 				}
 						public void UpdateOnIt(){
 							_allChoiceReactions.Remove(OnItChoice);
@@ -339,6 +363,7 @@ public class LighthouseGirlYoung : NPC {
 							GUIManager.Instance.CloseInteractionMenu();
 							SetDefaultText("Hurry!  I need you to get apple pie!");
 							pieString = "Pie!  Perfect, exactly what I needed!";
+							appleString = "Umm...I thought I told you to get apple pie, not an apple.";
 							//Placeholder for an extra flag
 						}
 						public void UpdateDoYourOwnChores(){
@@ -349,6 +374,7 @@ public class LighthouseGirlYoung : NPC {
 							GUIManager.Instance.RefreshInteraction();
 							SetDefaultText("Please help a girl play on the beach!");
 							pieString = "See!  It wasn't that hard to give me some pie!";
+							appleString = "If you are gonna give me an apple you might as well give me pie...";
 						}
 								public void UpdateOkayFine(){
 									_allChoiceReactions.Remove(NoChoice);
@@ -356,6 +382,7 @@ public class LighthouseGirlYoung : NPC {
 									GUIManager.Instance.CloseInteractionMenu();
 									SetDefaultText("Did you find apple pie.");
 									pieString = "See!  It wasn't that hard to give me some pie!";
+									appleString = "I thought I told you got give me pie not an apple!";
 									//FlagManager.instance.SetFlag(FlagStrings.WaitForItem);
 								}
 								public void UpdateNo(){
@@ -368,6 +395,7 @@ public class LighthouseGirlYoung : NPC {
 									GUIManager.Instance.RefreshInteraction();
 									SetDefaultText("Okay fine!  Just get me an apple!");
 									pieString = "See!  It wasn't that hard to give me some pie!";
+									appleString = "If you are gonna give me an apple you might as well give me pie...";
 								}
 										public void UpdateOkayOneMoreApple(){
 											_allChoiceReactions.Remove(NoMeansNoChoice);
@@ -377,12 +405,14 @@ public class LighthouseGirlYoung : NPC {
 											SetDefaultText("Have you got an apple yet?");
 											//FlagManager.instance.SetFlag(FlagStrings.WaitForItem);
 											pieString = "See!  It wasn't that hard to give me some pie!";
+											appleString = "I know I said to get an apple...but since you did this, could you get me pie?";
 										}
 										public void UpdateNoMeansNo(){
 											_allChoiceReactions.Remove(NoMeansNoChoice);
 											_allChoiceReactions.Remove(OkayOneAppleChoice);
 											_allChoiceReactions.Remove(ImTellingOnYouChoice);
 											GUIManager.Instance.CloseInteractionMenu();
+											_allItemReactions.Clear();
 											SetDefaultText("Go away peasant!");
 											FlagManager.instance.SetFlag(FlagStrings.MakePieFromScratch);
 										}
@@ -394,6 +424,7 @@ public class LighthouseGirlYoung : NPC {
 											_allChoiceReactions.Add(ImGonnaTellNowChoice, new DispositionDependentReaction(ImGonnaTellNowReaction));
 											GUIManager.Instance.RefreshInteraction();
 											SetDefaultText("Please, please, please don't tell on them!");
+											appleString = "If you are gonna give me an apple you might as well give me pie...";
 										}
 												public void UpdateThisOneTime(){
 													_allChoiceReactions.Remove(ThisOneTimeChoice);
@@ -401,6 +432,7 @@ public class LighthouseGirlYoung : NPC {
 													_allChoiceReactions.Add(NOOChoice, new DispositionDependentReaction(NOOReaction));
 													GUIManager.Instance.RefreshInteraction();
 													SetDefaultText("So an apple?");
+													appleString = "If you are gonna give me an apple you might as well give me pie...";
 												
 												}
 														public void UpdateSighYouWin(){
@@ -409,6 +441,7 @@ public class LighthouseGirlYoung : NPC {
 															_allChoiceReactions.Remove(NOOChoice);
 															GUIManager.Instance.CloseInteractionMenu();
 															SetDefaultText("Now go and aquire that apple!");
+															appleString = "I asked for apple pie...not a single apple!";
 															//FlagManager.instance.SetFlag(FlagStrings.WaitForItem);
 														}
 														public void UpdateNOO(){
@@ -417,6 +450,7 @@ public class LighthouseGirlYoung : NPC {
 															_allChoiceReactions.Remove(NOOChoice);
 															GUIManager.Instance.CloseInteractionMenu();
 															SetDefaultText("Go away!  I don't like you!");
+															//22222222222222222222222222222222222222222222222222222
 															FlagManager.instance.SetFlag(FlagStrings.MakePieFromScratch);
 														}
 			public void UpdateStopBeingLazy (){
@@ -425,9 +459,9 @@ public class LighthouseGirlYoung : NPC {
 				_allChoiceReactions.Add(ImTellingChoice, new DispositionDependentReaction(ImTellingReaction));
 				_allChoiceReactions.Add(ThisIsSilllyChoice, new DispositionDependentReaction(ThisIsSillyReaction));
 				_allChoiceReactions.Add(WarriorsCookChoice, new DispositionDependentReaction(WarriorsCookReaction));
-				//control
 				GUIManager.Instance.RefreshInteraction();
 				SetDefaultText("Hmmph.  I'm never lazy!");
+				appleString = "If you are gonna give me an apple you might as well give me pie...";
 			}
 				public void UpdateImTelling (){
 					_allChoiceReactions.Remove(ImTellingChoice);
@@ -437,6 +471,7 @@ public class LighthouseGirlYoung : NPC {
 					_allChoiceReactions.Add(NoImTellingChoice, new DispositionDependentReaction(NoImTellingReaction));
 					GUIManager.Instance.RefreshInteraction();
 					SetDefaultText("Please don't tell!");
+					appleString = "If you are gonna give me an apple you might as well give me pie...";
 				}
 						public void UpdateOkayIGuess(){
 							_allChoiceReactions.Remove(OkayIGuessChoice);
@@ -444,6 +479,7 @@ public class LighthouseGirlYoung : NPC {
 							GUIManager.Instance.CloseInteractionMenu();
 							FlagManager.instance.SetFlag(FlagStrings.MakePieFromScratch);
 							SetDefaultText("Apple Pie?  No?  okay...");
+							appleString = "If you are gonna give me an apple you might as well give me pie...";
 						}
 						public void UpdateNoImTelling(){
 							_allChoiceReactions.Remove(OkayIGuessChoice);
@@ -459,6 +495,7 @@ public class LighthouseGirlYoung : NPC {
 					GUIManager.Instance.CloseInteractionMenu();
 					SetDefaultText("On your way peasant!");
 					FlagManager.instance.SetFlag(FlagStrings.MakePieFromScratch);
+					appleString = "If you are gonna give me an apple you might as well give me pie...";
 				}
 				public void UpdateWarriorsCook(){
 					_allChoiceReactions.Remove(WarriorsCookChoice);
@@ -468,24 +505,29 @@ public class LighthouseGirlYoung : NPC {
 					_allChoiceReactions.Add(FairEnoughChoice, new DispositionDependentReaction(FairEnoughReaction));
 					GUIManager.Instance.RefreshInteraction();
 					SetDefaultText("Warrior's don't cook!");
+					appleString = "I can't cook!  I'm a warrior!  Now go get me pie!";
 				}
 						public void UpdateWhatIfYouTravel(){
 							_allChoiceReactions.Remove(WhatIfYouTravelChoice);
 							_allChoiceReactions.Remove(FairEnoughChoice);
 							GUIManager.Instance.CloseInteractionMenu();
+							FlagManager.instance.SetFlag(FlagStrings.MakePieFromScratch);
 							SetDefaultText("I guess warrior's should know how to cook...");
+							appleString = "If you are gonna give me an apple you might as well give me pie...";
 						}
 						public void UpdateFairEnough(){
 							_allChoiceReactions.Remove(FairEnoughChoice);
 							_allChoiceReactions.Remove(WhatIfYouTravelChoice);
 							GUIManager.Instance.CloseInteractionMenu();
 							SetDefaultText("Go findeth me apple pie!");
+							appleString = "I thought I told you to give me apple pie!  Not an apple!";
 						}
 		public void UpdateImTellingNow(){
 			_allChoiceReactions.Clear();
 			GUIManager.Instance.CloseInteractionMenu();
 			FlagManager.instance.SetFlag(FlagStrings.CounterTellOn);
 			SetDefaultText("My dad told you to leave me alone!");
+			//22222222222222222222222222222222222222222
 		}
 		public override void UpdateEmotionState(){
 			
