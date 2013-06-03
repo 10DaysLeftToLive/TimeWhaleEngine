@@ -97,6 +97,8 @@ public class NPCConvoSchedule : Schedule {
 	
 	public override void NextTask(){	
 		DebugManager.instance.Log(_toManage.name + " schedule next task", "Schedule", _toManage.name);
+		current = null;
+		currentTwo = null;
 		if (convoTasksToDo.Count > 0) {
 			current = convoTasksToDo.Peek().taskOne;
 			currentTwo = convoTasksToDo.Dequeue().taskTwo;
@@ -132,7 +134,9 @@ public class NPCConvoSchedule : Schedule {
 	}
 	
 	public override void OnInterrupt() {
-		SetComplete();
+		convoTasksToDo.Clear();
+		current = null;
+		currentTwo = null;
 	}
 	
 	public class ConvoTask {
