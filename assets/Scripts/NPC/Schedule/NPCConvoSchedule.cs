@@ -13,6 +13,7 @@ public class NPCConvoSchedule : Schedule {
 	protected NPCChat chatToPerform;
 	protected Task currentTwo;
 	protected Queue<ConvoTask> convoTasksToDo;
+	protected string setFlagAction; 
 	private static float DISTANCE_CLOSE_TO_PLAYER = 6f;
 	private static float TALK_DISTANCE = 2f;
 	
@@ -47,6 +48,10 @@ public class NPCConvoSchedule : Schedule {
 	
 	public void Add(ConvoTask task){
 		convoTasksToDo.Enqueue(task);
+	}
+	
+	public void SetFlagOnComplete(string flagToSet) {
+		setFlagAction = flagToSet;
 	}
 	
 	protected void SetConvoTasks(NPCConversation convo) {
@@ -108,6 +113,9 @@ public class NPCConvoSchedule : Schedule {
 			_toManage.ForceChangeToState(current.StatePerforming);
 			_npcTwo.ForceChangeToState(currentTwo.StatePerforming);
 		}
+		else {
+			SetComplete();
+		}
 	}
 	
 	private void CheckWithinDistanceOfEachOther() {
@@ -138,6 +146,12 @@ public class NPCConvoSchedule : Schedule {
 		convoTasksToDo.Clear();
 		current = null;
 		currentTwo = null;
+	}
+	
+	public override void SetComplete() {
+		if (setFlagAction != null) {
+			FlagManager.instance.SetFlag(setFlagAction);
+		}
 	}
 	
 	public class ConvoTask {
