@@ -50,7 +50,7 @@ public class MotherYoung : NPC {
 		
 		Reaction moveToMusicianReaction = new Reaction();
 		moveToMusicianReaction.AddAction(new ShowOneOffChatAction(this, "Follow me. They live up here.", 3f));
-		NPCConvoSchedule momToMusician = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.MusicianYoung), new YoungFarmerMotherToFarmerFatherOpenningScriptedDialogue(),Schedule.priorityEnum.DoNow);
+		NPCConvoSchedule momToMusician = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.MusicianYoung), new MotherToMusicianYoung(),Schedule.priorityEnum.DoNow);
 		momToMusician.SetCanNotInteractWithPlayer();
 		moveToMusicianReaction.AddAction(new NPCAddScheduleAction(this, moveToMusicianSchedule));
 		moveToMusicianReaction.AddAction(new NPCAddScheduleAction(this, momToMusician));
@@ -112,12 +112,10 @@ public class MotherYoung : NPC {
 
 		moveToMusicianSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
 		moveToMusicianSchedule.Add(new TimeTask(2f, new IdleState(this)));//this.transform.position
-		Task setFlag = (new Task(new MoveThenDoState(this, new Vector3 (5, -1f, .3f), new MarkTaskDone(this))));
+		Task setFlag = (new Task(new MoveThenDoState(this, new Vector3 (-2.9f, 7.6f, 1f), new MarkTaskDone(this))));
 		setFlag.AddFlagToSet(FlagStrings.FinishMusicianConvo);
 		moveToMusicianSchedule.Add(setFlag);
-		moveToMusicianSchedule.Add(new TimeTask(2f, new IdleState(this)));
-		//moveToMusicianSchedule.Add(new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.MusicianYoung), 
-		//	new YoungFarmerMotherToFarmerFatherOpenningScriptedDialogue(),Schedule.priorityEnum.High));
+		moveToMusicianSchedule.Add(new TimeTask(45f, new IdleState(this)));
 		//moveToMusicianSchedule.Add(new TimeTask(.5f, new IdleState(this)));
 		
 // ADD EXIT MAD SCHEDULE
