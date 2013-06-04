@@ -14,7 +14,7 @@ public class CarpenterSonMiddle : NPC {
 	bool successfulDate = false;
 	
 	Schedule stormOffSchedule, moveToBeach, moveBack;
-	NPCConvoSchedule dateWithLG;
+	//NPCConvoSchedule dateWithLG;
 	
 	protected override void Init() {
 		id = NPCIDs.CARPENTER_SON;
@@ -35,7 +35,7 @@ public class CarpenterSonMiddle : NPC {
 		flagReactions.Add(FlagStrings.CarpenterDate, iBeDating);
 		
 		Reaction endOfDate = new Reaction();
-		endOfDate.AddAction(new NPCCallbackAction(dateOver));
+		//endOfDate.AddAction(new NPCCallbackAction(dateOver));
 		endOfDate.AddAction(new NPCAddScheduleAction(this, moveBack));
 		flagReactions.Add(FlagStrings.EndOfDate, endOfDate);
 		
@@ -44,7 +44,7 @@ public class CarpenterSonMiddle : NPC {
 //		flagReactions.Add(FlagStrings.CarpenterNoShow, stoodUpLG);
 		
 		Reaction moveToDate = new Reaction();
-		moveToDate.AddAction(new NPCAddScheduleAction(this, dateWithLG));
+		//moveToDate.AddAction(new NPCAddScheduleAction(this, dateWithLG));
 		flagReactions.Add(FlagStrings.CarpenterDating, moveToDate);
 		
 		Reaction stormOffReaction = new Reaction();
@@ -80,15 +80,15 @@ public class CarpenterSonMiddle : NPC {
 		moveBack = new Schedule(this, Schedule.priorityEnum.High);
 		moveBack.Add(new Task(new MoveThenDoState(this, startingPosition, new MarkTaskDone(this))));
 		
-		dateWithLG =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.LighthouseGirlMiddle),
-			new MiddleCastleManToLighthouseGirl(), Schedule.priorityEnum.DoConvo); 
+		//dateWithLG =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.LighthouseGirlMiddle),
+		//	new MiddleCastleManToLighthouseGirl(), Schedule.priorityEnum.DoConvo); 
 		//dateWithLG.SetCanNotInteractWithPlayer();
 		
 		
-		stormOffSchedule = new Schedule(this,Schedule.priorityEnum.DoNow);
-		stormOffSchedule.Add(new Task(new MoveState(this, MapLocations.BaseOfPierMiddle)));
-		stormOffSchedule.Add(new TimeTask(2.0f, new IdleState(this)));
-		stormOffSchedule.Add(new Task(new MoveThenDoState(this, MapLocations.BaseOfPierMiddle, new MarkTaskDone(this))));
+		//stormOffSchedule = new Schedule(this,Schedule.priorityEnum.DoNow);
+		//stormOffSchedule.Add(new Task(new MoveState(this, MapLocations.BaseOfPierMiddle)));
+		//stormOffSchedule.Add(new TimeTask(2.0f, new IdleState(this)));
+		//stormOffSchedule.Add(new Task(new MoveThenDoState(this, MapLocations.BaseOfPierMiddle, new MarkTaskDone(this))));
 		
 		//IdleSchedule = new Schedule(this, Schedule.priorityEnum.High);
 		//IdleSchedule.Add(new Task(new MoveState(this, transform.position.x - 5)));

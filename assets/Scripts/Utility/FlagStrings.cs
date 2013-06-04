@@ -51,6 +51,9 @@ public static class FlagStrings {
 		public static string siblingOldReachedCarpenterSonFlag = "Sibling Old Reached Carpenter Son";
 		public static string siblingOldGreetCarpenterSonOldPartOneFlag = "Sibling Old Greet CarpenterSon Part One";
 		public static string siblingOldGreetCarpenterSonOldPartTwoFlag = "Sibling Old Greet CarpenterSon Part Two";
+	
+		public static string siblingOldGoToFortuneTellerIntro = "Sibling Old Go To Fortune Teller Intro";
+	
 		#endregion
 	#endregion
 
@@ -74,7 +77,17 @@ public static class FlagStrings {
 		#region old
 		public static string oldCarpenterGreetSiblingPartOneFlag = "Carpenter Greet Sibling Part One";
 		public static string oldCarpenterGreetSiblingPartTwoFlag = "Carpenter Greet Sibling Part Two";
+		
+		public static string oldCarpenterActivateGoToBeachHappyFlag = "Old Carpenter Activate Go To Beach Happy";
+		public static string oldCarpenterActivateGoToBeachUpsetFlag = "Old Carpenter Activate Go To Beach Upset";
+		public static string oldCarpenterGoToBeachPartOneFlag = "Old Carpenter Go To Beach Part One";
+		public static string oldCarpenterGoToBeachPartTwoFlag = "Old Carpenter Go To Beach Part Two";
+		public static string oldCarpenterGoToBeachPartThreeFlag = "Old Carpenter Go To Beach Part Three";
+		public static string oldCarpenterGoToBeachPartFourFlag = "Old Carpenter Go To Beach Part Four";
+		public static string oldCarpenterGoToBeachPartFiveFlag = "Old Carpenter Go To Beach Part Five";
+		public static string oldCarpenterGoToBeachPartSixFlag = "Old Carpenter Go To Beach Part Six";
 		#endregion
+	
 	#endregion
 	
 	#region CastleMan Only
