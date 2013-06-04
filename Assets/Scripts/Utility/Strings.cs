@@ -39,6 +39,7 @@ public static class Strings{
 	public static string NextLevel = "NextLevelToLoad";
 	public static string LoadingScreen = "LoadingScreen";
 	public static string Level1 = "Level1";
+	public static string LevelBase = "LevelBase";
 	public static string MainMenu = "MainMenu";
 	public static string GenderSelect = "GenderSelect";
 	
