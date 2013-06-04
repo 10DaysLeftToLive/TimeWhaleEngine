@@ -68,7 +68,7 @@ public class CastlemanYoung : NPC {
 		FriendsWithPlayer.AddAction(new NPCEmotionUpdateAction(this, new CastleManTraveling(this, "")));
 		FriendsWithPlayer.AddAction(new NPCCallbackAction(setFriends));
 		FriendsWithPlayer.AddAction(new NPCCallbackAction(setHappy));
-		flagReactions.Add(FlagStrings.PlayerAndCastleFriends, FriendsWithPlayer);
+		flagReactions.Add(FlagStrings.MusicianFinishedTalkingFriends, FriendsWithPlayer);
 		
 		//Schedule to start talking to carpenter as friends
 		Reaction IntroConversationCarpenterSonFriend = new Reaction ();
@@ -120,7 +120,7 @@ public class CastlemanYoung : NPC {
 		NOTFriendsWithPlayer.AddAction(new NPCEmotionUpdateAction(this, new CastleManTraveling(this, "")));
 		NOTFriendsWithPlayer.AddAction(new NPCAddScheduleAction(this, CastleManFollowSchedule));
 		NOTFriendsWithPlayer.AddAction(new NPCCallbackAction(setAngry));
-		flagReactions.Add(FlagStrings.PlayerAndCastleNOTFriends, NOTFriendsWithPlayer);
+		flagReactions.Add(FlagStrings.MusicianFinishedTalkingNOTFriends, NOTFriendsWithPlayer);
 		//Schedule for first convo with carpenter not friends
 		Reaction IntroConversationCarpenterSonNOTFriend = new Reaction ();
 		IntroConversationCarpenterSonNOTFriend.AddAction(new NPCAddScheduleAction(this, CastleManTalksFirstNOTFriends));
@@ -195,9 +195,11 @@ public class CastlemanYoung : NPC {
 		if(talkedToCSON == true){
 			if(friends == true){
 				FlagManager.instance.SetFlag(FlagStrings.BeachBeforeConvoFriendsString);
+				Debug.Log("What?");
 			}
 			else{
 				FlagManager.instance.SetFlag(FlagStrings.BeachBeforeConvoNotFriendsString);
+				Debug.Log("What?");
 			}
 		}
 	}
@@ -467,13 +469,14 @@ public class CastlemanYoung : NPC {
 			FlagManager.instance.SetFlag(FlagStrings.MusicianCommentOnSon);
 		}
 		public void UpdateWhatsYourName(){
-			FlagManager.instance.SetFlag(FlagStrings.PlayerAndCastleNOTFriends);
+			
 			_allChoiceReactions.Remove(WhatsYourNameChoice);
 			_allChoiceReactions.Remove(AreYouNewChoice);
 			_allChoiceReactions.Add(FineHaveItYourWayChoice, new DispositionDependentReaction(FineHaveItYourWayReaction));
 			_allChoiceReactions.Add(DontYouSpeakChoice, new DispositionDependentReaction(DontYouSpeakReaction));
-			GUIManager.Instance.RefreshInteraction();
+			GUIManager.Instance.CloseInteractionMenu();
 			FlagManager.instance.SetFlag(FlagStrings.MusicianCommentOnSon);
+			FlagManager.instance.SetFlag(FlagStrings.PlayerAndCastleNOTFriends);
 		}
 		
 		
