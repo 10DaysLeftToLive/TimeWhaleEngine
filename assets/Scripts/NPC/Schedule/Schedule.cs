@@ -202,7 +202,7 @@ public class Schedule {
 	public virtual void OnInterrupt() {	
 	}
 	
-	public void SetComplete() {
+	public virtual void SetComplete() {
 		_tasksToDo.Clear();
 		current = null;
 	}
