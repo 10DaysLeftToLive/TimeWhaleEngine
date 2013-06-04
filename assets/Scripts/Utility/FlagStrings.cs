@@ -150,6 +150,7 @@ public static class FlagStrings {
 	public static string GiveShovelToFarmer = "Give Shovel to Farmer";
 	public static string GiveRopeToFarmer = "Give Rope to Farmer";
 	public static string FarmerOnBoard = "Farmer on Board";
+	public static string OpeningConversationFarmerMotherToFarmerFather = "Opening Conversation Farmer Mother to Farmer Father";
 	#endregion
 	
 	#region Sea Captain
