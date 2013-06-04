@@ -3,7 +3,7 @@ using System.Collections;
 using SmoothMoves;
 
 public class TitleMenu : MonoBehaviour {
-	public BoneAnimation tree;
+	public FadeEffect fadeCamera;
 	
 	public UIPanel titleMenuPanel;
 	public UISlider titleMenuSlider;
@@ -68,9 +68,6 @@ public class TitleMenu : MonoBehaviour {
 		}
 		if(titleMenuSlider.sliderValue == 1){
 			TransitionPanels(titleMenuPanel, mainMenuPanel);
-			foreach(Arrow arrow in arrows){
-				arrow.DisableArrow();
-			}
 		}	
 	}
 	
@@ -79,14 +76,32 @@ public class TitleMenu : MonoBehaviour {
 			newGameSlider.sliderValue = 0;
 		}
 		if(newGameSlider.sliderValue == 1){
+			DisableArrows();
 			TransitionPanels(mainMenuPanel, openingScenePanel);
 			FadeToText();
 		}
 	}
 	
-	void TransitionPanels(UIPanel toDisable, UIPanel toEnable){
+	void DisableArrows(){
+		foreach(Arrow arrow in arrows){
+			arrow.DisableArrow();
+		}
+	}
+	
+	IEnumerator FadePanels(UIPanel toDisable, UIPanel toEnable){
+		//Debug.Log("Start Fade");
+		fadeCamera.DoFade();
+		
+		
+		yield return new WaitForSeconds(fadeCamera.fadeDuration * 0.5f);
+		
+		Utils.SetActiveRecursively(toEnable.gameObject, true);
 		Utils.SetActiveRecursively(toDisable.gameObject, false);
-		Utils.SetActiveRecursively(toEnable.gameObject, true);	
+		DisableArrows();
+	}
+	
+	void TransitionPanels(UIPanel toDisable, UIPanel toEnable){
+		StartCoroutine(FadePanels(toDisable,toEnable));
 	}
 	
 	void FadeToText(){
@@ -113,13 +128,13 @@ public class TitleMenu : MonoBehaviour {
 	
 	public void ChoseGenderMale(){
 		UnfadeGenderFilter();
-		//STUFF
+		PlayerPrefs.SetString(Strings.Gender, Strings.Male);
 		FadeToNextAutoPanel();
 	}
 	
 	public void ChoseGenderFemale(){
 		UnfadeGenderFilter();
-		//STUFF
+		PlayerPrefs.SetString(Strings.Gender, Strings.Female);
 		FadeToNextAutoPanel();
 	}
 	

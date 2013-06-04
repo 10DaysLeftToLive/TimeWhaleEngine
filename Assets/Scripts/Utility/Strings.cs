@@ -43,6 +43,8 @@ public static class Strings{
 	public static string GenderSelect = "GenderSelect";
 	
 	public static string Gender = "Gender";
+	public static string Male = "MALE";
+	public static string Female = "FEMALE";
 	
 	public static string YoungAge = "YoungAge";
 	public static string MiddleAge = "MiddleAge";
