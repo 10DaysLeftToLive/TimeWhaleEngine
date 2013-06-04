@@ -153,6 +153,7 @@ public class Schedule {
 		DebugManager.instance.Log(_toManage.name + " schedule next task", "Schedule", _toManage.name);
 		if (current != null){ // if we are going to skip the current task but it has not finished
 			current.Finish();
+			current = null;
 		}
 		
 		if (_tasksToDo.Count > 0) {
