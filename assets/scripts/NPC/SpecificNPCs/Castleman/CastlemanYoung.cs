@@ -47,13 +47,13 @@ public class CastlemanYoung : NPC {
 		this.SetCharacterPortrait(StringsNPC.Smile);	
 	}
 	protected override void SetFlagReactions(){
-		Reaction testOne = new Reaction();
+		/*Reaction testOne = new Reaction();
 		testOne.AddAction(new NPCAddScheduleAction(this, CastleManFollowSchedule));
 		flagReactions.Add(FlagStrings.MusicianFinishedTalkingFriends, testOne);
 		
 		Reaction testTwo = new Reaction();
 		testTwo.AddAction(new NPCAddScheduleAction(this, CastleManFollowSchedule));
-		flagReactions.Add(FlagStrings.MusicianFinishedTalkingNOTFriends, testTwo);
+		flagReactions.Add(FlagStrings.MusicianFinishedTalkingNOTFriends, testTwo);*/
 		
 		
 		Reaction ChangeToTalkingState = new Reaction();
