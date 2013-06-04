@@ -13,7 +13,7 @@ public class ChatMenu : GUIControl {
 	private List<ChatInfo> _currentChats = new List<ChatInfo>();
 	private Player player;
 	
-	public float CHATWIDTH = .2f;
+	public float CHATWIDTH = .45f;
 	
 	public GUIStyle chatBoxStyle;
 	
