@@ -13,8 +13,10 @@ public class CarpenterSonMiddle : NPC {
 	bool dateForMe = false;
 	bool successfulDate = false;
 	
-	Schedule stormOffSchedule, moveToBeach, moveBack;
-	//NPCConvoSchedule dateWithLG;
+	Schedule stormOffSchedule, moveToBeach, moveBack, moveToWindmill;
+	NPCConvoSchedule dateWithLG;
+	
+	NPCConvoSchedule reportedDidHardWorkToFather, reportedDidNoWorkToFather;
 	
 	protected override void Init() {
 		id = NPCIDs.CARPENTER_SON;
@@ -22,49 +24,53 @@ public class CarpenterSonMiddle : NPC {
 	}
 	
 	protected override void SetFlagReactions(){
-		Reaction waitingForDate = new Reaction();
-		waitingForDate.AddAction(new NPCEmotionUpdateAction(this, dateState));
-		flagReactions.Add(FlagStrings.WaitingForDate, waitingForDate);
+//		Reaction waitingForDate = new Reaction();
+//		waitingForDate.AddAction(new NPCEmotionUpdateAction(this, dateState));
+//		flagReactions.Add(FlagStrings.WaitingForDate, waitingForDate);
+//		
+//		Reaction gotTheGirl = new Reaction();
+//		gotTheGirl.AddAction(new NPCEmotionUpdateAction(this, initialState)); //change state after successfuldate
+//		flagReactions.Add(FlagStrings.PostDatingCarpenter, gotTheGirl);
+//		
+//		Reaction iBeDating = new Reaction();
+//		iBeDating.AddAction(new NPCCallbackAction(setFlagDateForMe));
+//		flagReactions.Add(FlagStrings.CarpenterDate, iBeDating);
+//		
+//		Reaction endOfDate = new Reaction();
+//		endOfDate.AddAction(new NPCCallbackAction(dateOver));
+//		endOfDate.AddAction(new NPCAddScheduleAction(this, moveBack));
+//		flagReactions.Add(FlagStrings.EndOfDate, endOfDate);
+//		
+//		
+////		Reaction stoodUpLG = new Reaction();
+////		stoodUpLG.AddAction(new NPCEmotionUpdateAction(this, StoodUpState));
+////		flagReactions.Add(FlagStrings.CarpenterNoShow, stoodUpLG);
+//		
+//		Reaction moveToDate = new Reaction();
+//		moveToDate.AddAction(new NPCAddScheduleAction(this, dateWithLG));
+//		flagReactions.Add(FlagStrings.CarpenterDating, moveToDate);
 		
-		Reaction gotTheGirl = new Reaction();
-		gotTheGirl.AddAction(new NPCEmotionUpdateAction(this, initialState)); //change state after successfuldate
-		flagReactions.Add(FlagStrings.PostDatingCarpenter, gotTheGirl);
+		Reaction independentStormOffReaction = new Reaction();
+		independentStormOffReaction.AddAction(new NPCAddScheduleAction(this, moveToWindmill));
+		independentStormOffReaction.AddAction(new NPCEmotionUpdateAction(this, new StormOffToWindmill(this, 
+			"I knew I was going to screw up somewhere. I left my specialized tools someplace")));
+		flagReactions.Add (FlagStrings.carpenterSonIndependent, independentStormOffReaction);
 		
-		Reaction iBeDating = new Reaction();
-		iBeDating.AddAction(new NPCCallbackAction(setFlagDateForMe));
-		flagReactions.Add(FlagStrings.CarpenterDate, iBeDating);
+		Reaction becomesACarpenter = new Reaction();
+		becomesACarpenter.AddAction(new NPCEmotionUpdateAction(this, new BecomeACarpenter(this, "Hey there man, I'm a bit busy right now.")));
+		flagReactions.Add(FlagStrings.carpenterSonTalkWithFatherMorning, becomesACarpenter);
 		
-		Reaction endOfDate = new Reaction();
-		//endOfDate.AddAction(new NPCCallbackAction(dateOver));
-		endOfDate.AddAction(new NPCAddScheduleAction(this, moveBack));
-		flagReactions.Add(FlagStrings.EndOfDate, endOfDate);
+//		Reaction stormOffReaction = new Reaction();
+//		stormOffReaction.AddAction(new NPCEmotionUpdateAction(this, stormoffState));
+//		stormOffReaction.AddAction(new NPCAddScheduleAction(this, stormOffSchedule));
+//		flagReactions.Add(FlagStrings.carpenterSonIndependent, stormOffReaction);
 		
-//		Reaction stoodUpLG = new Reaction();
-//		stoodUpLG.AddAction(new NPCEmotionUpdateAction(this, StoodUpState));
-//		flagReactions.Add(FlagStrings.CarpenterNoShow, stoodUpLG);
-		
-		Reaction moveToDate = new Reaction();
-		//moveToDate.AddAction(new NPCAddScheduleAction(this, dateWithLG));
-		flagReactions.Add(FlagStrings.CarpenterDating, moveToDate);
-		
-		Reaction stormOffReaction = new Reaction();
-		stormOffReaction.AddAction(new NPCEmotionUpdateAction(this, stormoffState));
-		stormOffReaction.AddAction(new NPCAddScheduleAction(this, stormOffSchedule));
-		flagReactions.Add(FlagStrings.carpenterSonStormOff, stormOffReaction);
-		
-		
-		Reaction IdleReaction = new Reaction();
-		//IdleReaction.AddAction(new NPCAddScheduleAction (this, ));
 	}
 	
 	protected override EmotionState GetInitEmotionState() {
-		dateState = new Date(this, "Date is over...shes alright, little wierd.");
-		stormoffState = new StormOffEmotionState(this, "Why can my father never let up? He knows my dream is to fish but at every turn he stifles me and makes me want to just stop doing anything.");
-		initialState = new InitialEmotionState(this, "");
-		
 		startingPosition = transform.position;
 		startingPosition.y += LevelManager.levelYOffSetFromCenter;
-		return (new InitialEmotionState(this, "Just leave me alone."));
+		return (new InitialEmotionState(this, "One Second, I am talking to someone"));
 	}
 	
 	protected override Schedule GetSchedule(){
@@ -80,21 +86,42 @@ public class CarpenterSonMiddle : NPC {
 		moveBack = new Schedule(this, Schedule.priorityEnum.High);
 		moveBack.Add(new Task(new MoveThenDoState(this, startingPosition, new MarkTaskDone(this))));
 		
-		//dateWithLG =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.LighthouseGirlMiddle),
-		//	new MiddleCastleManToLighthouseGirl(), Schedule.priorityEnum.DoConvo); 
-		//dateWithLG.SetCanNotInteractWithPlayer();
+		//SetepDefaultPathSchedules();
+		//SetepFishingPathSChedules();
+		//SetupCarpentryPathSchedules();
+	}
+	
+	private void SetupFishingPathSchedules() {
+		stormOffSchedule = new Schedule(this,Schedule.priorityEnum.DoNow);
+		stormOffSchedule.Add(new Task(new MoveState(this, MapLocations.BaseOfPierMiddle)));
+		stormOffSchedule.Add(new TimeTask(2.0f, new IdleState(this))); //Will replace with working on windmill
+		stormOffSchedule.Add(new Task(new MoveThenDoState(this, MapLocations.BaseOfPierMiddle, new MarkTaskDone(this))));
+		
+	}
+	
+	private void SetepDefaultPathSchedules() {
+		moveToWindmill = new Schedule(this, Schedule.priorityEnum.DoNow);
+		moveToWindmill.Add (new Task(new MoveState(this, MapLocations.WindmillMiddle)));
+		moveToWindmill.Add (new TimeTask(2.0f, new IdleState(this)));
+		moveToWindmill.Add (new Task(new MoveThenDoState(this, MapLocations.WindmillMiddle, new MarkTaskDone(this))));
+		
+		TimeTask finishWindmill = new TimeTask(50.0f, new IdleState(this));
+		moveToWindmill.Add(finishWindmill);
+	}
+	
+	private void SetupCarpentryPathSchedules() {
+//		dateWithLG =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.LighthouseGirlMiddle),
+//			new MiddleCastleManToLighthouseGirl(), Schedule.priorityEnum.DoConvo); 
+//		dateWithLG.SetCanNotInteractWithPlayer();
+		
+		reportedDidHardWorkToFather = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterMiddle), null);
+		reportedDidHardWorkToFather.SetCanNotInteractWithPlayer();
+		
+		reportedDidNoWorkToFather = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterMiddle), null);
+		reportedDidNoWorkToFather.SetCanNotInteractWithPlayer();
 		
 		
-		//stormOffSchedule = new Schedule(this,Schedule.priorityEnum.DoNow);
-		//stormOffSchedule.Add(new Task(new MoveState(this, MapLocations.BaseOfPierMiddle)));
-		//stormOffSchedule.Add(new TimeTask(2.0f, new IdleState(this)));
-		//stormOffSchedule.Add(new Task(new MoveThenDoState(this, MapLocations.BaseOfPierMiddle, new MarkTaskDone(this))));
 		
-		//IdleSchedule = new Schedule(this, Schedule.priorityEnum.High);
-		//IdleSchedule.Add(new Task(new MoveState(this, transform.position.x - 5)));
-		//IdleSchedule.Add(new TimeTask(5, new WaitState(this)));
-		//IdleSchedule.Add(new Task(new MoveState(this, transform.position.x + 5)));
-		//IdleSchedule.Add(new TimeTask(5, new WaitState(this)));
 	}
 	
 	protected void dateOver(){
@@ -111,9 +138,14 @@ public class CarpenterSonMiddle : NPC {
 	#region EmotionStates
 	#region Initial Emotion State
 	private class InitialEmotionState : EmotionState {
-	
+		
+		
+		
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+			
 		}
+				
+		
 		
 		public override void UpdateEmotionState(){
 			
@@ -121,7 +153,7 @@ public class CarpenterSonMiddle : NPC {
 	
 	}
 	#endregion
-	#region Storm off in anger Emotion State
+	#region Storm off To The Beach Emotion State
 	private class StormOffEmotionState : EmotionState{
 	
 		
@@ -155,6 +187,7 @@ public class CarpenterSonMiddle : NPC {
 	}
 	#endregion
 	
+	#region Date With LightHouse Girl
 	private class Date: EmotionState{
 		Choice DateChoice = new Choice("You have a date!", "Really? This...this...this is the most beauteous day of my life! Hurry to the beach. I cannot tarry!");
 		
@@ -175,6 +208,95 @@ public class CarpenterSonMiddle : NPC {
 		}
 		
 	}
+	#endregion
+	
+	#region Storm Off To WindMill
+	
+	private class StormOffToWindmill : EmotionState {
+		
+		Choice askAboutToolBox = new Choice("Want me to get your ToolBox?", "Thanks! could you please find them for me?");
+		
+		Reaction searchForToolBox = new Reaction();
+		Reaction toolsFound = new Reaction();
+		
+		public StormOffToWindmill(NPC toControl, string currentDialogue) : base(toControl, currentDialogue) {
+			searchForToolBox.AddAction(new UpdateDefaultTextAction(toControl, "Have you found my tools yet?"));
+			searchForToolBox.AddAction(new NPCCallbackAction(removeChoices));
+			
+			toolsFound.AddAction(new NPCTakeItemAction(toControl));
+			toolsFound.AddAction(new NPCCallbackAction(removeChoices));
+			toolsFound.AddAction(new UpdateCurrentTextAction(toControl, "Awesome! Now I can finish my repairs on this.. Windmill"));
+			toolsFound.AddAction(new UpdateDefaultTextAction(toControl, "Thanks for getting the tools for me, now I can continue to work on this... Windmill."));
+			//Makes it so you cannot click on Carpenter Middle
+			
+			_allChoiceReactions.Add(askAboutToolBox, new DispositionDependentReaction(searchForToolBox));
+			_allItemReactions.Add(StringsItem.Toolbox, new DispositionDependentReaction(toolsFound));
+		}
+		
+		public override void UpdateEmotionState(){
+			
+		}
+			
+		void removeChoices() {
+			_allChoiceReactions.Clear();
+			GUIManager.Instance.RefreshInteraction();
+		}
+	}
+	
+	#endregion
+	
+	#region Become A Carpenter
+	
+	private class BecomeACarpenter : EmotionState {
+		
+		Choice curiousAboutMood = new Choice("What are you up to?", 
+			"Well, I thought I'd make a present for my Dad, I thought I'd make him a rocking chair");
+		Choice presentForDad = new Choice("Can I help?", "Yeah Sure, I'll need some wood.  Can you get it from the beach");
+		
+		
+		Reaction curiousAboutMoodReaction = new Reaction();
+		Reaction assistGettingWood = new Reaction();
+		Reaction helpAppreciated = new Reaction();
+		
+		public BecomeACarpenter(NPC toControl, string currentDialogue) : base(toControl, currentDialogue) {
+			
+			curiousAboutMoodReaction.AddAction(new NPCCallbackAction(selectCuriousMoodChoice));
+			
+			assistGettingWood.AddAction(new NPCCallbackAction(helpCarpenterSon));
+			assistGettingWood.AddAction(new UpdateDefaultTextAction(toControl, "Would you like to help make me a present for my Dad?"));
+			
+			helpAppreciated.AddAction(new NPCTakeItemAction(toControl));
+			helpAppreciated.AddAction(new NPCCallbackAction(removeAllOtherReactions));
+			helpAppreciated.AddAction(new UpdateCurrentTextAction(toControl, "Thanks!"));
+			helpAppreciated.AddAction(new UpdateDefaultTextAction(toControl, "Come back later and I should have the rocking chair done!"));
+			helpAppreciated.AddAction(new SetOffFlagAction(FlagStrings.carpenterSonMakesFatherProud));
+			_allChoiceReactions.Add (curiousAboutMood, new DispositionDependentReaction(curiousAboutMoodReaction));
+			//TODO: Replace Toolbox with piece of wood
+			_allItemReactions.Add(StringsItem.Toolbox, new DispositionDependentReaction(helpAppreciated));
+		}
+		
+		public override void UpdateEmotionState(){
+			
+		}
+			
+		void selectCuriousMoodChoice() {
+			_allChoiceReactions.Remove(curiousAboutMood);
+			_allChoiceReactions.Add (presentForDad, new DispositionDependentReaction(assistGettingWood));
+			GUIManager.Instance.RefreshInteraction();
+		}
+			
+		void helpCarpenterSon() {
+			_allChoiceReactions.Remove(presentForDad);
+			GUIManager.Instance.RefreshInteraction();
+		}
+		
+		void removeAllOtherReactions() {
+			_allChoiceReactions.Clear();
+			GUIManager.Instance.RefreshInteraction();
+		}
+	}
+	
+	#endregion
 	
 	#endregion
 }

@@ -51,11 +51,15 @@ public class CameraController : MonoBehaviour {
 	}
 	
 	static private bool CanZoomIn(){
-		return (thisCamera.orthographicSize > closestZoomDistance);
+		return (thisCamera.orthographicSize > closestZoomDistance && NotTransitioning());
 	}
 	
 	static private bool CanZoomOut(){
-		return (thisCamera.orthographicSize < farthestZoomDistance);
+		return (thisCamera.orthographicSize < farthestZoomDistance && NotTransitioning());
+	}
+	
+	static private bool NotTransitioning(){
+		return (true);//!FadeToBlackTransition.fadingToBlack && !FadeToBlackTransition.fadeToClear);
 	}
 	
 	static private void ZoomIn(){
