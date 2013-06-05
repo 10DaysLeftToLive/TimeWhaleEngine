@@ -37,7 +37,7 @@ public class SiblingOldWalkToCarpenterSchedule : Schedule {
 			Task siblingOldReachedCarpenterSonTask = new Task(new MoveThenDoState(_toManage, new Vector3 (32f, Y_COORDINATE, .3f), new MarkTaskDone(_toManage))); // at top staircase
 			siblingOldReachedCarpenterSonTask.AddFlagToSet(FlagStrings.siblingOldReachedCarpenterSonFlag);
 			Add(siblingOldReachedCarpenterSonTask);
-			Add(new TimeTask(12f, new IdleState(_toManage)));
+			Add(new TimeTask(12.5f, new IdleState(_toManage)));
 		
 			Task siblingChatWithCarpenterPartOne = new Task(new MoveThenDoState(_toManage, new Vector3 (32f, Y_COORDINATE, .3f), new MarkTaskDone(_toManage))); // at top staircase
 			siblingChatWithCarpenterPartOne.AddFlagToSet(FlagStrings.siblingOldGreetCarpenterSonOldPartOneFlag);

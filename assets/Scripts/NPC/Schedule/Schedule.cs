@@ -144,15 +144,16 @@ public class Schedule {
 	public virtual void Resume() {
 		if (!HasTask()) {
 			NextTask();
+		} else {
+			_toManage.ForceChangeToState(current.StatePerforming);	
 		}
-		
-		_toManage.ForceChangeToState(current.StatePerforming);	
 	}
 	
 	public virtual void NextTask(){
 		DebugManager.instance.Log(_toManage.name + " schedule next task", "Schedule", _toManage.name);
 		if (current != null){ // if we are going to skip the current task but it has not finished
 			current.Finish();
+			current = null;
 		}
 		
 		if (_tasksToDo.Count > 0) {
@@ -202,7 +203,7 @@ public class Schedule {
 	public virtual void OnInterrupt() {	
 	}
 	
-	public void SetComplete() {
+	public virtual void SetComplete() {
 		_tasksToDo.Clear();
 		current = null;
 	}

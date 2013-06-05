@@ -11,7 +11,7 @@ public class FarmerMotherYoung : NPC {
 	bool ConversationInMiddleSet = false;
 	bool TellOnLighthouseSet = false;
 	
-	
+	NPCConvoSchedule InitialConversation;
 	
 	protected override void Init() {
 		id = NPCIDs.FARMER_MOTHER;
@@ -41,6 +41,9 @@ public class FarmerMotherYoung : NPC {
 		TellOnReaction.AddAction (new NPCCallbackAction(UpdateTellOnLighthouse));
 		flagReactions.Add(FlagStrings.TellOnLighthouse, TellOnReaction);
 		
+		Reaction OpeningConversation = new Reaction();
+		OpeningConversation.AddAction(new NPCAddScheduleAction(this, InitialConversation));
+		flagReactions.Add(FlagStrings.OpeningConversationFarmerMotherToFarmerFather, OpeningConversation);
 		
 	}
 	public void UpdateConversationInMiddleFarmerMother(){
@@ -53,19 +56,28 @@ public class FarmerMotherYoung : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "Talk to me later. I'm busy!"));
+		return (new StoryStoppingEmotionState(this, "Talk to me later. I'm busy!"));
 	}
 	
 	protected override Schedule GetSchedule(){
 		Schedule schedule = new DefaultSchedule(this);
-		return (schedule);
+		return (openningWaitingSchedule);
 	}
 	
 	Schedule openningWaitingSchedule;
 	Schedule postOpenningSchedule;
 
 	protected override void SetUpSchedules(){
+		openningWaitingSchedule = new Schedule(this, Schedule.priorityEnum.DoConvo);
+		openningWaitingSchedule.Add(new Task(new WaitTillPlayerCloseState(this, ref player)));
+		Task setFlag =  (new TimeTask(2f, new IdleState(this)));
+		setFlag.AddFlagToSet(FlagStrings.OpeningConversationFarmerMotherToFarmerFather);
+		openningWaitingSchedule.Add(setFlag);
 		
+		
+		InitialConversation = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerFatherYoung), 
+			new YoungFarmerMotherToFarmerFatherOpenningScriptedDialogue(),Schedule.priorityEnum.DoConvo);
+		InitialConversation.SetCanNotInteractWithPlayer();
 		
 	}
 	
@@ -90,7 +102,7 @@ public class FarmerMotherYoung : NPC {
 	#region Post-Openning Conversation Emotion State
 	private class StoryStoppingEmotionState : EmotionState{
 		NPC farmerMotherYoung;
-		
+		Reaction GiveSeedsReaction;
 		Reaction reactionToWhatAbout;
 		Choice whatAboutChoice = new Choice("What was that about?", "You saw our little spat? Don't worry about it! " +
 			"It's just some talk on how ta raise our daughter. Don't need ta fill her head with silly stories...");
@@ -151,8 +163,12 @@ public class FarmerMotherYoung : NPC {
 			reactionToGivePendant.AddAction(new NPCTakeItemAction(toControl));
 			reactionToGivePendant.AddAction(new NPCCallbackAction(givePendant));
 			
-			_allItemReactions.Add(StringsItem.Apple, new DispositionDependentReaction(reactionToGivePendant));
-			
+			//_allItemReactions.Add(StringsItem.Apple, new DispositionDependentReaction(reactionToGivePendant));
+			GiveSeedsReaction = new Reaction();
+			GiveSeedsReaction.AddAction(new NPCCallbackAction(UpdateGiveSeeds));
+			GiveSeedsReaction.AddAction(new NPCTakeItemAction(toControl));
+			GiveSeedsReaction.AddAction(new UpdateCurrentTextAction(toControl, "Thanks fer tha seeds!  Just what we needed after my idiot husband fergot ta buy them!"));
+			_allItemReactions.Add(StringsItem.SunflowerSeeds, new DispositionDependentReaction(GiveSeedsReaction));
 			
 			StoriesFunChoice = new Choice("But stories are fun!", "Hmmpphh...I didn't need any fancy stories when I was growing up!  What ya need kid is discipline!");
 			StoriesFunReaction = new Reaction();
@@ -228,6 +244,10 @@ public class FarmerMotherYoung : NPC {
 			TellOnDaughterReaction = new Reaction();
 			TellOnDaughterReaction.AddAction(new NPCCallbackAction(UpdateTellOnDaughter));
 			TellOnDaughterReaction.AddAction(new UpdateCurrentTextAction(toControl, "*Sigh* Thanks fer talking ta me bout this."));
+		}
+		public void UpdateGiveSeeds(){
+			_allItemReactions.Remove(StringsItem.SunflowerSeeds);
+			FlagManager.instance.SetFlag(FlagStrings.FarmAlive);	
 		}
 		public void UpdateTellOnDaughter(){
 			_allChoiceReactions.Remove(TellOnDaughterChoice);

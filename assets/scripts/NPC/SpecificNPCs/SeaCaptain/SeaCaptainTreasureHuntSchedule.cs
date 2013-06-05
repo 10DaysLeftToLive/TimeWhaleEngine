@@ -13,36 +13,46 @@ public class SeaCaptainTreasureHuntSchedule : Schedule {
 		Vector3 carpenterDigPos = new Vector3(16f, -1f + LevelManager.levelYOffSetFromCenter, .05f);
 		Vector3 beachDigPos = new Vector3(43f, -7.5f + LevelManager.levelYOffSetFromCenter, .05f);
 		
+		NPCChat farmDigChat = new NPCChat();
+		farmDigChat.AddChatInfo(new ChatInfo(_toManage, "Ah hah! My treas-"));
+		farmDigChat.AddChatInfo(new ChatInfo(_toManage, "Is this some exotic plant?"));
+		farmDigChat.AddChatInfo(new ChatInfo(_toManage, "Well judging by your face. This is a common plant."));
+		farmDigChat.AddChatInfo(new ChatInfo(_toManage, "Where is the treasure then?"));
+		farmDigChat.AddChatInfo(new ChatInfo(_toManage, "Oh! I had the map upside down."));
+		
+		NPCChat reflectDigChat = new NPCChat();
+		reflectDigChat.AddChatInfo(new ChatInfo(_toManage, "Nothing?"));
+		reflectDigChat.AddChatInfo(new ChatInfo(_toManage, "Interesting... that was just an ink stain."));
+		reflectDigChat.AddChatInfo(new ChatInfo(_toManage, "Hmm, looks like we are supposed to go to a giant tree."));
+		reflectDigChat.AddChatInfo(new ChatInfo(_toManage, "I know that grumpy guy lives in the stump of one."));
+		
+		NPCChat carpenterDigChat = new NPCChat();
+		carpenterDigChat.AddChatInfo(new ChatInfo(_toManage, "A flute?"));
+		carpenterDigChat.AddChatInfo(new ChatInfo(_toManage, "This can't be the treasure."));
+		carpenterDigChat.AddChatInfo(new ChatInfo(_toManage, "Wait a second..."));
+		carpenterDigChat.AddChatInfo(new ChatInfo(_toManage, "The X is where I am supposed to go?"));
+		carpenterDigChat.AddChatInfo(new ChatInfo(_toManage, "I thought it was the map maker's signature?"));
+		carpenterDigChat.AddChatInfo(new ChatInfo(_toManage, "Haha, I knew that all along. I was just testing you."));
+		
+		NPCChat beachDigChat = new NPCChat();
+		beachDigChat.AddChatInfo(new ChatInfo(_toManage, "NOOO! It isn't here!"));
+		beachDigChat.AddChatInfo(new ChatInfo(_toManage, "There is only this portrait. It must of already been plundered."));
+		beachDigChat.AddChatInfo(new ChatInfo(_toManage, "I must be the worst pirate ever."));
+		beachDigChat.AddChatInfo(new ChatInfo(_toManage, "I lost my ship over non-existent treasure..."));
+		
 		SetCanInteract(false);
 		Add(new Task(new MoveThenMarkDoneState(_toManage, farmDigPos), _toManage, 0, "Let's go find me some treasure!"));
 		Add(new TimeTask(2f, new IdleState(_toManage), _toManage, 0, "*Digging*"));
-		Add(new TimeTask(3f, new IdleState(_toManage), _toManage, 0, "Ah hah! My treas-"));
-		Add(new TimeTask(3f, new IdleState(_toManage), _toManage, 0, "Is this some exotic plant?"));
-		Add(new TimeTask(3.5f, new IdleState(_toManage), _toManage, 0, "Well judging by your face. This is a common plant."));
-		Add(new TimeTask(3f, new IdleState(_toManage), _toManage, 0f, "Where is the treasure then?"));
-		Add(new TimeTask(3f, new IdleState(_toManage), _toManage, 0, "Oh! I had the map upside down."));
+		Add(new Task(new NPCChatState(_toManage, _toManage.player, farmDigChat)));
 		Add(new Task(new MoveThenMarkDoneState(_toManage, reflectDigPos), _toManage, 0, "Come now. The map says something about a reflection tree."));
-		Add(new TimeTask(3f, new IdleState(_toManage), _toManage, 0, "It must be here!"));
-		Add(new TimeTask(2f, new IdleState(_toManage), _toManage, 0, "*Digging*"));
-		Add(new TimeTask(2f, new IdleState(_toManage), _toManage, 0, "Nothing"));
-		Add(new TimeTask(3f, new IdleState(_toManage), _toManage, 0, "Interesting... that was just an inkstain."));
-		Add(new TimeTask(3f, new IdleState(_toManage), _toManage, 0, "Hmm, looks like we are supposed to go to a giant tree."));
-		Add(new TimeTask(3f, new IdleState(_toManage), _toManage, 0, "I know that grumpy guy lives in the stump of one."));
+		Add(new TimeTask(3f, new IdleState(_toManage), _toManage, 0, "It must be here! *Digging*"));
+		Add(new Task(new NPCChatState(_toManage, _toManage.player, reflectDigChat)));
 		Add(new Task(new MoveThenMarkDoneState(_toManage, carpenterDigPos), _toManage, 0, "Let's try there and hope the grumpy guy isn't there."));
-		Add(new TimeTask(3f, new IdleState(_toManage), _toManage, 0, "This must be it. I can feel it in me bones."));
-		Add(new TimeTask(2f, new IdleState(_toManage), _toManage, 0, "*Digging*"));
-		Add(new TimeTask(2f, new IdleState(_toManage), _toManage, 0, "A flute?"));
-		Add(new TimeTask(2f, new IdleState(_toManage), _toManage, 0, "This can't be the treasure."));
-		Add(new TimeTask(2f, new IdleState(_toManage), _toManage, 0, "Wait a second..."));
-		Add(new TimeTask(3f, new IdleState(_toManage), _toManage, 0, "The X is where I am supposed to go? It isn't the map maker's signature?"));
-		Add(new TimeTask(3f, new IdleState(_toManage), _toManage, 0, "Haha, I knew that all along. I was just testing you."));
+		Add(new TimeTask(3f, new IdleState(_toManage), _toManage, 0, "This must be it. I can feel it in me bones. *Digging*"));
+		Add(new Task(new NPCChatState(_toManage, _toManage.player, carpenterDigChat)));
 		Add(new Task(new MoveThenMarkDoneState(_toManage, beachDigPos), _toManage, 0, "Now let's go dig up some treasure!"));
-		Add(new TimeTask(3f, new IdleState(_toManage), _toManage, 0, "Alright, the moment of truth."));
-		Add(new TimeTask(2f, new IdleState(_toManage), _toManage, 0, "*Digging*"));
-		Add(new TimeTask(2f, new IdleState(_toManage), _toManage, 0, "NOOO! It isn't here!"));
-		Add(new TimeTask(3f, new IdleState(_toManage), _toManage, 0, "All there is is this portrait. It must of already been plundered."));
-		Add(new TimeTask(3f, new IdleState(_toManage), _toManage, 0, "I must be the worst pirate ever."));
-		Add(new TimeTask(3f, new IdleState(_toManage), _toManage, 0, "I lost my ship over non-existent treasure..."));
-		Add(new Task(new MoveThenMarkDoneState(_toManage, startingPosition), _toManage, 0, "Well... thanks for your help. I have to find a way of this island now."));
+		Add(new TimeTask(3f, new IdleState(_toManage), _toManage, 0, "Alright, the moment of truth. *Digging*"));
+		Add(new Task(new NPCChatState(_toManage, _toManage.player, beachDigChat)));
+		Add(new Task(new MoveThenMarkDoneState(_toManage, startingPosition), _toManage, 0, "Well... thanks for your help. I have to find a way off this island now."));
 	}
 }

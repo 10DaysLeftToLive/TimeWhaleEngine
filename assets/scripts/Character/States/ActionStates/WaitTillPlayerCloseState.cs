@@ -17,6 +17,9 @@ public class WaitTillPlayerCloseState : WaitState {
 	private Vector2 flatPlayerPos;
 	private Vector2 flatPos;
 	protected override bool ConditionsSatisfied() {
+		if(_player == null){
+			_player = GameObject.Find ("PlayerCharacter").GetComponent<Player>();	
+		}
 		if (_player == null || character == null) {
 			Debug.Log ("Player is null");
 		}

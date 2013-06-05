@@ -95,6 +95,9 @@ public class FarmerMotherMiddle : NPC {
 		if (text == "carpenterSuccess" && farmersOnBoard){
 			initialState.PassStringToEmotionState("carpenterSuccess");
 		}
+		if (text == "carpenterSuccess" && !farmersOnBoard){
+			initialState.PassStringToEmotionState("daughterOnBoard");
+		}
 		if (text == "stoodUp" && farmersOnBoard){
 			initialState.PassStringToEmotionState("stoodUp");
 			disposition -= 20;
@@ -134,6 +137,7 @@ public class FarmerMotherMiddle : NPC {
 	private class InitialEmotionState : EmotionState{
 		bool farmerOnBoard = false;
 		bool WhyNotFlag = false;
+		bool daughterOnBoard = false;
 		Choice MarriageChoice = new Choice("What's this about marriage?", "That silly girl needs to settle herself down.");
 		Choice WhyNotChoice = new Choice("Why are stories silly?", "Hmmph.  In my days you did what your parents toldja, worked however long they wanted and didn't stick your heads in the clouds.  Ya got to know and love your parents through their work!");
 		Choice HowsFarmingChoice = new Choice ("How's farming?", "Poor.  That fool husband of mine can't sell anythin right.  Always undercharges.  We're lucky we still have a house.  I dun know what my girl will do when she grows up.");
@@ -227,6 +231,11 @@ public class FarmerMotherMiddle : NPC {
 			}
 			if (text == "carpenterSuccess"){
 				SetDefaultText("I've heard what you did for my daughter. Bout time she listens to me.");
+			}
+			if (text == "daughterOnBoard"){ //successful date with carpenter, farmers unaware
+				SetDefaultText("Hello there!  How's it going?");
+				daughterOnBoard = true;
+				MarriageChoice = new Choice("What's this about marriage?", "My daughter finally got her head on straight and is on board for the marriage");
 			}
 			if (text == "stoodUp"){
 				SetDefaultText("Went through all that trouble...for nothing.");

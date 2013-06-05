@@ -25,13 +25,18 @@ public class CameraController : MonoBehaviour {
 	#endregion
 	
 	public void Start () {
-		thisCamera = Camera.main;
-		player = FindObjectOfType(typeof(Player)) as Player;
-		thisCamera.orthographicSize = getStartZoom();
+		try{
+			thisCamera = Camera.main;
+			player = FindObjectOfType(typeof(Player)) as Player;
+			thisCamera.orthographicSize = getStartZoom();
+		}catch{
+			Debug.LogWarning("Main Camera or Player not found");	
+		}
 	}
 	
 	void Update () {
-		MoveCameraToTarget();
+		if(thisCamera != null)	
+			MoveCameraToTarget();
 	}
 	
 	// This function is used to zoom the camera in and out.

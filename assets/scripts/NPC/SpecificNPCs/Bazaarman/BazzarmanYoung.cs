@@ -94,20 +94,20 @@ public class BazzarmanYoung : NPC {
 			gaveCaptainsLog.AddAction(new NPCCallbackSetStringAction(AddTextToList, toControl, "The sea capatin has had quite an adventure"));
 			gaveCaptainsLog.AddAction(new NPCGiveItemAction(toControl,GiveItem)); // gives random item
 			gaveCaptainsLog.AddAction(new UpdateCurrentTextAction(toControl, "A pleasure doing business with you my friend!"));
-			_allItemReactions.Add(StringsItem.CaptainsLog,  new DispositionDependentReaction(gaveCaptainsLog));
+			_allItemReactions.Add(StringsItem.CaptainLog,  new DispositionDependentReaction(gaveCaptainsLog));
 			
 			gaveToySword.AddAction(new NPCTakeItemAction(toControl));
 			gaveToySword.AddAction(new NPCCallbackSetStringAction(AddTextToList, toControl, "That toy sword has brought back some fond memories"));
 			gaveToySword.AddAction(new NPCGiveItemAction(toControl,GiveItem)); // gives random item
 			gaveToySword.AddAction(new UpdateCurrentTextAction(toControl, "A pleasure doing business with you my friend!"));
 			_allItemReactions.Add(StringsItem.ToySword,  new DispositionDependentReaction(gaveToySword));
-			
+			/*
 			gavePortrait.AddAction(new NPCTakeItemAction(toControl));
 			gavePortrait.AddAction(new NPCCallbackSetStringAction(AddTextToList, toControl, "That portrait you gave me earlier...It's a fake!"));
 			gavePortrait.AddAction(new NPCGiveItemAction(toControl,GiveItem)); // gives random item
 			gavePortrait.AddAction(new UpdateCurrentTextAction(toControl, "A pleasure doing business with you my friend!"));
 			_allItemReactions.Add(StringsItem.Portrait,  new DispositionDependentReaction(gavePortrait));
-			
+			*/
 			gaveRope.AddAction(new NPCTakeItemAction(toControl));
 			gaveRope.AddAction(new NPCCallbackSetStringAction(AddTextToList, toControl, "All I need now is a hat to go with the rope you gave me!"));
 			gaveRope.AddAction(new NPCGiveItemAction(toControl,GiveItem)); // gives random item
@@ -170,8 +170,8 @@ public class BazzarmanYoung : NPC {
 					}
 					break;
 				case 3:
-					if (!inventory.Contains(StringsItem.TimeWhalePlushie)){
-						inventory.Enqueue(StringsItem.TimeWhalePlushie);
+					if (!inventory.Contains(StringsItem.TimeWhale)){
+						inventory.Enqueue(StringsItem.TimeWhale);
 						currentInventory++;
 					}
 					break;

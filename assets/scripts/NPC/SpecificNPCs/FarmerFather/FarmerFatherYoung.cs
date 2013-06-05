@@ -39,7 +39,7 @@ public class FarmerFatherYoung : NPC {
 		currentEmotion.PassStringToEmotionState(FlagStrings.ConversationInMiddleFather);
 	}
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "We need help running the farm!"));
+		return (new StoryEmotionState(this, "We need help running the farm!"));
 	}
 	
 	protected override Schedule GetSchedule(){
@@ -69,6 +69,7 @@ public class FarmerFatherYoung : NPC {
 	}
 	private class StoryEmotionState : EmotionState{
 		bool startedConversation = false;
+		Reaction GiveSeedsReaction;
 		Reaction ToyPuzzleReaction;
 		Reaction SeaShellReaction;
 		Reaction AppleReaction;
@@ -103,11 +104,17 @@ public class FarmerFatherYoung : NPC {
 		
 		
 		public StoryEmotionState(NPC toControl, string currentDialogue) : base(toControl, "Do you have any books on you?  I..I don't want to disobey my wife, but I want my daughter to grow up learning about stories of bravery..."){
+			GiveSeedsReaction = new Reaction();
+			GiveSeedsReaction.AddAction(new NPCCallbackAction(UpdateGiveSeeds));
+			GiveSeedsReaction.AddAction(new NPCTakeItemAction(toControl));
+			GiveSeedsReaction.AddAction(new UpdateCurrentTextAction(toControl, "Thanks for the seeds!  I thought we were in real trouble when I forgot to buy them."));
+			_allItemReactions.Add(StringsItem.SunflowerSeeds, new DispositionDependentReaction(GiveSeedsReaction));
+			
 			//Code for giving the Portrait
 			Reaction PortraitReaction = new Reaction();
 			PortraitReaction.AddAction(new NPCTakeItemAction(toControl));
 			PortraitReaction.AddAction(new UpdateCurrentTextAction(toControl, "Thanks a ton this will make a great addition to my study.  Can't let my wife see it though...she'll have me throw it out."));
-			_allItemReactions.Add(StringsItem.Portrait,  new DispositionDependentReaction(PortraitReaction));
+			//_allItemReactions.Add(StringsItem.Portrait,  new DispositionDependentReaction(PortraitReaction));
 			
 			//Code for giving the seashell
 			Reaction SeaShellReaction = new Reaction();
@@ -137,7 +144,7 @@ public class FarmerFatherYoung : NPC {
 			Reaction CaptainsLogReaction = new Reaction();
 			CaptainsLogReaction.AddAction(new NPCTakeItemAction(toControl));
 			CaptainsLogReaction.AddAction(new UpdateCurrentTextAction(toControl, "Thanks!  I know my daughter will love it!"));
-			_allItemReactions.Add(StringsItem.CaptainsLog,  new DispositionDependentReaction(CaptainsLogReaction));
+			_allItemReactions.Add(StringsItem.CaptainLog,  new DispositionDependentReaction(CaptainsLogReaction));
 			
 			Reaction ToySwordReaction = new Reaction();
 			ToySwordReaction.AddAction(new NPCTakeItemAction(toControl));
@@ -194,6 +201,10 @@ public class FarmerFatherYoung : NPC {
 			AlreadyBraveReaction = new Reaction();
 			AlreadyBraveReaction.AddAction(new NPCCallbackAction(UpdateAlreadyBrave));
 			AlreadyBraveReaction.AddAction(new UpdateCurrentTextAction(toControl, "I...I guess you're right.  Maybe my daughter doesn't need stories, maybe she is already brave...thanks for your help!"));
+		}
+		public void UpdateGiveSeeds(){
+			_allItemReactions.Remove(StringsItem.SunflowerSeeds);
+			FlagManager.instance.SetFlag(FlagStrings.FarmAlive);	
 		}
 		public void UpdateAlreadyBrave(){
 			_allChoiceReactions.Clear();

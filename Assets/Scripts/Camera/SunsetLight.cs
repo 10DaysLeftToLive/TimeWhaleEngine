@@ -7,7 +7,7 @@ public class SunsetLight : PauseObject {
 	private Color startColor;
 	public ColorFade[] colorFades;
 	private int fadeInProgressIndex = 0;
-	private bool doFade;
+	private bool isFading;
 	private bool stopFade = false;
 	private UISprite fadeSprite;
 	private Color sunsetLightColor = new Color(1f, 1f, 1f);
@@ -24,21 +24,20 @@ public class SunsetLight : PauseObject {
 	
 	// Update is called once per frame
 	protected override void UpdateObject() {
-		if (doFade) {
+		if (OneDayClock.Instance.GetGameDayTime() > sunsetStartTime && !stopFade) {
+			isFading = true;
+		}
+		if (isFading) {
 			if(Fade()){
-				if(fadeInProgressIndex < colorFades.Length){
-					startColor = colorFades[fadeInProgressIndex].color;
-					lerpTime = 0.0f;
-					if (fadeInProgressIndex < 255)
-					fadeInProgressIndex++;
-				}
-				else{
+				startColor = colorFades[fadeInProgressIndex].color;
+				lerpTime = 0.0f;
+				fadeInProgressIndex++;
+				
+				if(fadeInProgressIndex >= colorFades.Length){
 					stopFade = true;	
+					isFading = false;
 				}
 			}
-		}
-		else if (OneDayClock.Instance.GetGameDayTime() > sunsetStartTime && !stopFade) {
-			doFade = true;
 		}
 	}
 	
@@ -46,14 +45,14 @@ public class SunsetLight : PauseObject {
 	/// Fade this instance. Returns true when color is reached (done)
 	/// </summary>
 	bool Fade(){
-		//fadeSprite.color = Color.Lerp(startColor, colorFades[fadeInProgressIndex].color, lerpTime);
-		//if(lerpTime < 1){
-			//lerpTime += Time.deltaTime/colorFades[fadeInProgressIndex].durationForFade;
+		fadeSprite.color = Color.Lerp(startColor, colorFades[fadeInProgressIndex].color, lerpTime);
+		if(lerpTime < 1){
+			lerpTime += Time.deltaTime/colorFades[fadeInProgressIndex].durationForFade;
 			return false;
-		//}
-		//else{
-		//	return true;
-		//}
+		}
+		else{
+			return true;
+		}
 	}
 	
 	/*

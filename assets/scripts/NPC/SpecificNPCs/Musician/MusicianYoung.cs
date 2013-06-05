@@ -38,15 +38,15 @@ public class MusicianYoung : NPC {
 		IsHeMuteReaction.AddAction(new NPCAddChoiceAction(this, MuteResponseChoice, new DispositionDependentReaction(MuteResponseReaction)));
 		flagReactions.Add(FlagStrings.MusicianCommentOnSon, IsHeMuteReaction);
 		
-		//Reaction RespondToCMANAndYouFriends = new Reaction();
-		//RespondToCMANAndYouFriends.AddAction(new NPCAddScheduleAction(this, FinishedTalkingFriends));
-		//RespondToCMANAndYouFriends.AddAction(new NPCAddScheduleAction(this, TellSonToGoAroundIslandFriends));
-		//flagReactions.Add(FlagStrings.PlayerAndCastleFriends, RespondToCMANAndYouFriends);
+		Reaction RespondToCMANAndYouFriends = new Reaction();
+		RespondToCMANAndYouFriends.AddAction(new NPCAddScheduleAction(this, FinishedTalkingFriends));
+		RespondToCMANAndYouFriends.AddAction(new NPCAddScheduleAction(this, TellSonToGoAroundIslandFriends));
+		flagReactions.Add(FlagStrings.PlayerAndCastleFriends, RespondToCMANAndYouFriends);
 		
-		//Reaction RespondToCMANAndYouNOTFriends = new Reaction();
-		//RespondToCMANAndYouNOTFriends.AddAction(new NPCAddScheduleAction(this, FinishedTalkingNOTFriends));
-		//RespondToCMANAndYouNOTFriends.AddAction(new NPCAddScheduleAction(this, TellSonToGoAroundIslandNOTFriends));
-		//flagReactions.Add(FlagStrings.PlayerAndCastleNOTFriends, RespondToCMANAndYouNOTFriends);
+		Reaction RespondToCMANAndYouNOTFriends = new Reaction();
+		RespondToCMANAndYouNOTFriends.AddAction(new NPCAddScheduleAction(this, FinishedTalkingNOTFriends));
+		RespondToCMANAndYouNOTFriends.AddAction(new NPCAddScheduleAction(this, TellSonToGoAroundIslandNOTFriends));
+		flagReactions.Add(FlagStrings.PlayerAndCastleNOTFriends, RespondToCMANAndYouNOTFriends);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
@@ -60,21 +60,21 @@ public class MusicianYoung : NPC {
 
 	protected override void SetUpSchedules(){
 		FinishedTalkingFriends = new Schedule(this, Schedule.priorityEnum.DoNow);
-		Task SetFlagFriends = (new TimeTask(15f, new IdleState(this)));
+		Task SetFlagFriends = (new TimeTask(2f, new IdleState(this)));
 		SetFlagFriends.AddFlagToSet(FlagStrings.MusicianFinishedTalkingFriends);
 		FinishedTalkingFriends.Add(SetFlagFriends);
 		
 		FinishedTalkingNOTFriends = new Schedule(this, Schedule.priorityEnum.DoNow);
-		Task SetFlagNOTFriends = (new TimeTask(15f, new IdleState(this)));
+		Task SetFlagNOTFriends = (new TimeTask(2f, new IdleState(this)));
 		SetFlagNOTFriends.AddFlagToSet(FlagStrings.MusicianFinishedTalkingNOTFriends);
 		FinishedTalkingNOTFriends.Add(SetFlagNOTFriends);
 		
-		//TellSonToGoAroundIslandFriends = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CastlemanYoung), 
-		//	new MusicianToCastlemanFriends(),Schedule.priorityEnum.DoConvo);
-		//TellSonToGoAroundIslandFriends.SetCanNotInteractWithPlayer();
-		//TellSonToGoAroundIslandNOTFriends = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CastlemanYoung), 
-		//	new MusicianToCastlemanNotFriends(),Schedule.priorityEnum.DoConvo);
-		//TellSonToGoAroundIslandNOTFriends.SetCanNotInteractWithPlayer();
+		TellSonToGoAroundIslandFriends = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CastlemanYoung), 
+			new MusicianToCastlemanFriends(),Schedule.priorityEnum.DoConvo);
+		TellSonToGoAroundIslandFriends.SetCanNotInteractWithPlayer();
+		TellSonToGoAroundIslandNOTFriends = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CastlemanYoung), 
+			new MusicianToCastlemanNotFriends(),Schedule.priorityEnum.DoConvo);
+		TellSonToGoAroundIslandNOTFriends.SetCanNotInteractWithPlayer();
 	}
 	
 	

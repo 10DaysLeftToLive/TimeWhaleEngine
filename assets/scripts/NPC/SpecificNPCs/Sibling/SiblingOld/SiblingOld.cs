@@ -115,14 +115,28 @@ public class SiblingOld : NPC {
 		GreetCarpenterPartOne.AddAction(greetCarpenterPartOneChat);
 		flagReactions.Add(FlagStrings.siblingOldGreetCarpenterSonOldPartOneFlag, GreetCarpenterPartOne);
 		
-		//Reaction IntroStoryPartOne = new Reaction();
-		//IntroStoryPartOne.AddAction(new ShowOneOffChatAction(this, "She really loved her plants.", 7f));
-		//IntroStoryPartOne.AddAction(new ShowOneOffChatAction(this, "Mom's garden isn't looking so good.", 5f));
-		//IntroStoryPartOne.AddAction(new ShowOneOffChatAction(this, "Hmm.", 2f));
-		//flagReactions.Add(FlagStrings.oldSiblingIntroStoryOnePartOneFlag, IntroStoryPartOne);
+		Reaction appleGivenReaction = new Reaction();
+		appleGivenReaction.AddAction(new NPCAddScheduleAction(this, oldSiblingtoFortuneTellerSchedule));	
+		flagReactions.Add(FlagStrings.oldCarpenterActivateGoToBeachHappyFlag, appleGivenReaction);
 		
-		//siblingOldGreetCarpenterSonOldPartOneFlag
+		Reaction appleNotGivenReaction = new Reaction();
+		appleNotGivenReaction.AddAction(new NPCAddScheduleAction(this, oldSiblingtoFortuneTellerSchedule));	
+		flagReactions.Add(FlagStrings.oldCarpenterActivateGoToBeachUpsetFlag, appleNotGivenReaction);
 		
+		#endregion
+		
+		#region
+		Reaction goToFortuneTellerIntroReaction = new Reaction();
+		ShowMultipartChatAction goToFortuneTellerIntroChat = new ShowMultipartChatAction(this); // 9 seconds
+		goToFortuneTellerIntroChat.AddChat("Um..", 1f);
+		goToFortuneTellerIntroChat.AddChat("We're going to pass.", 2f);
+		goToFortuneTellerIntroChat.AddChat("We're getting our fortunes upstairs.", 1.5f);
+//Add context to the going upstairs, make the choice more meaningful (can't see the conversation from both sides.
+//Pause
+		goToFortuneTellerIntroChat.AddChat("Have fun though!", 2f);
+		goToFortuneTellerIntroChat.AddChat("See you later!", 3f);
+		goToFortuneTellerIntroReaction.AddAction(goToFortuneTellerIntroChat);
+		flagReactions.Add(FlagStrings.siblingOldGoToFortuneTellerIntro, goToFortuneTellerIntroReaction);
 		#endregion
 	}
 	
@@ -152,14 +166,14 @@ public class SiblingOld : NPC {
 	
 	#region Schedule List
 	private Schedule oldSiblingIntroductionSchedule;
-	private Schedule oldSiblingGreetCarpenterSchedule;
+	private Schedule oldSiblingtoFortuneTellerSchedule;
 	private Schedule walkToCarpenterSchedule;
 	#endregion
 	
 	protected override void SetUpSchedules() {
 		oldSiblingIntroductionSchedule = (new SiblingOldRaceToForestSchedule(this));
 		walkToCarpenterSchedule = (new SiblingOldWalkToCarpenterSchedule(this));
-		oldSiblingGreetCarpenterSchedule = (new SiblingOldGreetCarpenterSonSchedule(this));
+		oldSiblingtoFortuneTellerSchedule = (new SiblingOldGreetCarpenterSonSchedule(this));
 	}
 	#region EmotionStates
 		#region Initial Emotion State
@@ -175,7 +189,5 @@ public class SiblingOld : NPC {
 		}
 	}
 		#endregion
-	
-	
 	#endregion
 }

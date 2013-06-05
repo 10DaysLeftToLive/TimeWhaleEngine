@@ -47,13 +47,13 @@ public class CastlemanYoung : NPC {
 		this.SetCharacterPortrait(StringsNPC.Smile);	
 	}
 	protected override void SetFlagReactions(){
-		Reaction testOne = new Reaction();
+		/*Reaction testOne = new Reaction();
 		testOne.AddAction(new NPCAddScheduleAction(this, CastleManFollowSchedule));
 		flagReactions.Add(FlagStrings.MusicianFinishedTalkingFriends, testOne);
 		
 		Reaction testTwo = new Reaction();
 		testTwo.AddAction(new NPCAddScheduleAction(this, CastleManFollowSchedule));
-		flagReactions.Add(FlagStrings.MusicianFinishedTalkingNOTFriends, testTwo);
+		flagReactions.Add(FlagStrings.MusicianFinishedTalkingNOTFriends, testTwo);*/
 		
 		
 		Reaction ChangeToTalkingState = new Reaction();
@@ -68,7 +68,7 @@ public class CastlemanYoung : NPC {
 		FriendsWithPlayer.AddAction(new NPCEmotionUpdateAction(this, new CastleManTraveling(this, "")));
 		FriendsWithPlayer.AddAction(new NPCCallbackAction(setFriends));
 		FriendsWithPlayer.AddAction(new NPCCallbackAction(setHappy));
-		flagReactions.Add(FlagStrings.PlayerAndCastleFriends, FriendsWithPlayer);
+		flagReactions.Add(FlagStrings.MusicianFinishedTalkingFriends, FriendsWithPlayer);
 		
 		//Schedule to start talking to carpenter as friends
 		Reaction IntroConversationCarpenterSonFriend = new Reaction ();
@@ -120,7 +120,7 @@ public class CastlemanYoung : NPC {
 		NOTFriendsWithPlayer.AddAction(new NPCEmotionUpdateAction(this, new CastleManTraveling(this, "")));
 		NOTFriendsWithPlayer.AddAction(new NPCAddScheduleAction(this, CastleManFollowSchedule));
 		NOTFriendsWithPlayer.AddAction(new NPCCallbackAction(setAngry));
-		flagReactions.Add(FlagStrings.PlayerAndCastleNOTFriends, NOTFriendsWithPlayer);
+		flagReactions.Add(FlagStrings.MusicianFinishedTalkingNOTFriends, NOTFriendsWithPlayer);
 		//Schedule for first convo with carpenter not friends
 		Reaction IntroConversationCarpenterSonNOTFriend = new Reaction ();
 		IntroConversationCarpenterSonNOTFriend.AddAction(new NPCAddScheduleAction(this, CastleManTalksFirstNOTFriends));
@@ -167,6 +167,7 @@ public class CastlemanYoung : NPC {
 		flagReactions.Add(FlagStrings.FinishedCSONConversation, FinishedTalkingWithCSON);
 		
 		Reaction TalkWithLighthouseFirstTime = new Reaction();
+		//TalkWithLighthouseFirstTime.AddAction(new NPCAllRemoveScheduleAction("TalkWithCastleman"));
 		TalkWithLighthouseFirstTime.AddAction(new NPCAddScheduleAction(this, CastleManMeetsLighthouse));
 		TalkWithLighthouseFirstTime.AddAction(new NPCEmotionUpdateAction(this, new AfterLighthouse(this, "")));
 		TalkWithLighthouseFirstTime.AddAction(new NPCCallbackAction(testStartGoingtoBeachAfterLighthouseTalk));
@@ -195,9 +196,11 @@ public class CastlemanYoung : NPC {
 		if(talkedToCSON == true){
 			if(friends == true){
 				FlagManager.instance.SetFlag(FlagStrings.BeachBeforeConvoFriendsString);
+				Debug.Log("What?");
 			}
 			else{
 				FlagManager.instance.SetFlag(FlagStrings.BeachBeforeConvoNotFriendsString);
+				Debug.Log("What?");
 			}
 		}
 	}
@@ -331,7 +334,7 @@ public class CastlemanYoung : NPC {
 				
 			PlushieReaction = new Reaction();
 			PlushieReaction.AddAction(new UpdateCurrentTextAction(toControl, "......"));
-			_allItemReactions.Add(StringsItem.TimeWhalePlushie, new DispositionDependentReaction(PlushieReaction));
+			_allItemReactions.Add(StringsItem.TimeWhale, new DispositionDependentReaction(PlushieReaction));
 				
 			ToolBoxReaction = new Reaction();
 			ToolBoxReaction.AddAction(new UpdateCurrentTextAction(toControl, "......"));
@@ -347,16 +350,16 @@ public class CastlemanYoung : NPC {
 				
 			CaptainsLogReaction = new Reaction();
 			CaptainsLogReaction.AddAction(new UpdateCurrentTextAction(toControl, "......"));
-			_allItemReactions.Add(StringsItem.CaptainsLog, new DispositionDependentReaction(CaptainsLogReaction));
+			_allItemReactions.Add(StringsItem.CaptainLog, new DispositionDependentReaction(CaptainsLogReaction));
 				
 			ToySwordReaction = new Reaction();
 			ToySwordReaction.AddAction(new UpdateCurrentTextAction(toControl, "......"));
 			_allItemReactions.Add(StringsItem.ToySword, new DispositionDependentReaction(ToySwordReaction));
-			
+			/*
 			PortraitReaction = new Reaction();
 			PortraitReaction.AddAction(new UpdateCurrentTextAction(toControl, "......"));
 			_allItemReactions.Add(StringsItem.Portrait, new DispositionDependentReaction(PortraitReaction));
-			
+			*/
 			RopeReaction = new Reaction();
 			RopeReaction.AddAction(new UpdateCurrentTextAction(toControl, "......"));
 			_allItemReactions.Add(StringsItem.Rope, new DispositionDependentReaction(RopeReaction));
@@ -467,13 +470,14 @@ public class CastlemanYoung : NPC {
 			FlagManager.instance.SetFlag(FlagStrings.MusicianCommentOnSon);
 		}
 		public void UpdateWhatsYourName(){
-			FlagManager.instance.SetFlag(FlagStrings.PlayerAndCastleNOTFriends);
+			
 			_allChoiceReactions.Remove(WhatsYourNameChoice);
 			_allChoiceReactions.Remove(AreYouNewChoice);
 			_allChoiceReactions.Add(FineHaveItYourWayChoice, new DispositionDependentReaction(FineHaveItYourWayReaction));
 			_allChoiceReactions.Add(DontYouSpeakChoice, new DispositionDependentReaction(DontYouSpeakReaction));
-			GUIManager.Instance.RefreshInteraction();
+			GUIManager.Instance.CloseInteractionMenu();
 			FlagManager.instance.SetFlag(FlagStrings.MusicianCommentOnSon);
+			FlagManager.instance.SetFlag(FlagStrings.PlayerAndCastleNOTFriends);
 		}
 		
 		
