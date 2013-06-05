@@ -493,7 +493,7 @@ public class LighthouseGirlMiddle : NPC {
 			_allChoiceReactions.Add(NotSoBadChoice,new DispositionDependentReaction(NotSoBadReaction));
 			
 			_allItemReactions.Add(StringsItem.ToySword, new DispositionDependentReaction(ToySwordReaction));
-			_allItemReactions.Add(StringsItem.CaptainsLog, new DispositionDependentReaction(CaptainsLogReaction));
+			_allItemReactions.Add(StringsItem.CaptainLog, new DispositionDependentReaction(CaptainsLogReaction));
 			
 		}
 		

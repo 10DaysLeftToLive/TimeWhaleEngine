@@ -114,7 +114,7 @@ public class FarmerFatherYoung : NPC {
 			Reaction PortraitReaction = new Reaction();
 			PortraitReaction.AddAction(new NPCTakeItemAction(toControl));
 			PortraitReaction.AddAction(new UpdateCurrentTextAction(toControl, "Thanks a ton this will make a great addition to my study.  Can't let my wife see it though...she'll have me throw it out."));
-			_allItemReactions.Add(StringsItem.Portrait,  new DispositionDependentReaction(PortraitReaction));
+			//_allItemReactions.Add(StringsItem.Portrait,  new DispositionDependentReaction(PortraitReaction));
 			
 			//Code for giving the seashell
 			Reaction SeaShellReaction = new Reaction();
@@ -144,7 +144,7 @@ public class FarmerFatherYoung : NPC {
 			Reaction CaptainsLogReaction = new Reaction();
 			CaptainsLogReaction.AddAction(new NPCTakeItemAction(toControl));
 			CaptainsLogReaction.AddAction(new UpdateCurrentTextAction(toControl, "Thanks!  I know my daughter will love it!"));
-			_allItemReactions.Add(StringsItem.CaptainsLog,  new DispositionDependentReaction(CaptainsLogReaction));
+			_allItemReactions.Add(StringsItem.CaptainLog,  new DispositionDependentReaction(CaptainsLogReaction));
 			
 			Reaction ToySwordReaction = new Reaction();
 			ToySwordReaction.AddAction(new NPCTakeItemAction(toControl));

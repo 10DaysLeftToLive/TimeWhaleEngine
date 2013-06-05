@@ -333,7 +333,7 @@ public class CastlemanYoung : NPC {
 				
 			PlushieReaction = new Reaction();
 			PlushieReaction.AddAction(new UpdateCurrentTextAction(toControl, "......"));
-			_allItemReactions.Add(StringsItem.TimeWhalePlushie, new DispositionDependentReaction(PlushieReaction));
+			_allItemReactions.Add(StringsItem.TimeWhale, new DispositionDependentReaction(PlushieReaction));
 				
 			ToolBoxReaction = new Reaction();
 			ToolBoxReaction.AddAction(new UpdateCurrentTextAction(toControl, "......"));
@@ -349,16 +349,16 @@ public class CastlemanYoung : NPC {
 				
 			CaptainsLogReaction = new Reaction();
 			CaptainsLogReaction.AddAction(new UpdateCurrentTextAction(toControl, "......"));
-			_allItemReactions.Add(StringsItem.CaptainsLog, new DispositionDependentReaction(CaptainsLogReaction));
+			_allItemReactions.Add(StringsItem.CaptainLog, new DispositionDependentReaction(CaptainsLogReaction));
 				
 			ToySwordReaction = new Reaction();
 			ToySwordReaction.AddAction(new UpdateCurrentTextAction(toControl, "......"));
 			_allItemReactions.Add(StringsItem.ToySword, new DispositionDependentReaction(ToySwordReaction));
-			
+			/*
 			PortraitReaction = new Reaction();
 			PortraitReaction.AddAction(new UpdateCurrentTextAction(toControl, "......"));
 			_allItemReactions.Add(StringsItem.Portrait, new DispositionDependentReaction(PortraitReaction));
-			
+			*/
 			RopeReaction = new Reaction();
 			RopeReaction.AddAction(new UpdateCurrentTextAction(toControl, "......"));
 			_allItemReactions.Add(StringsItem.Rope, new DispositionDependentReaction(RopeReaction));
