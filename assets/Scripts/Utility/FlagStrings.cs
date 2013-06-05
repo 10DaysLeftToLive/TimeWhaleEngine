@@ -59,6 +59,7 @@ public static class FlagStrings {
 
 	#region Carpenter	
 	public static string gaveToolsToCarpenterOrSon = "Gave Tools to Carpenter Or Son";
+	public static string CarpenterAndCarpenterSonIndependantConversation = "Carpenter and Carpenter Son Independent Conversation";
 	#endregion
 	
 	#region Carpenter Son
