@@ -168,6 +168,7 @@ public static class FlagStrings {
 	
 	#region Sea Captain
 	public static string StolenFishingRod = StringsItem.FishingRod;
+	public static string TreasureHuntBegin = "Treasure hunt begins";
 	#endregion
 	
 	#region Musician
