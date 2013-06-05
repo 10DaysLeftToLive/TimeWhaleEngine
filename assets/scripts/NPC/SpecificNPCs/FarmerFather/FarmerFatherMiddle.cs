@@ -100,6 +100,9 @@ public class FarmerFatherMiddle : NPC {
 		if (text == "carpenterSuccess" && farmersOnBoard){
 			initialState.PassStringToEmotionState("carpenterSuccess");
 		}
+		if (text == "carpenterSuccess" && !farmersOnBoard){
+			initialState.PassStringToEmotionState("daughterOnBoard");
+		}
 		if (text == "stoodUp" && farmersOnBoard){
 			initialState.PassStringToEmotionState("stoodUp");
 			disposition -= 20;
@@ -107,6 +110,10 @@ public class FarmerFatherMiddle : NPC {
 		if (text == "farmerMotherOnBoard"){
 			farmersOnBoard = true;	
 		}
+	}
+	
+	public override void SendStringToNPC(string text) {
+		disposition += int.Parse(text);
 	}
 	
 	protected void SetupReactions(){
@@ -144,6 +151,7 @@ public class FarmerFatherMiddle : NPC {
 	private class InitialEmotionState : EmotionState{
 		bool MarriageFlag = false;
 		bool convinceFlag = false;
+		bool daughterOnBoard = false;
 		Choice BusinessChoice = new Choice("How's your business?", "It's going poorly...I just can never find the strength to be a hawk when it comes to business...");
 		Choice MarriageChoice = new Choice("So about this marriage?", "I...I don't like it...but I'm sure my wife knows what she's doing.");
 		Reaction BusinessReaction = new Reaction();
@@ -160,6 +168,8 @@ public class FarmerFatherMiddle : NPC {
 		Choice ConvinceDaughterChoice = new Choice("Convince daughter to marry", "I have tried that before with no luck but if you want to give it a try then go ahead.");
 		Choice WorkingOnItChoice = new Choice("I'm still working on it", "Give up now..");
 		Choice NoChoice = new Choice("No", "It's no hope.");
+		Choice IHelpedMarriageChoice = new Choice("I got her to go on a date.", "Really! Thats great, if only we had known earlier that convincing her was that easy.");
+		Choice StrangeChoice = new Choice("That is strange", "Strange indeed.");
 		
 		Reaction DontLikeItReaction = new Reaction();
 		Reaction YouSureReaction = new Reaction();
@@ -172,6 +182,8 @@ public class FarmerFatherMiddle : NPC {
 		Reaction ConvinceDaughterReaction = new Reaction();
 		Reaction WorkingOnItReaction = new Reaction();
 		Reaction NoReaction = new Reaction();
+		Reaction IHelpedMarriageReaction = new Reaction();
+		Reaction StrangeReaction = new Reaction();
 		
 		Reaction ToyPuzzleReaction = new Reaction();
 		Reaction SeaShellReaction = new Reaction();
@@ -223,6 +235,22 @@ public class FarmerFatherMiddle : NPC {
 			SoundSureReaction.AddAction(new NPCCallbackAction(UpdateSoundSure));
 			YouCanReaction.AddAction(new NPCCallbackAction(UpdateYouCan));
 			YouHaveItReaction.AddAction(new NPCCallbackAction(UpdateYouHaveIt));
+			IHelpedMarriageReaction.AddAction(new NPCCallbackAction(IHelpedMarriageResponse));
+			StrangeReaction.AddAction(new NPCCallbackAction(StrangeResponse));
+		}
+		public void StrangeResponse(){
+			_allChoiceReactions.Clear();
+			_allChoiceReactions.Add(MarriageChoice, new DispositionDependentReaction(MarriageReaction));
+			_allChoiceReactions.Add(BusinessChoice, new DispositionDependentReaction(BusinessReaction));
+			GUIManager.Instance.RefreshInteraction();
+		}
+		
+		public void IHelpedMarriageResponse(){
+			_allChoiceReactions.Clear();
+			control.UpdateDisposition(20);
+			_allChoiceReactions.Add(MarriageChoice, new DispositionDependentReaction(MarriageReaction));
+			_allChoiceReactions.Add(BusinessChoice, new DispositionDependentReaction(BusinessReaction));
+			GUIManager.Instance.RefreshInteraction();
 		}
 		
 		public void NoResponse(){
@@ -262,9 +290,14 @@ public class FarmerFatherMiddle : NPC {
 				SetDefaultText("My wife has everything planned out...I just hope our daughter enjoys the wedding...");
 				GUIManager.Instance.RefreshInteraction();
 			}*/
-			_allChoiceReactions.Add(DontLikeItChoice, new DispositionDependentReaction(DontLikeItReaction));
-			_allChoiceReactions.Add(YouSureChoice, new DispositionDependentReaction(YouSureReaction));
-			_allChoiceReactions.Remove(MarriageChoice);
+			if (!daughterOnBoard){
+				_allChoiceReactions.Add(DontLikeItChoice, new DispositionDependentReaction(DontLikeItReaction));
+				_allChoiceReactions.Add(YouSureChoice, new DispositionDependentReaction(YouSureReaction));
+				_allChoiceReactions.Remove(MarriageChoice);
+			}else if (daughterOnBoard){
+				_allChoiceReactions.Add(DontLikeItChoice, new DispositionDependentReaction(IHelpedMarriageReaction));
+				_allChoiceReactions.Add(YouSureChoice, new DispositionDependentReaction(StrangeReaction));
+			}
 			GUIManager.Instance.RefreshInteraction();
 		}
 		
@@ -330,6 +363,11 @@ public class FarmerFatherMiddle : NPC {
 			}
 			if (text == "carpenterSuccess"){
 				SetDefaultText("I've heard what you did for my daughter. Your idea worked!");
+			}
+			if (text == "daughterOnBoard"){ //successful date with carpenter, farmers unaware
+				SetDefaultText("Hello there!  How's it going?");
+				daughterOnBoard = true;
+				MarriageChoice = new Choice("So about this marriage?", "Great! I think? My daughter all of the sudden is now happy about the marriage...that's not like her.");
 			}
 			if (text == "stoodUp"){
 				SetDefaultText("Went through all that trouble...for nothing.");

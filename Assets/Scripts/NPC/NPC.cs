@@ -305,4 +305,8 @@ public abstract class NPC : Character {
 		NPCDispositionManager.instance.UpdateWithId(id, disp);
 	}
 	#endregion
+	
+	public virtual void SendStringToNPC(string text){
+		
+	}
 }
