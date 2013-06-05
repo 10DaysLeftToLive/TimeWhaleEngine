@@ -144,9 +144,9 @@ public class Schedule {
 	public virtual void Resume() {
 		if (!HasTask()) {
 			NextTask();
+		} else {
+			_toManage.ForceChangeToState(current.StatePerforming);	
 		}
-		
-		_toManage.ForceChangeToState(current.StatePerforming);	
 	}
 	
 	public virtual void NextTask(){
