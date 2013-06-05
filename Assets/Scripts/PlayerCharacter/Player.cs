@@ -22,7 +22,6 @@ public class Player : Character {
 		get { return inventory; }
 	}
 	
-	
 	// Use this for initialization
 	protected override void Init(){
 		EventManager.instance.mOnClickOnObjectAwayFromPlayerEvent += new EventManager.mOnClickOnObjectAwayFromPlayerDelegate (OnClickToInteract);
@@ -40,7 +39,10 @@ public class Player : Character {
 	private Vector3 pos;
 	// We want to be able to switch to move at any state when the player clicks
 	private void OnClickToMove (EventManager EM, ClickPositionArgs e){
-		if (currentState.GetType() == typeof(TalkState) || isGamePaused()) return;
+		if (isGamePaused()) return;
+		if (currentState.GetType() == typeof(TalkState)){
+			GUIManager.Instance.CloseInteractionMenu();
+		}
 		pos = Camera.main.ScreenToWorldPoint(e.position);
 		pos.z = this.transform.position.z;
 		
@@ -54,7 +56,10 @@ public class Player : Character {
     }
 	
 	private void OnClickToInteract(EventManager EM, ClickedObjectArgs e) {
-		if (currentState.GetType() == typeof(TalkState)) return;
+		if (isGamePaused()) return;
+		if (currentState.GetType() == typeof(TalkState)){
+			GUIManager.Instance.CloseInteractionMenu();
+		}
 		
 		string tag = e.clickedObject.tag;
 		Vector3 goal = e.clickedObject.transform.position;
@@ -83,7 +88,13 @@ public class Player : Character {
 	
 	private void OnHoldClick(EventManager EM, ClickPositionArgs e){
 		pos = Camera.main.ScreenToWorldPoint(e.position);
-		if (currentState.GetType() == typeof(TalkState) || HoldIsTooClose(pos)) {
+		
+		if (isGamePaused()) return;
+		if (currentState.GetType() == typeof(TalkState)){
+			GUIManager.Instance.CloseInteractionMenu();
+		}
+		
+		if (HoldIsTooClose(pos)) {
 			timeSinceLastHold = 1;
 			return;
 		}

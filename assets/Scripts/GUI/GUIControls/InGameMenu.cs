@@ -16,7 +16,7 @@ public class InGameMenu : GUIControl {
 	}
 	
 	public override void Render(){
-		if (GUI.Button(pauseButtonRect, (isPaused ? pauseTexture : unpauseTexture), buttonStyle)){
+		if (GUI.Button(pauseButtonRect, (isPaused ? unpauseTexture : pauseTexture), buttonStyle)){
 			if (isPaused){
 				GUIManager.Instance.HidePauseMenu();
 			} else {

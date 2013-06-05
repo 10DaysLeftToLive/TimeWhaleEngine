@@ -16,7 +16,7 @@ public class ChatMenu : GUIControl {
 	public float CHATWIDTH = .45f;
 	
 	public GUIStyle chatBoxStyle;
-	private static float FONTRATIO = 20; // kinda arbitrary
+	private static float FONTRATIO = 25; // kinda arbitrary
 	
 	
 	public override void Init(){
