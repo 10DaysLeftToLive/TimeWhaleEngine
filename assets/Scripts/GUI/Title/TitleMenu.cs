@@ -30,15 +30,16 @@ public class TitleMenu : MonoBehaviour {
 	
 	public bool fadedOpeningScene = false;
 	
-	
 	// Use this for initialization
 	void Start () {
 		titleMenuSlider.sliderValue = 0;
 		newGameSlider.sliderValue = 0;
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		
 		if(titleMenuPanel.enabled) CheckTitleSlider();
 		if(mainMenuPanel.enabled) CheckMainMenuSliders();
 		if(timerStarted) TickFadeTimer();
@@ -88,9 +89,10 @@ public class TitleMenu : MonoBehaviour {
 		}
 	}
 	
-	IEnumerator FadePanels(UIPanel toDisable, UIPanel toEnable){
-		//Debug.Log("Start Fade");
-		fadeCamera.DoFade();
+	IEnumerator FadePanels(UIPanel toDisable, UIPanel toEnable, bool forceFade){
+		Debug.Log("Start Fade");
+		if(forceFade)
+			fadeCamera.DoFade();
 		
 		
 		yield return new WaitForSeconds(fadeCamera.fadeDuration * 0.5f);
@@ -101,7 +103,7 @@ public class TitleMenu : MonoBehaviour {
 	}
 	
 	void TransitionPanels(UIPanel toDisable, UIPanel toEnable){
-		StartCoroutine(FadePanels(toDisable,toEnable));
+		StartCoroutine(FadePanels(toDisable,toEnable, true));
 	}
 	
 	void FadeToText(){
@@ -140,6 +142,11 @@ public class TitleMenu : MonoBehaviour {
 	
 	void UnfadeGenderFilter(){
 		genderPickFilter.alpha = 0.0f;	
+	}
+		
+	
+	public void TransitionToMainMenu(){
+		StartCoroutine(FadePanels(titleMenuPanel,mainMenuPanel, false));
 	}
 	
 }
