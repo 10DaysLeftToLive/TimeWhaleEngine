@@ -45,11 +45,11 @@ public class LighthouseGirlYoung : NPC {
 		#region Castle man
 		Reaction ReactToCastleMan = new Reaction();
 		ReactToCastleMan.AddAction(new NPCAddScheduleAction(this, TalkWithCastleman));
-		flagReactions.Add(FlagStrings.PlayerAndCastleFriends , ReactToCastleMan);
+		flagReactions.Add(FlagStrings.MusicianFinishedTalkingFriends , ReactToCastleMan);
 		
 		Reaction ReactToCastleManNotFriends = new Reaction();
 		ReactToCastleManNotFriends.AddAction(new NPCAddScheduleAction(this, TalkWithCastleman));
-		flagReactions.Add(FlagStrings.PlayerAndCastleNOTFriends , ReactToCastleManNotFriends);
+		flagReactions.Add(FlagStrings.MusicianFinishedTalkingNOTFriends , ReactToCastleManNotFriends);
 		#endregion
 		
 		Reaction CounterTellOn = new Reaction();
