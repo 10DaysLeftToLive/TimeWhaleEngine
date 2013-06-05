@@ -25,6 +25,7 @@ public class CarpenterMiddle : NPC {
 		Reaction carpenterSonBecomesIndependent = new Reaction();
 		carpenterSonBecomesIndependent.AddAction(new NPCAddScheduleAction(this, angryAtSonBeingIndependent));
 		carpenterSonBecomesIndependent.AddAction(new NPCAddScheduleAction(this, afterAngryAtSonIndependent));
+		flagReactions.Add(FlagStrings.CarpenterAndCarpenterSonIndependantConversation, carpenterSonBecomesIndependent);
 		
 		Reaction carpenterSonBecomesFishermen = new Reaction();
 		carpenterSonBecomesFishermen.AddAction (new NPCAddScheduleAction(this, angryAtSonFishing));
@@ -50,18 +51,23 @@ public class CarpenterMiddle : NPC {
 	
 	protected override Schedule GetSchedule(){
 		Schedule schedule = new DefaultSchedule(this);
-		return (schedule);
+		return (openningWaitingSchedule);
 	}
 	
 	
 
 	protected override void SetUpSchedules() {
 		openningWaitingSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
-		openningWaitingSchedule.Add(new TimeTask(10, new WaitTillPlayerCloseState(this, ref player)));
-		this.AddSchedule(openningWaitingSchedule);
+		openningWaitingSchedule.Add(new TimeTask(300, new WaitTillPlayerCloseState(this, ref player)));
+		Task nullFlag =  new TimeTask(0f, new IdleState(this));
+		nullFlag.AddFlagToSet(FlagStrings.CarpenterAndCarpenterSonIndependantConversation);
+		openningWaitingSchedule.Add(nullFlag);
+		//this.AddSchedule(openningWaitingSchedule);
 		
 //CONVERSATION SCHEDULE BUG!!!! PLEASE FIX		
 		SetupCarpentrySchedules();		
+		SetupDefualtSchedules();
+		SeteupPrimaryDefaultSchedules();
 //CONVERSATION SCHEDULE BUG!!!! PLEASE FIX		
 	}
 
@@ -72,7 +78,7 @@ public class CarpenterMiddle : NPC {
 	}
 	
 	private void SeteupPrimaryDefaultSchedules() {
-		angryAtSonBeingIndependent = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), new MiddleCarpenterToSonDefaultScriptedConvo(), Schedule.priorityEnum.High); // CHANGE THIS CONVERSATION TO THE ONE WE WANT TO USE!
+		angryAtSonBeingIndependent = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), new MiddleCarpenterToSonDefaultScriptedConvo(), Schedule.priorityEnum.DoConvo); // CHANGE THIS CONVERSATION TO THE ONE WE WANT TO USE!
 		angryAtSonBeingIndependent.SetCanNotInteractWithPlayer();
 		angryAtSonBeingIndependent.SetFlagOnComplete(FlagStrings.carpenterSonTalkWithFatherMorning);
 		//AddSchedule(angryAtSonBeingIndependent);
