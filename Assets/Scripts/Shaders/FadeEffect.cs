@@ -30,7 +30,7 @@ public class FadeEffect : ShaderBase {
 	#endregion
 	
 	#region SwirlShaderEffects
-	public bool isFading = false;
+	public static bool isFading = false;
 	
 	private bool wasFading = false;
 	
