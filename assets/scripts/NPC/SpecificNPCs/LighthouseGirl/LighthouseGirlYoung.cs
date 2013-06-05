@@ -71,6 +71,13 @@ public class LighthouseGirlYoung : NPC {
 		MakingApplePieFromScratch.AddAction(new NPCEmotionUpdateAction(this, new EmptyEmotion(this, "Leave peasant!  I have work to attend to!")));
 		MakingApplePieFromScratch.AddAction(new NPCAddScheduleAction(this, GaveNothingSchedule));
 		flagReactions.Add(FlagStrings.MakePieFromScratch, MakingApplePieFromScratch);
+		
+		Reaction RemoveConvoWithCastleman = new Reaction();
+		RemoveConvoWithCastleman.AddAction(new NPCCallbackAction(DoRemoveConvoWithCastleman));
+		flagReactions.Add(FlagStrings.StartTalkingToLighthouse, RemoveConvoWithCastleman);
+	}
+	public void DoRemoveConvoWithCastleman(){
+		this.RemoveScheduleWithFlag("TalkWithCastleman");
 	}
 	protected override EmotionState GetInitEmotionState(){
 		initialState = new InitialEmotionState(this, "So my mom wants me to learn how to cook...but I'm gonna grow up to be a great warrior, not a cook! Get some kind of cooked food and I'll reward you!");
@@ -97,11 +104,12 @@ public class LighthouseGirlYoung : NPC {
 		Task SetFlagToBeach = (new Task(new MoveThenDoState(this, this.gameObject.transform.position, new MarkTaskDone(this))));
 		SetFlagToBeach.AddFlagToSet(FlagStrings.GoDownToBeach);
 		
-		TalkWithCastleman = new Schedule (this, Schedule.priorityEnum.High);
+		TalkWithCastleman = new Schedule (this, Schedule.priorityEnum.DoNow);
 		TalkWithCastleman.Add(new TimeTask(3000, new WaitTillPlayerCloseState(this, ref player)));
-		Task setFlag = (new Task(new MoveThenDoState(this, this.gameObject.transform.position, new MarkTaskDone(this))));
+		Task setFlag = (new TimeTask(2f, new IdleState(this)));
 		setFlag.AddFlagToSet(FlagStrings.StartTalkingToLighthouse);
 		TalkWithCastleman.Add(setFlag);
+		TalkWithCastleman.AddFlagGroup("TalkWithCastleman");
 		
 		GaveApple = new Schedule(this, Schedule.priorityEnum.High);
 		GaveApple.Add(new TimeTask(10f, new IdleState(this)));
@@ -112,7 +120,7 @@ public class LighthouseGirlYoung : NPC {
 		GaveNothingSchedule.Add(new TimeTask(750f, new IdleState(this)));
 		GaveNothingSchedule.Add(SetFlagToBeach);
 		
-		WalkToBeach = new Schedule(this, Schedule.priorityEnum.DoNow);
+		WalkToBeach = new Schedule(this, Schedule.priorityEnum.High);
 		WalkToBeach.Add(new Task(new MoveThenMarkDoneState(this, MapLocations.MiddleOfBeachYoung)));
 		
 		LighthouseGoingToBeach = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerMotherYoung), 

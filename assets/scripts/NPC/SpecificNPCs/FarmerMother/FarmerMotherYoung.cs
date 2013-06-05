@@ -56,7 +56,7 @@ public class FarmerMotherYoung : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "Talk to me later. I'm busy!"));
+		return (new StoryStoppingEmotionState(this, "Talk to me later. I'm busy!"));
 	}
 	
 	protected override Schedule GetSchedule(){

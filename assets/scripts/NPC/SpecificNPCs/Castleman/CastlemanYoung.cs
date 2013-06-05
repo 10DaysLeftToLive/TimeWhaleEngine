@@ -167,6 +167,7 @@ public class CastlemanYoung : NPC {
 		flagReactions.Add(FlagStrings.FinishedCSONConversation, FinishedTalkingWithCSON);
 		
 		Reaction TalkWithLighthouseFirstTime = new Reaction();
+		//TalkWithLighthouseFirstTime.AddAction(new NPCAllRemoveScheduleAction("TalkWithCastleman"));
 		TalkWithLighthouseFirstTime.AddAction(new NPCAddScheduleAction(this, CastleManMeetsLighthouse));
 		TalkWithLighthouseFirstTime.AddAction(new NPCEmotionUpdateAction(this, new AfterLighthouse(this, "")));
 		TalkWithLighthouseFirstTime.AddAction(new NPCCallbackAction(testStartGoingtoBeachAfterLighthouseTalk));
