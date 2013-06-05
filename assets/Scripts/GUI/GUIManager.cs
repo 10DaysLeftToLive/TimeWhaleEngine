@@ -106,6 +106,9 @@ public class GUIManager : MonoBehaviour {
 	}
 	
 	public void RefreshInteraction(){
+		if (!ControlActive(interactionMenu)){
+			MarkControlForAdding(interactionMenu);
+		}
 		interactionMenu.Refresh();	
 	}
 	
@@ -138,9 +141,7 @@ public class GUIManager : MonoBehaviour {
 	}
 	
 	private void LoadControl(GUIControl guiControlToLoad){
-		if (!guiControlToLoad.Initialized){	
-			guiControlToLoad.Initialize();	
-		}
+		
 		
 		activeControls.Add(guiControlToLoad);
 	}
@@ -154,6 +155,9 @@ public class GUIManager : MonoBehaviour {
 	}
 	
 	private void MarkControlForAdding(GUIControl guiControlToAdd){
+		if (!guiControlToAdd.Initialized){	
+			guiControlToAdd.Initialize();	
+		}
 		controlsToAdd.Add(guiControlToAdd);
 	}
 	
