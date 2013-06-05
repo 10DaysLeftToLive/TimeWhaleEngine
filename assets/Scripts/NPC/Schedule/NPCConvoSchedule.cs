@@ -149,6 +149,7 @@ public class NPCConvoSchedule : Schedule {
 	}
 	
 	public override void SetComplete() {
+		base.SetComplete();
 		if (setFlagAction != null) {
 			FlagManager.instance.SetFlag(setFlagAction);
 		}

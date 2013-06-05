@@ -14,7 +14,6 @@ public abstract class ShaderBase : PauseObject {
 	
 	// Use this for initialization
 	void Start () {
-		AudioListener.volume = 0;
 		// Disable if we don't support image effects
 		if (!SystemInfo.supportsImageEffects) {
 			//enabled = false;

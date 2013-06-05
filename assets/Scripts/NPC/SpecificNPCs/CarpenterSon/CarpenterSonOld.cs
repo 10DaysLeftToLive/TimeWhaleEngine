@@ -11,7 +11,6 @@ public class CarpenterSonOld : NPC {
 	}
 	internal static bool ateBool = false;
 	protected override void SetFlagReactions(){
-		AudioListener.volume = 0;
 	
 		#region Greet Old Sibling
 		Reaction introductionToSiblingOld = new Reaction();

@@ -15,7 +15,7 @@ public class MusicianMiddle : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "|||| Toot Toot"));
+		return (new InitialEmotionState(this, "I am very disapointed by my son's actions, would you be a dear and make sure he stays out of trouble?"));
 	}
 	
 	protected override Schedule GetSchedule(){
@@ -23,7 +23,7 @@ public class MusicianMiddle : NPC {
 		return (schedule);
 	}
 
-	protected override void SetUpSchedules(){
+	protected override void SetUpSchedules() {
 		
 	}
 	
@@ -32,7 +32,9 @@ public class MusicianMiddle : NPC {
 	#region Initial Emotion State
 	private class InitialEmotionState : EmotionState{
 	
-	
+		Choice reassureMusician = new Choice("Sure, I will look after him.", "Thanks!  I appreciate your consideration.");
+		Choice distressMusician = new Choice("He is your kid, watch over him yourself.", "How Rude!  Leave me alone then");
+		
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
 			
 		

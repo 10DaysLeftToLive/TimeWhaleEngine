@@ -15,13 +15,10 @@ public class InteractionMenu : GUIControl {
 	private Player player;
 	
 	#region Publicly edited visual data
-	public Texture talkingIndicator;
-	
 	public GUIStyle textFieldStyle;
 	public GUIStyle buttonStyle;
-	public GUIStyle portraitStyle;
-	public GUIStyle interactionBoxStyle;
-	public GUIStyle talkingIndicatorStyle;
+	public Font textFieldFont;
+	public Font buttonFont;
 	#endregion
 	
 	#region Saved Data for this interaction
@@ -34,32 +31,18 @@ public class InteractionMenu : GUIControl {
 	private Rect portraitRect;
 	private Rect textBoxRect;
 	private Rect leaveButtonRect;
-	private Rect talkingIndicatorRect;
 	private List<Rect> buttonRects;
 	private List<string> buttonTexts;
-	float textBoxHeight;
-	#endregion
-	
-	#region Button Data
-	private float buttonBoxTopLeftX;
-	private float buttonBoxTopLeftY;
-	private float buttonBoxWidth;
-	private float buttonBoxHeight;
-	private float buttonWidth;
-	private float buttonHeight;
 	#endregion
 	
 	#region Settings
 	private static float CHATPADDING = .01f; // padding between chat and the screen in all directions
 	private static float CHATINTERNALPADDING = .01f; // padding between chat elements in all directions
-	private static float CHATBUTTONPADDING = .02f; // padding between chat elements in all directions
-	private static float CHATHEIGHT = .3f;
-	private static float TEXTBOXPERCENTAGE = .6f;
-	private static float PORTRAITHEIGHT = .32f;
-	private static float INTERATIONMENUARTRATIO = 5.0f/1.0f; // width / height
-	private static float FONTRATIOTEXTBOX = 20; // kinda arbitrary
-	private static float FONTRATIOBUTTONS = 30; // kinda arbitrary
-	private static float INDICATORSIZE = .1f;
+	private static float CHATBUTTONPADDING = .01f; // padding between chat elements in all directions
+	private static float PORTRAITWIDTH = .2f;
+	private static int GIVEITEMBUTTON = 3; // index in rect list for wher give button should go
+	private static float LEAVEBUTTONHEIGHT = .1f;
+	private static int charPerLine = 45;
 	#endregion
 	
 	public override void Init(){
@@ -68,8 +51,6 @@ public class InteractionMenu : GUIControl {
 		buttonRects = new List<Rect>();
 		SetChatRectangles();
 		mainDisplayText = null;
-        textFieldStyle.fontSize = (Mathf.RoundToInt(Mathf.Min(ScreenSetup.screenWidth, ScreenSetup.screenHeight) / FONTRATIOTEXTBOX));
-        buttonStyle.fontSize = (Mathf.RoundToInt(Mathf.Min(ScreenSetup.screenWidth, ScreenSetup.screenHeight) / FONTRATIOBUTTONS));
 	}
 	
 	public override void Render(){		
@@ -80,11 +61,13 @@ public class InteractionMenu : GUIControl {
 		DrawBackgroundBox();
 		DrawTextBox();
 		DisplayButtonChoices();
-		DisplayPortrait();	
-		DisplayTalkingIndicator();
+		DisplayPortrait();
+		DisplayLeaveButton();
+		if (player.Inventory.HasItem()){
+			DisplayGiveButton();
+		}
 	}
 	
-	#region Display Functions
 	private int currentButtonIndex;
 	private void DisplayButtonChoices(){
 		currentButtonIndex = 0;
@@ -99,11 +82,6 @@ public class InteractionMenu : GUIControl {
 			}
 			currentButtonIndex++;
 		}
-		if (player.Inventory.HasItem()){
-			if (ButtonClick(buttonRects[currentButtonIndex], "Give " + player.Inventory.GetItem().name, buttonStyle)){
-				DoGiveClick();
-			}
-		}
 	}
 	
 	public override bool ClickOnGUI(Vector2 screenPos){
@@ -115,23 +93,30 @@ public class InteractionMenu : GUIControl {
 		player.LeaveInteraction();
 	}
 	
+	private void DisplayGiveButton(){
+		if (ButtonClick(buttonRects[GIVEITEMBUTTON], "Give " + player.Inventory.GetItem().name, buttonStyle)){
+			DoGiveClick();
+		}
+	}
+	
 	private void DisplayPortrait(){
-		GUI.DrawTexture (portraitRect, charPortrait);	
+		GUI.Box (portraitRect, charPortrait, textFieldStyle);	
 	}
 	
 	private void DrawBackgroundBox(){
-		GUI.Box (mainChatRect, "", interactionBoxStyle);
+		GUI.Box (mainChatRect, "", textFieldStyle);
+	}
+	
+	private void DisplayLeaveButton(){
+		if (ButtonClick(leaveButtonRect, "Leave", buttonStyle)){
+			GUIManager.Instance.CloseInteractionMenu();
+		}
 	}
 	
 	private void DrawTextBox(){
 		if (mainDisplayText == null) Refresh();
-		GUI.Box (textBoxRect, mainDisplayText, textFieldStyle);
+		GUI.TextField (textBoxRect, mainDisplayText, textFieldStyle);
 	}
-	
-	private void DisplayTalkingIndicator(){
-		GUI.DrawTexture(talkingIndicatorRect, talkingIndicator);
-	}
-	#endregion
 	
 	public void DoClickOnChoice(string choice){
 		npcChattingWith.ReactToChoice(choice);
@@ -153,12 +138,11 @@ public class InteractionMenu : GUIControl {
 	}
 	
 	public void UpdateDisplayText(string newText){
-		mainDisplayText = newText;
+		mainDisplayText = newText;//ParseMessage(newText);
 	}
 	
 	private void GetChoicesFromNPC(){
 		buttonTexts = npcChattingWith.GetButtonChats();
-		SetUpChoiceButtonRectangles(buttonTexts.Count + (player.Inventory.HasItem() ? 1 : 0));
 	}
 	
 	private void GetPortraitTexture(){
@@ -169,68 +153,68 @@ public class InteractionMenu : GUIControl {
 		return (npcChattingWith.GetDisplayText());	
 	}
 	
-	private void SetUpChoiceButtonRectangles(int numChoices){
-		buttonRects.Clear();
-		float totalButtonWidth = (numChoices * buttonWidth) + ((numChoices - 1) * CHATBUTTONPADDING);
-		
-		float button1TopLeftX = (buttonBoxTopLeftX + buttonBoxWidth/2) - totalButtonWidth/2; // move the first button off set from the center by the number of buttons
-		float spaceBetweenTopPointXs = CHATBUTTONPADDING + buttonWidth;
-		
-		for (int i = 0; i < numChoices; i++){
-			buttonRects.Add(ScreenRectangle.NewRect(button1TopLeftX + (spaceBetweenTopPointXs * i), buttonBoxTopLeftY, buttonWidth, buttonHeight));
+	// Convert the given message's formatting so it will fit into the screen nicely
+	private string ParseMessage(string message){
+		if (message.Length > charPerLine){
+			int index = 0;
+			do {
+				index = index + charPerLine;
+				if (index >= message.Length)
+					return (message);
+				do {
+					--index;
+				}while(message[index] != ' ');
+
+				message = message.Insert(index, "\n");
+				message = message.Remove(index+1, 1);
+			}while(true);
+			
 		}
+		return (message);
 	}
 	
-	private void SetChatRectangles(){	
-		float sideSpace; // the space on the left and right of the interactions menu to properly scale the assets
-		
-		float portraitHeight = PORTRAITHEIGHT;
-		float screenRatio = ScreenSetup.screenHeight/ScreenSetup.screenWidth;
-		float portraitWidth = PORTRAITHEIGHT * screenRatio;
-		
-		float chatHeight = CHATHEIGHT;
-		float chatWidth = (chatHeight * INTERATIONMENUARTRATIO) * screenRatio;
-		
-		if (portraitWidth + chatWidth > 1){
-			chatWidth = 1 - portraitWidth - CHATINTERNALPADDING;
-			sideSpace = 0;
-		} else {
-			sideSpace = (1.0f - (portraitWidth + chatWidth))/2.0f;
-		}
-		
-		// Portrait variables
-		float portraitTopLeftX = sideSpace;
-		float portraitTopLeftY = CHATPADDING;
-		portraitRect = ScreenRectangle.NewRect(portraitTopLeftX, portraitTopLeftY, portraitWidth, portraitHeight);
-		
+	private void SetChatRectangles(){		
 		// Overall Chat variables
-		float chatTopLeftX = sideSpace + portraitWidth + CHATINTERNALPADDING;
-		float chatTopLeftY = (2 * CHATPADDING);
+		float chatWidth = 1 - (2f * CHATPADDING);
+		float chatHeight = .45f - (2f * CHATPADDING);
+		float chatTopLeftX = CHATPADDING;
+		float chatTopLeftY = CHATPADDING;
 		mainChatRect = ScreenRectangle.NewRect(chatTopLeftX, chatTopLeftY, chatWidth, chatHeight);
 		
-		// Text Box Variables
-		float textBoxTopLeftX = chatTopLeftX + CHATINTERNALPADDING;
-		float textBoxTopLeftY = chatTopLeftY + CHATINTERNALPADDING;
-		float textBoxWidth = chatWidth - (2f * CHATINTERNALPADDING);
-		textBoxHeight = (chatHeight*TEXTBOXPERCENTAGE) - CHATINTERNALPADDING;
+		// Portrait variables
+		float portraitTopLeftX = chatTopLeftX + CHATINTERNALPADDING;
+		float portraitTopLeftY = chatTopLeftY + CHATINTERNALPADDING;
+		float portraitWidth = PORTRAITWIDTH;
+		float portraitHeight = chatHeight - (2f * CHATINTERNALPADDING) - LEAVEBUTTONHEIGHT;
+		portraitRect = ScreenRectangle.NewRect(portraitTopLeftX, portraitTopLeftY, portraitWidth, portraitHeight);
+		leaveButtonRect = ScreenRectangle.NewRect(portraitTopLeftX, portraitTopLeftY + portraitHeight, portraitWidth, LEAVEBUTTONHEIGHT); 
 		
+		// Text Box Variables
+		float textBoxTopLeftX = chatTopLeftX + (2f * CHATBUTTONPADDING) + portraitWidth;
+		float textBoxTopLeftY = chatTopLeftY + CHATINTERNALPADDING;
+		float textBoxWidth = chatWidth - (3f * CHATINTERNALPADDING) - portraitWidth;
+		float textBoxHeight = (chatHeight/2.0f) - CHATINTERNALPADDING;
 		textBoxRect = ScreenRectangle.NewRect(textBoxTopLeftX, textBoxTopLeftY, textBoxWidth, textBoxHeight);
 		
-		float indicatorSizeX = INDICATORSIZE * screenRatio;
-		
-		float talkingIndicatorTopLeftX = textBoxTopLeftX - indicatorSizeX - CHATINTERNALPADDING/2;
-		float talkingIndicatorTopLeftY = .18f;
-		
-		talkingIndicatorRect = ScreenRectangle.NewRect(talkingIndicatorTopLeftX, talkingIndicatorTopLeftY, indicatorSizeX,INDICATORSIZE);
-		
 		// Button Box Variables
-		buttonBoxTopLeftX = textBoxTopLeftX;
-		buttonBoxTopLeftY = textBoxTopLeftY + textBoxHeight;
-		buttonBoxWidth = textBoxWidth - (2 * CHATINTERNALPADDING);
-		buttonBoxHeight = chatHeight - textBoxHeight - (3 * CHATINTERNALPADDING);
+		float buttonBoxTopLeftX = textBoxTopLeftX;
+		float buttonBoxTopLeftY = textBoxTopLeftY + textBoxHeight;
+		float buttonBoxWidth = textBoxWidth;
+		float buttonBoxHeight = textBoxHeight;
 		
 		// Button Variables
-		buttonWidth = (buttonBoxWidth - (3 * CHATBUTTONPADDING)) / 4;
-		buttonHeight = buttonBoxHeight;
+		float buttonWidth = (buttonBoxWidth - (3 * CHATBUTTONPADDING)) / 4;
+		float buttonHeight = buttonBoxHeight;
+		
+		// Button one
+		float button1TopLeftX = buttonBoxTopLeftX;
+		float button2TopLeftX = button1TopLeftX + CHATBUTTONPADDING + buttonWidth;
+		float button3TopLeftX = button2TopLeftX + CHATBUTTONPADDING + buttonWidth;
+		float button4TopLeftX = button3TopLeftX + CHATBUTTONPADDING + buttonWidth;
+		
+		buttonRects.Add(ScreenRectangle.NewRect(button1TopLeftX, buttonBoxTopLeftY, buttonWidth, buttonHeight));
+		buttonRects.Add(ScreenRectangle.NewRect(button2TopLeftX, buttonBoxTopLeftY, buttonWidth, buttonHeight));
+		buttonRects.Add(ScreenRectangle.NewRect(button3TopLeftX, buttonBoxTopLeftY, buttonWidth, buttonHeight));
+		buttonRects.Add(ScreenRectangle.NewRect(button4TopLeftX, buttonBoxTopLeftY, buttonWidth, buttonHeight));
 	}
 }

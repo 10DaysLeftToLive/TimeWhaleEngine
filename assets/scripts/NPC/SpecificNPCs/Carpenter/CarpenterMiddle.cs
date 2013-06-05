@@ -10,12 +10,38 @@ public class CarpenterMiddle : NPC {
 		base.Init();
 	}
 	
-	protected override void SetFlagReactions(){
-		Reaction gaveFlagReaction = new Reaction();
-		gaveFlagReaction.AddAction(new NPCAllRemoveScheduleAction(FlagStrings.gaveFishingRodToCarpenterSon));
-		gaveFlagReaction.AddAction(new NPCAddScheduleAction(this, angryAtSonFishing));
-		gaveFlagReaction.AddAction(new NPCAddScheduleAction(this, afterAngryAtSonFishing));
-		flagReactions.Add(FlagStrings.gaveFishingRodToCarpenterSon, gaveFlagReaction);
+	private bool followDefaultSchedule = true;
+	private Schedule openningWaitingSchedule;
+	//Carpenter Son Fishing Branch
+	NPCConvoSchedule angryAtSonFishing, seaCaptainCarpenterSonTalk, angryAtSonWantingToFish;
+	//Carpenter Son Default/Independent Branch
+	NPCConvoSchedule angryAtSonBeingIndependent, endOfDayTalk;
+	//Carpenter Son Carpenter Branch
+	NPCConvoSchedule happyAtSonForBeingCarpenter, talkToSonAfterWhittle, talkToSonWithoutWhittle;
+	
+	Schedule afterAngryAtSonFishing, afterAngryAtSonIndependent, afterHappyForSonBeingACarpenter;
+	
+	protected override void SetFlagReactions() {
+		Reaction carpenterSonBecomesIndependent = new Reaction();
+		carpenterSonBecomesIndependent.AddAction(new NPCAddScheduleAction(this, angryAtSonBeingIndependent));
+		carpenterSonBecomesIndependent.AddAction(new NPCAddScheduleAction(this, afterAngryAtSonIndependent));
+		
+		Reaction carpenterSonBecomesFishermen = new Reaction();
+		carpenterSonBecomesFishermen.AddAction (new NPCAddScheduleAction(this, angryAtSonFishing));
+		carpenterSonBecomesFishermen.AddAction (new NPCAddScheduleAction(this, afterAngryAtSonFishing));
+		flagReactions.Add (FlagStrings.carpenterSonMakesFishingRod, carpenterSonBecomesFishermen);
+		
+		Reaction carpenterSonBecomesCarpenter = new Reaction();
+		carpenterSonBecomesCarpenter.AddAction(new NPCAddScheduleAction(this, happyAtSonForBeingCarpenter));
+		carpenterSonBecomesCarpenter.AddAction(new NPCAddScheduleAction(this, afterHappyForSonBeingACarpenter));
+		carpenterSonBecomesCarpenter.AddAction(new NPCAddScheduleAction(this, talkToSonAfterWhittle));
+		flagReactions.Add(FlagStrings.gaveToolsToCarpenterOrSon, carpenterSonBecomesCarpenter);
+	}
+	
+	protected void IndepdentTalkActionDone() {
+		if (afterAngryAtSonIndependent.IsComplete()) {
+			FlagManager.instance.SetFlag(FlagStrings.carpenterSonIndependent);
+		}
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
@@ -27,32 +53,84 @@ public class CarpenterMiddle : NPC {
 		return (schedule);
 	}
 	
-	private Schedule openningWaitingSchedule;
-	NPCConvoSchedule angryAtSonFishing;
-	Schedule afterAngryAtSonFishing;
+	
 
-	protected override void SetUpSchedules(){
+	protected override void SetUpSchedules() {
 		openningWaitingSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
-		openningWaitingSchedule.Add(new TimeTask(30, new WaitTillPlayerCloseState(this, ref player)));
+		openningWaitingSchedule.Add(new TimeTask(10, new WaitTillPlayerCloseState(this, ref player)));
 		this.AddSchedule(openningWaitingSchedule);
 		
 //CONVERSATION SCHEDULE BUG!!!! PLEASE FIX		
-		NPCConvoSchedule angryAtSonDefault =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), new MiddleCarpenterToSonDefaultScriptedConvo(), Schedule.priorityEnum.High); // CHANGE THIS CONVERSATION TO THE ONE WE WANT TO USE!
-		angryAtSonDefault.SetCanNotInteractWithPlayer();
-		angryAtSonDefault.AddFlagGroup(FlagStrings.gaveFishingRodToCarpenterSon);
-		this.AddSchedule(angryAtSonDefault);
-
-		angryAtSonFishing =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), new MiddleCarpenterToSonFishingScriptedConvo(), Schedule.priorityEnum.High); // CHANGE THIS CONVERSATION TO THE ONE WE WANT TO USE!
-		angryAtSonFishing.SetCanNotInteractWithPlayer();		
+		SetupCarpentrySchedules();		
 //CONVERSATION SCHEDULE BUG!!!! PLEASE FIX		
-
-		afterAngryAtSonFishing = new Schedule(this, Schedule.priorityEnum.Medium);
-		Task setOffStormOffFlag = (new TimeTask(1.0f,new IdleState(this)));
-		setOffStormOffFlag.AddFlagToSet(FlagStrings.carpenterSonStormOff);
-		
-		afterAngryAtSonFishing.Add(new TimeTask(1.0f, new IdleState(this)));
-		afterAngryAtSonFishing.Add(setOffStormOffFlag);
 	}
+
+	#region Independent Branch
+	private void SetupDefualtSchedules() {
+		SetupPrimaryCarpentrySchedules();
+		SetupPassiveDefaultSchedules();
+	}
+	
+	private void SeteupPrimaryDefaultSchedules() {
+		angryAtSonBeingIndependent = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), new MiddleCarpenterToSonDefaultScriptedConvo(), Schedule.priorityEnum.High); // CHANGE THIS CONVERSATION TO THE ONE WE WANT TO USE!
+		angryAtSonBeingIndependent.SetCanNotInteractWithPlayer();
+		angryAtSonBeingIndependent.SetFlagOnComplete(FlagStrings.carpenterSonTalkWithFatherMorning);
+		//AddSchedule(angryAtSonBeingIndependent);
+	}
+	
+	private void SetupPassiveDefaultSchedules() {
+	}
+	#endregion
+	
+	#region Fisherman Branch
+	private void SetupFishingSchedules() {
+		angryAtSonFishing =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), new MiddleCarpenterToSonFishingScriptedConvo(), Schedule.priorityEnum.High); // CHANGE THIS CONVERSATION TO THE ONE WE WANT TO USE!
+		angryAtSonFishing.SetCanNotInteractWithPlayer();
+		
+		afterAngryAtSonFishing = new Schedule(this, Schedule.priorityEnum.Medium);
+		Task setOffStormOffFlag = new TimeTask(2.0f,new IdleState(this));
+		setOffStormOffFlag.AddFlagToSet(FlagStrings.carpenterSonTalkWithFatherMorning);
+		
+		afterAngryAtSonFishing.Add(setOffStormOffFlag);
+		this.AddSchedule(afterAngryAtSonFishing);
+	}
+	#endregion
+	
+	#region CarpentryBranch
+	
+	private void SetupCarpentrySchedules() {
+		SetupPrimaryCarpentrySchedules();
+		SetupPassiveCarpentrySchedules();
+	}
+	
+	private void SetupPrimaryCarpentrySchedules() {
+		happyAtSonForBeingCarpenter = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), 
+			new MiddleCarpenterToSonCarpentryScriptedConvo(), Schedule.priorityEnum.High);
+		happyAtSonForBeingCarpenter.SetCanNotInteractWithPlayer();
+		happyAtSonForBeingCarpenter.SetFlagOnComplete(FlagStrings.carpenterSonTalkWithFatherMorning);
+		
+		afterHappyForSonBeingACarpenter = new Schedule(this, Schedule.priorityEnum.Medium);
+		TimeTask stormOffToWindmill = new TimeTask(50f, new MoveState(this, MapLocations.WindmillMiddle));
+		afterHappyForSonBeingACarpenter.Add(stormOffToWindmill);
+		
+		talkToSonAfterWhittle = new NPCConvoSchedule(this, 
+			NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), new MiddleCarpenterToSonCarpentryScriptedConvo(), Schedule.priorityEnum.Low);
+		talkToSonAfterWhittle.SetCanNotInteractWithPlayer();
+		
+		
+//		AddSchedule(happyAtSonForBeingCarpenter);
+//		AddSchedule(afterHappyForSonBeingACarpenter);
+//		AddSchedule(talkToSonAfterWhittle);
+		
+		talkToSonWithoutWhittle = new NPCConvoSchedule(this,
+			NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), new MiddleCarpenterToSonCarpentryScriptedConvo(), Schedule.priorityEnum.Low);
+		talkToSonWithoutWhittle.SetCanNotInteractWithPlayer();
+	}
+	
+	private void SetupPassiveCarpentrySchedules() {
+		
+	}
+	#endregion
 	
 	
 	#region EmotionStates

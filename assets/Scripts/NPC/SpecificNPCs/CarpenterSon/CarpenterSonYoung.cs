@@ -17,11 +17,11 @@ public class CarpenterSonYoung : NPC {
 		
 		Reaction ReactToCastleMan = new Reaction();
 		ReactToCastleMan.AddAction(new NPCAddScheduleAction(this, TalkWithCastleman));
-		flagReactions.Add(FlagStrings.MusicianFinishedTalkingFriends , ReactToCastleMan);
+		flagReactions.Add(FlagStrings.PlayerAndCastleFriends , ReactToCastleMan);
 		
 		Reaction ReactToCastleManNotFriends = new Reaction();
 		ReactToCastleManNotFriends.AddAction(new NPCAddScheduleAction(this, TalkWithCastlemanNotFriend));
-		flagReactions.Add(FlagStrings.MusicianFinishedTalkingNOTFriends , ReactToCastleManNotFriends);
+		flagReactions.Add(FlagStrings.PlayerAndCastleNOTFriends , ReactToCastleManNotFriends);
 		
 		CreatedFishingRod = new Reaction();
 		flagReactions.Add(FlagStrings.carpenterSonMakesFishingRod, CreatedFishingRod);
