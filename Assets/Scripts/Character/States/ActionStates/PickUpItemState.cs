@@ -5,10 +5,10 @@ using System.Collections;
 /// Pick up item state. Will grab a given item and put it itno the player's invetory
 /// Will also set out a flag with the name of the item being picked up
 /// </summary>
-public class PickUpItemState : AbstractState {
+public class PickUpItemState : PlayAnimationThenDoState {
 	GameObject _toPickUp;
 
-	public PickUpItemState(Character toControl, GameObject toPickUp) : base(toControl) {
+	public PickUpItemState(Character toControl, GameObject toPickUp) : base(toControl, Strings.animation_pickup) {
 		_toPickUp = toPickUp;
 	}
 	
@@ -16,14 +16,16 @@ public class PickUpItemState : AbstractState {
 		if (character is NPC){
 			character.EnterState(new MarkTaskDone(character));
 		}
-		else if (!character.animationData.IsPlaying(Strings.animation_pickup)) {
-			character.EnterState(new IdleState(character));
-			((Player) character).Inventory.PickUpObject(_toPickUp);
-		}
+//		else if (!character.animationData.IsPlaying(Strings.animation_pickup)) {
+//			character.EnterState(new IdleState(character));
+//			((Player) character).Inventory.PickUpObject(_toPickUp);
+//		}
+		base.Update();
 	}
 	
 	public override void OnEnter() {
-		character.PlayAnimation(Strings.animation_pickup);;
+		base.OnEnter();
+		//character.PlayAnimation(Strings.animation_pickup);;
 		DebugManager.instance.Log(character.name + 
 			": PickUpItemState Enter to pickup " + _toPickUp.name, "State", character.name);
 	}
@@ -31,7 +33,7 @@ public class PickUpItemState : AbstractState {
 	public override void OnExit() {
 		DebugManager.instance.Log(character.name + ": PickUpItemState Exit", "State", character.name);
 		FlagManager.instance.SetFlag(_toPickUp.name);
-		
+		((Player) character).Inventory.PickUpObject(_toPickUp);
 		// Shoot off event for having picked up item
 		EventManager.instance.RiseOnPlayerPickupEvent(new PickUpStateArgs(_toPickUp));
 	}

@@ -61,6 +61,20 @@ public class MapLocations {
 		get{return new Vector3(_upperMiddleBeach.x, _upperMiddleBeach.y + (LevelManager.levelYOffSetFromCenter * 2), _upperMiddleBeach.z);}	
 	}
 	
+	#region WindMill Location
+	static Vector3 _windMillLedge = new Vector3(-4.283016f, 11.34081f, 0f);
+	public static Vector3 WindmillYoung {
+		get{return new Vector3(_windMillLedge.x, _windMillLedge.y, _upperMiddleBeach.z);}	
+	}
+	public static Vector3 WindmillMiddle {
+		get{return new Vector3(_windMillLedge.x, _windMillLedge.y + LevelManager.levelYOffSetFromCenter, _windMillLedge.z);}	
+	}
+	public static Vector3 WindmillOld {
+		get{return new Vector3(_windMillLedge.x, _windMillLedge.y + (LevelManager.levelYOffSetFromCenter * 2), _windMillLedge.z);}	
+	}
+	
+	#endregion
+	
 	#region SiblingOld
 	static Vector3 _playerHouseWaterWell = new Vector3 (-2.4f, -2.4f, 0);
 	public static Vector3 PlayerHouseWaterWellOld {

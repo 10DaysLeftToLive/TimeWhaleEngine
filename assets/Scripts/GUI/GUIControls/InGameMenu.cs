@@ -3,10 +3,6 @@ using System.Collections;
 
 public class InGameMenu : GUIControl {
 	public GUIStyle buttonStyle;
-	public Texture2D pauseTexture;
-	public Texture2D unpauseTexture;
-	public float pauseButtonSize = .15f;
-	
 	
 	private Rect pauseButtonRect;
 	private bool isPaused = false;
@@ -16,7 +12,7 @@ public class InGameMenu : GUIControl {
 	}
 	
 	public override void Render(){
-		if (GUI.Button(pauseButtonRect, (isPaused ? unpauseTexture : pauseTexture), buttonStyle)){
+		if (GUI.Button(pauseButtonRect, (isPaused ? "Resume" : "Pause"))){
 			if (isPaused){
 				GUIManager.Instance.HidePauseMenu();
 			} else {
@@ -36,6 +32,6 @@ public class InGameMenu : GUIControl {
 	}
 	
 	private void SetupRectangles(){
-		pauseButtonRect = ScreenRectangle.NewRect(.0f,.98f-pauseButtonSize,pauseButtonSize,pauseButtonSize);	
+		pauseButtonRect = ScreenRectangle.NewRect(.0f,.8f,.2f,.2f);	
 	}
 }
