@@ -70,7 +70,8 @@ public class ChatMenu : GUIControl {
 		distance = Utils.GetDistance(chatInfo.npcTalking.gameObject, player.gameObject);
 		distancePercent = 1 - distance/DISTANCE_NEAR_PLAYER;
 		GUI.color = new Color(1,1,1,distancePercent);
-		MakeBox(chatInfo, chatBoxStyle);	
+		MakeBox(chatInfo, chatBoxStyle);
+		GUI.color = new Color(1,1,1, 1);
 	}
 	
 	string text;
