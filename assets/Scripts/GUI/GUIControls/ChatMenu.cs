@@ -16,9 +16,12 @@ public class ChatMenu : GUIControl {
 	public float CHATWIDTH = .45f;
 	
 	public GUIStyle chatBoxStyle;
+	private static float FONTRATIO = 25; // kinda arbitrary
+	
 	
 	public override void Init(){
-		player = FindObjectOfType(typeof(Player)) as Player;	
+		player = FindObjectOfType(typeof(Player)) as Player;
+        chatBoxStyle.fontSize = (Mathf.RoundToInt(Mathf.Min(ScreenSetup.screenWidth, ScreenSetup.screenHeight) / FONTRATIO));
 	}
 	
 	private List<NPCChat> toRemove = new List<NPCChat>();
@@ -67,8 +70,7 @@ public class ChatMenu : GUIControl {
 		distance = Utils.GetDistance(chatInfo.npcTalking.gameObject, player.gameObject);
 		distancePercent = 1 - distance/DISTANCE_NEAR_PLAYER;
 		GUI.color = new Color(1,1,1,distancePercent);
-		MakeBox(chatInfo, chatBoxStyle);
-		GUI.color = new Color(1,1,1, 1);
+		MakeBox(chatInfo, chatBoxStyle);	
 	}
 	
 	string text;
@@ -80,7 +82,7 @@ public class ChatMenu : GUIControl {
 		text = infoToDisplay.text;
 		boxContent = new GUIContent(text);
 		boxSize.x = CHATWIDTH * ScreenSetup.screenWidth; // convert into screen space for gui checking
-		boxStyle.wordWrap = false; // need to check the length of the line
+		boxStyle.wordWrap = false; // need to check if length of the line is less that that allocated so we can make it smaller
 		boxWidth = boxStyle.CalcSize(boxContent).x;
 		if (boxWidth < boxSize.x){
 			boxSize.x = boxWidth;
