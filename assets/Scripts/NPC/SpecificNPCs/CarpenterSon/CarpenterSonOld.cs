@@ -89,7 +89,7 @@ public class CarpenterSonOld : NPC {
 		//goToBeachChatPartThree.AddChat("Did I make a mistake?", 2f);
 		GoToBeachPartThree.AddAction(goToBeachChatPartThree);
 // Wait for 8 seconds or below	
-		GoToBeachPartThree.AddAction(new NPCEmotionUpdateAction(this, new AnswerLivedAGoodLifeState(this, "Have you ever just wondered"+ "\n" +"Am I following my dreams?")));
+		GoToBeachPartThree.AddAction(new NPCEmotionUpdateAction(this, new AnswerLivedAGoodLifeState(this, "Have you ever just wondered, "+ "\n" +"am I following my dreams?")));
 		flagReactions.Add(FlagStrings.oldCarpenterGoToBeachPartThreeFlag, GoToBeachPartThree);
 
 /*
