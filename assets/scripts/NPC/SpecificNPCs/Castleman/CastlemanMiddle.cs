@@ -99,38 +99,38 @@ public class CastlemanMiddle : NPC {
 		
 		moveToBeach = new Schedule(this, Schedule.priorityEnum.DoNow);
 		moveToBeach.Add(new Task(new MoveThenDoState(this, new Vector3(MapLocations.MiddleOfBeachMiddle.x+1.5f, MapLocations.MiddleOfBeachMiddle.y, MapLocations.MiddleOfBeachMiddle.z), new MarkTaskDone(this))));
-		Task reachedBeach = new Task(new MoveThenDoState(this, new Vector3 (MapLocations.MiddleOfBeachMiddle.x+1.5f, MapLocations.MiddleOfBeachMiddle.y, MapLocations.MiddleOfBeachMiddle.z), new MarkTaskDone(this))); // at top staircase
+		Task reachedBeach = new TimeTask(.1f,new IdleState(this));
 		reachedBeach.AddFlagToSet(FarmerFamilyFlagStrings.GirlCastleDateOne);
 		moveToBeach.Add(reachedBeach);
 		moveToBeach.Add(new TimeTask(5.3f, new IdleState(this)));
 		
-		Task reachedBeachTwo = new Task(new MoveThenDoState(this, new Vector3 (MapLocations.MiddleOfBeachMiddle.x+1.5f, MapLocations.MiddleOfBeachMiddle.y, MapLocations.MiddleOfBeachMiddle.z), new MarkTaskDone(this))); // at top staircase
+		Task reachedBeachTwo = new TimeTask(.1f,new IdleState(this));
 		reachedBeachTwo.AddFlagToSet(FarmerFamilyFlagStrings.GirlCastleDateTwo);
 		moveToBeach.Add(reachedBeachTwo);
 		moveToBeach.Add(new TimeTask(7.3f, new IdleState(this)));
 		
-		Task reachedBeachThree = new Task(new MoveThenDoState(this, new Vector3 (MapLocations.MiddleOfBeachMiddle.x+1.5f, MapLocations.MiddleOfBeachMiddle.y, MapLocations.MiddleOfBeachMiddle.z), new MarkTaskDone(this))); // at top staircase
+		Task reachedBeachThree = new TimeTask(.1f,new IdleState(this));
 		reachedBeachThree.AddFlagToSet(FarmerFamilyFlagStrings.GirlCastleDateThree);
 		moveToBeach.Add(reachedBeachThree);
 		moveToBeach.Add(new TimeTask(3.3f, new IdleState(this)));
 		
 		
-		Task reachedBeachFour = new Task(new MoveThenDoState(this, new Vector3 (MapLocations.MiddleOfBeachMiddle.x+1.5f, MapLocations.MiddleOfBeachMiddle.y, MapLocations.MiddleOfBeachMiddle.z), new MarkTaskDone(this))); // at top staircase
+		Task reachedBeachFour = new TimeTask(.1f,new IdleState(this));
 		reachedBeachFour.AddFlagToSet(FarmerFamilyFlagStrings.GirlCastleDateFour);
 		moveToBeach.Add(reachedBeachFour);
 		moveToBeach.Add(new TimeTask(6.3f, new IdleState(this)));
 		
-		Task reachedBeachFive = new Task(new MoveThenDoState(this, new Vector3 (MapLocations.MiddleOfBeachMiddle.x+1.5f, MapLocations.MiddleOfBeachMiddle.y, MapLocations.MiddleOfBeachMiddle.z), new MarkTaskDone(this))); // at top staircase
+		Task reachedBeachFive = new TimeTask(.1f,new IdleState(this));
 		reachedBeachFive.AddFlagToSet(FarmerFamilyFlagStrings.GirlCastleDateFive);
 		moveToBeach.Add(reachedBeachFive);
 		moveToBeach.Add(new TimeTask(2.3f, new IdleState(this)));
 		
-		Task reachedBeachSix = new Task(new MoveThenDoState(this, new Vector3 (MapLocations.MiddleOfBeachMiddle.x+1.5f, MapLocations.MiddleOfBeachMiddle.y, MapLocations.MiddleOfBeachMiddle.z), new MarkTaskDone(this))); // at top staircase
+		Task reachedBeachSix = new TimeTask(.1f,new IdleState(this));
 		reachedBeachSix.AddFlagToSet(FarmerFamilyFlagStrings.GirlCastleDateSix);
 		moveToBeach.Add(reachedBeachSix);
 		moveToBeach.Add(new TimeTask(6f, new IdleState(this)));
 		
-		Task reachedBeachEnd = new Task(new MoveThenDoState(this, new Vector3 (MapLocations.MiddleOfBeachMiddle.x+1.5f, MapLocations.MiddleOfBeachMiddle.y, MapLocations.MiddleOfBeachMiddle.z), new MarkTaskDone(this))); // at top staircase
+		Task reachedBeachEnd = new TimeTask(.1f,new IdleState(this));
 		reachedBeachEnd.AddFlagToSet(FlagStrings.EndOfDate);
 		moveToBeach.Add(reachedBeachEnd);
 		moveToBeach.Add(new TimeTask(3f, new IdleState(this)));

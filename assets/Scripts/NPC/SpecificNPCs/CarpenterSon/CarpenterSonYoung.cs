@@ -27,8 +27,15 @@ public class CarpenterSonYoung : NPC {
 		flagReactions.Add(FlagStrings.carpenterSonMakesFishingRod, CreatedFishingRod);
 		//CreatedFishingRod.Add
 		
+		Reaction ReactToMeetingCSON = new Reaction();
+		//ReactToMeetingCSON.AddAction(new NPCCallbackAction(UpdateReactToMeetingCSON));
+		flagReactions.Add(FlagStrings.InitialConversationWithCSONNOTFriend, ReactToMeetingCSON);
+		
 	}
-	
+	public void UpdateReactToMeetingCSON(){
+		//Debug.Log("This should go away!");
+		this.RemoveScheduleWithFlag("CSONMEETCASTLEMAN");	
+	}
 	protected override EmotionState GetInitEmotionState(){
 		return (new InitialEmotionState(this, "Hey! Can you help me find my tools?"));
 	}
@@ -41,18 +48,18 @@ public class CarpenterSonYoung : NPC {
 	protected override void SetUpSchedules(){
 		TalkWithCastleman = new Schedule (this, Schedule.priorityEnum.High);
 		TalkWithCastleman.Add(new TimeTask(300, new WaitTillPlayerCloseState(this, ref player)));
-		Task setFlag = (new Task(new MoveThenDoState(this, this.gameObject.transform.position, new MarkTaskDone(this))));
+		Task setFlag = (new TimeTask(2f, new IdleState(this)));
 		setFlag.AddFlagToSet(FlagStrings.InitialConversationWithCSONFriend);
 		TalkWithCastleman.Add(setFlag);
-		//TalkWithCastleman.AddFlagGroup("Talk with Castleman");
+		TalkWithCastleman.AddFlagGroup("CSONMEETCASTLEMAN");
 		
 		
 		TalkWithCastlemanNotFriend = new Schedule (this, Schedule.priorityEnum.High);
 		TalkWithCastlemanNotFriend.Add(new TimeTask(300, new WaitTillPlayerCloseState(this, ref player)));
-		Task setFlagNOT = (new Task(new MoveThenDoState(this, this.gameObject.transform.position, new MarkTaskDone(this))));
+		Task setFlagNOT = (new TimeTask(2f, new IdleState(this)));
 		setFlagNOT.AddFlagToSet(FlagStrings.InitialConversationWithCSONNOTFriend);
 		TalkWithCastlemanNotFriend.Add(setFlagNOT);
-		//TalkWithCastleman.AddFlagGroup("Talk with Castleman NOT Friends");
+		TalkWithCastleman.AddFlagGroup("CSONMEETCASTLEMAN");
 		
 		
 		Woodworking = new Schedule( this, Schedule.priorityEnum.Medium);

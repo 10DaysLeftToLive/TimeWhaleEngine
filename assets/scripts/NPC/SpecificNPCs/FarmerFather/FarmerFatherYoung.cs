@@ -39,7 +39,7 @@ public class FarmerFatherYoung : NPC {
 		currentEmotion.PassStringToEmotionState(FlagStrings.ConversationInMiddleFather);
 	}
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "We need help running the farm!"));
+		return (new StoryEmotionState(this, "We need help running the farm!"));
 	}
 	
 	protected override Schedule GetSchedule(){

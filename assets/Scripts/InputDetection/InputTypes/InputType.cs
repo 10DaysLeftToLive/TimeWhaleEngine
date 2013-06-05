@@ -37,9 +37,13 @@ public abstract class InputType  {
 	protected LevelManager levelManager;
 	
 	public InputType(){
-		camera = Camera.main.GetComponent<CameraController>();
-		shader = GameObject.Find("FadePlane").GetComponent<AgeTransitionShader>();
-		levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+		try{
+			camera = Camera.main.GetComponent<CameraController>();
+			shader = GameObject.Find("FadePlane").GetComponent<AgeTransitionShader>();
+			levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+		}catch{
+			Debug.LogWarning("Camera, FadePlane, or LevelManager not found");
+		}
 		ResetControlState();
 	}
 	
