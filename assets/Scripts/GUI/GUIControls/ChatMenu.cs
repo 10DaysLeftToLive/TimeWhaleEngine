@@ -16,9 +16,12 @@ public class ChatMenu : GUIControl {
 	public float CHATWIDTH = .2f;
 	
 	public GUIStyle chatBoxStyle;
+	private static float FONTRATIO = 20; // kinda arbitrary
+	
 	
 	public override void Init(){
-		player = FindObjectOfType(typeof(Player)) as Player;	
+		player = FindObjectOfType(typeof(Player)) as Player;
+        chatBoxStyle.fontSize = (Mathf.RoundToInt(Mathf.Min(ScreenSetup.screenWidth, ScreenSetup.screenHeight) / FONTRATIO));
 	}
 	
 	private List<NPCChat> toRemove = new List<NPCChat>();
@@ -79,7 +82,7 @@ public class ChatMenu : GUIControl {
 		text = infoToDisplay.text;
 		boxContent = new GUIContent(text);
 		boxSize.x = CHATWIDTH * ScreenSetup.screenWidth; // convert into screen space for gui checking
-		boxStyle.wordWrap = false; // need to check the length of the line
+		boxStyle.wordWrap = false; // need to check if length of the line is less that that allocated so we can make it smaller
 		boxWidth = boxStyle.CalcSize(boxContent).x;
 		if (boxWidth < boxSize.x){
 			boxSize.x = boxWidth;

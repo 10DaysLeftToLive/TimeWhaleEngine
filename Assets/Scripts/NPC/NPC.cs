@@ -278,6 +278,9 @@ public abstract class NPC : Character {
 	
 	public void UpdateEmotionState(EmotionState newEmotionState){
 		currentEmotion = newEmotionState;	
+		if (IsInteracting()){
+			GUIManager.Instance.RefreshInteraction();
+		}
 	}
 	#endregion
 	
