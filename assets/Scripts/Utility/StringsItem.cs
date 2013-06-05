@@ -11,13 +11,14 @@ public static class StringsItem {
 	public static string LilySeeds = "Lily Seeds";
 	public static string Note = "Note";
 	public static string Pendant = "Pendant";
+	public static string Portrait = "Portrait";
 	public static string PuzzlePieces = "Puzzle Pieces";
 	
 	public static string Rope = "Rope";
 	public static string Rose = "Rose";
 	public static string Seashell = "Seashell";
 	public static string SeashellTwo = "SeashellTwo!";
-	public static string Shovel = "Shovel";
+	public static string Shovel = "shovel";
 	public static string SunflowerSeeds = "Sunflower Seeds";
 	public static string TimeWhale = "Plushie";
 	public static string Toolbox = "toolbox";

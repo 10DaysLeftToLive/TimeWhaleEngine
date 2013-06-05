@@ -5,25 +5,44 @@ using System.Collections;
 /// SeaCaptainMiddle specific scripting values
 /// </summary>
 public class SeaCaptainMiddle : NPC {	
-	Vector3 startingPosition, farmDigPos, reflectDigPos, carpenterDigPos, beachDigPos;
-	Schedule treasureHuntSched;
+	private SeaCaptainTreasureHuntSchedule treasureHuntSched;
+	private NPCConvoSchedule talkToFortuneTellerFirstSched;
+	private NPCConvoSchedule talkToFortuneTellerSecondSched;
+	private Schedule returnToDockSched;
+	Reaction fishingRodStolenReaction = new Reaction();
+	Reaction treasureHuntBeginsReaction = new Reaction();
+	Reaction talkToFortuenTellerFirstReaction = new Reaction();
+	Reaction talkToFortuenTellerSecondReaction = new Reaction();
+	private Vector3 startingPos = new Vector3(74f, -3.09f + LevelManager.levelYOffSetFromCenter, 0f);
 	
 	protected override void Init() {
 		id = NPCIDs.SEA_CAPTAIN;
 		base.Init();
+		startingPos = this.transform.position;
 	}
 	
 	protected override void SetFlagReactions(){
 		#region Fishing rod stolen
-		Reaction fishingRodStolen = new Reaction();
-		fishingRodStolen.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "Don't forget to bring my fishing rod back.")));
-		fishingRodStolen.AddAction(new ShowOneOffChatAction(this, "Make sure to bring that back in one piece", 2f));
-		flagReactions.Add(FlagStrings.StolenFishingRod, fishingRodStolen);
+		fishingRodStolenReaction.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "Don't forget to bring my fishing rod back.")));
+		fishingRodStolenReaction.AddAction(new ShowOneOffChatAction(this, "Make sure to bring that back in one piece", 2f));
+		flagReactions.Add(FlagStrings.StolenFishingRod, fishingRodStolenReaction);
 		#endregion
+		
+		treasureHuntBeginsReaction.AddAction(new NPCAddScheduleAction(this, treasureHuntSched));
+		treasureHuntBeginsReaction.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "Alas! All has been for naught. Well, I guess I shall leave with haste as soon as I can go!")));
+		flagReactions.Add(FlagStrings.TreasureHuntBegin, treasureHuntBeginsReaction);
+		
+		talkToFortuenTellerFirstReaction.AddAction(new NPCAddScheduleAction(this, returnToDockSched));
+		talkToFortuenTellerFirstReaction.AddAction(new NPCAddScheduleAction(this, talkToFortuneTellerFirstSched));
+		AddTimeReaction(1000, talkToFortuenTellerFirstReaction);
+		
+		talkToFortuenTellerSecondReaction.AddAction(new NPCAddScheduleAction(this, returnToDockSched));
+		talkToFortuenTellerSecondReaction.AddAction(new NPCAddScheduleAction(this, talkToFortuneTellerSecondSched));
+		AddTimeReaction(1500, talkToFortuenTellerSecondReaction);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "Ahoy laddie! I am the legendeary sea captain of the six seas, or was it 7..."));
+		return (new InitialEmotionState(this, "Ahoy matey! I am the legendeary sea captain of the six seas, or was it seven..."));
 	}
 	
 	protected override Schedule GetSchedule(){
@@ -32,7 +51,13 @@ public class SeaCaptainMiddle : NPC {
 	}
 
 	protected override void SetUpSchedules(){
+		treasureHuntSched = new SeaCaptainTreasureHuntSchedule(this);
 		
+		talkToFortuneTellerFirstSched = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FortuneTellerMiddle), new MiddleSeaCaptainFortuneTellerFirstConvo(), Schedule.priorityEnum.Medium);
+		talkToFortuneTellerSecondSched = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FortuneTellerMiddle), new MiddleSeaCaptainFortuneTellerSecondConvo(), Schedule.priorityEnum.Medium);
+		
+		returnToDockSched = new Schedule(this);
+		returnToDockSched.Add(new Task(new MoveThenMarkDoneState(this, startingPos)));
 	}
 	
 	
@@ -49,6 +74,8 @@ public class SeaCaptainMiddle : NPC {
 		Reaction veggiesReaction;
 		Reaction shovelReaction;
 		Reaction toyShipReaction;
+		Reaction seaShellReaction;
+		Reaction portraitReaction;
 	
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
 			#region item reactions
@@ -70,13 +97,23 @@ public class SeaCaptainMiddle : NPC {
 			Reaction shovelReaction = new Reaction();
 			shovelReaction.AddAction(new NPCTakeItemAction(toControl));
 			shovelReaction.AddAction(new UpdateCurrentTextAction(toControl, "Thanks matey! I can now go and dig for treasure."));
-			shovelReaction.AddAction(new NPCAddScheduleAction(_npcInState, new SeaCaptainTreasureHuntSchedule(_npcInState)));
+			shovelReaction.AddAction(new NPCCallbackAction(UpdateTreasureHuntBegins));
 			_allItemReactions.Add(StringsItem.Shovel,  new DispositionDependentReaction(shovelReaction));
 			
 			Reaction toyShipReaction = new Reaction();
 			toyShipReaction.AddAction(new NPCTakeItemAction(toControl));
 			toyShipReaction.AddAction(new UpdateCurrentTextAction(toControl, "Ahhh... what a grand vessel! Reminds me of me own ship. Thanks laddie!"));
 			_allItemReactions.Add(StringsItem.ToyBoat,  new DispositionDependentReaction(toyShipReaction));
+			
+			Reaction seaShellReaction = new Reaction();
+			seaShellReaction.AddAction(new NPCTakeItemAction(toControl));
+			seaShellReaction.AddAction(new UpdateCurrentTextAction(toControl, "What is this? There is a pearl inside! My search has not been in vain."));
+			_allItemReactions.Add(StringsItem.Seashell,  new DispositionDependentReaction(seaShellReaction));
+			
+			Reaction portraitReaction = new Reaction();
+			portraitReaction.AddAction(new NPCTakeItemAction(toControl));
+			portraitReaction.AddAction(new UpdateCurrentTextAction(toControl, "I don't know what use I have for a portrait, but I guess I should take it since I found it."));
+			_allItemReactions.Add(StringsItem.Portrait,  new DispositionDependentReaction(portraitReaction));
 			#endregion
 			
 			#region choices
@@ -108,6 +145,10 @@ public class SeaCaptainMiddle : NPC {
 		public void UpdateWhereShip(){
 			_allChoiceReactions.Remove(whereShipChoice);
 			GUIManager.Instance.RefreshInteraction();
+		}
+		
+		public void UpdateTreasureHuntBegins() {
+			FlagManager.instance.SetFlag(FlagStrings.TreasureHuntBegin);
 		}
 		#endregion
 	

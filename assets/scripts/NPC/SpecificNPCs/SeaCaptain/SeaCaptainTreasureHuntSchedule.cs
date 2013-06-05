@@ -7,11 +7,11 @@ public class SeaCaptainTreasureHuntSchedule : Schedule {
 	
 	protected override void Init ()
 	{
-		Vector3 startingPosition = new Vector3(74f, -3f + LevelManager.levelYOffSetFromCenter, .05f);
-		Vector3 farmDigPos = new Vector3(52.5f, 16f + LevelManager.levelYOffSetFromCenter, .05f);
-		Vector3 reflectDigPos = new Vector3(-28f, 18f + LevelManager.levelYOffSetFromCenter, .05f);
-		Vector3 carpenterDigPos = new Vector3(16f, -1f + LevelManager.levelYOffSetFromCenter, .05f);
-		Vector3 beachDigPos = new Vector3(43f, -7.5f + LevelManager.levelYOffSetFromCenter, .05f);
+		Vector3 startingPosition = new Vector3(74f, -3.09f + LevelManager.levelYOffSetFromCenter, 0f);
+		Vector3 farmDigPos = new Vector3(52.5f, 16f + LevelManager.levelYOffSetFromCenter, 0f);
+		Vector3 reflectDigPos = new Vector3(-28f, 18f + LevelManager.levelYOffSetFromCenter, 0f);
+		Vector3 carpenterDigPos = new Vector3(16f, -1f + LevelManager.levelYOffSetFromCenter, 0f);
+		Vector3 beachDigPos = new Vector3(43f, -7.5f + LevelManager.levelYOffSetFromCenter, 0f);
 		
 		NPCChat farmDigChat = new NPCChat();
 		farmDigChat.AddChatInfo(new ChatInfo(_toManage, "Ah hah! My treas-"));
@@ -24,7 +24,7 @@ public class SeaCaptainTreasureHuntSchedule : Schedule {
 		reflectDigChat.AddChatInfo(new ChatInfo(_toManage, "Nothing?"));
 		reflectDigChat.AddChatInfo(new ChatInfo(_toManage, "Interesting... that was just an ink stain."));
 		reflectDigChat.AddChatInfo(new ChatInfo(_toManage, "Hmm, looks like we are supposed to go to a giant tree."));
-		reflectDigChat.AddChatInfo(new ChatInfo(_toManage, "I know that grumpy guy lives in the stump of one."));
+		reflectDigChat.AddChatInfo(new ChatInfo(_toManage, "I know that that grumpy guy lives in the stump of a giant tree."));
 		
 		NPCChat carpenterDigChat = new NPCChat();
 		carpenterDigChat.AddChatInfo(new ChatInfo(_toManage, "A flute?"));
