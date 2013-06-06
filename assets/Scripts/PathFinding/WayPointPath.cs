@@ -28,7 +28,7 @@ public class WayPointPath {
 		}
 	}
 
-	public static void SetupPathfinding(Vector3 startPos, Vector3 destination, float ht){
+	public static void SetupPathfinding(Vector3 startPos, Vector3 destination, float ht, RaycastHit hit){
 		noPath = false;
 		skipWayPoints = false;
 		startPoint = -1;
@@ -44,8 +44,10 @@ public class WayPointPath {
 		Vector3 heading = SetHeading(startPos);
 		GameObject startLeft = GetPoint(startPos, mask, heading);
 		GameObject startRight = GetPoint(startPos, mask, heading*-1);
-
-		heading = SetHeading(destination);
+		
+		
+		heading = Quaternion.AngleAxis(90, new Vector3(0,0,1)) * hit.normal;
+		if (heading.x > 0){ heading *= -1;} // heading will sometimes point wrong direction on slopes
 		GameObject endLeft = GetPoint(destination, mask, heading);
 		GameObject endRight = GetPoint(destination, mask, heading*-1);
 
@@ -77,35 +79,6 @@ public class WayPointPath {
 			noPath = true;
 		}
 	}
-	
-	public static void SetupPathfinding(Vector3 startPos, string name, float ht){
-		noPath = false;
-		startPosition = startPos;
-		height = ht;
-		points = new Vector3[30];
-		wayPoints = new int[30];
-		index = 0;
-		AddPoint(startPos, -1);
-		int mask = (1 << 15); // wayPoint layer
-		Vector3 heading = SetHeading(startPos);
-		GameObject startLeft = GetPoint(startPos, mask, heading);
-		GameObject startRight = GetPoint(startPos, mask, heading);
-		
-		WayPoints startLeftScript, startRightScript, endScript;
-		startLeftScript = GetScript(startLeft);
-		startRightScript = GetScript(startRight);
-		endScript = GetScript(Graph.FindWayPointByName(name));
-
-		float minDistance = 999;
-		minDistance = CheckDistance(startLeftScript, endScript, minDistance);
-		minDistance = CheckDistance(startRightScript, endScript, minDistance);
-		startPoint = start.id;
-		endPoint = end.id;
-		currentAge = (int)start.pointAge;
-		if (minDistance == 999)
-			noPath = true;
-		
-	}
 
 	public static bool CheckForPathBetweenPoints(){		
 		// if moving small distance and wont use waypoints
@@ -121,14 +94,6 @@ public class WayPointPath {
 
 		return AddArray(startPoint, endPoint, destPosition);
 	}
-
-	public static bool CheckForPathToNode(){
-		if (noPath)
-			return false;
-		
-		return AddArray(startPoint, endPoint);
-	}
-
 	private static float CheckDistance(WayPoints st, WayPoints ed, float minDistance){
 		if ((st != null && ed != null) && (pathDistance[st.id, ed.id] + Vector3.Distance(st.GetFloorPosition(), startPosition) + Vector3.Distance(ed.GetFloorPosition(), destPosition)) < minDistance){
 			minDistance = pathDistance[st.id, ed.id] + Vector3.Distance(st.GetFloorPosition(), startPosition) + Vector3.Distance(ed.GetFloorPosition(), destPosition);
@@ -137,19 +102,9 @@ public class WayPointPath {
 		}
 		return minDistance;
 	}
-	
-	private static float CheckDistanceFromStart(WayPoints st, WayPoints ed, float minDistance){
-		if ((st != null && ed != null) && (pathDistance[st.id, ed.id] + Vector3.Distance(st.GetFloorPosition(), startPosition)) < minDistance){
-			minDistance = pathDistance[st.id, ed.id] + Vector3.Distance(st.GetFloorPosition(), startPosition);
-			start = st;
-			end = ed;
-		}
-		return minDistance;
-	}
 
 	private static Vector3 SetHeading(Vector3 pos1){
 		Vector3 heading = CheckPositionForSlope(pos1);
-		//Debug.DrawRay(pos1,heading,Color.green,20);
 		return heading;
 	}
 
@@ -162,15 +117,6 @@ public class WayPointPath {
 		AddPoint(destination, -1);
 		return true;
 	}
-
-	private static bool AddArray(int start, int stop){
-		Vector3[] temp = Search.GetVectors(stop, start);
-		int[] wayPointTemp = Search.GetWayPointIndices(stop, start);
-		for (int i = 0; i < Search.index; i++)
-			AddPoint(new Vector3 (temp[i].x, temp[i].y + height + LevelManager.levelYOffSetFromCenter*currentAge,temp[i].z), wayPointTemp[i]);
-		return true;
-	}
-
 
 	private static GameObject GetPoint(Vector3 pos, int mask, Vector3 heading){
 		RaycastHit hit;
