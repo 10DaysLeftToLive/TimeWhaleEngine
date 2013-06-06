@@ -46,7 +46,7 @@ public class Player : Character {
 		pos = Camera.main.ScreenToWorldPoint(e.position);
 		pos.z = this.transform.position.z;
 		
-		if (currentState.GetType() == typeof(IdleState) || currentState.GetType() == typeof(ClimbIdleState)){ // if we are idled or climbing idled
+		if (currentState.GetType() == typeof(IdleState) || currentState.GetType().IsSubclassOf(typeof(MoveState))){ 
 			EnterState(new MoveState(this, pos)); // move normaly
 		} else if (currentState.GetType() == typeof(MoveState)){
 			((MoveState) currentState).UpdateGoal(pos);

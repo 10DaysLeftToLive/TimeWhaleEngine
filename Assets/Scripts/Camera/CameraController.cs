@@ -59,7 +59,7 @@ public class CameraController : MonoBehaviour {
 	}
 	
 	static private bool NotTransitioning(){
-		return (true);//!FadeToBlackTransition.fadingToBlack && !FadeToBlackTransition.fadeToClear);
+		return (!FadeEffect.isFading);
 	}
 	
 	static private void ZoomIn(){

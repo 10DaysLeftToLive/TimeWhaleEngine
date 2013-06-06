@@ -20,6 +20,7 @@ public class NPCDispositionManager : ManagerSingleton<NPCDispositionManager> {
 		foreach (NPC objectToManage in componentsToManage){
 			if (!containersInLevel.ContainsKey(objectToManage.ID)){
 				containersInLevel.Add(objectToManage.ID, new NPCClassContainer());
+				objectToManage.ageNPCisIn = ageRootIn;
 			}
 			Add (objectToManage, ageRootIn);
 		}
