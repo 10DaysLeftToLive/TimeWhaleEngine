@@ -18,7 +18,6 @@ public class ChatMenu : GUIControl {
 	public GUIStyle chatBoxStyle;
 	private static float FONTRATIO = 25; // kinda arbitrary
 	
-	
 	public override void Init(){
 		player = FindObjectOfType(typeof(Player)) as Player;
         chatBoxStyle.fontSize = (Mathf.RoundToInt(Mathf.Min(ScreenSetup.screenWidth, ScreenSetup.screenHeight) / FONTRATIO));
@@ -56,8 +55,13 @@ public class ChatMenu : GUIControl {
 	private void ShowChats(){
 		foreach (ChatInfo chatInfo in _currentChats){
 			if (IsVisibleToPlayer(chatInfo.npcTalking)){
-				GUI.color = new Color(1,1,1, 1);
+				if (player.npcTalkingWith != null){
+					GUI.color = new Color(1,1,1,.5f);
+				} else {
+					GUI.color = new Color(1,1,1,1);
+				}
 				MakeBox(chatInfo, chatBoxStyle);	
+				GUI.color = new Color(1,1,1,1);
 			} else if (IsNearPlayer(chatInfo.npcTalking)) {
 				FadeChatBox(chatInfo);
 			}
@@ -67,10 +71,15 @@ public class ChatMenu : GUIControl {
 	float distance;
 	float distancePercent;
 	private void FadeChatBox(ChatInfo chatInfo){
-		distance = Utils.GetDistance(chatInfo.npcTalking.gameObject, player.gameObject);
-		distancePercent = 1 - distance/DISTANCE_NEAR_PLAYER;
-		GUI.color = new Color(1,1,1,distancePercent);
+		if (player.npcTalkingWith != null){
+			GUI.color = new Color(1,1,1,.5f);
+		} else {
+			distance = Utils.GetDistance(chatInfo.npcTalking.gameObject, player.gameObject);
+			distancePercent = 1 - distance/DISTANCE_NEAR_PLAYER;
+			GUI.color = new Color(1,1,1,distancePercent);
+		}
 		MakeBox(chatInfo, chatBoxStyle);	
+		GUI.color = new Color(1,1,1, 1);
 	}
 	
 	string text;
