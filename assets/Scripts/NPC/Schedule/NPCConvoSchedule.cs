@@ -33,8 +33,8 @@ public class NPCConvoSchedule : Schedule {
 	}
 	
 	public NPCConvoSchedule(NPC npcOne, NPC npcTwo, NPCConversation conversation, Enum priority, bool dontWaitForPlayer) : base(npcOne, priority) {
-		Init(npcOne, npcTwo, conversation, priority);
 		_waitForPlayer = (!dontWaitForPlayer);
+		Init(npcOne, npcTwo, conversation, priority);
 	}
 	
 	protected void Init(NPC npcOne, NPC npcTwo, NPCConversation conversation, Enum priority) {
