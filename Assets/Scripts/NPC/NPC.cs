@@ -22,6 +22,7 @@ public abstract class NPC : Character {
 	public Player player;
 	public bool chatingWithPlayer = false;
 	public bool chatingWithNPC = false;
+	public CharacterAgeState ageNPCisIn;
 	private Texture charPortrait;
 	public float timeTillPassiveChatAgain = 0;
 	#endregion

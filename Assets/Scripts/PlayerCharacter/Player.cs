@@ -39,7 +39,6 @@ public class Player : Character {
 	private Vector3 pos;
 	// We want to be able to switch to move at any state when the player clicks
 	private void OnClickToMove (EventManager EM, ClickPositionArgs e){
-		Debug.Log("current state = " + currentState.GetType());
 		if (isGamePaused()) return;
 		if (currentState.GetType() == typeof(TalkState)){
 			GUIManager.Instance.CloseInteractionMenu();
