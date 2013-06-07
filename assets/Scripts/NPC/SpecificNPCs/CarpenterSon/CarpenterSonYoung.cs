@@ -104,7 +104,7 @@ public class CarpenterSonYoung : NPC {
 		Choice makeDollChoice = new Choice("Make Doll", "That's kind of lame, but it's something");
 		Reaction makeDollReaction = new Reaction();
 		
-		Choice recieveItemChoice = new Choice("Recieve Item", "Here you go");
+		Choice recieveItemChoice = new Choice("Are you done yet?", "Yep!");
 		Reaction recieveItemReaction = new Reaction();
 		
 		Reaction transferEmotionStateReaction = new Reaction();
@@ -201,7 +201,7 @@ public class CarpenterSonYoung : NPC {
 		
 		private void WhittleItem(){
 			//TODO: Whittling Animation
-			//_allChoiceReactions.Add(recieveItemChoice, new DispositionDependentReaction(recieveItemReaction))
+			_allChoiceReactions.Add(recieveItemChoice, new DispositionDependentReaction(recieveItemReaction));
 		}
 		
 		
@@ -230,7 +230,7 @@ public class CarpenterSonYoung : NPC {
 		Choice CritisizeWorkChoice = new Choice("You could use some work", "Uh, alright. Guess I'll just have to make myself better.");
 		Reaction EncourageCarpentryReaction = new Reaction();
 		
-		Choice RecieveItemChoice = new Choice("Here it is!", "Do you like it?");
+		Choice RecieveItemChoice = new Choice("Can I see it?", "Do you like it?");
 		Reaction RecieveItemReaction = new Reaction();
 	
 		
