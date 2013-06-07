@@ -28,12 +28,24 @@ public static class Utils{
 		return (GetDistance(gameObjOne, gameObjTwo) < distance);
 	}
 	
+	/// <summary>
+	/// Gets the point infront of the given object. Based on their positions. 
+	/// If the start is right inside the target object it will move to one of the sides
+	/// </summary>
 	public static Vector3 GetPointInfrontOf(Vector3 start, GameObject objectToMoveInfront){
 		Vector3 whereToMove = objectToMoveInfront.transform.position;
-		if (Utils.CalcDifference(start.x, whereToMove.x) < 0) { // if the target is to the right
+		Bounds objectBounds = objectToMoveInfront.collider.bounds;
+		
+		if (Utils.CalcDifference(start.x, objectBounds.min.x) < 0) { // if the target is to the right
 			whereToMove.x = whereToMove.x - objectToMoveInfront.transform.localScale.x/2 - SPACEINFRONT;
-		} else {
+		} else if (Utils.CalcDifference(start.x, objectBounds.max.x) > 0) { // if the target is to the left
 			whereToMove.x = whereToMove.x + objectToMoveInfront.transform.localScale.x/2 + SPACEINFRONT;
+		} else { // if we are inside
+			if (Utils.CalcDifference(start.x, whereToMove.x) < 0) { // if the target is to the right
+				whereToMove.x = whereToMove.x - objectToMoveInfront.transform.localScale.x/2 - SPACEINFRONT;
+			} else {
+				whereToMove.x = whereToMove.x + objectToMoveInfront.transform.localScale.x/2 + SPACEINFRONT;
+			}
 		}
 		
 		return (whereToMove);

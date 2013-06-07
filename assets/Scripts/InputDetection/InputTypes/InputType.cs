@@ -86,9 +86,9 @@ public abstract class InputType  {
 	protected void NotifyNoObjectClickedOn(Vector2 inputScreenPos){
 		EventManager.instance.RiseOnClickedNoObjectEvent(new ClickPositionArgs(inputScreenPos));
 	}
-	
-	protected void NotifyObjectClickedOn(Vector2 inputScreenPos){
-		EventManager.instance.RiseOnClickEvent(new ClickPositionArgs(inputScreenPos));
+
+	protected void NotifyObjectClickedOn(GameObject objectClicked){
+		EventManager.instance.RiseOnClickedObjectEvent(new ClickedObjectArgs(objectClicked));
 	}
 	#endregion
 	
@@ -98,7 +98,7 @@ public abstract class InputType  {
 		RaycastHit hit;
 		
 		if (Physics.Raycast(ray, out hit, 15) && !hit.transform.CompareTag("Untagged")) {
-			NotifyObjectClickedOn(inputScreenPos);
+			NotifyObjectClickedOn(hit.transform.gameObject);
 		} else {
 			NotifyNoObjectClickedOn(inputScreenPos);
 		}

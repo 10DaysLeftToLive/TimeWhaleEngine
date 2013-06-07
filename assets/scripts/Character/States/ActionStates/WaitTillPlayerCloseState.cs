@@ -20,9 +20,6 @@ public class WaitTillPlayerCloseState : WaitState {
 		if(_player == null){
 			_player = GameObject.Find ("PlayerCharacter").GetComponent<Player>();	
 		}
-		if (_player == null || character == null) {
-			Debug.Log ("Player is null");
-		}
 		flatPlayerPos = new Vector2(_player.transform.position.x, _player.transform.position.y);
 		flatPos = new Vector2(character.transform.position.x, character.transform.position.y);
 		return (Vector2.Distance(flatPlayerPos, flatPos) < _distance);
