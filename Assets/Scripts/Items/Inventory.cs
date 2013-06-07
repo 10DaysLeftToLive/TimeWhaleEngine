@@ -27,9 +27,9 @@ public class Inventory {
 			Utils.SetActiveRecursively(pickedUpObject.gameObject, true);
 			
 			pickedUpObject.GetComponent<InteractableOnClick>().Disable();
+       		SoundManager.instance.PickUpItemSFX.Play();
 		}
 		
-        SoundManager.instance.PickUpItemSFX.Play();
 	}
 	
 	public bool HasItem() {

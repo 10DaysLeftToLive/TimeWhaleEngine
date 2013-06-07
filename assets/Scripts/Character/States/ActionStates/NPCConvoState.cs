@@ -20,13 +20,8 @@ public class NPCConvoState : AbstractState {
 	}
 	
 	public void FaceEachOther() {
-		if (character.transform.position.x > _toTalkWith.transform.position.x) {
-			character.LookLeft();
-			_toTalkWith.LookRight();
-		} else {
-			character.LookRight();
-			_toTalkWith.LookLeft();
-		}
+		((NPC)character).LookAt(_toTalkWith.gameObject);
+		((NPC)_toTalkWith).LookAt(character.gameObject);
 	}
 	
 	public override void OnEnter(){
