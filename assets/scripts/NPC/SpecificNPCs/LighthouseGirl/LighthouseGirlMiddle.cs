@@ -19,6 +19,22 @@ public class LighthouseGirlMiddle : NPC {
 		base.Init();
 	}
 	
+	protected void setAngry(){
+		this.SetCharacterPortrait(StringsNPC.Angry);
+	}
+	protected void setSad(){
+		this.SetCharacterPortrait(StringsNPC.Sad);
+	}
+	protected void setDefault(){
+		this.SetCharacterPortrait(StringsNPC.Default);
+	}
+	protected void setHappy(){
+		this.SetCharacterPortrait(StringsNPC.Happy);	
+	}
+	protected void setEmbarrassed(){
+		this.SetCharacterPortrait(StringsNPC.Embarassed);	
+	}
+	
 	protected override void CharacterUpdate ()
 	{
 		if (waitingOnDateTimer && !dateOver){
@@ -76,14 +92,17 @@ public class LighthouseGirlMiddle : NPC {
 		
 		#region date
 		dateCarpenterNotified.AddAction(new NPCCallbackAction(DateSuccess));
+		dateCarpenterNotified.AddAction(new NPCCallbackAction(setHappy));
 		flagReactions.Add(FlagStrings.CarpenterDating, dateCarpenterNotified);
 		
 		dateCastleManNotified.AddAction(new NPCCallbackAction(DateSuccess));
+		dateCastleManNotified.AddAction(new NPCCallbackAction(setHappy));
 		flagReactions.Add(FlagStrings.CastleManDating, dateCastleManNotified);
 		
 		waitForPlayer.AddAction(new NPCAddScheduleAction(this, ropeDownSchedule));
 		flagReactions.Add(FlagStrings.WaitForPlayerBeforeRope, waitForPlayer);
 		
+		dateCarpenterNotified.AddAction(new NPCCallbackAction(setSad));
 		waitingForDate.AddAction(new NPCCallbackAction(MoveToBeach)); // teleport to beach
 		waitingForDate.AddAction(new NPCCallbackAction(WaitingOnDate));
 		flagReactions.Add(FlagStrings.WaitingForDate, waitingForDate);
@@ -94,6 +113,7 @@ public class LighthouseGirlMiddle : NPC {
 		flagReactions.Add(FlagStrings.EndOfDate, endOfDate);
 		
 		stoodUp.AddAction(new NPCEmotionUpdateAction(this, stoodUpState));
+		stoodUp.AddAction(new NPCCallbackAction(setAngry));
 		flagReactions.Add(FlagStrings.StoodUp, stoodUp);
 		
 		farmerOnBoard.AddAction(new NPCCallbackAction(SendFarmerOnBoard));

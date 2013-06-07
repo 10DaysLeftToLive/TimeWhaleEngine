@@ -117,24 +117,25 @@ public class MoveState : AbstractState {
 			if (hitDown.distance < distance){
 				distance = hitDown.distance;
 				hitPos = hitDown.point;
-            	hitPos.y += character.transform.localScale.y/2;
+            	hitPos.y += .2f;
 			}
         } 
 		if (Physics.Raycast(_goal, Vector3.up , out hitUp, 10, mask)) {
 			if (hitUp.distance < distance/2){
+				hitDown = hitUp;
 				distance = hitUp.distance;
 				hitPos = hitUp.point;
-           		hitPos.y += character.transform.localScale.y/2;
+           		hitPos.y += .2f;
 			}
         }
 		
 		if (distance != MIN_DISTANCE_TO_POINT){
 			float height = character.transform.localScale.y/2;
 			if (character is Player && hitPos.y > 70){
-				hitPos.y += character.transform.localScale.y/2.5f;
+				hitPos.y += .2f;
 				height += character.transform.localScale.y/2.5f;
 			}
-			if (PathFinding.GetPathForPoints(character.transform.position, hitPos, height)){
+			if (PathFinding.GetPathForPoints(character.transform.position, hitPos, height, hitDown)){
                 _pathFollowing = PathFinding.GetPath();
                 return (true);
 	        }
@@ -143,9 +144,9 @@ public class MoveState : AbstractState {
 		return (false);
     }
     
-    protected virtual bool PathSearch(Vector3 pos, Vector3 hitPos, float height){
+   /* protected virtual bool PathSearch(Vector3 pos, Vector3 hitPos, float height){
         return (PathFinding.GetPathForPoints(pos, hitPos, height));
-    }
+    }*/
     
     // Draw a line from the current position to the point and determine if we should walk or climb there
     private GoToState GetGoToStateToPoint(Vector3 point){

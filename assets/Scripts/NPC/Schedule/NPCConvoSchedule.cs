@@ -14,6 +14,7 @@ public class NPCConvoSchedule : Schedule {
 	protected Task currentTwo;
 	protected Queue<ConvoTask> convoTasksToDo;
 	protected string setFlagAction; 
+	bool hasAdded = false;
 	private static float DISTANCE_CLOSE_TO_PLAYER = 6f;
 	private static float TALK_DISTANCE = 2f;
 	
@@ -32,8 +33,8 @@ public class NPCConvoSchedule : Schedule {
 	}
 	
 	public NPCConvoSchedule(NPC npcOne, NPC npcTwo, NPCConversation conversation, Enum priority, bool dontWaitForPlayer) : base(npcOne, priority) {
-		Init(npcOne, npcTwo, conversation, priority);
 		_waitForPlayer = (!dontWaitForPlayer);
+		Init(npcOne, npcTwo, conversation, priority);
 	}
 	
 	protected void Init(NPC npcOne, NPC npcTwo, NPCConversation conversation, Enum priority) {
@@ -91,7 +92,10 @@ public class NPCConvoSchedule : Schedule {
 	
 	// Schedule sets what it manages to the correct state the schedule is in
 	public override void Resume() {
-		_npcTwo.AddSharedSchedule(this);
+		if (convoTasksToDo.Count > 0) {
+			DebugManager.instance.Log ("Adding this NPC to shared schedule: " + _npcTwo.name + " from " + _toManage.name, _toManage.name);
+			_npcTwo.AddSharedSchedule(this);
+		}
 		if (current == null || currentTwo == null) {
 			NextTask();
 		}

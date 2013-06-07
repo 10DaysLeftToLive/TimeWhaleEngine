@@ -8,7 +8,8 @@ public class SeaCaptainMiddle : NPC {
 	private SeaCaptainTreasureHuntSchedule treasureHuntSched;
 	private NPCConvoSchedule talkToFortuneTellerFirstSched;
 	private NPCConvoSchedule talkToFortuneTellerSecondSched;
-	private Schedule returnToDockSched;
+	private Schedule returnToDockSchedOne;
+	private Schedule returnToDockSchedTwo;
 	Reaction fishingRodStolenReaction = new Reaction();
 	Reaction treasureHuntBeginsReaction = new Reaction();
 	Reaction talkToFortuenTellerFirstReaction = new Reaction();
@@ -32,11 +33,11 @@ public class SeaCaptainMiddle : NPC {
 		treasureHuntBeginsReaction.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "Alas! All has been for naught. Well, I guess I shall leave with haste as soon as I can go!")));
 		flagReactions.Add(FlagStrings.TreasureHuntBegin, treasureHuntBeginsReaction);
 		
-		talkToFortuenTellerFirstReaction.AddAction(new NPCAddScheduleAction(this, returnToDockSched));
+		talkToFortuenTellerFirstReaction.AddAction(new NPCAddScheduleAction(this, returnToDockSchedOne));
 		talkToFortuenTellerFirstReaction.AddAction(new NPCAddScheduleAction(this, talkToFortuneTellerFirstSched));
 		AddTimeReaction(1000, talkToFortuenTellerFirstReaction);
 		
-		talkToFortuenTellerSecondReaction.AddAction(new NPCAddScheduleAction(this, returnToDockSched));
+		talkToFortuenTellerSecondReaction.AddAction(new NPCAddScheduleAction(this, returnToDockSchedTwo));
 		talkToFortuenTellerSecondReaction.AddAction(new NPCAddScheduleAction(this, talkToFortuneTellerSecondSched));
 		AddTimeReaction(1500, talkToFortuenTellerSecondReaction);
 	}
@@ -53,11 +54,14 @@ public class SeaCaptainMiddle : NPC {
 	protected override void SetUpSchedules(){
 		treasureHuntSched = new SeaCaptainTreasureHuntSchedule(this);
 		
-		talkToFortuneTellerFirstSched = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FortuneTellerMiddle), new MiddleSeaCaptainFortuneTellerFirstConvo(), Schedule.priorityEnum.Medium);
-		talkToFortuneTellerSecondSched = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FortuneTellerMiddle), new MiddleSeaCaptainFortuneTellerSecondConvo(), Schedule.priorityEnum.Medium);
+		talkToFortuneTellerFirstSched = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FortuneTellerMiddle), new MiddleSeaCaptainFortuneTellerFirstConvo(), Schedule.priorityEnum.Medium, true);
+		talkToFortuneTellerSecondSched = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FortuneTellerMiddle), new MiddleSeaCaptainFortuneTellerSecondConvo(), Schedule.priorityEnum.Medium, true);
 		
-		returnToDockSched = new Schedule(this);
-		returnToDockSched.Add(new Task(new MoveThenMarkDoneState(this, startingPos)));
+		returnToDockSchedOne = new Schedule(this);
+		returnToDockSchedOne.Add(new Task(new MoveThenMarkDoneState(this, startingPos)));
+		
+		returnToDockSchedTwo = new Schedule(this);
+		returnToDockSchedTwo.Add(new Task(new MoveThenMarkDoneState(this, startingPos)));
 	}
 	
 	
