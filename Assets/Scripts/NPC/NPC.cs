@@ -163,6 +163,10 @@ public abstract class NPC : Character {
 	public void RemoveChoice(Choice choiceToRemove){
 		currentEmotion.RemoveChoice(choiceToRemove);
 	}
+	
+	public bool CanTakeItem(string itemName){
+		return (currentEmotion.CanTakeItem(itemName));
+	}
 	#endregion	
 	
 	#region Schedule
