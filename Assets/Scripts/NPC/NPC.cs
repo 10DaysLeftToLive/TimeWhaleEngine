@@ -40,11 +40,12 @@ public abstract class NPC : Character {
 	#region Initialization
 	protected override void Awake() {
 		base.Awake();
-		NPCManager.instance.Add(this.gameObject);
 	}
 	
 	protected override void Init(){
+		currentState = new IdleState(this);
 		FindInitialObjects();
+		NPCManager.instance.Add(this.gameObject);
 		currentEmotion = GetInitEmotionState();
 		scheduleStack = new ScheduleStack();
 		flagReactions = new Dictionary<string, Reaction>();
@@ -163,6 +164,10 @@ public abstract class NPC : Character {
 	public void RemoveChoice(Choice choiceToRemove){
 		currentEmotion.RemoveChoice(choiceToRemove);
 	}
+	
+	public bool CanTakeItem(string itemName){
+		return (currentEmotion.CanTakeItem(itemName));
+	}
 	#endregion	
 	
 	#region Schedule
@@ -269,6 +274,18 @@ public abstract class NPC : Character {
 	#endregion
 	
 	#region Utility Methods
+	public void LookAt(GameObject objectToLookAt){
+		if (Utils.CalcDifference(this.transform.position.x, objectToLookAt.transform.position.x) < 0){
+			LookRight();
+		} else {
+			LookLeft();
+		}
+	}
+	
+	public void LookAtPlayer(){
+		LookAt(player.gameObject);
+	}
+	
 	private bool NearPlayerToChat(){
 		return Vector3.Distance(player.transform.position, this.transform.position) < DISTANCE_TO_CHAT;
 	}

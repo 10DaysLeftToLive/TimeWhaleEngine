@@ -131,7 +131,7 @@ public class MotherYoung : NPC {
 				GaveAppleReaction = new Reaction();
 				GaveAppleReaction.AddAction(new NPCEmotionUpdateAction(toControl, new GaveAppleState(toControl," ")));
 				GaveAppleReaction.AddAction(new NPCTakeItemAction(toControl));
-				_allItemReactions.Add("apple",  new DispositionDependentReaction(GaveAppleReaction));
+				_allItemReactions.Add(StringsItem.Apple,  new DispositionDependentReaction(GaveAppleReaction));
 			}	
 		
 		public void UpdateText() {

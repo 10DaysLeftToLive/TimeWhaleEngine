@@ -18,19 +18,21 @@ public class SiblingOld : NPC {
 		#region FirstPassiveChat
 		Reaction gameStartPassiveChat = new Reaction();
 //Emotion State shouldn't say the text: Care to talk with the Carpenter's Son?" + "\n\n" + "Let me know when you're ready to continue.
-		gameStartPassiveChat.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "Care to talk with the Carpenter's Son?" + "\n\n" + "Let me know when you're ready to continue.")));
+		gameStartPassiveChat.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "Care to talk with the Carpenter's Son?" + "Let me know when you're ready to continue.")));
 		#region reactivate after debugging <&^&>
-		/*
+//		
 		ShowMultipartChatAction introMultChatPartOne = new ShowMultipartChatAction(this);
 		introMultChatPartOne.AddChat("Hey!", 2f);
 		introMultChatPartOne.AddChat("Feeling well today?", 2f);
 		introMultChatPartOne.AddChat("You up for a race like old times?", 2.5f);
 		gameStartPassiveChat.AddAction(introMultChatPartOne);
-		*/
+//		
 		#endregion
-		gameStartPassiveChat.AddAction(new NPCTeleportToAction(this, new Vector3(30f, -1.6f + (LevelManager.levelYOffSetFromCenter * 2),0)));
-		//gameStartPassiveChat.AddAction(new NPCAddScheduleAction(this, oldSiblingIntroductionSchedule));
+		//gameStartPassiveChat.AddAction(new NPCTeleportToAction(this, new Vector3(30f, -1.6f + (LevelManager.levelYOffSetFromCenter * 2),0)));
+//
+//gameStartPassiveChat.AddAction(new NPCAddScheduleAction(this, oldSiblingIntroductionSchedule));	
 		gameStartPassiveChat.AddAction(new NPCAddScheduleAction(this, walkToCarpenterSchedule));
+//		
 		flagReactions.Add(FlagStrings.oldSiblingIntroChatFlag, gameStartPassiveChat);
 		#endregion
 		#region Race To Forest
@@ -62,7 +64,6 @@ public class SiblingOld : NPC {
 		ShowMultipartChatAction beginRaceToForestPartFour = new ShowMultipartChatAction(this);
 		beginRaceToForestPartFour.AddChat("Mom's garden isn't looking so good.", 3f);
 		beginRaceToForestPartFour.AddChat("Too bad we weren't able to help before she passed.", 3f);
-		beginRaceToForestPartFour.AddChat("Oh well...", 2.5f);
 		beginRaceToForestPartFour.AddChat("If only we could go back, right?", 3f);
 		RaceToForestPartFour.AddAction(beginRaceToForestPartFour);
 		flagReactions.Add(FlagStrings.siblingOldIntroRaceChatPartFourFlag, RaceToForestPartFour);
@@ -71,7 +72,6 @@ public class SiblingOld : NPC {
 		ShowMultipartChatAction beginRaceToForestPartFive = new ShowMultipartChatAction(this);
 		beginRaceToForestPartFive.AddChat("Hey.", 2f);
 		beginRaceToForestPartFive.AddChat("Want to go visit ole Carp?", 3f);
-		beginRaceToForestPartFive.AddChat("I'm sure he'd be happy to have visitors.", 3f);
 		beginRaceToForestPartFive.AddChat("Race you back!", 3.5f);
 		beginRaceToForestPartFive.AddChat("Hahahaha!", 2.5f);
 		RaceToForestPartFive.AddAction(beginRaceToForestPartFive);
@@ -125,19 +125,50 @@ public class SiblingOld : NPC {
 		
 		#endregion
 		
-		#region
+		#region FortuneTeller Region
 		Reaction goToFortuneTellerIntroReaction = new Reaction();
-		ShowMultipartChatAction goToFortuneTellerIntroChat = new ShowMultipartChatAction(this); // 9 seconds
+		ShowMultipartChatAction goToFortuneTellerIntroChat = new ShowMultipartChatAction(this);
 		goToFortuneTellerIntroChat.AddChat("Um..", 1f);
-		goToFortuneTellerIntroChat.AddChat("We're going to pass.", 2f);
-		goToFortuneTellerIntroChat.AddChat("We're getting our fortunes upstairs.", 1.5f);
+		goToFortuneTellerIntroChat.AddChat("I'm getting my fortunes upstairs. So I'm going to pass.", 2.5f);
 //Add context to the going upstairs, make the choice more meaningful (can't see the conversation from both sides.
 //Pause
 		goToFortuneTellerIntroChat.AddChat("Have fun though!", 2f);
 		goToFortuneTellerIntroChat.AddChat("See you later!", 3f);
 		goToFortuneTellerIntroReaction.AddAction(goToFortuneTellerIntroChat);
 		flagReactions.Add(FlagStrings.siblingOldGoToFortuneTellerIntro, goToFortuneTellerIntroReaction);
+		
+		Reaction goToFortuneTellerPartOneReaction = new Reaction();
+		ShowMultipartChatAction goToFortuneTellerPartOneChat = new ShowMultipartChatAction(this);
+		goToFortuneTellerPartOneChat.AddChat("I'm here for my fortune!", 2f);
+		goToFortuneTellerPartOneChat.AddChat("Let's get started!", 2f);
+		goToFortuneTellerPartOneReaction.AddAction(goToFortuneTellerPartOneChat);
+		flagReactions.Add(FlagStrings.siblingOldTalkToFortunePartOne, goToFortuneTellerPartOneReaction);
+		
+		Reaction goToFortuneTellerPartTwoReaction = new Reaction();
+		ShowMultipartChatAction goToFortuneTellerPartTwoChat = new ShowMultipartChatAction(this);
+		goToFortuneTellerPartTwoChat.AddChat(".", .75f);
+		goToFortuneTellerPartTwoChat.AddChat("..", .75f);
+		goToFortuneTellerPartTwoChat.AddChat("...", 1f);
+		goToFortuneTellerPartTwoChat.AddChat("Now?", 1.5f);
+		goToFortuneTellerPartTwoReaction.AddAction(goToFortuneTellerPartTwoChat);
+		flagReactions.Add(FlagStrings.siblingOldTalkToFortunePartTwo, goToFortuneTellerPartTwoReaction);
+		
+		Reaction goToFortuneTellerPartThreeReaction = new Reaction();
+		ShowMultipartChatAction goToFortuneTellerPartThreeChat = new ShowMultipartChatAction(this);
+		goToFortuneTellerPartThreeChat.AddChat(".", 1.5f);
+		goToFortuneTellerPartThreeChat.AddChat("..", 1.25f);
+		goToFortuneTellerPartThreeChat.AddChat("...", 1f);
+		goToFortuneTellerPartThreeChat.AddChat("... How about now?", 1.5f);
+		goToFortuneTellerPartThreeReaction.AddAction(goToFortuneTellerPartThreeChat);
+		flagReactions.Add(FlagStrings.siblingOldTalkToFortunePartThree, goToFortuneTellerPartThreeReaction);
 		#endregion
+		
+		Reaction goToFarmerArea = new Reaction();
+		ShowMultipartChatAction goToFarmerAreaChat = new ShowMultipartChatAction(this);
+		goToFarmerAreaChat.AddChat(".", 1.5f);
+		goToFarmerAreaChat.AddChat("..", 1.25f);
+		goToFarmerArea.AddAction(goToFarmerAreaChat);
+		flagReactions.Add(FlagStrings.oldSiblingGoToFarmerArea, goToFarmerArea);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
@@ -146,15 +177,17 @@ public class SiblingOld : NPC {
 	
 	protected override Schedule GetSchedule(){	
 		#region reactivate after debugging <&^&>
-		/*
+//
 		Schedule schedule = new Schedule(this, Schedule.priorityEnum.DoNow); 
 		schedule.Add(new TimeTask(1.25f, new IdleState(this)));
 		Task oldSiblingMoveToBridge = new Task(new MoveThenDoState(this, new Vector3(2f,Y_COORDINATE, .3f), new MarkTaskDone(this)));
 		oldSiblingMoveToBridge.AddFlagToSet(FlagStrings.oldSiblingIntroChatFlag);
 		schedule.Add(oldSiblingMoveToBridge);
 		schedule.Add(new TimeTask(5.5f, new IdleState(this)));
-		*/
+		return (schedule);
+//
 		#endregion
+		/*
 		Schedule schedule = new Schedule(this, Schedule.priorityEnum.DoNow); 
 		schedule.Add(new TimeTask(1.25f, new IdleState(this)));
 		Task oldSiblingMoveToBridge = new Task(new MoveThenDoState(this, new Vector3(2f,Y_COORDINATE, .3f), new MarkTaskDone(this)));
@@ -162,6 +195,7 @@ public class SiblingOld : NPC {
 		schedule.Add(oldSiblingMoveToBridge);
 		schedule.Add(new TimeTask(.25f, new IdleState(this)));
 		return (schedule);
+		*/
 	}
 	
 	#region Schedule List
@@ -173,7 +207,7 @@ public class SiblingOld : NPC {
 	protected override void SetUpSchedules() {
 		oldSiblingIntroductionSchedule = (new SiblingOldRaceToForestSchedule(this));
 		walkToCarpenterSchedule = (new SiblingOldWalkToCarpenterSchedule(this));
-		oldSiblingtoFortuneTellerSchedule = (new SiblingOldGreetCarpenterSonSchedule(this));
+		oldSiblingtoFortuneTellerSchedule = (new SiblingOldToFortunetellerSchedule(this));
 	}
 	#region EmotionStates
 		#region Initial Emotion State

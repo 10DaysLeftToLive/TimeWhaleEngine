@@ -7,13 +7,14 @@ using System.Collections;
 public class CarpenterSonMiddle : NPC {
 	StormOffEmotionState stormoffState;
 	Date dateState;
-	InitialEmotionState initialState;
+	BlankEmotionState initialState;
 	Vector3 startingPosition;
 	bool castlemanDateSuccess = false;
 	bool dateForMe = false;
 	bool successfulDate = false;
 	
 	Schedule stormOffSchedule, moveToBeach, moveBack, moveToWindmill;
+	Schedule MoveToPierToFish, AfterSeaCaptainTalk;
 	NPCConvoSchedule dateWithLG;
 	
 	NPCConvoSchedule reportedDidHardWorkToFather, reportedDidNoWorkToFather;
@@ -50,27 +51,44 @@ public class CarpenterSonMiddle : NPC {
 //		moveToDate.AddAction(new NPCAddScheduleAction(this, dateWithLG));
 //		flagReactions.Add(FlagStrings.CarpenterDating, moveToDate);
 		
+		
+		//Schedule for the default path
+		#region DefaultSection
 		Reaction independentStormOffReaction = new Reaction();
 		independentStormOffReaction.AddAction(new NPCAddScheduleAction(this, moveToWindmill));
 		independentStormOffReaction.AddAction(new NPCEmotionUpdateAction(this, new StormOffToWindmill(this, 
 			"I knew I was going to screw up somewhere. I left my specialized tools someplace")));
-		flagReactions.Add (FlagStrings.carpenterSonIndependent, independentStormOffReaction);
+		flagReactions.Add (FlagStrings.carpenterSonTalkWithFatherMorning, independentStormOffReaction);
+		#endregion 
+		#region FishSection
+		Reaction StartFishing = new Reaction();
+		StartFishing.AddAction(new NPCAddScheduleAction(this, MoveToPierToFish));
+		StartFishing.AddAction(new NPCEmotionUpdateAction(this, new StormOffEmotionState(this, "I need to work on the windmill.")));
+		flagReactions.Add(FlagStrings.CarpenterSonMovesToTheBeach, StartFishing);
 		
-		Reaction becomesACarpenter = new Reaction();
+		Reaction StartTalkingToSeaCaptain = new Reaction();
+		//Add in NPCConvoSchedule
+		StartTalkingToSeaCaptain.AddAction(new NPCAddScheduleAction(this, AfterSeaCaptainTalk));
+		flagReactions.Add(FlagStrings.StartConversationWithSeaCaptainAboutBuildingShip, StartTalkingToSeaCaptain);
+		#endregion
+		#region Carpentry Section
+		
+		#endregion
+		/*Reaction becomesACarpenter = new Reaction();
 		becomesACarpenter.AddAction(new NPCEmotionUpdateAction(this, new BecomeACarpenter(this, "Hey there man, I'm a bit busy right now.")));
 		flagReactions.Add(FlagStrings.carpenterSonTalkWithFatherMorning, becomesACarpenter);
 		
-//		Reaction stormOffReaction = new Reaction();
-//		stormOffReaction.AddAction(new NPCEmotionUpdateAction(this, stormoffState));
-//		stormOffReaction.AddAction(new NPCAddScheduleAction(this, stormOffSchedule));
-//		flagReactions.Add(FlagStrings.carpenterSonIndependent, stormOffReaction);
+		Reaction stormOffReaction = new Reaction();
+		stormOffReaction.AddAction(new NPCEmotionUpdateAction(this, new StormOffToWindmill(this, "I need to work on the windmill.")));
+		stormOffReaction.AddAction(new NPCAddScheduleAction(this, stormOffSchedule));
+		flagReactions.Add(FlagStrings.carpenterSonStormOffFisherman, stormOffReaction);*/
 		
 	}
 	
 	protected override EmotionState GetInitEmotionState() {
 		startingPosition = transform.position;
 		startingPosition.y += LevelManager.levelYOffSetFromCenter;
-		return (new InitialEmotionState(this, "One Second, I am talking to my father"));
+		return (new BlankEmotionState(this, "One Second, I am talking to someone"));
 	}
 	
 	protected override Schedule GetSchedule(){
@@ -82,46 +100,49 @@ public class CarpenterSonMiddle : NPC {
 	//Schedule IdleSchedule;
 
 	protected override void SetUpSchedules(){
-		
-		moveBack = new Schedule(this, Schedule.priorityEnum.High);
-		moveBack.Add(new Task(new MoveThenDoState(this, startingPosition, new MarkTaskDone(this))));
-		
-		//SetepDefaultPathSchedules();
-		//SetepFishingPathSChedules();
-		//SetupCarpentryPathSchedules();
-	}
-	
-	private void SetupFishingPathSchedules() {
-		stormOffSchedule = new Schedule(this,Schedule.priorityEnum.DoNow);
-		stormOffSchedule.Add(new Task(new MoveState(this, MapLocations.BaseOfPierMiddle)));
-		stormOffSchedule.Add(new TimeTask(2.0f, new IdleState(this))); //Will replace with working on windmill
-		stormOffSchedule.Add(new Task(new MoveThenDoState(this, MapLocations.BaseOfPierMiddle, new MarkTaskDone(this))));
-		
-	}
-	
-	private void SetepDefaultPathSchedules() {
+		#region PathOne
+		//Schedule for the Default path
 		moveToWindmill = new Schedule(this, Schedule.priorityEnum.DoNow);
-		moveToWindmill.Add (new Task(new MoveState(this, MapLocations.WindmillMiddle)));
-		moveToWindmill.Add (new TimeTask(2.0f, new IdleState(this)));
-		moveToWindmill.Add (new Task(new MoveThenDoState(this, MapLocations.WindmillMiddle, new MarkTaskDone(this))));
+		moveToWindmill.Add (new Task(new MoveThenMarkDoneState(this, MapLocations.WindmillMiddle)));
+		moveToWindmill.Add (new TimeTask(100f, new IdleState(this)));
+		moveToWindmill.Add (new Task(new MoveThenMarkDoneState(this, this.gameObject.transform.position)));
+		#endregion
 		
-		TimeTask finishWindmill = new TimeTask(50.0f, new IdleState(this));
-		moveToWindmill.Add(finishWindmill);
-	}
-	
-	private void SetupCarpentryPathSchedules() {
-//		dateWithLG =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.LighthouseGirlMiddle),
-//			new MiddleCastleManToLighthouseGirl(), Schedule.priorityEnum.DoConvo); 
-//		dateWithLG.SetCanNotInteractWithPlayer();
+		#region FishingPath
+		MoveToPierToFish = new Schedule(this, Schedule.priorityEnum.DoNow);
+		MoveToPierToFish.Add(new Task(new MoveThenMarkDoneState(this, MapLocations.BaseOfPierMiddle)));
+		MoveToPierToFish.Add(new TimeTask(100f, new IdleState(this)));
+		//Fishing stuffs
+		Task SetOffConversationWithSeaCaptain = new TimeTask(0f, new IdleState(this));
+		SetOffConversationWithSeaCaptain.AddFlagToSet(FlagStrings.StartConversationWithSeaCaptainAboutBuildingShip);
+		MoveToPierToFish.Add(SetOffConversationWithSeaCaptain);
 		
+		AfterSeaCaptainTalk = new Schedule (this, Schedule.priorityEnum.DoNow);
+		AfterSeaCaptainTalk.Add(new Task(new MoveThenMarkDoneState(this, MapLocations.MiddleOfBeachMiddle)));
+		//Whittling Animation.
+		Task SetOffAfterSeaCaptain = new TimeTask(100f, new IdleState(this));
+		SetOffAfterSeaCaptain.AddFlagToSet(FlagStrings.StartProudOfSonConversation);
+		AfterSeaCaptainTalk.Add(SetOffAfterSeaCaptain);
+		#endregion
+		
+		#region CarpentryPath
+		
+		#endregion
+		//Schedule for something
+		stormOffSchedule = new Schedule(this,Schedule.priorityEnum.DoNow);
+		stormOffSchedule.Add(new Task(new MoveThenMarkDoneState(this, MapLocations.BaseOfPierMiddle)));
+		stormOffSchedule.Add(new TimeTask(2.0f, new IdleState(this))); //Will replace with working on windmill
+		stormOffSchedule.Add(new Task(new MoveThenMarkDoneState(this, MapLocations.BaseOfPierMiddle)));
+				
+		
+		
+		#region NPCConvoSchedules
 		reportedDidHardWorkToFather = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterMiddle), null);
 		reportedDidHardWorkToFather.SetCanNotInteractWithPlayer();
 		
 		reportedDidNoWorkToFather = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterMiddle), null);
 		reportedDidNoWorkToFather.SetCanNotInteractWithPlayer();
-		
-		
-		
+		#endregion
 	}
 	
 	protected void dateOver(){
@@ -137,11 +158,12 @@ public class CarpenterSonMiddle : NPC {
 	
 	#region EmotionStates
 	#region Initial Emotion State
-	private class InitialEmotionState : EmotionState {
+	//EmotionState to be used for setting up non-choice dialogue.
+	private class BlankEmotionState : EmotionState {
 		
 		
 		
-		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+		public BlankEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
 			
 		}
 				
@@ -154,6 +176,7 @@ public class CarpenterSonMiddle : NPC {
 	}
 	#endregion
 	#region Storm off To The Beach Emotion State
+	//This is for when the Carpenter Son runs off to the beach.
 	private class StormOffEmotionState : EmotionState{
 	
 		
@@ -188,6 +211,7 @@ public class CarpenterSonMiddle : NPC {
 	#endregion
 	
 	#region Date With LightHouse Girl
+	//This is Eric's stuff for setting up a date with the LG.
 	private class Date: EmotionState{
 		Choice DateChoice = new Choice("You have a date!", "Really? This...this...this is the most beauteous day of my life! Hurry to the beach. I cannot tarry!");
 		
@@ -211,7 +235,8 @@ public class CarpenterSonMiddle : NPC {
 	#endregion
 	
 	#region Storm Off To WindMill
-	
+	//This is for when he storms off to work on windmill alone.
+	//This is from the default path.
 	private class StormOffToWindmill : EmotionState {
 		
 		Choice askAboutToolBox = new Choice("Want me to get your ToolBox?", "Thanks! could you please find them for me?");
@@ -246,7 +271,7 @@ public class CarpenterSonMiddle : NPC {
 	#endregion
 	
 	#region Become A Carpenter
-	
+	//State for when Carpenter's son becomes interested in being a carpenter.
 	private class BecomeACarpenter : EmotionState {
 		
 		Choice curiousAboutMood = new Choice("What are you up to?", 

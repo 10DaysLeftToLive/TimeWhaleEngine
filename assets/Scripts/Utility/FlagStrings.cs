@@ -53,6 +53,23 @@ public static class FlagStrings {
 		public static string siblingOldGreetCarpenterSonOldPartTwoFlag = "Sibling Old Greet CarpenterSon Part Two";
 	
 		public static string siblingOldGoToFortuneTellerIntro = "Sibling Old Go To Fortune Teller Intro";
+		public static string siblingOldTalkToFortunePartOne = "Sibling Old Talk To Fortune Part One";
+		public static string siblingOldTalkToFortunePartTwo = "Sibling Old Talk To Fortune Part Two";
+		public static string siblingOldTalkToFortunePartThree = "Sibling Old Talk To Fortune Part Three";
+		public static string siblingOldTalkToFortunePartFour = "Sibling Old Talk To Fortune Part Four";
+		public static string siblingOldTalkToFortunePartFive = "Sibling Old Talk To Fortune Part Five";
+		public static string siblingOldTalkToFortunePartSix = "Sibling Old Talk To Fortune Part Six";
+	
+		public static string oldSiblingGoToFarmerArea = "oldSiblingGoToFarmerArea";
+	
+	#region fortuneteller old
+	public static string FortunetellerTalkToSiblingOldPartOne = "Fortuneteller Talk To Sibling Old Part One";
+	public static string FortunetellerTalkToSiblingOldPartTwo = "Fortuneteller Talk To Sibling Old Part Two";
+	public static string FortunetellerTalkToSiblingOldPartThree = "Fortuneteller Talk To Sibling Old Part Three";
+	public static string FortunetellerTalkToSiblingOldPartFour = "Fortuneteller Talk To Sibling Old Part Four";
+	public static string FortunetellerTalkToSiblingOldPartFive = "Fortuneteller Talk To Sibling Old Part Five";
+	public static string FortunetellerTalkToSiblingOldPartSix = "Fortuneteller Talk To Sibling Old Part Six";
+	#endregion
 	
 		#endregion
 	#endregion
@@ -216,5 +233,14 @@ public static class FlagStrings {
 	public static string BeachAfterConvoBad = "Beach after conversation bad.";
 	
 	public static string StartTalkingToLighthouse = "Start talking to lighthouse.";
+	#endregion
+	
+	#region JohnsFlagsForCarpenterSonAndCarpenter
+	public static string TestFlag = "Test Flag.";
+	public static string CarpenterSonMovesToTheBeach = "Carpenter Son Moves To The Beach.";
+	public static string StartConversationWithSeaCaptainAboutBuildingShip = "Start Conversation with Sea Captain about building ship";
+	public static string AfterConversationAboutBuildingShip = "After Conversation about building ship.";
+	public static string StartProudOfSonConversation = "Start Proud of Son Conversation.";
+	public static string AfterProudOfSonConversation = "After Proud of Son Conversation.";
 	#endregion
 }

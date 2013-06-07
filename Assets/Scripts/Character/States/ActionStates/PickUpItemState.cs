@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// Pick up item state. Will grab a given item and put it itno the player's invetory
+/// Pick up item state. Will grab a given item and put it into the player's invetory
 /// Will also set out a flag with the name of the item being picked up
 /// </summary>
 public class PickUpItemState : PlayAnimationThenDoState {
@@ -36,9 +36,5 @@ public class PickUpItemState : PlayAnimationThenDoState {
 		((Player) character).Inventory.PickUpObject(_toPickUp);
 		// Shoot off event for having picked up item
 		EventManager.instance.RiseOnPlayerPickupEvent(new PickUpStateArgs(_toPickUp));
-	}
-	
-	private void OnPickUpItem(EventManager Em, PickUpItemState pickedUpItem) {
-		
 	}
 }

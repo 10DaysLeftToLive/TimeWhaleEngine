@@ -116,6 +116,10 @@ public class EmotionState {
 		}
 	}
 	
+	public bool CanTakeItem(string itemName){
+		return (_allItemReactions.ContainsKey(itemName));
+	}
+	
 	/// <summary>
 	/// Performs the reaction based on disposition. If the reaction does not have that type of reaction then it will 
 	/// 	perform the default reaction
