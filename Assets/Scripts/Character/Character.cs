@@ -82,16 +82,18 @@ public abstract class Character : PauseObject {
 	}
 	
 	public void PlayAnimation(string animation){
-		
-		if (animationData.GetClipCount() > 0) {
-			try {
-				if (!animationData.isPlaying) {
-					animationData.Play(animation);
+		try {
+			if (animationData.GetClipCount() > 0) {
+				try {
+					if (!animationData.isPlaying) {
+						animationData.Play(animation);
+					}
+					animationData.CrossFade(animation);
+				} catch (Exception e){
+					Debug.LogError("Animation data for " + name + " " + animation + " does not exist for " + name + "\n" + e.StackTrace);
 				}
-				animationData.CrossFade(animation);
-			} catch (Exception e){
-				Debug.LogError("Animation data for " + name + " " + animation + " does not exist for " + name + "\n" + e.StackTrace);
 			}
+		} catch (Exception e){
 		}
 	}
 	

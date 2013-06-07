@@ -25,6 +25,7 @@ public class TalkState : AbstractState {
 			_toTalkWith.StarTalkingWithPlayer();
 			((Player) character).npcTalkingWith = _toTalkWith;
 			MakePlayerLookAtNPC();
+			_toTalkWith.LookAtPlayer();
 			GUIManager.Instance.InitiateInteraction(_toTalkWith);
 		} else {
 			character.EnterState(new IdleState(character));

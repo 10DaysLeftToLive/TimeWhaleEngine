@@ -22,6 +22,7 @@ public class LevelManager : MonoBehaviour {
 	public PlayerAnimationContainer[] genderAnimations;
 	public CharacterGender playerGender = CharacterGender.MALE;
 	private PlayerAnimationContainer genderAnimationInUse;
+	private PlayerAnimationContainer siblingGenderAnimations;
 	private Player playerCharacter;
 	
 	void Awake(){
@@ -49,10 +50,15 @@ public class LevelManager : MonoBehaviour {
 		FindSections();
 		SpreadSections();
 		SetUpAges();
-		ManagerLoader.LoadManagers(youngSectionTarget, middleSectionTarget, oldSectionTarget);
+		
+		
+		//SetSiblingAnimations(siblingGenderAnimations);
 		
 		NPCManager.instance.Init();
 		FlagManager.instance.Init();
+		ManagerLoader.LoadManagers(youngSectionTarget, middleSectionTarget, oldSectionTarget);
+		
+		
 		
 		parallaxManager.Init();
 		cloudManager.Init();
@@ -128,13 +134,15 @@ public class LevelManager : MonoBehaviour {
 		switch(gender){
 			case CharacterGender.MALE:
 				genderAnimationInUse = genderAnimations[(int)CharacterGender.MALE];
-				DestroyAnimations(femaleAnimations);
+				siblingGenderAnimations = genderAnimations[(int)CharacterGender.FEMALE];
 				DisableAnimations(maleAnimations);
+				DisableAnimations(femaleAnimations);
 				break;
 			case CharacterGender.FEMALE:
 				genderAnimationInUse = genderAnimations[(int)CharacterGender.FEMALE];
-				DestroyAnimations(maleAnimations);
+				siblingGenderAnimations = genderAnimations[(int)CharacterGender.MALE];
 				DisableAnimations(femaleAnimations);
+				DisableAnimations(maleAnimations);
 				break;		
 		}
 	}
@@ -177,6 +185,83 @@ public class LevelManager : MonoBehaviour {
 		for (int i = 0; i < 3; i++){
 			Utils.SetActiveRecursively(animationArray[i].gameObject, false);
 		}
+	}
+	
+	/// <summary>
+	/// Sets the sibling animations by destroying what the sibling has then replacing it
+	/// </summary>
+	private void SetSiblingAnimations(PlayerAnimationContainer genderAnimation){
+		//TODO Brent // I quit - Jared
+		NPC youngSibling = GameObject.Find(StringsNPC.SiblingYoung).GetComponent<NPC>();
+		NPC middleSibling = GameObject.Find(StringsNPC.SiblingMiddle).GetComponent<NPC>();
+		NPC oldSibling = GameObject.Find(StringsNPC.SiblingOld).GetComponent<NPC>();
+		
+		SmoothMoves.BoneAnimation youngSiblingAnimation = youngSibling.GetComponent<SmoothMoves.BoneAnimation>();
+		SmoothMoves.BoneAnimation middleSiblingAnimation = middleSibling.GetComponent<SmoothMoves.BoneAnimation>();
+		SmoothMoves.BoneAnimation oldSiblingAnimation = oldSibling.GetComponent<SmoothMoves.BoneAnimation>();
+		
+		for (int i = 0; i < youngSiblingAnimation.GetClipCount(); i++){
+			youngSiblingAnimation.RemoveClip(youngSiblingAnimation[youngSiblingAnimation.GetAnimationClipName(i)].clip);
+			middleSiblingAnimation.RemoveClip(middleSiblingAnimation[middleSiblingAnimation.GetAnimationClipName(i)].clip);
+			oldSiblingAnimation.RemoveClip(oldSiblingAnimation[oldSiblingAnimation.GetAnimationClipName(i)].clip);
+		}
+		
+		youngSibling.animationData = genderAnimation.youngBoneAnimation;
+		middleSibling.animationData = genderAnimation.middleBoneAnimation;
+		oldSibling.animationData = genderAnimation.oldBoneAnimation;
+		
+		for (int i = 0; i < genderAnimation.middleBoneAnimation.GetClipCount(); i++){
+			string clipName = genderAnimation.youngBoneAnimation.GetAnimationClipName(i);
+			youngSiblingAnimation.AddClip(genderAnimation.youngBoneAnimation[clipName].clip, clipName); 
+			Debug.Log("clip = " + clipName);
+			
+			clipName = genderAnimation.middleBoneAnimation.GetAnimationClipName(i);
+			middleSiblingAnimation.AddClip(genderAnimation.middleBoneAnimation[clipName].clip, clipName);
+			
+			clipName = genderAnimation.oldBoneAnimation.GetAnimationClipName(i);
+			oldSiblingAnimation.AddClip(genderAnimation.oldBoneAnimation[clipName].clip, clipName); 
+		}
+		
+		
+		/*
+		genderAnimation.youngBoneAnimation.transform.position = youngSibling.transform.position;
+		SiblingYoung newSiblingYoung = genderAnimation.youngBoneAnimation.transform.gameObject.AddComponent<SiblingYoung>();
+		newSiblingYoung.Init();
+		newSiblingYoung.tag = Strings.tag_NPC;
+		Collider tempCollider = newSiblingYoung.gameObject.AddComponent<BoxCollider>();
+		tempCollider = youngSibling.collider;
+		tempCollider.isTrigger = true;
+		newSiblingYoung.animationData = genderAnimation.youngBoneAnimation;
+		newSiblingYoung.SpriteLookingLeft = youngSibling.SpriteLookingLeft;
+		genderAnimation.youngBoneAnimation.transform.parent = youngSibling.transform.parent;
+		
+		genderAnimation.middleBoneAnimation.transform.name = middleSibling.name;
+		genderAnimation.middleBoneAnimation.transform.position = middleSibling.transform.position;
+		SiblingMiddle newSiblingMiddle = genderAnimation.middleBoneAnimation.transform.gameObject.AddComponent<SiblingMiddle>();
+		newSiblingMiddle.Init();
+		newSiblingMiddle.tag = Strings.tag_NPC;
+		tempCollider = newSiblingMiddle.gameObject.AddComponent<BoxCollider>();
+		tempCollider.isTrigger = true;
+		tempCollider = middleSibling.collider;
+		newSiblingMiddle.animationData = genderAnimation.middleBoneAnimation;
+		newSiblingMiddle.SpriteLookingLeft = middleSibling.SpriteLookingLeft;
+		genderAnimation.middleBoneAnimation.transform.parent = middleSibling.transform.parent;
+		
+		genderAnimation.oldBoneAnimation.transform.name = oldSibling.name;
+		genderAnimation.oldBoneAnimation.transform.position = oldSibling.transform.position;
+		SiblingOld newSiblingOld = genderAnimation.oldBoneAnimation.transform.gameObject.AddComponent<SiblingOld>();
+		newSiblingOld.Init();
+		newSiblingOld.tag = Strings.tag_NPC;
+		tempCollider = newSiblingOld.gameObject.AddComponent<BoxCollider>();
+		tempCollider.isTrigger = true;
+		newSiblingOld.gameObject.collider = tempCollider;
+		newSiblingOld.animationData = genderAnimation.oldBoneAnimation;
+		newSiblingOld.SpriteLookingLeft = oldSibling.SpriteLookingLeft;
+		genderAnimation.oldBoneAnimation.transform.parent = oldSibling.transform.parent;
+		
+		Destroy(youngSibling.gameObject);
+		Destroy(middleSibling.gameObject);
+		Destroy(oldSibling.gameObject);*/
 	}
 	
 	private void SetUpAges(){

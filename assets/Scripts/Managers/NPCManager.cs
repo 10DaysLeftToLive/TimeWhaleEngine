@@ -6,6 +6,9 @@ public class NPCManager : ManagerSingleton<NPCManager> {
 	private static Dictionary<string, NPC> dictNPC = new Dictionary<string, NPC>();
 	
 	public void Add(GameObject npc) {
+		if (dictNPC.ContainsKey(npc.name)){
+			dictNPC.Remove(npc.name);
+		}
 		dictNPC.Add(npc.name, npc.GetComponent<NPC>());
 	}
 	
@@ -14,7 +17,19 @@ public class NPCManager : ManagerSingleton<NPCManager> {
 	}
 	
 	public NPC getNPC(string npcName) {
-		return dictNPC[npcName];
+		if (dictNPC.ContainsKey(npcName)){
+			return dictNPC[npcName];
+		} else {
+			GameObject toFind = GameObject.Find(npcName);
+			if (toFind == null){
+				Debug.LogError("Could not find the npc " + npcName);
+				return (null);
+			} else {
+				NPC foundNpc = toFind.GetComponent<NPC>();
+				Add(foundNpc);
+				return (foundNpc);
+			}
+		}
 	}
 	
 	public Dictionary<string, NPC> getNPCDictionary() {
