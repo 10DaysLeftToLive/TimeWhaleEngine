@@ -11,15 +11,35 @@ public class FortuneTellerOld : NPC {
 	}
 	
 	protected override void SetFlagReactions(){
-		#region Race To Carpenter House
-		/*
-		Reaction raceToCarpenterHouse = new Reaction();
-		raceToCarpenterHouse.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "Careful, the Carpenter is really mean!")));
-		raceToCarpenterHouse.AddAction(new ShowOneOffChatAction(this, "These are our neighbors!", 2f));
-		raceToCarpenterHouse.AddAction(new NPCAddScheduleAction(this, carpenterRaceSchedule));
-		flagReactions.Add(FlagStrings.RunToCarpenter, raceToCarpenterHouse);
-		*/
-		#endregion
+		Reaction speakWithSiblingReactionPartOne = new Reaction();
+		ShowMultipartChatAction speakWithSiblingChatPartOne = new ShowMultipartChatAction(this);
+		speakWithSiblingChatPartOne.AddChat("Patience.", 2f);
+		speakWithSiblingReactionPartOne.AddAction(speakWithSiblingChatPartOne);
+		flagReactions.Add(FlagStrings.FortunetellerTalkToSiblingOldPartOne, speakWithSiblingReactionPartOne);
+		
+		Reaction speakWithSiblingReactionPartTwo = new Reaction();
+		ShowMultipartChatAction speakWithSiblingChatPartTwo = new ShowMultipartChatAction(this);
+		speakWithSiblingChatPartTwo.AddChat("I said patience!!", 2f);		
+		speakWithSiblingReactionPartTwo.AddAction(speakWithSiblingChatPartTwo);
+		flagReactions.Add(FlagStrings.FortunetellerTalkToSiblingOldPartTwo, speakWithSiblingReactionPartTwo);
+		
+		Reaction speakWithSiblingReactionPartThree = new Reaction();
+		ShowMultipartChatAction speakWithSiblingChatPartThree = new ShowMultipartChatAction(this);
+		speakWithSiblingChatPartThree.AddChat(".", .12f);
+		speakWithSiblingChatPartThree.AddChat("..", .12f);
+		speakWithSiblingChatPartThree.AddChat("...", .12f);
+		speakWithSiblingChatPartThree.AddChat("...!", .12f);
+		speakWithSiblingChatPartThree.AddChat("...!!", 1.5f);
+		speakWithSiblingChatPartThree.AddChat("...!", .75f);
+		speakWithSiblingChatPartThree.AddChat("...", .5f);
+		speakWithSiblingChatPartThree.AddChat("..", .33f);
+		speakWithSiblingChatPartThree.AddChat(".. O", .5f);
+		speakWithSiblingChatPartThree.AddChat(".. Ok", .5f);
+		speakWithSiblingChatPartThree.AddChat(".. Ok.", 2f);
+		speakWithSiblingChatPartThree.AddChat("Let's get this over with.", 2f);
+		
+		speakWithSiblingReactionPartThree.AddAction(speakWithSiblingChatPartThree);
+		flagReactions.Add(FlagStrings.FortunetellerTalkToSiblingOldPartThree, speakWithSiblingReactionPartThree);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
@@ -30,7 +50,7 @@ public class FortuneTellerOld : NPC {
 		Schedule schedule = new DefaultSchedule(this);
 		return (schedule);
 	}
-
+	
 	protected override void SetUpSchedules(){
 		
 	}
