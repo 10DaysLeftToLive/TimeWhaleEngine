@@ -16,6 +16,26 @@ public class FarmerFatherMiddle : NPC {
 		id = NPCIDs.FARMER_FATHER;
 		base.Init();
 	}
+	
+	protected void setAngry(){
+		this.SetCharacterPortrait(StringsNPC.Angry);
+	}
+	protected void setSad(){
+		this.SetCharacterPortrait(StringsNPC.Sad);
+	}
+	protected void setDefault(){
+		this.SetCharacterPortrait(StringsNPC.Default);
+	}
+	protected void setSmile(){
+		this.SetCharacterPortrait(StringsNPC.Smile);	
+	}
+	protected void setEmbarrassed(){
+		this.SetCharacterPortrait(StringsNPC.Embarassed);	
+	}
+	protected void setHappy(){
+		this.SetCharacterPortrait(StringsNPC.Happy);	
+	}
+	
 	#region ReactionInstantiate
 	Reaction moveAway = new Reaction();
 	
@@ -80,8 +100,11 @@ public class FarmerFatherMiddle : NPC {
 	protected void ChangeDisposition(NPC npc, string disp){
 		disposition += int.Parse(disp);
 		if (disposition > 70 && farmerHelped && !flagSet){
+			setHappy();
 			initialState.PassStringToEmotionState("happy");
 			flagSet = true;
+		}else if (disposition < 50){
+			setAngry();
 		}
 	}
 	
@@ -125,8 +148,10 @@ public class FarmerFatherMiddle : NPC {
 		
 		alreadyBrave.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "10"));
 		
+		
 		illDoIt.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "5"));
 		
+		illSellForYou.AddAction(new NPCCallbackAction(setSmile));
 		illSellForYou.AddAction(new NPCCallbackAction(FarmerHelped));
 		
 		apple.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "5"));

@@ -16,6 +16,20 @@ public class FarmerMotherMiddle : NPC {
 		id = NPCIDs.FARMER_MOTHER;
 		base.Init();
 	}
+	
+	protected void setAngry(){
+		this.SetCharacterPortrait(StringsNPC.Angry);
+	}
+	protected void setSad(){
+		this.SetCharacterPortrait(StringsNPC.Sad);
+	}
+	protected void setDefault(){
+		this.SetCharacterPortrait(StringsNPC.Default);
+	}
+	protected void setHappy(){
+		this.SetCharacterPortrait(StringsNPC.Happy);	
+	}
+	
 	#region ReactionInstantiate
 	Reaction moveAway = new Reaction();
 	Reaction notSilly = new Reaction();
@@ -76,7 +90,10 @@ public class FarmerMotherMiddle : NPC {
 	protected void ChangeDisposition(NPC npc, string disp){
 		disposition += int.Parse(disp);
 		if (disposition > 70){
+			setHappy();
 			initialState.PassStringToEmotionState("happy");
+		}else if (disposition < 50){
+			setAngry();
 		}
 	}
 	
@@ -114,6 +131,7 @@ public class FarmerMotherMiddle : NPC {
 		tellOn.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "10"));
 		sillyStories.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "5"));
 		yourRight.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "10"));
+		
 		apple.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "5"));
 		applePie.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "10"));
 		shovel.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "15"));
