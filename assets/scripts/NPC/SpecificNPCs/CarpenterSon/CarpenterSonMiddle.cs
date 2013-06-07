@@ -98,7 +98,7 @@ public class CarpenterSonMiddle : NPC {
 		Reaction DoNothing = new Reaction();
 		DoNothing.AddAction(new NPCEmotionUpdateAction(this, new BecomeACarpenter(this, "")));
 		DoNothing.AddAction(new NPCAddScheduleAction(this, DoNothingSchedule));
-		flagReactions.Add(FlagStrings.IntroConvoCarpentry);
+		flagReactions.Add(FlagStrings.IntroConvoCarpentry, DoNothing);
 		#endregion
 		/*Reaction becomesACarpenter = new Reaction();
 		becomesACarpenter.AddAction(new NPCEmotionUpdateAction(this, new BecomeACarpenter(this, "Hey there man, I'm a bit busy right now.")));
