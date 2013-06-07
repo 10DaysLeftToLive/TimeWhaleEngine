@@ -14,11 +14,11 @@ public class CarpenterSonMiddle : NPC {
 	bool successfulDate = false;
 	
 	Schedule stormOffSchedule, moveToBeach, moveBack, moveToWindmill;
-	Schedule MoveToPierToFish, AfterSeaCaptainTalk;
+	Schedule MoveToPierToFish, AfterSeaCaptainTalk, TeleportToStartConvo;
 	NPCConvoSchedule dateWithLG;
 	
 	NPCConvoSchedule reportedDidHardWorkToFather, reportedDidNoWorkToFather;
-	
+	Schedule EndState;
 	protected override void Init() {
 		id = NPCIDs.CARPENTER_SON;
 		base.Init();
@@ -51,7 +51,8 @@ public class CarpenterSonMiddle : NPC {
 //		moveToDate.AddAction(new NPCAddScheduleAction(this, dateWithLG));
 //		flagReactions.Add(FlagStrings.CarpenterDating, moveToDate);
 		
-		
+		startingPosition = transform.position;
+		startingPosition.y += LevelManager.levelYOffSetFromCenter;
 		//Schedule for the default path
 		#region DefaultSection
 		Reaction independentStormOffReaction = new Reaction();
@@ -61,15 +62,30 @@ public class CarpenterSonMiddle : NPC {
 		flagReactions.Add (FlagStrings.carpenterSonTalkWithFatherMorning, independentStormOffReaction);
 		#endregion 
 		#region FishSection
+		//Moves the Son back to start if need be. Then triggers a flag to start the conversation with the carpenter
+		Reaction MovePiecesForFishing =  new Reaction();
+		//MovePiecesForFishing.AddAction
+		MovePiecesForFishing.AddAction(new NPCTeleportToAction(this, startingPosition));
+		MovePiecesForFishing.AddAction(new NPCAddScheduleAction(this, TeleportToStartConvo));
+		flagReactions.Add(FlagStrings.TestFlag, MovePiecesForFishing);
+		
+		//Moves the carpenter son to the pier.
 		Reaction StartFishing = new Reaction();
 		StartFishing.AddAction(new NPCAddScheduleAction(this, MoveToPierToFish));
 		StartFishing.AddAction(new NPCEmotionUpdateAction(this, new StormOffEmotionState(this, "I need to work on the windmill.")));
 		flagReactions.Add(FlagStrings.CarpenterSonMovesToTheBeach, StartFishing);
 		
-		Reaction StartTalkingToSeaCaptain = new Reaction();
+		Reaction StartWhittling = new Reaction();
+		StartWhittling.AddAction(new NPCAddScheduleAction(this, AfterSeaCaptainTalk));
+		flagReactions.Add(FlagStrings.AfterConversationAboutBuildingShip, StartWhittling);
+		
+		Reaction EndReaction = new Reaction();
+		EndReaction.AddAction(new NPCAddScheduleAction(this, EndState));
+		flagReactions.Add(FlagStrings.AfterProudOfSonConversation, EndReaction);
+		/*Reaction StartTalkingToSeaCaptain = new Reaction();
 		//Add in NPCConvoSchedule
 		StartTalkingToSeaCaptain.AddAction(new NPCAddScheduleAction(this, AfterSeaCaptainTalk));
-		flagReactions.Add(FlagStrings.StartConversationWithSeaCaptainAboutBuildingShip, StartTalkingToSeaCaptain);
+		flagReactions.Add(FlagStrings.StartConversationWithSeaCaptainAboutBuildingShip, StartTalkingToSeaCaptain);*/
 		#endregion
 		#region Carpentry Section
 		
@@ -86,8 +102,7 @@ public class CarpenterSonMiddle : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState() {
-		startingPosition = transform.position;
-		startingPosition.y += LevelManager.levelYOffSetFromCenter;
+		
 		return (new BlankEmotionState(this, "One Second, I am talking to someone"));
 	}
 	
@@ -100,18 +115,27 @@ public class CarpenterSonMiddle : NPC {
 	//Schedule IdleSchedule;
 
 	protected override void SetUpSchedules(){
+		startingPosition = transform.position;
+		startingPosition.y += LevelManager.levelYOffSetFromCenter;
 		#region PathOne
 		//Schedule for the Default path
-		moveToWindmill = new Schedule(this, Schedule.priorityEnum.DoNow);
+		moveToWindmill = new Schedule(this, Schedule.priorityEnum.Low);
 		moveToWindmill.Add (new Task(new MoveThenMarkDoneState(this, MapLocations.WindmillMiddle)));
 		moveToWindmill.Add (new TimeTask(100f, new IdleState(this)));
 		moveToWindmill.Add (new Task(new MoveThenMarkDoneState(this, this.gameObject.transform.position)));
 		#endregion
 		
 		#region FishingPath
+		TeleportToStartConvo =  new Schedule (this, Schedule.priorityEnum.DoNow);
+		TeleportToStartConvo.Add(new TimeTask(300f, new WaitTillPlayerCloseState(this, ref player))); 
+		//TeleportToStartConvo.Add(new Task (new MoveThenMarkDoneState(this, this.gameObject.transform.position)));
+		Task StartFishingStuff = new TimeTask(0f, new IdleState(this));
+		StartFishingStuff.AddFlagToSet(FlagStrings.FishingConversation);
+		TeleportToStartConvo.Add(StartFishingStuff);
+		
 		MoveToPierToFish = new Schedule(this, Schedule.priorityEnum.DoNow);
 		MoveToPierToFish.Add(new Task(new MoveThenMarkDoneState(this, MapLocations.BaseOfPierMiddle)));
-		MoveToPierToFish.Add(new TimeTask(100f, new IdleState(this)));
+		MoveToPierToFish.Add(new TimeTask(10f, new IdleState(this)));
 		//Fishing stuffs
 		Task SetOffConversationWithSeaCaptain = new TimeTask(0f, new IdleState(this));
 		SetOffConversationWithSeaCaptain.AddFlagToSet(FlagStrings.StartConversationWithSeaCaptainAboutBuildingShip);
@@ -120,9 +144,12 @@ public class CarpenterSonMiddle : NPC {
 		AfterSeaCaptainTalk = new Schedule (this, Schedule.priorityEnum.DoNow);
 		AfterSeaCaptainTalk.Add(new Task(new MoveThenMarkDoneState(this, MapLocations.MiddleOfBeachMiddle)));
 		//Whittling Animation.
-		Task SetOffAfterSeaCaptain = new TimeTask(100f, new IdleState(this));
+		Task SetOffAfterSeaCaptain = new TimeTask(10f, new IdleState(this));
 		SetOffAfterSeaCaptain.AddFlagToSet(FlagStrings.StartProudOfSonConversation);
 		AfterSeaCaptainTalk.Add(SetOffAfterSeaCaptain);
+		
+		EndState = new Schedule(this, Schedule.priorityEnum.High);
+		EndState.Add(new TimeTask(10000f, new IdleState(this)));
 		#endregion
 		
 		#region CarpentryPath
@@ -137,11 +164,6 @@ public class CarpenterSonMiddle : NPC {
 		
 		
 		#region NPCConvoSchedules
-		reportedDidHardWorkToFather = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterMiddle), null);
-		reportedDidHardWorkToFather.SetCanNotInteractWithPlayer();
-		
-		reportedDidNoWorkToFather = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterMiddle), null);
-		reportedDidNoWorkToFather.SetCanNotInteractWithPlayer();
 		#endregion
 	}
 	

@@ -476,6 +476,7 @@ public class CastlemanYoung : NPC {
 			_allChoiceReactions.Add(FineHaveItYourWayChoice, new DispositionDependentReaction(FineHaveItYourWayReaction));
 			_allChoiceReactions.Add(DontYouSpeakChoice, new DispositionDependentReaction(DontYouSpeakReaction));
 			GUIManager.Instance.CloseInteractionMenu();
+			FlagManager.instance.SetFlag(FlagStrings.TestFlag);
 			FlagManager.instance.SetFlag(FlagStrings.MusicianCommentOnSon);
 			FlagManager.instance.SetFlag(FlagStrings.PlayerAndCastleNOTFriends);
 		}

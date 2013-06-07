@@ -139,4 +139,17 @@ public class MapLocations {
 	}
 	
 	#endregion
+	
+	#region BeachCliff
+	static Vector3 _BeachCliff = new Vector3(57f, -.5f, 0f);
+	public static Vector3 BeachCliffYoung{
+		get{return _BeachCliff;}	
+	}
+	public static Vector3 BeachCliffMiddle{
+		get{return new Vector3(_BeachCliff.x, _BeachCliff.y + LevelManager.levelYOffSetFromCenter, _BeachCliff.z);}	
+	}
+	public static Vector3 BeachCliffOld{
+		get{return new Vector3(_BeachCliff.x, _BeachCliff.y + (LevelManager.levelYOffSetFromCenter * 2), _BeachCliff.z);}	
+	}
+	#endregion
 }

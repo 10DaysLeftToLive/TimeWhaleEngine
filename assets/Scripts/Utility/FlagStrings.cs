@@ -237,6 +237,7 @@ public static class FlagStrings {
 	
 	#region JohnsFlagsForCarpenterSonAndCarpenter
 	public static string TestFlag = "Test Flag.";
+	public static string FishingConversation = "Fishing Conversation";
 	public static string CarpenterSonMovesToTheBeach = "Carpenter Son Moves To The Beach.";
 	public static string StartConversationWithSeaCaptainAboutBuildingShip = "Start Conversation with Sea Captain about building ship";
 	public static string AfterConversationAboutBuildingShip = "After Conversation about building ship.";
