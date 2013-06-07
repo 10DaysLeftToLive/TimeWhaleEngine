@@ -15,7 +15,8 @@ public class SeaCaptainMiddle : NPC {
 	Reaction talkToFortuenTellerFirstReaction = new Reaction();
 	Reaction talkToFortuenTellerSecondReaction = new Reaction();
 	private Vector3 startingPos = new Vector3(74f, -3.09f + LevelManager.levelYOffSetFromCenter, 0f);
-	
+	NPCConvoSchedule TalktoCarpenterSon;
+	Schedule AfterTalkToCarpenterSon;
 	protected override void Init() {
 		id = NPCIDs.SEA_CAPTAIN;
 		base.Init();
@@ -40,6 +41,11 @@ public class SeaCaptainMiddle : NPC {
 		talkToFortuenTellerSecondReaction.AddAction(new NPCAddScheduleAction(this, returnToDockSchedTwo));
 		talkToFortuenTellerSecondReaction.AddAction(new NPCAddScheduleAction(this, talkToFortuneTellerSecondSched));
 		AddTimeReaction(1500, talkToFortuenTellerSecondReaction);
+		
+		Reaction rebuildShip = new Reaction();
+		rebuildShip.AddAction(new NPCAddScheduleAction(this, TalktoCarpenterSon));
+		rebuildShip.AddAction(new NPCAddScheduleAction(this, AfterTalkToCarpenterSon));
+		flagReactions.Add(FlagStrings.StartConversationWithSeaCaptainAboutBuildingShip, rebuildShip);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
@@ -56,12 +62,18 @@ public class SeaCaptainMiddle : NPC {
 		
 		talkToFortuneTellerFirstSched = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FortuneTellerMiddle), new MiddleSeaCaptainFortuneTellerFirstConvo(), Schedule.priorityEnum.Medium, true);
 		talkToFortuneTellerSecondSched = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FortuneTellerMiddle), new MiddleSeaCaptainFortuneTellerSecondConvo(), Schedule.priorityEnum.Medium, true);
+		TalktoCarpenterSon = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), new MiddleSeaCaptainToCarpenterSon(), Schedule.priorityEnum.DoConvo, true);
 		
 		returnToDockSchedOne = new Schedule(this);
 		returnToDockSchedOne.Add(new Task(new MoveThenMarkDoneState(this, startingPos)));
 		
 		returnToDockSchedTwo = new Schedule(this);
 		returnToDockSchedTwo.Add(new Task(new MoveThenMarkDoneState(this, startingPos)));
+		
+		AfterTalkToCarpenterSon = new Schedule(this, Schedule.priorityEnum.High);
+		Task FinishedTalking  = new TimeTask(0f, new IdleState(this));
+		FinishedTalking.AddFlagToSet(FlagStrings.AfterConversationAboutBuildingShip);
+		AfterTalkToCarpenterSon.Add (FinishedTalking);
 	}
 	
 	
