@@ -7,7 +7,7 @@ public class InGameMenu : GUIControl {
 	public Texture2D unpauseTexture;
 	public float pauseButtonSize = .15f;
 	
-	
+	private float MAXPAUSEBUTTONSIZE = 128; // in pixels
 	private Rect pauseButtonRect;
 	private bool isPaused = false;
 	
@@ -36,6 +36,11 @@ public class InGameMenu : GUIControl {
 	}
 	
 	private void SetupRectangles(){
-		pauseButtonRect = ScreenRectangle.NewRect(.0f,.98f-pauseButtonSize,pauseButtonSize,pauseButtonSize);	
+		float largestScreenSize = (Mathf.Max(ScreenSetup.screenWidth, ScreenSetup.screenHeight));
+		
+		if (pauseButtonSize * largestScreenSize  > MAXPAUSEBUTTONSIZE){
+			pauseButtonSize = MAXPAUSEBUTTONSIZE / largestScreenSize;
+		}
+		pauseButtonRect = ScreenRectangle.NewRect(.0f,1f-pauseButtonSize,pauseButtonSize,pauseButtonSize);	
 	}
 }

@@ -217,4 +217,13 @@ public static class FlagStrings {
 	
 	public static string StartTalkingToLighthouse = "Start talking to lighthouse.";
 	#endregion
+	
+	#region JohnsFlagsForCarpenterSonAndCarpenter
+	public static string TestFlag = "Test Flag.";
+	public static string CarpenterSonMovesToTheBeach = "Carpenter Son Moves To The Beach.";
+	public static string StartConversationWithSeaCaptainAboutBuildingShip = "Start Conversation with Sea Captain about building ship";
+	public static string AfterConversationAboutBuildingShip = "After Conversation about building ship.";
+	public static string StartProudOfSonConversation = "Start Proud of Son Conversation.";
+	public static string AfterProudOfSonConversation = "After Proud of Son Conversation.";
+	#endregion
 }

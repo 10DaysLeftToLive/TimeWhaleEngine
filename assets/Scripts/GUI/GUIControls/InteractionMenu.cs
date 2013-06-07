@@ -99,7 +99,7 @@ public class InteractionMenu : GUIControl {
 			}
 			currentButtonIndex++;
 		}
-		if (player.Inventory.HasItem()){
+		if (player.Inventory.HasItem() && npcChattingWith.CanTakeItem(player.Inventory.GetItem().name)){
 			if (ButtonClick(buttonRects[currentButtonIndex], "Give " + player.Inventory.GetItem().name, buttonStyle)){
 				DoGiveClick();
 			}
@@ -158,7 +158,7 @@ public class InteractionMenu : GUIControl {
 	
 	private void GetChoicesFromNPC(){
 		buttonTexts = npcChattingWith.GetButtonChats();
-		SetUpChoiceButtonRectangles(buttonTexts.Count + (player.Inventory.HasItem() ? 1 : 0));
+		SetUpChoiceButtonRectangles(buttonTexts.Count + (player.Inventory.HasItem() && npcChattingWith.CanTakeItem(player.Inventory.GetItem().name) ? 1 : 0));
 	}
 	
 	private void GetPortraitTexture(){

@@ -1,6 +1,6 @@
 public static class StringsItem {
 		public static string AppleCarpenter = "Apple[Carpenter]";
-	public static string Apple = "apple";
+	public static string Apple = "Apple";
 	public static string ApplePie = "Apple Pie";
 	public static string Broccoli = "Broccoli";
 	public static string CaptainLog = "Captain's Log";
