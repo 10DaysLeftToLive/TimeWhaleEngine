@@ -149,6 +149,7 @@ public class CarpenterSonYoung : NPC {
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Hey, now that I have my tools back I need to make something. Do you have any suggestions?");
 			
+			
 			makeFishingRodReaction.AddAction(new NPCCallbackAction(TellToMakeFishingRod));
 			makeFishingRodReaction.AddAction(new NPCEmotionUpdateAction(toControl, new CarpenterSonYoung.EncourageEmotionState(toControl, encourageString)));
 			makeSwordReaction.AddAction(new NPCCallbackAction(TellToMakeSword));
@@ -165,14 +166,15 @@ public class CarpenterSonYoung : NPC {
 		}
 				
 		private void TellToMakeFishingRod(){
-			((CarpenterSonYoung)_npcInState).madeFishingRod = true;
+//((CarpenterSonYoung)_npcInState).madeFishingRod = true;
 			_allChoiceReactions.Remove(makeFishingRodChoice);
 			_allChoiceReactions.Remove(makeSwordChoice);
 			_allChoiceReactions.Remove(makeDollChoice);
-			//_allItemReactions.Remove(giveToolsChoice);
-			FlagManager.instance.SetFlag(FlagStrings.carpenterSonMakesFishingRod);
+			//_allChoiceReactions.Clear();
 			SetDefaultText("I wonder how it will turn out.");
 			GUIManager.Instance.RefreshInteraction();
+			//_allItemReactions.Remove(giveToolsChoice);
+//FlagManager.instance.SetFlag(FlagStrings.carpenterSonMakesFishingRod);
 			itemCarpenterMakes = "FishingRod";
 			WhittleItem();
 		}

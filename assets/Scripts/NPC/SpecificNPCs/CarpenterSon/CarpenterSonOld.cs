@@ -33,7 +33,7 @@ public class CarpenterSonOld : NPC {
 			Reaction GoToBeachIntroHappy = new Reaction();
 			ShowMultipartChatAction goToBeachChatIntroHappy = new ShowMultipartChatAction(this); // 4 seconds
 			goToBeachChatIntroHappy.AddChat("Thanks!", 2f);
-			goToBeachChatIntroHappy.AddChat("I'm about to take a break on the beach.", 2f);
+			goToBeachChatIntroHappy.AddChat("Well, I'm about to take a break on the beach.", 2f);
 			goToBeachChatIntroHappy.AddChat("You two care to join me?", 2f);
 			GoToBeachIntroHappy.AddAction(goToBeachChatIntroHappy);
 			GoToBeachIntroHappy.AddAction(new NPCAddScheduleAction(this, goToBeachSchedule));
@@ -43,7 +43,7 @@ public class CarpenterSonOld : NPC {
 		Reaction GoToBeachIntroUpset = new Reaction();
 		ShowMultipartChatAction goToBeachChatIntroUpset = new ShowMultipartChatAction(this); // 4 seconds
 		goToBeachChatIntroUpset.AddChat("Ohh.. Ok.", 2f);
-		goToBeachChatIntroUpset.AddChat("I'm about to take a break on the beach.", 2f);
+		goToBeachChatIntroUpset.AddChat("Well, I'm about to take a break on the beach.", 2f);
 		goToBeachChatIntroUpset.AddChat("You two care to join me?", 2f);
 		GoToBeachIntroUpset.AddAction(goToBeachChatIntroUpset);
 		GoToBeachIntroUpset.AddAction(new NPCAddScheduleAction(this, goToBeachSchedule));
