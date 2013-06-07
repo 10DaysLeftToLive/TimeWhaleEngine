@@ -70,7 +70,7 @@ public class CarpenterSonMiddle : NPC {
 	protected override EmotionState GetInitEmotionState() {
 		startingPosition = transform.position;
 		startingPosition.y += LevelManager.levelYOffSetFromCenter;
-		return (new InitialEmotionState(this, "One Second, I am talking to someone"));
+		return (new InitialEmotionState(this, "One Second, I am talking to my father"));
 	}
 	
 	protected override Schedule GetSchedule(){
