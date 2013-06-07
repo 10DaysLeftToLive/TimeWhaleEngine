@@ -29,7 +29,7 @@ public class CarpenterSonYoung : NPC {
 		flagReactions.Add(FlagStrings.PlayerAndCastleNOTFriends , ReactToCastleManNotFriends);
 		
 		CreatedFishingRod = new Reaction();
-		flagReactions.Add(FlagStrings.carpenterSonMakesFishingRod, CreatedFishingRod);
+		//flagReactions.Add(FlagStrings.carpenterSonMakesFishingRod, CreatedFishingRod);
 		//CreatedFishingRod.Add
 		BeginDayChat = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterYoung), new YoungCarpenterSonToCarpenterConvo());
 
@@ -170,9 +170,9 @@ public class CarpenterSonYoung : NPC {
 			_allChoiceReactions.Remove(makeSwordChoice);
 			_allChoiceReactions.Remove(makeDollChoice);
 			//_allItemReactions.Remove(giveToolsChoice);
-			GUIManager.Instance.RefreshInteraction();
 			FlagManager.instance.SetFlag(FlagStrings.carpenterSonMakesFishingRod);
 			SetDefaultText("I wonder how it will turn out.");
+			GUIManager.Instance.RefreshInteraction();
 			itemCarpenterMakes = "FishingRod";
 			WhittleItem();
 		}
@@ -182,8 +182,8 @@ public class CarpenterSonYoung : NPC {
 			_allChoiceReactions.Remove(makeSwordChoice);
 			_allChoiceReactions.Remove(makeDollChoice);
 			//_allItemReactions.Remove(giveToolsChoice);
-			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("This is going to be so cool when I'm done.");
+			GUIManager.Instance.RefreshInteraction();
 			itemCarpenterMakes = "Sword";
 			WhittleItem();
 		}
@@ -193,14 +193,15 @@ public class CarpenterSonYoung : NPC {
 			_allChoiceReactions.Remove(makeSwordChoice);
 			_allChoiceReactions.Remove(makeDollChoice);
 			//_allItemReactions.Remove(giveToolsChoice);
-			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("The more I whittle this, the creepier it looks.");
+			GUIManager.Instance.RefreshInteraction();
 			itemCarpenterMakes = "Doll";
 			WhittleItem();
 		}
 		
 		private void WhittleItem(){
 			//TODO: Whittling Animation
+			DebugManager.print("WHITTLING AWW YEEEAAAAAH");
 			_allChoiceReactions.Add(recieveItemChoice, new DispositionDependentReaction(recieveItemReaction));
 		}
 		
