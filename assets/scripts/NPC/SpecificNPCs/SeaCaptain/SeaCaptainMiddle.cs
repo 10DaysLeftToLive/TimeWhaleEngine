@@ -63,6 +63,7 @@ public class SeaCaptainMiddle : NPC {
 		talkToFortuneTellerFirstSched = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FortuneTellerMiddle), new MiddleSeaCaptainFortuneTellerFirstConvo(), Schedule.priorityEnum.Medium, true);
 		talkToFortuneTellerSecondSched = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FortuneTellerMiddle), new MiddleSeaCaptainFortuneTellerSecondConvo(), Schedule.priorityEnum.Medium, true);
 		TalktoCarpenterSon = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), new MiddleSeaCaptainToCarpenterSon(), Schedule.priorityEnum.DoConvo, true);
+		TalktoCarpenterSon.SetCanNotInteractWithPlayer();
 		
 		returnToDockSchedOne = new Schedule(this);
 		returnToDockSchedOne.Add(new Task(new MoveThenMarkDoneState(this, startingPos)));
