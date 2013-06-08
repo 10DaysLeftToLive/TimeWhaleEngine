@@ -71,11 +71,17 @@ public class Player : Character {
 	
 	private void DoClickOnPlayer(){
 		if (Inventory.HasItem()){
+			if (IsInteracting()){
+				GUIManager.Instance.CloseInteractionMenu();
+			}
 			EnterState(new DropItemState(this));
 		}
 	}
 	
 	private void DoClickOnItem(GameObject item){
+		if (IsInteracting()){
+			GUIManager.Instance.CloseInteractionMenu();
+		}
 		if (Inventory.HasItem() && Inventory.GetItem() == item){
 			EnterState(new DropItemState(this));
 		} else {
