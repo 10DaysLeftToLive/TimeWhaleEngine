@@ -77,7 +77,10 @@ public static class Strings{
 
     // Area Names
     public static string CURRENTAREA = "Forest";
+    public static string PREVIOUSAREA = "";
     public static string CURRENTFADING = "Forest";
+    public static string FADINGAREA = "";
+    public static string CROSSFADINGAREA = "";
     public static string TOPOFSTAIRS = "Forest";
     public static string BOTTOMOFSTAIRS = "Forest";
 }

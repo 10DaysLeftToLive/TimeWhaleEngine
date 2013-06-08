@@ -46,7 +46,7 @@ public class MoveToObjectState : MoveState {
         }
         else
         {
-            if(SoundManager.instance.AudioOn)
+            if(SoundManager.instance.AudioOn && SoundManager.instance.SFXOn)
             SoundManager.instance.StopWalkSFX();
         }
         

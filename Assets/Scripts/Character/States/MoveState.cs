@@ -221,79 +221,197 @@ public class MoveState : AbstractState {
         }
 	}
 	
-	private void TransitionSounds(){
-		if (SoundManager.instance.AudioOn) {
+    private void TransitionSounds()
+    {
+        if (SoundManager.instance.AudioOn)
+        {
             lastWay = _pathFollowing.GetLastWayPointName();
-
+            //Debug.Log("lastWay is " + lastWay);
             NameStartCounter = lastWay.IndexOf(".");
             NameEndCounter = lastWay.IndexOf("Stair");
             // since we're heading towards the stairs, we need to grab the name of the area we are leaving and the area we're heading towards
-            if (lastWay.IndexOf("StairBase") > 0 || lastWay.IndexOf("StairTop") > 0 || lastWay == "Forest.010") {
-                if (lastWay.IndexOf("StairBase") > 0) {
+            if (lastWay.IndexOf("StairBase") > 0 || lastWay.IndexOf("StairTop") > 0 || lastWay == "Forest.010")
+            {
+                if (lastWay.IndexOf("StairBase") > 0)
+                {
                     Strings.BOTTOMOFSTAIRS = lastWay.Substring(0, NameStartCounter);
                     Strings.TOPOFSTAIRS = lastWay.Substring(NameStartCounter + 5, NameEndCounter - (NameStartCounter + 5));
-                } else if (lastWay.IndexOf("StairTop") > 0){
+                }
+                else if (lastWay.IndexOf("StairTop") > 0)
+                {
                     Strings.TOPOFSTAIRS = lastWay.Substring(0, NameStartCounter);
                     Strings.BOTTOMOFSTAIRS = lastWay.Substring(NameStartCounter + 5, NameEndCounter - (NameStartCounter + 5));
                 }
                 towardStair = true;
-            } else if (towardStair){ // possibly walking towards stairs
-                if (lastWay.EndsWith("High") || lastWay.EndsWith("Low")){
-                    if (lastWay.IndexOf("Low") > 0){
-                        SoundManager.instance.StartCoroutineFadeDown(Strings.BOTTOMOFSTAIRS);
-                    } else  {
-                        SoundManager.instance.StartCoroutineFadeDown(Strings.TOPOFSTAIRS);
+            }
+            else if (towardStair)
+            { // possibly walking towards stairs
+                if (lastWay.EndsWith("High") || lastWay.EndsWith("Low"))
+                {
+                    if (lastWay.IndexOf("Low") > 0)
+                    {
+                        Strings.PREVIOUSAREA = Strings.BOTTOMOFSTAIRS;
+                        Crossfade.instance.StartCoroutineFadeDown();
+                    }
+                    else
+                    {
+                        Strings.PREVIOUSAREA = Strings.TOPOFSTAIRS;
+                        Crossfade.instance.StartCoroutineFadeDown();
                     }
                     towardStair = false;
                     traverseStair = true;
                     Strings.CURRENTAREA = "Stairs";
-                    if (SoundManager.instance.SFXOn) {
-                        SoundManager.instance.PlayWalkSFX();
-                    }
-                } else if (lastWay.IndexOf("Pier") > 0 || lastWay.IndexOf("Bridge") > 0){ // walking on the pier or the bridge
+                    SoundManager.instance.PlayWalkSFX();
+                }
+                else if (lastWay.IndexOf("Pier") > 0 || lastWay.IndexOf("Bridge") > 0)
+                { // walking on the pier or the bridge
                     towardStair = false;
                     traverseStair = true;
                     Strings.CURRENTAREA = "Stairs";
-                    if (SoundManager.instance.SFXOn){
-                        SoundManager.instance.PlayWalkSFX();
-                    }
-                } else if (lastWay.IndexOf("Stair") == -1 && lastWay.IndexOf("Pier") == -1 && lastWay.IndexOf("Bridge") == -1){ // passed by the stairs, rather than going up them
+                    SoundManager.instance.PlayWalkSFX();
+                }
+                else if (lastWay.IndexOf("Stair") == -1 && lastWay.IndexOf("Pier") == -1 && lastWay.IndexOf("Bridge") == -1)
+                { // passed by the stairs, rather than going up them
                     towardStair = false;
                 }
-			} else if (traverseStair) { // finished traversing the stairs
-                if (lastWay.EndsWith("High") || lastWay.EndsWith("Low")) {
+            }
+            else if (traverseStair)
+            { // finished traversing the stairs
+                if (lastWay.EndsWith("High") || lastWay.EndsWith("Low"))
+                {
                     traverseStair = false;
                     towardStair = true;
 
-                    if (lastWay.EndsWith("High")){
+                    if (lastWay.EndsWith("High"))
+                    {
                         Strings.CURRENTAREA = Strings.TOPOFSTAIRS;
-                    } else {
+                    }
+                    else
+                    {
                         Strings.CURRENTAREA = Strings.BOTTOMOFSTAIRS;
                     }
-                    if (SoundManager.instance.SFXOn){
-                        SoundManager.instance.PlayWalkSFX();
+                    SoundManager.instance.PlayWalkSFX();
+                    Crossfade.instance.StartCoroutineFadeUp();
+
+                    if (lastWay == "MarketWindmillStairLow" || lastWay == "MarketWindmillStairHigh")
+                    {
+                        if (!Crossfade.instance.CrossFade)
+                        {
+                            //Debug.Log("No crossfade occuring.");
+                            if (Crossfade.instance.MarketAmbient.isPlaying)
+                            {
+                                Crossfade.instance.startCoroutineFadeOverTime("Market", "Windmill");
+                            }
+                            else
+                            {
+                                Crossfade.instance.startCoroutineFadeOverTime("Windmill", "Market");
+                            }
+                        }
+                        else
+                        {
+                            ////Debug.Log("Crossfade occuring.");
+                            Crossfade.instance.startCoroutineFadeOverTime("Market", "Windmill");
+                        }
                     }
-                    SoundManager.instance.StartCoroutineFadeUp(Strings.CURRENTAREA);
-                } else if (lastWay.IndexOf("Bridge") > 0){
-                    if (lastWay.EndsWith("Left") || lastWay.EndsWith("Right")){
+                }
+                else if (lastWay.IndexOf("Bridge") > 0)
+                {
+                    if (lastWay.EndsWith("Left") || lastWay.EndsWith("Right"))
+                    {
                         traverseStair = false;
                         towardStair = true;
                         Strings.CURRENTAREA = "Forest";
-                        if (SoundManager.instance.SFXOn){
-                            SoundManager.instance.PlayWalkSFX();
+                        SoundManager.instance.PlayWalkSFX();
+                    }
+                }
+                else if (lastWay.IndexOf("Pier") > 0 && lastWay.EndsWith("Left"))
+                {
+                    traverseStair = false;
+                    towardStair = true;
+                    Strings.CURRENTAREA = "Beach";
+                    SoundManager.instance.PlayWalkSFX();
+                }
+                else if (lastWay == "BeachForestStairMiddle")
+                {
+                    if (!Crossfade.instance.CrossFade)
+                    {
+                        //Debug.Log("No crossfade occuring.");
+                        if (Crossfade.instance.BeachAmbient.isPlaying)
+                        {
+                            Crossfade.instance.startCoroutineFadeOverTime("Beach", "Forest");
+                        }
+                        else
+                        {
+                            Crossfade.instance.startCoroutineFadeOverTime("Forest", "Beach");
                         }
                     }
-                } else if (lastWay.IndexOf("Pier") > 0) {
-                    if (lastWay.EndsWith("Left")) {
-                        traverseStair = false;
-                        towardStair = true;
-                        Strings.CURRENTAREA = "Beach";
-                        if (SoundManager.instance.SFXOn) {
-                            SoundManager.instance.PlayWalkSFX();
+                    else
+                    {
+                        //Debug.Log("Crossfade occuring.");
+                        Crossfade.instance.startCoroutineFadeOverTime("Forest", "Beach");
+                    }
+                }
+                else if (lastWay == "ForestToMarketLeftStair.000" || lastWay == "ForestToMarketRightStair.000")
+                {
+                    if (!Crossfade.instance.CrossFade)
+                    {
+                        //Debug.Log("No crossfade occuring.");
+                        if (Crossfade.instance.ForestAmbient.isPlaying)
+                        {
+                            Crossfade.instance.startCoroutineFadeOverTime("Forest", "Market");
                         }
+                        else
+                        {
+                            Crossfade.instance.startCoroutineFadeOverTime("Market", "Forest");
+                        }
+                    }
+                    else
+                    {
+                        //Debug.Log("Crossfade occuring.");
+                        Crossfade.instance.startCoroutineFadeOverTime("Market", "Forest");
+                    }
+                }
+                else if (lastWay == "MarketToReflectionTreeStair.002")
+                {
+                    if (!Crossfade.instance.CrossFade)
+                    {
+                        //Debug.Log("No crossfade occuring.");
+                        if (Crossfade.instance.MarketAmbient.isPlaying)
+                        {
+                            Crossfade.instance.startCoroutineFadeOverTime("Market", "ReflectionTree");
+                        }
+                        else
+                        {
+                            Crossfade.instance.startCoroutineFadeOverTime("ReflectionTree", "Market");
+                        }
+                    }
+                    else
+                    {
+                        //Debug.Log("Crossfade occuring.");
+                        Crossfade.instance.startCoroutineFadeOverTime("Market", "ReflectionTree");
+                    }
+                }
+                else if (lastWay == "MarketToLighthouseStair.000")
+                {
+                    if (!Crossfade.instance.CrossFade)
+                    {
+                        //Debug.Log("No crossfade occuring.");
+                        if (Crossfade.instance.MarketAmbient.isPlaying)
+                        {
+                            Crossfade.instance.startCoroutineFadeOverTime("Market", "Lighthouse");
+                        }
+                        else
+                        {
+                            Crossfade.instance.startCoroutineFadeOverTime("Lighthouse", "Market");
+                        }
+                    }
+                    else
+                    {
+                        //Debug.Log("Crossfade occuring.");
+                        Crossfade.instance.startCoroutineFadeOverTime("Market", "Lighthouse");
                     }
                 }
             }
         }
-	}
+    }
 }
