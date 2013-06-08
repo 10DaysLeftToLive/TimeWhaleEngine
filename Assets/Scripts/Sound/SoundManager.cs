@@ -33,7 +33,7 @@ public class SoundManager : MonoBehaviour {
                 GameObject obj = new GameObject("SoundManager");
                 manager_instance = obj.AddComponent(typeof (SoundManager)) as SoundManager;
             }
-
+				
             return manager_instance;
         }
     }
