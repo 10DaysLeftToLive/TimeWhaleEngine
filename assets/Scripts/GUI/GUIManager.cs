@@ -30,7 +30,6 @@ public class GUIManager : MonoBehaviour {
 		}
 		instance = this;
 		alreadyMade = true;
-		DontDestroyOnLoad(this); // keep this manager and its loaded assests around
 		activeControls = new List<GUIControl>();
 		controlsToRemove = new List<GUIControl>();
 		controlsToAdd = new List<GUIControl>();

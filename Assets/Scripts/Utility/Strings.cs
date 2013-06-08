@@ -1,5 +1,7 @@
 
 public static class Strings{
+	public static string TitleMenu = "TitleScreen";
+	
 	public static string ButtonVertical = "Vertical";
 	public static string ButtonHorizontal = "Horizontal";
 

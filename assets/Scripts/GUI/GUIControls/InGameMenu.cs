@@ -2,9 +2,8 @@ using UnityEngine;
 using System.Collections;
 
 public class InGameMenu : GUIControl {
-	public GUIStyle buttonStyle;
-	public Texture2D pauseTexture;
-	public Texture2D unpauseTexture;
+	public GUIStyle pausedButtonStyle;
+	public GUIStyle resumeButtonStyle;
 	public float pauseButtonSize = .15f;
 	
 	private float MAXPAUSEBUTTONSIZE = 128; // in pixels
@@ -16,7 +15,7 @@ public class InGameMenu : GUIControl {
 	}
 	
 	public override void Render(){
-		if (GUI.Button(pauseButtonRect, (isPaused ? unpauseTexture : pauseTexture), buttonStyle)){
+		if (GUI.Button(pauseButtonRect, "", (isPaused ? resumeButtonStyle : pausedButtonStyle))){
 			if (isPaused){
 				GUIManager.Instance.HidePauseMenu();
 			} else {
@@ -41,6 +40,9 @@ public class InGameMenu : GUIControl {
 		if (pauseButtonSize * largestScreenSize  > MAXPAUSEBUTTONSIZE){
 			pauseButtonSize = MAXPAUSEBUTTONSIZE / largestScreenSize;
 		}
-		pauseButtonRect = ScreenRectangle.NewRect(.0f,1f-pauseButtonSize,pauseButtonSize,pauseButtonSize);	
+		
+		float screenRatio = ScreenSetup.screenHeight/ScreenSetup.screenWidth;
+		float width = pauseButtonSize * screenRatio;
+		pauseButtonRect = ScreenRectangle.NewRect(.0f,1f-pauseButtonSize,width,pauseButtonSize);	
 	}
 }
