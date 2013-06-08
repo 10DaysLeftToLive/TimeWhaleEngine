@@ -237,10 +237,14 @@ public static class FlagStrings {
 	
 	#region JohnsFlagsForCarpenterSonAndCarpenter
 	public static string TestFlag = "Test Flag.";
+	public static string FishingConversation = "Fishing Conversation";
 	public static string CarpenterSonMovesToTheBeach = "Carpenter Son Moves To The Beach.";
 	public static string StartConversationWithSeaCaptainAboutBuildingShip = "Start Conversation with Sea Captain about building ship";
 	public static string AfterConversationAboutBuildingShip = "After Conversation about building ship.";
 	public static string StartProudOfSonConversation = "Start Proud of Son Conversation.";
 	public static string AfterProudOfSonConversation = "After Proud of Son Conversation.";
+	
+	public static string IntroConvoCarpentry = "Intro Conversation with Carpenter Son Middle Carpentry.";
+	public static string CarpenterReturnedHome = "CarpenterReturnedHome.";
 	#endregion
 }

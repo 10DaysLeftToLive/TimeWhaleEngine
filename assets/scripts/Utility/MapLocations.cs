@@ -75,6 +75,54 @@ public class MapLocations {
 	
 	#endregion
 	
+	#region LightHouse Location
+	
+	static Vector3 _lighthouse = new Vector3(58.92967f, 14.97302f, 0f);
+	public static Vector3 LightHouseYoung {
+		get { return new Vector3(_lighthouse.x, _lighthouse.y, _lighthouse.z); }
+	}
+	
+	public static Vector3 LightHouseMiddle {
+		get { return new Vector3(_lighthouse.x, _lighthouse.y + LevelManager.levelYOffSetFromCenter, _lighthouse.z); }
+	}
+	
+	public static Vector3 LightHouseOld {
+		get { return new Vector3(_lighthouse.x, _lighthouse.y + (LevelManager.levelYOffSetFromCenter * 2), _lighthouse.z); }
+	}
+	
+	#endregion
+	
+	#region Reflection Tree
+	
+	static Vector3 _reflectionTree = new Vector3(-41.09068f, 17.48419f, 0f);
+	
+	public static Vector3 ReflectionTreeYoung {
+		get{return new Vector3(_reflectionTree.x, _reflectionTree.y, _reflectionTree.z);}	
+	}
+	public static Vector3 ReflectionTreeMiddle {
+		get{return new Vector3(_reflectionTree.x, _reflectionTree.y + LevelManager.levelYOffSetFromCenter, _reflectionTree.z);}	
+	}
+	public static Vector3 ReflectionTreeOld {
+		get{return new Vector3(_reflectionTree.x, _reflectionTree.y + (LevelManager.levelYOffSetFromCenter * 2), _reflectionTree.z);}	
+	}
+	#endregion
+	
+	#region Bridge
+		static Vector3 _bridge = new Vector3(58.92967f, 14.97302f, 0f);
+		public static Vector3 BridgeYoung {
+			get { return new Vector3(_bridge.x, _bridge.y, _bridge.z); }
+		}
+	
+		public static Vector3 BridgeMiddle {
+			get { return new Vector3(_bridge.x, _bridge.y + LevelManager.levelYOffSetFromCenter, _bridge.z); }
+		}
+	
+		public static Vector3 BridgeeOld {
+			get { return new Vector3(_bridge.x, _bridge.y + (LevelManager.levelYOffSetFromCenter * 2), _bridge.z); }
+		}
+	#endregion
+	
+	
 	#region SiblingOld
 	static Vector3 _playerHouseWaterWell = new Vector3 (-2.4f, -2.4f, 0);
 	public static Vector3 PlayerHouseWaterWellOld {
@@ -86,5 +134,22 @@ public class MapLocations {
 		get	{return new Vector3 (_MiddleOfHauntedForest.x, _MiddleOfHauntedForest.y + (LevelManager.levelYOffSetFromCenter * 2), _MiddleOfHauntedForest.z);}
 	}
 	
+	public static Vector3 MiddleOfHauntedForestMiddle {
+		get {return new Vector3 (_MiddleOfHauntedForest.x, _MiddleOfHauntedForest.y + LevelManager.levelYOffSetFromCenter, _MiddleOfHauntedForest.z);}
+	}
+	
+	#endregion
+	
+	#region BeachCliff
+	static Vector3 _BeachCliff = new Vector3(51f, -.5f, 0f);
+	public static Vector3 BeachCliffYoung{
+		get{return _BeachCliff;}	
+	}
+	public static Vector3 BeachCliffMiddle{
+		get{return new Vector3(_BeachCliff.x, _BeachCliff.y + LevelManager.levelYOffSetFromCenter, _BeachCliff.z);}	
+	}
+	public static Vector3 BeachCliffOld{
+		get{return new Vector3(_BeachCliff.x, _BeachCliff.y + (LevelManager.levelYOffSetFromCenter * 2), _BeachCliff.z);}	
+	}
 	#endregion
 }
