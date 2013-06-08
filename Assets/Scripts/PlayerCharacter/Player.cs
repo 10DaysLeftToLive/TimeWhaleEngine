@@ -85,11 +85,14 @@ public class Player : Character {
 	
 	private void DoClickOnNPC(GameObject npc){
 		NPC toTalkWith = (NPC)npc.GetComponent<NPC>();
-		if (IsInteracting() && toTalkWith == npcTalkingWith){
+		if (IsInteracting()){
+			if (toTalkWith == npcTalkingWith){
+				GUIManager.Instance.CloseInteractionMenu();
+				return;
+			}
 			GUIManager.Instance.CloseInteractionMenu();
-		} else {
-			GoToInteractWithNPC(toTalkWith);
 		}
+		GoToInteractWithNPC(toTalkWith);
 	}
 	
 	/// <summary>
