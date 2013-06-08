@@ -151,7 +151,7 @@ public class CarpenterSonYoung : NPC {
 			
 			
 			makeFishingRodReaction.AddAction(new NPCCallbackAction(TellToMakeFishingRod));
-			makeFishingRodReaction.AddAction(new NPCEmotionUpdateAction(toControl, new CarpenterSonYoung.EncourageEmotionState(toControl, encourageString)));
+			makeFishingRodReaction.AddAction(new NPCEmotionUpdateAction(toControl, new CarpenterSonYoung.MadeFishingRodEmotionState(toControl, encourageString)));
 			makeSwordReaction.AddAction(new NPCCallbackAction(TellToMakeSword));
 			makeSwordReaction.AddAction(new NPCEmotionUpdateAction(toControl, new CarpenterSonYoung.EncourageEmotionState(toControl, encourageString)));
 			makeDollReaction.AddAction(new NPCCallbackAction(TellToMakeDoll));
@@ -211,17 +211,82 @@ public class CarpenterSonYoung : NPC {
 	}
 	#endregion
 	#region GivenFishingRod
-	private class GaveFishingRodEmotionState : EmotionState{
+	private class MadeFishingRodEmotionState : EmotionState{
 	
-		Reaction giveFishingRodReaction;
+		string gaveFishingRodDialogue = "Oh man, thanks so much!";
+		Choice EncourageFishingChoice = new Choice("Try fishing with it", "Huh? Oh yeah, I totally should.");
+		Reaction EncourageFishingReaction = new Reaction();
+		
+		Choice ComplimentWorkChoice = new Choice("Oh man this is so cool", "I know right?");
+		Choice CritisizeWorkChoice = new Choice("You could use some work", "Uh, alright. Guess I'll just have to make myself better.");
+		Reaction EncourageCarpentryReaction = new Reaction();
+		
+		Choice RecieveItemChoice = new Choice("Can I see it?", "Do you like it?");
+		Reaction RecieveItemReaction = new Reaction();
+	
+		Reaction giveFishingRodReaction = new Reaction();
+		
+		public MadeFishingRodEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+			giveFishingRodReaction.AddAction(new NPCTakeItemAction(toControl));
+			giveFishingRodReaction.AddAction(new SetOffFlagAction(FlagStrings.gaveFishingRodToCarpenterSon));
+			giveFishingRodReaction.AddAction(new NPCEmotionUpdateAction(toControl, new GaveFishingRodEmotionState(toControl, gaveFishingRodDialogue)));
+			_allItemReactions.Add(StringsItem.FishingRod, new DispositionDependentReaction(giveFishingRodReaction));
+			
+			EncourageCarpentryReaction.AddAction(new SetOffFlagAction(FlagStrings.carpenterSonEncouragedCarpentry));
+			EncourageCarpentryReaction.AddAction(new NPCCallbackAction(EncouragedCarpentryResult));
+			
+			//EncourageFishingReaction.AddAction(SetDefaultText("I think I'll go try out fishing tomorrow."));
+			EncourageFishingReaction.AddAction(new SetOffFlagAction(FlagStrings.carpenterSonEncouragedFishing));
+			EncourageFishingReaction.AddAction(new NPCCallbackAction(EncouragedFishingResult));
+			//DebugManager.print(itemCarpenterMakes);
+			//DebugManager.print(((CarpenterSonYoung)_npcInState).madeFishingRod);
+			RecieveItemReaction.AddAction(new NPCCallbackAction(RecieveItemResult));
+			_allChoiceReactions.Add(RecieveItemChoice, new DispositionDependentReaction(RecieveItemReaction));
+			//DebugManager.print("Inside Emotion State Encourage");
+			
+			//_allChoiceReactions.Clear();
+			//_allChoiceReactions.Add(, new DispositionDependentReaction(makeFishingRodReaction));
+		}
+		
+		public override void UpdateEmotionState(){
+			
+		}
+		
+		private void RecieveItemResult(){
+			_allChoiceReactions.Clear();
+			_allChoiceReactions.Add(EncourageFishingChoice, new DispositionDependentReaction(EncourageFishingReaction));
+			_allChoiceReactions.Add(ComplimentWorkChoice, new DispositionDependentReaction(EncourageCarpentryReaction));
+			_allChoiceReactions.Add(CritisizeWorkChoice, new DispositionDependentReaction(EncourageCarpentryReaction));
+			GUIManager.Instance.RefreshInteraction();
+			SetDefaultText("What do you think?");
+		}
+		
+		private void EncouragedCarpentryResult(){
+			SetDefaultText("Alright, now I just need to work on my carpentry.");
+			_allChoiceReactions.Clear();
+			DebugManager.print("Inside Carpentry Result");
+			GUIManager.Instance.RefreshInteraction();
+		}
+		
+		private void EncouragedFishingResult(){
+			SetDefaultText("I think I'll try to go fishing tomorrow. Thanks!");
+			_allChoiceReactions.Clear();
+			DebugManager.print("Inside Fishing Result");
+			GUIManager.Instance.RefreshInteraction();
+		}
+	}
+	#region Carpenter Son Gains Fishing Rod
+	private class GaveFishingRodEmotionState : EmotionState{
+		
 		public GaveFishingRodEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
-
+			
 		}
 		
 		public override void UpdateEmotionState(){
 			
 		}
 	}
+	#endregion
 	#endregion
 	#region EncourageEmotionState
 	private class EncourageEmotionState : EmotionState{
