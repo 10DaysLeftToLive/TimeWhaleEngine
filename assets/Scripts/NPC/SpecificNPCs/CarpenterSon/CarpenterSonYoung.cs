@@ -15,7 +15,7 @@ public class CarpenterSonYoung : NPC {
 	Reaction CreatedFishingRod;
 	public bool madeFishingRod = false;
 	internal static string encourageString = "Hey, now that I have my tools back I need to make something. Do you have any suggestions?";
-	internal static string itemCarpenterMakes = "None";
+	public string itemCarpenterMakes = "None";
 	Schedule BeginDayWithDad;
 	NPCConvoSchedule BeginDayChat;
 	protected override void SetFlagReactions(){
@@ -166,7 +166,7 @@ public class CarpenterSonYoung : NPC {
 		}
 				
 		private void TellToMakeFishingRod(){
-//((CarpenterSonYoung)_npcInState).madeFishingRod = true;
+			((CarpenterSonYoung)_npcInState).madeFishingRod = true;
 			_allChoiceReactions.Remove(makeFishingRodChoice);
 			_allChoiceReactions.Remove(makeSwordChoice);
 			_allChoiceReactions.Remove(makeDollChoice);
@@ -175,7 +175,7 @@ public class CarpenterSonYoung : NPC {
 			GUIManager.Instance.RefreshInteraction();
 			//_allItemReactions.Remove(giveToolsChoice);
 //FlagManager.instance.SetFlag(FlagStrings.carpenterSonMakesFishingRod);
-			itemCarpenterMakes = "FishingRod";
+			((CarpenterSonYoung)_npcInState).itemCarpenterMakes = "FishingRod";
 			WhittleItem();
 		}
 			
@@ -186,7 +186,7 @@ public class CarpenterSonYoung : NPC {
 			//_allItemReactions.Remove(giveToolsChoice);
 			SetDefaultText("This is going to be so cool when I'm done.");
 			GUIManager.Instance.RefreshInteraction();
-			itemCarpenterMakes = "Sword";
+			((CarpenterSonYoung)_npcInState).itemCarpenterMakes = "Sword";
 			WhittleItem();
 		}
 		
@@ -197,7 +197,7 @@ public class CarpenterSonYoung : NPC {
 			//_allItemReactions.Remove(giveToolsChoice);
 			SetDefaultText("The more I whittle this, the creepier it looks.");
 			GUIManager.Instance.RefreshInteraction();
-			itemCarpenterMakes = "Doll";
+			((CarpenterSonYoung)_npcInState).itemCarpenterMakes = "Doll";
 			WhittleItem();
 		}
 		
@@ -260,6 +260,12 @@ public class CarpenterSonYoung : NPC {
 		
 		private void RecieveItemResult(){
 			_allChoiceReactions.Clear();
+			Action giveFishingRodAction = new NPCGiveItemAction(NPCManager.instance.getNPC(StringsNPC.CarpenterSonYoung), StringsItem.FishingRod);
+			Action giveSwordAction = new NPCGiveItemAction (NPCManager.instance.getNPC(StringsNPC.CarpenterSonYoung), StringsItem.ToySword);
+			Action giveDollAction = new NPCGiveItemAction (NPCManager.instance.getNPC(StringsNPC.CarpenterSonYoung), StringsItem.TimeWhale);
+			if (((CarpenterSonYoung)_npcInState).itemCarpenterMakes == "FishingRod") giveFishingRodAction.Perform();
+			if (((CarpenterSonYoung)_npcInState).itemCarpenterMakes == "Sword") giveSwordAction.Perform();
+			if (((CarpenterSonYoung)_npcInState).itemCarpenterMakes == "Doll") giveDollAction.Perform();
 			if (((CarpenterSonYoung)_npcInState).madeFishingRod) _allChoiceReactions.Add(EncourageFishingChoice, new DispositionDependentReaction(EncourageFishingReaction));
 			_allChoiceReactions.Add(ComplimentWorkChoice, new DispositionDependentReaction(EncourageCarpentryReaction));
 			_allChoiceReactions.Add(CritisizeWorkChoice, new DispositionDependentReaction(EncourageCarpentryReaction));
