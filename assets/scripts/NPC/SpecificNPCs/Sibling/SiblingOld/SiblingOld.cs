@@ -129,7 +129,7 @@ public class SiblingOld : NPC {
 		Reaction goToFortuneTellerIntroReaction = new Reaction();
 		ShowMultipartChatAction goToFortuneTellerIntroChat = new ShowMultipartChatAction(this);
 		goToFortuneTellerIntroChat.AddChat("Um..", 1f);
-		goToFortuneTellerIntroChat.AddChat("I'm getting my fortunes upstairs. So I'm going to pass.", 2.5f);
+		goToFortuneTellerIntroChat.AddChat("I'm getting my fortune upstairs. So I'm going to pass.", 2.5f);
 //Add context to the going upstairs, make the choice more meaningful (can't see the conversation from both sides.
 //Pause
 		goToFortuneTellerIntroChat.AddChat("Have fun though!", 2f);
