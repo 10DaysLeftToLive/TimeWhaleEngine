@@ -16,7 +16,7 @@ public class SiblingOldToFortunetellerSchedule : Schedule {
 			Add(new TimeTask(4.25f, new IdleState(_toManage)));
 		
 //Sibling begins conversation: I'm here for my fortune! Are you ready?		
-			Task siblingOldToFortunetellerPartOne = (new Task(new MoveThenDoState(_toManage, new Vector3(27f, 7.8f + (LevelManager.levelYOffSetFromCenter*2), 0), new MarkTaskDone(_toManage)))); 
+			Task siblingOldToFortunetellerPartOne = (new Task(new MoveThenDoState(_toManage, new Vector3(28f, 7.8f + (LevelManager.levelYOffSetFromCenter*2), 0), new MarkTaskDone(_toManage)))); 
 			siblingOldToFortunetellerPartOne.AddFlagToSet(FlagStrings.siblingOldTalkToFortunePartOne);
 			Add(siblingOldToFortunetellerPartOne);
 			Add(new TimeTask(4.5f, new IdleState(_toManage))); 
@@ -85,20 +85,23 @@ public class SiblingOldToFortunetellerSchedule : Schedule {
 			Task fortunetellerToSiblingPartSix = (new TimeTask(.05f, new IdleState(_toManage))); 
 			fortunetellerToSiblingPartSix.AddFlagToSet(FlagStrings.FortunetellerTalkToSiblingOldPartSix);
 			Add(fortunetellerToSiblingPartSix);
-			Add(new TimeTask(3.5f, new IdleState(_toManage)));
+			Add(new TimeTask(3f, new IdleState(_toManage)));
 //	
+			Task goToFarmerArea = (new TimeTask(.05f, new IdleState(_toManage))); 
+			goToFarmerArea.AddFlagToSet(FlagStrings.oldSiblingGoToFarmerArea);
+			Add(goToFarmerArea);
+			Add(new TimeTask(2f, new IdleState(_toManage))); //Sibling
+			Add(new Task(new MoveThenDoState(_toManage, new Vector3(48f, (LevelManager.levelYOffSetFromCenter*2) + 15, 0), new MarkTaskDone(_toManage))));
+			Add(new TimeTask(60f, new WaitTillPlayerCloseState(_toManage, ref _toManage.player, 3f))); //Sibling		
+
+// Such a loud one she is... | Ohh| Hello there quiet one | Care for your fortune		
 			Task fortunetellerToSiblingPartSeven = (new TimeTask(.05f, new IdleState(_toManage))); 
 			fortunetellerToSiblingPartSeven.AddFlagToSet(FlagStrings.FortunetellerTalkToSiblingOldPartSeven);
 			Add(fortunetellerToSiblingPartSeven);
 			Add(new TimeTask(7f, new IdleState(_toManage)));
 		
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////		
-			Task goToFarmerArea = (new TimeTask(.05f, new IdleState(_toManage))); 
-			goToFarmerArea.AddFlagToSet(FlagStrings.oldSiblingGoToFarmerArea);
-			Add(goToFarmerArea);
-			Add(new TimeTask(2f, new IdleState(_toManage))); //Sibling
-			Add(new Task(new MoveThenDoState(_toManage, new Vector3(48f, (LevelManager.levelYOffSetFromCenter*2) + 15, 0), new MarkTaskDone(_toManage))));
-			Add(new TimeTask(60f, new WaitTillPlayerCloseState(_toManage, ref _toManage.player, 3f))); //Sibling
+
 			// 
 			//TALK ABOUT FARMER FAMILY BRIEFLY
 			//
