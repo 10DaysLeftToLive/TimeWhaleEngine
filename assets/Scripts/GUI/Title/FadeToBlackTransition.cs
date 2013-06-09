@@ -30,8 +30,8 @@ public class FadeToBlackTransition : MonoBehaviour {
 			blackSprite.alpha = timer / fadeTime;
 		}
 		if(fadingToBlack && (timer >= fadeTime)){
-			foreach(GameObject go in toDisableOnFadeGO) Utils.SetActiveRecursively(go, false);
 			foreach(GameObject go in toEnableOnFadeGO) Utils.SetActiveRecursively(go, true);
+			foreach(GameObject go in toDisableOnFadeGO) Utils.SetActiveRecursively(go, false);
 			fadingToBlack = false;
 			fadeToClear = true;
 		}
@@ -60,6 +60,12 @@ public class FadeToBlackTransition : MonoBehaviour {
 		toEnableOnFadeGO = new ArrayList();
 		toEnableOnFadeGO.Add(toEnable);
 		
+		fadingToBlack = true;	
+	}
+	
+	public void StartFadeToBlack(ArrayList toDisable, ArrayList toEnable){
+		toDisableOnFadeGO = toDisable;
+		toEnableOnFadeGO = toEnable;
 		fadingToBlack = true;	
 	}
 	
