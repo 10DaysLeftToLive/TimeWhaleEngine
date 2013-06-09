@@ -99,6 +99,10 @@ public class CarpenterSonMiddle : NPC {
 		DoNothing.AddAction(new NPCEmotionUpdateAction(this, new BecomeACarpenter(this, "")));
 		DoNothing.AddAction(new NPCAddScheduleAction(this, DoNothingSchedule));
 		flagReactions.Add(FlagStrings.IntroConvoCarpentry, DoNothing);
+		
+		Reaction EndOfDayConvo = new Reaction();
+		EndOfDayConvo.AddAction(new NPCEmotionUpdateAction(this, new BlankEmotionState(this, "It's nice to relax after a long day.")));
+		flagReactions.Add(FlagStrings.CarpenterReturnedHome, EndOfDayConvo);
 		#endregion
 		/*Reaction becomesACarpenter = new Reaction();
 		becomesACarpenter.AddAction(new NPCEmotionUpdateAction(this, new BecomeACarpenter(this, "Hey there man, I'm a bit busy right now.")));
@@ -313,7 +317,7 @@ public class CarpenterSonMiddle : NPC {
 	#region Become A Carpenter
 	//State for when Carpenter's son becomes interested in being a carpenter.
 	private class BecomeACarpenter : EmotionState {
-		
+		Reaction GetWoodReaction;
 		Choice curiousAboutMood = new Choice("What are you up to?", 
 			"Well, I thought I'd make a present for my Dad, I thought I'd make him a rocking chair");
 		Choice presentForDad = new Choice("Can I help?", "Yeah Sure, I'll need some wood.  Can you get it from the beach");
@@ -324,7 +328,11 @@ public class CarpenterSonMiddle : NPC {
 		Reaction helpAppreciated = new Reaction();
 		
 		public BecomeACarpenter(NPC toControl, string currentDialogue) : base(toControl, "Hi there.  I'm a bit busy right now.") {
-			
+			GetWoodReaction = new Reaction();
+			GetWoodReaction.AddAction(new NPCCallbackAction(UpdateGetWoodReaction));
+			//Change this to wood or whatever is the needed item.
+			_allItemReactions.Add(StringsItem.Apple, new DispositionDependentReaction(GetWoodReaction));	
+				
 			curiousAboutMoodReaction.AddAction(new NPCCallbackAction(selectCuriousMoodChoice));
 			
 			assistGettingWood.AddAction(new NPCCallbackAction(helpCarpenterSon));
@@ -339,7 +347,9 @@ public class CarpenterSonMiddle : NPC {
 			//TODO: Replace Toolbox with piece of wood
 			_allItemReactions.Add(StringsItem.Toolbox, new DispositionDependentReaction(helpAppreciated));
 		}
-		
+		public void UpdateGetWoodReaction(){
+			FlagManager.instance.SetFlag(FlagStrings.BuiltStuffForDad);	
+		}
 		public override void UpdateEmotionState(){
 			
 		}

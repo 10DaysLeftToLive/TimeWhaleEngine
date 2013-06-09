@@ -9,6 +9,7 @@ public class CarpenterMiddle : NPC {
 		id = NPCIDs.CARPENTER;
 		base.Init();
 	}
+	bool builtChair = false;
 	
 	//private bool followDefaultSchedule = true;
 	private Schedule openningWaitingSchedule;
@@ -18,7 +19,7 @@ public class CarpenterMiddle : NPC {
 	NPCConvoSchedule angryAtSonBeingIndependent, endOfDayTalk;
 	//Carpenter Son Carpenter Branch
 	NPCConvoSchedule happyAtSonForBeingCarpenter, talkToSonAfterWhittle, talkToSonWithoutWhittle;
-	
+	NPCConvoSchedule ConversationAboutRockingChair, ConversationAboutNotDoingAnything;
 	Schedule afterAngryAtSonFishing, afterAngryAtSonIndependent, afterHappyForSonBeingACarpenter;
 	Schedule AfterAngryAtSonFishing;
 	Schedule MoveToCliffSide;
@@ -53,6 +54,24 @@ public class CarpenterMiddle : NPC {
 		HaveConversation.AddAction(new NPCAddScheduleAction(this, WorkOnWindmill));
 		flagReactions.Add(FlagStrings.IntroConvoCarpentry, HaveConversation);
 		
+		
+		Reaction setBuiltStuff = new Reaction();
+		setBuiltStuff.AddAction(new NPCCallbackAction(SettingConversation));
+		flagReactions.Add(FlagStrings.BuiltStuffForDad, setBuiltStuff);
+		
+		Reaction ReturnHomeReaction = new Reaction();
+		ReturnHomeReaction.AddAction(new NPCCallbackAction(PrepareReturnedHomeConversation));
+		flagReactions.Add(FlagStrings.CarpenterReturnedHome, ReturnHomeReaction);
+		
+		Reaction PerformConversationAboutNothing = new Reaction();
+		PerformConversationAboutNothing.AddAction(new NPCAddScheduleAction(this, ConversationAboutNotDoingAnything));
+		PerformConversationAboutNothing.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "")));
+		flagReactions.Add(FlagStrings.DidntBuildRockingChairConversation, PerformConversationAboutNothing);
+		
+		Reaction BuiltRockingChair = new Reaction();
+		BuiltRockingChair.AddAction(new NPCAddScheduleAction(this, ConversationAboutRockingChair));
+		BuiltRockingChair.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "")));
+		flagReactions.Add(FlagStrings.BuiltRockingChairTalk, BuiltRockingChair);
 		#endregion
 		/*Reaction carpenterSonBecomesFishermen = new Reaction();
 		carpenterSonBecomesFishermen.AddAction (new NPCAddScheduleAction(this, angryAtSonFishing));
@@ -64,6 +83,17 @@ public class CarpenterMiddle : NPC {
 		carpenterSonBecomesCarpenter.AddAction(new NPCAddScheduleAction(this, afterHappyForSonBeingACarpenter));
 		carpenterSonBecomesCarpenter.AddAction(new NPCAddScheduleAction(this, talkToSonAfterWhittle));
 		flagReactions.Add(FlagStrings.gaveToolsToCarpenterOrSon, carpenterSonBecomesCarpenter);*/
+	}
+	protected void PrepareReturnedHomeConversation(){
+		if(builtChair == true){
+			FlagManager.instance.SetFlag(FlagStrings.BuiltRockingChairTalk);
+		}
+		else{
+			FlagManager.instance.SetFlag(FlagStrings.DidntBuildRockingChairConversation);
+		}
+	}
+	protected void SettingConversation(){
+			builtChair = true;
 	}
 	
 	/*protected void IndepdentTalkActionDone() {
@@ -137,6 +167,15 @@ public class CarpenterMiddle : NPC {
 		Task setCarpentryFlag = new TimeTask(0f, new IdleState(this));
 		setCarpentryFlag.AddFlagToSet(FlagStrings.CarpenterReturnedHome);
 		WorkOnWindmill.Add(setCarpentryFlag);
+		
+		ConversationAboutRockingChair = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), 
+			new GiveRockingChairScript(), Schedule.priorityEnum.DoNow);
+		ConversationAboutRockingChair.SetCanNotInteractWithPlayer();
+		
+		ConversationAboutNotDoingAnything = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), 
+			new GiveNothingScript(), Schedule.priorityEnum.DoNow);
+		ConversationAboutNotDoingAnything.SetCanNotInteractWithPlayer();
+		
 		#endregion
 //CONVERSATION SCHEDULE BUG!!!! PLEASE FIX		
 //CONVERSATION SCHEDULE BUG!!!! PLEASE FIX		
