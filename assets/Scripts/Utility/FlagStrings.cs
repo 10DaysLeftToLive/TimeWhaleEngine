@@ -59,7 +59,6 @@ public static class FlagStrings {
 		public static string siblingOldTalkToFortunePartFour = "Sibling Old Talk To Fortune Part Four";
 		public static string siblingOldTalkToFortunePartFive = "Sibling Old Talk To Fortune Part Five";
 		public static string siblingOldTalkToFortunePartSix = "Sibling Old Talk To Fortune Part Six";
-		public static string siblingOldTalkToFortunePartSeven = "Sibling Old Talk To Fortune Part Seven";
 	
 		public static string oldSiblingGoToFarmerArea = "oldSiblingGoToFarmerArea";
 	
@@ -70,6 +69,7 @@ public static class FlagStrings {
 	public static string FortunetellerTalkToSiblingOldPartFour = "Fortuneteller Talk To Sibling Old Part Four";
 	public static string FortunetellerTalkToSiblingOldPartFive = "Fortuneteller Talk To Sibling Old Part Five";
 	public static string FortunetellerTalkToSiblingOldPartSix = "Fortuneteller Talk To Sibling Old Part Six";
+	public static string FortunetellerTalkToSiblingOldPartSeven = "Fortuneteller Talk To Sibling Old Part Seven";
 	#endregion
 	
 		#endregion

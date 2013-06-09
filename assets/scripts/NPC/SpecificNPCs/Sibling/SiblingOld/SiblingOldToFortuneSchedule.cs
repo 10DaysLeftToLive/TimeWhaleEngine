@@ -85,12 +85,12 @@ public class SiblingOldToFortunetellerSchedule : Schedule {
 			Task fortunetellerToSiblingPartSix = (new TimeTask(.05f, new IdleState(_toManage))); 
 			fortunetellerToSiblingPartSix.AddFlagToSet(FlagStrings.FortunetellerTalkToSiblingOldPartSix);
 			Add(fortunetellerToSiblingPartSix);
-			Add(new TimeTask(10.5f, new IdleState(_toManage)));
+			Add(new TimeTask(3.5f, new IdleState(_toManage)));
 //	
 			Task fortunetellerToSiblingPartSeven = (new TimeTask(.05f, new IdleState(_toManage))); 
 			fortunetellerToSiblingPartSeven.AddFlagToSet(FlagStrings.FortunetellerTalkToSiblingOldPartSeven);
 			Add(fortunetellerToSiblingPartSeven);
-			Add(new TimeTask(10.5f, new IdleState(_toManage)));
+			Add(new TimeTask(7f, new IdleState(_toManage)));
 		
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////		
 			Task goToFarmerArea = (new TimeTask(.05f, new IdleState(_toManage))); 
