@@ -333,6 +333,7 @@ public class CarpenterSonMiddle : NPC {
 		public BecomeACarpenter(NPC toControl, string currentDialogue) : base(toControl, "Hi there.  I'm a bit busy right now.") {
 			GetWoodReaction = new Reaction();
 			GetWoodReaction.AddAction(new NPCCallbackAction(UpdateGetWoodReaction));
+			GetWoodReaction.AddAction(new NPCTakeItemAction(toControl));
 			//Change this to wood or whatever is the needed item.
 			_allItemReactions.Add(StringsItem.Apple, new DispositionDependentReaction(GetWoodReaction));	
 				
@@ -352,6 +353,8 @@ public class CarpenterSonMiddle : NPC {
 		}
 		public void UpdateGetWoodReaction(){
 			FlagManager.instance.SetFlag(FlagStrings.BuiltStuffForDad);	
+			SetDefaultText("Thank you so much for helping me!");
+			GUIManager.Instance.RefreshInteraction();
 		}
 		public override void UpdateEmotionState(){
 			

@@ -68,7 +68,7 @@ public class CarpenterMiddle : NPC {
 		
 		Reaction PerformConversationAboutNothing = new Reaction();
 		PerformConversationAboutNothing.AddAction(new NPCAddScheduleAction(this, ConversationAboutNotDoingAnything));
-		BuiltRockingChair.AddAction(new NPCAddScheduleAction(this, AfterConversation));
+        PerformConversationAboutNothing.AddAction(new NPCAddScheduleAction(this, AfterConversation));
 		PerformConversationAboutNothing.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "")));
 		flagReactions.Add(FlagStrings.DidntBuildRockingChairConversation, PerformConversationAboutNothing);
 		
