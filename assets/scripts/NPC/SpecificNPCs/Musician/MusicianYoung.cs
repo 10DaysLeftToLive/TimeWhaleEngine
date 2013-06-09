@@ -111,10 +111,10 @@ public class MusicianYoung : NPC {
 			WhatKindOfMusicReaction.AddAction(new UpdateCurrentTextAction(toControl, "All sorts, I've tried to learn as many instruments as I can."));
 			_allChoiceReactions.Add(WhatKindOfMusicChoice, new DispositionDependentReaction(WhatKindOfMusicReaction));
 			
-			PlayForMeChoice = new Choice("Could you play something for me?", "Maybe later, I'm really tired from moving in right now.");
+			PlayForMeChoice = new Choice("Could you play something for me?", "I would play for you when I'm not tired from moving in.");
 			PlayForMeReaction = new Reaction();
 			PlayForMeReaction.AddAction(new NPCCallbackAction(UpdatePlayForMe));
-			PlayForMeReaction.AddAction(new UpdateCurrentTextAction(toControl, "Maybe later, I'm really tired from moving in right now."));
+			PlayForMeReaction.AddAction(new UpdateCurrentTextAction(toControl, "I would play for you when I'm not tired from moving in."));
 			
 			IsThereAnyYouLikeChoice = new Choice("What kind of musical instrument do you like?", "I like all of them, although the flute always has a special place in my heart.\nBut I lost it at my old town.");
 			IsThereAnyYouLikeReaction = new Reaction();
@@ -151,6 +151,8 @@ public class MusicianYoung : NPC {
 			CanIHelpReaction = new Reaction ();
 			CanIHelpReaction.AddAction(new NPCCallbackAction(UpdateCanIHelp));
 			CanIHelpReaction.AddAction(new UpdateCurrentTextAction(toControl, "Ha ha!  I think we are okay, you've been such a kind neighbor.\nI hope that we can become friends in the future!"));
+			CanIHelpReaction.AddAction(new SetOffFlagAction(FlagStrings.MusicianFriendsWithPlayer));
+			
 		}
 		public void UpdateWhatKindOfMusic(){
 			_allChoiceReactions.Remove(WhatKindOfMusicChoice);
