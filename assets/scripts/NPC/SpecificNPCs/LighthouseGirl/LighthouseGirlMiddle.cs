@@ -582,10 +582,10 @@ public class LighthouseGirlMiddle : NPC {
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Promise you don't tell anyone about this?");
 			
-			FlagManager.instance.SetFlag(FlagStrings.ToolsForMarriage); // test
+			//FlagManager.instance.SetFlag(FlagStrings.ToolsForMarriage); // test
 			//FlagManager.instance.SetFlag(FlagStrings.CastleDate);	//test
 			//FlagManager.instance.SetFlag(FlagStrings.WaitForPlayerBeforeRope); //test
-			GUIManager.Instance.CloseInteractionMenu();
+			//GUIManager.Instance.CloseInteractionMenu();
 		}
 		public void MarriageResponse(){	
 			_allChoiceReactions.Remove(PlanChoice);
