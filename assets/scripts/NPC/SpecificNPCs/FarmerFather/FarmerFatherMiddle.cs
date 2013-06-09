@@ -54,6 +54,15 @@ public class FarmerFatherMiddle : NPC {
 	Reaction applePie = new Reaction();
 	Reaction shovel = new Reaction();
 	Reaction rope = new Reaction();
+	
+	//chat
+	Reaction girlEndStart = new Reaction();
+	Reaction girlEndOne = new Reaction();
+	Reaction girlEndTwo = new Reaction();
+	Reaction girlEndThree = new Reaction();
+	Reaction girlEndFour = new Reaction();
+	Reaction girlEndFive = new Reaction();
+	Reaction girlEndSix = new Reaction();
 	#endregion
 	
 	protected override void SetFlagReactions(){
@@ -74,22 +83,95 @@ public class FarmerFatherMiddle : NPC {
 		flagReactions.Add(FlagStrings.GiveApplePieToFarmer, applePie);
 		flagReactions.Add(FlagStrings.GiveShovelToFarmer, shovel);
 		flagReactions.Add(FlagStrings.GiveRopeToFarmer, rope);
+		
+		girlEndStart.AddAction(new NPCAddScheduleAction(this, girlEnd));
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlPathEndStart, girlEndStart);
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlPathEndOne, girlEndOne);
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlPathEndEight, girlEndTwo);
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlPathEndTen, girlEndThree);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
 		initialState = new InitialEmotionState(this, "H-hey there. D-do you have some time to listen? If you do, come back later when my wife isn't around..");
 		startingPosition = transform.position;
 		startingPosition.y += LevelManager.levelYOffSetFromCenter;
-		this.transform.position = new Vector3(200,0,0);
-		return (new GoneEmotionState(this, ""));
+		//this.transform.position = new Vector3(200,0,0);
+		return (initialState);
 	}
 	
 	protected override Schedule GetSchedule(){
 		Schedule schedule = new DefaultSchedule(this);
 		return (schedule);
 	}
-
+	Schedule girlEnd;
 	protected override void SetUpSchedules(){
+		girlEnd = new Schedule(this, Schedule.priorityEnum.DoNow);
+		Task girlEndChatOne = new TimeTask(.1f,new IdleState(this));
+		girlEndChatOne.AddFlagToSet(FarmerFamilyFlagStrings.GirlPathEndOne);
+		girlEnd.Add(girlEndChatOne);
+		girlEnd.Add(new Task(new MoveThenDoState(this, new Vector3(startingPosition.x + 1, startingPosition.y, startingPosition.z), new MarkTaskDone(this))));
+		girlEnd.Add(new TimeTask(8.3f, new IdleState(this)));
+		
+		Task girlEndChatTwo = new TimeTask(.1f,new IdleState(this));
+		girlEndChatTwo.AddFlagToSet(FarmerFamilyFlagStrings.GirlPathEndTwo);
+		girlEnd.Add(girlEndChatTwo);
+		girlEnd.Add(new TimeTask(3.3f, new IdleState(this)));
+		
+		Task girlEndChatThree = new TimeTask(.1f,new IdleState(this));
+		girlEndChatThree.AddFlagToSet(FarmerFamilyFlagStrings.GirlPathEndThree);
+		girlEnd.Add(girlEndChatThree);
+		girlEnd.Add(new TimeTask(8f, new IdleState(this)));
+		
+		Task girlEndChatFour = new TimeTask(.1f,new IdleState(this));
+		girlEndChatFour.AddFlagToSet(FarmerFamilyFlagStrings.GirlPathEndFour);
+		girlEnd.Add(girlEndChatFour);
+		girlEnd.Add(new TimeTask(4.3f, new IdleState(this)));
+		
+		Task girlEndChatFive = new TimeTask(.1f,new IdleState(this));
+		girlEndChatFive.AddFlagToSet(FarmerFamilyFlagStrings.GirlPathEndFive);
+		girlEnd.Add(girlEndChatFive);
+		girlEnd.Add(new TimeTask(5.1f, new IdleState(this)));
+		
+		Task girlEndChatSix = new TimeTask(.1f,new IdleState(this));
+		girlEndChatSix.AddFlagToSet(FarmerFamilyFlagStrings.GirlPathEndSix);
+		girlEnd.Add(girlEndChatSix);
+		girlEnd.Add(new TimeTask(4.1f, new IdleState(this)));
+		
+		Task girlEndChatSeven = new TimeTask(.1f,new IdleState(this));
+		girlEndChatSeven.AddFlagToSet(FarmerFamilyFlagStrings.GirlPathEndSeven);
+		girlEnd.Add(girlEndChatSeven);
+		girlEnd.Add(new TimeTask(23f, new IdleState(this)));
+		
+		Task girlEndChatEight = new TimeTask(.1f,new IdleState(this));
+		girlEndChatEight.AddFlagToSet(FarmerFamilyFlagStrings.GirlPathEndEight);
+		girlEnd.Add(girlEndChatEight);
+		girlEnd.Add(new TimeTask(1f, new IdleState(this)));
+		
+		Task girlEndChatNine = new TimeTask(.1f,new IdleState(this));
+		girlEndChatNine.AddFlagToSet(FarmerFamilyFlagStrings.GirlPathEndNine);
+		girlEnd.Add(girlEndChatNine);
+		girlEnd.Add(new TimeTask(4f, new IdleState(this)));
+		
+		Task girlEndChatTen = new TimeTask(.1f,new IdleState(this));
+		girlEndChatTen.AddFlagToSet(FarmerFamilyFlagStrings.GirlPathEndTen);
+		girlEnd.Add(girlEndChatTen);
+		girlEnd.Add(new TimeTask(21f, new IdleState(this)));
+		
+		Task girlEndChatEleven = new TimeTask(.1f,new IdleState(this));
+		girlEndChatEleven.AddFlagToSet(FarmerFamilyFlagStrings.GirlPathEndEleven);
+		girlEnd.Add(girlEndChatEleven);
+		girlEnd.Add(new TimeTask(1.2f, new IdleState(this)));
+		
+		Task girlEndChatTwelve = new TimeTask(.1f,new IdleState(this));
+		girlEndChatTwelve.AddFlagToSet(FarmerFamilyFlagStrings.GirlPathEndTwelve);
+		girlEnd.Add(girlEndChatTwelve);
+		girlEnd.Add(new TimeTask(1.2f, new IdleState(this)));
+		
+		Task girlEndChatThirteen = new TimeTask(.1f,new IdleState(this));
+		girlEndChatThirteen.AddFlagToSet(FarmerFamilyFlagStrings.GirlPathEndThirteen);
+		girlEnd.Add(girlEndChatThirteen);
+		girlEnd.Add(new TimeTask(4f, new IdleState(this)));
+		girlEnd.Add(new Task(new MoveThenDoState(this, new Vector3(startingPosition.x - 1, startingPosition.y, startingPosition.z), new MarkTaskDone(this))));
 		
 	}
 	
@@ -168,6 +250,23 @@ public class FarmerFatherMiddle : NPC {
 		castleDate.AddAction(new NPCCallbackSetStringAction(FlagToNPC, this, "castle"));
 		
 		stoodUp.AddAction(new NPCCallbackSetStringAction(FlagToNPC, this, "stoodUp"));
+		
+		
+		
+		ShowMultipartChatAction girlEndOneDialogue = new ShowMultipartChatAction(this);
+		girlEndOneDialogue.AddChat("So...I've been doing some thinking...and I feel like its best that we let our daughter...follow her heart...", 8f);
+		girlEndOne.AddAction(girlEndOneDialogue);
+		
+		ShowMultipartChatAction girlEndTwoDialogue = new ShowMultipartChatAction(this);
+		girlEndTwoDialogue.AddChat("...but..", 1f);
+		girlEndTwo.AddAction(girlEndTwoDialogue);
+		
+		ShowMultipartChatAction girlEndThreeDialogue = new ShowMultipartChatAction(this);
+		girlEndThreeDialogue.AddChat("I...", 1f);
+		girlEndThreeDialogue.AddChat("HAVE HAD ENOUGH OF YOUR BULLYING!", 5f);
+		girlEndThreeDialogue.AddChat("We did not agree to anything! you talked a lot and assumed my opinion.", 7f);
+		girlEndThreeDialogue.AddChat("I'm drawing the line here! Our daughter can marry whomever she chooses!", 7f);
+		girlEndThree.AddAction(girlEndThreeDialogue);
 	}
 	
 	
@@ -220,6 +319,7 @@ public class FarmerFatherMiddle : NPC {
 		NPC control;
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, "Hello there!  How's it going?"){
 			control = toControl;
+			SetupReactions();
 //			_allItemReactions.Add(StringsItem.Portrait,  new DispositionDependentReaction(PortraitReaction)); // change item to shell
 			_allItemReactions.Add(StringsItem.Seashell,  new DispositionDependentReaction(SeaShellReaction)); // change item to shell
 			_allItemReactions.Add(StringsItem.ToyPuzzle,  new DispositionDependentReaction(ToyPuzzleReaction)); // change item to shell
@@ -252,6 +352,7 @@ public class FarmerFatherMiddle : NPC {
 			ConvinceDaughterReaction.AddAction(new NPCCallbackAction(ConvinceDaughterResponse));
 			
 			MarriageReaction.AddAction(new NPCCallbackAction(UpdateMarriage));
+			
 			//The Convincing him to marry path.
 			DontLikeItReaction.AddAction(new NPCCallbackAction(UpdateDontLikeIt));
 			YouSureReaction.AddAction(new NPCCallbackAction(UpdateYouSure));
@@ -324,6 +425,9 @@ public class FarmerFatherMiddle : NPC {
 				_allChoiceReactions.Add(YouSureChoice, new DispositionDependentReaction(StrangeReaction));
 			}
 			GUIManager.Instance.RefreshInteraction();
+			
+			FlagManager.instance.SetFlag(FarmerFamilyFlagStrings.GirlPathEndStart); //test
+			GUIManager.Instance.CloseInteractionMenu();
 		}
 		
 		public void UpdateYouSure(){

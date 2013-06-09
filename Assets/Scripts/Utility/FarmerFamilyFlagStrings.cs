@@ -9,5 +9,31 @@ public static class FarmerFamilyFlagStrings {
 	public static string GirlCastleDateFour = "Girl to castle date four";
 	public static string GirlCastleDateFive = "Girl to castle date five";
 	public static string GirlCastleDateSix = "Girl to castle date six";
+	
+	public static string GirlCastleMarriageOne = "Girl to castle marriage one";
+	public static string GirlCastleMarriageTwo = "Girl to castle marriage two";
+	public static string GirlCastleMarriageThree = "Girl to castle marriage three";
+	public static string GirlCastleMarriageFour = "Girl to castle marriage four";
+	public static string GirlCastleMarriageFive = "Girl to castle marriage five";
+	public static string GirlCastleMarriageSix = "Girl to castle marriage six";
+	public static string GirlCastleMarriageSeven = "Girl to castle marriage seven";
+	public static string GirlCastleMarriageEight = "Girl to castle marriage eight";
+	
+	public static string GirlNoMarriageOne = "Girl no marriage one";
+	
+	public static string GirlPathEndStart = "Girl path end start";
+	public static string GirlPathEndOne = "Girl path end one";
+	public static string GirlPathEndTwo = "Girl path end two";
+	public static string GirlPathEndThree = "Girl path end three";
+	public static string GirlPathEndFour = "Girl path end four";
+	public static string GirlPathEndFive = "Girl path end five";
+	public static string GirlPathEndSix = "Girl path end six";
+	public static string GirlPathEndSeven = "Girl path end seven";
+	public static string GirlPathEndEight = "Girl path end eight";
+	public static string GirlPathEndNine = "Girl path end nine";
+	public static string GirlPathEndTen = "Girl path end ten";
+	public static string GirlPathEndEleven = "Girl path end eleven";
+	public static string GirlPathEndTwelve = "Girl path end twelve";
+	public static string GirlPathEndThirteen = "Girl path end thirteen";
 }
 

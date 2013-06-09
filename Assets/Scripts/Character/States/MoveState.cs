@@ -131,7 +131,7 @@ public class MoveState : AbstractState {
 		
 		if (distance != MIN_DISTANCE_TO_POINT){
 			float height = character.transform.localScale.y/2;
-			if (character is Player && hitPos.y > 70){
+			if (hitPos.y > 70){
 				hitPos.y += .2f;
 				height += character.transform.localScale.y/2.5f;
 			}
