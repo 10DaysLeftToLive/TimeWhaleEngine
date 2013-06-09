@@ -25,6 +25,20 @@ public class MoveState : AbstractState {
     public MoveState(Character toControl, Vector3 goal) : base(toControl){
         _goal = goal;
     }
+	
+	public MoveState(Character toControl, string walkAnimation, Vector3 goal) : base(toControl) {
+		_goal = goal;
+	}
+	
+	public MoveState(Character toControl, Vector3 goal, float speed) : base (toControl) {
+		_goal = goal;
+		this.speed = speed;
+	}
+	
+	public MoveState(Character toControl, string walkAnimation, Vector3 goal, float speed) : base(toControl) {
+		_goal = goal;
+		this.speed = speed;
+	}
     
 	Vector3 pos;
 	Vector3 movement;
