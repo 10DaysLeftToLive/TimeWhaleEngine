@@ -158,9 +158,39 @@ public class SiblingOld : NPC {
 		goToFortuneTellerPartThreeChat.AddChat(".", 1.5f);
 		goToFortuneTellerPartThreeChat.AddChat("..", 1.25f);
 		goToFortuneTellerPartThreeChat.AddChat("...", 1f);
-		goToFortuneTellerPartThreeChat.AddChat("... How about now?", 1.5f);
+		goToFortuneTellerPartThreeChat.AddChat("How about now?", 1.5f);
 		goToFortuneTellerPartThreeReaction.AddAction(goToFortuneTellerPartThreeChat);
 		flagReactions.Add(FlagStrings.siblingOldTalkToFortunePartThree, goToFortuneTellerPartThreeReaction);
+		
+		Reaction goToFortuneTellerPartFourReaction = new Reaction();
+		ShowMultipartChatAction goToFortuneTellerPartFourChat = new ShowMultipartChatAction(this);
+	
+		goToFortuneTellerPartFourChat.AddChat("Hmm", 1.5f);
+		goToFortuneTellerPartFourChat.AddChat("Hmm.", .75f);
+		goToFortuneTellerPartFourChat.AddChat("Hmm..", .75f);
+		goToFortuneTellerPartFourReaction.AddAction(goToFortuneTellerPartFourChat);
+		flagReactions.Add(FlagStrings.siblingOldTalkToFortunePartFour, goToFortuneTellerPartFourReaction);
+		
+		Reaction goToFortuneTellerPartFiveReaction = new Reaction();
+		ShowMultipartChatAction goToFortuneTellerPartFiveChat = new ShowMultipartChatAction(this);
+		goToFortuneTellerPartFiveChat.AddChat("No..!", 1f);
+		goToFortuneTellerPartFiveChat.AddChat("I.", .15f);
+		goToFortuneTellerPartFiveChat.AddChat("I..", .2f);
+		goToFortuneTellerPartFiveChat.AddChat("I...", .5f);
+		goToFortuneTellerPartFiveChat.AddChat("I... I just wanted a fortune...", 2f);
+		goToFortuneTellerPartFiveReaction.AddAction(goToFortuneTellerPartFiveChat);
+		flagReactions.Add(FlagStrings.siblingOldTalkToFortunePartFive, goToFortuneTellerPartFiveReaction);
+		
+		Reaction goToFortuneTellerPartSixReaction = new Reaction();
+		ShowMultipartChatAction goToFortuneTellerPartSixChat = new ShowMultipartChatAction(this);
+		goToFortuneTellerPartSixChat.AddChat("R", .5f);
+		goToFortuneTellerPartSixChat.AddChat("R-", .5f);
+		goToFortuneTellerPartSixChat.AddChat("R-Really?", 1.25f);
+		goToFortuneTellerPartSixChat.AddChat("Thank you so much!", 1f);
+		goToFortuneTellerPartSixChat.AddChat("Have a nice day!", 1f);
+		
+		goToFortuneTellerPartSixReaction.AddAction(goToFortuneTellerPartSixChat);
+		flagReactions.Add(FlagStrings.siblingOldTalkToFortunePartSix, goToFortuneTellerPartSixReaction);
 		#endregion
 		
 		#region Farmer Area
