@@ -21,6 +21,7 @@ public class CarpenterSonMiddle : NPC {
 	Schedule EndState;
 	Schedule StartCarpentry;
 	Schedule DoNothingSchedule;
+	Schedule AfterConversationCarpentery;
 	protected override void Init() {
 		id = NPCIDs.CARPENTER_SON;
 		base.Init();
@@ -102,6 +103,7 @@ public class CarpenterSonMiddle : NPC {
 		
 		Reaction EndOfDayConvo = new Reaction();
 		EndOfDayConvo.AddAction(new NPCEmotionUpdateAction(this, new BlankEmotionState(this, "It's nice to relax after a long day.")));
+		EndOfDayConvo.AddAction(new NPCAddScheduleAction(this, AfterConversationCarpentery));
 		flagReactions.Add(FlagStrings.CarpenterReturnedHome, EndOfDayConvo);
 		#endregion
 		/*Reaction becomesACarpenter = new Reaction();
@@ -184,7 +186,8 @@ public class CarpenterSonMiddle : NPC {
 		stormOffSchedule.Add(new Task(new MoveThenMarkDoneState(this, MapLocations.BaseOfPierMiddle)));
 				
 		
-		
+		AfterConversationCarpentery = new Schedule(this, Schedule.priorityEnum.High);
+		AfterConversationCarpentery.Add(new TimeTask(10000f, new IdleState(this)));
 		#region NPCConvoSchedules
 		#endregion
 	}
