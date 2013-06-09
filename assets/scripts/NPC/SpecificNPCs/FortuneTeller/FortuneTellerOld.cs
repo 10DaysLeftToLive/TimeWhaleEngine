@@ -33,13 +33,49 @@ public class FortuneTellerOld : NPC {
 		speakWithSiblingChatPartThree.AddChat("...!", .75f);
 		speakWithSiblingChatPartThree.AddChat("...", .5f);
 		speakWithSiblingChatPartThree.AddChat("..", .33f);
-		speakWithSiblingChatPartThree.AddChat(".. O", .5f);
-		speakWithSiblingChatPartThree.AddChat(".. Ok", .5f);
-		speakWithSiblingChatPartThree.AddChat(".. Ok.", 2f);
+		speakWithSiblingChatPartThree.AddChat(".. F", .33f);
+		speakWithSiblingChatPartThree.AddChat(".. Fi", .5f);
+		speakWithSiblingChatPartThree.AddChat(".. Fin", .5f);
+		speakWithSiblingChatPartThree.AddChat(".. Fine", 1f);
+		speakWithSiblingChatPartThree.AddChat(".. Fine.", 1f);
 		speakWithSiblingChatPartThree.AddChat("Let's get this over with.", 2f);
-		
+		speakWithSiblingChatPartThree.AddChat("What is it that you seek?", 2f);
 		speakWithSiblingReactionPartThree.AddAction(speakWithSiblingChatPartThree);
 		flagReactions.Add(FlagStrings.FortunetellerTalkToSiblingOldPartThree, speakWithSiblingReactionPartThree);
+		
+		Reaction speakWithSiblingReactionPartFour = new Reaction();
+		ShowMultipartChatAction speakWithSiblingChatPartFour = new ShowMultipartChatAction(this);
+		speakWithSiblingChatPartFour.AddChat(".",.2f);
+		speakWithSiblingChatPartFour.AddChat("..",.2f);
+		speakWithSiblingChatPartFour.AddChat("...", 2f);
+		speakWithSiblingChatPartFour.AddChat("Seeking a fortune with no goal in mind?", 1.5f);
+		speakWithSiblingReactionPartFour.AddAction(speakWithSiblingChatPartFour);
+		flagReactions.Add(FlagStrings.FortunetellerTalkToSiblingOldPartFour, speakWithSiblingReactionPartFour);
+		
+		Reaction speakWithSiblingReactionPartFive = new Reaction();
+		ShowMultipartChatAction speakWithSiblingChatPartFive = new ShowMultipartChatAction(this);
+		speakWithSiblingChatPartFive.AddChat("I see...",1.5f);
+		speakWithSiblingChatPartFive.AddChat("You are off your path.",3f);
+		speakWithSiblingChatPartFive.AddChat("You should visit the sacred tree.", 3f);
+		speakWithSiblingChatPartFive.AddChat("That is your fortune.", 1.5f);
+		speakWithSiblingReactionPartFive.AddAction(speakWithSiblingChatPartFive);
+		flagReactions.Add(FlagStrings.FortunetellerTalkToSiblingOldPartFive, speakWithSiblingReactionPartFive);
+		
+		Reaction speakWithSiblingReactionPartSix = new Reaction();
+		ShowMultipartChatAction speakWithSiblingChatPartSix = new ShowMultipartChatAction(this);
+		speakWithSiblingChatPartSix.AddChat("Have a nice day.", 3f);
+		speakWithSiblingReactionPartSix.AddAction(speakWithSiblingChatPartSix);
+		flagReactions.Add(FlagStrings.FortunetellerTalkToSiblingOldPartSix, speakWithSiblingReactionPartSix);
+		
+		Reaction speakWithSiblingReactionPartSeven = new Reaction();
+		ShowMultipartChatAction speakWithSiblingChatPartSeven = new ShowMultipartChatAction(this);
+		speakWithSiblingChatPartSeven.AddChat("Such a loud one she is...", 2f);
+		speakWithSiblingChatPartSeven.AddChat("Ohh", 1.5f);
+		speakWithSiblingChatPartSeven.AddChat("Hello there quiet one.", 2f);
+		speakWithSiblingChatPartSeven.AddChat("Care for your fortune?", 2f);
+		speakWithSiblingReactionPartSeven.AddAction(speakWithSiblingChatPartSeven);
+		speakWithSiblingReactionPartSeven.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "Line 72")));
+		flagReactions.Add(FlagStrings.FortunetellerTalkToSiblingOldPartSeven, speakWithSiblingReactionPartSeven);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){

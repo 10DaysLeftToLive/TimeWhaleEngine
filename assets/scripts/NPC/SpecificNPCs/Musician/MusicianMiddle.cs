@@ -175,9 +175,6 @@ public class MusicianMiddle : NPC {
 				pissOffMusician.AddAction(new UpdateDefaultTextAction(toControl, "I have no business with you."));
 				pissOffMusician.AddAction(new NPCCallbackAction(ClearAllChoices));
 				
-				
-				AudioListener.volume = 0; //SUP BABY
-				
 				apologizesToPlayer.AddAction(new NPCCallbackAction(BecomeNetural));
 				apologizesToPlayer.AddAction(new NPCCallbackAction(ClearAllChoices));
 				_allChoiceReactions.Add(distressMusician, shunsPlayerEffect);

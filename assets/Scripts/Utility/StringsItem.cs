@@ -1,5 +1,5 @@
 public static class StringsItem {
-		public static string AppleCarpenter = "Apple[Carpenter]";
+	public static string AppleCarpenter = "Apple[Carpenter]";
 	public static string Apple = "Apple";
 	public static string ApplePie = "ApplePie";
 	public static string Broccoli = "Broccoli";
@@ -21,7 +21,7 @@ public static class StringsItem {
 	public static string SeashellTwo = "SeashellTwo!";
 	public static string Shovel = "Shovel";
 	public static string SunflowerSeeds = "SunflowerSeeds";
-	public static string TimeWhale = "Plushie";
+	public static string TimeWhale = "TimeWhale";
 	public static string Toolbox = "Toolbox";
 	
 	public static string ToyBoat = "ToyBoat";

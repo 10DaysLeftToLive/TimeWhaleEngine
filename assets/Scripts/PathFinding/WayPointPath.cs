@@ -83,7 +83,7 @@ public class WayPointPath {
 	public static bool CheckForPathBetweenPoints(){		
 		// if moving small distance and wont use waypoints
 		if (skipWayPoints){
-			return AddPoint(new Vector3(destPosition.x, destPosition.y + height, destPosition.z), -1);
+			return AddPoint(new Vector3(destPosition.x, destPosition.y + height -.2f, destPosition.z), -1);
 		}
 		
 		if (noPath)
@@ -114,7 +114,7 @@ public class WayPointPath {
 		for (int i = 0; i < Search.index; i++){
 			AddPoint(new Vector3 (temp[i].x, temp[i].y + height + LevelManager.levelYOffSetFromCenter*currentAge,temp[i].z), wayPointTemp[i]);
 		}
-		AddPoint(new Vector3(destination.x, destination.y + height, destination.z), -1);
+		AddPoint(new Vector3(destination.x, destination.y + height-.2f, destination.z), -1);
 		return true;
 	}
 

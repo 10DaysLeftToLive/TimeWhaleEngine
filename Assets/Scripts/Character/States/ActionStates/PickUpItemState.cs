@@ -16,10 +16,6 @@ public class PickUpItemState : PlayAnimationThenDoState {
 		if (character is NPC){
 			character.EnterState(new MarkTaskDone(character));
 		}
-//		else if (!character.animationData.IsPlaying(Strings.animation_pickup)) {
-//			character.EnterState(new IdleState(character));
-//			((Player) character).Inventory.PickUpObject(_toPickUp);
-//		}
 		base.Update();
 	}
 	

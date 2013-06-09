@@ -209,10 +209,6 @@ public class CarpenterSonOld : NPC {
 		
 		
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){		
-			//aReaction.AddAction();
-			//bReaction.AddAction();
-			
-			
 			_allChoiceReactions.Add(aChoice, new DispositionDependentReaction(aReaction));
 			_allChoiceReactions.Add(bChoice, new DispositionDependentReaction(bReaction));
 		}

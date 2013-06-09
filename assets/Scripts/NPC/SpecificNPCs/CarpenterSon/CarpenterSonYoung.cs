@@ -34,7 +34,9 @@ public class CarpenterSonYoung : NPC {
 		BeginDayChat = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterYoung), new YoungCarpenterSonToCarpenterConvo());
 
 		BeginDayWithDad = new Schedule(this, Schedule.priorityEnum.DoNow);
-  		BeginDayWithDad.Add(new TimeTask(10, new WaitTillPlayerCloseState(this, ref player)));
+		TimeTask BeginDayTimeTask = new TimeTask(10, new WaitTillPlayerCloseState(this, ref player));
+  		BeginDayTimeTask.AddFlagToSet(FlagStrings.carpenterSonYoungConvoWithDadFinished);
+		BeginDayWithDad.Add(BeginDayTimeTask);
   		this.AddSchedule(BeginDayWithDad);
 		this.AddSchedule(BeginDayChat);
 	
@@ -203,6 +205,7 @@ public class CarpenterSonYoung : NPC {
 		
 		private void WhittleItem(){
 			//TODO: Whittling Animation
+			_npcInState.animationData.Play("Whittle");
 			DebugManager.print("WHITTLING AWW YEEEAAAAAH");
 			_allChoiceReactions.Add(recieveItemChoice, new DispositionDependentReaction(recieveItemReaction));
 		}
@@ -231,7 +234,6 @@ public class CarpenterSonYoung : NPC {
 			giveFishingRodReaction.AddAction(new SetOffFlagAction(FlagStrings.gaveFishingRodToCarpenterSon));
 			giveFishingRodReaction.AddAction(new NPCEmotionUpdateAction(toControl, new GaveFishingRodEmotionState(toControl, gaveFishingRodDialogue)));
 			_allItemReactions.Add(StringsItem.FishingRod, new DispositionDependentReaction(giveFishingRodReaction));
-			
 			EncourageCarpentryReaction.AddAction(new SetOffFlagAction(FlagStrings.carpenterSonEncouragedCarpentry));
 			EncourageCarpentryReaction.AddAction(new NPCCallbackAction(EncouragedCarpentryResult));
 			
@@ -259,6 +261,7 @@ public class CarpenterSonYoung : NPC {
 			_allChoiceReactions.Add(ComplimentWorkChoice, new DispositionDependentReaction(EncourageCarpentryReaction));
 			_allChoiceReactions.Add(CritisizeWorkChoice, new DispositionDependentReaction(EncourageCarpentryReaction));
 			GUIManager.Instance.RefreshInteraction();
+			_npcInState.PlayAnimation(Strings.animation_stand);
 			SetDefaultText("What do you think?");
 		}
 		
@@ -314,13 +317,15 @@ public class CarpenterSonYoung : NPC {
 		
 		private void RecieveItemResult(){
 			_allChoiceReactions.Clear();
+			_npcInState.PlayAnimation(Strings.animation_stand);
 			_allChoiceReactions.Add(ComplimentWorkChoice, new DispositionDependentReaction(EncourageCarpentryReaction));
 			_allChoiceReactions.Add(CritisizeWorkChoice, new DispositionDependentReaction(EncourageCarpentryReaction));
 		}
 				
 		private void EncouragedCarpentryResult(){
-			SetDefaultText("I'll make sure the next thing I make is made of wood.");
 			GUIManager.Instance.RefreshInteraction();
+			SetDefaultText("I'll make sure the next thing I make is made of wood.");
+			
 			_allChoiceReactions.Clear();
 		}
 	}
@@ -357,6 +362,7 @@ public class CarpenterSonYoung : NPC {
 		
 		private void RecieveItemResult(){
 			_allChoiceReactions.Clear();
+			_npcInState.PlayAnimation(Strings.animation_stand);
 			Action giveSwordAction = new NPCGiveItemAction (NPCManager.instance.getNPC(StringsNPC.CarpenterSonYoung), StringsItem.ToySword);
 			Action giveDollAction = new NPCGiveItemAction (NPCManager.instance.getNPC(StringsNPC.CarpenterSonYoung), StringsItem.TimeWhale);
 			if (((CarpenterSonYoung)_npcInState).itemCarpenterMakes == "Sword") giveSwordAction.Perform();
