@@ -70,6 +70,7 @@ public class Player : Character {
     }
 	
 	private void DoClickOnPlayer(){
+		if (currentState is DropItemState || currentState is PickUpItemState) return;
 		if (Inventory.HasItem()){
 			if (IsInteracting()){
 				GUIManager.Instance.CloseInteractionMenu();
@@ -79,6 +80,7 @@ public class Player : Character {
 	}
 	
 	private void DoClickOnItem(GameObject item){
+		if (currentState is DropItemState || currentState is PickUpItemState) return;
 		if (IsInteracting()){
 			GUIManager.Instance.CloseInteractionMenu();
 		}
