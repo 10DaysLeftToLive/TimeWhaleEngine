@@ -7,7 +7,7 @@ using System.Collections;
 public class CarpenterSonOld : NPC {
 	protected override void Init() {
 		id = NPCIDs.CARPENTER_SON;
-		AudioListener.volume = 0;
+		//AudioListener.volume = 0;
 		base.Init();
 	}
 	internal static bool ateBool = false;

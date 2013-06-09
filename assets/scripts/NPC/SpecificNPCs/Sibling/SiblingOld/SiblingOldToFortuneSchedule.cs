@@ -67,25 +67,30 @@ public class SiblingOldToFortunetellerSchedule : Schedule {
 			Task siblingOldToFortunetellerPartFive = (new TimeTask(.05f, new IdleState(_toManage))); 
 			siblingOldToFortunetellerPartFive.AddFlagToSet(FlagStrings.siblingOldTalkToFortunePartFive);
 			Add(siblingOldToFortunetellerPartFive);
-			Add(new TimeTask(3.75f, new IdleState(_toManage))); 
+			Add(new TimeTask(4f, new IdleState(_toManage))); 
 		
 //	... | You... | You should spend some time to think and reflect, perhaps at the sacred tree | That is your fortune.
 			Task fortunetellerToSiblingPartFive = (new TimeTask(.05f, new IdleState(_toManage))); 
 			fortunetellerToSiblingPartFive.AddFlagToSet(FlagStrings.FortunetellerTalkToSiblingOldPartFive);
 			Add(fortunetellerToSiblingPartFive);
-			Add(new TimeTask(6.3f, new IdleState(_toManage))); 
+			Add(new TimeTask(9.2f, new IdleState(_toManage))); 
 		
 // That's great! | Thank you so much!
 			Task siblingOldToFortunetellerPartSix = (new TimeTask(.05f, new IdleState(_toManage))); 
 			siblingOldToFortunetellerPartSix.AddFlagToSet(FlagStrings.siblingOldTalkToFortunePartSix);
 			Add(siblingOldToFortunetellerPartSix);
-			Add(new TimeTask(3.75f, new IdleState(_toManage))); 
+			Add(new TimeTask(4.75f, new IdleState(_toManage))); 
 
 // Have a nice day.		
 			Task fortunetellerToSiblingPartSix = (new TimeTask(.05f, new IdleState(_toManage))); 
 			fortunetellerToSiblingPartSix.AddFlagToSet(FlagStrings.FortunetellerTalkToSiblingOldPartSix);
 			Add(fortunetellerToSiblingPartSix);
-			Add(new TimeTask(1.5f, new IdleState(_toManage)));
+			Add(new TimeTask(10.5f, new IdleState(_toManage)));
+//	
+			Task fortunetellerToSiblingPartSeven = (new TimeTask(.05f, new IdleState(_toManage))); 
+			fortunetellerToSiblingPartSeven.AddFlagToSet(FlagStrings.FortunetellerTalkToSiblingOldPartSeven);
+			Add(fortunetellerToSiblingPartSeven);
+			Add(new TimeTask(10.5f, new IdleState(_toManage)));
 		
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////		
 			Task goToFarmerArea = (new TimeTask(.05f, new IdleState(_toManage))); 
