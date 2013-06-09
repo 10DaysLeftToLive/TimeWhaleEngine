@@ -147,7 +147,7 @@ public class MoveState : AbstractState {
 			float height = character.transform.collider.bounds.size.y/2;
 			if (character is NPC){
 				height += .15f;	
-			}else if (character is Player && hitPos.y > 70){
+			}else if (character is Player && hitPos.y > 70){ // y offset for middle/old change in height
 				height += .3f;	
 			}
 			if (PathFinding.GetPathForPoints(character.transform.position, hitPos, height, hitDown)){
