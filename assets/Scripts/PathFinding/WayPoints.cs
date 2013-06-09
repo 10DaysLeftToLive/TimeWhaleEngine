@@ -20,7 +20,7 @@ public class WayPoints : MonoBehaviour {
 	public float downDistance;
 	
 	public int id;
-	public Age pointAge;
+	public CharacterAgeState pointAge;
 	
 	private bool setupWayPoints = false;
 	private bool initialized = false;
@@ -37,7 +37,7 @@ public class WayPoints : MonoBehaviour {
 		if (this.id == 0 && !initialized){
 			Graph.Initialize();	
 		}
-		if ((this.id == 0)&& !setupWayPoints && initialized && pointAge == Age.young){
+		if ((this.id == 0)&& !setupWayPoints && initialized && pointAge == CharacterAgeState.YOUNG){
 			Graph.StartGraph(this.gameObject);
 			WayPointPath.Initialize();
 			setupWayPoints = true;

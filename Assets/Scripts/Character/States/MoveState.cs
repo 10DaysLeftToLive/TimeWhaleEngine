@@ -199,6 +199,7 @@ public class MoveState : AbstractState {
 		float currentDistance;
 		
 		foreach (WayPoints waypoint in ageWaypoints){
+			if (waypoint.pointAge != CharacterAgeManager.currentAge) continue;
 			currentDistance = Vector3.Distance(waypoint.transform.position, goalCantReach);
 			if (currentDistance < closestDistance){
 				closestDistance = currentDistance;
