@@ -426,8 +426,8 @@ public class FarmerFatherMiddle : NPC {
 			}
 			GUIManager.Instance.RefreshInteraction();
 			
-			FlagManager.instance.SetFlag(FarmerFamilyFlagStrings.GirlPathEndStart); //test
-			GUIManager.Instance.CloseInteractionMenu();
+			//FlagManager.instance.SetFlag(FarmerFamilyFlagStrings.GirlPathEndStart); //test
+			//GUIManager.Instance.CloseInteractionMenu();
 		}
 		
 		public void UpdateYouSure(){
