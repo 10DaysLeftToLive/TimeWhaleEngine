@@ -26,7 +26,7 @@ public class LevelManager : MonoBehaviour {
 	private Player playerCharacter;
 	
 	void Awake(){
-		//playerGender = (PlayerPrefs.GetFloat(Strings.GenderSelect) == ((float)CharacterGender.MALE) ? CharacterGender.MALE : CharacterGender.FEMALE);
+		playerGender = (PlayerPrefs.GetFloat(Strings.GenderSelect) == ((float)CharacterGender.MALE) ? CharacterGender.MALE : CharacterGender.FEMALE);
 		
 		playerCharacter = GameObject.Find(Strings.Player).GetComponent<Player>();
 		CharacterAgeManager.SetPlayer(playerCharacter);
