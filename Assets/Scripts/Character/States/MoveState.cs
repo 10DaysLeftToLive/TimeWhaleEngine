@@ -21,6 +21,7 @@ public class MoveState : AbstractState {
     private static bool traverseStair = false;
     private static bool towardStair = true;
 	private static float MIN_DISTANCE_TO_POINT = 4;
+	private static float zDepthChange = .2f;
         
     public MoveState(Character toControl, Vector3 goal) : base(toControl){
         _goal = goal;
@@ -147,7 +148,7 @@ public class MoveState : AbstractState {
 			float height = character.transform.collider.bounds.size.y/2;
 			if (character is NPC){
 				height += .15f;	
-			}else if (character is Player && hitPos.y > 70){
+			}else if (character is Player && hitPos.y > 70){ // y offset for middle/old change in height
 				height += .3f;	
 			}
 			if (PathFinding.GetPathForPoints(character.transform.position, hitPos, height, hitDown)){
@@ -248,6 +249,9 @@ public class MoveState : AbstractState {
             // since we're heading towards the stairs, we need to grab the name of the area we are leaving and the area we're heading towards
             if (lastWay.IndexOf("StairBase") > 0 || lastWay.IndexOf("StairTop") > 0 || lastWay == "Forest.010")
             {
+				Vector3 charPos = character.transform.position;
+				charPos.z -= zDepthChange;
+				character.transform.position = character.transform.position;
                 if (lastWay.IndexOf("StairBase") > 0)
                 {
                     Strings.BOTTOMOFSTAIRS = lastWay.Substring(0, NameStartCounter);
@@ -293,6 +297,9 @@ public class MoveState : AbstractState {
             }
             else if (traverseStair)
             { // finished traversing the stairs
+				Vector3 charPos = character.transform.position;
+				charPos.z += zDepthChange;
+				character.transform.position = character.transform.position;
                 if (lastWay.EndsWith("High") || lastWay.EndsWith("Low"))
                 {
                     traverseStair = false;

@@ -167,7 +167,11 @@ public class CarpenterSonOld : NPC {
 		Reaction reconcileReaction = new Reaction();
 		reconcileReaction.AddAction(new NPCTeleportToAction(this, MapLocations.BaseOfPierOld));
 		reconcileReaction.AddAction(new UpdateDefaultTextAction(this, "Best wind in years today, and with my father with me I'm sure I'll get my best catch yet."));
-		flagReactions.Add(FlagStrings.carpenterSonReconcile, reconcileReaction);	
+		flagReactions.Add(FlagStrings.carpenterSonReconcile, reconcileReaction);
+		
+		Reaction carpenterMarriage = new Reaction();
+		carpenterMarriage.AddAction(new NPCCallbackSetStringAction(MoveForMarriage, this, "carpenter"));
+		flagReactions.Add(FlagStrings.CastleMarriage, carpenterMarriage);
 	}
 	 	
 	protected override EmotionState GetInitEmotionState(){
@@ -191,6 +195,12 @@ public class CarpenterSonOld : NPC {
 		greetSiblingOldSchedule = (new CarpenterSonOldGreetSibllingSchedule(this));
 		goToBeachSchedule = (new CarpenterSonOldToBeachScript(this));
 		
+	}
+	
+	protected void MoveForMarriage(NPC npc, string text){
+		if (text == "carpenter"){
+			this.transform.position = new Vector3(1,0+LevelManager.levelYOffSetFromCenter*2, this.transform.position.z);
+		}
 	}
 	
 	#region EmotionStates

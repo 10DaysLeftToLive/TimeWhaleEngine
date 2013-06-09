@@ -12,7 +12,9 @@ public class CastlemanOld : NPC {
 	}
 	
 	protected override void SetFlagReactions(){
-		
+		Reaction castleMarriage = new Reaction();
+		castleMarriage.AddAction(new NPCCallbackSetStringAction(MoveForMarriage, this, "castle"));
+		flagReactions.Add(FlagStrings.CastleMarriage, castleMarriage);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
@@ -28,6 +30,11 @@ public class CastlemanOld : NPC {
 		
 	}
 	
+	protected void MoveForMarriage(NPC npc, string text){
+		if (text == "castle"){
+			this.transform.position = new Vector3(1,0+LevelManager.levelYOffSetFromCenter*2, this.transform.position.z);
+		}
+	}
 	
 	#region EmotionStates
 	#region Initial Emotion State

@@ -48,6 +48,12 @@ public class FarmerMotherMiddle : NPC {
 	Reaction stoodUp = new Reaction();
 	
 	//chat
+	Reaction introConvoStart = new Reaction();
+	Reaction introConvoOne = new Reaction();
+	Reaction introConvoTwo = new Reaction();
+	Reaction introConvoThree = new Reaction();
+	Reaction introConvoFour = new Reaction();
+	
 	Reaction castleMarriageStart = new Reaction();
 	Reaction castleMarriageOne = new Reaction();
 	Reaction castleMarriageTwo = new Reaction();
@@ -82,12 +88,21 @@ public class FarmerMotherMiddle : NPC {
 		
 		flagReactions.Add(FlagStrings.HusbandOnBoard, husbandOnBoard);
 		
+		introConvoStart.AddAction(new NPCAddScheduleAction(this, introConvo)); // turn around
+		flagReactions.Add(FarmerFamilyFlagStrings.IntroConvoStart, introConvoStart);
+		flagReactions.Add(FarmerFamilyFlagStrings.IntroConvoTwo, introConvoOne);
+		flagReactions.Add(FarmerFamilyFlagStrings.IntroConvoFour, introConvoTwo);
+		flagReactions.Add(FarmerFamilyFlagStrings.IntroConvoSix, introConvoThree);
+		
+		
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleMarriageTwo, castleMarriageOne);
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleMarriageFour, castleMarriageTwo);
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleMarriageSix, castleMarriageThree);
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleMarriageEight, castleMarriageFour);
 		
 		
+		girlEndStart.AddAction(new NPCAddScheduleAction(this, girlEnd));
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlPathEndStart, girlEndStart);
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlPathEndThree, girlEndOne);
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlPathEndFive, girlEndTwo);
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlPathEndSeven, girlEndThree);
@@ -109,11 +124,25 @@ public class FarmerMotherMiddle : NPC {
 		return (schedule);
 	}
 	
-	Schedule marriageConvo;
+	Schedule marriageConvo, girlEnd, introConvo;
 	protected override void SetUpSchedules(){
 		
 		marriageConvo = new Schedule(this, Schedule.priorityEnum.High);
 		marriageConvo.Add(new TimeTask(40f, new IdleState(this)));
+		
+		introConvo = new Schedule(this, Schedule.priorityEnum.DoNow);
+		introConvo.Add(new Task (new MoveThenDoState(this, new Vector3(startingPosition.x+.01f, startingPosition.y, startingPosition.z), new MarkTaskDone(this))));
+		introConvo.Add(new TimeTask(27.5f, new IdleState(this)));
+		introConvo.SetCanInteract(false);
+		
+		girlEnd = new Schedule(this, Schedule.priorityEnum.DoNow);
+		girlEnd.Add(new Task (new MoveThenDoState(this, new Vector3(startingPosition.x-.05f, startingPosition.y, startingPosition.z), new MarkTaskDone(this)))); //turn towards farmer
+		girlEnd.Add(new TimeTask(19.6f, new IdleState(this)));
+		girlEnd.Add(new Task (new MoveThenDoState(this, new Vector3(startingPosition.x+.05f, startingPosition.y, startingPosition.z), new MarkTaskDone(this)))); //turn towards farmer
+		girlEnd.Add(new TimeTask(31.4f, new IdleState(this)));
+		girlEnd.Add(new Task (new MoveThenDoState(this, new Vector3(startingPosition.x-.05f, startingPosition.y, startingPosition.z), new MarkTaskDone(this)))); //turn towards farmer
+		girlEnd.Add(new TimeTask(18.3f, new IdleState(this)));
+		girlEnd.SetCanInteract(false);
 	}
 	
 	protected void ResetPosition(){
@@ -182,6 +211,19 @@ public class FarmerMotherMiddle : NPC {
 		stoodUp.AddAction(new NPCCallbackSetStringAction(FlagToNPC, this, "stoodUp"));
 		
 		//chat
+		ShowMultipartChatAction introConvoOneDialogue = new ShowMultipartChatAction(this);
+		introConvoOneDialogue.AddChat("And the last time ah let ya get you way, yah ran from home with that tramp.", 5f);
+		introConvoOne.AddAction(introConvoOneDialogue);
+		
+		ShowMultipartChatAction introConvoTwoDialogue = new ShowMultipartChatAction(this);
+		introConvoTwoDialogue.AddChat("What ya need is someone that can help ya settle down and tha carpenter's son will do that very nicely!", 6f);
+		introConvoTwo.AddAction(introConvoTwoDialogue);
+		
+		ShowMultipartChatAction introConvoThreeDialogue = new ShowMultipartChatAction(this);
+		introConvoThreeDialogue.AddChat("ENOUGH! What's done is done. Go back and take care of tha lighthouse, ya need ta work!", 5f);
+		introConvoThree.AddAction(introConvoThreeDialogue);
+		
+		
 		ShowMultipartChatAction castleMarriageOneDialogue = new ShowMultipartChatAction(this);
 		castleMarriageOneDialogue.AddChat("...", 1f);
 		castleMarriageOneDialogue.AddChat("I've just been talking to the Carpenter and he says that his tools have gone missing. Do you know anything about that?", 6f);
