@@ -131,10 +131,6 @@ public class MoveState : AbstractState {
 		
 		if (distance != MIN_DISTANCE_TO_POINT){
 			float height = character.transform.localScale.y/2;
-			if (hitPos.y > 70){
-				hitPos.y += .2f;
-				height += character.transform.localScale.y/2.5f;
-			}
 			if (PathFinding.GetPathForPoints(character.transform.position, hitPos, height, hitDown)){
                 _pathFollowing = PathFinding.GetPath();
                 return (true);
