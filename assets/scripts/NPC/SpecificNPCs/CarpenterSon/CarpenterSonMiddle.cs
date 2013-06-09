@@ -225,8 +225,6 @@ public class CarpenterSonMiddle : NPC {
 	#region Storm off To The Beach Emotion State
 	//This is for when the Carpenter Son runs off to the beach.
 	private class StormOffEmotionState : EmotionState{
-	
-		
 		Choice reconcileWithFather = new Choice("You should try to get along with your father.", "Yeah, if I just keep trying I'm sure my dad will accept me");
 		Choice youDontNeedHim = new Choice("You don't need your dad's approval.", "Yeah, my dad doesn't deserve my respect.");
 		
@@ -347,6 +345,7 @@ public class CarpenterSonMiddle : NPC {
 			helpAppreciated.AddAction(new UpdateCurrentTextAction(toControl, "Thanks!"));
 			helpAppreciated.AddAction(new UpdateDefaultTextAction(toControl, "Come back later and I should have the rocking chair done!"));
 			helpAppreciated.AddAction(new SetOffFlagAction(FlagStrings.carpenterSonMakesFatherProud));
+			helpAppreciated.AddAction(new NPCCallbackAction(WhittleWood));
 			_allChoiceReactions.Add (curiousAboutMood, new DispositionDependentReaction(curiousAboutMoodReaction));
 			//TODO: Replace Toolbox with piece of wood
 			_allItemReactions.Add(StringsItem.Toolbox, new DispositionDependentReaction(helpAppreciated));
@@ -374,6 +373,10 @@ public class CarpenterSonMiddle : NPC {
 		void removeAllOtherReactions() {
 			_allChoiceReactions.Clear();
 			GUIManager.Instance.RefreshInteraction();
+		}
+		
+		void WhittleWood() {
+			_npcInState.animationData.Play("Whittle");
 		}
 	}
 	

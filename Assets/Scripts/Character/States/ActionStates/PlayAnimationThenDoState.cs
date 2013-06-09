@@ -1,27 +1,23 @@
 using UnityEngine;
 using System.Collections;
 
-public class PlayAnimationThenDoState : AbstractState {
-	protected string _animationToPlay;
+public class PlayAnimationThenDoState : AbstractAnimationState {
+	
 	protected string _animationToPlayOnExit;
 	private State _nextState;
 	// Use this for initialization
-	public PlayAnimationThenDoState(Character toControl, string animationToPlay) : base(toControl) {
-		_animationToPlay = animationToPlay;
+	public PlayAnimationThenDoState(Character toControl, string animationToPlay) : base(toControl, animationToPlay) {
 	}
 	
-	public PlayAnimationThenDoState(Character toControl, string animationToPlay, State nextState) : base(toControl) {
-		_animationToPlay = animationToPlay;
+	public PlayAnimationThenDoState(Character toControl, string animationToPlay, State nextState) : base(toControl, animationToPlay) {
 		_nextState = nextState;
 	}
 	
-	public PlayAnimationThenDoState(Character toControl, string animationToPlayOnEnter, string animationToPlayOnExit) : base(toControl) {
-		_animationToPlay = animationToPlayOnEnter;
+	public PlayAnimationThenDoState(Character toControl, string animationToPlayOnEnter, string animationToPlayOnExit) : base(toControl, animationToPlayOnEnter) {
 		_animationToPlayOnExit = animationToPlayOnExit;
 	}
 	
-	public PlayAnimationThenDoState(Character toControl, string animationToPlayOnEnter, string animationToPlayOnExit, State nextState) : base(toControl) {
-		_animationToPlay = animationToPlayOnEnter;
+	public PlayAnimationThenDoState(Character toControl, string animationToPlayOnEnter, string animationToPlayOnExit, State nextState) : base(toControl, animationToPlayOnEnter) {
 		_animationToPlayOnExit = animationToPlayOnExit;
 		_nextState = nextState;
 	}
