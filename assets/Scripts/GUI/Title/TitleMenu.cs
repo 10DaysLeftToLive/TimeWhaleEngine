@@ -14,7 +14,7 @@ public class TitleMenu : MonoBehaviour {
 	public UIPanel openingScenePanel;
 	
 	public UIPanel[] autoPlayPanels;
-	private int autoPlayPanelsIndex = 0;
+	public int autoPlayPanelsIndex = 0;
 	
 	
 	public UIPanel chooseGenderPanel;
@@ -140,14 +140,14 @@ public class TitleMenu : MonoBehaviour {
 	public void ChoseGenderMale(){
 		
         UnfadeGenderFilter();
-		PlayerPrefs.SetString(Strings.Gender, Strings.Male);
+		PlayerPrefs.SetFloat(Strings.Gender, (float)CharacterGender.MALE);
 		FadeToNextAutoPanel();
 	}
 	
 	public void ChoseGenderFemale(){
 
 		UnfadeGenderFilter();
-		PlayerPrefs.SetString(Strings.Gender, Strings.Female);
+		PlayerPrefs.SetFloat(Strings.Gender, (float)CharacterGender.FEMALE);
 		FadeToNextAutoPanel();
 	}
 	
@@ -155,9 +155,7 @@ public class TitleMenu : MonoBehaviour {
 		genderPickFilter.alpha = 0.0f;	
 	}
 		
-	
 	public void TransitionToMainMenu(){
 		StartCoroutine(FadePanels(titleMenuPanel,mainMenuPanel, false));
 	}
-	
 }
