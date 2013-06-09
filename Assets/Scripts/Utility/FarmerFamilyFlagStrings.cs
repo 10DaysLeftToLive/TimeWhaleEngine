@@ -3,6 +3,15 @@ using System.Collections;
 
 public static class FarmerFamilyFlagStrings {
 	
+	public static string IntroConvoStart = "Into convo start";
+	public static string IntroConvoOne = "Into convo one";
+	public static string IntroConvoTwo = "Into convo two";
+	public static string IntroConvoThree = "Into convo three";
+	public static string IntroConvoFour = "Into convo four";
+	public static string IntroConvoFive = "Into convo five";
+	public static string IntroConvoSix = "Into convo six";
+	public static string IntroConvoSeven = "Into convo seven";
+	
 	public static string GirlCastleDateOne = "Girl to castle date one";
 	public static string GirlCastleDateTwo = "Girl to castle date two";
 	public static string GirlCastleDateThree = "Girl to castle date three";

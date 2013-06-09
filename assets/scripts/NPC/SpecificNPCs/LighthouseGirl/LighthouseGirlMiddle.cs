@@ -63,6 +63,12 @@ public class LighthouseGirlMiddle : NPC {
 	Reaction farmerOnBoard = new Reaction();
 	
 	//chat
+	Reaction introConvoStart = new Reaction();
+	Reaction introConvoOne = new Reaction();
+	Reaction introConvoTwo = new Reaction();
+	Reaction introConvoThree = new Reaction();
+	Reaction introConvoFour = new Reaction();
+	
 	Reaction castleDateStart = new Reaction();
 	Reaction castleDateOne = new Reaction();
 	Reaction castleDateTwo = new Reaction();
@@ -92,7 +98,6 @@ public class LighthouseGirlMiddle : NPC {
 		moveAway.AddAction(new NPCCallbackAction(ResetPosition));
 		moveAway.AddAction(new NPCEmotionUpdateAction(this, initialState));
 		moveAway.AddAction(new NPCAddScheduleAction(this, openningWaitingSchedule));
-		//moveAway.AddAction(new NPCAddScheduleAction(this, postOpenningSchedule));
 		flagReactions.Add(FlagStrings.FarmAlive, moveAway);
 		
 		antiMarriagePlanInAction.AddAction(new NPCAddScheduleAction(this, noMarriageSchedule));
@@ -131,11 +136,17 @@ public class LighthouseGirlMiddle : NPC {
 		farmerOnBoard.AddAction(new NPCCallbackAction(SendFarmerOnBoard));
 		flagReactions.Add(FlagStrings.FarmerOnBoard, farmerOnBoard);
 		#endregion
-		//castleDateStart.AddAction(new NPCAddScheduleAction(this, dateConvo)); 
+		
+		introConvoStart.AddAction(new NPCAddScheduleAction(this, introConvo)); // turn around
+		flagReactions.Add(FarmerFamilyFlagStrings.IntroConvoStart, introConvoStart);
+		flagReactions.Add(FarmerFamilyFlagStrings.IntroConvoOne, introConvoOne);
+		flagReactions.Add(FarmerFamilyFlagStrings.IntroConvoThree, introConvoTwo);
+		flagReactions.Add(FarmerFamilyFlagStrings.IntroConvoFive, introConvoThree);
+		flagReactions.Add(FarmerFamilyFlagStrings.IntroConvoSeven, introConvoFour);
+		
 		castleDateStart.AddAction(new NPCAddScheduleAction(this, turnAround)); // turn around
 		castleDateStart.AddAction(new NPCCallbackSetStringAction(FlagToNPC, this, "startDate"));
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleDateOne, castleDateStart);
-		
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleDateTwo, castleDateOne);
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleDateFour, castleDateTwo);
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleDateSix, castleDateThree);
@@ -148,6 +159,8 @@ public class LighthouseGirlMiddle : NPC {
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleMarriageSeven, castleMarriageFour);
 		
 		
+		girlEndStart.AddAction(new NPCAddScheduleAction(this, girlEnd));
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlPathEndStart, girlEndStart);
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlPathEndTwo, girlEndOne);
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlPathEndFour, girlEndTwo);
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlPathEndSix, girlEndThree);
@@ -165,7 +178,7 @@ public class LighthouseGirlMiddle : NPC {
 		return (initialState);
 	}
 	
-	Schedule openningWaitingSchedule, waitingOnDate, backToFarmSchedule, ropeDownSchedule, dateConvo, turnAround, castleMarriage;
+	Schedule openningWaitingSchedule, waitingOnDate, backToFarmSchedule, ropeDownSchedule, dateConvo, turnAround, castleMarriage, girlEnd, introConvo;
 	NPCConvoSchedule postOpenningSchedule;
 	NPCConvoSchedule noMarriageSchedule, marriageToCastleManSchedule;
 	
@@ -179,7 +192,10 @@ public class LighthouseGirlMiddle : NPC {
 		float dateTime = 50;
 		
 		openningWaitingSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
-		openningWaitingSchedule.Add(new TimeTask(30, new WaitTillPlayerCloseState(this, ref player)));	
+		openningWaitingSchedule.Add(new TimeTask(200, new WaitTillPlayerCloseState(this, ref player)));
+		Task postOpening = new TimeTask(.1f,new IdleState(this));
+		postOpening.AddFlagToSet(FarmerFamilyFlagStrings.IntroConvoStart);
+		openningWaitingSchedule.Add(postOpening);
 		
 		backToFarmSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
 		backToFarmSchedule.Add(new TimeTask(6f, new IdleState(this)));
@@ -195,19 +211,52 @@ public class LighthouseGirlMiddle : NPC {
 		turnAround = new Schedule(this, Schedule.priorityEnum.DoNow);
 		turnAround.Add(new Task(new MoveThenDoState(this, new Vector3(MapLocations.MiddleOfBeachMiddle.x+.1f, MapLocations.MiddleOfBeachMiddle.y, MapLocations.MiddleOfBeachMiddle.z), new MarkTaskDone(this))));
 		turnAround.AddFlagGroup("b");
+		
+		
 		/*postOpenningSchedule =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerMotherMiddle),
-			new MiddleFarmerMotherToLighthouseGirl(), Schedule.priorityEnum.DoConvo); */
-		//postOpenningSchedule.SetCanNotInteractWithPlayer();
+			new MiddleFarmerMotherToLighthouseGirl(), Schedule.priorityEnum.DoConvo); 
+		postOpenningSchedule.SetCanNotInteractWithPlayer();*/
 		
-		//noMarriageSchedule =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerMotherMiddle),
-		//	new MiddleLighthouseGirlNoMarriage(), Schedule.priorityEnum.DoConvo); 
-		//noMarriageSchedule.SetCanNotInteractWithPlayer();
+		introConvo = new Schedule(this, Schedule.priorityEnum.DoNow);
+		introConvo.Add(new Task (new MoveThenDoState(this, new Vector3(startingPosition.x-.01f, startingPosition.y, startingPosition.z), new MarkTaskDone(this))));
+		Task introConvoChatOne = new TimeTask(.1f,new IdleState(this));
+		introConvoChatOne.AddFlagToSet(FarmerFamilyFlagStrings.IntroConvoOne);
+		introConvo.Add(introConvoChatOne);
+		introConvo.Add(new TimeTask(4.3f, new IdleState(this)));
 		
-		//marriageToCastleManSchedule =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerMotherMiddle),
-		//	new MiddleLighthouseGirlCastleManMarriage(), Schedule.priorityEnum.DoConvo); 
-		//marriageToCastleManSchedule.SetCanNotInteractWithPlayer();
+		Task introConvoChatTwo = new TimeTask(.1f,new IdleState(this));
+		introConvoChatTwo.AddFlagToSet(FarmerFamilyFlagStrings.IntroConvoTwo);
+		introConvo.Add(introConvoChatTwo);
+		introConvo.Add(new TimeTask(5.3f, new IdleState(this)));
+		
+		Task introConvoChatThree = new TimeTask(.1f,new IdleState(this));
+		introConvoChatThree.AddFlagToSet(FarmerFamilyFlagStrings.IntroConvoThree);
+		introConvo.Add(introConvoChatThree);
+		introConvo.Add(new TimeTask(4.3f, new IdleState(this)));
+		
+		Task introConvoChatFour = new TimeTask(.1f,new IdleState(this));
+		introConvoChatFour.AddFlagToSet(FarmerFamilyFlagStrings.IntroConvoFour);
+		introConvo.Add(introConvoChatFour);
+		introConvo.Add(new TimeTask(6.3f, new IdleState(this)));
+		
+		Task introConvoChatFive = new TimeTask(.1f,new IdleState(this));
+		introConvoChatFive.AddFlagToSet(FarmerFamilyFlagStrings.IntroConvoFive);
+		introConvo.Add(introConvoChatFive);
+		introConvo.Add(new TimeTask(2.3f, new IdleState(this)));
+		
+		Task introConvoChatSix = new TimeTask(.1f,new IdleState(this));
+		introConvoChatSix.AddFlagToSet(FarmerFamilyFlagStrings.IntroConvoSix);
+		introConvo.Add(introConvoChatSix);
+		introConvo.Add(new TimeTask(5.3f, new IdleState(this)));
+		
+		Task introConvoChatSeven = new TimeTask(.1f,new IdleState(this));
+		introConvoChatSeven.AddFlagToSet(FarmerFamilyFlagStrings.IntroConvoSeven);
+		introConvo.Add(introConvoChatSeven);
+		introConvo.Add(new TimeTask(2f, new IdleState(this)));
+		introConvo.SetCanInteract(false);
 		
 		
+		#region castleMarriage
 		castleMarriage = new Schedule(this, Schedule.priorityEnum.DoNow);
 		Task castleMarriageChatOne = new TimeTask(.1f,new IdleState(this));
 		castleMarriageChatOne.AddFlagToSet(FarmerFamilyFlagStrings.GirlCastleMarriageOne);
@@ -251,12 +300,11 @@ public class LighthouseGirlMiddle : NPC {
 		castleMarriage.Add(castleMarriageChatEight);
 		castleMarriage.Add(new TimeTask(2f, new IdleState(this)));
 		castleMarriage.Add(new Task(new MoveThenDoState(this, new Vector3(startingPosition.x + 2, startingPosition.y, startingPosition.z), new MarkTaskDone(this))));
+		#endregion
 		
-		
-		/*Task castleMarriageChatEnd = new TimeTask(.1f,new IdleState(this));
-		reachedBeachEnd.AddFlagToSet(FlagStrings.EndOfDate);
-		castleMarriage.Add(reachedBeachEnd);
-		castleMarriage.Add(new TimeTask(3f, new IdleState(this)));*/
+		girlEnd = new Schedule(this, Schedule.priorityEnum.DoNow);
+		girlEnd.Add(new TimeTask(88.5f, new IdleState(this)));
+		girlEnd.SetCanInteract(false);
 	}
 	
 	protected void WaitingOnDate(){
@@ -312,6 +360,23 @@ public class LighthouseGirlMiddle : NPC {
 	}
 	
 	protected void SetupReactions(){
+		ShowMultipartChatAction introConvoOneDialogue = new ShowMultipartChatAction(this);
+		introConvoOneDialogue.AddChat("...Look mom! I'm not going to marry the Carpenter's Son!", 4f);
+		introConvoOne.AddAction(introConvoOneDialogue);
+		
+		ShowMultipartChatAction introConvoTwoDialogue = new ShowMultipartChatAction(this);
+		introConvoTwoDialogue.AddChat("But I've chosen not to marry anyone this time!", 4f);
+		introConvoTwo.AddAction(introConvoTwoDialogue);
+		
+		ShowMultipartChatAction introConvoThreeDialogue = new ShowMultipartChatAction(this);
+		introConvoThreeDialogue.AddChat("Mom, I...", 2f);
+		introConvoThree.AddAction(introConvoThreeDialogue);
+		
+		ShowMultipartChatAction introConvoFourDialogue = new ShowMultipartChatAction(this);
+		introConvoFourDialogue.AddChat("...Fine...this isn't over...", 3f);
+		introConvoFour.AddAction(introConvoFourDialogue);
+		
+		
 		ShowMultipartChatAction castleDateOneDialogue = new ShowMultipartChatAction(this);
 		castleDateOneDialogue.AddChat("Fair lady? Come now pretending to like the stoires my dad read to me won't make you endearing.", 7f);
 		castleDateOne.AddAction(castleDateOneDialogue);
@@ -583,9 +648,9 @@ public class LighthouseGirlMiddle : NPC {
 			SetDefaultText("Promise you don't tell anyone about this?");
 			
 			//FlagManager.instance.SetFlag(FlagStrings.ToolsForMarriage); // test
-			//FlagManager.instance.SetFlag(FlagStrings.CastleDate);	//test
-			//FlagManager.instance.SetFlag(FlagStrings.WaitForPlayerBeforeRope); //test
-			//GUIManager.Instance.CloseInteractionMenu();
+			FlagManager.instance.SetFlag(FlagStrings.CastleDate);	//test
+			FlagManager.instance.SetFlag(FlagStrings.WaitForPlayerBeforeRope); //test
+			GUIManager.Instance.CloseInteractionMenu();
 		}
 		public void MarriageResponse(){	
 			_allChoiceReactions.Remove(PlanChoice);

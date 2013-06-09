@@ -34,6 +34,7 @@ public class WayPointPath {
 		startPoint = -1;
 		endPoint = -1;
 		startPosition = startPos;
+		startPosition.y -= height/2;
 		destPosition = destination;
 		height = ht;
 		points = new Vector3[30];
@@ -41,9 +42,9 @@ public class WayPointPath {
 		index = 0;
 		AddPoint(startPos, -1);
 		int mask = (1 << 15); // wayPoint layer
-		Vector3 heading = SetHeading(startPos);
-		GameObject startLeft = GetPoint(startPos, mask, heading);
-		GameObject startRight = GetPoint(startPos, mask, heading*-1);
+		Vector3 heading = SetHeading(startPosition);
+		GameObject startLeft = GetPoint(startPosition, mask, heading);
+		GameObject startRight = GetPoint(startPosition, mask, heading*-1);
 		
 		
 		heading = Quaternion.AngleAxis(90, new Vector3(0,0,1)) * hit.normal;
