@@ -54,22 +54,28 @@ public class FortuneTellerOld : NPC {
 		
 		Reaction speakWithSiblingReactionPartFive = new Reaction();
 		ShowMultipartChatAction speakWithSiblingChatPartFive = new ShowMultipartChatAction(this);
-		speakWithSiblingChatPartFive.AddChat(".",.5f);
-		speakWithSiblingChatPartFive.AddChat("..", .6f);
-		speakWithSiblingChatPartFive.AddChat("...", .7f);
-		speakWithSiblingChatPartFive.AddChat("You...", .5f);
-		speakWithSiblingChatPartFive.AddChat("You..", .6f);
-		speakWithSiblingChatPartFive.AddChat("You.", .7f);
-		speakWithSiblingChatPartFive.AddChat("You should visit the sacred tree.", 2f);
+		speakWithSiblingChatPartFive.AddChat("I see...",1.5f);
+		speakWithSiblingChatPartFive.AddChat("You are off your path.",3f);
+		speakWithSiblingChatPartFive.AddChat("You should visit the sacred tree.", 3f);
 		speakWithSiblingChatPartFive.AddChat("That is your fortune.", 1.5f);
 		speakWithSiblingReactionPartFive.AddAction(speakWithSiblingChatPartFive);
 		flagReactions.Add(FlagStrings.FortunetellerTalkToSiblingOldPartFive, speakWithSiblingReactionPartFive);
 		
 		Reaction speakWithSiblingReactionPartSix = new Reaction();
 		ShowMultipartChatAction speakWithSiblingChatPartSix = new ShowMultipartChatAction(this);
-		speakWithSiblingChatPartSix.AddChat("Have a nice day.",1.5f);
+		speakWithSiblingChatPartSix.AddChat("Have a nice day.", 3f);
 		speakWithSiblingReactionPartSix.AddAction(speakWithSiblingChatPartSix);
 		flagReactions.Add(FlagStrings.FortunetellerTalkToSiblingOldPartSix, speakWithSiblingReactionPartSix);
+		
+		Reaction speakWithSiblingReactionPartSeven = new Reaction();
+		ShowMultipartChatAction speakWithSiblingChatPartSeven = new ShowMultipartChatAction(this);
+		speakWithSiblingChatPartSeven.AddChat("Such a loud one she is...", 2f);
+		speakWithSiblingChatPartSeven.AddChat("Ohh", 1.5f);
+		speakWithSiblingChatPartSeven.AddChat("Hello there quiet one.", 2f);
+		speakWithSiblingChatPartSeven.AddChat("Care for your fortune?", 2f);
+		speakWithSiblingReactionPartSeven.AddAction(speakWithSiblingChatPartSeven);
+		speakWithSiblingReactionPartSeven.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "Line 72")));
+		flagReactions.Add(FlagStrings.FortunetellerTalkToSiblingOldPartSeven, speakWithSiblingReactionPartSeven);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){

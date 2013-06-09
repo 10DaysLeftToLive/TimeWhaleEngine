@@ -176,7 +176,7 @@ public class SiblingOld : Sibling {
 		goToFortuneTellerPartFiveChat.AddChat("No..!", 1f);
 		goToFortuneTellerPartFiveChat.AddChat("I.", .15f);
 		goToFortuneTellerPartFiveChat.AddChat("I..", .2f);
-		goToFortuneTellerPartFiveChat.AddChat("I...", .5f);
+		goToFortuneTellerPartFiveChat.AddChat("I...", .75f);
 		goToFortuneTellerPartFiveChat.AddChat("I... I just wanted a fortune...", 2f);
 		goToFortuneTellerPartFiveReaction.AddAction(goToFortuneTellerPartFiveChat);
 		flagReactions.Add(FlagStrings.siblingOldTalkToFortunePartFive, goToFortuneTellerPartFiveReaction);
@@ -187,8 +187,6 @@ public class SiblingOld : Sibling {
 		goToFortuneTellerPartSixChat.AddChat("R-", .5f);
 		goToFortuneTellerPartSixChat.AddChat("R-Really?", 1.25f);
 		goToFortuneTellerPartSixChat.AddChat("Thank you so much!", 1f);
-		goToFortuneTellerPartSixChat.AddChat("Have a nice day!", 1f);
-		
 		goToFortuneTellerPartSixReaction.AddAction(goToFortuneTellerPartSixChat);
 		flagReactions.Add(FlagStrings.siblingOldTalkToFortunePartSix, goToFortuneTellerPartSixReaction);
 		#endregion
@@ -196,8 +194,9 @@ public class SiblingOld : Sibling {
 		#region Farmer Area
 		Reaction farmerAreaReaction = new Reaction();
 		ShowMultipartChatAction goToFarmerAreaChat = new ShowMultipartChatAction(this);
-		goToFarmerAreaChat.AddChat(".", 1.5f);
-		goToFarmerAreaChat.AddChat("..", 1.25f);
+		goToFarmerAreaChat.AddChat("You should get your fortune!", 1.5f);
+		goToFarmerAreaChat.AddChat("I'll be near the lighthouse when you're done!", 1.25f);
+		goToFarmerAreaChat.AddChat("See ya later!", 1.5f);
 		farmerAreaReaction.AddAction(goToFarmerAreaChat);
 		//FarmerAreaReaction.AddAction(new NPCEmotionUpdateAction(this, new STATE())); 
 		flagReactions.Add(FlagStrings.oldSiblingGoToFarmerArea, farmerAreaReaction);

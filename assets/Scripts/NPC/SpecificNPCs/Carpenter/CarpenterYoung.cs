@@ -24,7 +24,6 @@ public class CarpenterYoung : NPC
         conversationWithSonDone = new Reaction();
         conversationWithSonDone.AddAction(new NPCAddScheduleAction(this, WalkSitWhittle));
         flagReactions.Add(FlagStrings.carpenterSonYoungConvoWithDadFinished, conversationWithSonDone);
-        
     }
 
     protected override EmotionState GetInitEmotionState()
@@ -41,9 +40,8 @@ public class CarpenterYoung : NPC
     protected override void SetUpSchedules()
     {
         TimeTask WaitTask = new TimeTask(5f, new IdleState(this));
-        Task MoveTask = new Task(new MoveState(this, new Vector3(35.30966f, -1.544042f, 0.3f)));
-        //Task IdleTask = new Task(new IdleState(this));
-        //to do add whittle animation
+        Task MoveTask = new Task(new MoveState(this, new Vector3(34.1062f, -1.041937f, 0.3f)));
+        //todo: add whittle animation
 
         WalkSitWhittle = new Schedule(this);
 
@@ -65,16 +63,15 @@ public class CarpenterYoung : NPC
         public InitialEmotionState(NPC toControl, string currentDialogue)
             : base(toControl, currentDialogue)
         {
-
             randomMessage = new Reaction();
 
             randomMessage.AddAction(new NPCCallbackAction(RandomMessage));
             SetOnOpenInteractionReaction(new DispositionDependentReaction(randomMessage));
 
             stringList[0] = "Why does my son always lose his tools?";
-            stringList[1] = "Maybe he left them by the windmill?";
-            stringCounter = 2;
-
+            stringList[1] = "Maybe he left his tools by the windmill?  Again?";
+            stringList[2] = "I wish he'd take better care of his tools, they're a carpenter's most valuable asset after all.";
+            stringCounter = 3;
         }
 
         public void RandomMessage()
