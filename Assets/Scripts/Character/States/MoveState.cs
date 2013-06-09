@@ -131,10 +131,6 @@ public class MoveState : AbstractState {
 		
 		if (distance != MIN_DISTANCE_TO_POINT){
 			float height = character.transform.localScale.y/2;
-			if (hitPos.y > 70){
-				hitPos.y += .2f;
-				height += character.transform.localScale.y/2.5f;
-			}
 			if (PathFinding.GetPathForPoints(character.transform.position, hitPos, height, hitDown)){
                 _pathFollowing = PathFinding.GetPath();
                 return (true);
@@ -199,6 +195,7 @@ public class MoveState : AbstractState {
 		float currentDistance;
 		
 		foreach (WayPoints waypoint in ageWaypoints){
+			if (waypoint.pointAge != CharacterAgeManager.currentAge) continue;
 			currentDistance = Vector3.Distance(waypoint.transform.position, goalCantReach);
 			if (currentDistance < closestDistance){
 				closestDistance = currentDistance;

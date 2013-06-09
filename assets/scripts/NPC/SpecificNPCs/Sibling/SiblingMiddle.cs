@@ -4,7 +4,7 @@ using System.Collections;
 /// <summary>
 /// SiblingMiddle specific scripting values
 /// </summary>
-public class SiblingMiddle : NPC {
+public class SiblingMiddle : Sibling {
 	protected override void Init() {
 		id = NPCIDs.SIBLING;
 		base.Init();

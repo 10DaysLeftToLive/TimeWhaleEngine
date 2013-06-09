@@ -4,7 +4,7 @@ using System.Collections;
 /// <summary>
 /// Sibling young specific scripting values
 /// </summary>
-public class SiblingYoung : NPC {
+public class SiblingYoung : Sibling {
 	protected override void Init() {
 		id = NPCIDs.SIBLING;
 		base.Init();
@@ -198,6 +198,7 @@ public class SiblingYoung : NPC {
 				
 				activateWalkToBridgeState.AddAction(new NPCEmotionUpdateAction(toControl, new WalkToBridgeState(toControl)));	
 				activateWalkToBridgeState.AddAction(new NPCCallbackAction(updateFlag));
+				activateWalkToBridgeState.AddAction(new NPCChangePortraitAction(toControl, "this is a test"));
 				_allChoiceReactions.Add(new Choice("Ready to keep going?", str_readyToRace), new DispositionDependentReaction(activateWalkToBridgeState));		
 				_allChoiceReactions.Add(new Choice("Hold on.", str_readyToRace), new DispositionDependentReaction(activateWalkToBridgeState));
 			}

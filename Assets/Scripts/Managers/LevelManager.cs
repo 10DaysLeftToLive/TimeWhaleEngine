@@ -20,12 +20,14 @@ public class LevelManager : MonoBehaviour {
 	public LevelLoader levelLoader;
 	
 	public PlayerAnimationContainer[] genderAnimations;
-	public CharacterGender playerGender = CharacterGender.MALE;
+	public static CharacterGender playerGender = CharacterGender.MALE;
 	private PlayerAnimationContainer genderAnimationInUse;
 	private PlayerAnimationContainer siblingGenderAnimations;
 	private Player playerCharacter;
 	
 	void Awake(){
+		//playerGender = (PlayerPrefs.GetFloat(Strings.GenderSelect) == ((float)CharacterGender.MALE) ? CharacterGender.MALE : CharacterGender.FEMALE);
+		
 		playerCharacter = GameObject.Find(Strings.Player).GetComponent<Player>();
 		CharacterAgeManager.SetPlayer(playerCharacter);
 		
@@ -35,6 +37,8 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	void Start () {
+		
+		
 		parallaxManager = GameObject.Find(Strings.PARALLAXMANAGER).GetComponent<ParallaxManager>();
 		cloudManager = GameObject.Find(Strings.CLOUDMANAGER).GetComponent<CloudManager>();
 		ScreenSetup.CalculateSettings();
@@ -52,7 +56,7 @@ public class LevelManager : MonoBehaviour {
 		SetUpAges();
 		
 		
-		//SetSiblingAnimations(siblingGenderAnimations);
+		SetSiblingAnimations(siblingGenderAnimations);
 		
 		NPCManager.instance.Init();
 		FlagManager.instance.Init();
@@ -191,11 +195,16 @@ public class LevelManager : MonoBehaviour {
 	/// Sets the sibling animations by destroying what the sibling has then replacing it
 	/// </summary>
 	private void SetSiblingAnimations(PlayerAnimationContainer genderAnimation){
-		//TODO Brent // I quit - Jared
-		NPC youngSibling = GameObject.Find(StringsNPC.SiblingYoung).GetComponent<NPC>();
-		NPC middleSibling = GameObject.Find(StringsNPC.SiblingMiddle).GetComponent<NPC>();
-		NPC oldSibling = GameObject.Find(StringsNPC.SiblingOld).GetComponent<NPC>();
+		Sibling youngSibling = GameObject.Find(StringsNPC.SiblingYoung).GetComponent<Sibling>();
+		Sibling middleSibling = GameObject.Find(StringsNPC.SiblingMiddle).GetComponent<Sibling>();
+		Sibling oldSibling = GameObject.Find(StringsNPC.SiblingOld).GetComponent<Sibling>();
 		
+		string gender = (playerGender == CharacterGender.MALE ? "Female" : "Male");
+		
+		youngSibling.ChangeGender(gender, genderAnimation.youngBoneAnimation);
+		middleSibling.ChangeGender(gender, genderAnimation.middleBoneAnimation);
+		oldSibling.ChangeGender(gender, genderAnimation.oldBoneAnimation);
+		/*
 		SmoothMoves.BoneAnimation youngSiblingAnimation = youngSibling.GetComponent<SmoothMoves.BoneAnimation>();
 		SmoothMoves.BoneAnimation middleSiblingAnimation = middleSibling.GetComponent<SmoothMoves.BoneAnimation>();
 		SmoothMoves.BoneAnimation oldSiblingAnimation = oldSibling.GetComponent<SmoothMoves.BoneAnimation>();

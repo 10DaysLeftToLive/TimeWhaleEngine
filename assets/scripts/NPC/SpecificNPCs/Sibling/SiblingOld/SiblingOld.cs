@@ -6,7 +6,7 @@ using System.Collections;
 /// <summary>
 /// SiblingOld specific scripting values
 /// </summary>
-public class SiblingOld : NPC {
+public class SiblingOld : Sibling {
 	private static readonly float Y_COORDINATE = -1.735313f + (LevelManager.levelYOffSetFromCenter*2);
 	
 	protected override void Init() {

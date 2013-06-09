@@ -21,8 +21,10 @@ public class Crossfade : MonoBehaviour
     public AudioSource LighthouseAmbient;
     public float LighthouseAmbientVolume = 1.0f;
     public AudioSource ReflectionTreeAmbient;
-    public float ReflectionTreeVolume = 0.5f;
-    private static float delay = 0.01f;
+    public float ReflectionTreeAmbientVolume = 0.5f;
+    public AudioSource IntroBGM;
+    public float IntroBGMVolume = 1f;
+    public static float delay = 0.01f;
     public bool FadeDown = false;
     public bool FadeUp = false;
     public bool CrossFade = false;
@@ -73,10 +75,14 @@ public class Crossfade : MonoBehaviour
                 CurrentAmbient = instance.MarketAmbient;
                 //delay = 0.03f;
                 break;
-            case "ReflectionTree*":
+            case "ReflectionTree":
                 CurrentSong = null;
                 CurrentAmbient = instance.ReflectionTreeAmbient;
                 //delay = 0.04f;
+                break;
+            case "Intro":
+                CurrentSong = instance.IntroBGM;
+                CurrentAmbient = instance.IntroBGM;
                 break;
             default:
                 CurrentSong = null;
@@ -96,7 +102,7 @@ public class Crossfade : MonoBehaviour
 
             CurrentSong.Stop();
         }
-        /*else if (CurrentAmbient != null && SoundManager.instance.SFXOn)
+        else if (CurrentAmbient != null && SoundManager.instance.SFXOn)
         {
             // 1f will need to be changed to match the final volume used
             while (!(Mathf.Approximately(fTimeCounter, 1f)))
@@ -107,7 +113,7 @@ public class Crossfade : MonoBehaviour
             }
 
             CurrentAmbient.Stop();
-        }*/
+        }
 
         instance.FadeDown = false;
 
@@ -166,7 +172,7 @@ public class Crossfade : MonoBehaviour
             case "ReflectionTree":
                 CurrentSong = null;
                 CurrentAmbient = instance.ReflectionTreeAmbient;
-                CurrentAmbientVolume = instance.ReflectionTreeVolume;
+                CurrentAmbientVolume = instance.ReflectionTreeAmbientVolume;
                 //delay = 0.04f;
                 break;
             default:
@@ -275,7 +281,12 @@ public class Crossfade : MonoBehaviour
             case "ReflectionTree":
                 CurrentSong = null;
                 CurrentAmbient = instance.ReflectionTreeAmbient;
-                CurrentAmbientVolume = instance.ReflectionTreeVolume;
+                CurrentAmbientVolume = instance.ReflectionTreeAmbientVolume;
+                break;
+            case "Intro":
+                CurrentSong = null;
+                CurrentAmbient = instance.IntroBGM;
+                CurrentAmbientVolume = instance.IntroBGMVolume;
                 break;
             default:
                 CurrentSong = null;
@@ -314,7 +325,17 @@ public class Crossfade : MonoBehaviour
             case "ReflectionTree":
                 NextSong = null;
                 NextAmbient = instance.ReflectionTreeAmbient;
-                NextAmbientVolume = instance.ReflectionTreeVolume;
+                NextAmbientVolume = instance.ReflectionTreeAmbientVolume;
+                break;
+            case "Intro":
+                NextSong = null;
+                NextAmbient = instance.IntroBGM;
+                NextAmbientVolume = instance.IntroBGMVolume;
+                break;
+            case "ForestBGM":
+                NextSong = null;
+                NextAmbient = instance.ForestBGM;
+                NextAmbientVolume = instance.ForestBGM.volume;
                 break;
             default:
                 NextSong = null;
@@ -390,7 +411,7 @@ public class Crossfade : MonoBehaviour
 
     public void StartCoroutineFadeDown()
     {
-        if (SoundManager.instance.BGMOn)
+        if (SoundManager.instance.AudioOn && SoundManager.instance.BGMOn)
         {
             if (Strings.FADINGAREA == Strings.CURRENTAREA && Crossfade.instance.FadeUp)
             {
@@ -406,7 +427,7 @@ public class Crossfade : MonoBehaviour
 
     public void StartCoroutineFadeUp()
     {
-        if (SoundManager.instance.BGMOn)
+        if (SoundManager.instance.AudioOn && SoundManager.instance.BGMOn)
         {
             if (Strings.FADINGAREA == Strings.CURRENTAREA && Crossfade.instance.FadeDown)
             {
@@ -422,7 +443,7 @@ public class Crossfade : MonoBehaviour
 
     public void startCoroutineFadeOverTime(string Current, string Next)
     {
-        if (SoundManager.instance.SFXOn)
+        if (SoundManager.instance.AudioOn && SoundManager.instance.SFXOn)
         {
             if (Crossfade.instance.CrossFade)
             {
@@ -433,7 +454,7 @@ public class Crossfade : MonoBehaviour
                     Crossfade.instance.CrossFade = false;
                     StartCoroutine(Crossfade.CoroutineFadeOverTime(Next, Current));
                 }
-                else
+                else if (Strings.CROSSFADINGAREA == Next)
                 {
                     //Debug.Log("crossfade occuring, stopping current crossfade before starting normal order");
                     StopAllCoroutines();

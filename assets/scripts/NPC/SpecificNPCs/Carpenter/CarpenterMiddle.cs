@@ -26,6 +26,7 @@ public class CarpenterMiddle : NPC {
 	Schedule AfterAcceptFishing;
 	Schedule WorkOnWindmill;
 	NPCConvoSchedule AcceptFishing;
+	Schedule AfterConversation;
 	protected override void SetFlagReactions() {		
 		//This is where the Initial Base Conversation Happens.
 		Reaction carpenterSonBecomesIndependent = new Reaction();
@@ -63,13 +64,16 @@ public class CarpenterMiddle : NPC {
 		ReturnHomeReaction.AddAction(new NPCCallbackAction(PrepareReturnedHomeConversation));
 		flagReactions.Add(FlagStrings.CarpenterReturnedHome, ReturnHomeReaction);
 		
+		Reaction BuiltRockingChair = new Reaction();
+		
 		Reaction PerformConversationAboutNothing = new Reaction();
 		PerformConversationAboutNothing.AddAction(new NPCAddScheduleAction(this, ConversationAboutNotDoingAnything));
+        PerformConversationAboutNothing.AddAction(new NPCAddScheduleAction(this, AfterConversation));
 		PerformConversationAboutNothing.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "")));
 		flagReactions.Add(FlagStrings.DidntBuildRockingChairConversation, PerformConversationAboutNothing);
 		
-		Reaction BuiltRockingChair = new Reaction();
 		BuiltRockingChair.AddAction(new NPCAddScheduleAction(this, ConversationAboutRockingChair));
+		BuiltRockingChair.AddAction(new NPCAddScheduleAction(this, AfterConversation));
 		BuiltRockingChair.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "")));
 		flagReactions.Add(FlagStrings.BuiltRockingChairTalk, BuiltRockingChair);
 		#endregion
@@ -176,6 +180,8 @@ public class CarpenterMiddle : NPC {
 			new GiveNothingScript(), Schedule.priorityEnum.DoNow);
 		ConversationAboutNotDoingAnything.SetCanNotInteractWithPlayer();
 		
+		AfterConversation = new Schedule(this, Schedule.priorityEnum.High);
+		AfterConversation.Add(new TimeTask(10000f, new IdleState(this)));
 		#endregion
 //CONVERSATION SCHEDULE BUG!!!! PLEASE FIX		
 //CONVERSATION SCHEDULE BUG!!!! PLEASE FIX		

@@ -241,7 +241,7 @@ public class CarpenterSonOld : NPC {
 		}
 		
 		public AnswerLivedAGoodLifeState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue) {	
-			toControl.SetCharacterPortrait(StringsNPC.CarpenterSonOld + StringsNPC.Sad);
+			toControl.SetCharacterPortrait(StringsNPC.Sad);
 			choiceLeftReaction.AddAction(new NPCCallbackOnNPCAction(ContinueCarpenterSonChatPartOne,toControl));
 			choiceLeftReaction.AddAction(new ShowOneOffChatAction(toControl, "Then you understand." + "\n" + "I feel like I lived my father's dream and not my own.",2f));
 			choiceLeftReaction.AddAction(new NPCCallbackOnNPCAction(setPortraitSad, toControl));

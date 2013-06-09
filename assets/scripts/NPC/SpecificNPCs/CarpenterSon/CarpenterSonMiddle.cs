@@ -21,6 +21,7 @@ public class CarpenterSonMiddle : NPC {
 	Schedule EndState;
 	Schedule StartCarpentry;
 	Schedule DoNothingSchedule;
+	Schedule AfterConversationCarpentery;
 	protected override void Init() {
 		id = NPCIDs.CARPENTER_SON;
 		base.Init();
@@ -102,6 +103,7 @@ public class CarpenterSonMiddle : NPC {
 		
 		Reaction EndOfDayConvo = new Reaction();
 		EndOfDayConvo.AddAction(new NPCEmotionUpdateAction(this, new BlankEmotionState(this, "It's nice to relax after a long day.")));
+		EndOfDayConvo.AddAction(new NPCAddScheduleAction(this, AfterConversationCarpentery));
 		flagReactions.Add(FlagStrings.CarpenterReturnedHome, EndOfDayConvo);
 		#endregion
 		/*Reaction becomesACarpenter = new Reaction();
@@ -184,7 +186,8 @@ public class CarpenterSonMiddle : NPC {
 		stormOffSchedule.Add(new Task(new MoveThenMarkDoneState(this, MapLocations.BaseOfPierMiddle)));
 				
 		
-		
+		AfterConversationCarpentery = new Schedule(this, Schedule.priorityEnum.High);
+		AfterConversationCarpentery.Add(new TimeTask(10000f, new IdleState(this)));
 		#region NPCConvoSchedules
 		#endregion
 	}
@@ -330,6 +333,7 @@ public class CarpenterSonMiddle : NPC {
 		public BecomeACarpenter(NPC toControl, string currentDialogue) : base(toControl, "Hi there.  I'm a bit busy right now.") {
 			GetWoodReaction = new Reaction();
 			GetWoodReaction.AddAction(new NPCCallbackAction(UpdateGetWoodReaction));
+			GetWoodReaction.AddAction(new NPCTakeItemAction(toControl));
 			//Change this to wood or whatever is the needed item.
 			_allItemReactions.Add(StringsItem.Apple, new DispositionDependentReaction(GetWoodReaction));	
 				
@@ -349,6 +353,8 @@ public class CarpenterSonMiddle : NPC {
 		}
 		public void UpdateGetWoodReaction(){
 			FlagManager.instance.SetFlag(FlagStrings.BuiltStuffForDad);	
+			SetDefaultText("Thank you so much for helping me!");
+			GUIManager.Instance.RefreshInteraction();
 		}
 		public override void UpdateEmotionState(){
 			
