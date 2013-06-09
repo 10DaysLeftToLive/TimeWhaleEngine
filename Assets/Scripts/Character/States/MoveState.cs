@@ -131,7 +131,7 @@ public class MoveState : AbstractState {
 			if (hitDown.distance < distance){
 				distance = hitDown.distance;
 				hitPos = hitDown.point;
-            	hitPos.y += .2f;
+            	hitPos.y += .2f; //offset for raycast within pathfinding
 			}
         } 
 		if (Physics.Raycast(_goal, Vector3.up , out hitUp, 10, mask)) {
@@ -144,7 +144,12 @@ public class MoveState : AbstractState {
         }
 		
 		if (distance != MIN_DISTANCE_TO_POINT){
-			float height = character.transform.localScale.y/2;
+			float height = character.transform.collider.bounds.size.y/2;
+			if (character is NPC){
+				height += .15f;	
+			}else if (character is Player && hitPos.y > 70){
+				height += .3f;	
+			}
 			if (PathFinding.GetPathForPoints(character.transform.position, hitPos, height, hitDown)){
                 _pathFollowing = PathFinding.GetPath();
                 return (true);
