@@ -13,7 +13,7 @@ public class DigState : PlayAnimationThenDoState {
 		_timeToDig = DIG_TIME;
 	}
 	
-	public DigState(Character toControl, string itemToDrop) : base(toControl, Strings.animation_walk) {
+	public DigState(Character toControl, string itemToDrop) : base(toControl, Strings.animation_dig) {
 		_itemToDrop = itemToDrop;
 		_timeToDig = DIG_TIME;
 	}

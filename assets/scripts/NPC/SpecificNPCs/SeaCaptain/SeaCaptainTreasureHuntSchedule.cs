@@ -13,6 +13,9 @@ public class SeaCaptainTreasureHuntSchedule : Schedule {
 		Vector3 carpenterDigPos = new Vector3(16f, -1f + LevelManager.levelYOffSetFromCenter, 0f);
 		Vector3 beachDigPos = new Vector3(43f, -7.5f + LevelManager.levelYOffSetFromCenter, 0f);
 		
+		NPCChat startHuntChat = new NPCChat();
+		startHuntChat.AddChatInfo(new ChatInfo(_toManage, "Thanks matey! Let's go find me some treasure!"));
+		
 		NPCChat farmDigChat = new NPCChat();
 		farmDigChat.AddChatInfo(new ChatInfo(_toManage, "Ah hah! My treas-"));
 		farmDigChat.AddChatInfo(new ChatInfo(_toManage, "Is this some exotic plant?"));
@@ -41,17 +44,18 @@ public class SeaCaptainTreasureHuntSchedule : Schedule {
 		beachDigChat.AddChatInfo(new ChatInfo(_toManage, "I lost my ship over non-existent treasure..."));
 		
 		SetCanInteract(false);
-		Add(new Task(new MoveThenMarkDoneState(_toManage, farmDigPos), _toManage, 0, "Let's go find me some treasure!"));
+		Add(new Task(new NPCChatState(_toManage, _toManage.player, startHuntChat)));
+		Add(new Task(new MoveThenMarkDoneState(_toManage, farmDigPos), _toManage, 3f, "It feels good to be exploring again."));
 		Add(new Task(new DigState(_toManage, StringsItem.Apple)));
 		Add(new Task(new NPCChatState(_toManage, _toManage.player, farmDigChat)));
 		Add(new Task(new MoveThenMarkDoneState(_toManage, reflectDigPos), _toManage, 0, "Come now. The map says something about a reflection tree."));
-		Add(new TimeTask(3f, new IdleState(_toManage), _toManage, 0, "It must be here! *Digging*"));
+		Add(new Task(new DigState(_toManage)));
 		Add(new Task(new NPCChatState(_toManage, _toManage.player, reflectDigChat)));
 		Add(new Task(new MoveThenMarkDoneState(_toManage, carpenterDigPos), _toManage, 0, "Let's try there and hope the grumpy guy isn't there."));
-		Add(new TimeTask(3f, new IdleState(_toManage), _toManage, 0, "This must be it. I can feel it in me bones. *Digging*"));
+		Add(new Task(new DigState(_toManage, StringsItem.Flute)));
 		Add(new Task(new NPCChatState(_toManage, _toManage.player, carpenterDigChat)));
 		Add(new Task(new MoveThenMarkDoneState(_toManage, beachDigPos), _toManage, 0, "Now let's go dig up some treasure!"));
-		Add(new TimeTask(3f, new IdleState(_toManage), _toManage, 0, "Alright, the moment of truth. *Digging*"));
+		Add(new Task(new DigState(_toManage, StringsItem.Portrait)));
 		Add(new Task(new NPCChatState(_toManage, _toManage.player, beachDigChat)));
 		Add(new Task(new MoveThenMarkDoneState(_toManage, startingPosition), _toManage, 0, "Well... thanks for your help. I have to find a way off this island now."));
 	}
