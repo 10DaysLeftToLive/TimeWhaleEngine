@@ -12,13 +12,13 @@ public abstract class NPC : Character {
 	#region Fields
 	protected int id = -1;
 	private int npcDisposition;
-	
+	public string textureAtlasName;
+	private string currentFaceTexture = "Default";
 	protected ScheduleStack scheduleStack;
 	protected EmotionState currentEmotion;
 	protected Dictionary<string, Reaction> flagReactions;
 	private Dictionary<int, Reaction> timeReactions;
 	private int truncatedTime;
-	
 	public Player player;
 	public bool chatingWithPlayer = false;
 	public bool chatingWithNPC = false;
@@ -145,10 +145,18 @@ public abstract class NPC : Character {
 	/// </param>
 	public virtual void SetCharacterPortrait(string emotion){
 		charPortrait = (Texture)Resources.Load(this.name + emotion, typeof(Texture));
-		if(charPortrait == null){
+		if(charPortrait == null) {
 			Debug.LogWarning("Could not find " + this.name + emotion + " in /Resources");
 			charPortrait = (Texture)Resources.Load(this.name, typeof(Texture));
 		}
+	}
+	
+	public void ChangeFacialExpression(string emotion) {
+		Debug.Log ("textureAtlasName " + textureAtlasName + ", emotion: " + emotion);
+		foreach (SmoothMoves.TextureAtlas atlas in animationData.textureAtlases) {
+			Debug.Log (atlas.name);
+		}
+		animationData.SwapBoneTexture("Head", textureAtlasName, currentFaceTexture, textureAtlasName, emotion);
 	}
 	
 	/// <summary>
