@@ -30,6 +30,7 @@ public class CastlemanMiddle : NPC {
 	Reaction endOfDate = new Reaction();
 	Reaction stoodUpLG = new Reaction();
 	Reaction moveToDate = new Reaction();
+	Reaction girlMarriageApproved = new Reaction();
 	
 	//chat stuff
 	Reaction castleDateOne = new Reaction();
@@ -66,6 +67,9 @@ public class CastlemanMiddle : NPC {
 		
 		moveToDate.AddAction(new NPCAddScheduleAction(this, moveToBeach));
 		flagReactions.Add(FlagStrings.CastleManDating, moveToDate);
+		
+		girlMarriageApproved.AddAction(new NPCCallbackSetStringAction(FlagToNPC, this, "marriage"));
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlPathEndThirteen, girlMarriageApproved);
 		
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleDateOne, castleDateOne);
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleDateThree, castleDateTwo);
@@ -154,7 +158,10 @@ public class CastlemanMiddle : NPC {
 		carpenterDateSuccess = true;
 	}
 	
-	protected void letCastleManKnowOfDate(){
+	protected void FlagToNPC(NPC npc, string text){
+		if (text == "marriage"){
+			dateSuccessState.PassStringToEmotionState(text);	
+		}
 	}
 	
 	protected void SetupReactions(){
@@ -334,8 +341,15 @@ public class CastlemanMiddle : NPC {
 	}
 	
 	private class DateSuccess: EmotionState{
-		public DateSuccess (NPC toControl, string currentDialogue):base (toControl, "The date was a success!"){
+		public DateSuccess (NPC toControl, string currentDialogue):base (toControl, "The fair maiden does like me! I only hope that she can overcome her parents mistrust towards me. She told me she would."){
 			
+		}
+		
+		public override void PassStringToEmotionState(string text){
+			if (text == "marriage"){
+				SetDefaultText("I am eternally in your debt! Ask me anything and I shall surely give it to you!");
+				FlagManager.instance.SetFlag(FlagStrings.CastleMarriage);
+			}
 		}
 	}
 	

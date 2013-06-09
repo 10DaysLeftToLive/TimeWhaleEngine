@@ -172,7 +172,7 @@ public class FarmerFatherMiddle : NPC {
 		girlEnd.Add(girlEndChatThirteen);
 		girlEnd.Add(new TimeTask(4f, new IdleState(this)));
 		girlEnd.Add(new Task(new MoveThenDoState(this, new Vector3(startingPosition.x - 1, startingPosition.y, startingPosition.z), new MarkTaskDone(this))));
-		
+		girlEnd.SetCanInteract(false);
 	}
 	
 	protected void ResetPosition(){
@@ -242,8 +242,9 @@ public class FarmerFatherMiddle : NPC {
 		rope.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "5"));
 		
 		farmer.AddAction(new NPCCallbackSetStringAction(FlagToNPC, this, "farmerMotherOnBoard"));
-		postDateCastle.AddAction(new NPCEmotionUpdateAction(this, new HateEmotionState(this, "")));
-		postDateCastle.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "-100"));
+		
+		//postDateCastle.AddAction(new NPCEmotionUpdateAction(this, new HateEmotionState(this, "")));
+		//postDateCastle.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "-100"));
 		
 		postDateCarpenter.AddAction(new NPCCallbackSetStringAction(FlagToNPC, this, "carpenterSuccess"));
 		
@@ -329,8 +330,6 @@ public class FarmerFatherMiddle : NPC {
 			
 			_allChoiceReactions.Add(MarriageChoice, new DispositionDependentReaction(MarriageReaction));
 			_allChoiceReactions.Add(BusinessChoice, new DispositionDependentReaction(BusinessReaction));
-			
-
 		}
 		
 		public void SetupReactions(){
@@ -426,8 +425,8 @@ public class FarmerFatherMiddle : NPC {
 			}
 			GUIManager.Instance.RefreshInteraction();
 			
-			//FlagManager.instance.SetFlag(FarmerFamilyFlagStrings.GirlPathEndStart); //test
-			//GUIManager.Instance.CloseInteractionMenu();
+			FlagManager.instance.SetFlag(FarmerFamilyFlagStrings.GirlPathEndStart); //test
+			GUIManager.Instance.CloseInteractionMenu();
 		}
 		
 		public void UpdateYouSure(){

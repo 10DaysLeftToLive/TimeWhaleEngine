@@ -103,7 +103,7 @@ public class SeaCaptainMiddle : NPC {
 			
 			Reaction applePieReaction = new Reaction();
 			applePieReaction.AddAction(new NPCTakeItemAction(toControl));
-			applePieReaction.AddAction(new UpdateCurrentTextAction(toControl, "I haven't eaten applie pie this good, since I impersonated a noble to eat at the Sultan's palace!"));
+			applePieReaction.AddAction(new UpdateCurrentTextAction(toControl, "I haven't eaten apple pie this good, since I impersonated a noble to eat at the Sultan's palace!"));
 			_allItemReactions.Add(StringsItem.ApplePie,  new DispositionDependentReaction(applePieReaction));
 			
 			Reaction veggiesReaction = new Reaction();
@@ -140,7 +140,7 @@ public class SeaCaptainMiddle : NPC {
 			whyHereReaction.AddAction(new UpdateCurrentTextAction(toControl, "How 'ave ye been matey?"));
 			_allChoiceReactions.Add(whyHereChoice, new DispositionDependentReaction(whyHereReaction));
 			
-			whereShipChoice = new Choice("Where is your ship?", "Well... I might have forgot to drop the anchor before commin' ashore.");
+			whereShipChoice = new Choice("Where is your ship?", "Well... I might have forgotten to drop the anchor before commin' ashore.");
 			whereShipReaction = new Reaction();
 			whereShipReaction.AddAction(new NPCCallbackAction(UpdateWhereShip));
 			whereShipReaction.AddAction(new UpdateCurrentTextAction(toControl, "How 'ave ye been laddie?"));
@@ -165,6 +165,7 @@ public class SeaCaptainMiddle : NPC {
 		}
 		
 		public void UpdateTreasureHuntBegins() {
+			GUIManager.Instance.CloseInteractionMenu();
 			FlagManager.instance.SetFlag(FlagStrings.TreasureHuntBegin);
 		}
 		#endregion
