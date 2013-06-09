@@ -319,8 +319,9 @@ public class CarpenterSonYoung : NPC {
 		}
 				
 		private void EncouragedCarpentryResult(){
-			SetDefaultText("I'll make sure the next thing I make is made of wood.");
 			GUIManager.Instance.RefreshInteraction();
+			SetDefaultText("I'll make sure the next thing I make is made of wood.");
+			
 			_allChoiceReactions.Clear();
 		}
 	}
