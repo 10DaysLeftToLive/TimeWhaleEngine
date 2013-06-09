@@ -42,7 +42,7 @@ public class SeaCaptainTreasureHuntSchedule : Schedule {
 		
 		SetCanInteract(false);
 		Add(new Task(new MoveThenMarkDoneState(_toManage, farmDigPos), _toManage, 0, "Let's go find me some treasure!"));
-		Add(new TimeTask(2f, new IdleState(_toManage), _toManage, 0, "*Digging*"));
+		Add(new Task(new DigState(_toManage, StringsItem.Apple)));
 		Add(new Task(new NPCChatState(_toManage, _toManage.player, farmDigChat)));
 		Add(new Task(new MoveThenMarkDoneState(_toManage, reflectDigPos), _toManage, 0, "Come now. The map says something about a reflection tree."));
 		Add(new TimeTask(3f, new IdleState(_toManage), _toManage, 0, "It must be here! *Digging*"));
