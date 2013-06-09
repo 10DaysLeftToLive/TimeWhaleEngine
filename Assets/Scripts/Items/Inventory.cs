@@ -27,7 +27,7 @@ public class Inventory {
 			Utils.SetActiveRecursively(pickedUpObject.gameObject, true);
 			
 			pickedUpObject.GetComponent<InteractableOnClick>().Disable();
-       		SoundManager.instance.PickUpItemSFX.Play();
+            SoundManager.instance.PlaySFX("PickUp");
 		}
 		
 	}
@@ -47,7 +47,7 @@ public class Inventory {
 		pickedUpObject.transform.position = toPlace;
 		
 		pickedUpObject = null;
-        SoundManager.instance.PutDownItemSFX.Play();
+        SoundManager.instance.PlaySFX("PutDown");
 	}
 	
 	public void SwapItemWithCurrentAge(SmoothMoves.BoneAnimation animationData) {

@@ -2,7 +2,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Crossfade: MonoBehaviour {
+public class Crossfade : MonoBehaviour
+{
 
     public AudioSource BeachBGM;
     public AudioSource BeachAmbient;
@@ -19,63 +20,69 @@ public class Crossfade: MonoBehaviour {
     public AudioSource LighthouseBGM;
     public AudioSource LighthouseAmbient;
     public float LighthouseAmbientVolume = 1.0f;
-    private static float delay = 0.02f;
+    public AudioSource ReflectionTreeAmbient;
+    public float ReflectionTreeAmbientVolume = 0.5f;
+    public AudioSource IntroBGM;
+    public float IntroBGMVolume = 1f;
+    public static float delay = 0.01f;
+    public bool FadeDown = false;
+    public bool FadeUp = false;
+    public bool CrossFade = false;
 
-    public static void FadeBetween()
-    {
-        string Current = null;
-        string Next = null;
+    static public Crossfade instance;
 
-        Crossfade.CrossfadeInstance.StartCoroutine(CoroutineFadeOverTime(Current, Next));
-    }
-
-    static public Crossfade CrossfadeInstance;
-    
     void Awake()
     {
-        Crossfade.CrossfadeInstance = this;
+        Crossfade.instance = this;
     }
 
-    public static IEnumerator CoroutineFadeDown(string AreaName)
+    public static IEnumerator CoroutineFadeDown()
     {
-    
-        Strings.CURRENTFADING = AreaName;
+        instance.FadeDown = true;
+
+        Strings.FADINGAREA = Strings.PREVIOUSAREA;
+
+        //Debug.Log("CoroutineFadeDown start in " + Strings.FADINGAREA + ", FadeDown is " + instance.FadeDown);
 
         AudioSource CurrentSong;
         AudioSource CurrentAmbient;
         float fTimeCounter = 0f;
 
-        switch (AreaName)
+        switch (Strings.FADINGAREA)
         {
             case "Forest":
-                CurrentSong = CrossfadeInstance.ForestBGM;
-                CurrentAmbient = CrossfadeInstance.ForestAmbient;
-                delay = 0.075f;
+                CurrentSong = instance.ForestBGM;
+                CurrentAmbient = instance.ForestAmbient;
+                //delay = 0.03f;
                 break;
             case "Beach":
-                CurrentSong = CrossfadeInstance.BeachBGM;
-                CurrentAmbient = CrossfadeInstance.BeachAmbient;
-                delay = 0.075f;
+                CurrentSong = instance.BeachBGM;
+                CurrentAmbient = instance.BeachAmbient;
+                //delay = 0.02f;
                 break;
             case "Lighthouse":
-                CurrentSong = CrossfadeInstance.LighthouseBGM;
-                CurrentAmbient = CrossfadeInstance.LighthouseAmbient;
-                delay = 0.1f;
+                CurrentSong = instance.LighthouseBGM;
+                CurrentAmbient = instance.LighthouseAmbient;
+                //delay = 0.03f;
                 break;
             case "Windmill":
-                CurrentSong = CrossfadeInstance.WindmillBGM;
-                CurrentAmbient = CrossfadeInstance.WindmillAmbient;
-                delay = 0.02f;
+                CurrentSong = instance.WindmillBGM;
+                CurrentAmbient = instance.WindmillAmbient;
+                //delay = 0.02f;
                 break;
             case "Market":
-                CurrentSong = CrossfadeInstance.MarketBGM;
-                CurrentAmbient = CrossfadeInstance.MarketAmbient;
-                delay = 0.1f;
+                CurrentSong = instance.MarketBGM;
+                CurrentAmbient = instance.MarketAmbient;
+                //delay = 0.03f;
                 break;
             case "ReflectionTree":
                 CurrentSong = null;
-                CurrentAmbient = CrossfadeInstance.LighthouseAmbient;
-                delay = 0.1f;
+                CurrentAmbient = instance.ReflectionTreeAmbient;
+                //delay = 0.04f;
+                break;
+            case "Intro":
+                CurrentSong = instance.IntroBGM;
+                CurrentAmbient = instance.IntroBGM;
                 break;
             default:
                 CurrentSong = null;
@@ -83,21 +90,7 @@ public class Crossfade: MonoBehaviour {
                 break;
         }
 
-        if (CurrentSong != null && CurrentAmbient != null && SoundManager.instance.SFXOn && SoundManager.instance.BGMOn)
-        {
-            // 1f will need to be changed to match the final volume used
-            while (!(Mathf.Approximately(fTimeCounter, 1f)))
-            {
-                fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
-                CurrentSong.volume = (1f - fTimeCounter) * CurrentSong.volume;
-                CurrentAmbient.volume = (1f - fTimeCounter) * CurrentAmbient.volume;
-                yield return new WaitForSeconds(delay);
-            }
-
-            CurrentSong.Stop();
-            CurrentAmbient.Stop();
-        }
-        else if (CurrentSong != null && CurrentAmbient != null && !SoundManager.instance.SFXOn && SoundManager.instance.BGMOn)
+        if (CurrentSong != null && SoundManager.instance.BGMOn)
         {
             // 1f will need to be changed to match the final volume used
             while (!(Mathf.Approximately(fTimeCounter, 1f)))
@@ -109,19 +102,7 @@ public class Crossfade: MonoBehaviour {
 
             CurrentSong.Stop();
         }
-        else if (CurrentSong != null && CurrentAmbient != null && SoundManager.instance.SFXOn && !SoundManager.instance.BGMOn)
-        {
-            // 1f will need to be changed to match the final volume used
-            while (!(Mathf.Approximately(fTimeCounter, 1f)))
-            {
-                fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
-                CurrentAmbient.volume = (1f - fTimeCounter) * CurrentAmbient.volume;
-                yield return new WaitForSeconds(delay);
-            }
-
-            CurrentAmbient.Stop();
-        }
-        else if (CurrentSong == null && CurrentAmbient != null && SoundManager.instance.SFXOn)
+        else if (CurrentAmbient != null && SoundManager.instance.SFXOn)
         {
             // 1f will need to be changed to match the final volume used
             while (!(Mathf.Approximately(fTimeCounter, 1f)))
@@ -134,51 +115,65 @@ public class Crossfade: MonoBehaviour {
             CurrentAmbient.Stop();
         }
 
-        Crossfade.CrossfadeInstance.StopCoroutine("CoroutineFadeDown");
+        instance.FadeDown = false;
+
+        //Debug.Log("CoroutineFadeDown end, FadeDown is " + instance.FadeDown);
+
+        Crossfade.instance.StopCoroutine("CoroutineFadeDown");
     }
 
-    public static IEnumerator CoroutineFadeUp(string AreaName)
+    public static IEnumerator CoroutineFadeUp()
     {
-        delay = 0.02f;
+        instance.FadeUp = true;
 
-        Strings.CURRENTFADING = AreaName;
+        Strings.FADINGAREA = Strings.CURRENTAREA;
+
+        //Debug.Log("CoroutineFadeUp start in "+Strings.FADINGAREA+", FadeUp is " + instance.FadeUp);
+
+        //delay = 0.02f;
 
         AudioSource CurrentSong;
         AudioSource CurrentAmbient;
         float CurrentAmbientVolume;
         float fTimeCounter = 0f;
 
-        switch (AreaName)
+        switch (Strings.FADINGAREA)
         {
             case "Forest":
-                CurrentSong = CrossfadeInstance.ForestBGM;
-                CurrentAmbient = CrossfadeInstance.ForestAmbient;
-                CurrentAmbientVolume = CrossfadeInstance.ForestAmbientVolume;
+                CurrentSong = instance.ForestBGM;
+                CurrentAmbient = instance.ForestAmbient;
+                CurrentAmbientVolume = instance.ForestAmbientVolume;
+                //delay = 0.03f;
                 break;
             case "Beach":
-                CurrentSong = CrossfadeInstance.BeachBGM;
-                CurrentAmbient = CrossfadeInstance.BeachAmbient;
-                CurrentAmbientVolume = CrossfadeInstance.BeachAmbientVolume;
+                CurrentSong = instance.BeachBGM;
+                CurrentAmbient = instance.BeachAmbient;
+                CurrentAmbientVolume = instance.BeachAmbientVolume;
+                //delay = 0.02f;
                 break;
             case "Lighthouse":
-                CurrentSong = CrossfadeInstance.LighthouseBGM;
-                CurrentAmbient = CrossfadeInstance.LighthouseAmbient;
-                CurrentAmbientVolume = CrossfadeInstance.LighthouseAmbientVolume;
+                CurrentSong = instance.LighthouseBGM;
+                CurrentAmbient = instance.LighthouseAmbient;
+                CurrentAmbientVolume = instance.LighthouseAmbientVolume;
+                //delay = 0.03f;
                 break;
             case "Windmill":
-                CurrentSong = CrossfadeInstance.WindmillBGM;
-                CurrentAmbient = CrossfadeInstance.WindmillAmbient;
-                CurrentAmbientVolume = CrossfadeInstance.WindmillAmbientVolume;
+                CurrentSong = instance.WindmillBGM;
+                CurrentAmbient = instance.WindmillAmbient;
+                CurrentAmbientVolume = instance.WindmillAmbientVolume;
+                //delay = 0.02f;
                 break;
             case "Market":
-                CurrentSong = CrossfadeInstance.MarketBGM;
-                CurrentAmbient = CrossfadeInstance.MarketAmbient;
-                CurrentAmbientVolume = CrossfadeInstance.MarketAmbientVolume;
+                CurrentSong = instance.MarketBGM;
+                CurrentAmbient = instance.MarketAmbient;
+                CurrentAmbientVolume = instance.MarketAmbientVolume;
+                //delay = 0.03f;
                 break;
             case "ReflectionTree":
                 CurrentSong = null;
-                CurrentAmbient = CrossfadeInstance.LighthouseAmbient;
-                CurrentAmbientVolume = CrossfadeInstance.LighthouseAmbientVolume;
+                CurrentAmbient = instance.ReflectionTreeAmbient;
+                CurrentAmbientVolume = instance.ReflectionTreeAmbientVolume;
+                //delay = 0.04f;
                 break;
             default:
                 CurrentSong = null;
@@ -189,131 +184,192 @@ public class Crossfade: MonoBehaviour {
 
         if (CurrentSong != null && SoundManager.instance.BGMOn)
         {
-            CurrentSong.volume = 0;
-            CurrentSong.Play();
+            if (CurrentSong.volume != 0 && CurrentSong.isPlaying)
+            {
+                fTimeCounter = CurrentSong.volume;
+            }
+            else
+            {
+                CurrentSong.volume = 0;
+                CurrentSong.Play();
+            }
         }
-        if (CurrentAmbient != null && SoundManager.instance.SFXOn)
+        /*if (CurrentAmbient != null && SoundManager.instance.SFXOn)
         {
-            CurrentAmbient.volume = 0;
-            CurrentAmbient.Play();
-        }
+            if (CurrentAmbient.volume != 0)
+            {
+                fTimeCounter = CurrentAmbient.volume;
+            }
+            else
+            {
+                CurrentAmbient.volume = 0;
+                CurrentAmbient.Play();
+            }
+        }*/
 
-        if (CurrentSong != null && CurrentAmbient != null && SoundManager.instance.SFXOn && SoundManager.instance.BGMOn)
+        if (CurrentSong != null && SoundManager.instance.BGMOn)
         {
             // 1f will need to be changed to match the final volume used
             while (!(Mathf.Approximately(fTimeCounter, 1f)))
             {
                 fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
                 CurrentSong.volume = fTimeCounter;
-                CurrentAmbient.volume = (fTimeCounter * CurrentAmbientVolume);
                 yield return new WaitForSeconds(delay);
             }
         }
-        else if (CurrentSong != null && CurrentAmbient != null && !SoundManager.instance.SFXOn && SoundManager.instance.BGMOn)
+        /*else if (CurrentAmbient != null && SoundManager.instance.SFXOn)
         {
             // 1f will need to be changed to match the final volume used
             while (!(Mathf.Approximately(fTimeCounter, 1f)))
             {
                 fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
-                CurrentSong.volume = fTimeCounter;
+                //CurrentAmbient.volume = (fTimeCounter * CurrentAmbientVolume);
+                CurrentAmbient.volume = (fTimeCounter);
                 yield return new WaitForSeconds(delay);
             }
-        }
-        else if (CurrentSong != null && CurrentAmbient != null && SoundManager.instance.SFXOn && !SoundManager.instance.BGMOn)
-        {
-            // 1f will need to be changed to match the final volume used
-            while (!(Mathf.Approximately(fTimeCounter, 1f)))
-            {
-                fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
-                CurrentAmbient.volume = (fTimeCounter * CurrentAmbientVolume);
-                yield return new WaitForSeconds(delay);
-            }
-        }
-        else if (CurrentSong == null && CurrentAmbient != null && SoundManager.instance.SFXOn)
-        {
-            while (!(Mathf.Approximately(fTimeCounter, 1f)))
-            {
-                fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
-                CurrentAmbient.volume = (fTimeCounter * CurrentAmbientVolume);
-                yield return new WaitForSeconds(delay);
-            }
-        }
+        }*/
 
-        Crossfade.CrossfadeInstance.StopCoroutine("CoroutineFadeUp");
+        instance.FadeUp = false;
+
+        //Debug.Log("CoroutineFadeUp end, FadeUp is " + instance.FadeUp);
+
+        Crossfade.instance.StopCoroutine("CoroutineFadeUp");
     }
 
-    public static IEnumerator CoroutineFadeOverTime(string Current, string Next)
+    public static IEnumerator CoroutineFadeOverTime(string CurrentArea, string NextArea)
     {
+        //Debug.Log("Fade Over Time, current is " + CurrentArea + ", next is " + NextArea);
+        Strings.CROSSFADINGAREA = CurrentArea;
+        instance.CrossFade = true;
 
         AudioSource CurrentSong;
         AudioSource CurrentAmbient;
         AudioSource NextSong;
         AudioSource NextAmbient;
+        float CurrentAmbientVolume;
+        float NextAmbientVolume;
+        float fTimeCounter = 0f;
+        //delay = 0.01f;
 
-        switch (Current)
+        switch (CurrentArea)
         {
             case "Forest":
-                CurrentSong = CrossfadeInstance.ForestBGM;
-                CurrentAmbient = CrossfadeInstance.ForestAmbient;
+                CurrentSong = instance.ForestBGM;
+                CurrentAmbient = instance.ForestAmbient;
+                CurrentAmbientVolume = instance.ForestAmbientVolume;
                 break;
             case "Beach":
-                CurrentSong = CrossfadeInstance.BeachBGM;
-                CurrentAmbient = CrossfadeInstance.BeachAmbient;
+                CurrentSong = instance.BeachBGM;
+                CurrentAmbient = instance.BeachAmbient;
+                CurrentAmbientVolume = instance.BeachAmbientVolume;
                 break;
-            case "Cliff":
-                CurrentSong = CrossfadeInstance.LighthouseBGM;
-                CurrentAmbient = CrossfadeInstance.LighthouseAmbient;
+            case "Lighthouse":
+                CurrentSong = instance.LighthouseBGM;
+                CurrentAmbient = instance.LighthouseAmbient;
+                CurrentAmbientVolume = instance.LighthouseAmbientVolume;
                 break;
             case "Windmill":
-                CurrentSong = CrossfadeInstance.WindmillBGM;
-                CurrentAmbient = CrossfadeInstance.WindmillAmbient;
+                CurrentSong = instance.WindmillBGM;
+                CurrentAmbient = instance.WindmillAmbient;
+                CurrentAmbientVolume = instance.WindmillAmbientVolume;
                 break;
             case "Market":
-                CurrentSong = CrossfadeInstance.MarketBGM;
-                CurrentAmbient = CrossfadeInstance.MarketAmbient;
+                CurrentSong = instance.MarketBGM;
+                CurrentAmbient = instance.MarketAmbient;
+                CurrentAmbientVolume = instance.MarketAmbientVolume;
+                break;
+            case "ReflectionTree":
+                CurrentSong = null;
+                CurrentAmbient = instance.ReflectionTreeAmbient;
+                CurrentAmbientVolume = instance.ReflectionTreeAmbientVolume;
+                break;
+            case "Intro":
+                CurrentSong = null;
+                CurrentAmbient = instance.IntroBGM;
+                CurrentAmbientVolume = instance.IntroBGMVolume;
                 break;
             default:
                 CurrentSong = null;
                 CurrentAmbient = null;
+                CurrentAmbientVolume = 0;
                 break;
         }
 
-        switch (Next)
+        switch (NextArea)
         {
             case "Forest":
-                NextSong = CrossfadeInstance.ForestBGM;
-                NextAmbient = CrossfadeInstance.ForestAmbient;
+                NextSong = instance.ForestBGM;
+                NextAmbient = instance.ForestAmbient;
+                NextAmbientVolume = instance.ForestAmbientVolume;
                 break;
             case "Beach":
-                NextSong = CrossfadeInstance.BeachBGM;
-                NextAmbient = CrossfadeInstance.BeachAmbient;
+                NextSong = instance.BeachBGM;
+                NextAmbient = instance.BeachAmbient;
+                NextAmbientVolume = instance.BeachAmbientVolume;
                 break;
-            case "Cliff":
-                NextSong = CrossfadeInstance.LighthouseBGM;
-                NextAmbient = CrossfadeInstance.LighthouseAmbient;
+            case "Lighthouse":
+                NextSong = instance.LighthouseBGM;
+                NextAmbient = instance.LighthouseAmbient;
+                NextAmbientVolume = instance.LighthouseAmbientVolume;
                 break;
             case "Windmill":
-                NextSong = CrossfadeInstance.WindmillBGM;
-                NextAmbient = CrossfadeInstance.WindmillAmbient;
+                NextSong = instance.WindmillBGM;
+                NextAmbient = instance.WindmillAmbient;
+                NextAmbientVolume = instance.WindmillAmbientVolume;
                 break;
             case "Market":
-                NextSong = CrossfadeInstance.MarketBGM;
-                NextAmbient = CrossfadeInstance.MarketAmbient;
+                NextSong = instance.MarketBGM;
+                NextAmbient = instance.MarketAmbient;
+                NextAmbientVolume = instance.MarketAmbientVolume;
+                break;
+            case "ReflectionTree":
+                NextSong = null;
+                NextAmbient = instance.ReflectionTreeAmbient;
+                NextAmbientVolume = instance.ReflectionTreeAmbientVolume;
+                break;
+            case "Intro":
+                NextSong = null;
+                NextAmbient = instance.IntroBGM;
+                NextAmbientVolume = instance.IntroBGMVolume;
+                break;
+            case "ForestBGM":
+                NextSong = null;
+                NextAmbient = instance.ForestBGM;
+                NextAmbientVolume = instance.ForestBGM.volume;
                 break;
             default:
                 NextSong = null;
                 NextAmbient = null;
+                NextAmbientVolume = 0;
                 break;
         }
 
-        float fTimeCounter = 0f;
+        /*if (NextSong != null && SoundManager.instance.BGMOn && AudioType == "BGM"){
+            if (NextSong.volume != 0)
+            {
+                fTimeCounter = NextSong.volume;
+            }
+            else
+            {
+                NextSong.volume = 0;
+                NextSong.Play();
+            }
+        }*/
+        if (NextAmbient != null && SoundManager.instance.SFXOn){
+            if (NextAmbient.volume != 0 && NextAmbient.isPlaying)
+            {
+                //Debug.Log("NextAmbient is not at 0 volume.");
+                fTimeCounter = NextAmbient.volume;
+            }
+            else
+            {
+                //Debug.Log("NextAmbient is at 0 volume.");
+                NextAmbient.volume = 0;
+                NextAmbient.Play();
+            }
+        }
 
-        NextSong.volume = 0;
-        NextSong.Play();
-        NextAmbient.volume = 0;
-        NextAmbient.Play();
-        
-        while(!(Mathf.Approximately(fTimeCounter, 1f)))
+        /*while (!(Mathf.Approximately(fTimeCounter, 1f)))
         {
             fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
             CurrentSong.volume = 1f - fTimeCounter;
@@ -321,19 +377,96 @@ public class Crossfade: MonoBehaviour {
             NextSong.volume = fTimeCounter;
             NextAmbient.volume = fTimeCounter;
             yield return new WaitForSeconds(0.02f);
+        }*/
+
+        /*if (CurrentSong != null && SoundManager.instance.BGMOn && AudioType == "BGM")
+        {
+            // 1f will need to be changed to match the final volume used
+            while (!(Mathf.Approximately(fTimeCounter, 1f)))
+            {
+                fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
+                CurrentSong.volume = (1f - fTimeCounter) * CurrentSong.volume;
+                NextSong.volume = fTimeCounter;
+                yield return new WaitForSeconds(//delay);
+            }
+            CurrentSong.Stop();
+        }
+        else*/ if (CurrentAmbient != null && NextAmbient != null && SoundManager.instance.SFXOn)
+        {
+            // 1f will need to be changed to match the final volume used
+            while (!(Mathf.Approximately(fTimeCounter, 1f)))
+            {
+                fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
+                CurrentAmbient.volume = (1f - fTimeCounter) * CurrentAmbientVolume;
+                NextAmbient.volume = (fTimeCounter * NextAmbientVolume);
+                yield return new WaitForSeconds(delay);
+            }
+            CurrentAmbient.Stop();
         }
 
-        /*while (!(Mathf.Approximately(fTimeCounter, 1f)))
+        instance.CrossFade = false;
+
+        Crossfade.instance.StopCoroutine("CoroutineFadeOverTime");
+    }
+
+    public void StartCoroutineFadeDown()
+    {
+        if (SoundManager.instance.AudioOn && SoundManager.instance.BGMOn)
         {
-            fTimeCounter = Mathf.Clamp01(fTimeCounter + Time.deltaTime);
-            NextSong.volume = fTimeCounter;
-            NextAmbient.volume = fTimeCounter;
-            yield return new WaitForSeconds(0.02f);
-        }*/
-        
-        CurrentSong.Stop();
-        CurrentAmbient.Stop();
-        
-        Crossfade.CrossfadeInstance.StopCoroutine("CoroutineFadeOverTime");
+            if (Strings.FADINGAREA == Strings.CURRENTAREA && Crossfade.instance.FadeUp)
+            {
+                StopAllCoroutines();
+                /*StopCoroutine("CoroutineFadeDown");
+                Crossfade.instance.FadeUp = false;*/
+            }
+            StartCoroutine(Crossfade.CoroutineFadeDown());
+            /*StartCoroutine("CoroutineFadeDown");
+            yield return new WaitForSeconds(1);*/
+        }
+    }
+
+    public void StartCoroutineFadeUp()
+    {
+        if (SoundManager.instance.AudioOn && SoundManager.instance.BGMOn)
+        {
+            if (Strings.FADINGAREA == Strings.CURRENTAREA && Crossfade.instance.FadeDown)
+            {
+                StopAllCoroutines();
+                /*StopCoroutine("CoroutineFadeUp");
+                Crossfade.instance.FadeDown = false;*/
+
+            }
+            StartCoroutine(Crossfade.CoroutineFadeUp());
+            //yield return StartCoroutine("CoroutineFadeUp");
+        }
+    }
+
+    public void startCoroutineFadeOverTime(string Current, string Next)
+    {
+        if (SoundManager.instance.AudioOn && SoundManager.instance.SFXOn)
+        {
+            if (Crossfade.instance.CrossFade)
+            {
+                if (Strings.CROSSFADINGAREA == Current)
+                {
+                    //Debug.Log("crossfade occuring, stopping current crossfade before starting reversed order");
+                    StopAllCoroutines();
+                    Crossfade.instance.CrossFade = false;
+                    StartCoroutine(Crossfade.CoroutineFadeOverTime(Next, Current));
+                }
+                else if (Strings.CROSSFADINGAREA == Next)
+                {
+                    //Debug.Log("crossfade occuring, stopping current crossfade before starting normal order");
+                    StopAllCoroutines();
+                    Crossfade.instance.CrossFade = false;
+                    StartCoroutine(Crossfade.CoroutineFadeOverTime(Current, Next));
+                }
+            }
+            else
+            {
+                //Debug.Log("no crossfading happening, starting crossfade");
+                StartCoroutine(Crossfade.CoroutineFadeOverTime(Current, Next));
+            }
+        }
     }
 }

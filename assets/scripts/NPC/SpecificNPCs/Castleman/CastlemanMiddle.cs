@@ -142,7 +142,7 @@ public class CastlemanMiddle : NPC {
 	}
 	
 	protected void dateOver(){
-		if (dateForMe)
+		if (!dateForMe)
 			FlagManager.instance.SetFlag(FlagStrings.CastleManNoShow);
 	}
 	
@@ -309,6 +309,10 @@ public class CastlemanMiddle : NPC {
 		
 		public void DateResponse(){
 			if (!flagSet){
+				_allChoiceReactions.Clear();
+				_allItemReactions.Clear();
+				GUIManager.Instance.CloseInteractionMenu();
+				SetDefaultText("Im busy now, go away.");
 				FlagManager.instance.SetFlag(FlagStrings.CastleManDating);
 				flagSet = true;
 			}
@@ -330,7 +334,7 @@ public class CastlemanMiddle : NPC {
 	}
 	
 	private class DateSuccess: EmotionState{
-		public DateSuccess (NPC toControl, string currentDialogue):base (toControl, currentDialogue){
+		public DateSuccess (NPC toControl, string currentDialogue):base (toControl, "The date was a success!"){
 			
 		}
 	}

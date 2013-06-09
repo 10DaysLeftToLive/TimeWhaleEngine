@@ -11,6 +11,11 @@ public class Game  {
 		GUIManager.Instance.HidePauseMenu();//just in case
 	}
 	
+	public static void GoToMainMenu(){
+		Debug.Log("MainMenu");
+		Application.LoadLevel(Strings.TitleMenu);
+	}
+	
 	public static void Quit(){
 		Debug.Log("Quiting");
 		Application.Quit();

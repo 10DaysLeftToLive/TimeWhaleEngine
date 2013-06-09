@@ -476,9 +476,9 @@ public class CastlemanYoung : NPC {
 			_allChoiceReactions.Add(FineHaveItYourWayChoice, new DispositionDependentReaction(FineHaveItYourWayReaction));
 			_allChoiceReactions.Add(DontYouSpeakChoice, new DispositionDependentReaction(DontYouSpeakReaction));
 			GUIManager.Instance.CloseInteractionMenu();
-			FlagManager.instance.SetFlag(FlagStrings.TestFlag);
+			//FlagManager.instance.SetFlag(FlagStrings.TestFlag);
 			FlagManager.instance.SetFlag(FlagStrings.MusicianCommentOnSon);
-			FlagManager.instance.SetFlag(FlagStrings.PlayerAndCastleNOTFriends);
+			//FlagManager.instance.SetFlag(FlagStrings.PlayerAndCastleNOTFriends);
 		}
 		
 		
@@ -679,15 +679,17 @@ public class CastlemanYoung : NPC {
 			_allChoiceReactions.Remove(ILikePoetryChoice);
 			_allChoiceReactions.Remove(ThatSoundsCoolChoice);
 			_allChoiceReactions.Remove(PoetryIsSillyChoice);
-			GUIManager.Instance.RefreshInteraction();
+			GUIManager.Instance.CloseInteractionMenu();
 			SetDefaultText("I love poetry!");
+			FlagManager.instance.SetFlag(FlagStrings.PlayerAndCastleFriends);
 			FriendshipTally += 2;
 		}
 		public void UpdateThatSoundsCool(){
 			_allChoiceReactions.Remove(ILikePoetryChoice);
 			_allChoiceReactions.Remove(ThatSoundsCoolChoice);
 			_allChoiceReactions.Remove(PoetryIsSillyChoice);
-			GUIManager.Instance.RefreshInteraction();
+			GUIManager.Instance.CloseInteractionMenu();
+			FlagManager.instance.SetFlag(FlagStrings.PlayerAndCastleFriends);
 			SetDefaultText("I love poetry!");
 			FriendshipTally += 1;
 		}
@@ -748,7 +750,8 @@ public class CastlemanYoung : NPC {
 			_allChoiceReactions.Remove(ItsBecauseYourStupidChoice);
 			_allChoiceReactions.Add(ImReallyReallySorryChoice, new DispositionDependentReaction(ImReallyReallySorryReaction));
 			_allChoiceReactions.Add(YouGotMeIWasLyingChoice, new DispositionDependentReaction(YouGotMeIWasLyingReaction));
-			GUIManager.Instance.RefreshInteraction();
+			GUIManager.Instance.CloseInteractionMenu();
+			FlagManager.instance.SetFlag(FlagStrings.PlayerAndCastleFriends);
 			SetDefaultText("You should apologize!");
 		}
 		//Ending one here

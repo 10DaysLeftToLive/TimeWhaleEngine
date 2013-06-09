@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -94,8 +95,14 @@ public class InteractionMenu : GUIControl {
 				Debug.LogError("Trying to display more than 3 choices");
 				return;
 			}
-			if (ButtonClick(buttonRects[currentButtonIndex], text, buttonStyle)){
-				DoClickOnChoice(text);
+			try {
+				if (ButtonClick(buttonRects[currentButtonIndex], text, buttonStyle)){
+					DoClickOnChoice(text);
+				}
+			} catch (Exception e){
+				Debug.LogWarning("Button choices were not altered correctly for " + npcChattingWith.name + " updating them");
+				GetChoicesFromNPC();
+				return;
 			}
 			currentButtonIndex++;
 		}

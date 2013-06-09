@@ -101,14 +101,5 @@ public class CheatListener : MonoBehaviour {
                 AudioListener.pause = false;
             }
         }
-
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            StartCoroutine(Crossfade.CoroutineFadeOverTime("Forest", "Beach"));
-        }
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            StartCoroutine(Crossfade.CoroutineFadeOverTime("Beach", "Forest"));
-        }
     }
 }

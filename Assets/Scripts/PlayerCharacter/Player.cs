@@ -70,12 +70,20 @@ public class Player : Character {
     }
 	
 	private void DoClickOnPlayer(){
+		if (currentState is DropItemState || currentState is PickUpItemState) return;
 		if (Inventory.HasItem()){
+			if (IsInteracting()){
+				GUIManager.Instance.CloseInteractionMenu();
+			}
 			EnterState(new DropItemState(this));
 		}
 	}
 	
 	private void DoClickOnItem(GameObject item){
+		if (currentState is DropItemState || currentState is PickUpItemState) return;
+		if (IsInteracting()){
+			GUIManager.Instance.CloseInteractionMenu();
+		}
 		if (Inventory.HasItem() && Inventory.GetItem() == item){
 			EnterState(new DropItemState(this));
 		} else {
@@ -85,11 +93,14 @@ public class Player : Character {
 	
 	private void DoClickOnNPC(GameObject npc){
 		NPC toTalkWith = (NPC)npc.GetComponent<NPC>();
-		if (IsInteracting() && toTalkWith == npcTalkingWith){
+		if (IsInteracting()){
+			if (toTalkWith == npcTalkingWith){
+				GUIManager.Instance.CloseInteractionMenu();
+				return;
+			}
 			GUIManager.Instance.CloseInteractionMenu();
-		} else {
-			GoToInteractWithNPC(toTalkWith);
 		}
+		GoToInteractWithNPC(toTalkWith);
 	}
 	
 	/// <summary>

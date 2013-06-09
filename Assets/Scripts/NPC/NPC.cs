@@ -57,17 +57,17 @@ public abstract class NPC : Character {
 	}
 	
 	private void FindInitialObjects(){
-		charPortrait = (Texture)Resources.Load("" + this.name, typeof(Texture));
+		SetCharacterPortrait("");
 		player = GameObject.Find("PlayerCharacter").GetComponent<Player>();
 		animationData = GetComponent<SmoothMoves.BoneAnimation>();
-		if (animationData == null){
-			Debug.LogError("No animation data attached to " + name);	
+		if (animationData == null && !(this is Sibling)){
+			Debug.LogWarning("No animation data attached to " + name);	
 		}
 		if (charPortrait == null){
-			Debug.LogError("No initial character portait found for " + name);	
+			Debug.LogWarning("No initial character portait found for " + name);	
 		}
 		if (player == null){
-			Debug.LogError("No player was found by " + name);	
+			Debug.LogWarning("No player was found by " + name);	
 		}
 	}
 	#endregion
@@ -143,7 +143,7 @@ public abstract class NPC : Character {
 	/// <param name='emotion'>
 	/// Name of the emotion in resources folder [npcName][emotion]. Send empty string for default/neutral face
 	/// </param>
-	public void SetCharacterPortrait(string emotion){
+	public virtual void SetCharacterPortrait(string emotion){
 		charPortrait = (Texture)Resources.Load(this.name + emotion, typeof(Texture));
 		if(charPortrait == null) {
 			Debug.LogWarning("Could not find " + this.name + emotion + " in /Resources");

@@ -19,6 +19,9 @@ public class CarpenterSonMiddle : NPC {
 	
 	NPCConvoSchedule reportedDidHardWorkToFather, reportedDidNoWorkToFather;
 	Schedule EndState;
+	Schedule StartCarpentry;
+	Schedule DoNothingSchedule;
+	Schedule AfterConversationCarpentery;
 	protected override void Init() {
 		id = NPCIDs.CARPENTER_SON;
 		base.Init();
@@ -67,7 +70,7 @@ public class CarpenterSonMiddle : NPC {
 		//MovePiecesForFishing.AddAction
 		MovePiecesForFishing.AddAction(new NPCTeleportToAction(this, startingPosition));
 		MovePiecesForFishing.AddAction(new NPCAddScheduleAction(this, TeleportToStartConvo));
-		flagReactions.Add(FlagStrings.TestFlag, MovePiecesForFishing);
+		flagReactions.Add(FlagStrings.carpenterSonEncouragedFishing, MovePiecesForFishing);
 		
 		//Moves the carpenter son to the pier.
 		Reaction StartFishing = new Reaction();
@@ -88,7 +91,20 @@ public class CarpenterSonMiddle : NPC {
 		flagReactions.Add(FlagStrings.StartConversationWithSeaCaptainAboutBuildingShip, StartTalkingToSeaCaptain);*/
 		#endregion
 		#region Carpentry Section
+		Reaction MovePiecesForCarpentry = new Reaction();
+		MovePiecesForCarpentry.AddAction(new NPCTeleportToAction(this, startingPosition));
+		MovePiecesForCarpentry.AddAction(new NPCAddScheduleAction(this, StartCarpentry));
+		flagReactions.Add(FlagStrings.carpenterSonEncouragedCarpentry, MovePiecesForCarpentry);
+			
+		Reaction DoNothing = new Reaction();
+		DoNothing.AddAction(new NPCEmotionUpdateAction(this, new BecomeACarpenter(this, "")));
+		DoNothing.AddAction(new NPCAddScheduleAction(this, DoNothingSchedule));
+		flagReactions.Add(FlagStrings.IntroConvoCarpentry, DoNothing);
 		
+		Reaction EndOfDayConvo = new Reaction();
+		EndOfDayConvo.AddAction(new NPCEmotionUpdateAction(this, new BlankEmotionState(this, "It's nice to relax after a long day.")));
+		EndOfDayConvo.AddAction(new NPCAddScheduleAction(this, AfterConversationCarpentery));
+		flagReactions.Add(FlagStrings.CarpenterReturnedHome, EndOfDayConvo);
 		#endregion
 		/*Reaction becomesACarpenter = new Reaction();
 		becomesACarpenter.AddAction(new NPCEmotionUpdateAction(this, new BecomeACarpenter(this, "Hey there man, I'm a bit busy right now.")));
@@ -135,7 +151,7 @@ public class CarpenterSonMiddle : NPC {
 		
 		MoveToPierToFish = new Schedule(this, Schedule.priorityEnum.DoNow);
 		MoveToPierToFish.Add(new Task(new MoveThenMarkDoneState(this, MapLocations.BaseOfPierMiddle)));
-		MoveToPierToFish.Add(new TimeTask(10f, new IdleState(this)));
+		MoveToPierToFish.Add(new TimeTask(100f, new IdleState(this)));
 		//Fishing stuffs
 		Task SetOffConversationWithSeaCaptain = new TimeTask(0f, new IdleState(this));
 		SetOffConversationWithSeaCaptain.AddFlagToSet(FlagStrings.StartConversationWithSeaCaptainAboutBuildingShip);
@@ -144,7 +160,7 @@ public class CarpenterSonMiddle : NPC {
 		AfterSeaCaptainTalk = new Schedule (this, Schedule.priorityEnum.DoNow);
 		AfterSeaCaptainTalk.Add(new Task(new MoveThenMarkDoneState(this, MapLocations.MiddleOfBeachMiddle)));
 		//Whittling Animation.
-		Task SetOffAfterSeaCaptain = new TimeTask(10f, new IdleState(this));
+		Task SetOffAfterSeaCaptain = new TimeTask(100f, new IdleState(this));
 		SetOffAfterSeaCaptain.AddFlagToSet(FlagStrings.StartProudOfSonConversation);
 		AfterSeaCaptainTalk.Add(SetOffAfterSeaCaptain);
 		
@@ -153,7 +169,15 @@ public class CarpenterSonMiddle : NPC {
 		#endregion
 		
 		#region CarpentryPath
+		StartCarpentry =  new Schedule (this, Schedule.priorityEnum.High);
+		StartCarpentry.Add(new TimeTask(300f, new WaitTillPlayerCloseState(this, ref player))); 
+		//TeleportToStartConvo.Add(new Task (new MoveThenMarkDoneState(this, this.gameObject.transform.position)));
+		Task StartCarpentryStuff = new TimeTask(0f, new IdleState(this));
+		StartCarpentryStuff.AddFlagToSet(FlagStrings.IntroConvoCarpentry);
+		StartCarpentry.Add(StartCarpentryStuff);
 		
+		DoNothingSchedule =  new Schedule(this, Schedule.priorityEnum.High);
+		DoNothingSchedule.Add(new TimeTask(10000f, new IdleState(this)));
 		#endregion
 		//Schedule for something
 		stormOffSchedule = new Schedule(this,Schedule.priorityEnum.DoNow);
@@ -162,7 +186,8 @@ public class CarpenterSonMiddle : NPC {
 		stormOffSchedule.Add(new Task(new MoveThenMarkDoneState(this, MapLocations.BaseOfPierMiddle)));
 				
 		
-		
+		AfterConversationCarpentery = new Schedule(this, Schedule.priorityEnum.High);
+		AfterConversationCarpentery.Add(new TimeTask(10000f, new IdleState(this)));
 		#region NPCConvoSchedules
 		#endregion
 	}
@@ -295,7 +320,7 @@ public class CarpenterSonMiddle : NPC {
 	#region Become A Carpenter
 	//State for when Carpenter's son becomes interested in being a carpenter.
 	private class BecomeACarpenter : EmotionState {
-		
+		Reaction GetWoodReaction;
 		Choice curiousAboutMood = new Choice("What are you up to?", 
 			"Well, I thought I'd make a present for my Dad, I thought I'd make him a rocking chair");
 		Choice presentForDad = new Choice("Can I help?", "Yeah Sure, I'll need some wood.  Can you get it from the beach");
@@ -305,8 +330,12 @@ public class CarpenterSonMiddle : NPC {
 		Reaction assistGettingWood = new Reaction();
 		Reaction helpAppreciated = new Reaction();
 		
-		public BecomeACarpenter(NPC toControl, string currentDialogue) : base(toControl, currentDialogue) {
-			
+		public BecomeACarpenter(NPC toControl, string currentDialogue) : base(toControl, "Hi there.  I'm a bit busy right now.") {
+			GetWoodReaction = new Reaction();
+			GetWoodReaction.AddAction(new NPCCallbackAction(UpdateGetWoodReaction));
+			//Change this to wood or whatever is the needed item.
+			_allItemReactions.Add(StringsItem.Apple, new DispositionDependentReaction(GetWoodReaction));	
+				
 			curiousAboutMoodReaction.AddAction(new NPCCallbackAction(selectCuriousMoodChoice));
 			
 			assistGettingWood.AddAction(new NPCCallbackAction(helpCarpenterSon));
@@ -321,7 +350,9 @@ public class CarpenterSonMiddle : NPC {
 			//TODO: Replace Toolbox with piece of wood
 			_allItemReactions.Add(StringsItem.Toolbox, new DispositionDependentReaction(helpAppreciated));
 		}
-		
+		public void UpdateGetWoodReaction(){
+			FlagManager.instance.SetFlag(FlagStrings.BuiltStuffForDad);	
+		}
 		public override void UpdateEmotionState(){
 			
 		}
