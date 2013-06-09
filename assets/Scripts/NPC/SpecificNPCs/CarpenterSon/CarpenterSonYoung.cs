@@ -316,18 +316,18 @@ public class CarpenterSonYoung : NPC {
 		}
 		
 		private void RecieveItemResult(){
-			GUIManager.Instance.RefreshInteraction();
 			_allChoiceReactions.Clear();
 			_npcInState.PlayAnimation(Strings.animation_stand);
 			_allChoiceReactions.Add(ComplimentWorkChoice, new DispositionDependentReaction(EncourageCarpentryReaction));
 			_allChoiceReactions.Add(CritisizeWorkChoice, new DispositionDependentReaction(EncourageCarpentryReaction));
+			GUIManager.Instance.RefreshInteraction();
+
 		}
 				
 		private void EncouragedCarpentryResult(){
-			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("I'll make sure the next thing I make is made of wood.");
-			
 			_allChoiceReactions.Clear();
+			GUIManager.Instance.RefreshInteraction();
 		}
 	}
 	#endregion
@@ -362,7 +362,6 @@ public class CarpenterSonYoung : NPC {
 		}
 		
 		private void RecieveItemResult(){
-			GUIManager.Instance.RefreshInteraction();
 			_allChoiceReactions.Clear();
 			_npcInState.PlayAnimation(Strings.animation_stand);
 			Action giveSwordAction = new NPCGiveItemAction (NPCManager.instance.getNPC(StringsNPC.CarpenterSonYoung), StringsItem.ToySword);
@@ -373,13 +372,14 @@ public class CarpenterSonYoung : NPC {
 			_allChoiceReactions.Add(CritisizeWorkChoice, new DispositionDependentReaction(EncourageCarpentryReaction));
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("What do you think?");
+			GUIManager.Instance.RefreshInteraction();
 		}
 		
 		private void EncouragedCarpentryResult(){
-			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Alright, now I just need to work on my carpentry.");
 			_allChoiceReactions.Clear();
 			DebugManager.print("Inside Carpentry Result");
+			GUIManager.Instance.RefreshInteraction();
 		}
 		
 	}
