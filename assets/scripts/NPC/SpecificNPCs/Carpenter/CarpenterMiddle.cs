@@ -64,13 +64,14 @@ public class CarpenterMiddle : NPC {
 		ReturnHomeReaction.AddAction(new NPCCallbackAction(PrepareReturnedHomeConversation));
 		flagReactions.Add(FlagStrings.CarpenterReturnedHome, ReturnHomeReaction);
 		
+		Reaction BuiltRockingChair = new Reaction();
+		
 		Reaction PerformConversationAboutNothing = new Reaction();
 		PerformConversationAboutNothing.AddAction(new NPCAddScheduleAction(this, ConversationAboutNotDoingAnything));
-		BuiltRockingChair.AddAction(new NPCAddScheduleAction(this, AfterConversation));
+        PerformConversationAboutNothing.AddAction(new NPCAddScheduleAction(this, AfterConversation));
 		PerformConversationAboutNothing.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "")));
 		flagReactions.Add(FlagStrings.DidntBuildRockingChairConversation, PerformConversationAboutNothing);
 		
-		Reaction BuiltRockingChair = new Reaction();
 		BuiltRockingChair.AddAction(new NPCAddScheduleAction(this, ConversationAboutRockingChair));
 		BuiltRockingChair.AddAction(new NPCAddScheduleAction(this, AfterConversation));
 		BuiltRockingChair.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "")));
