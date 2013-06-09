@@ -315,6 +315,7 @@ public class CarpenterSonYoung : NPC {
 		}
 		
 		private void RecieveItemResult(){
+			GUIManager.Instance.RefreshInteraction();
 			_allChoiceReactions.Clear();
 			_allChoiceReactions.Add(ComplimentWorkChoice, new DispositionDependentReaction(EncourageCarpentryReaction));
 			_allChoiceReactions.Add(CritisizeWorkChoice, new DispositionDependentReaction(EncourageCarpentryReaction));
@@ -359,6 +360,7 @@ public class CarpenterSonYoung : NPC {
 		}
 		
 		private void RecieveItemResult(){
+			GUIManager.Instance.RefreshInteraction();
 			_allChoiceReactions.Clear();
 			Action giveSwordAction = new NPCGiveItemAction (NPCManager.instance.getNPC(StringsNPC.CarpenterSonYoung), StringsItem.ToySword);
 			Action giveDollAction = new NPCGiveItemAction (NPCManager.instance.getNPC(StringsNPC.CarpenterSonYoung), StringsItem.TimeWhale);
