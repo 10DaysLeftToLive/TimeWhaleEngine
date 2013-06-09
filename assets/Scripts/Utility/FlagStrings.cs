@@ -198,6 +198,8 @@ public static class FlagStrings {
 	public static string MusicianCommentOnSon = "Is he mute?";
 	public static string MusicianFinishedTalkingFriends = "Musician finished talking friends.";
 	public static string MusicianFinishedTalkingNOTFriends = "Musician finished talking not friends";
+	public static string MusicianFriendsWithPlayer = "Musician Friends With Player";
+	public static string MusicianYellAtPlayer = "Musician Yell At Player";
 	#endregion
 	
 	#region CastleMan
