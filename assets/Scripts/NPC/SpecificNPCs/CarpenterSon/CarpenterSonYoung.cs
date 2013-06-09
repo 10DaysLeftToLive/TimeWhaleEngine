@@ -34,7 +34,9 @@ public class CarpenterSonYoung : NPC {
 		BeginDayChat = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterYoung), new YoungCarpenterSonToCarpenterConvo());
 
 		BeginDayWithDad = new Schedule(this, Schedule.priorityEnum.DoNow);
-  		BeginDayWithDad.Add(new TimeTask(10, new WaitTillPlayerCloseState(this, ref player)));
+		TimeTask BeginDayTimeTask = new TimeTask(10, new WaitTillPlayerCloseState(this, ref player));
+  		BeginDayWithDad.AddFlagGroup(FlagStrings.carpenterSonYoungConvoWithDadFinished);
+		BeginDayWithDad.Add(BeginDayTimeTask);
   		this.AddSchedule(BeginDayWithDad);
 		this.AddSchedule(BeginDayChat);
 	
