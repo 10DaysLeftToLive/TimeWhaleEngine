@@ -46,6 +46,23 @@ public class FarmerMotherMiddle : NPC {
 	Reaction postDateCarpenter = new Reaction();
 	Reaction castleDate = new Reaction();
 	Reaction stoodUp = new Reaction();
+	
+	//chat
+	Reaction castleMarriageStart = new Reaction();
+	Reaction castleMarriageOne = new Reaction();
+	Reaction castleMarriageTwo = new Reaction();
+	Reaction castleMarriageThree = new Reaction();
+	Reaction castleMarriageFour = new Reaction();
+	Reaction castleMarriageFive = new Reaction();
+	Reaction castleMarriageSix = new Reaction();
+	
+	Reaction girlEndStart = new Reaction();
+	Reaction girlEndOne = new Reaction();
+	Reaction girlEndTwo = new Reaction();
+	Reaction girlEndThree = new Reaction();
+	Reaction girlEndFour = new Reaction();
+	Reaction girlEndFive = new Reaction();
+	Reaction girlEndSix = new Reaction();
 	#endregion
 	
 	protected override void SetFlagReactions(){
@@ -64,23 +81,39 @@ public class FarmerMotherMiddle : NPC {
 		flagReactions.Add(FlagStrings.GiveRopeToFarmer, rope);
 		
 		flagReactions.Add(FlagStrings.HusbandOnBoard, husbandOnBoard);
+		
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleMarriageTwo, castleMarriageOne);
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleMarriageFour, castleMarriageTwo);
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleMarriageSix, castleMarriageThree);
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleMarriageEight, castleMarriageFour);
+		
+		
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlPathEndThree, girlEndOne);
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlPathEndFive, girlEndTwo);
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlPathEndSeven, girlEndThree);
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlPathEndNine, girlEndFour);
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlPathEndEleven, girlEndFive);
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlPathEndThirteen, girlEndSix);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
 		initialState = new InitialEmotionState(this,"What do you want? I'm busy." );
 		startingPosition = transform.position;
 		startingPosition.y += LevelManager.levelYOffSetFromCenter;
-		this.transform.position = new Vector3(200,0,0);
-		return (new GoneEmotionState(this, ""));
+		//this.transform.position = new Vector3(200,0,0);
+		return (initialState);
 	}
 	
 	protected override Schedule GetSchedule(){
 		Schedule schedule = new DefaultSchedule(this);
 		return (schedule);
 	}
-
+	
+	Schedule marriageConvo;
 	protected override void SetUpSchedules(){
 		
+		marriageConvo = new Schedule(this, Schedule.priorityEnum.High);
+		marriageConvo.Add(new TimeTask(40f, new IdleState(this)));
 	}
 	
 	protected void ResetPosition(){
@@ -147,6 +180,53 @@ public class FarmerMotherMiddle : NPC {
 		castleDate.AddAction(new NPCCallbackSetStringAction(FlagToNPC, this, "castle"));
 		
 		stoodUp.AddAction(new NPCCallbackSetStringAction(FlagToNPC, this, "stoodUp"));
+		
+		//chat
+		ShowMultipartChatAction castleMarriageOneDialogue = new ShowMultipartChatAction(this);
+		castleMarriageOneDialogue.AddChat("...", 1f);
+		castleMarriageOneDialogue.AddChat("I've just been talking to the Carpenter and he says that his tools have gone missing. Do you know anything about that?", 6f);
+		castleMarriageOne.AddAction(castleMarriageOneDialogue);
+		
+		ShowMultipartChatAction castleMarriageTwoDialogue = new ShowMultipartChatAction(this);
+		castleMarriageTwoDialogue.AddChat("I am fed up with your lies and attempts to sabotage this marriange. IT. WILL. BE. GOOD. FOR. YOU.", 5f);
+		castleMarriageTwo.AddAction(castleMarriageTwoDialogue);
+		
+		ShowMultipartChatAction castleMarriageThreeDialogue = new ShowMultipartChatAction(this);
+		castleMarriageThreeDialogue.AddChat("Enough of your childish behavior! Get back to working at the lighthouse and I fully expect an apology tomorrow morning.", 6f);
+		castleMarriageThree.AddAction(castleMarriageThreeDialogue);
+		
+		ShowMultipartChatAction castleMarriageFourDialogue = new ShowMultipartChatAction(this);
+		castleMarriageFourDialogue.AddChat("NOW!", 1f);
+		castleMarriageFour.AddAction(castleMarriageFourDialogue);
+		
+		
+		//girl end path
+		ShowMultipartChatAction girlEndOneDialogue = new ShowMultipartChatAction(this);
+		girlEndOneDialogue.AddChat("Really? you let her influence your thoughts? We've talked about this stuff already. Our daughter needs someone who can guide her!", 8f);
+		girlEndOne.AddAction(girlEndOneDialogue);
+		
+		ShowMultipartChatAction girlEndTwoDialogue = new ShowMultipartChatAction(this);
+		girlEndTwoDialogue.AddChat("Oh please! You are too immature to know anything about love!", 5f);
+		girlEndTwo.AddAction(girlEndTwoDialogue);
+		
+		ShowMultipartChatAction girlEndThreeDialogue = new ShowMultipartChatAction(this);
+		girlEndThreeDialogue.AddChat("And that's exactly how I know that it will provide the stability you need!", 6f);
+		girlEndThreeDialogue.AddChat("Now enough of this nonsense!", 4f);
+		girlEndThreeDialogue.AddChat("You girl have crossed the line far too many times. You do it once more and the punishment will be severe.", 7f);
+		girlEndThreeDialogue.AddChat("And husband, I would have expected you above this nonsense!", 6f);
+		girlEndThree.AddAction(girlEndThreeDialogue);
+		
+		ShowMultipartChatAction girlEndFourDialogue = new ShowMultipartChatAction(this);
+		girlEndFourDialogue.AddChat("Oh don't give me those puppy dog eyes! We need to stick to what we came up with!", 4f);
+		girlEndFour.AddAction(girlEndFourDialogue);
+		
+		ShowMultipartChatAction girlEndFiveDialogue = new ShowMultipartChatAction(this);
+		girlEndFiveDialogue.AddChat("...", 1f);
+		girlEndFive.AddAction(girlEndFiveDialogue);
+		
+		ShowMultipartChatAction girlEndSixDialogue = new ShowMultipartChatAction(this);
+		girlEndSixDialogue.AddChat("Fine...have it your way but this talk isn't over.", 3f);
+		girlEndSix.AddAction(girlEndSixDialogue);
 	}
 	
 	

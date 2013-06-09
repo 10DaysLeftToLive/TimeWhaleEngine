@@ -246,5 +246,8 @@ public static class FlagStrings {
 	
 	public static string IntroConvoCarpentry = "Intro Conversation with Carpenter Son Middle Carpentry.";
 	public static string CarpenterReturnedHome = "CarpenterReturnedHome.";
+	public static string BuiltStuffForDad = "Built stuff for dad.";
+	public static string BuiltRockingChairTalk = "BuiltRockingChairTalk";
+	public static string DidntBuildRockingChairConversation = "Didn't build rocking chair conversation";
 	#endregion
 }

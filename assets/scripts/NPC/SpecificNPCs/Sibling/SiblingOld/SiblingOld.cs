@@ -129,7 +129,7 @@ public class SiblingOld : Sibling {
 		Reaction goToFortuneTellerIntroReaction = new Reaction();
 		ShowMultipartChatAction goToFortuneTellerIntroChat = new ShowMultipartChatAction(this);
 		goToFortuneTellerIntroChat.AddChat("Um..", 1f);
-		goToFortuneTellerIntroChat.AddChat("I'm getting my fortunes upstairs. So I'm going to pass.", 2.5f);
+		goToFortuneTellerIntroChat.AddChat("I'm getting my fortune upstairs. So I'm going to pass.", 2.5f);
 //Add context to the going upstairs, make the choice more meaningful (can't see the conversation from both sides.
 //Pause
 		goToFortuneTellerIntroChat.AddChat("Have fun though!", 2f);
@@ -163,12 +163,15 @@ public class SiblingOld : Sibling {
 		flagReactions.Add(FlagStrings.siblingOldTalkToFortunePartThree, goToFortuneTellerPartThreeReaction);
 		#endregion
 		
-		Reaction goToFarmerArea = new Reaction();
+		#region Farmer Area
+		Reaction farmerAreaReaction = new Reaction();
 		ShowMultipartChatAction goToFarmerAreaChat = new ShowMultipartChatAction(this);
 		goToFarmerAreaChat.AddChat(".", 1.5f);
 		goToFarmerAreaChat.AddChat("..", 1.25f);
-		goToFarmerArea.AddAction(goToFarmerAreaChat);
-		flagReactions.Add(FlagStrings.oldSiblingGoToFarmerArea, goToFarmerArea);
+		farmerAreaReaction.AddAction(goToFarmerAreaChat);
+		//FarmerAreaReaction.AddAction(new NPCEmotionUpdateAction(this, new STATE())); 
+		flagReactions.Add(FlagStrings.oldSiblingGoToFarmerArea, farmerAreaReaction);
+		#endregion 
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
@@ -224,4 +227,31 @@ public class SiblingOld : Sibling {
 	}
 		#endregion
 	#endregion
+	
+	private class VisitingFarmerArea : EmotionState{
+		//return (new InitialEmotionState(this, "Hey. I'm busy at work." + "\n" + "Got anything you need from me?"));
+		Reaction aReaction = new Reaction();
+		Reaction bReaction = new Reaction();
+		Reaction cReaction = new Reaction();
+		Reaction dReaction = new Reaction();
+		
+		Choice aChoice = new Choice("a", "hey");
+		Choice bChoice = new Choice("b", "hey");
+		Choice cChoice = new Choice("c", "hey");
+		Choice dChoice = new Choice("d", "hey");
+		
+		
+		public VisitingFarmerArea(NPC toControl, string currentDialogue) : base(toControl, currentDialogue) {		
+			//aReaction.AddAction();
+			//bReaction.AddAction();
+			
+			
+			_allChoiceReactions.Add(aChoice, new DispositionDependentReaction(aReaction));
+			_allChoiceReactions.Add(bChoice, new DispositionDependentReaction(bReaction));
+		}
+		
+		public override void UpdateEmotionState(){
+			
+		}
+	}
 }

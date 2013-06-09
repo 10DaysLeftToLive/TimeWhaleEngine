@@ -7,11 +7,13 @@ using System.Collections;
 public class CarpenterSonOld : NPC {
 	protected override void Init() {
 		id = NPCIDs.CARPENTER_SON;
+		//AudioListener.volume = 0;
 		base.Init();
 	}
 	internal static bool ateBool = false;
-	protected override void SetFlagReactions(){
-	
+	protected override void SetFlagReactions() {
+
+		
 		#region Greet Old Sibling
 		Reaction introductionToSiblingOld = new Reaction();
 		introductionToSiblingOld.AddAction(new UpdateDefaultTextAction(this, "Best wind in years today, and with my father with me I'm sure I'll get my best catch yet."));
@@ -169,7 +171,8 @@ public class CarpenterSonOld : NPC {
 	}
 	 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "My back aches, my arms are tired and I'm too tired. I wish I never got into this lousy carpentry business."));
+		//return (new InitialEmotionState(this, "My back aches, my arms are tired. I wish I never got into this lousy carpentry business."));
+		return (new InitialEmotionState(this, "Hey. I'm busy at work." + "\n" + "Got anything you need from me?"));
 	}
 	
 	protected override Schedule GetSchedule() {
@@ -190,13 +193,28 @@ public class CarpenterSonOld : NPC {
 		
 	}
 	
-	
 	#region EmotionStates
 	#region Initial Emotion State
 	private class InitialEmotionState : EmotionState{
-
-		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){		
+		//return (new InitialEmotionState(this, "Hey. I'm busy at work." + "\n" + "Got anything you need from me?"));
+		Reaction aReaction = new Reaction();
+		Reaction bReaction = new Reaction();
+		Reaction cReaction = new Reaction();
+		Reaction dReaction = new Reaction();
 		
+		Choice aChoice = new Choice("a", "hey");
+		Choice bChoice = new Choice("b", "hey");
+		Choice cChoice = new Choice("c", "hey");
+		Choice dChoice = new Choice("d", "hey");
+		
+		
+		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){		
+			//aReaction.AddAction();
+			//bReaction.AddAction();
+			
+			
+			_allChoiceReactions.Add(aChoice, new DispositionDependentReaction(aReaction));
+			_allChoiceReactions.Add(bChoice, new DispositionDependentReaction(bReaction));
 		}
 		
 		public override void UpdateEmotionState(){
@@ -479,7 +497,7 @@ public class CarpenterSonOld : NPC {
 	
 		public void ContinueCarpenterSonChatCompleteSecretDefeated(NPC toControl) {
 			RefreshOptions();	
-			SetDefaultText("Secret Efeated =)");
+			SetDefaultText("Secret Defeated =)");
 			GUIManager.Instance.RefreshInteraction();
 		}
 
@@ -494,9 +512,10 @@ public class CarpenterSonOld : NPC {
 			didntGiveApple.AddAction(new NPCEmotionUpdateAction(toControl, new GaveAppleState(toControl, "hey!")));
 			
 			giveApple.AddAction(new NPCCallbackAction(GiveApple));
+			giveApple.AddAction(new NPCTakeItemAction(toControl));
 			giveApple.AddAction(new NPCEmotionUpdateAction(toControl, new GaveAppleState(toControl, "hey!")));
 			
-			_allItemReactions.Add("apple", new DispositionDependentReaction(giveApple));
+			_allItemReactions.Add(StringsItem.Apple, new DispositionDependentReaction(giveApple));
 			_allChoiceReactions.Add(new Choice ("I don't", "Ohh ok.."), new DispositionDependentReaction(didntGiveApple));
 		}
 		public void GiveApple() {

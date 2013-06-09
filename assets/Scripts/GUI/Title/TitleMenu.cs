@@ -93,10 +93,19 @@ public class TitleMenu : MonoBehaviour {
 		Debug.Log("Start Fade");
 		if(forceFade)
 			fadeCamera.DoFade();
-		
-		
+
 		yield return new WaitForSeconds(fadeCamera.fadeDuration * 0.5f);
-		
+
+        if (toDisable == titleMenuPanel && !Crossfade.instance.LighthouseAmbient.isPlaying)
+        {
+            Crossfade.instance.startCoroutineFadeOverTime("ReflectionTree", "Lighthouse");
+        }
+        else if (toDisable == mainMenuPanel && !Crossfade.instance.IntroBGM.isPlaying)
+        {
+            Crossfade.instance.startCoroutineFadeOverTime("Lighthouse", "Intro");
+        }
+        
+
 		Utils.SetActiveRecursively(toEnable.gameObject, true);
 		Utils.SetActiveRecursively(toDisable.gameObject, false);
 		DisableArrows();
@@ -129,12 +138,14 @@ public class TitleMenu : MonoBehaviour {
 	}
 	
 	public void ChoseGenderMale(){
-		UnfadeGenderFilter();
+		
+        UnfadeGenderFilter();
 		PlayerPrefs.SetString(Strings.Gender, Strings.Male);
 		FadeToNextAutoPanel();
 	}
 	
 	public void ChoseGenderFemale(){
+
 		UnfadeGenderFilter();
 		PlayerPrefs.SetString(Strings.Gender, Strings.Female);
 		FadeToNextAutoPanel();
