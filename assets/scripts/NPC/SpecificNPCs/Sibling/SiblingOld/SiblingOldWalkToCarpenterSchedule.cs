@@ -18,12 +18,12 @@ public class SiblingOldWalkToCarpenterSchedule : Schedule {
 		
 			Add(new Task(new MoveThenDoState(_toManage, new Vector3(24f, Y_COORDINATE, .3f), new MarkTaskDone(_toManage))));
 
-			Task activateStoryIntroPartTwo = (new Task(new MoveThenDoState(_toManage, new Vector3(22f, Y_COORDINATE, .3f), new MarkTaskDone(_toManage)))); 
-			activateStoryIntroPartTwo.AddFlagToSet(FlagStrings.oldSiblingIntroStoryOnePartTwoFlag);
-			Add(activateStoryIntroPartTwo);
+			//Task activateStoryIntroPartTwo = (new Task(new MoveThenDoState(_toManage, new Vector3(22f, Y_COORDINATE, .3f), new MarkTaskDone(_toManage)))); 
+			//activateStoryIntroPartTwo.AddFlagToSet(FlagStrings.oldSiblingIntroStoryOnePartTwoFlag);
+			//Add(activateStoryIntroPartTwo);
 		
-			Add(new TimeTask(3f, new IdleState(_toManage)));
-			Add(new TimeTask(10f, new WaitTillPlayerCloseState(_toManage, ref _toManage.player,1.5f)));
+			//Add(new TimeTask(3f, new IdleState(_toManage)));
+			Add(new TimeTask(10f, new WaitTillPlayerCloseState(_toManage, ref _toManage.player,2f)));
 
 			Add(new Task(new MoveThenDoState(_toManage, new Vector3(30f, Y_COORDINATE, .3f), new MarkTaskDone(_toManage))));		
 			

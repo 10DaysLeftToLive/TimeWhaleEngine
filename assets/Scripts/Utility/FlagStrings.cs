@@ -34,6 +34,7 @@ public static class FlagStrings {
 	public static string RunToReflectionTree = "Run To Reflection Tree";
 	public static string RunToHome = "Run Home";
 		#region sibling middle
+	
 		#endregion
 	
 		#region sibling old
@@ -60,7 +61,23 @@ public static class FlagStrings {
 		public static string siblingOldTalkToFortunePartFive = "Sibling Old Talk To Fortune Part Five";
 		public static string siblingOldTalkToFortunePartSix = "Sibling Old Talk To Fortune Part Six";
 	
-		public static string oldSiblingGoToFarmerArea = "oldSiblingGoToFarmerArea";
+		public static string siblingOldTalkAboutFarmerOne = "Sibling Old Talk About Farmer Part One";
+		public static string siblingOldTalkAboutFarmerTwo = "Sibling Old Talk About Farmer Part Two";
+		public static string siblingOldTalkAboutFarmerThree = "Sibling Old Talk About Farmer Part Three";
+		public static string siblingOldTalkAboutFarmerFour = "Sibling Old Talk About Farmer Part Four";
+		public static string siblingOldTalkAboutFarmerFive = "Sibling Old Talk About Farmer Part Five";
+		
+		public static string oldSiblingGoToFarmerArea = "old Sibling Go To Farmer Area";
+		public static string oldSiblingActivateFarmerSchedule = "old Sibling Activate Farmer Schedule";
+	
+		public static string oldSiblingReflectionTreeFortuneteller = "old Sibling reflection fortuneteller";
+		public static string oldSiblingReflectionTreeCastleman = "old Sibling reflection castleman";
+		public static string oldSiblingReflectionTreePond = "old Sibling reflection pond";
+		public static string oldSiblingReflectionTreePartOne = "old Sibling reflection part One";
+		public static string oldSiblingReflectionTreePartTwo = "old Sibling reflection part Two";
+		public static string oldSiblingReflectionTreePartThree = "old Sibling reflection part Three";
+		public static string oldSiblingReflectionTreePartFour = "old Sibling reflection part Four";
+	#endregion
 	
 	#region fortuneteller old
 	public static string FortunetellerTalkToSiblingOldPartOne = "Fortuneteller Talk To Sibling Old Part One";
@@ -70,9 +87,10 @@ public static class FlagStrings {
 	public static string FortunetellerTalkToSiblingOldPartFive = "Fortuneteller Talk To Sibling Old Part Five";
 	public static string FortunetellerTalkToSiblingOldPartSix = "Fortuneteller Talk To Sibling Old Part Six";
 	public static string FortunetellerTalkToSiblingOldPartSeven = "Fortuneteller Talk To Sibling Old Part Seven";
+	
+	public static string FortunetellerOldChangeSchedule = "Fortuneteller Old Change Schedule";
 	#endregion
 	
-		#endregion
 	#endregion
 
 	#region Carpenter	
