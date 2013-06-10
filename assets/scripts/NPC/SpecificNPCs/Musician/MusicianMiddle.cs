@@ -271,7 +271,7 @@ public class MusicianMiddle : NPC {
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			ClearAllChoices();
-			_npcInState.SetCharacterPortrait(StringsNPC.Smile);
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_npcInState.ChangeFacialExpression(StringsNPC.Smile);
 			_allChoiceReactions.Add(askAboutSon, new DispositionDependentReaction(curiousAboutSon));
 		}

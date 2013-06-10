@@ -144,7 +144,7 @@ public abstract class NPC : Character {
 	/// Name of the emotion in resources folder [npcName][emotion]. Send empty string for default/neutral face
 	/// </param>
 	public virtual void SetCharacterPortrait(string emotion){
-		charPortrait = (Texture)Resources.Load("/" + this.name + "/" + this.name + emotion, typeof(Texture));
+		charPortrait = (Texture)Resources.Load(this.name + "/" + this.name + emotion, typeof(Texture));
 		if(charPortrait == null) {
 			Debug.LogWarning("Could not find " + this.name + emotion + " in /Resources");
 			charPortrait = (Texture)Resources.Load(this.name, typeof(Texture));
@@ -152,7 +152,7 @@ public abstract class NPC : Character {
 	}
 	
 	public void ChangeFacialExpression(string emotion) {
-		
+		if (emotion.Equals(string.Empty)) { emotion = "Default"; }
 		Debug.Log ("textureAtlasName " + textureAtlasName + ", emotion: " + emotion);
 		foreach (SmoothMoves.TextureAtlas atlas in animationData.textureAtlases) {
 			Debug.Log (atlas.name);
