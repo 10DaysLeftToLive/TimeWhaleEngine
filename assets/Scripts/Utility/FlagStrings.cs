@@ -100,6 +100,7 @@ public static class FlagStrings {
 	
 	#region Carpenter Son
 	public static string carpenterSonYoungConvoWithDadFinished = "Completed Conversation with Dad in Young Age";
+	public static string carpenterSonYoungCompletedWhittling = "Carpenter Son Young Completed Whittling";
 	public static string gaveFishingRodToCarpenterSon = "Gave Fishingrod to Carpenter Son";
 	public static string carpenterSonStormOffFisherman = "Carpenter Son Storms Off Fisherman";
 	public static string carpenterSonReconcile = "Carpenter Son Reconcile"; // Leads to Old Age Reconcile with Father on the Interaction Chart
