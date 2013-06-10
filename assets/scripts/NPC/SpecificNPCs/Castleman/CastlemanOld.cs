@@ -18,7 +18,7 @@ public class CastlemanOld : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "|||| WHERE'S DENT!."));
+		return (new InitialEmotionState(this, "Hey... Want to be friends...?"));
 	}
 	
 	protected override Schedule GetSchedule(){
