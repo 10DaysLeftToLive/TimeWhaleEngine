@@ -97,9 +97,15 @@ public class CarpenterSonMiddle : NPC {
 		MovePiecesForCarpentry.AddAction(new NPCAddScheduleAction(this, StartCarpentry));
 		flagReactions.Add(FlagStrings.carpenterSonEncouragedCarpentry, MovePiecesForCarpentry);
 		
-		Reaction MakeHarp = new Reaction();
-		MakeHarp.AddAction(new NPCAddScheduleAction(this, WhittleStuff));
-		flagReactions.Add (FlagStrings.carpenterSonMakesFatherProud, MakeHarp);
+		#region Making the Harp
+		Reaction StartMakingHarp = new Reaction();
+		StartMakingHarp.AddAction(new NPCAddScheduleAction(this, WhittleStuff));
+		flagReactions.Add (FlagStrings.carpenterSonWhittleMiddleAge, StartMakingHarp);
+		
+		Reaction MakingTheHarpDone = new Reaction();
+		MakingTheHarpDone.AddAction(new NPCGiveItemAction(this, StringsItem.Harp));
+		flagReactions.Add (FlagStrings.carpenterSonMakesFatherProud, MakingTheHarpDone);
+		#endregion
 		
 		Reaction DoNothing = new Reaction();
 		DoNothing.AddAction(new NPCEmotionUpdateAction(this, new BecomeACarpenter(this, "")));
@@ -164,9 +170,6 @@ public class CarpenterSonMiddle : NPC {
 		EndState.Add(new TimeTask(10000f, new IdleState(this)));
 		#endregion
 		
-		WhittleStuff = new Schedule(this, Schedule.priorityEnum.High);
-		WhittleStuff.Add(new TimeTask(30f, new AbstractAnimationState(this, "Whittle")));
-		
 		#region CarpentryPath
 		StartCarpentry =  new Schedule (this, Schedule.priorityEnum.High);
 		StartCarpentry.Add(new TimeTask(300f, new WaitTillPlayerCloseState(this, ref player))); 
@@ -174,10 +177,14 @@ public class CarpenterSonMiddle : NPC {
 		Task StartCarpentryStuff = new TimeTask(0f, new IdleState(this));
 		StartCarpentryStuff.AddFlagToSet(FlagStrings.IntroConvoCarpentry);
 		StartCarpentry.Add(StartCarpentryStuff);
-	
 		
 		DoNothingSchedule =  new Schedule(this, Schedule.priorityEnum.High);
 		DoNothingSchedule.Add(new TimeTask(10000f, new IdleState(this)));
+		
+		WhittleStuff = new Schedule(this, Schedule.priorityEnum.High);
+		TimeTask WhittlingAHarp = new TimeTask(30f, new AbstractAnimationState(this, "Whittle"));
+		WhittlingAHarp.AddFlagToSet(FlagStrings.BuiltRockingChairTalk);
+		WhittleStuff.Add(WhittlingAHarp);
 		#endregion
 		//Schedule for something
 		stormOffSchedule = new Schedule(this,Schedule.priorityEnum.DoNow);
@@ -284,10 +291,12 @@ public class CarpenterSonMiddle : NPC {
 	//This is from the default path.
 	private class StormOffToWindmill : EmotionState {
 		
+		#region Independent
 		Choice askAboutToolBox = new Choice("Want me to get your ToolBox?", "Thanks! could you please find them for me?");
 		
 		Reaction searchForToolBox = new Reaction();
 		Reaction toolsFound = new Reaction();
+		#endregion
 		
 		public StormOffToWindmill(NPC toControl, string currentDialogue) : base(toControl, currentDialogue) {
 			searchForToolBox.AddAction(new UpdateDefaultTextAction(toControl, "Have you found my tools yet?"));
@@ -322,7 +331,6 @@ public class CarpenterSonMiddle : NPC {
 			"Well, I thought I'd make a present for my Dad, I thought I'd make him a Harp");
 		Choice presentForDad = new Choice("Can I help?", "Yeah Sure, I'll need some wood.  Can you get it from the beach");
 		
-		
 		Reaction curiousAboutMoodReaction = new Reaction();
 		Reaction assistGettingWood = new Reaction();
 		Reaction helpAppreciated = new Reaction();
@@ -331,19 +339,18 @@ public class CarpenterSonMiddle : NPC {
 				
 			curiousAboutMoodReaction.AddAction(new NPCCallbackAction(selectCuriousMoodChoice));
 			
-			assistGettingWood.AddAction(new NPCCallbackAction(helpCarpenterSon));
 			assistGettingWood.AddAction(new UpdateDefaultTextAction(toControl, "Would you like to help make me a present for my Dad?"));
+			assistGettingWood.AddAction(new UpdateCurrentTextAction(toControl, "Yeah Sure, I'll need some wood.  Can you get it from the beach"));
+			assistGettingWood.AddAction(new NPCCallbackAction(removeAllOtherReactions));
 			
 			helpAppreciated.AddAction(new NPCTakeItemAction(toControl));
 			helpAppreciated.AddAction(new NPCCallbackAction(removeAllOtherReactions));
 			helpAppreciated.AddAction(new UpdateCurrentTextAction(toControl, "Thanks!"));
 			helpAppreciated.AddAction(new UpdateDefaultTextAction(toControl, "Come back later and I should have the Harp done!"));
-			helpAppreciated.AddAction(new SetOffFlagAction(FlagStrings.carpenterSonMakesFatherProud));
-			
-			//helpAppreciated.AddAction(new NPCCallbackAction(WhittleWood));
+			helpAppreciated.AddAction(new SetOffFlagAction(FlagStrings.carpenterSonWhittleMiddleAge));
+
 			_allChoiceReactions.Add (curiousAboutMood, new DispositionDependentReaction(curiousAboutMoodReaction));
-			//TODO: Replace Toolbox with piece of wood
-			_allItemReactions.Add(StringsItem.Toolbox, new DispositionDependentReaction(helpAppreciated));
+			_allItemReactions.Add(StringsItem.Whittle, new DispositionDependentReaction(helpAppreciated));
 		}
 		
 		public override void UpdateEmotionState(){
@@ -351,7 +358,7 @@ public class CarpenterSonMiddle : NPC {
 		}
 			
 		void selectCuriousMoodChoice() {
-			_allChoiceReactions.Remove(curiousAboutMood);
+			_allChoiceReactions.Clear();
 			_allChoiceReactions.Add (presentForDad, new DispositionDependentReaction(assistGettingWood));
 			GUIManager.Instance.RefreshInteraction();
 		}
@@ -368,6 +375,19 @@ public class CarpenterSonMiddle : NPC {
 	}
 	
 	#endregion
+	
+	private class OtherCarpentryTasks : EmotionState {
+		public OtherCarpentryTasks(NPC toControl, string currentDialogue) : base(toControl, currentDialogue) {
+		}
+		
+		public override void UpdateEmotionState() {
+		}
+		
+		void removeChoices() {
+			_allChoiceReactions.Clear();
+			GUIManager.Instance.RefreshInteraction();
+		}
+	}
 	
 	#endregion
 }

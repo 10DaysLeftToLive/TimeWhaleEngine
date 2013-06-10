@@ -9,10 +9,9 @@ public class SiblingYoung : Sibling {
 		id = NPCIDs.SIBLING;
 		base.Init();
 	}
-	//
+	
 	#region Set Flag Reactions
 	public string currentPassiveText;
-	//private bool initScheduleTriggered = false; //if the race is initiated via chatBox, it begins a new schedule
 	
 	protected override void SetFlagReactions() {
 		#region Race To Carpenter House
@@ -32,8 +31,6 @@ public class SiblingYoung : Sibling {
 		raceToBeachHouse.AddAction(new NPCAddScheduleAction(this, walkToBeach));
 		flagReactions.Add(FlagStrings.RunToBeach, raceToBeachHouse);
 		
-		//Reaction nothingTwo = new Reaction();
-		//flagReactions.Add(FlagStrings.StartedRace, nothingTwo);
 		#endregion
 		#region Race To Farmer House
 		Reaction raceToFarmerHouse = new Reaction();
@@ -42,8 +39,6 @@ public class SiblingYoung : Sibling {
 		raceToFarmerHouse.AddAction(new NPCAddScheduleAction(this, walkToFarmerHouse));
 		flagReactions.Add(FlagStrings.RunToFarmer, raceToFarmerHouse);
 		
-		//Reaction nothingTwo = new Reaction();
-		//flagReactions.Add(FlagStrings.StartedRace, nothingTwo);
 		#endregion
 		#region Race To Market House
 		Reaction raceToMarket = new Reaction();
@@ -52,8 +47,6 @@ public class SiblingYoung : Sibling {
 		raceToMarket.AddAction(new NPCAddScheduleAction(this, walkToMarket));
 		flagReactions.Add(FlagStrings.RunToMarket, raceToMarket);
 		
-		//Reaction nothingTwo = new Reaction();
-		//flagReactions.Add(FlagStrings.StartedRace, nothingTwo);
 		#endregion	
 		#region Race To Windmill
 		Reaction raceToWindmill = new Reaction();
@@ -62,8 +55,6 @@ public class SiblingYoung : Sibling {
 		raceToWindmill.AddAction(new NPCAddScheduleAction(this, walkToWindmill));
 		flagReactions.Add(FlagStrings.RunToWindmill, raceToWindmill);
 		
-		//Reaction nothingTwo = new Reaction();
-		//flagReactions.Add(FlagStrings.StartedRace, nothingTwo);
 		#endregion
 		#region Race To Reflection Tree
 		Reaction raceToReflectionTree = new Reaction();
@@ -71,9 +62,7 @@ public class SiblingYoung : Sibling {
 		raceToReflectionTree.AddAction(new ShowOneOffChatAction(this, "I'm going to beat you!", 2f));
 		raceToReflectionTree.AddAction(new NPCAddScheduleAction(this, walkToReflectionTree));
 		flagReactions.Add(FlagStrings.RunToReflectionTree, raceToReflectionTree);
-		
-		//Reaction nothingTwo = new Reaction();
-		//flagReactions.Add(FlagStrings.StartedRace, nothingTwo);
+
 		#endregion
 		#region Race To Home
 		Reaction raceToHome = new Reaction();
@@ -81,19 +70,15 @@ public class SiblingYoung : Sibling {
 		raceToHome.AddAction(new ShowOneOffChatAction(this, "Race you home!", 2f));
 		raceToHome.AddAction(new NPCAddScheduleAction(this, walkToHome));
 		flagReactions.Add(FlagStrings.RunToHome, raceToHome);
-		
-		//Reaction nothingTwo = new Reaction();
-		//flagReactions.Add(FlagStrings.StartedRace, nothingTwo);
+
 		#endregion
 		#region Get in Trouble
 		Reaction getInTrouble = new Reaction();
 		getInTrouble.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "Opps, I forgot mom told us not to go up there.")));
 		getInTrouble.AddAction(new ShowOneOffChatAction(this, "Uh Oh!!!", 2f));
-		//getInTrouble.AddAction(new NPCAddScheduleAction(this, walkToHome));
 		flagReactions.Add(FlagStrings.PostSiblingExplore, getInTrouble);
 		
-		//Reaction nothingTwo = new Reaction();
-		//flagReactions.Add(FlagStrings.StartedRace, nothingTwo);
+
 		#endregion
 		
 	}
