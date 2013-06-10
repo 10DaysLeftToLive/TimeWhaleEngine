@@ -30,4 +30,5 @@ public static class StringsItem {
 	public static string TulipSeeds = "TulipSeeds";
 	public static string TulipSeedsTwo = "TulipSeeds";
 	public static string Vegetable = "Vegetable";
+	public static string Whittle = "Whittle";
 }

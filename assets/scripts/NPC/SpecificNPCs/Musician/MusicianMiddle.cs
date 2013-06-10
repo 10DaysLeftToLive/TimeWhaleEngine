@@ -271,7 +271,7 @@ public class MusicianMiddle : NPC {
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			ClearAllChoices();
-			_npcInState.SetCharacterPortrait(StringsNPC.Smile);
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_npcInState.ChangeFacialExpression(StringsNPC.Smile);
 			_allChoiceReactions.Add(askAboutSon, new DispositionDependentReaction(curiousAboutSon));
 		}
@@ -292,7 +292,17 @@ public class MusicianMiddle : NPC {
 		Reaction respondToFamilyQuestion = new Reaction();
 		Reaction respondToSonInsanity = new Reaction();
 		
+		int timesTalkedTo = 0;
+		
 		public NeturalTowardsPlayer(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+			
+			respondToSonInsanity.AddAction(new NPCRemoveChoiceAction(toControl, askAboutSonInsanity));
+			//respondToSonInsanity.AddAction(new NPCCallbackAction(IncrementTimesTalkedTo));
+			respondToFamilyQuestion.AddAction(new NPCRemoveChoiceAction(toControl, askAboutFamily));
+			//respondToFamilyQuestion.AddAction(new NPCCallbackAction(IncrementTimesTalkedTo));
+			respondToPlayerCurosity.AddAction(new NPCRemoveChoiceAction(toControl, askAboutSon));
+			//respondToPlayerCurosity.AddAction(new NPCCallbackAction(IncrementTimesTalkedTo));
+			
 			_allChoiceReactions.Add(askAboutSon, new DispositionDependentReaction(respondToPlayerCurosity));
 			_allChoiceReactions.Add(askAboutFamily, new DispositionDependentReaction(respondToFamilyQuestion));
 			_allChoiceReactions.Add(askAboutSonInsanity, new DispositionDependentReaction(respondToSonInsanity));

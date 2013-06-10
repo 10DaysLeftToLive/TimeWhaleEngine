@@ -99,6 +99,7 @@ public static class FlagStrings {
 	#endregion
 	
 	#region Carpenter Son
+	public static string carpenterSonYoungGottenTools = "Carpenter Son has gotten the tools";
 	public static string carpenterSonYoungConvoWithDadFinished = "Completed Conversation with Dad in Young Age";
 	public static string carpenterSonYoungCompletedWhittling = "Carpenter Son Young Completed Whittling";
 	public static string gaveFishingRodToCarpenterSon = "Gave Fishingrod to Carpenter Son";
@@ -272,5 +273,16 @@ public static class FlagStrings {
 	public static string BuiltStuffForDad = "Built stuff for dad.";
 	public static string BuiltRockingChairTalk = "BuiltRockingChairTalk";
 	public static string DidntBuildRockingChairConversation = "Didn't build rocking chair conversation";
+	#endregion
+	
+	#region NewCastleManYoungStrings
+	public static string FinishedMeetingTheTown = "Castle Man finished meeting the town.";
+	public static string PreparedForConversationWithLighthouse = "Castle Man Prepared for conversation with the Lighthouse girl.";
+	public static string CastleManAtBeach = "CastleMan at Beach.";
+	public static string LighthouseAtBeach = "Lighthouse at beach.";
+	public static string CastleManTalk = "CastleManTalk.";
+	public static string TalkPreparedForConvo = "Castle Man talk at beach prepared for Convo.";
+	public static string TalkNotPreparedForConvo = "Castle Man talk at beach not prepared for Convo.";
+	
 	#endregion
 }

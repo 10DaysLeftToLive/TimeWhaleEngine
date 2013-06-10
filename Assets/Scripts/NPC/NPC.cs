@@ -152,6 +152,7 @@ public abstract class NPC : Character {
 	}
 	
 	public void ChangeFacialExpression(string emotion) {
+		if (emotion.Equals(string.Empty)) { emotion = "Default"; }
 		Debug.Log ("textureAtlasName " + textureAtlasName + ", emotion: " + emotion);
 		foreach (SmoothMoves.TextureAtlas atlas in animationData.textureAtlases) {
 			Debug.Log (atlas.name);

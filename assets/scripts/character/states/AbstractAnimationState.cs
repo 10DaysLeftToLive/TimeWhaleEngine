@@ -12,6 +12,10 @@ public class AbstractAnimationState : AbstractState {
 	}
 	
 	public override void OnEnter(){
+//		if (character is NPC) {
+//			string textureAtlas = (character as NPC).textureAtlasName;
+//			(character as NPC).ChangeFacialExpression(
+//		}
 		character.PlayAnimation(_animationToPlay);
 	}
 	

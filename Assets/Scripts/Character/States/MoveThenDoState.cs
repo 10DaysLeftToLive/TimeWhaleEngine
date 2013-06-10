@@ -11,6 +11,14 @@ public class MoveThenDoState : MoveState {
     public MoveThenDoState(Character toControl, Vector3 goal, State toDoWhenDone) : base(toControl, goal){
         _toDoWhenDone = toDoWhenDone;
     }
+	
+	public MoveThenDoState(Character toControl, Vector3 goal, State toDoWhenDone, string animation) : base(toControl, animation, goal) {
+		_toDoWhenDone = toDoWhenDone;
+	}
+	
+	public MoveThenDoState(Character toControl, Vector3 goal, State toDoWhenDone, string animation, float speed) : base(toControl, animation, goal, speed) {
+		_toDoWhenDone = toDoWhenDone;
+	}
     
     public override void OnEnter(){
 		DebugManager.instance.Log(character.name + ": MoveThenDoState Exit", character.name, "State");
