@@ -155,6 +155,7 @@ public class MusicianYoung : NPC {
 			
 		}
 		public void UpdateWhatKindOfMusic(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_allChoiceReactions.Remove(WhatKindOfMusicChoice);
 			if(_allChoiceReactions.ContainsKey(WhereDoYouComeFromChoice)){
 				_allChoiceReactions.Remove(WhereDoYouComeFromChoice);
@@ -166,6 +167,7 @@ public class MusicianYoung : NPC {
 			SetDefaultText("I love all kinds of music!");
 		}
 		public void UpdatePlayForMe(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(PlayForMeChoice);
 			_allChoiceReactions.Remove(IsThereAnyYouLikeChoice);
 			if(hasTalkedAboutTrip == false){
@@ -223,7 +225,7 @@ public class MusicianYoung : NPC {
 			SetDefaultText("Hopefully my son will be okay.");
 		}
 		public void UpdateHowAreYouDoing(){
-			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(WasYourSonCloseToHisFatherChoice);
 			_allChoiceReactions.Remove(HowAreYouDoingChoice);
 			_allChoiceReactions.Add(CanIHelpChoice, new DispositionDependentReaction(CanIHelpReaction));

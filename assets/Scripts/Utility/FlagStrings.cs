@@ -99,6 +99,7 @@ public static class FlagStrings {
 	#endregion
 	
 	#region Carpenter Son
+	public static string carpenterSonYoungGottenTools = "Carpenter Son has gotten the tools";
 	public static string carpenterSonYoungConvoWithDadFinished = "Completed Conversation with Dad in Young Age";
 	public static string carpenterSonYoungCompletedWhittling = "Carpenter Son Young Completed Whittling";
 	public static string gaveFishingRodToCarpenterSon = "Gave Fishingrod to Carpenter Son";

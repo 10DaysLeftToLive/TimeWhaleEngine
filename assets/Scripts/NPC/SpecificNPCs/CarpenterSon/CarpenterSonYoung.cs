@@ -139,6 +139,7 @@ public class CarpenterSonYoung : NPC {
 			
 			giveToolsReaction.AddAction(new NPCCallbackAction(GiveToolsToCarpenterSon));
 			giveToolsReaction.AddAction(new NPCTakeItemAction(toControl));
+			giveToolsReaction.AddAction(new SetOffFlagAction(FlagStrings.carpenterSonYoungGottenTools));
 			//giveToolsReaction.AddAction(new ShowOneOffChatAction(NPCManager.instance.getNPC(StringsNPC.CarpenterYoung),
 			//	"Oh! You founds your tools? " +
 			//	"You should get started on something then. You'll need to practice if you want to be a Carpenter one day."));
@@ -166,6 +167,7 @@ public class CarpenterSonYoung : NPC {
 			string completeRodText = "..and there. Done.";
 			string completeSwordText = "I could sharpen it but I think my Dad would get mad.";
 			string completeDollText = "Wow, I have no idea how that happened.";
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			NPC toControl = NPCManager.instance.getNPC(StringsNPC.CarpenterSonYoung);
 			_allChoiceReactions.Remove(giveToolsChoice);
 			SetDefaultText("Hey, now that I have my tools back I need to make something. Do you have any suggestions?");
@@ -198,6 +200,7 @@ public class CarpenterSonYoung : NPC {
 		}
 				
 		private void TellToMakeFishingRod(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Smile);
 			((CarpenterSonYoung)_npcInState).madeFishingRod = true;
 			_allChoiceReactions.Remove(makeFishingRodChoice);
 			_allChoiceReactions.Remove(makeSwordChoice);
@@ -207,6 +210,7 @@ public class CarpenterSonYoung : NPC {
 		}
 			
 		private void TellToMakeSword(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Smile);
 			_allChoiceReactions.Remove(makeFishingRodChoice);
 			_allChoiceReactions.Remove(makeSwordChoice);
 			_allChoiceReactions.Remove(makeDollChoice);
@@ -216,6 +220,7 @@ public class CarpenterSonYoung : NPC {
 		}
 		
 		private void TellToMakeDoll(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(makeFishingRodChoice);
 			_allChoiceReactions.Remove(makeSwordChoice);
 			_allChoiceReactions.Remove(makeDollChoice);
@@ -276,6 +281,7 @@ public class CarpenterSonYoung : NPC {
 		}
 		
 		private void RecieveItemResult(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Smile);
 			_allChoiceReactions.Clear();
 			_allChoiceReactions.Add(EncourageFishingChoice, new DispositionDependentReaction(EncourageFishingReaction));
 			_allChoiceReactions.Add(ComplimentWorkChoice, new DispositionDependentReaction(EncourageCarpentryReaction));
@@ -286,6 +292,7 @@ public class CarpenterSonYoung : NPC {
 		}
 		
 		private void EncouragedCarpentryResult(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			SetDefaultText("Alright, now I just need to work on my carpentry.");
 			_allChoiceReactions.Clear();
 			DebugManager.print("Inside Carpentry Result");
