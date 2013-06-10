@@ -166,7 +166,7 @@ public class CastlemanYoung : NPC {
 		flagReactions.Add(FlagStrings.BeachBeforeConvoNotFriendsString, ReadyForBeachNOTAsFriends);
 		#endregion
 		Reaction TriggerBeach = new Reaction();
-		TriggerBeach.AddAction(new NPCCallbackAction());
+		TriggerBeach.AddAction(new NPCCallbackAction(TimerAndBeach));
 		TriggerBeach.AddAction(new NPCEmotionUpdateAction(this, new EmptyEmotion(this, "Let's keep going.  Everyone hates me.")));
 		flagReactions.Add(FlagStrings.TimerForGoingToBeach, TriggerBeach);
 		
@@ -209,7 +209,8 @@ public class CastlemanYoung : NPC {
 		
 	}
 	public void TimerAndBeach(){
-		if(goingDownToBeach = false){	
+		Debug.Log("It made it here!");
+		if(goingDownToBeach == false){	
 			FlagManager.instance.SetFlag(FlagStrings.FinishedCSONConversation);	
 		}
 	}
