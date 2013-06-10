@@ -128,6 +128,8 @@ public class MoveState : AbstractState {
 		float distance = MIN_DISTANCE_TO_POINT;
 		Vector3 hitPos = Vector3.zero;
         
+		
+		
         if (Physics.Raycast(_goal, Vector3.down , out hitDown, 10, mask)) {
 			if (hitDown.distance < distance){
 				distance = hitDown.distance;
