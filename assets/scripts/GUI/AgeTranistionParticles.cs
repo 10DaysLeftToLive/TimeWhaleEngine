@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
-
-public class AgeTranistionParticles : PauseObject {
+/*
+public class AgeTranstionParticles : PauseObject {
 	public ParticleSystem emitter;
 	public float time = 0;
 	public float SWITCHTIME = 4; // seconds
@@ -10,7 +10,7 @@ public class AgeTranistionParticles : PauseObject {
 	public float timeToChange = .6f;
 	public LevelManager levelManager;
 	public Player playerCharacter;
-	bool goingUp ;
+	bool goingUp;
 	bool didChange = false;
 	bool facingUp = true;
 	
@@ -35,7 +35,7 @@ public class AgeTranistionParticles : PauseObject {
 		if (CanShift() && levelManager.CanAgeTransitionDown()) {
 			goingUp = false;
 			if (facingUp){
-				ToggleEmitters();
+				//ToggleEmitter();
 			}
 			DoFade();
 		}
@@ -45,21 +45,10 @@ public class AgeTranistionParticles : PauseObject {
 		if (CanShift() && levelManager.CanAgeTransitionUp()) {
 			goingUp = true;
 			if (!facingUp){
-				ToggleEmitters();
+				//ToggleEmitter();
 			}
 			DoFade();
 		}
-	}
-	
-	private void ToggleEmitters(){
-		Debug.Log("Toggle");
-		Vector3 newPos = emitter.transform.localPosition;
-		newPos.y *= -1;
-		
-		emitter.transform.localPosition = newPos;
-		
-		emitter.startSpeed *= -1;
-		facingUp = !facingUp;
 	}
 	
 	private bool CanShift(){
@@ -96,3 +85,4 @@ public class AgeTranistionParticles : PauseObject {
 		}
 	}
 }
+*/
