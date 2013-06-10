@@ -92,7 +92,8 @@ public class SiblingOldToFortunetellerSchedule : Schedule {
 			beginWalkToFarmerArea.AddFlagToSet(FlagStrings.oldSiblingGoToFarmerArea);
 			Add(beginWalkToFarmerArea);
 			Add(new TimeTask(1f, new IdleState(_toManage)));
-			Add(new Task(new MoveThenDoState(_toManage, new Vector3(48f, (LevelManager.levelYOffSetFromCenter*2) + 15, 0), new MarkTaskDone(_toManage))));		
+//It waits till Sibling has moved here.	
+		Add(new Task(new MoveThenDoState(_toManage, new Vector3(48f, (LevelManager.levelYOffSetFromCenter*2) + 15, 0), new MarkTaskDone(_toManage))));		
 		
 // Such a loud one she is... | Ohh| Hello there quiet one | Care for your fortune
 			Task fortunetellerToSiblingPartSeven = (new TimeTask(.05f, new IdleState(_toManage))); 
