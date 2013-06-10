@@ -27,7 +27,7 @@ public class NPCGiveItemAction : Action {
 		if (functToGetItem != null){
 			_itemToGiveName = functToGetItem();
 		}
-		Object itemToPlace = Resources.Load(_itemToGiveName);
+		Object itemToPlace = Resources.Load("Prefab/" + _itemToGiveName);
 		if (itemToPlace == null){
 			Debug.Log("Did not find " + _itemToGiveName);
 			return;
