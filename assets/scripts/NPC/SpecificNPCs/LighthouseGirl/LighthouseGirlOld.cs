@@ -13,8 +13,8 @@ public class LighthouseGirlOld : NPC {
 	protected override void SetFlagReactions(){
 		Reaction castleMarriage = new Reaction();
 		castleMarriage.AddAction(new NPCCallbackSetStringAction(MoveForMarriage, this, "castle"));
-		flagReactions.Add(FlagStrings.CastleMarriage, castleMarriage);
-		
+		//flagReactions.Add(FlagStrings.CastleMarriage, castleMarriage);
+		flagReactions.Add(FlagStrings.MarryingCarpenter, castleMarriage);
 		
 		Reaction carpenterMarriage = new Reaction();
 		carpenterMarriage.AddAction(new NPCCallbackSetStringAction(MoveForMarriage, this, "carpenter"));
