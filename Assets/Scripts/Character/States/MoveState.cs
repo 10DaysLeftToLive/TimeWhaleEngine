@@ -10,7 +10,6 @@ public class MoveState : AbstractState {
     private Vector3 _goal;
     private Path _pathFollowing;
     protected float speed = 5f;
-	protected float currentSpeed;
     private GoToState currentMovementState = null;
     private Vector3 currentGoal;
 	private string animationWalk;
