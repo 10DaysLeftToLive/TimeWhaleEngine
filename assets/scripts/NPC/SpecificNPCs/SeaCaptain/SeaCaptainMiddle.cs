@@ -14,7 +14,7 @@ public class SeaCaptainMiddle : NPC {
 	Reaction treasureHuntBeginsReaction = new Reaction();
 	Reaction talkToFortuenTellerFirstReaction = new Reaction();
 	Reaction talkToFortuenTellerSecondReaction = new Reaction();
-	private Vector3 startingPos = new Vector3(74f, -3.09f + LevelManager.levelYOffSetFromCenter, 0f);
+	private Vector3 startingPos = new Vector3(74f, -3.2f + LevelManager.levelYOffSetFromCenter, 0f);
 	NPCConvoSchedule TalktoCarpenterSon;
 	Schedule AfterTalkToCarpenterSon;
 	protected override void Init() {
@@ -72,7 +72,7 @@ public class SeaCaptainMiddle : NPC {
 		returnToDockSchedTwo.Add(new Task(new MoveThenMarkDoneState(this, startingPos)));
 		
 		AfterTalkToCarpenterSon = new Schedule(this, Schedule.priorityEnum.High);
-		Task FinishedTalking  = new TimeTask(0f, new IdleState(this));
+		Task FinishedTalking  = new TimeTask(0.05f, new IdleState(this));
 		FinishedTalking.AddFlagToSet(FlagStrings.AfterConversationAboutBuildingShip);
 		AfterTalkToCarpenterSon.Add (FinishedTalking);
 	}

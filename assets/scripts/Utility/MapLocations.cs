@@ -141,7 +141,7 @@ public class MapLocations {
 	#endregion
 	
 	#region BeachCliff
-	static Vector3 _BeachCliff = new Vector3(51f, -.5f, 0f);
+	static Vector3 _BeachCliff = new Vector3(51f, -.5f, 1f);
 	public static Vector3 BeachCliffYoung{
 		get{return _BeachCliff;}	
 	}
