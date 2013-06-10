@@ -27,7 +27,7 @@ public abstract class PauseObject : MonoBehaviour {
 	}
 	
 	// To be implemented by child
-	protected abstract void UpdateObject();
+	protected virtual void UpdateObject(){}
 	protected virtual void OnPause(){}
 	protected virtual void OnResume(){}
 	

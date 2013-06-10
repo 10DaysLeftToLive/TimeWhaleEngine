@@ -113,7 +113,7 @@ public class GUIManager : MonoBehaviour {
 	
 	public void CloseInteractionMenu(){
 		if (!ControlActive(interactionMenu)){
-			Debug.LogError("Trying to close interaction menu when it was not up.");
+			Debug.LogWarning("Trying to close interaction menu when it was not up.");
 			return;
 		}
 		interactionMenu.Close();

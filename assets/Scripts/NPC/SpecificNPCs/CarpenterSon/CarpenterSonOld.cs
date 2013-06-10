@@ -12,7 +12,7 @@ public class CarpenterSonOld : NPC {
 	}
 	internal static bool ateBool = false;
 	protected override void SetFlagReactions() {
-
+	
 		
 		#region Greet Old Sibling
 		Reaction introductionToSiblingOld = new Reaction();

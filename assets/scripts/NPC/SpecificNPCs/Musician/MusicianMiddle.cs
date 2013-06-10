@@ -293,6 +293,11 @@ public class MusicianMiddle : NPC {
 		Reaction respondToSonInsanity = new Reaction();
 		
 		public NeturalTowardsPlayer(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+			
+			respondToSonInsanity.AddAction(new NPCRemoveChoiceAction(toControl, askAboutSonInsanity));
+			respondToFamilyQuestion.AddAction(new NPCRemoveChoiceAction(toControl, askAboutFamily));
+			respondToPlayerCurosity.AddAction(new NPCRemoveChoiceAction(toControl, askAboutSon));
+			
 			_allChoiceReactions.Add(askAboutSon, new DispositionDependentReaction(respondToPlayerCurosity));
 			_allChoiceReactions.Add(askAboutFamily, new DispositionDependentReaction(respondToFamilyQuestion));
 			_allChoiceReactions.Add(askAboutSonInsanity, new DispositionDependentReaction(respondToSonInsanity));
