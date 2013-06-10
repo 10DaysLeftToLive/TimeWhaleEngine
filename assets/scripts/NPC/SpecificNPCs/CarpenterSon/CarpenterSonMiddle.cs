@@ -106,14 +106,7 @@ public class CarpenterSonMiddle : NPC {
 		EndOfDayConvo.AddAction(new NPCAddScheduleAction(this, AfterConversationCarpentery));
 		flagReactions.Add(FlagStrings.CarpenterReturnedHome, EndOfDayConvo);
 		#endregion
-		/*Reaction becomesACarpenter = new Reaction();
-		becomesACarpenter.AddAction(new NPCEmotionUpdateAction(this, new BecomeACarpenter(this, "Hey there man, I'm a bit busy right now.")));
-		flagReactions.Add(FlagStrings.carpenterSonTalkWithFatherMorning, becomesACarpenter);
-		
-		Reaction stormOffReaction = new Reaction();
-		stormOffReaction.AddAction(new NPCEmotionUpdateAction(this, new StormOffToWindmill(this, "I need to work on the windmill.")));
-		stormOffReaction.AddAction(new NPCAddScheduleAction(this, stormOffSchedule));
-		flagReactions.Add(FlagStrings.carpenterSonStormOffFisherman, stormOffReaction);*/
+
 		
 	}
 	
@@ -136,7 +129,7 @@ public class CarpenterSonMiddle : NPC {
 		#region PathOne
 		//Schedule for the Default path
 		moveToWindmill = new Schedule(this, Schedule.priorityEnum.Low);
-		moveToWindmill.Add (new Task(new MoveThenMarkDoneState(this, MapLocations.WindmillMiddle)));
+		moveToWindmill.Add (new Task(new MoveThenMarkDoneState(this, MapLocations.WindmillMiddle, "Somber Walk", 0.000000000025f)));
 		moveToWindmill.Add (new TimeTask(100f, new IdleState(this)));
 		moveToWindmill.Add (new Task(new MoveThenMarkDoneState(this, this.gameObject.transform.position)));
 		#endregion

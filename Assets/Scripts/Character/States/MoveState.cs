@@ -10,8 +10,10 @@ public class MoveState : AbstractState {
     private Vector3 _goal;
     private Path _pathFollowing;
     protected float speed = 5f;
+	protected float currentSpeed;
     private GoToState currentMovementState = null;
     private Vector3 currentGoal;
+	private string animationWalk;
     private float stuckTimer;
     private AudioSource walkSFX;
 	protected static float NPC_SPEED_RATIO = 0.75f;
@@ -25,18 +27,23 @@ public class MoveState : AbstractState {
         
     public MoveState(Character toControl, Vector3 goal) : base(toControl){
         _goal = goal;
+		this.animationWalk = Strings.animation_walk;
     }
 	
 	public MoveState(Character toControl, string walkAnimation, Vector3 goal) : base(toControl) {
+		this.animationWalk = walkAnimation;
+		this.animationWalk = Strings.animation_walk;
 		_goal = goal;
 	}
 	
 	public MoveState(Character toControl, Vector3 goal, float speed) : base (toControl) {
 		_goal = goal;
+		this.animationWalk = Strings.animation_walk;
 		this.speed = speed;
 	}
 	
 	public MoveState(Character toControl, string walkAnimation, Vector3 goal, float speed) : base(toControl) {
+		this.animationWalk = walkAnimation;
 		_goal = goal;
 		this.speed = speed;
 	}
@@ -168,7 +175,7 @@ public class MoveState : AbstractState {
     
     // Draw a line from the current position to the point and determine if we should walk or climb there
     private GoToState GetGoToStateToPoint(Vector3 point){
-        return (new WalkToState(character)); //TODO
+        return (new WalkToState(character, animationWalk)); //TODO
     }
     
     public virtual void OnStuck(){
@@ -219,7 +226,7 @@ public class MoveState : AbstractState {
 		foreach (WayPoints waypoint in ageWaypoints){
 			if (waypoint.pointAge != CharacterAgeManager.currentAge) continue;
 			currentDistance = Vector3.Distance(waypoint.transform.position, goalCantReach);
-			if (currentDistance < closestDistance){
+			if (currentDistance < closestDistance) {
 				closestDistance = currentDistance;
 				closest = waypoint;
 			}

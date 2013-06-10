@@ -7,7 +7,7 @@ public class WalkToState : AbstractGoToState {
 	public WalkToState(Character toControl, string walkAnimation) : base(toControl, walkAnimation) {}
 	
 	// If we are walking and we reach our goal then we should return to idle
-	public override void OnGoalReached(){
+	public override void OnGoalReached() {
 		if (character is NPC){
 			character.PlayAnimation(Strings.animation_stand);
 			character.EnterState(new MarkTaskDone(character));
