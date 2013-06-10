@@ -48,7 +48,7 @@ public static class StringsNPC {
 	#endregion
 	
 	#region Emotions
-	public static string Default = "Default";
+	public static string Default = "";
 	public static string Happy = "Happy";
 	public static string Angry = "Angry";
 	public static string Sad = "Sad";
