@@ -74,7 +74,7 @@ public class FortuneTellerOld : NPC {
 		speakWithSiblingChatPartSeven.AddChat("Hello there quiet one.", 2f);
 		speakWithSiblingChatPartSeven.AddChat("Care for your fortune?", 1.25f);
 		speakWithSiblingReactionPartSeven.AddAction(speakWithSiblingChatPartSeven);
-		speakWithSiblingReactionPartSeven.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "Line 72")));
+		speakWithSiblingReactionPartSeven.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "I will say more once the spirits guide me~")));
 		speakWithSiblingReactionPartSeven.AddAction(new NPCAddScheduleAction(this, fortunetellerFortuneWithPlayer));
 		flagReactions.Add(FlagStrings.FortunetellerTalkToSiblingOldPartSeven, speakWithSiblingReactionPartSeven);
 		
