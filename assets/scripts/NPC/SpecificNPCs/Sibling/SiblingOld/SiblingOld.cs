@@ -30,8 +30,9 @@ public class SiblingOld : Sibling {
 		#endregion
 		//gameStartPassiveChat.AddAction(new NPCTeleportToAction(this, new Vector3(30f, -1.6f + (LevelManager.levelYOffSetFromCenter * 2),0)));
 //
-//gameStartPassiveChat.AddAction(new NPCAddScheduleAction(this, oldSiblingIntroductionSchedule));	
-		gameStartPassiveChat.AddAction(new NPCAddScheduleAction(this, walkToCarpenterSchedule));
+gameStartPassiveChat.AddAction(new NPCAddScheduleAction(this, oldSiblingIntroductionSchedule));	
+//gameStartPassiveChat.AddAction(new NPCAddScheduleAction(this, walkToCarpenterSchedule));
+//gameStartPassiveChat.AddAction(new NPCAddScheduleAction(this, siblingOldToLighthouseShedule));
 //		
 		flagReactions.Add(FlagStrings.oldSiblingIntroChatFlag, gameStartPassiveChat);
 		#endregion
@@ -64,6 +65,7 @@ public class SiblingOld : Sibling {
 		ShowMultipartChatAction beginRaceToForestPartFour = new ShowMultipartChatAction(this);
 		beginRaceToForestPartFour.AddChat("Mom's garden isn't looking so good.", 3f);
 		beginRaceToForestPartFour.AddChat("Too bad we weren't able to help before she passed.", 3f);
+//?		
 		beginRaceToForestPartFour.AddChat("If only we could go back, right?", 3f);
 		RaceToForestPartFour.AddAction(beginRaceToForestPartFour);
 		flagReactions.Add(FlagStrings.siblingOldIntroRaceChatPartFourFlag, RaceToForestPartFour);
@@ -95,10 +97,10 @@ public class SiblingOld : Sibling {
 		IntroStoryPartOne.AddAction(walkToCarpenterPartOne);
 		flagReactions.Add(FlagStrings.oldSiblingIntroStoryOnePartOneFlag, IntroStoryPartOne);
 		
-		Reaction IntroStoryPartTwo = new Reaction();
+		//Reaction IntroStoryPartTwo = new Reaction();
 		//IntroStoryPartTwo.AddAction(new ShowOneOffChatAction(this, "Remember the apple trees that were once here?", 5f));
-		IntroStoryPartTwo.AddAction(new ShowOneOffChatAction(this, "Remember the apple trees that once were here?", 5f));
-		flagReactions.Add(FlagStrings.oldSiblingIntroStoryOnePartTwoFlag, IntroStoryPartTwo);
+		//IntroStoryPartTwo.AddAction(new ShowOneOffChatAction(this, "Remember the apple trees that once were here?", 5f));
+		//flagReactions.Add(FlagStrings.oldSiblingIntroStoryOnePartTwoFlag, IntroStoryPartTwo);
 		
 		Reaction ReachCarpenterHouse = new Reaction();
 		ShowMultipartChatAction reachedCarpenterDialogue = new ShowMultipartChatAction(this);
@@ -194,19 +196,128 @@ public class SiblingOld : Sibling {
 		#region Farmer Area
 		Reaction farmerAreaReaction = new Reaction();
 		ShowMultipartChatAction goToFarmerAreaChat = new ShowMultipartChatAction(this);
-		goToFarmerAreaChat.AddChat("You should get your fortune!", 1.5f);
 		goToFarmerAreaChat.AddChat("I'll be near the lighthouse when you're done!", 1.25f);
-		goToFarmerAreaChat.AddChat("See ya later!", 1.5f);
+		goToFarmerAreaChat.AddChat("You should get your fortune!", 1.25f);
+		goToFarmerAreaChat.AddChat("See ya later!", 1.25f);
 		farmerAreaReaction.AddAction(goToFarmerAreaChat);
-		//FarmerAreaReaction.AddAction(new NPCEmotionUpdateAction(this, new STATE())); 
 		flagReactions.Add(FlagStrings.oldSiblingGoToFarmerArea, farmerAreaReaction);
+		
+		Reaction farmerAreaChangeSchedule = new Reaction();
+		farmerAreaChangeSchedule.AddAction(new NPCAddScheduleAction(this, siblingOldToLighthouseShedule));
+		//FarmerAreaReaction.AddAction(new NPCEmotionUpdateAction(this, new STATE()));
+		flagReactions.Add(FlagStrings.oldSiblingActivateFarmerSchedule, farmerAreaChangeSchedule);
+		
+		Reaction farmerAreaReactionPartOne = new Reaction();
+		ShowMultipartChatAction goToFarmerAreaChatOne = new ShowMultipartChatAction(this);
+		goToFarmerAreaChatOne.AddChat(".", .75f);
+		goToFarmerAreaChatOne.AddChat("..", 1f);
+		goToFarmerAreaChatOne.AddChat("...", 1.5f);
+		goToFarmerAreaChatOne.AddChat("Remember when the farmers used to live here?", 2f);
+		goToFarmerAreaChatOne.AddChat("They always had the best crops.", 2.5f);
+		goToFarmerAreaChatOne.AddChat("It's too bad they had to leave.", 2.5f);
+		farmerAreaReactionPartOne.AddAction(goToFarmerAreaChatOne);
+		flagReactions.Add(FlagStrings.siblingOldTalkAboutFarmerOne , farmerAreaReactionPartOne);
+		
+		Reaction farmerAreaReactionPartTwo = new Reaction();
+		ShowMultipartChatAction goToFarmerAreaChatTwo = new ShowMultipartChatAction(this);
+		goToFarmerAreaChatTwo.AddChat("Hey.", 1.5f);
+		goToFarmerAreaChatTwo.AddChat("Did you get your fortune done?", 1.5f);	
+		farmerAreaReactionPartTwo.AddAction(goToFarmerAreaChatTwo);
+		flagReactions.Add(FlagStrings.siblingOldTalkAboutFarmerTwo, farmerAreaReactionPartTwo);
+		
+		Reaction farmerAreaReactionPartThree = new Reaction();
+		ShowMultipartChatAction goToFarmerAreaChatPartThree = new ShowMultipartChatAction(this);
+		goToFarmerAreaChatPartThree.AddChat("The fortuneteller told me I should visit the sacred tree.", 2f);
+		goToFarmerAreaChatPartThree.AddChat("Want to go with me?", 1.5f);
+		goToFarmerAreaChatPartThree.AddChat("I'd like your company.", 3.5f);
+		goToFarmerAreaChatPartThree.AddChat("Let's go!", 1.5f);
+		farmerAreaReactionPartThree.AddAction(goToFarmerAreaChatPartThree);
+		farmerAreaReactionPartThree.AddAction(new NPCAddScheduleAction(this, toReflectionTreeSchedule));
+		flagReactions.Add(FlagStrings.siblingOldTalkAboutFarmerThree, farmerAreaReactionPartThree);
 		#endregion 
+		
+		#region Reflection Tree
+		Reaction toReflectionTreeAtFortuneteller = new Reaction();
+		ShowMultipartChatAction toReflectionTreeAtFortunetellerChat = new ShowMultipartChatAction(this);
+		toReflectionTreeAtFortunetellerChat.AddChat("Hey!", 1.25f);
+		toReflectionTreeAtFortunetellerChat.AddChat("Thanks again!", 1.25f);
+		toReflectionTreeAtFortuneteller.AddAction(toReflectionTreeAtFortunetellerChat);
+		flagReactions.Add(FlagStrings.oldSiblingReflectionTreeFortuneteller, toReflectionTreeAtFortuneteller);
+		
+		Reaction toReflectionTreeAtCastleman = new Reaction();
+		ShowMultipartChatAction toReflectionTreeAtCastlemanChat = new ShowMultipartChatAction(this);
+		toReflectionTreeAtCastlemanChat.AddChat("Shh.", 1.25f);
+		toReflectionTreeAtCastlemanChat.AddChat("Don't talk to him, he's crazy.", 2f);
+		toReflectionTreeAtCastleman.AddAction(toReflectionTreeAtCastlemanChat);
+		flagReactions.Add(FlagStrings.oldSiblingReflectionTreeCastleman, toReflectionTreeAtCastleman);
+		
+		Reaction toReflectionTreeAtPond = new Reaction();
+		ShowMultipartChatAction toReflectionTreeAtPondChat = new ShowMultipartChatAction(this);
+		toReflectionTreeAtPondChat.AddChat("Mmm!", 1.5f);
+		toReflectionTreeAtPondChat.AddChat("I love this place.", 2f);
+		toReflectionTreeAtPondChat.AddChat("It's the best spot on the island!", 2f);
+		toReflectionTreeAtPond.AddAction(toReflectionTreeAtPondChat);
+		flagReactions.Add(FlagStrings.oldSiblingReflectionTreePond, toReflectionTreeAtPond);
+		
+		Reaction toReflectionTreePartOne = new Reaction();
+		ShowMultipartChatAction toReflectionTreeAtPartOneChat = new ShowMultipartChatAction(this);
+		toReflectionTreeAtPartOneChat.AddChat("Hey.", 2f);
+		toReflectionTreeAtPartOneChat.AddChat("Thanks for coming.", 3f);
+		toReflectionTreeAtPartOneChat.AddChat("It's meant a lot having you around all these years.", 3f);
+		toReflectionTreePartOne.AddAction(toReflectionTreeAtPartOneChat);
+		flagReactions.Add(FlagStrings.oldSiblingReflectionTreePartOne, toReflectionTreePartOne);
+		
+		Reaction toReflectionTreeAtPartTwo = new Reaction();
+		ShowMultipartChatAction toReflectionTreeAtPartTwoChat = new ShowMultipartChatAction(this);
+		toReflectionTreeAtPartTwoChat.AddChat("Sometimes I miss the old days.", 3f);
+		toReflectionTreeAtPartTwoChat.AddChat("Mom.",2f);
+		toReflectionTreeAtPartTwoChat.AddChat("The lighthouse girl..",2f);
+		toReflectionTreeAtPartTwoChat.AddChat("The old bazaarman...",2f);
+		toReflectionTreeAtPartTwoChat.AddChat("And that crazy sea captain...",3.5f);
+		toReflectionTreeAtPartTwo.AddAction(toReflectionTreeAtPartTwoChat);
+		flagReactions.Add(FlagStrings.oldSiblingReflectionTreePartTwo, toReflectionTreeAtPartTwo);
+		
+		Reaction toReflectionTreeAtPartThree = new Reaction();
+		ShowMultipartChatAction toReflectionTreeAtPartThreeChat = new ShowMultipartChatAction(this);
+		toReflectionTreeAtPartThreeChat.AddChat("What if we could go back to the past?", 2f);
+		toReflectionTreeAtPartThreeChat.AddChat(".", .75f);
+		toReflectionTreeAtPartThreeChat.AddChat("..", .75f);
+		toReflectionTreeAtPartThreeChat.AddChat("...", 1.5f);
+		toReflectionTreeAtPartThreeChat.AddChat("If only we could go back.", .75f);
+		toReflectionTreeAtPartThreeChat.AddChat("If only we could go back..", .75f);
+		toReflectionTreeAtPartThreeChat.AddChat("If only we could go back...", 2f);
+		toReflectionTreeAtPartThree.AddAction(toReflectionTreeAtPartThreeChat);
+		toReflectionTreeAtPartThree.AddAction(new NPCEmotionUpdateAction(this, new AtReflectionTreeState(this, "If only we could go back to the people we used to love..")));
+		flagReactions.Add(FlagStrings.oldSiblingReflectionTreePartThree, toReflectionTreeAtPartThree);
+/*		
+		Reaction toReflectionTreeAtPartFour = new Reaction();
+		ShowMultipartChatAction toReflectionTreeAtPartFourChat = new ShowMultipartChatAction(this);
+		toReflectionTreeAtPartFourChat.AddChat("Hmm.", .75f);
+		toReflectionTreeAtPartFourChat.AddChat("Hmm..", .75f);
+		toReflectionTreeAtPartFourChat.AddChat("Hmm...", 1.5f);
+		toReflectionTreeAtPartFourChat.AddChat("All this thinking is making me tired.", 3f);
+		toReflectionTreeAtPartFourChat.AddChat("I'm going to close my eyes.", .75f);
+		toReflectionTreeAtPartFourChat.AddChat("I'm going to close my eyes..", .75f);
+		toReflectionTreeAtPartFourChat.AddChat("I'm going to close my eyes...", 2f);
+		toReflectionTreeAtPartFourChat.AddChat("I'm going to close my eyes... and.", .75f);
+		toReflectionTreeAtPartFourChat.AddChat("I'm going to close my eyes... and..", .75f);
+		toReflectionTreeAtPartFourChat.AddChat("I'm going to close my eyes... and...", 2f);
+		toReflectionTreeAtPartFourChat.AddChat("Z", 1f);
+		toReflectionTreeAtPartFourChat.AddChat("zZ", 1f);
+		toReflectionTreeAtPartFourChat.AddChat("ZzZ", 2f);
+		toReflectionTreeAtPartFourChat.AddChat("zZz", 1f);
+		toReflectionTreeAtPartFourChat.AddChat("ZzZ", 2f);
+		toReflectionTreeAtPartFourChat.AddChat("zZz", 1f);
+		toReflectionTreeAtPartFour.AddAction(toReflectionTreeAtPartFourChat);
+		flagReactions.Add(FlagStrings.oldSiblingReflectionTreePartFour, toReflectionTreeAtPartFour);
+*/		
+	#endregion
 	}
-	
+
 	protected override EmotionState GetInitEmotionState(){
 		return (new InitialEmotionState(this, "Do you remember the old times and all our memories together? I feel like we were just kids not too long ago..."));
 	}
-	
+
 	protected override Schedule GetSchedule(){	
 		#region reactivate after debugging <&^&>
 //
@@ -234,12 +345,16 @@ public class SiblingOld : Sibling {
 	private Schedule oldSiblingIntroductionSchedule;
 	private Schedule oldSiblingtoFortuneTellerSchedule;
 	private Schedule walkToCarpenterSchedule;
+	private Schedule siblingOldToLighthouseShedule;
+	private Schedule toReflectionTreeSchedule;
 	#endregion
 	
 	protected override void SetUpSchedules() {
 		oldSiblingIntroductionSchedule = (new SiblingOldRaceToForestSchedule(this));
 		walkToCarpenterSchedule = (new SiblingOldWalkToCarpenterSchedule(this));
 		oldSiblingtoFortuneTellerSchedule = (new SiblingOldToFortunetellerSchedule(this));
+		siblingOldToLighthouseShedule = (new SiblingOldToLighthouseScript(this));
+		toReflectionTreeSchedule = (new SiblingOldToReflectionTree(this));	
 	}
 	#region EmotionStates
 		#region Initial Emotion State
@@ -268,8 +383,7 @@ public class SiblingOld : Sibling {
 		Choice bChoice = new Choice("b", "hey");
 		Choice cChoice = new Choice("c", "hey");
 		Choice dChoice = new Choice("d", "hey");
-		
-		
+			
 		public VisitingFarmerArea(NPC toControl, string currentDialogue) : base(toControl, currentDialogue) {		
 			//aReaction.AddAction();
 			//bReaction.AddAction();
@@ -278,9 +392,15 @@ public class SiblingOld : Sibling {
 			_allChoiceReactions.Add(aChoice, new DispositionDependentReaction(aReaction));
 			_allChoiceReactions.Add(bChoice, new DispositionDependentReaction(bReaction));
 		}
+	}
+	
+	private class AtReflectionTreeState : EmotionState {			
+		public AtReflectionTreeState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue) {		
+
+		}
 		
 		public override void UpdateEmotionState(){
 			
 		}
-	}
+	}	
 }

@@ -69,18 +69,27 @@ public class FortuneTellerOld : NPC {
 		
 		Reaction speakWithSiblingReactionPartSeven = new Reaction();
 		ShowMultipartChatAction speakWithSiblingChatPartSeven = new ShowMultipartChatAction(this);
-		speakWithSiblingChatPartSeven.AddChat("Such a loud one she is...", 2f);
-		speakWithSiblingChatPartSeven.AddChat("Ohh", 1.5f);
+		speakWithSiblingChatPartSeven.AddChat("Such a loud one she is...", 3f);
+		speakWithSiblingChatPartSeven.AddChat("Ohh.", 1.25f);
 		speakWithSiblingChatPartSeven.AddChat("Hello there quiet one.", 2f);
-		speakWithSiblingChatPartSeven.AddChat("Care for your fortune?", 2f);
+		speakWithSiblingChatPartSeven.AddChat("Care for your fortune?", 1.25f);
 		speakWithSiblingReactionPartSeven.AddAction(speakWithSiblingChatPartSeven);
 		speakWithSiblingReactionPartSeven.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "Line 72")));
+		speakWithSiblingReactionPartSeven.AddAction(new NPCAddScheduleAction(this, fortunetellerFortuneWithPlayer));
 		flagReactions.Add(FlagStrings.FortunetellerTalkToSiblingOldPartSeven, speakWithSiblingReactionPartSeven);
+		
+		//Reaction changeScheduleAfterSiblingFortune = new Reaction();
+		//changeScheduleAfterSiblingFortune.AddAction(speakWithSiblingChatPartSeven);
+		//changeScheduleAfterSiblingFortune.AddAction(new NPCAddScheduleAction(this, fortunetellerFortuneWithPlayer));
+		//changeScheduleAfterSiblingFortune.AddAction(new NPCEmotionUpdateAction(this, new InitialEmotionState(this, "Line 72")));
+		//flagReactions.Add(FlagStrings.FortunetellerOldChangeSchedule, changeScheduleAfterSiblingFortune);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
 		return (new InitialEmotionState(this, "Have the choices in your past affected your present and influenced your future?"));
 	}
+	
+	private Schedule fortunetellerFortuneWithPlayer;
 	
 	protected override Schedule GetSchedule(){
 		Schedule schedule = new DefaultSchedule(this);
@@ -88,7 +97,7 @@ public class FortuneTellerOld : NPC {
 	}
 	
 	protected override void SetUpSchedules(){
-		
+		fortunetellerFortuneWithPlayer = (new FortuneToPlayerSchedule(this));
 	}
 	
 	

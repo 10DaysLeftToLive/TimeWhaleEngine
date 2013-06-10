@@ -31,13 +31,13 @@ public class SiblingOldRaceToForestSchedule : Schedule {
 			Add(new TimeTask(8.5f, new IdleState(_toManage)));
 		
 // Move to the middle of bottom forest area, Initiate Dialogue: Mom's garden isn't look so good | Too bad we didn't help before she passed. If only we could go back right?, wait for 9 seconds for dialogue to finish		
-			Task activateRacePartFour = (new Task(new MoveThenDoState(_toManage, new Vector3(MapLocations.MiddleOfHauntedForestOld.x + 6f,MapLocations.MiddleOfHauntedForestOld.y, MapLocations.MiddleOfHauntedForestOld.z), new MarkTaskDone(_toManage)))); 
+			Task activateRacePartFour = (new Task(new MoveThenDoState(_toManage, new Vector3(MapLocations.MiddleOfHauntedForestOld.x + 8f,MapLocations.MiddleOfHauntedForestOld.y, MapLocations.MiddleOfHauntedForestOld.z), new MarkTaskDone(_toManage)))); 
 			activateRacePartFour.AddFlagToSet(FlagStrings.siblingOldIntroRaceChatPartFourFlag);
 			Add(activateRacePartFour);
 			Add(new TimeTask(9f, new IdleState(_toManage)));
 
 // Move to the edge of the bottom forest area, Initiate Dialogue: Hey. | Want to go visit Carpy? 	
-			Task activateRacePartFive = (new Task(new MoveThenDoState(_toManage,new Vector3(MapLocations.MiddleOfHauntedForestOld.x - 1.5f,MapLocations.MiddleOfHauntedForestOld.y, MapLocations.MiddleOfHauntedForestOld.z), new MarkTaskDone(_toManage)))); 
+			Task activateRacePartFive = (new TimeTask(.05f, new IdleState(_toManage))); //(new Task(new MoveThenDoState(_toManage,new Vector3(MapLocations.MiddleOfHauntedForestOld.x - 1.5f,MapLocations.MiddleOfHauntedForestOld.y, MapLocations.MiddleOfHauntedForestOld.z), new MarkTaskDone(_toManage)))); 
 			activateRacePartFive.AddFlagToSet(FlagStrings.siblingOldIntroRaceChatPartFiveFlag);
 			Add(activateRacePartFive);
 			Add(new TimeTask(5f, new IdleState(_toManage)));

@@ -79,26 +79,36 @@ public class SiblingOldToFortunetellerSchedule : Schedule {
 			Task siblingOldToFortunetellerPartSix = (new TimeTask(.05f, new IdleState(_toManage))); 
 			siblingOldToFortunetellerPartSix.AddFlagToSet(FlagStrings.siblingOldTalkToFortunePartSix);
 			Add(siblingOldToFortunetellerPartSix);
-			Add(new TimeTask(4.75f, new IdleState(_toManage))); 
+			Add(new TimeTask(4.25f, new IdleState(_toManage))); 
 
 // Have a nice day.		
 			Task fortunetellerToSiblingPartSix = (new TimeTask(.05f, new IdleState(_toManage))); 
 			fortunetellerToSiblingPartSix.AddFlagToSet(FlagStrings.FortunetellerTalkToSiblingOldPartSix);
 			Add(fortunetellerToSiblingPartSix);
-			Add(new TimeTask(3f, new IdleState(_toManage)));
-//	
-			Task goToFarmerArea = (new TimeTask(.05f, new IdleState(_toManage))); 
-			goToFarmerArea.AddFlagToSet(FlagStrings.oldSiblingGoToFarmerArea);
-			Add(goToFarmerArea);
-			Add(new TimeTask(2f, new IdleState(_toManage))); //Sibling
-			Add(new Task(new MoveThenDoState(_toManage, new Vector3(48f, (LevelManager.levelYOffSetFromCenter*2) + 15, 0), new MarkTaskDone(_toManage))));
-			Add(new TimeTask(60f, new WaitTillPlayerCloseState(_toManage, ref _toManage.player, 3f))); //Sibling		
+			Add(new TimeTask(3.5f, new IdleState(_toManage)));
 
-// Such a loud one she is... | Ohh| Hello there quiet one | Care for your fortune		
+// I'll be near the lighthouse when you're done! | You should get your fortune! See ya later!
+			Task beginWalkToFarmerArea = (new Task(new MoveThenDoState(_toManage, new Vector3(_toManage.transform.position.x + 2, (LevelManager.levelYOffSetFromCenter*2) + 15, 0), new MarkTaskDone(_toManage))));
+			beginWalkToFarmerArea.AddFlagToSet(FlagStrings.oldSiblingGoToFarmerArea);
+			Add(beginWalkToFarmerArea);
+			Add(new TimeTask(1f, new IdleState(_toManage)));
+//It waits till Sibling has moved here.	
+		Add(new Task(new MoveThenDoState(_toManage, new Vector3(48f, (LevelManager.levelYOffSetFromCenter*2) + 15, 0), new MarkTaskDone(_toManage))));		
+		
+// Such a loud one she is... | Ohh| Hello there quiet one | Care for your fortune
 			Task fortunetellerToSiblingPartSeven = (new TimeTask(.05f, new IdleState(_toManage))); 
 			fortunetellerToSiblingPartSeven.AddFlagToSet(FlagStrings.FortunetellerTalkToSiblingOldPartSeven);
 			Add(fortunetellerToSiblingPartSeven);
-			Add(new TimeTask(7f, new IdleState(_toManage)));
+			Add(new TimeTask(8.5f, new IdleState(_toManage)));
+		
+			//Task fortunetellerChangeSchedule = (new TimeTask(.5f, new IdleState(_toManage))); 
+			//fortunetellerChangeSchedule.AddFlagToSet(FlagStrings.FortunetellerTalkToSiblingOldPartSeven);
+			//Add(fortunetellerChangeSchedule);
+		
+			Task toggleFarmerScheduleOn = (new TimeTask(.05f, new IdleState(_toManage))); 
+			toggleFarmerScheduleOn.AddFlagToSet(FlagStrings.oldSiblingActivateFarmerSchedule);
+			Add(toggleFarmerScheduleOn);
+			Add(new TimeTask(.5f, new IdleState(_toManage)));	
 		
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////		
 
