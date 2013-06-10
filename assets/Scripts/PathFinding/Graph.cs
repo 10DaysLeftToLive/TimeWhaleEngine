@@ -122,9 +122,13 @@ public static class Graph {
 	public static GameObject FindWayPointById(int id){
 		if (id != -1){
 			for(int i = 0; i < wayPointCount; i++){
-				WayPoints tmpScript = GetScript(wayPoints[i]);
-				if (tmpScript.id == id)
-					return wayPoints[i];
+				if (wayPoints[i] != null){
+ 					WayPoints tmpScript = GetScript(wayPoints[i]);
+				
+					if (tmpScript.id == id){
+						return wayPoints[i];
+					}
+				}
 			}
 		}
 		return null;
