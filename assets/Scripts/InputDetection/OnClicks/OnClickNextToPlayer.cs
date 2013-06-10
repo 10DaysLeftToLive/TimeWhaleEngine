@@ -26,16 +26,6 @@ public class OnClickNextToPlayer : OnClick {
 	protected virtual void DoClickNextToPlayer(){}
 	
 	protected override void DoClick(ClickPositionArgs e){
-		Vector3 playerPos = player.transform.position;
-		Vector3 position = transform.position;
 		
-		Vector2 flatPlayerPos = new Vector2(playerPos.x, playerPos.y);
-		Vector2 flatPos = new Vector2(position.x, position.y);
-		
-		if (Vector2.Distance(flatPlayerPos, flatPos) < minimumDistance){
-			DoClickNextToPlayer();
-		} else {
-			EventManager.instance.RiseOnClickOnObjectAwayFromPlayerEvent(new ClickedObjectArgs(this.gameObject));
-		}
 	}
 }

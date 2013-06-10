@@ -9,15 +9,11 @@ using System.Collections;
 
 public class InteractableOnClick : OnClickNextToPlayer {
 	protected override void DoClickNextToPlayer(){
-		InteractWithPlayer();
+		//InteractWithPlayer();
 	}
 	
 	protected virtual void InteractWithPlayer(){
-		if (player.Inventory.HasItem() && player.Inventory.GetItem() == this.gameObject){
-			player.EnterState(new DropItemState(player));
-		} else {
-			player.EnterState(new PickUpItemState(player, this.gameObject));
-		}
+		
 	}
 	
 	public void Enable(){

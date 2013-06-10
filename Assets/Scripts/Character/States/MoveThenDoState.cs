@@ -15,7 +15,6 @@ public class MoveThenDoState : MoveState {
     public override void OnEnter(){
 		DebugManager.instance.Log(character.name + ": MoveThenDoState Exit", character.name, "State");
 		
-        character.PlayAnimation(Strings.animation_walk);
         base.OnEnter();
     }
     

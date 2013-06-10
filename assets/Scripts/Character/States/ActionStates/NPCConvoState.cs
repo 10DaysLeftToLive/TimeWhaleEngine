@@ -25,6 +25,9 @@ public class NPCConvoState : AbstractState {
 	}
 	
 	public override void OnEnter(){
+		if (((NPC)character).IsInteracting()){
+			GUIManager.Instance.CloseInteractionMenu();
+		}
 		GUIManager.Instance.AddNPCChat(_chatToPerform);
 		FaceEachOther();
 		
