@@ -55,6 +55,7 @@ public class FortuneTellerMiddle : NPC {
 		Reaction giveToySwordReaction = new Reaction();
 		Reaction giveTulipSeedsReaction = new Reaction();
 		Reaction giveVegetableReaction = new Reaction();
+		Reaction giveWhittleReaction = new Reaction();
 		#endregion
 		
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
@@ -132,6 +133,9 @@ public class FortuneTellerMiddle : NPC {
 			//Vegetable
 			giveVegetableReaction.AddAction(new UpdateCurrentTextAction(toControl, "Some sort of animal awaits its prize."));
 			_allItemReactions.Add(StringsItem.Vegetable,  new DispositionDependentReaction(giveVegetableReaction));
+		
+			giveWhittleReaction.AddAction(new UpdateCurrentTextAction(toControl, "A skilled craftsman needs just a simple tool to create a masterpiece"));
+			_allItemReactions.Add(StringsItem.Whittle,  new DispositionDependentReaction(giveWhittleReaction));
 		}
 		
 		public override void UpdateEmotionState(){
