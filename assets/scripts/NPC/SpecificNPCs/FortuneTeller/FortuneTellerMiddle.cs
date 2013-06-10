@@ -62,76 +62,76 @@ public class FortuneTellerMiddle : NPC {
 			
 			//Apple
 			giveAppleReaction.AddAction(new UpdateCurrentTextAction(toControl, "I predict this apple is important to one of your family members~"));
-			_allItemReactions.Add("apple",  new DispositionDependentReaction(giveAppleReaction));
+			_allItemReactions.Add(StringsItem.Apple,  new DispositionDependentReaction(giveAppleReaction));
 			
 			//Apple Pie
 			giveApplePieReaction.AddAction(new UpdateCurrentTextAction(toControl, "Mmm. Who you give this to will surely appreciate your visit in their time of new arrival~"));
-			_allItemReactions.Add("Apple Pie",  new DispositionDependentReaction(giveApplePieReaction));
+			_allItemReactions.Add(StringsItem.ApplePie,  new DispositionDependentReaction(giveApplePieReaction));
 			
 			//Captain Log
 			giveCaptainLogReaction.AddAction(new UpdateCurrentTextAction(toControl, "A tale of the sea, seemingly from a land afar. Perhaps treasure is involved too~"));
-			_allItemReactions.Add("Captain's Log",  new DispositionDependentReaction(giveCaptainLogReaction));
+			_allItemReactions.Add(StringsItem.CaptainLog,  new DispositionDependentReaction(giveCaptainLogReaction));
 			
 			//Fishing Rod
 			giveFishingRodReaction.AddAction(new UpdateCurrentTextAction(toControl, "The lake catches the biggest fish. But only by he who has passion and gives up his legacy~"));
-			_allItemReactions.Add("Fishing Rod",  new DispositionDependentReaction(giveFishingRodReaction));
+			_allItemReactions.Add(StringsItem.FishingRod,  new DispositionDependentReaction(giveFishingRodReaction));
 			
 			//Flute
 			giveFluteReaction.AddAction(new UpdateCurrentTextAction(toControl, "I hear a tune near the new direction of the wind~"));
-			_allItemReactions.Add("Flute",  new DispositionDependentReaction(giveFluteReaction));
+			_allItemReactions.Add(StringsItem.Flute,  new DispositionDependentReaction(giveFluteReaction));
 			
 			//Harp
 			giveHarpReaction.AddAction(new UpdateCurrentTextAction(toControl, "The strum of a master plays a tune a little ways from the market~"));
-			_allItemReactions.Add("Harp",  new DispositionDependentReaction(giveHarpReaction));
+			_allItemReactions.Add(StringsItem.Harp,  new DispositionDependentReaction(giveHarpReaction));
 
 			
 			//Lily Seeds
 			giveLilySeedsReaction.AddAction(new UpdateCurrentTextAction(toControl, "Planted with others makes the garden even more beautiful~"));
-			_allItemReactions.Add("Lily Seeds",  new DispositionDependentReaction(giveLilySeedsReaction));
+			_allItemReactions.Add(StringsItem.LilySeeds,  new DispositionDependentReaction(giveLilySeedsReaction));
 						
 			//Note
 			giveNoteReaction.AddAction(new UpdateCurrentTextAction(toControl, "Love can be determined with something as simple as this~"));
-			_allItemReactions.Add("Note",  new DispositionDependentReaction(giveNoteReaction));
+			_allItemReactions.Add(StringsItem.Note,  new DispositionDependentReaction(giveNoteReaction));
 			
 			//Pendant
 			givePendantReaction.AddAction(new UpdateCurrentTextAction(toControl, "Return this to whom it belongs and they will be at peace~"));
-			_allItemReactions.Add("Pendant",  new DispositionDependentReaction(givePendantReaction));
+			_allItemReactions.Add(StringsItem.Pendant,  new DispositionDependentReaction(givePendantReaction));
 			
 			//Rose
 			giveRoseReaction.AddAction(new UpdateCurrentTextAction(toControl, "For me? No, someone else~"));
-			_allItemReactions.Add("Rose",  new DispositionDependentReaction(giveRoseReaction));
+			_allItemReactions.Add(StringsItem.Rose,  new DispositionDependentReaction(giveRoseReaction));
 			
 			//Seashell
 			giveSeashellReaction.AddAction(new UpdateCurrentTextAction(toControl, "An ordinary item to one is a priceless item to another~"));
-			_allItemReactions.Add("Seashell",  new DispositionDependentReaction(giveSeashellReaction));
+			_allItemReactions.Add(StringsItem.Seashell,  new DispositionDependentReaction(giveSeashellReaction));
 			
 			//Shovel
 			giveShovelReaction.AddAction(new UpdateCurrentTextAction(toControl, "An X, but perhaps what you're looking for has already been taken~"));
-			_allItemReactions.Add("shovel",  new DispositionDependentReaction(giveShovelReaction));
+			_allItemReactions.Add(StringsItem.Shovel,  new DispositionDependentReaction(giveShovelReaction));
 			
 			//Sunflower Seeds
 			giveSunflowerSeedsReaction.AddAction(new UpdateCurrentTextAction(toControl, "Follow the sun and plant the seeds there~"));
-			_allItemReactions.Add("Sunflower",  new DispositionDependentReaction(giveSunflowerSeedsReaction));
+			_allItemReactions.Add(StringsItem.SunflowerSeeds,  new DispositionDependentReaction(giveSunflowerSeedsReaction));
 			
 			//Toolbox
 			giveToolboxReaction.AddAction(new UpdateCurrentTextAction(toControl, "Trees, lots of trees. Who would need tools for tending to trees?~"));
-			_allItemReactions.Add("Toolbox",  new DispositionDependentReaction(giveToolboxReaction));
+			_allItemReactions.Add(StringsItem.Toolbox,  new DispositionDependentReaction(giveToolboxReaction));
 			
 			//Toy Boat
 			giveToyBoatReaction.AddAction(new UpdateCurrentTextAction(toControl, "Perhaps the owner of a vessel knows its secrets~"));
-			_allItemReactions.Add("Toy Boat",  new DispositionDependentReaction(giveToyBoatReaction));
+			_allItemReactions.Add(StringsItem.ToyBoat,  new DispositionDependentReaction(giveToyBoatReaction));
 						
 			//Toy Sword
 			giveToySwordReaction.AddAction(new UpdateCurrentTextAction(toControl, "What seems like a toy may actually be more~"));
-			_allItemReactions.Add("Toy Sword",  new DispositionDependentReaction(giveToySwordReaction));
+			_allItemReactions.Add(StringsItem.ToySword,  new DispositionDependentReaction(giveToySwordReaction));
 			
 			//Tulip Seeds
 			giveTulipSeedsReaction.AddAction(new UpdateCurrentTextAction(toControl, "Where two lips touch is where tulips should go~"));
-			_allItemReactions.Add("Tulip Seeds",  new DispositionDependentReaction(giveTulipSeedsReaction));
+			_allItemReactions.Add(StringsItem.TulipSeeds,  new DispositionDependentReaction(giveTulipSeedsReaction));
 			
 			//Vegetable
 			giveVegetableReaction.AddAction(new UpdateCurrentTextAction(toControl, "Some sort of animal awaits its prize."));
-			_allItemReactions.Add("Vegetable",  new DispositionDependentReaction(giveVegetableReaction));
+			_allItemReactions.Add(StringsItem.Vegetable,  new DispositionDependentReaction(giveVegetableReaction));
 		}
 		
 		public override void UpdateEmotionState(){

@@ -140,7 +140,7 @@ public class BazzarmanYoung : NPC {
 		
 		public string GiveItem(){
 			Debug.Log("Bazaarman trying to give the item: " + inventory.Peek());
-			return inventory.Dequeue();
+				return inventory.Dequeue();
 		}
 		
 		public void AddTextToList(NPC npc, string text){
