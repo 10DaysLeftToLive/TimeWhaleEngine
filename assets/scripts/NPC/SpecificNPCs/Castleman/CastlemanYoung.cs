@@ -13,6 +13,8 @@ public class CastlemanYoung : NPC {
 	bool talkedToLighthouse = false;
 	bool talkedToCSON = false;
 	bool friends = false;
+	bool prepared = false;
+	int NumberAtBeach = 0;
 	Schedule CastleManTalksFirstFriends;
 	Schedule CastleManTalksFirstNOTFriends;
 	Schedule CastleManFollowSchedule;
@@ -159,23 +161,57 @@ public class CastlemanYoung : NPC {
 		ReadyForBeachNOTAsFriends.AddAction(new NPCAddScheduleAction(this, CastlemanWalkToBeachSchedule));
 		flagReactions.Add(FlagStrings.BeachBeforeConvoNotFriendsString, ReadyForBeachNOTAsFriends);
 		#endregion
-		/*Reaction FinishedWithCSON = new Reaction();
-		FinishedWithCSON.AddAction(new NPCCallbackAction(*/
 		
 		Reaction FinishedTalkingWithCSON = new Reaction ();
 		FinishedTalkingWithCSON.AddAction(new NPCCallbackAction(testStartGoingToBeachAfterCarpenterSonTalk));
 		flagReactions.Add(FlagStrings.FinishedCSONConversation, FinishedTalkingWithCSON);
 		
+		Reaction CheckLighthouseAtBeach = new Reaction();
+		CheckLighthouseAtBeach.AddAction(new NPCCallbackAction(checkNumberAtBeach));
+		flagReactions.Add(FlagStrings.LighthouseAtBeach, CheckLighthouseAtBeach);
+		
+		Reaction CheckCastleAtBeach = new Reaction();
+		CheckCastleAtBeach.AddAction(new NPCCallbackAction(checkNumberAtBeach));
+		flagReactions.Add(FlagStrings.CastleManAtBeach, CheckCastleAtBeach);
+		
+		Reaction SetPrepared = new Reaction();
+		SetPrepared.AddAction(new NPCCallbackAction(setPrepare));
+		flagReactions.Add(FlagStrings.PreparedForConversationWithLighthouse, SetPrepared);
+		//This is to talk with the lighthouse girl for the first time.
 		Reaction TalkWithLighthouseFirstTime = new Reaction();
-		//TalkWithLighthouseFirstTime.AddAction(new NPCAllRemoveScheduleAction("TalkWithCastleman"));
 		TalkWithLighthouseFirstTime.AddAction(new NPCAddScheduleAction(this, CastleManMeetsLighthouse));
 		TalkWithLighthouseFirstTime.AddAction(new NPCEmotionUpdateAction(this, new AfterLighthouse(this, "")));
 		TalkWithLighthouseFirstTime.AddAction(new NPCCallbackAction(testStartGoingtoBeachAfterLighthouseTalk));
 		TalkWithLighthouseFirstTime.AddAction(new NPCCallbackAction(setEmbarrased));
 		flagReactions.Add(FlagStrings.StartTalkingToLighthouse, TalkWithLighthouseFirstTime);
 		
+		#region Conversations
+		Reaction ConversationPrepared = new Reaction();
+		ConversationPrepared.AddAction(new NPCAddScheduleAction(this, CastleManTalksToLighthouseOnBeachFriends));
+		flagReactions.Add(FlagStrings.TalkPreparedForConvo, ConversationPrepared);
+		
+		Reaction ConversationNOTPrepared = new Reaction();
+		ConversationNOTPrepared.AddAction(new NPCAddScheduleAction(this, CastleManTalksToLighthouseOnBeachNOTFriends));
+		flagReactions.Add(FlagStrings.TalkNotPreparedForConvo, ConversationNOTPrepared);
 		
 		
+		#endregion
+		
+		
+	}
+	public void setPrepare(){
+		prepared = true;	
+	}
+	public void checkNumberAtBeach(){
+		NumberAtBeach++;
+		if (NumberAtBeach == 2){
+			if(prepared == true){
+				FlagManager.instance.SetFlag(FlagStrings.TalkPreparedForConvo);
+			}
+			else{
+				FlagManager.instance.SetFlag(FlagStrings.TalkNotPreparedForConvo);
+			}
+		}
 	}
 	public void setFriends(){
 		friends = true;	
@@ -226,6 +262,9 @@ public class CastlemanYoung : NPC {
 		CastlemanWalkToBeachSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
 		CastlemanWalkToBeachSchedule.Add(new TimeTask(1f, new IdleState(this)));
 		CastlemanWalkToBeachSchedule.Add(new Task(new MoveThenMarkDoneState(this, MapLocations.MiddleOfBeachYoung)));
+		Task setAtBeachFlag = new TimeTask(0f, new IdleState(this));
+		setAtBeachFlag.AddFlagToSet(FlagStrings.CastleManAtBeach);
+		CastlemanWalkToBeachSchedule.Add(setAtBeachFlag);
 		
 		
 		#region Friends
