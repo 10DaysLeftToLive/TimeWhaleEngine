@@ -45,6 +45,26 @@ public class WayPointPath {
 		Vector3 heading = SetHeading(startPosition);
 		GameObject startLeft = GetPoint(startPosition, mask, heading);
 		GameObject startRight = GetPoint(startPosition, mask, heading*-1);
+		if (startLeft == null || startRight == null){
+			WayPoints[] ageWaypoints = LevelManager.GetCurrentAgeWaypoints();
+			
+			WayPoints closest = ageWaypoints[0];
+			float closestDistance = 100;
+			float currentDistance;
+			
+			foreach (WayPoints waypoint in ageWaypoints){
+				if (waypoint.pointAge != CharacterAgeManager.currentAge) continue;
+				currentDistance = Vector3.Distance(waypoint.transform.position, startPosition);
+				if (currentDistance < closestDistance){
+					closestDistance = currentDistance;
+					closest = waypoint;
+				}
+			}
+			startPosition = closest.transform.position;
+			heading = SetHeading(startPosition);
+			startLeft = GetPoint(startPosition, mask, heading);
+			startRight = GetPoint(startPosition, mask, heading*-1);
+		}
 		
 		
 		heading = Quaternion.AngleAxis(90, new Vector3(0,0,1)) * hit.normal;
@@ -58,10 +78,10 @@ public class WayPointPath {
 		endLeftScript = GetScript(endLeft);
 		endRightScript = GetScript(endRight);
 
-		/*if (startLeft != null) Debug.Log("startLeft " + startLeft.name);
-		if (startRight != null) Debug.Log("startRight " + startRight.name);
-		if (endLeft != null) Debug.Log("endLeft " + endLeft.name);
-		if (endRight != null) Debug.Log("endRight " + endRight.name);*/
+		//if (startLeft != null) Debug.Log("startLeft " + startLeft.name);
+		//if (startRight != null) Debug.Log("startRight " + startRight.name);
+		//if (endLeft != null) Debug.Log("endLeft " + endLeft.name);
+		//if (endRight != null) Debug.Log("endRight " + endRight.name);
 		
 		if ( (startLeft != null && startRight != null && endLeft != null && endRight != null) 
 			&& (startLeft.name == endLeft.name && startRight.name == endRight.name)){
