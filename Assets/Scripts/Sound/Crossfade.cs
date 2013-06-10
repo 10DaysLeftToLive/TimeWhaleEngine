@@ -34,6 +34,31 @@ public class Crossfade : MonoBehaviour
     void Awake()
     {
         Crossfade.instance = this;
+        if (SoundManager.instance.AudioOn)
+        {
+            if (SoundManager.instance.SFXOn)
+            {
+                if (Application.loadedLevelName == "LevelBase")
+                {
+                    Crossfade.instance.ForestAmbient.Play();
+                }
+                else if (Application.loadedLevelName == "TitleScreen")
+                {
+                    Crossfade.instance.ReflectionTreeAmbient.Play();
+                }
+            }
+            if (SoundManager.instance.BGMOn)
+            {
+                if (Application.loadedLevelName == "LevelBase")
+                {
+                    Crossfade.instance.ForestBGM.Play();
+                }
+                else if (Application.loadedLevelName == "TitleScreen")
+                {
+                    // I sure hope we get menu music sometime.
+                }
+            }
+        }
     }
 
     public static IEnumerator CoroutineFadeDown()
