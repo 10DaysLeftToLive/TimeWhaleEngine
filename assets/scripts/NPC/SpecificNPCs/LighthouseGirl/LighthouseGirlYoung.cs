@@ -122,6 +122,9 @@ public class LighthouseGirlYoung : NPC {
 		
 		WalkToBeach = new Schedule(this, Schedule.priorityEnum.High);
 		WalkToBeach.Add(new Task(new MoveThenMarkDoneState(this, MapLocations.MiddleOfBeachYoung)));
+		Task setAtBeachFlag = new TimeTask(0f, new IdleState(this));
+		setAtBeachFlag.AddFlagToSet(FlagStrings.LighthouseAtBeach);
+		WalkToBeach.Add(setAtBeachFlag);
 		
 		LighthouseGoingToBeach = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerMotherYoung), 
 			new LighthouseToFarmerMother(),Schedule.priorityEnum.DoConvo);

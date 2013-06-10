@@ -50,9 +50,11 @@ public class MotherYoung : NPC {
 		
 		Reaction moveToMusicianReaction = new Reaction();
 		moveToMusicianReaction.AddAction(new ShowOneOffChatAction(this, "Follow me. They live up here.", 3f));
+		moveToMusicianReaction.AddAction(new NPCGiveItemAction(this, StringsItem.ApplePie));
 		NPCConvoSchedule momToMusician = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.MusicianYoung), new MotherToMusicianYoung(),Schedule.priorityEnum.DoNow);
 		momToMusician.SetCanNotInteractWithPlayer();
 		moveToMusicianReaction.AddAction(new NPCAddScheduleAction(this, moveToMusicianSchedule));
+		
 		moveToMusicianReaction.AddAction(new NPCAddScheduleAction(this, momToMusician));
 		flagReactions.Add(FlagStrings.MoveToMusician, moveToMusicianReaction);		
 	}

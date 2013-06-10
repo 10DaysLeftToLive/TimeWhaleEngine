@@ -273,4 +273,15 @@ public static class FlagStrings {
 	public static string BuiltRockingChairTalk = "BuiltRockingChairTalk";
 	public static string DidntBuildRockingChairConversation = "Didn't build rocking chair conversation";
 	#endregion
+	
+	#region NewCastleManYoungStrings
+	public static string FinishedMeetingTheTown = "Castle Man finished meeting the town.";
+	public static string PreparedForConversationWithLighthouse = "Castle Man Prepared for conversation with the Lighthouse girl.";
+	public static string CastleManAtBeach = "CastleMan at Beach.";
+	public static string LighthouseAtBeach = "Lighthouse at beach.";
+	public static string CastleManTalk = "CastleManTalk.";
+	public static string TalkPreparedForConvo = "Castle Man talk at beach prepared for Convo.";
+	public static string TalkNotPreparedForConvo = "Castle Man talk at beach not prepared for Convo.";
+	
+	#endregion
 }
