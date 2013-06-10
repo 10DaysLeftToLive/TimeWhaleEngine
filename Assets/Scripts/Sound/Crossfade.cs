@@ -102,7 +102,7 @@ public class Crossfade : MonoBehaviour
 
             CurrentSong.Stop();
         }
-        else if (CurrentAmbient != null && SoundManager.instance.SFXOn)
+        /*else if (CurrentAmbient != null && SoundManager.instance.SFXOn)
         {
             // 1f will need to be changed to match the final volume used
             while (!(Mathf.Approximately(fTimeCounter, 1f)))
@@ -113,7 +113,7 @@ public class Crossfade : MonoBehaviour
             }
 
             CurrentAmbient.Stop();
-        }
+        }*/
 
         instance.FadeDown = false;
 
