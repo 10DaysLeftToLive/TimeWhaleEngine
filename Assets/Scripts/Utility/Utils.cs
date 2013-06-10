@@ -37,14 +37,14 @@ public static class Utils{
 		Bounds objectBounds = objectToMoveInfront.collider.bounds;
 		
 		if (Utils.CalcDifference(start.x, objectBounds.min.x) < 0) { // if the target is to the right
-			whereToMove.x = whereToMove.x - objectToMoveInfront.transform.localScale.x/2 - SPACEINFRONT;
+			whereToMove.x = whereToMove.x - objectBounds.size.x/2 - SPACEINFRONT;
 		} else if (Utils.CalcDifference(start.x, objectBounds.max.x) > 0) { // if the target is to the left
-			whereToMove.x = whereToMove.x + objectToMoveInfront.transform.localScale.x/2 + SPACEINFRONT;
+			whereToMove.x = whereToMove.x + objectBounds.size.x/2 + SPACEINFRONT;
 		} else { // if we are inside
 			if (Utils.CalcDifference(start.x, whereToMove.x) < 0) { // if the target is to the right
-				whereToMove.x = whereToMove.x - objectToMoveInfront.transform.localScale.x/2 - SPACEINFRONT;
+				whereToMove.x = whereToMove.x - objectBounds.size.x/2 - SPACEINFRONT;
 			} else {
-				whereToMove.x = whereToMove.x + objectToMoveInfront.transform.localScale.x/2 + SPACEINFRONT;
+				whereToMove.x = whereToMove.x + objectBounds.size.x/2 + SPACEINFRONT;
 			}
 		}
 		
