@@ -172,11 +172,12 @@ public class MusicianYoung : NPC {
 				_allChoiceReactions.Add(WhereDoYouComeFromChoice, new DispositionDependentReaction(WhereDoYouComeFromReaction));	
 			}
 			GUIManager.Instance.RefreshInteraction();
-			SetDefaultText("I would play for you when I'm not tired from moving in.");
+			SetDefaultText("I will play for you when I'm not tired from moving in.");
 			hasTalkedAboutMusic = true;
 			//END STATE FOR MUSIC TALK
 		}
 		public void UpdateIsThereAnyYouLike(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(PlayForMeChoice);
 			_allChoiceReactions.Remove(IsThereAnyYouLikeChoice);
 			if(hasTalkedAboutTrip == false){
@@ -188,6 +189,7 @@ public class MusicianYoung : NPC {
 			//END STATE FOR MUSIC TALK
 		}
 		public void UpdateWhereDoYouComeFrom(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(WhereDoYouComeFromChoice);
 			if(_allChoiceReactions.ContainsKey(WhatKindOfMusicChoice)){
 				_allChoiceReactions.Remove(WhatKindOfMusicChoice);
@@ -198,6 +200,7 @@ public class MusicianYoung : NPC {
 			SetDefaultText("I'm glad I moved here from the mainland.");
 		}
 		public void UpdateWhyDidYouCome(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(WhyDidYouComeChoice);
 			_allChoiceReactions.Remove(WhatWasTheTripLikeChoice);
 			_allChoiceReactions.Add (WasYourSonCloseToHisFatherChoice, new DispositionDependentReaction(WasYourSonCloseToHisFatherReaction));
@@ -206,11 +209,13 @@ public class MusicianYoung : NPC {
 			SetDefaultText("I think its best that we moved away from the bad memories.");
 		}
 		public void UpdateWhatWasTheTripLike(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_allChoiceReactions.Remove(WhatWasTheTripLikeChoice);
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("The trip wasn't too bad.");
 		}
 		public void UpdateWasYourSonCloseToHisFatherReaction(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(WasYourSonCloseToHisFatherChoice);
 			_allChoiceReactions.Remove(HowAreYouDoingChoice);
 			_allChoiceReactions.Add(CanIHelpChoice, new DispositionDependentReaction(CanIHelpReaction));
@@ -218,6 +223,7 @@ public class MusicianYoung : NPC {
 			SetDefaultText("Hopefully my son will be okay.");
 		}
 		public void UpdateHowAreYouDoing(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_allChoiceReactions.Remove(WasYourSonCloseToHisFatherChoice);
 			_allChoiceReactions.Remove(HowAreYouDoingChoice);
 			_allChoiceReactions.Add(CanIHelpChoice, new DispositionDependentReaction(CanIHelpReaction));
@@ -225,6 +231,7 @@ public class MusicianYoung : NPC {
 			SetDefaultText("I miss my husband.");
 		}
 		public void UpdateCanIHelp(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_allChoiceReactions.Remove(CanIHelpChoice);
 			GUIManager.Instance.RefreshInteraction();
 			hasTalkedAboutTrip = true;
