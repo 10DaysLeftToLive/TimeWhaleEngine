@@ -483,11 +483,13 @@ public class CastlemanYoung : NPC {
 		public void UpdateDontYouSpeak(){			
 			_allChoiceReactions.Remove(DontYouSpeakChoice);
 			_allChoiceReactions.Add(WellTellMeChoice, new DispositionDependentReaction(WellTellMeReaction));
+			_npcInState.PlayAnimation("Timid");
 			GUIManager.Instance.RefreshInteraction();
 		}
 		public void UpdateWellTellMe(){
 			_allChoiceReactions.Remove(WellTellMeChoice);
 			_allChoiceReactions.Remove(FineHaveItYourWayChoice);
+			_npcInState.PlayAnimation("Timid");
 			GUIManager.Instance.RefreshInteraction();
 		}
 		public void UpdateFineHaveItYourWay(){
@@ -498,6 +500,7 @@ public class CastlemanYoung : NPC {
 				_allChoiceReactions.Remove(DontYouSpeakChoice);
 			}
 			_allChoiceReactions.Remove(FineHaveItYourWayChoice);
+			_npcInState.PlayAnimation("Timid");
 			GUIManager.Instance.RefreshInteraction();
 		}
 		public void UpdateAreYouNew(){
@@ -506,6 +509,7 @@ public class CastlemanYoung : NPC {
 			_allChoiceReactions.Add(FineHaveItYourWayChoice, new DispositionDependentReaction(FineHaveItYourWayReaction));
 			_allChoiceReactions.Add(DontYouSpeakChoice, new DispositionDependentReaction(DontYouSpeakReaction));
 			GUIManager.Instance.RefreshInteraction();
+			_npcInState.PlayAnimation("Timid");
 			FlagManager.instance.SetFlag(FlagStrings.MusicianCommentOnSon);
 		}
 		public void UpdateWhatsYourName(){
@@ -515,6 +519,7 @@ public class CastlemanYoung : NPC {
 			_allChoiceReactions.Add(FineHaveItYourWayChoice, new DispositionDependentReaction(FineHaveItYourWayReaction));
 			_allChoiceReactions.Add(DontYouSpeakChoice, new DispositionDependentReaction(DontYouSpeakReaction));
 			GUIManager.Instance.CloseInteractionMenu();
+			_npcInState.PlayAnimation("Timid");
 			//FlagManager.instance.SetFlag(FlagStrings.TestFlag);
 			FlagManager.instance.SetFlag(FlagStrings.MusicianCommentOnSon);
 			//FlagManager.instance.SetFlag(FlagStrings.PlayerAndCastleNOTFriends);

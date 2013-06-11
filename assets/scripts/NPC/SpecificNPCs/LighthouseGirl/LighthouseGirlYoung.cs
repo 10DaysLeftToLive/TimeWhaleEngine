@@ -75,6 +75,10 @@ public class LighthouseGirlYoung : NPC {
 		Reaction RemoveConvoWithCastleman = new Reaction();
 		RemoveConvoWithCastleman.AddAction(new NPCCallbackAction(DoRemoveConvoWithCastleman));
 		flagReactions.Add(FlagStrings.StartTalkingToLighthouse, RemoveConvoWithCastleman);
+		
+		Reaction HiReaction = new Reaction();
+		HiReaction.AddAction(new ShowOneOffChatAction(this, "Pssst...Come over here!"));
+			flagReactions.Add(FlagStrings.UselessFlag, HiReaction);
 	}
 	public void DoRemoveConvoWithCastleman(){
 		this.RemoveScheduleWithFlag("TalkWithCastleman");
@@ -93,7 +97,12 @@ public class LighthouseGirlYoung : NPC {
 	protected override void SetUpSchedules(){
 		InitialSchedule = new Schedule(this, Schedule.priorityEnum.Medium);
 		InitialSchedule.Add(new TimeTask(1500, new WaitTillPlayerCloseState(this, ref player)));
-		InitialSchedule.Add(new Task(new IdleState(this), this, 0.1f, "Psst!  Come over here!"));
+		Task CallUselessFlag = new TimeTask(0f, new IdleState(this));
+		CallUselessFlag.AddFlagToSet(FlagStrings.UselessFlag);
+		InitialSchedule.Add(CallUselessFlag);
+		InitialSchedule.Add(new Task(new AbstractAnimationState(this, "Play with Sword")));
+		InitialSchedule.Add(new Task(new AbstractAnimationState(this, "Hi")));
+		
 		
 		AttemptToTellOnLighthouse = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerFatherYoung), 
 			new LightHouseToFarmerFather(),Schedule.priorityEnum.DoConvo);

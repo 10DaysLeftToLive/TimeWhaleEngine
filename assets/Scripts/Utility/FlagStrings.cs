@@ -274,7 +274,7 @@ public static class FlagStrings {
 	public static string BuiltRockingChairTalk = "BuiltRockingChairTalk";
 	public static string DidntBuildRockingChairConversation = "Didn't build rocking chair conversation";
 	#endregion
-	
+	public static string UselessFlag = "Useless flag";
 	#region NewCastleManYoungStrings
 	public static string FinishedMeetingTheTown = "Castle Man finished meeting the town.";
 	public static string PreparedForConversationWithLighthouse = "Castle Man Prepared for conversation with the Lighthouse girl.";
