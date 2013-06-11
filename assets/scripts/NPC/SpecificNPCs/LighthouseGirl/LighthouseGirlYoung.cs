@@ -127,7 +127,8 @@ public class LighthouseGirlYoung : NPC {
 		WalkToBeach.Add(setAtBeachFlag);
 		
 		LighthouseGoingToBeach = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerMotherYoung), 
-			new LighthouseToFarmerMother(),Schedule.priorityEnum.DoConvo);
+			new LighthouseToFarmerMother(),Schedule.priorityEnum.DoConvo, true);
+		LighthouseGoingToBeach.SetCanNotInteractWithPlayer();
 	}
 	
 	
