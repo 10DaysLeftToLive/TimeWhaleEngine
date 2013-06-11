@@ -35,7 +35,6 @@ public class GameAgeTransition : TransitionEffect {
 	}
 	
 	protected override void DoSwitchAction(){
-		Debug.Log("Changing ages " + directionFacing.ToString());
 		if (directionFacing == DragDirection.Up){
 			levelManager.ShiftUpAge();
 		} else {

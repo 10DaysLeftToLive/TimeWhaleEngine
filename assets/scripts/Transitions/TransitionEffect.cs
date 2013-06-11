@@ -20,7 +20,7 @@ public abstract class TransitionEffect : PauseObject {
 		cameraMain = Camera.main;
 		if (cameraMain == null){
 			Debug.LogError("No main camera found");
-			return;
+			cameraMain = GameObject.Find("Camera").GetComponent<Camera>();
 		}
 		emitter = GetComponent<ParticleSystem>();
 		emitter.Stop();
@@ -62,15 +62,12 @@ public abstract class TransitionEffect : PauseObject {
 	
 	protected void Update() {
 		if (isChanging){
-			Debug.Log("Changing");
 			time += Time.deltaTime;
 			if (!didChange && time >= SWITCHTIMESECONDS * timeToChange){
-				Debug.Log("Switching");
 				DoSwitchAction();
 				didChange = true;
 			}
 			if (time > SWITCHTIMESECONDS){
-				Debug.Log("Done");
 				isChanging = false;
 				emitter.Stop();
 				EventManager.instance.RiseOnPauseToggleEvent(new PauseStateArgs(false));
