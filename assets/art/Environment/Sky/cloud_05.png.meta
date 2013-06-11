@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 5a02941c59ebd934c8687b2fe88e63b7
+guid: 040f62b1da6e16c4f811af9a8c5804f3
 TextureImporter:
   serializedVersion: 2
   mipmaps:
@@ -30,6 +30,6 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  textureType: 5
+  textureType: -1
   buildTargetSettings: []
   userData: 
