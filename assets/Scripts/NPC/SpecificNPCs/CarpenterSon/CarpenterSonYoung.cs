@@ -175,19 +175,19 @@ public class CarpenterSonYoung : NPC {
 			
 			makeFishingRodReaction.AddAction(new NPCCallbackAction(TellToMakeFishingRod));
 			makeFishingRodReaction.AddAction(new NPCEmotionUpdateAction(toControl, new CarpenterSonYoung.MadeFishingRodEmotionState(toControl, completeRodText)));
-			makeFishingRodReaction.AddAction(new ShowOneOffChatAction(toControl, "I wonder how this will turn out..."));
+			makeFishingRodReaction.AddAction(new ShowOneOffChatAction(toControl, "Come back later, I'll be working on this for a while"));
 			makeFishingRodReaction.AddAction(new NPCAddScheduleAction(toControl, whittleSchedule));
 			makeFishingRodReaction.AddAction(new NPCAddScheduleAction(toControl, whittleDoneSchedule));
 			
 			makeSwordReaction.AddAction(new NPCCallbackAction(TellToMakeSword));
 			makeSwordReaction.AddAction(new NPCEmotionUpdateAction(toControl, new CarpenterSonYoung.EncourageEmotionState(toControl, completeSwordText)));
-			makeSwordReaction.AddAction(new ShowOneOffChatAction(toControl, "This is going to be so cool when I'm done"));
+			makeSwordReaction.AddAction(new ShowOneOffChatAction(toControl, "This is going to take some time, the wait will be worth it though"));
 			makeSwordReaction.AddAction(new NPCAddScheduleAction(toControl, whittleSchedule));
 			makeSwordReaction.AddAction(new NPCAddScheduleAction(toControl, whittleDoneSchedule));
 			
 			makeDollReaction.AddAction(new NPCCallbackAction(TellToMakeDoll));
 			makeDollReaction.AddAction(new NPCEmotionUpdateAction(toControl, new CarpenterSonYoung.GaveDollEmotionState(toControl, completeDollText)));
-			makeDollReaction.AddAction(new ShowOneOffChatAction(toControl, "The more I whittle this, the creepier it looks"));
+			makeDollReaction.AddAction(new ShowOneOffChatAction(toControl, "I got a bad feeling about this, but swing by later to come see it"));
 			makeDollReaction.AddAction(new NPCAddScheduleAction(toControl, whittleSchedule));
 			makeDollReaction.AddAction(new NPCAddScheduleAction(toControl, whittleDoneSchedule));
 			
@@ -343,6 +343,7 @@ public class CarpenterSonYoung : NPC {
 		}
 		
 		private void RecieveItemResult(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Clear();
 			_npcInState.PlayAnimation(Strings.animation_stand);
 			_allChoiceReactions.Add(ComplimentWorkChoice, new DispositionDependentReaction(EncourageCarpentryReaction));
@@ -352,6 +353,7 @@ public class CarpenterSonYoung : NPC {
 		}
 				
 		private void EncouragedCarpentryResult(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			SetDefaultText("I'll make sure the next thing I make is made of wood.");
 			_allChoiceReactions.Clear();
 			GUIManager.Instance.RefreshInteraction();
@@ -368,7 +370,7 @@ public class CarpenterSonYoung : NPC {
 		Choice CritisizeNameChoice = new Choice("That name is kind of lame", "Well I think it's cool.");
 		Reaction CritisizeNameReaction = new Reaction();
 		
-		Choice RecieveItemChoice = new Choice("Can I see it?", "Check it out. Everyone will now know you as \"Swordweilder\".");
+		Choice RecieveItemChoice = new Choice("Can I see it?", "Check it out. Everyone will now know you as \"Swordwielder\".");
 		Reaction RecieveItemReaction = new Reaction();
 	
 		
@@ -388,6 +390,7 @@ public class CarpenterSonYoung : NPC {
 		}
 		
 		private void RecieveItemResult(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_allChoiceReactions.Clear();
 			_npcInState.PlayAnimation(Strings.animation_stand);
 			CritisizeNameReaction.AddAction(new NPCCallbackAction(CritisizeNameResult));
@@ -402,6 +405,7 @@ public class CarpenterSonYoung : NPC {
 		}
 		
 		private void EncouragedCarpentryResult(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			SetDefaultText("Alright, now I just need to work on my carpentry.");
 			_allChoiceReactions.Clear();
 			DebugManager.print("Inside Carpentry Result");
@@ -409,6 +413,8 @@ public class CarpenterSonYoung : NPC {
 		}
 		
 		private void CritisizeNameResult(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
+			SetDefaultText("\"Swordwielder\" is an awesome name.");
 			_allChoiceReactions.Remove(CritisizeNameChoice);
 			GUIManager.Instance.RefreshInteraction();
 		}

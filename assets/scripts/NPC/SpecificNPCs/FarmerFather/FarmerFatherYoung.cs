@@ -203,10 +203,12 @@ public class FarmerFatherYoung : NPC {
 			AlreadyBraveReaction.AddAction(new UpdateCurrentTextAction(toControl, "I...I guess you're right.  Maybe my daughter doesn't need stories, maybe she is already brave...thanks for your help!"));
 		}
 		public void UpdateGiveSeeds(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_allItemReactions.Remove(StringsItem.SunflowerSeeds);
 			FlagManager.instance.SetFlag(FlagStrings.FarmAlive);	
 		}
 		public void UpdateAlreadyBrave(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_allChoiceReactions.Clear();
 			GUIManager.Instance.RefreshInteraction();
 			startedConversation = true;
@@ -216,6 +218,7 @@ public class FarmerFatherYoung : NPC {
 		}
 		#region UpdatePathOne
 		public void UpdateStandUp(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			//_allChoiceReactions.Remove(StandUpChoice);
 			//_allChoiceReactions.Remove(StoriesSillyChoice);
 			_allChoiceReactions.Clear();
@@ -226,6 +229,7 @@ public class FarmerFatherYoung : NPC {
 			//SetDefaultDialogue();
 		}
 		public void UpdateNotHard(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(NotHardChoice);
 			_allChoiceReactions.Remove(CowardChoice);
 			_allChoiceReactions.Add(DoItChoice, new DispositionDependentReaction(DoItReaction));
@@ -234,6 +238,7 @@ public class FarmerFatherYoung : NPC {
 			//SetDefaultDialogue();
 		}
 		public void UpdateCoward (){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(NotHardChoice);
 			_allChoiceReactions.Remove(CowardChoice);
 			GUIManager.Instance.RefreshInteraction();
@@ -242,6 +247,7 @@ public class FarmerFatherYoung : NPC {
 			FlagManager.instance.SetFlag(FlagStrings.YourCoward);
 		}
 		public void UpdateDoIt(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(DoItChoice);
 			_allChoiceReactions.Remove(OnYourOwnChoice);
 			GUIManager.Instance.RefreshInteraction();
@@ -250,6 +256,7 @@ public class FarmerFatherYoung : NPC {
 			FlagManager.instance.SetFlag(FlagStrings.IllDoIt);
 		}
 		public void UpdateOnYourOwn(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_allChoiceReactions.Remove(DoItChoice);
 			_allChoiceReactions.Remove(OnYourOwnChoice);
 			GUIManager.Instance.RefreshInteraction();
@@ -260,6 +267,7 @@ public class FarmerFatherYoung : NPC {
 		
 		#region UpdatePathTwo
 		public void UpdateStoriesSilly(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Clear();
 			startedConversation = true;
 			_allChoiceReactions.Add(DoYouMeanChoice, new DispositionDependentReaction(DoYouMeanReaction));
@@ -269,12 +277,14 @@ public class FarmerFatherYoung : NPC {
 			//SetDefaultDialogue();
 		}
 		public void UpdateDoYouMean(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
 			_allChoiceReactions.Remove(DoYouMeanChoice);
 			_allChoiceReactions.Add(StandUpChoice, new DispositionDependentReaction(StandUpReaction));
 			GUIManager.Instance.RefreshInteraction();
 			//SetDefaultDialogue();
 		}
 		public void UpdateNoStoriesSilly(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Clear();
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("If you find a story tell me...");
