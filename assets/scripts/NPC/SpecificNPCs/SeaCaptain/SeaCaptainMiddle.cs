@@ -21,6 +21,7 @@ public class SeaCaptainMiddle : NPC {
 		id = NPCIDs.SEA_CAPTAIN;
 		base.Init();
 		startingPos = this.transform.position;
+		this.SetCharacterPortrait(StringsNPC.Happy);
 	}
 	
 	protected override void SetFlagReactions(){
@@ -58,6 +59,10 @@ public class SeaCaptainMiddle : NPC {
 	}
 
 	protected override void SetUpSchedules(){
+		ScheduleLoop newDefaultSched = new ScheduleLoop(this, Schedule.priorityEnum.Default);
+		newDefaultSched.Add(new Task(new FishState(this)));
+		this.AddSchedule(newDefaultSched);
+		
 		treasureHuntSched = new SeaCaptainTreasureHuntSchedule(this);
 		
 		talkToFortuneTellerFirstSched = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FortuneTellerMiddle), new MiddleSeaCaptainFortuneTellerFirstConvo(), Schedule.priorityEnum.Medium, true);
@@ -156,17 +161,20 @@ public class SeaCaptainMiddle : NPC {
 		#region update methods
 		public void UpdateWhyHere(){
 			_allChoiceReactions.Remove(whyHereChoice);
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			GUIManager.Instance.RefreshInteraction();
 		}
 		
 		public void UpdateWhereShip(){
 			_allChoiceReactions.Remove(whereShipChoice);
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			GUIManager.Instance.RefreshInteraction();
 		}
 		
 		public void UpdateTreasureHuntBegins() {
 			GUIManager.Instance.CloseInteractionMenu();
 			FlagManager.instance.SetFlag(FlagStrings.TreasureHuntBegin);
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 		}
 		#endregion
 	

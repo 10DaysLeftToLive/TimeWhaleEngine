@@ -140,8 +140,8 @@ public class CarpenterSonMiddle : NPC {
 		#region PathOne
 		//Schedule for the Default path
 		moveToWindmill = new Schedule(this, Schedule.priorityEnum.Low);
-		moveToWindmill.Add (new Task(new MoveThenMarkDoneState(this, MapLocations.WindmillMiddle, "Somber Walk", 0.000000000025f)));
-		moveToWindmill.Add (new TimeTask(100f, new IdleState(this)));
+		moveToWindmill.Add (new Task(new MoveThenMarkDoneState(this, MapLocations.WindmillMiddle, "Somber Walk", 2f)));
+		moveToWindmill.Add (new TimeTask(100f, new AbstractAnimationState(this, "Hammer", false)));
 		moveToWindmill.Add (new Task(new MoveThenMarkDoneState(this, this.gameObject.transform.position)));
 		#endregion
 		

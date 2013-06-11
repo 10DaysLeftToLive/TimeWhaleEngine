@@ -111,7 +111,7 @@ public class Schedule {
 	public void RemoveScheduleWithFlag(string flag) {
 		foreach (List<string> fl in flagList) {
 			foreach (string f in fl) {
-				if (f ==(flag)) {
+				if (f.Equals(flag)) {
 					SetComplete();
 				}
 			}

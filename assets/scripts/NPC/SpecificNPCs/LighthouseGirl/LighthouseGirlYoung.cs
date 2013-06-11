@@ -11,6 +11,7 @@ public class LighthouseGirlYoung : NPC {
 	Schedule WalkToBeach;
 	Schedule GaveApple;
 	Schedule GaveNothingSchedule;
+	ScheduleLoop PlayIdle;
 	NPCConvoSchedule LighthouseGoingToBeach;
 	protected override void Init() {
 		id = NPCIDs.LIGHTHOUSE_GIRL;
@@ -77,8 +78,8 @@ public class LighthouseGirlYoung : NPC {
 		flagReactions.Add(FlagStrings.StartTalkingToLighthouse, RemoveConvoWithCastleman);
 		
 		Reaction HiReaction = new Reaction();
-		HiReaction.AddAction(new ShowOneOffChatAction(this, "Pssst...Come over here!"));
-			flagReactions.Add(FlagStrings.UselessFlag, HiReaction);
+		HiReaction.AddAction(new NPCAddScheduleAction(this, PlayIdle));
+		flagReactions.Add(FlagStrings.UselessFlag, HiReaction);
 	}
 	public void DoRemoveConvoWithCastleman(){
 		this.RemoveScheduleWithFlag("TalkWithCastleman");
@@ -97,12 +98,16 @@ public class LighthouseGirlYoung : NPC {
 	protected override void SetUpSchedules(){
 		InitialSchedule = new Schedule(this, Schedule.priorityEnum.Medium);
 		InitialSchedule.Add(new TimeTask(1500, new WaitTillPlayerCloseState(this, ref player)));
-		Task CallUselessFlag = new TimeTask(0f, new IdleState(this));
+		Task CallUselessFlag = new Task(new AbstractAnimationState(this, "Hi"));
 		CallUselessFlag.AddFlagToSet(FlagStrings.UselessFlag);
 		InitialSchedule.Add(CallUselessFlag);
-		InitialSchedule.Add(new Task(new AbstractAnimationState(this, "Play with Sword")));
-		InitialSchedule.Add(new Task(new AbstractAnimationState(this, "Hi")));
+		InitialSchedule.AddFlagGroup(FlagStrings.UselessFlag);
+		//sInitialSchedule.Add(new Task(new AbstractAnimationState(this, "Play with Sword")));
+		//InitialSchedule.Add(new Task(new AbstractAnimationState(this, "Play With Sword")));
 		
+		PlayIdle = new ScheduleLoop(this);
+		PlayIdle.Add(new TimeTask(50f, new IdleState(this)));
+		PlayIdle.Add(new Task(new AbstractAnimationState(this, "Play With Sword")));
 		
 		AttemptToTellOnLighthouse = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerFatherYoung), 
 			new LightHouseToFarmerFather(),Schedule.priorityEnum.DoConvo);
@@ -210,21 +215,25 @@ public class LighthouseGirlYoung : NPC {
 			TakePieReaction = new Reaction();
 			TakePieReaction.AddAction(new NPCTakeItemAction(toControl));
 			TakePieReaction.AddAction(new NPCCallbackAction(UpdateTakeApplePie));
+			TakePieReaction.AddAction(new NPCRemoveScheduleAction(toControl, FlagStrings.UselessFlag));
 			_allItemReactions.Add(StringsItem.ApplePie, new DispositionDependentReaction(TakePieReaction));
 			
 			TakeAppleReaction = new Reaction();
 			TakeAppleReaction.AddAction(new NPCTakeItemAction(toControl));
 			TakeAppleReaction.AddAction(new NPCCallbackAction(UpdateTakeApple));
+			TakeAppleReaction.AddAction(new NPCRemoveScheduleAction(toControl, FlagStrings.UselessFlag));
 			TakeAppleReaction.AddAction(new ShowOneOffChatAction(toControl, "*Sigh*  time to bake I guess..."));
 			
 			DenyAppleReaction = new Reaction();
 			DenyAppleReaction.AddAction(new NPCCallbackAction(UpdateDenyApple));
+			DenyAppleReaction.AddAction(new NPCRemoveScheduleAction(toControl, FlagStrings.UselessFlag));
 			_allItemReactions.Add(StringsItem.Apple, new DispositionDependentReaction(DenyAppleReaction));
 			
 			
 			EvilPlanChoice = new Choice ("What evil plan?", "She wants to drain my strength through constant chores!\n But I'm a great warrior and can see through her cunning schemes to make me cook!");
 			EvilPlanReaction = new Reaction ();
 			EvilPlanReaction.AddAction(new NPCCallbackAction(UpdateEvilPlan));
+			EvilPlanReaction.AddAction(new NPCRemoveScheduleAction(toControl, FlagStrings.UselessFlag));
 			EvilPlanReaction.AddAction(new UpdateCurrentTextAction(toControl, "She wants to drain my strength through constant chores!\n But I'm a great warrior and can see through her cunning schemes to make me cook!"));
 			_allChoiceReactions.Add(EvilPlanChoice, new DispositionDependentReaction(EvilPlanReaction));
 			

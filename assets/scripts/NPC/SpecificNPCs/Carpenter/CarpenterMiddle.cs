@@ -199,7 +199,8 @@ public class CarpenterMiddle : NPC {
 
 		
 		afterHappyForSonBeingACarpenter = new Schedule(this, Schedule.priorityEnum.Medium);
-		TimeTask stormOffToWindmill = new TimeTask(50f, new MoveState(this, MapLocations.WindmillMiddle));
+		Task stormOffToWindmill = new Task(new MoveState(this, MapLocations.WindmillMiddle));
+		TimeTask workOnWindmill = new TimeTask(1000f, new AbstractAnimationState(this, "Hammer"));
 		afterHappyForSonBeingACarpenter.Add(stormOffToWindmill);
 		
 		talkToSonAfterWhittle = new NPCConvoSchedule(this, 

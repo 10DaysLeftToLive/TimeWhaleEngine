@@ -45,6 +45,10 @@ public class FarmerMotherYoung : NPC {
 		OpeningConversation.AddAction(new NPCAddScheduleAction(this, InitialConversation));
 		flagReactions.Add(FlagStrings.OpeningConversationFarmerMotherToFarmerFather, OpeningConversation);
 		
+		Reaction StartHoeing = new Reaction();
+		StartHoeing.AddAction(new NPCAddScheduleAction(this, postOpenningSchedule));
+		flagReactions.Add(FlagStrings.HoeAfterDialogue, StartHoeing);
+		
 	}
 	public void UpdateConversationInMiddleFarmerMother(){
 		this.currentEmotion.PassStringToEmotionState(FlagStrings.ConversationInMiddleFarmerMother);
@@ -78,6 +82,12 @@ public class FarmerMotherYoung : NPC {
 		InitialConversation = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerFatherYoung), 
 			new YoungFarmerMotherToFarmerFatherOpenningScriptedDialogue(),Schedule.priorityEnum.DoConvo);
 		InitialConversation.SetCanNotInteractWithPlayer();
+		InitialConversation.SetFlagOnComplete(FlagStrings.HoeAfterDialogue);
+		
+		postOpenningSchedule = new Schedule(this, Schedule.priorityEnum.Medium);
+		Task goToField = new Task(new MoveState(this, new Vector3(transform.position.x - 4, transform.position.y, transform.position.z)));
+		Task hoeField = new Task(new AbstractAnimationState(this, "Hoe"));
+		postOpenningSchedule.Add(hoeField);
 		
 	}
 	
@@ -253,6 +263,7 @@ public class FarmerMotherYoung : NPC {
 			_allChoiceReactions.Remove(TellOnDaughterChoice);
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Thanks fer talkin to me bout that.  That girl needs ta learn responsibility.");
+			_npcInState.PlayAnimation("Hoe");
 			FinishedTellOnConversation = true;
 			FlagManager.instance.SetFlag(FlagStrings.TellOnLighthouseConversation);
 			FlagManager.instance.SetFlag(FlagStrings.TellOnDaughter);
@@ -274,6 +285,7 @@ public class FarmerMotherYoung : NPC {
 			}
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("I reckon you were right bout those stories.");
+			_npcInState.PlayAnimation("Hoe");
 			FinishedStoriesConversation = true;
 		}
 		public void UpdateMyMom(){
@@ -284,6 +296,7 @@ public class FarmerMotherYoung : NPC {
 			}
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Don't come to me talkin bout those silly stories again.");
+			_npcInState.PlayAnimation("Hoe");
 			FinishedStoriesConversation = true;
 			//Setflag here
 		}
@@ -334,6 +347,7 @@ public class FarmerMotherYoung : NPC {
 			}
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Stop botherin me I got work ta do!");
+			_npcInState.PlayAnimation("Hoe");
 			FinishedStoriesConversation = true;
 		}
 		public void UpdateCanReadAndWork(){
@@ -344,6 +358,7 @@ public class FarmerMotherYoung : NPC {
 			}
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Stop botherin me I got work ta do!");
+			_npcInState.PlayAnimation("Hoe");
 			FinishedStoriesConversation = true;
 			FlagManager.instance.SetFlag(FlagStrings.WorkAndStories);
 		}
@@ -373,6 +388,7 @@ public class FarmerMotherYoung : NPC {
 			}
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Stop botherin me I got work ta do!");
+			_npcInState.PlayAnimation("Hoe");
 			FinishedStoriesConversation = true;
 			FlagManager.instance.SetFlag(FlagStrings.NotSilly);
 		}
@@ -386,6 +402,7 @@ public class FarmerMotherYoung : NPC {
 			}
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Stop botherin me I got work ta do!");
+			_npcInState.PlayAnimation("Hoe");
 			FinishedStoriesConversation = true;
 			FlagManager.instance.SetFlag(FlagStrings.YourRight);
 		}
