@@ -283,6 +283,7 @@ public static class FlagStrings {
 	public static string CastleManTalk = "CastleManTalk.";
 	public static string TalkPreparedForConvo = "Castle Man talk at beach prepared for Convo.";
 	public static string TalkNotPreparedForConvo = "Castle Man talk at beach not prepared for Convo.";
+	public static string TimerForGoingToBeach = "Timer for going to beach.";
 	
 	#endregion
 }
