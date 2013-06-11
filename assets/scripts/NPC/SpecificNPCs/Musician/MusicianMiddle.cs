@@ -15,6 +15,7 @@ public class MusicianMiddle : NPC {
 		id = NPCIDs.MUSICIAN;
 		base.Init();
 		originalLocation = transform.position;
+		AudioListener.volume = 0;
 	}
 	
 	#region Emotion States Initialization
