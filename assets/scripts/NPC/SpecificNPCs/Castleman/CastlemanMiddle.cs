@@ -46,7 +46,8 @@ public class CastlemanMiddle : NPC {
 		flagReactions.Add(FlagStrings.NotInsane, notInsane);
 		
 		waitingForDate.AddAction(new NPCEmotionUpdateAction(this, dateState));
-		flagReactions.Add(FlagStrings.WaitingForDate, waitingForDate);
+		flagReactions.Add(FlagStrings.CastleDate, waitingForDate);
+		//flagReactions.Add(FlagStrings.WaitingForDate, waitingForDate);
 		
 		datingThyEnemy.AddAction(new NPCCallbackAction(setFlagCarpenterDateSuccess));
 		datingThyEnemy.AddAction(new NPCEmotionUpdateAction(this, marriedCarpenterState));
@@ -138,6 +139,7 @@ public class CastlemanMiddle : NPC {
 		reachedBeachEnd.AddFlagToSet(FlagStrings.EndOfDate);
 		moveToBeach.Add(reachedBeachEnd);
 		moveToBeach.Add(new TimeTask(3f, new IdleState(this)));
+		moveToBeach.SetCanInteract(false);
 		
 		
 		/*dateWithLG =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.LighthouseGirlMiddle),

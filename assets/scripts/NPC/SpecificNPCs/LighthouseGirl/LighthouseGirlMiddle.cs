@@ -77,6 +77,14 @@ public class LighthouseGirlMiddle : NPC {
 	Reaction castleDateFive = new Reaction();
 	Reaction castleDateSix = new Reaction();
 	
+	Reaction carpenterDateStart = new Reaction();
+	Reaction carpenterDateOne = new Reaction();
+	Reaction carpenterDateTwo = new Reaction();
+	Reaction carpenterDateThree = new Reaction();
+	Reaction carpenterDateFour = new Reaction();
+	Reaction carpenterDateFive = new Reaction();
+	Reaction carpenterDateSix = new Reaction();
+	
 	Reaction castleMarriageStart = new Reaction();
 	Reaction castleMarriageOne = new Reaction();
 	Reaction castleMarriageTwo = new Reaction();
@@ -150,6 +158,13 @@ public class LighthouseGirlMiddle : NPC {
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleDateTwo, castleDateOne);
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleDateFour, castleDateTwo);
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleDateSix, castleDateThree);
+		
+		carpenterDateStart.AddAction(new NPCAddScheduleAction(this, turnAround)); // turn around
+		carpenterDateStart.AddAction(new NPCCallbackSetStringAction(FlagToNPC, this, "startDate"));
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlCarpenterDateOne, carpenterDateStart);
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlCarpenterDateTwo, carpenterDateOne);
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlCarpenterDateFour, carpenterDateTwo);
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlCarpenterDateSix, carpenterDateThree);
 		
 		castleMarriageStart.AddAction(new NPCAddScheduleAction(this, castleMarriage));
 		flagReactions.Add(FlagStrings.ToolsForMarriage, castleMarriageStart);
@@ -300,6 +315,7 @@ public class LighthouseGirlMiddle : NPC {
 		castleMarriage.Add(castleMarriageChatEight);
 		castleMarriage.Add(new TimeTask(2f, new IdleState(this)));
 		castleMarriage.Add(new Task(new MoveThenDoState(this, new Vector3(startingPosition.x + 2, startingPosition.y, startingPosition.z), new MarkTaskDone(this))));
+		castleMarriage.SetCanInteract(false);
 		#endregion
 		
 		girlEnd = new Schedule(this, Schedule.priorityEnum.DoNow);
@@ -388,6 +404,19 @@ public class LighthouseGirlMiddle : NPC {
 		ShowMultipartChatAction castleDateThreeDialogue = new ShowMultipartChatAction(this);
 		castleDateThreeDialogue.AddChat("Of course I do! You were really sweet to me!", 4f);
 		castleDateThree.AddAction(castleDateThreeDialogue);
+		
+		
+		ShowMultipartChatAction carpenterDateOneDialogue = new ShowMultipartChatAction(this);
+		carpenterDateOneDialogue.AddChat("Fair lady? Come now pretending to like the stoires my dad read to me won't make you endearing.", 7f);
+		carpenterDateOne.AddAction(carpenterDateOneDialogue);
+		
+		ShowMultipartChatAction carpenterDateTwoDialogue = new ShowMultipartChatAction(this);
+		carpenterDateTwoDialogue.AddChat("Wait...I remember you! You were the one I used to play with on the beach and build sand castles!", 6f);
+		carpenterDateTwo.AddAction(carpenterDateTwoDialogue);
+		
+		ShowMultipartChatAction carpenterDateThreeDialogue = new ShowMultipartChatAction(this);
+		carpenterDateThreeDialogue.AddChat("Of course I do! You were really sweet to me!", 4f);
+		carpenterDateThree.AddAction(carpenterDateThreeDialogue);
 		
 		
 		ShowMultipartChatAction castleMarriageOneDialogue = new ShowMultipartChatAction(this);
