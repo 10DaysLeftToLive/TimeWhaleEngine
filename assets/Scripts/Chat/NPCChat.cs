@@ -28,6 +28,12 @@ public class NPCChat {
 		_chatIndex = 0;
 	}
 	
+	public NPCChat(NPC npcToTalk, string chatToSay){
+		_chatTexts = new List<ChatInfo>();
+		_chatIndex = 0;
+		AddChatInfo(new ChatInfo(npcToTalk, chatToSay));
+	}
+	
 	public NPCChat(List<ChatInfo> chatTexts) : base(){
 		_chatTexts = chatTexts;	
 	}

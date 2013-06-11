@@ -27,6 +27,7 @@ public class DigState : PlayAnimationThenDoState {
 				Object itemToPlace = Resources.Load(_itemToDrop);
 				if (itemToPlace == null){
 					Debug.Log("Did not find " + _itemToDrop);
+					character.EnterState(new MarkTaskDone(character));
 					return;
 				}
 				Object newItem = GameObject.Instantiate(itemToPlace, character.GetFeet(), Quaternion.identity);
@@ -34,6 +35,7 @@ public class DigState : PlayAnimationThenDoState {
 			}
 			
 			character.EnterState(new MarkTaskDone(character));
+			return;
 		}
 		
 		base.Update();

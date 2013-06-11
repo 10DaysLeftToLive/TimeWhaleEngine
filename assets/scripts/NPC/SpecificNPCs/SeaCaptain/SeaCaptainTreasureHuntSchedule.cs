@@ -7,11 +7,11 @@ public class SeaCaptainTreasureHuntSchedule : Schedule {
 	
 	protected override void Init ()
 	{
-		Vector3 startingPosition = new Vector3(74f, -3.09f + LevelManager.levelYOffSetFromCenter, 0f);
-		Vector3 farmDigPos = new Vector3(52.5f, 16f + LevelManager.levelYOffSetFromCenter, 0f);
-		Vector3 reflectDigPos = new Vector3(-28f, 18f + LevelManager.levelYOffSetFromCenter, 0f);
-		Vector3 carpenterDigPos = new Vector3(16f, -1f + LevelManager.levelYOffSetFromCenter, 0f);
-		Vector3 beachDigPos = new Vector3(43f, -7.5f + LevelManager.levelYOffSetFromCenter, 0f);
+		Vector3 startingPosition = new Vector3(74f, -3.09f + LevelManager.levelYOffSetFromCenter, 1f);
+		Vector3 farmDigPos = new Vector3(52.5f, 16f + LevelManager.levelYOffSetFromCenter, 1f);
+		Vector3 reflectDigPos = new Vector3(-28f, 18f + LevelManager.levelYOffSetFromCenter, 1f);
+		Vector3 carpenterDigPos = new Vector3(16f, -1f + LevelManager.levelYOffSetFromCenter, 1f);
+		Vector3 beachDigPos = new Vector3(52f, -7.5f + LevelManager.levelYOffSetFromCenter, 1f);
 		
 		NPCChat startHuntChat = new NPCChat();
 		startHuntChat.AddChatInfo(new ChatInfo(_toManage, "Thanks matey! Let's go find me some treasure!"));
@@ -46,15 +46,19 @@ public class SeaCaptainTreasureHuntSchedule : Schedule {
 		SetCanInteract(false);
 		Add(new Task(new NPCChatState(_toManage, _toManage.player, startHuntChat)));
 		Add(new Task(new MoveThenMarkDoneState(_toManage, farmDigPos), _toManage, 3f, "It feels good to be exploring again."));
+		Add(new Task(new NPCChatState(_toManage, _toManage.player, new NPCChat(_toManage, "This looks like the spot"))));
 		Add(new Task(new DigState(_toManage, StringsItem.Apple)));
 		Add(new Task(new NPCChatState(_toManage, _toManage.player, farmDigChat)));
 		Add(new Task(new MoveThenMarkDoneState(_toManage, reflectDigPos), _toManage, 0, "Come now. The map says something about a reflection tree."));
+		Add(new Task(new NPCChatState(_toManage, _toManage.player, new NPCChat(_toManage, "Hopefully this is the spot"))));
 		Add(new Task(new DigState(_toManage)));
 		Add(new Task(new NPCChatState(_toManage, _toManage.player, reflectDigChat)));
-		Add(new Task(new MoveThenMarkDoneState(_toManage, carpenterDigPos), _toManage, 0, "Let's try there and hope the grumpy guy isn't there."));
+		Add(new Task(new MoveThenMarkDoneState(_toManage, carpenterDigPos), _toManage, 0, "Let's try over there and hope the grumpy guy isn't there."));
+		Add(new Task(new NPCChatState(_toManage, _toManage.player, new NPCChat(_toManage, "This had better be the spot!"))));
 		Add(new Task(new DigState(_toManage, StringsItem.Flute)));
 		Add(new Task(new NPCChatState(_toManage, _toManage.player, carpenterDigChat)));
 		Add(new Task(new MoveThenMarkDoneState(_toManage, beachDigPos), _toManage, 0, "Now let's go dig up some treasure!"));
+		Add(new Task(new NPCChatState(_toManage, _toManage.player, new NPCChat(_toManage, "If this isn't where me treasure be buried, then I must not like gold"))));
 		Add(new Task(new DigState(_toManage, StringsItem.Portrait)));
 		Add(new Task(new NPCChatState(_toManage, _toManage.player, beachDigChat)));
 		Add(new Task(new MoveThenMarkDoneState(_toManage, startingPosition), _toManage, 0, "Well... thanks for your help. I have to find a way off this island now."));
