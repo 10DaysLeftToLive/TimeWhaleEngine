@@ -59,6 +59,10 @@ public class SeaCaptainMiddle : NPC {
 	}
 
 	protected override void SetUpSchedules(){
+		ScheduleLoop newDefaultSched = new ScheduleLoop(this, Schedule.priorityEnum.Default);
+		newDefaultSched.Add(new Task(new FishState(this)));
+		this.AddSchedule(newDefaultSched);
+		
 		treasureHuntSched = new SeaCaptainTreasureHuntSchedule(this);
 		
 		talkToFortuneTellerFirstSched = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FortuneTellerMiddle), new MiddleSeaCaptainFortuneTellerFirstConvo(), Schedule.priorityEnum.Medium, true);

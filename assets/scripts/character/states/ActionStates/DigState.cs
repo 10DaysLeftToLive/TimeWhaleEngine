@@ -24,7 +24,7 @@ public class DigState : PlayAnimationThenDoState {
 		if (character is NPC && _timeToDig <= 0){
 			//drop item
 			if (_itemToDrop != "") {
-				Object itemToPlace = Resources.Load(_itemToDrop);
+				Object itemToPlace = Resources.Load("Prefabs/Items" + _itemToDrop);
 				if (itemToPlace == null){
 					Debug.Log("Did not find " + _itemToDrop);
 					character.EnterState(new MarkTaskDone(character));
