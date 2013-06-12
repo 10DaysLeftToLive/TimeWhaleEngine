@@ -213,6 +213,7 @@ public class FarmerMotherYoung : NPC {
 			CanReadAndWorkChoice = new Choice("You can work and read stories.", "*Sigh*  You're just too young ta understand.");
 			CanReadAndWorkReaction = new Reaction();
 			CanReadAndWorkReaction.AddAction(new NPCCallbackAction(UpdateCanReadAndWork));
+			CanReadAndWorkReaction.AddAction(new SetOffFlagAction(FlagStrings.HoeAfterDialogue));
 			CanReadAndWorkReaction.AddAction(new UpdateCurrentTextAction(toControl, "*Sigh*  You're just too young ta understand."));
 			
 			SheShouldDecideChoice = new Choice("Maybe she should decide.", "That silly girl don't know what's best for her!  She's nearly got herself killed tryin to pretend to be some tragic hero by jumpin off the cliff.");
@@ -228,6 +229,7 @@ public class FarmerMotherYoung : NPC {
 			NotSillyChoice = new Choice("She's not silly!", "*Sigh*  You're just too young ta understand.");
 			NotSillyReaction = new Reaction();
 			NotSillyReaction.AddAction(new NPCCallbackAction(UpdateNotSilly));
+			NotSillyReaction.AddAction(new SetOffFlagAction(FlagStrings.HoeAfterDialogue));
 			NotSillyReaction.AddAction(new UpdateCurrentTextAction(toControl, "*Sigh*  You're just too young ta understand."));
 			
 			YouAreRightChoice = new Choice("You're right.", "Course I am!");
@@ -243,16 +245,19 @@ public class FarmerMotherYoung : NPC {
 			WhyNotChoice = new Choice("Why not?", "My dad didn't tell stories, and I came out okay!");
 			WhyNotReaction = new Reaction();
 			WhyNotReaction.AddAction(new NPCCallbackAction(UpdateWhyNot));
+			WhyNotReaction.AddAction(new SetOffFlagAction(FlagStrings.HoeAfterDialogue));
 			WhyNotReaction.AddAction(new UpdateCurrentTextAction(toControl, "My dad didn't tell stories, and I came out okay!"));
 			
 			MyMomChoice = new Choice("My mom tells me stories.", "Yeah?  Well...I guess you don't jump off of cliffs...Perhaps the stories ain't the problem...I'll let her keep the stories so long as she don't jump off cliffs again.");
 			MyMomReaction = new Reaction();
 			MyMomReaction.AddAction(new NPCCallbackAction(UpdateMyMom));
+			MyMomReaction.AddAction(new SetOffFlagAction(FlagStrings.HoeAfterDialogue));
 			MyMomReaction.AddAction(new UpdateCurrentTextAction(toControl, "Yeah?  Well...I guess you don't jump off of cliffs...Perhaps the stories ain't the problem...I'll let her keep the stories so long as she don't jump off cliffs again."));
 			
 			TellOnDaughterChoice = new Choice ("Tell on daughter.", "*Sigh* Thanks fer talkin ta me bout this.");
 			TellOnDaughterReaction = new Reaction();
 			TellOnDaughterReaction.AddAction(new NPCCallbackAction(UpdateTellOnDaughter));
+			TellOnDaughterReaction.AddAction(new SetOffFlagAction(FlagStrings.HoeAfterDialogue));
 			TellOnDaughterReaction.AddAction(new UpdateCurrentTextAction(toControl, "*Sigh* Thanks fer talking ta me bout this."));
 		}
 		public void UpdateGiveSeeds(){

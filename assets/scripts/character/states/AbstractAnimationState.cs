@@ -4,6 +4,7 @@ using System.Collections;
 public class AbstractAnimationState : AbstractState {
 	protected string _animationToPlay;
 	private bool lookRight;
+	private bool reactInPlayerDirection;
 	// Use this for initialization
 	public AbstractAnimationState(Character toControl, string animation) : base(toControl){ 
 		_animationToPlay = animation;
@@ -11,6 +12,12 @@ public class AbstractAnimationState : AbstractState {
 	
 	public AbstractAnimationState(Character toControl, string animation, bool lookRight) : base(toControl) {
 		_animationToPlay = animation;
+		this.lookRight = lookRight;
+	}
+	
+	public AbstractAnimationState(Character toControl, string animation, bool reactInPlayerDirecton, bool lookRight) : base(toControl) {
+		_animationToPlay = animation;
+		this.reactInPlayerDirection = reactInPlayerDirecton;
 		this.lookRight = lookRight;
 	}
 	
@@ -24,11 +31,13 @@ public class AbstractAnimationState : AbstractState {
 //		}
 		
 		character.PlayAnimation(_animationToPlay);
-		if (lookRight) {
-			character.LookRight();
-		}
-		else {
-			character.LookLeft();
+		if (reactInPlayerDirection) {
+			if (lookRight) {
+				character.LookRight();
+			}
+			else {
+				character.LookLeft();
+			}
 		}
 	}
 	

@@ -67,6 +67,7 @@ public class OneDayClock : PauseObject {
 	/// Returns military time starting at 0800
 	/// </summary>
 	public int GetGameDayTime() {
+		if (GamePlayTime() > GAME_LENGTH) EndTheGame();
 		timeOfDay = GamePlayTime()/timeInHour;
 		minutes = (timeOfDay - Mathf.Floor(timeOfDay))*60;
 		hours = ((Mathf.Floor(timeOfDay)*MILITARY_TIME_MULTIPLIER) + START_TIME);
@@ -78,5 +79,9 @@ public class OneDayClock : PauseObject {
 			return true;
 		}
 		return false;
+	}
+	
+	protected void EndTheGame() {
+		//Application.LoadLevel(
 	}
 }

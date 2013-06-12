@@ -11,7 +11,7 @@ public class LighthouseGirlYoung : NPC {
 	Schedule WalkToBeach;
 	Schedule GaveApple;
 	Schedule GaveNothingSchedule;
-	ScheduleLoop PlayIdle;
+
 	NPCConvoSchedule LighthouseGoingToBeach;
 	protected override void Init() {
 		id = NPCIDs.LIGHTHOUSE_GIRL;
@@ -77,9 +77,6 @@ public class LighthouseGirlYoung : NPC {
 		RemoveConvoWithCastleman.AddAction(new NPCCallbackAction(DoRemoveConvoWithCastleman));
 		flagReactions.Add(FlagStrings.StartTalkingToLighthouse, RemoveConvoWithCastleman);
 		
-		Reaction HiReaction = new Reaction();
-		HiReaction.AddAction(new NPCAddScheduleAction(this, PlayIdle));
-		flagReactions.Add(FlagStrings.UselessFlag, HiReaction);
 	}
 	public void DoRemoveConvoWithCastleman(){
 		this.RemoveScheduleWithFlag("TalkWithCastleman");
@@ -94,20 +91,18 @@ public class LighthouseGirlYoung : NPC {
 		//Schedule schedule = new DefaultSchedule(this);
 		return (InitialSchedule);
 	}
-	Schedule InitialSchedule;
-	protected override void SetUpSchedules(){
-		InitialSchedule = new Schedule(this, Schedule.priorityEnum.Medium);
-		InitialSchedule.Add(new TimeTask(1500, new WaitTillPlayerCloseState(this, ref player)));
-		Task CallUselessFlag = new Task(new AbstractAnimationState(this, "Hi"));
-		CallUselessFlag.AddFlagToSet(FlagStrings.UselessFlag);
-		InitialSchedule.Add(CallUselessFlag);
-		InitialSchedule.AddFlagGroup(FlagStrings.UselessFlag);
-		//sInitialSchedule.Add(new Task(new AbstractAnimationState(this, "Play with Sword")));
-		//InitialSchedule.Add(new Task(new AbstractAnimationState(this, "Play With Sword")));
+	ScheduleLoop InitialSchedule;
+	protected override void SetUpSchedules() {
+		InitialSchedule = new ScheduleLoop(this, Schedule.priorityEnum.Medium);
+		Task waitForPlayer = new Task(new WaitTillPlayerCloseState(this, ref player));
+		InitialSchedule.Add(waitForPlayer);
+		Task SayHi = new Task(new AbstractAnimationState(this, "Hi"), this, 0.1f, "Psst! Come over here!");
+		InitialSchedule.Add(SayHi);
+		InitialSchedule.Add(new Task(new WaitTillPlayerCloseState(this, ref player)));
+		Task playWithSword = new Task(new AbstractAnimationState(this, "Play With Sword"));
+		InitialSchedule.Add(playWithSword);
 		
-		PlayIdle = new ScheduleLoop(this);
-		PlayIdle.Add(new TimeTask(50f, new IdleState(this)));
-		PlayIdle.Add(new Task(new AbstractAnimationState(this, "Play With Sword")));
+		
 		
 		AttemptToTellOnLighthouse = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerFatherYoung), 
 			new LightHouseToFarmerFather(),Schedule.priorityEnum.DoConvo);
@@ -126,7 +121,7 @@ public class LighthouseGirlYoung : NPC {
 		TalkWithCastleman.AddFlagGroup("TalkWithCastleman");
 		
 		GaveApple = new Schedule(this, Schedule.priorityEnum.High);
-		GaveApple.Add(new TimeTask(10f, new IdleState(this)));
+		GaveApple.Add(new TimeTask(10f, new AbstractAnimationState(this, "Play With Sword")));
 		GaveApple.Add(SetFlagToBeach);
 		//GaveApple.Add(new TimeTask(500f, new IdleState(this)));
 		

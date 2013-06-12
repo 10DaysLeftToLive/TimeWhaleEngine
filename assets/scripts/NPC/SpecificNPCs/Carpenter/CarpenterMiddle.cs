@@ -115,8 +115,6 @@ public class CarpenterMiddle : NPC {
 		return (openningWaitingSchedule);
 	}
 	
-	
-
 	protected override void SetUpSchedules() {
 		Vector3 startingPosition = transform.position;
 		startingPosition.y += LevelManager.levelYOffSetFromCenter;
@@ -196,8 +194,6 @@ public class CarpenterMiddle : NPC {
 	}
 	
 	private void SetupPrimaryCarpentrySchedules() {
-
-		
 		afterHappyForSonBeingACarpenter = new Schedule(this, Schedule.priorityEnum.Medium);
 		Task stormOffToWindmill = new Task(new MoveState(this, MapLocations.WindmillMiddle));
 		TimeTask workOnWindmill = new TimeTask(1000f, new AbstractAnimationState(this, "Hammer", false));
@@ -207,11 +203,6 @@ public class CarpenterMiddle : NPC {
 		talkToSonAfterWhittle = new NPCConvoSchedule(this, 
 			NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), new MiddleCarpenterToSonCarpentryScriptedConvo(), Schedule.priorityEnum.Low);
 		talkToSonAfterWhittle.SetCanNotInteractWithPlayer();
-		
-		
-//		AddSchedule(happyAtSonForBeingCarpenter);
-//		AddSchedule(afterHappyForSonBeingACarpenter);
-//		AddSchedule(talkToSonAfterWhittle);
 		
 		talkToSonWithoutWhittle = new NPCConvoSchedule(this,
 			NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), new MiddleCarpenterToSonCarpentryScriptedConvo(), Schedule.priorityEnum.Low);
