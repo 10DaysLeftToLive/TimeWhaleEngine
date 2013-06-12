@@ -113,6 +113,7 @@ public class CastlemanOld : NPC {
 		{
 			_allChoiceReactions.Add(whySoBitterChoice, new DispositionDependentReaction(whySoBitterReaction));
 			whySoBitterReaction.AddAction(new NPCCallbackAction(AngryReply));
+			whySoBitterReaction.AddAction(new NPCOneOffChat("You ruined everything, and you dare to ask me if I'm in the wrong!?"));
 		}
 		
 		private void AngryReply()
@@ -138,11 +139,23 @@ public class CastlemanOld : NPC {
 		Reaction whyBitterReaction = new Reaction();
 		
 		Choice herMotherChoice = new Choice("What about her Mother?", "Her mother never approved of our marriage. It caused problems for them, I wish I could help but you can't change the past.");
+		Reaction herMotherReaction = new Reaction();
 		
 		public MarriedEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue)
 		{
+			howisLifeReaction.AddAction(new NPCCallbackAction(HowIsLifeResult));
 			
+			
+			_allChoiceReactions.Add(howIsLifeChoice, howisLifeReaction);
 		}
+		
+		private void HowIsLifeResult()
+		{
+			_allChoiceReactions.Remove(howIsLifeChoice);
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
+			SetDefaultText("Thanks for everything you've done!");
+		}
+		
 	}
 	#endregion
 	#region SadState
@@ -165,7 +178,54 @@ public class CastlemanOld : NPC {
 		
 		public SadEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue)
 		{
+			whatChanceDidYouMissReaction.AddAction(new NPCCallbackAction(AreYouAlrightResult));
+			areYouAlrightReaction.AddAction(new NPCCallbackAction(AreYouAlrightResult));
+			whatCastleReaction.AddAction(new NPCCallbackAction(WhatCastleResult));
+			brightReaction.AddAction(new NPCCallbackAction(BrightResult));
+			ignoredReaction.AddAction(new NPCCallbackAction(IgnoredResult));
 			
+			_allChoiceReactions.Add(whatChanceDidYouMissChoice, whatChanceDidYouMissReaction);
+			_allChoiceReactions.Add(areYouAlrightChoice, areYouAlrightReaction);
+		}
+		
+		private void AreYouAlrightResult()
+		{
+			_allChoiceReactions.Clear();
+			SetDefaultText("Sorry about that, the mind's been wandering a bit lately.");
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
+			GUIManager.Instance.RefreshInteraction();
+		}
+		
+		private void WhatChanceRseult()
+		{
+			_allChoiceReactions.Remove(whatChanceDidYouMissChoice);
+			_allChoiceReactions.Add(whatCastleChoice, whatCastleReaction);
+			SetDefaultText("My Castle... My Castle...");
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
+			GUIManager.Instance.RefreshInteraction();
+		}
+		
+		private void WhatCastleResult()
+		{
+			_allChoiceReactions.Remove(whatCastleChoice);
+			_allChoiceReactions.Add(brightChoice, brightReaction);
+			SetDefaultText("bright...");
+			GUIManager.Instance.RefreshInteraction();
+		}
+		
+		private void BrightResult()
+		{
+			_allChoiceReactions.Remove(brightChoice);
+			_allChoiceReactions.Add(ignoredChoice, ignoredReaction);
+			SetDefaultText("ignored...");
+			GUIManager.Instance.RefreshInteraction();
+		}
+		
+		private void IgnoredResult()
+		{
+			_allChoiceReactions.Remove(ignoredChoice);
+			SetDefaultText("gone...");
+			GUIManager.Instance.RefreshInteraction();
 		}
 	}
 	#endregion
