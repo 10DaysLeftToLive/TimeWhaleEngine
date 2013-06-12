@@ -29,32 +29,11 @@ public class CarpenterSonMiddle : NPC {
 	}
 	
 	protected override void SetFlagReactions(){
-//		Reaction waitingForDate = new Reaction();
-//		waitingForDate.AddAction(new NPCEmotionUpdateAction(this, dateState));
-//		flagReactions.Add(FlagStrings.WaitingForDate, waitingForDate);
-//		
-//		Reaction gotTheGirl = new Reaction();
-//		gotTheGirl.AddAction(new NPCEmotionUpdateAction(this, initialState)); //change state after successfuldate
-//		flagReactions.Add(FlagStrings.PostDatingCarpenter, gotTheGirl);
-//		
-//		Reaction iBeDating = new Reaction();
-//		iBeDating.AddAction(new NPCCallbackAction(setFlagDateForMe));
-//		flagReactions.Add(FlagStrings.CarpenterDate, iBeDating);
-//		
-//		Reaction endOfDate = new Reaction();
-//		endOfDate.AddAction(new NPCCallbackAction(dateOver));
-//		endOfDate.AddAction(new NPCAddScheduleAction(this, moveBack));
-//		flagReactions.Add(FlagStrings.EndOfDate, endOfDate);
-//		
-//		
 ////		Reaction stoodUpLG = new Reaction();
 ////		stoodUpLG.AddAction(new NPCEmotionUpdateAction(this, StoodUpState));
 ////		flagReactions.Add(FlagStrings.CarpenterNoShow, stoodUpLG);
 //		
-//		Reaction moveToDate = new Reaction();
-//		moveToDate.AddAction(new NPCAddScheduleAction(this, dateWithLG));
-//		flagReactions.Add(FlagStrings.CarpenterDating, moveToDate);
-		
+
 		startingPosition = transform.position;
 		startingPosition.y += LevelManager.levelYOffSetFromCenter;
 		//Schedule for the default path
@@ -123,6 +102,10 @@ public class CarpenterSonMiddle : NPC {
 		dating.AddAction(new NPCCallbackAction(setFlagDateForMe));
 		dating.AddAction(new NPCCallbackSetStringAction(FlagToNPC, this, "date"));
 		flagReactions.Add(FlagStrings.CarpenterDate, dating);
+		
+		Reaction moveToDate = new Reaction();
+		moveToDate.AddAction(new NPCAddScheduleAction(this, moveToBeach));
+		flagReactions.Add(FlagStrings.CarpenterDating, moveToDate);
 		
 		Reaction endOfDate = new Reaction();
 		endOfDate.AddAction(new NPCCallbackAction(dateOver));
