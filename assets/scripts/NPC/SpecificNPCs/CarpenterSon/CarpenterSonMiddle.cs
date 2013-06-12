@@ -16,7 +16,6 @@ public class CarpenterSonMiddle : NPC {
 	Schedule stormOffSchedule, moveToBeach, moveBack, moveToWindmill;
 	Schedule MoveToPierToFish, AfterSeaCaptainTalk, TeleportToStartConvo;
 	NPCConvoSchedule dateWithLG;
-	
 	NPCConvoSchedule reportedDidHardWorkToFather, reportedDidNoWorkToFather;
 	Schedule EndState;
 	Schedule StartCarpentry;
@@ -70,6 +69,7 @@ public class CarpenterSonMiddle : NPC {
 		Reaction MovePiecesForFishing =  new Reaction();
 		//MovePiecesForFishing.AddAction
 		MovePiecesForFishing.AddAction(new NPCTeleportToAction(this, startingPosition));
+		MovePiecesForFishing.AddAction(new NPCCallbackAction(this, AcquireFishingPole));
 		MovePiecesForFishing.AddAction(new NPCAddScheduleAction(this, TeleportToStartConvo));
 		flagReactions.Add(FlagStrings.carpenterSonEncouragedFishing, MovePiecesForFishing);
 		
@@ -142,7 +142,7 @@ public class CarpenterSonMiddle : NPC {
 		moveToWindmill = new Schedule(this, Schedule.priorityEnum.Low);
 		moveToWindmill.Add (new Task(new MoveThenMarkDoneState(this, MapLocations.WindmillMiddle, "Somber Walk", 2f)));
 		moveToWindmill.Add (new TimeTask(100f, new AbstractAnimationState(this, "Hammer", false)));
-		moveToWindmill.Add (new Task(new MoveThenMarkDoneState(this, this.gameObject.transform.position)));
+		moveToWindmill.Add (new Task(new MoveThenMarkDoneState(this, startingPosition)));
 		#endregion
 		
 		#region FishingPath
@@ -197,6 +197,10 @@ public class CarpenterSonMiddle : NPC {
 		AfterConversationCarpentery.Add(new TimeTask(10000f, new IdleState(this)));
 		#region NPCConvoSchedules
 		#endregion
+	}
+	
+	protected void AcquireFishingPole() {
+		
 	}
 	
 	protected void dateOver(){
