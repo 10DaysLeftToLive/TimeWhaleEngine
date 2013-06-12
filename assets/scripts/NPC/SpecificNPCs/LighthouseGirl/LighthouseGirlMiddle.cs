@@ -39,7 +39,7 @@ public class LighthouseGirlMiddle : NPC {
 	{
 		if (waitingOnDateTimer && !dateOver){
 			time -= Time.deltaTime;
-			Debug.Log(time);
+			//Debug.Log(time);
 			if (time < 0 && !dateOver){
 				dateOver = true;
 				this.RemoveScheduleWithFlag("a");
@@ -677,8 +677,9 @@ public class LighthouseGirlMiddle : NPC {
 			SetDefaultText("Promise you don't tell anyone about this?");
 			
 			//FlagManager.instance.SetFlag(FlagStrings.ToolsForMarriage); // test
-			FlagManager.instance.SetFlag(FlagStrings.CastleDate);	//test
-			FlagManager.instance.SetFlag(FlagStrings.WaitForPlayerBeforeRope); //test
+			//FlagManager.instance.SetFlag(FlagStrings.CastleDate);	//test
+			//FlagManager.instance.SetFlag(FlagStrings.CarpenterDate);	//test
+			//FlagManager.instance.SetFlag(FlagStrings.WaitForPlayerBeforeRope); //test
 			GUIManager.Instance.CloseInteractionMenu();
 		}
 		public void MarriageResponse(){	
