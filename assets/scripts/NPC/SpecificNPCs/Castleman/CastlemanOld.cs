@@ -18,18 +18,22 @@ public class CastlemanOld : NPC {
 	 * 
 	 * 2. ANGRY STATE - time for the rage machine
 	 * 	is angry at the player and refuses to speak with them (wow this shit it going to be simple)
+	 *  flagReactions.Add(FlagStrings.PostDatingCarpenter, datingThyEnemy);
 	 * 
 	 * 3. MARRIED STATE - hoo yeeeeaaaahahhahahahah
 	 * 	he's happy as fuck, just chillen like a badass motherfucker, maybe have a quest in there? If not it's no biggie
 	 * 	probably need to teleport this badass to the lighthouse, poor windmill, nobody loves you
+	 *  flagReactions.Add(FlagStrings.CastleMarriage, castleMarriage);
 	 * 
 	 * 4. SAD STATE - not married full of regret
 	 * 	writes poetry every day and daaaaaayyyyyyyymmmmmmmmmmm, sound sweet as fuck
 	 * 	mostly just has dialogue, muses about the world and shit
 	 * 	(also totally optional depending on the flags)
+	 *  flagReactions.Add(FlagStrings.StartTalkingToLighthouse, TalkWithLighthouseFirstTime);   OR FlagStrings.FinishedInitialConversationWithCSONFriend
 	 * 
 	 * 5. RAN OFF STATE - ran off to get married (optional)
 	 * 	is no where to be found, as is Lighthouse Girl
+	 * flagReactions.Add(FlagStrings.PostCastleDate, gotTheGirl); but NOT flagReactions.Add(FlagStrings.CastleMarriage, castleMarriage);
 	 * 	
 	*/
 	protected override void SetFlagReactions(){
@@ -113,7 +117,7 @@ public class CastlemanOld : NPC {
 		{
 			_allChoiceReactions.Add(whySoBitterChoice, new DispositionDependentReaction(whySoBitterReaction));
 			whySoBitterReaction.AddAction(new NPCCallbackAction(AngryReply));
-			whySoBitterReaction.AddAction(new NPCOneOffChat("You ruined everything, and you dare to ask me if I'm in the wrong!?"));
+			whySoBitterReaction.AddAction(new ShowOneOffChatAction(toControl, "You ruined everything, and you dare to ask me if I'm in the wrong!?"));
 		}
 		
 		private void AngryReply()
@@ -146,7 +150,7 @@ public class CastlemanOld : NPC {
 			howisLifeReaction.AddAction(new NPCCallbackAction(HowIsLifeResult));
 			
 			
-			_allChoiceReactions.Add(howIsLifeChoice, howisLifeReaction);
+			_allChoiceReactions.Add(howIsLifeChoice, new DispositionDependentReaction(howisLifeReaction));
 		}
 		
 		private void HowIsLifeResult()
@@ -184,8 +188,8 @@ public class CastlemanOld : NPC {
 			brightReaction.AddAction(new NPCCallbackAction(BrightResult));
 			ignoredReaction.AddAction(new NPCCallbackAction(IgnoredResult));
 			
-			_allChoiceReactions.Add(whatChanceDidYouMissChoice, whatChanceDidYouMissReaction);
-			_allChoiceReactions.Add(areYouAlrightChoice, areYouAlrightReaction);
+			_allChoiceReactions.Add(whatChanceDidYouMissChoice,new DispositionDependentReaction(whatChanceDidYouMissReaction));
+			_allChoiceReactions.Add(areYouAlrightChoice, new DispositionDependentReaction(areYouAlrightReaction));
 		}
 		
 		private void AreYouAlrightResult()
@@ -199,7 +203,7 @@ public class CastlemanOld : NPC {
 		private void WhatChanceRseult()
 		{
 			_allChoiceReactions.Remove(whatChanceDidYouMissChoice);
-			_allChoiceReactions.Add(whatCastleChoice, whatCastleReaction);
+			_allChoiceReactions.Add(whatCastleChoice, new DispositionDependentReaction(whatCastleReaction));
 			SetDefaultText("My Castle... My Castle...");
 			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			GUIManager.Instance.RefreshInteraction();
@@ -208,7 +212,7 @@ public class CastlemanOld : NPC {
 		private void WhatCastleResult()
 		{
 			_allChoiceReactions.Remove(whatCastleChoice);
-			_allChoiceReactions.Add(brightChoice, brightReaction);
+			_allChoiceReactions.Add(brightChoice, new DispositionDependentReaction(brightReaction));
 			SetDefaultText("bright...");
 			GUIManager.Instance.RefreshInteraction();
 		}
@@ -216,7 +220,7 @@ public class CastlemanOld : NPC {
 		private void BrightResult()
 		{
 			_allChoiceReactions.Remove(brightChoice);
-			_allChoiceReactions.Add(ignoredChoice, ignoredReaction);
+			_allChoiceReactions.Add(ignoredChoice, new DispositionDependentReaction(ignoredReaction));
 			SetDefaultText("ignored...");
 			GUIManager.Instance.RefreshInteraction();
 		}
