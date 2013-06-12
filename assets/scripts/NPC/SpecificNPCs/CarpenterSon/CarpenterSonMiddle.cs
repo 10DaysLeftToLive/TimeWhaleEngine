@@ -176,7 +176,7 @@ public class CarpenterSonMiddle : NPC {
 		//Schedule for the Default path
 		moveToWindmill = new Schedule(this, Schedule.priorityEnum.Low);
 		moveToWindmill.Add (new Task(new MoveThenMarkDoneState(this, MapLocations.WindmillMiddle, "Somber Walk", 2f)));
-		moveToWindmill.Add (new TimeTask(100f, new AbstractAnimationState(this, "Hammer", false)));
+		moveToWindmill.Add (new TimeTask(100f, new AbstractAnimationState(this, "Hammer", false, false)));
 		moveToWindmill.Add (new Task(new MoveThenMarkDoneState(this, startingPosition)));
 		#endregion
 		
@@ -190,7 +190,7 @@ public class CarpenterSonMiddle : NPC {
 		
 		MoveToPierToFish = new Schedule(this, Schedule.priorityEnum.DoNow);
 		MoveToPierToFish.Add(new Task(new MoveThenMarkDoneState(this, MapLocations.BaseOfPierMiddle)));
-		MoveToPierToFish.Add(new TimeTask(100f, new AbstractAnimationState(this, "Fish")));
+		MoveToPierToFish.Add(new TimeTask(100f, new AbstractAnimationState(this, "Fishing", true, true)));
 		Task SetOffConversationWithSeaCaptain = new TimeTask(0f, new IdleState(this));
 		SetOffConversationWithSeaCaptain.AddFlagToSet(FlagStrings.StartConversationWithSeaCaptainAboutBuildingShip);
 		MoveToPierToFish.Add(SetOffConversationWithSeaCaptain);

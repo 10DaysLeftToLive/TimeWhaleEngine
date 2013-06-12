@@ -10,9 +10,9 @@ public class AbstractAnimationState : AbstractState {
 		_animationToPlay = animation;
 	}
 	
-	public AbstractAnimationState(Character toControl, string animation, bool lookRight) : base(toControl) {
+	public AbstractAnimationState(Character toControl, string animation, bool reactInPlayerDirection) : base(toControl) {
 		_animationToPlay = animation;
-		this.lookRight = lookRight;
+		this.reactInPlayerDirection = reactInPlayerDirection;
 	}
 	
 	public AbstractAnimationState(Character toControl, string animation, bool reactInPlayerDirecton, bool lookRight) : base(toControl) {
@@ -31,7 +31,7 @@ public class AbstractAnimationState : AbstractState {
 //		}
 		
 		character.PlayAnimation(_animationToPlay);
-		if (reactInPlayerDirection) {
+		if (!reactInPlayerDirection) {
 			if (lookRight) {
 				character.LookRight();
 			}

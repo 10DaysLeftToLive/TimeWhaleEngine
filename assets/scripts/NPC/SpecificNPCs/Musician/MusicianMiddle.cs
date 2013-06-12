@@ -21,11 +21,12 @@ public class MusicianMiddle : NPC {
 	
 	DispleasedWithSon unhappyMusician = null;
 	HappyForCastleMan happyMusician = null;
-	NeturalTowardsPlayer indroducedToHappyMusician = null;
+	NeturalTowardsPlayer introducedToHappyMusician = null;
 	#endregion
 	
 	ScheduleLoop runAway, wanderAndPlayMusic;
-	Schedule playMusicAtSunset;
+	Schedule playHarpInstrument;
+	Schedule playFluteInstrument;
 	
 	protected override void SetFlagReactions() {
 		Reaction neutralTowardsPlayer = new Reaction();
@@ -100,8 +101,18 @@ public class MusicianMiddle : NPC {
 		wanderAndPlayMusic.Add (moveToReflectionTree);
 		wanderAndPlayMusic.Add (moveToCliff);
 		wanderAndPlayMusic.Add (moveToWindmill);
+		
+		SetupInstrumentSchedules ();
 	}
-	
+
+	void SetupInstrumentSchedules ()
+	{
+		playHarpInstrument = new Schedule(this);
+		playHarpInstrument.Add(new Task(new AbstractAnimationState(this, "Playing Harp")));
+		
+		playFluteInstrument = new Schedule(this);
+		playHarpInstrument.Add(new Task(new AbstractAnimationState(this, "Playing Flute")));
+	}
 	
 	#endregion
 	
@@ -238,11 +249,12 @@ public class MusicianMiddle : NPC {
 		Choice playMusicialInstrument = new Choice("Could you play me a tune?", "That would lovely, if only I had something to play with.");
 		
 		Reaction curiousAboutSon = new Reaction();
-		Reaction playMusic = new Reaction();
+		Reaction playHarp = new Reaction();
+		Reaction playFlute = new Reaction();
 		Reaction askToPlayMusic = new Reaction();
 		
 		public HappyForCastleMan(NPC toControl, string currentDialogue) : base(toControl, currentDialogue) {
-			toControl.SetCharacterPortrait(StringsNPC.Smile);
+			toControl.SetCharacterPortrait(StringsNPC.Happy);
 			toControl.ChangeFacialExpression(StringsNPC.Happy);
 			
 			curiousAboutSon.AddAction(new NPCCallbackAction(AskAboutSon));
@@ -250,16 +262,31 @@ public class MusicianMiddle : NPC {
 			askToPlayMusic.AddAction(new UpdateDefaultTextAction(toControl, "I always wanted to play something compliments the seasons."));
 			askToPlayMusic.AddAction(new NPCCallbackAction(ClearAllChoices));
 			
-			playMusic.AddAction(new NPCTakeItemAction(toControl));
-			playMusic.AddAction(new UpdateCurrentTextAction(toControl, "This is perfect! I will be playing melodies around town; please, feel free to follow me."));
-			playMusic.AddAction(new UpdateDefaultTextAction(toControl, "There is nothing better than serenading under the sunlight"));
+			Action takeItemFromPlayer = new NPCTakeItemAction(toControl);
+			Action textBoxUpdate = new UpdateCurrentTextAction(toControl, "This is perfect! I will be playing melodies around town.");
+			Action defaultTextUpdate = new UpdateDefaultTextAction(toControl, "There is nothing better than serenading under the sunlight");
+			
+			
+			CreateInstrumentReactions (toControl, takeItemFromPlayer, textBoxUpdate, defaultTextUpdate);
 			//Add schedule action here
 			
 			_allChoiceReactions.Add(askAboutSon, new DispositionDependentReaction(curiousAboutSon));
 			_allChoiceReactions.Add(playMusicialInstrument, new DispositionDependentReaction(askToPlayMusic));
 			
-			_allItemReactions.Add(StringsItem.Harp, new DispositionDependentReaction(playMusic));
-			_allItemReactions.Add(StringsItem.Flute, new DispositionDependentReaction(playMusic));
+			_allItemReactions.Add(StringsItem.Harp, new DispositionDependentReaction(playHarp));
+			_allItemReactions.Add(StringsItem.Flute, new DispositionDependentReaction(playFlute));
+		}
+
+		void CreateInstrumentReactions (NPC toControl, Action takeItemFromPlayer, Action textBoxUpdate, Action defaultTextUpdate) {
+			playHarp.AddAction(takeItemFromPlayer);
+			playHarp.AddAction(textBoxUpdate);
+			playHarp.AddAction(defaultTextUpdate);
+			playHarp.AddAction(new SetOffFlagAction("Play The Harp"));
+			
+			playFlute.AddAction(takeItemFromPlayer);
+			playFlute.AddAction(textBoxUpdate);
+			playFlute.AddAction(defaultTextUpdate);
+			playFlute.AddAction(new SetOffFlagAction("Play The Flute"));
 		}
 				
 		void ClearAllChoices() {
@@ -275,7 +302,7 @@ public class MusicianMiddle : NPC {
 			_npcInState.ChangeFacialExpression(StringsNPC.Smile);
 			_allChoiceReactions.Add(askAboutSon, new DispositionDependentReaction(curiousAboutSon));
 		}
-		
+
 		public override void UpdateEmotionState(){
 			
 		}

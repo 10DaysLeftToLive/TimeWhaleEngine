@@ -61,7 +61,7 @@ public class Player : Character {
 		pos.z = this.transform.position.z;
 		
 		if (currentState.GetType() == typeof(IdleState) || currentState.GetType().IsSubclassOf(typeof(MoveState))){ 
-			EnterState(new MoveState(this, pos)); // If we are idling of in a movethen do state cancel and move to the new position
+			EnterState(new MoveState(this, pos, 5f)); // If we are idling of in a movethen do state cancel and move to the new position
 		} else if (currentState.GetType() == typeof(MoveState)){
 			((MoveState) currentState).UpdateGoal(pos);
 		}

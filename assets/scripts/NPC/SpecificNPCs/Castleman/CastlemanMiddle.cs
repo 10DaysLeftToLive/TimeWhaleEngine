@@ -46,8 +46,9 @@ public class CastlemanMiddle : NPC {
 		flagReactions.Add(FlagStrings.NotInsane, notInsane);
 		
 		waitingForDate.AddAction(new NPCEmotionUpdateAction(this, dateState));
+//CONFLICTS WITH LINE 61		
 		flagReactions.Add(FlagStrings.CastleDate, waitingForDate);
-		//flagReactions.Add(FlagStrings.WaitingForDate, waitingForDate);
+		flagReactions.Add(FlagStrings.WaitingForDate, waitingForDate);
 		
 		datingThyEnemy.AddAction(new NPCCallbackAction(setFlagCarpenterDateSuccess));
 		datingThyEnemy.AddAction(new NPCEmotionUpdateAction(this, marriedCarpenterState));
