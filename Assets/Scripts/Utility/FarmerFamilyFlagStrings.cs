@@ -51,5 +51,7 @@ public static class FarmerFamilyFlagStrings {
 	public static string GirlPathEndEleven = "Girl path end eleven";
 	public static string GirlPathEndTwelve = "Girl path end twelve";
 	public static string GirlPathEndThirteen = "Girl path end thirteen";
+	
+	public static string DaughterReady = "Daughter ready";
 }
 

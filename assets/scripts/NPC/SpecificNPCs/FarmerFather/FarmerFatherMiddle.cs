@@ -47,8 +47,10 @@ public class FarmerFatherMiddle : NPC {
 	Reaction postDateCastle = new Reaction();
 	Reaction postDateCarpenter = new Reaction();
 	Reaction castleDate = new Reaction();
+	Reaction farmersBetrayed = new Reaction();
 	Reaction stoodUp = new Reaction();
 	Reaction farmer = new Reaction();
+	Reaction daughterReady = new Reaction();
 	
 	Reaction apple = new Reaction();
 	Reaction applePie = new Reaction();
@@ -78,6 +80,8 @@ public class FarmerFatherMiddle : NPC {
 		flagReactions.Add(FlagStrings.CastleDate, castleDate);
 		flagReactions.Add(FlagStrings.FarmerOnBoard, farmer);
 		flagReactions.Add(FlagStrings.StoodUp, stoodUp);
+		flagReactions.Add(FlagStrings.FarmersBetrayed, farmersBetrayed);
+		flagReactions.Add(FarmerFamilyFlagStrings.DaughterReady, daughterReady);
 		
 		flagReactions.Add(FlagStrings.GiveAppleToFarmer, apple);
 		flagReactions.Add(FlagStrings.GiveApplePieToFarmer, applePie);
@@ -215,6 +219,13 @@ public class FarmerFatherMiddle : NPC {
 		if (text == "farmerMotherOnBoard"){
 			farmersOnBoard = true;	
 		}
+		if (text == "castleSuccess" && farmersOnBoard){
+			disposition = 0;
+			FlagManager.instance.SetFlag(FlagStrings.FarmersBetrayed);
+		}
+		if (text == "daughterReady"){
+			initialState.PassStringToEmotionState(text);	
+		}
 	}
 	
 	public override void SendStringToNPC(string text) {
@@ -243,14 +254,17 @@ public class FarmerFatherMiddle : NPC {
 		
 		farmer.AddAction(new NPCCallbackSetStringAction(FlagToNPC, this, "farmerMotherOnBoard"));
 		
-		//postDateCastle.AddAction(new NPCEmotionUpdateAction(this, new HateEmotionState(this, "")));
-		//postDateCastle.AddAction(new NPCCallbackSetStringAction(ChangeDisposition, this, "-100"));
+		farmersBetrayed.AddAction(new NPCEmotionUpdateAction(this, new HateEmotionState(this, "")));
+		
+		postDateCastle.AddAction(new NPCCallbackSetStringAction(FlagToNPC, this, "castleSuccess"));
 		
 		postDateCarpenter.AddAction(new NPCCallbackSetStringAction(FlagToNPC, this, "carpenterSuccess"));
 		
 		castleDate.AddAction(new NPCCallbackSetStringAction(FlagToNPC, this, "castle"));
 		
 		stoodUp.AddAction(new NPCCallbackSetStringAction(FlagToNPC, this, "stoodUp"));
+		
+		daughterReady.AddAction(new NPCCallbackSetStringAction(FlagToNPC, this, "daughterReady"));
 		
 		
 		
@@ -277,6 +291,7 @@ public class FarmerFatherMiddle : NPC {
 		bool MarriageFlag = false;
 		bool convinceFlag = false;
 		bool daughterOnBoard = false;
+		bool newMarriagePlan = false;
 		Choice BusinessChoice = new Choice("How's your business?", "It's going poorly...I just can never find the strength to be a hawk when it comes to business...");
 		Choice MarriageChoice = new Choice("So about this marriage?", "I...I don't like it...but I'm sure my wife knows what she's doing.");
 		Reaction BusinessReaction = new Reaction();
@@ -430,8 +445,8 @@ public class FarmerFatherMiddle : NPC {
 			}
 			GUIManager.Instance.RefreshInteraction();
 			
-			FlagManager.instance.SetFlag(FarmerFamilyFlagStrings.GirlPathEndStart); //test
-			GUIManager.Instance.CloseInteractionMenu();
+			//FlagManager.instance.SetFlag(FarmerFamilyFlagStrings.GirlPathEndStart); //test
+			//GUIManager.Instance.CloseInteractionMenu(); //test
 		}
 		
 		public void UpdateYouSure(){
@@ -482,6 +497,13 @@ public class FarmerFatherMiddle : NPC {
 			_allChoiceReactions.Remove(YouHaveItChoice);
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Thanks");
+			if (newMarriagePlan){
+				FlagManager.instance.SetFlag(FarmerFamilyFlagStrings.GirlPathEndStart);
+				GUIManager.Instance.CloseInteractionMenu();
+			}else {
+				_allChoiceReactions.Add(MarriageChoice, new DispositionDependentReaction(MarriageReaction));
+				_allChoiceReactions.Add(BusinessChoice, new DispositionDependentReaction(BusinessReaction));
+			}
 			
 		}
 		public void UpdateYouHaveIt(){
@@ -490,6 +512,13 @@ public class FarmerFatherMiddle : NPC {
 			_allChoiceReactions.Remove(YouHaveItChoice);
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Thanks");
+			if (newMarriagePlan){
+				FlagManager.instance.SetFlag(FarmerFamilyFlagStrings.GirlPathEndStart);
+				GUIManager.Instance.CloseInteractionMenu();
+			}else {
+				_allChoiceReactions.Add(MarriageChoice, new DispositionDependentReaction(MarriageReaction));
+				_allChoiceReactions.Add(BusinessChoice, new DispositionDependentReaction(BusinessReaction));
+			}
 		}
 		
 		public override void UpdateEmotionState(){
@@ -510,6 +539,9 @@ public class FarmerFatherMiddle : NPC {
 			}
 			if (text == "stoodUp"){
 				SetDefaultText("Went through all that trouble...for nothing.");
+			}
+			if (text == "daughterReady"){
+				newMarriagePlan = true;
 			}
 		}
 	
