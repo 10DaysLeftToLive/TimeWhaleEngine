@@ -47,7 +47,7 @@ public class SeaCaptainTreasureHuntSchedule : Schedule {
 		Add(new Task(new NPCChatState(_toManage, _toManage.player, startHuntChat)));
 		Add(new Task(new MoveThenMarkDoneState(_toManage, farmDigPos), _toManage, 3f, "It feels good to be exploring again."));
 		Add(new Task(new NPCChatState(_toManage, _toManage.player, new NPCChat(_toManage, "This looks like the spot"))));
-		Add(new Task(new DigState(_toManage, StringsItem.Apple)));
+		Add(new Task(new DigState(_toManage, StringsItem.Vegetable)));
 		Add(new Task(new NPCChatState(_toManage, _toManage.player, farmDigChat)));
 		Add(new Task(new MoveThenMarkDoneState(_toManage, reflectDigPos), _toManage, 0, "Come now. The map says something about a reflection tree."));
 		Add(new Task(new NPCChatState(_toManage, _toManage.player, new NPCChat(_toManage, "Hopefully this is the spot"))));
@@ -59,7 +59,7 @@ public class SeaCaptainTreasureHuntSchedule : Schedule {
 		Add(new Task(new NPCChatState(_toManage, _toManage.player, carpenterDigChat)));
 		Add(new Task(new MoveThenMarkDoneState(_toManage, beachDigPos), _toManage, 0, "Now let's go dig up some treasure!"));
 		Add(new Task(new NPCChatState(_toManage, _toManage.player, new NPCChat(_toManage, "If this isn't where me treasure be buried, then I must not like gold"))));
-		Add(new Task(new DigState(_toManage, StringsItem.Portrait)));
+		Add(new Task(new DigState(_toManage, StringsItem.SeashellTwo)));
 		Add(new Task(new NPCChatState(_toManage, _toManage.player, beachDigChat)));
 		Add(new Task(new MoveThenMarkDoneState(_toManage, startingPosition), _toManage, 0, "Well... thanks for your help. I have to find a way off this island now."));
 	}

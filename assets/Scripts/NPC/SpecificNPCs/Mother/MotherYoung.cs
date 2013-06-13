@@ -11,27 +11,28 @@ public class MotherYoung : NPC {
 	}
 	#region SetFlagReactions	
 	protected override void SetFlagReactions() {	
-		Reaction enterHappy = new Reaction();
+		/*Reaction enterHappy = new Reaction();
 		enterHappy.AddAction(new ShowOneOffChatAction(this, "I think there's a good spot over here!"));
 		enterHappy.AddAction(new NPCAddScheduleAction(this, moveMotherHappyState));
-		flagReactions.Add (FlagStrings.EnterHappyState, enterHappy);
+		flagReactions.Add (FlagStrings.EnterHappyState, enterHappy);*/
 		
-		Reaction moveHome = new Reaction();
+		/*Reaction moveHome = new Reaction();
 		moveHome.AddAction(new ShowOneOffChatAction(this, "Let's go back to the house.", 3f));
 		moveHome.AddAction(new NPCAddScheduleAction(this, moveHomeSchedule));
 		flagReactions.Add (FlagStrings.MoveHome, moveHome);
-		
+		*/
+		//Add states for apple
 		Reaction gaveApple = new Reaction();
 		gaveApple.AddAction(new ShowOneOffChatAction(this, "What a delicious looking apple!"));
 		gaveApple.AddAction(new NPCAddScheduleAction(this, gaveAppleSchedule));
 		flagReactions.Add (FlagStrings.GaveApple, gaveApple);
-		
+		/*
 		Reaction giveSeeds = new Reaction();
 		giveSeeds.AddAction(new ShowOneOffChatAction(this, "Here are the leftover seeds.",4f));
 		giveSeeds.AddAction(new NPCAddScheduleAction(this, giveSeedsSchedule));
 		giveSeeds.AddAction(new NPCEmotionUpdateAction(this, new AskToGardenState(this, "You're such a great help! Do you have more time to help me?")));
 		flagReactions.Add (FlagStrings.GiveSeeds, giveSeeds);
-		
+		*/
 		Reaction postRace = new Reaction();
 		postRace.AddAction(new ShowOneOffChatAction(this, "Get over here you two!!"));
 		postRace.AddAction(new NPCAddScheduleAction(this, postRaceSchedule));
@@ -49,7 +50,8 @@ public class MotherYoung : NPC {
 		flagReactions.Add (FlagStrings.ExitMadState, exitMadMother);
 		
 		Reaction moveToMusicianReaction = new Reaction();
-		moveToMusicianReaction.AddAction(new ShowOneOffChatAction(this, "Follow me. They live up here.", 3f));
+		moveToMusicianReaction.AddAction(new ShowOneOffChatAction(this, "Finished! Now why don't we take it up to our new neighbors on the cliff!"));
+		moveToMusicianReaction.AddAction(new NPCGiveItemAction(this, StringsItem.ApplePie));
 		moveToMusicianReaction.AddAction(new NPCGiveItemAction(this, StringsItem.Apple));
 		NPCConvoSchedule momToMusician = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.MusicianYoung), new MotherToMusicianYoung(),Schedule.priorityEnum.DoNow);
 		momToMusician.SetCanNotInteractWithPlayer();
@@ -82,8 +84,12 @@ public class MotherYoung : NPC {
 	#region Set Up Sechedules
 	protected override void SetUpSchedules(){
 		gaveAppleSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
-		gaveAppleSchedule.Add (new TimeTask(1, new IdleState(this)));
-		gaveAppleSchedule.Add(new Task(new MoveThenDoState(this, new Vector3(4f, -1f, -.5f), new MarkTaskDone(this))));
+		gaveAppleSchedule.Add (new TimeTask(1f, new IdleState(this)));
+		gaveAppleSchedule.Add(new Task(new WaitTillPlayerCloseState(this, ref player)));
+		Task SetMusicianConvoFlag = new TimeTask(45f, new IdleState(this));
+		SetMusicianConvoFlag.AddFlagToSet(FlagStrings.MoveToMusician);
+		gaveAppleSchedule.Add(SetMusicianConvoFlag);
+		//gaveAppleSchedule.Add(new Task(new MoveThenDoState(this, new Vector3(4f, -1f, -.5f), new MarkTaskDone(this))));
 		
 		giveSeedsSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
 		giveSeedsSchedule.Add (new TimeTask(1, new IdleState(this)));
@@ -113,11 +119,13 @@ public class MotherYoung : NPC {
 */
 
 		moveToMusicianSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
-		moveToMusicianSchedule.Add(new TimeTask(2f, new IdleState(this)));//this.transform.position
+		moveToMusicianSchedule.Add(new TimeTask(2f, new IdleState(this)));
+		//moveToMusicianSchedule.Add(new Task(new ShowOneOffChatAction(this, "Follow me. They live up here.")));
 		Task setFlag = (new Task(new MoveThenDoState(this, new Vector3 (-2.9f, 7.6f, 1f), new MarkTaskDone(this))));
 		setFlag.AddFlagToSet(FlagStrings.FinishMusicianConvo);
 		moveToMusicianSchedule.Add(setFlag);
 		moveToMusicianSchedule.Add(new TimeTask(45f, new IdleState(this)));
+		moveToMusicianSchedule.Add(new Task(new MoveThenMarkDoneState(this, this.gameObject.transform.position)));
 		//moveToMusicianSchedule.Add(new TimeTask(.5f, new IdleState(this)));
 		
 // ADD EXIT MAD SCHEDULE
@@ -129,15 +137,20 @@ public class MotherYoung : NPC {
 		private class InitialEmotionState : EmotionState {
 			Reaction GaveAppleReaction = new Reaction(); 
 	
-			public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue) {
+			public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, "Have you found an apple yet?  Remember once you find one, you'll get a slice of apple pie!") {
 				GaveAppleReaction = new Reaction();
 				GaveAppleReaction.AddAction(new NPCEmotionUpdateAction(toControl, new GaveAppleState(toControl," ")));
+				GaveAppleReaction.AddAction(new NPCCallbackAction(UpdateApple));
 				GaveAppleReaction.AddAction(new NPCTakeItemAction(toControl));
-				_allItemReactions.Add(StringsItem.Apple,  new DispositionDependentReaction(GaveAppleReaction));
+				GaveAppleReaction.AddAction(new ShowOneOffChatAction(toControl, "Thank you!  Come back in a bit to get some pie!"));	
+			_allItemReactions.Add(StringsItem.Apple,  new DispositionDependentReaction(GaveAppleReaction));
 			}	
-		
-		public void UpdateText() {
+		public void UpdateApple(){
 			FlagManager.instance.SetFlag(FlagStrings.GaveApple);
+			GUIManager.Instance.CloseInteractionMenu();
+		}
+		public void UpdateText() {
+			//FlagManager.instance.SetFlag(FlagStrings.GaveApple);
 		}
 	}
 	
@@ -149,16 +162,17 @@ public class MotherYoung : NPC {
 		
 			public GaveAppleState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue) {
 				SetDefaultText("Thanks so much! Now I can start baking!");
-				SetOnCloseInteractionReaction(new DispositionDependentReaction(AskToGardenReaction));
-				AskToGardenReaction.AddAction(new NPCGiveItemAction(toControl, StringsItem.LilySeeds)); // supposed to drop apple seeds (brown baggy?)
-				AskToGardenReaction.AddAction(new ShowOneOffChatAction(toControl, "Here are the leftover seeds.", 3f));	
-				AskToGardenReaction.AddAction(new NPCEmotionUpdateAction(toControl, new AskToGardenState(toControl,"I'm going to get the pie ready. Plant these seeds for me, ok?")));
+				//tOnCloseInteractionReaction(new DispositionDependentReaction(AskToGardenReaction));
+				//AskToGardenReaction.AddAction(new NPCGiveItemAction(toControl, StringsItem.LilySeeds)); // supposed to drop apple seeds (brown baggy?)
+				//AskToGardenReaction.AddAction(new ShowOneOffChatAction(toControl, "Here are the leftover seeds.", 3f));	
+				//AskToGardenReaction.AddAction(new NPCEmotionUpdateAction(toControl, new AskToGardenState(toControl,"I'm going to get the pie ready. Plant these seeds for me, ok?")));
 			}	
 		
 		public void UpdateText() {
 			SetOnOpenInteractionReaction(new DispositionDependentReaction(otherState));
 		}
 	}
+
 		#endregion
 	#region PostInitialEmotionState
 		private class AskToGardenState : EmotionState {
