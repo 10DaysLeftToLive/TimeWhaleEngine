@@ -21,9 +21,6 @@ public class AbstractAnimationState : AbstractState {
 		this.lookRight = lookRight;
 	}
 	
-	public override void Update(){
-	}
-	
 	public override void OnEnter(){
 //		if (character is NPC) {
 //			string textureAtlas = (character as NPC).textureAtlasName;
@@ -41,6 +38,6 @@ public class AbstractAnimationState : AbstractState {
 		}
 	}
 	
-	public override void OnExit(){
-	}
+	public override void Update(){}
+	public override void OnExit(){}
 }
