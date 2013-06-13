@@ -17,29 +17,34 @@ public class CastlemanOld : NPC {
 	 * 	says crazy things
 	 * 
 	 * 2. ANGRY STATE - time for the rage machine
-	 * 	is angry at the player and refuses to speak with them (wow this shit it going to be simple)
 	 *  flagReactions.Add(FlagStrings.PostDatingCarpenter, datingThyEnemy);
 	 * 
 	 * 3. MARRIED STATE - hoo yeeeeaaaahahhahahahah
-	 * 	he's happy as fuck, just chillen like a badass motherfucker, maybe have a quest in there? If not it's no biggie
-	 * 	probably need to teleport this badass to the lighthouse, poor windmill, nobody loves you
 	 *  flagReactions.Add(FlagStrings.CastleMarriage, castleMarriage);
 	 * 
 	 * 4. SAD STATE - not married full of regret
-	 * 	writes poetry every day and daaaaaayyyyyyyymmmmmmmmmmm, sound sweet as fuck
-	 * 	mostly just has dialogue, muses about the world and shit
 	 * 	(also totally optional depending on the flags)
 	 *  flagReactions.Add(FlagStrings.StartTalkingToLighthouse, TalkWithLighthouseFirstTime);   OR FlagStrings.FinishedInitialConversationWithCSONFriend
 	 * 
 	 * 5. RAN OFF STATE - ran off to get married (optional)
 	 * 	is no where to be found, as is Lighthouse Girl
-	 * flagReactions.Add(FlagStrings.PostCastleDate, gotTheGirl); but NOT flagReactions.Add(FlagStrings.CastleMarriage, castleMarriage);
+	 * 	flagReactions.Add(FlagStrings.PostCastleDate, gotTheGirl); but NOT flagReactions.Add(FlagStrings.CastleMarriage, castleMarriage);
 	 * 	
 	*/
 	protected override void SetFlagReactions(){
 		Reaction castleMarriage = new Reaction();
 		castleMarriage.AddAction(new NPCCallbackSetStringAction(MoveForMarriage, this, "castle"));
+		castleMarriage.AddAction(new NPCEmotionUpdateAction(this, new MarriedEmotionState(this, "Today is a good day")));
 		flagReactions.Add(FlagStrings.CastleMarriage, castleMarriage);
+		
+		Reaction castleSad = new Reaction();
+		castleSad.AddAction(new NPCEmotionUpdateAction(this, new SadEmotionState(this, "I missed my chance...")));
+		flagReactions.Add(FlagStrings.StartTalkingToLighthouse, castleSad);
+		flagReactions.Add(FlagStrings.FinishedInitialConversationWithCSONFriend, castleSad);
+		
+		Reaction castleAngry = new Reaction();
+		castleAngry.AddAction(new NPCEmotionUpdateAction(this, new AngryEmotionState(this, "What are YOU doing here?")));
+		flagReactions.Add(FlagStrings.PostDatingCarpenter, castleAngry);
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
@@ -65,14 +70,39 @@ public class CastlemanOld : NPC {
 	#region Initial Emotion State
 	private class InitialEmotionState : EmotionState{
 	
-	
-		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
-			
+		Choice noThanksChoice = new Choice("No Thanks", "Well... I...");
+		Reaction noThanksReaction = new Reaction();
 		
+		Choice sureChoice = new Choice("Sure", "You will? Oh thank you thank you thank you.");
+		Reaction sureReaction = new Reaction();
+		
+		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
+			noThanksReaction.AddAction(new NPCCallbackAction(noThanksResult));
+			noThanksReaction.AddAction(new NPCEmotionUpdateAction(toControl, new CrazyTalkEmotionState(toControl, "...")));
+			sureReaction.AddAction(new NPCCallbackAction(sureResult));
+			
+			_allChoiceReactions.Add(noThanksChoice, new DispositionDependentReaction(noThanksReaction));
+			_allChoiceReactions.Add(sureChoice, new DispositionDependentReaction(sureReaction));
 		}
 		
 		public override void UpdateEmotionState(){
 			
+		}
+		
+		private void noThanksResult()
+		{
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
+			_allChoiceReactions.Clear();
+		}
+		
+		private void sureResult()
+		{
+			_allChoiceReactions.Clear();
+			SetDefaultText("Thank you thank you thank you.");
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
+			GUIManager.Instance.RefreshInteraction();
+			//Set Portrait to CastleManCrazyHappy
 		}
 	
 	}
@@ -115,6 +145,7 @@ public class CastlemanOld : NPC {
 		
 		public AngryEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue)
 		{
+			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
 			_allChoiceReactions.Add(whySoBitterChoice, new DispositionDependentReaction(whySoBitterReaction));
 			whySoBitterReaction.AddAction(new NPCCallbackAction(AngryReply));
 			whySoBitterReaction.AddAction(new ShowOneOffChatAction(toControl, "You ruined everything, and you dare to ask me if I'm in the wrong!?"));
@@ -148,7 +179,7 @@ public class CastlemanOld : NPC {
 		public MarriedEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue)
 		{
 			howisLifeReaction.AddAction(new NPCCallbackAction(HowIsLifeResult));
-			
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			
 			_allChoiceReactions.Add(howIsLifeChoice, new DispositionDependentReaction(howisLifeReaction));
 		}
@@ -182,7 +213,7 @@ public class CastlemanOld : NPC {
 		
 		public SadEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue)
 		{
-			whatChanceDidYouMissReaction.AddAction(new NPCCallbackAction(AreYouAlrightResult));
+			whatChanceDidYouMissReaction.AddAction(new NPCCallbackAction(WhatChanceRseult));
 			areYouAlrightReaction.AddAction(new NPCCallbackAction(AreYouAlrightResult));
 			whatCastleReaction.AddAction(new NPCCallbackAction(WhatCastleResult));
 			brightReaction.AddAction(new NPCCallbackAction(BrightResult));
