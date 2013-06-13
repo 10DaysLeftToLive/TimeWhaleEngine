@@ -65,6 +65,7 @@ public class CastlemanMiddle : NPC {
 		flagReactions.Add(FlagStrings.EndOfDate, endOfDate);
 		
 		stoodUpLG.AddAction(new NPCEmotionUpdateAction(this, stoodUpState));
+		stoodUpLG.AddAction(new NPCChangePortraitAction(this, StringsNPC.Angry));
 		flagReactions.Add(FlagStrings.CastleManNoShow, stoodUpLG);
 		
 		moveToDate.AddAction(new NPCAddScheduleAction(this, moveToBeach));
@@ -302,7 +303,7 @@ public class CastlemanMiddle : NPC {
 		}
 		
 		public void WhatResponse(){
-			
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Clear();
 			_allChoiceReactions.Add(JudgeItChoice, new DispositionDependentReaction(JudgeItReaction));
 			GUIManager.Instance.RefreshInteraction();
@@ -325,6 +326,7 @@ public class CastlemanMiddle : NPC {
 		}
 		
 		public void DateResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			if (!flagSet){
 				_allChoiceReactions.Clear();
 				_allItemReactions.Clear();
