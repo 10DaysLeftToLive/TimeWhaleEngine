@@ -6,7 +6,7 @@ public class WaveSpeed : MonoBehaviour {
 	private float startFps = 15f;
 	
 	void Start () {
-		Random.seed = (int)Time.time;
+		Random.seed = (int)Time.timeSinceLevelLoad;
 		SmoothMoves.BoneAnimation[] animations = gameObject.GetComponentsInChildren<SmoothMoves.BoneAnimation>();
 		for (int i = 0; i < animations.Length; ++i) {
 			foreach (SmoothMoves.AnimationStateSM wave in animations[i]) {

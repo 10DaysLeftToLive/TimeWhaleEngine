@@ -18,7 +18,7 @@ public class EndingMenu : MonoBehaviour {
 	
 	private bool timerStarted = false;
 	private float sceneTimer = 0.0f;
-	public float holdTimeInSeconds = 5.0f;
+	public float holdTimeInSeconds = 2.0f;
 	
 	public bool fadedOpeningScene = false;
 	
@@ -104,7 +104,7 @@ public class EndingMenu : MonoBehaviour {
 	}
 	
 	public void ChooseYes(){
-
+		Game.Reset();
 		FadeToNextAutoPanel();
 	}
 	

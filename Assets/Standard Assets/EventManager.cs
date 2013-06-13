@@ -109,7 +109,7 @@ public class EventManager : ManagerSingleton<EventManager> {
     //Riser
     public void RiseOnDragEvent(DragArgs dragMagnitude) {
         if(mOnDragEvent != null)  mOnDragEvent(this, dragMagnitude);
-    }
+	}
 }
 
 public class ClickPositionArgs : EventArgs {

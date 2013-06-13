@@ -20,7 +20,7 @@ public class NPCPassiveConvoCheck : MonoBehaviour {
 	void Start() {
 		npcDict = NPCManager.instance.getNPCDictionary();
 		player = GameObject.Find("PlayerCharacter").GetComponent<Player>();
-		currentTime = previousTime = Time.time;
+		currentTime = previousTime = Time.timeSinceLevelLoad;
 	}
 	
 	void Update() {
@@ -57,11 +57,11 @@ public class NPCPassiveConvoCheck : MonoBehaviour {
 	
 	private void SetPassiveChatTimer(NPC npc) {
 		npc.timeTillPassiveChatAgain = TIME_INBETWEEN_PASSIVE_CHATS;
-		currentTime = previousTime = Time.time;
+		currentTime = previousTime = Time.timeSinceLevelLoad;
 	}
 	
 	private void DecrementPassiveChatTimer(NPC npc) {
-		currentTime = Time.time;
+		currentTime = Time.timeSinceLevelLoad;
 		timeToDecrement = Mathf.Abs(currentTime - previousTime);
 		npc.timeTillPassiveChatAgain -= timeToDecrement;
 		previousTime = currentTime;

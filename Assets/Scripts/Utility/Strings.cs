@@ -46,6 +46,7 @@ public static class Strings{
 	public static string LevelBase = "LevelBase";
 	public static string MainMenu = "MainMenu";
 	public static string GenderSelect = "GenderSelect";
+	public static string EndScreen = "EndingScreen";
 	
 	public static string Gender = "Gender";
 	public static string Male = "MALE";

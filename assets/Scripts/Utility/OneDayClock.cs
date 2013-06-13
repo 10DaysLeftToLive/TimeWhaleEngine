@@ -17,7 +17,7 @@ public class OneDayClock : PauseObject {
 	private float minutes;
 	private float hours;
 	
-	public static float GAME_LENGTH = 600f; // seconds
+	public static float GAME_LENGTH = 50f; // seconds
 	public static float START_TIME = 800; // day starts at 8 AM, 0800 military
 	public static float HOURS_IN_DAY = 12;
 	public static float MIDDAY = START_TIME + GAME_LENGTH / 2;
@@ -42,8 +42,8 @@ public class OneDayClock : PauseObject {
     }
 	
 	void Start () {
-		timeSinceGameStarted = timeSinceLastPaused = Time.time;
-		timeInHour = GAME_LENGTH/HOURS_IN_DAY;
+		Restart();
+		
 	}
 	
 	protected override void UpdateObject() {
@@ -51,23 +51,23 @@ public class OneDayClock : PauseObject {
 	}
 	
 	protected override void OnPause() {
-		timeSinceLastPaused = Time.time;
+		timeSinceLastPaused = Time.timeSinceLevelLoad;
 	}
 	
 	protected override void OnResume() {
-		lostTime += (Time.time - timeSinceLastPaused);
-		timeSinceLastPaused = Time.time - (Time.time - timeSinceLastPaused);
+		lostTime += (Time.timeSinceLevelLoad - timeSinceLastPaused);
+		timeSinceLastPaused = Time.timeSinceLevelLoad - (Time.timeSinceLevelLoad - timeSinceLastPaused);
 	}
 	
 	private float GamePlayTime() {
-		return Time.time - lostTime;
+		return Time.timeSinceLevelLoad - lostTime;
 	}
 	
 	/// <summary>
 	/// Returns military time starting at 0800
 	/// </summary>
 	public int GetGameDayTime() {
-		if (GamePlayTime() > GAME_LENGTH) EndTheGame();
+		if (IsGameDone()) EndTheGame();
 		timeOfDay = GamePlayTime()/timeInHour;
 		minutes = (timeOfDay - Mathf.Floor(timeOfDay))*60;
 		hours = ((Mathf.Floor(timeOfDay)*MILITARY_TIME_MULTIPLIER) + START_TIME);
@@ -75,13 +75,16 @@ public class OneDayClock : PauseObject {
 	}
 	
 	public bool IsGameDone() {
-		if (GAME_LENGTH < GamePlayTime()) {
-			return true;
-		}
-		return false;
+		return (GAME_LENGTH < GamePlayTime());
+	}
+	
+	public void Restart(){
+		timeSinceGameStarted = timeSinceLastPaused = Time.timeSinceLevelLoad;
+		timeInHour = GAME_LENGTH/HOURS_IN_DAY;
+		lostTime = 0;
 	}
 	
 	protected void EndTheGame() {
-		//Application.LoadLevel(
+		Game.GoToEndScene();
 	}
 }

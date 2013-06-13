@@ -4,7 +4,7 @@ using System.Linq;
 
 public class NPCManager : ManagerSingleton<NPCManager> {
 	private static Dictionary<string, NPC> dictNPC = new Dictionary<string, NPC>();
-	
+
 	public void Add(GameObject npc) {
 		if (dictNPC.ContainsKey(npc.name)){
 			dictNPC.Remove(npc.name);
@@ -13,6 +13,9 @@ public class NPCManager : ManagerSingleton<NPCManager> {
 	}
 	
 	public void Add(NPC npc) {
+		if (dictNPC.ContainsKey(npc.name)){
+			dictNPC.Remove(npc.name);
+		}
 		dictNPC.Add(npc.gameObject.name, npc);
 	}
 	
@@ -56,6 +59,7 @@ public class NPCManager : ManagerSingleton<NPCManager> {
 			}
 			currentNPCFlags.Clear();
 		}
+		Debug.Log(allNPCFlags.Count);
 		return(allNPCFlags);
 	}
 }

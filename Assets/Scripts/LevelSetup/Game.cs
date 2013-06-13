@@ -7,17 +7,19 @@ using System.Collections;
 /// </summary>
 public class Game  {
 	public static void Reset(){
-		Application.LoadLevel(Application.loadedLevel);
-		GUIManager.Instance.HidePauseMenu();//just in case
+		OneDayClock.Instance.Restart();
+		Application.LoadLevel(Strings.LevelBase);
 	}
 	
 	public static void GoToMainMenu(){
-		Debug.Log("MainMenu");
 		Application.LoadLevel(Strings.TitleMenu);
 	}
 	
+	public static void GoToEndScene(){
+		Application.LoadLevel(Strings.EndScreen);
+	}
+	
 	public static void Quit(){
-		Debug.Log("Quiting");
 		Application.Quit();
 	}	
 }

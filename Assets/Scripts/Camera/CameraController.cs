@@ -8,7 +8,7 @@ This script allows for panning the camera via drag and zooming. It will also fol
 Attach this script to the camera.
 */
 
-public class CameraController : MonoBehaviour {
+public class CameraController : MonoBehaviour{
 	#region Fields
 	// Variables for altering the camera's movement
 	static private float closestZoomDistance = 2.45f;	
@@ -20,9 +20,31 @@ public class CameraController : MonoBehaviour {
 	static public float currentYOffsetRelativeToTarget = 1f;
 	static public float zOffsetFromTarget = -5f;
 	
-	static private Camera thisCamera;
-	static private Player player;
+	private Camera thisCamera;
+	private Player player;
 	#endregion
+	
+	private static CameraController manager_instance = null;
+
+    public static CameraController instance
+    {
+        get
+        {
+            if (manager_instance == null)
+            {
+                manager_instance = FindObjectOfType(typeof(CameraController)) as CameraController;
+            }
+
+            // If it is still null, create a new instance
+            if (manager_instance == null)
+            {
+                GameObject obj = new GameObject("CameraController");
+                manager_instance = obj.AddComponent(typeof(CameraController)) as CameraController;
+            }
+
+            return manager_instance;
+        }
+    }
 	
 	public void Start () {
 		try{
@@ -41,7 +63,7 @@ public class CameraController : MonoBehaviour {
 	
 	// This function is used to zoom the camera in and out.
 	// Assumes the camera is at a 45 degree angle towards the terrain.
-	static public void Zoom(bool isZoomingIn){
+	public void Zoom(bool isZoomingIn){
 		if (isZoomingIn && CanZoomOut()){
 			ZoomOut();
 		} else if (!isZoomingIn && CanZoomIn()) {	
@@ -50,23 +72,23 @@ public class CameraController : MonoBehaviour {
 		currentYOffsetRelativeToTarget = CalcOffset();
 	}
 	
-	static private bool CanZoomIn(){
+	private bool CanZoomIn(){
 		return (thisCamera.orthographicSize > closestZoomDistance && NotTransitioning());
 	}
 	
-	static private bool CanZoomOut(){
+	private bool CanZoomOut(){
 		return (thisCamera.orthographicSize < farthestZoomDistance && NotTransitioning());
 	}
 	
-	static private bool NotTransitioning(){
+	private bool NotTransitioning(){
 		return (!FadeEffect.isFading);
 	}
 	
-	static private void ZoomIn(){
+	private void ZoomIn(){
 		thisCamera.orthographicSize -= zoomingIncrement;
 	}
 	
-	static private void ZoomOut(){
+	private void ZoomOut(){
 		thisCamera.orthographicSize += zoomingIncrement;
 	}
 	
@@ -85,7 +107,7 @@ public class CameraController : MonoBehaviour {
 	/// <summary>
 	/// Calculates the offset in the y direction by linear interpolation
 	/// </summary>
-	static private float CalcOffset(){
+	private float CalcOffset(){
 		return ((minYOffset + (maxYOffset - minYOffset)*((thisCamera.orthographicSize - closestZoomDistance)/(farthestZoomDistance-closestZoomDistance))));
 	}
 	

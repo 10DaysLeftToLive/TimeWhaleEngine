@@ -68,7 +68,7 @@ public abstract class InputType  {
 	
 	// Tell the camera to zoom in or out
 	protected void ZoomEvent(bool isZoomingIn){
-		CameraController.Zoom(isZoomingIn);
+		CameraController.instance.Zoom(isZoomingIn);
 	}	
 	
 	protected void OnHoldClick(Vector2 inputScreenPos){

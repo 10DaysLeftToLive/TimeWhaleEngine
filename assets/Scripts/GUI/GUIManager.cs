@@ -49,7 +49,6 @@ public class GUIManager : MonoBehaviour {
 	
 	public void AddInGameMenu(){
 		if (ControlActive(chatMenu)){
-			Debug.LogWarning("In game menu was already up");
 			return;
 		}
 		MarkControlForAdding(inGameMenu);

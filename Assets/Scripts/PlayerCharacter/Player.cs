@@ -221,4 +221,12 @@ public class Player : Character {
 		EnterState(new IdleState(this));
 	}
 	#endregion
+	
+	public void OnDestroy(){
+		EventManager.instance.mOnClickNoObjectEvent -= OnClickToMove;
+		EventManager.instance.mOnClickHoldEvent -= OnHoldClick;
+		EventManager.instance.mOnClickHoldReleaseEvent -= OnHoldRelease;
+		EventManager.instance.mOnClickObjectEvent -= OnObjectClick;
+		base.OnDestroy();
+	}
 }

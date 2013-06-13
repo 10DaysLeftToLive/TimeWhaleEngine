@@ -31,12 +31,10 @@ public class NPCConvoState : AbstractState {
 		GUIManager.Instance.AddNPCChat(_chatToPerform);
 		FaceEachOther();
 		
-		Debug.Log(character.name + ": NPCConvoState Enter");
 		character.PlayAnimation(Strings.animation_stand); // Should be a talk animation
 		_toTalkWith.PlayAnimation(Strings.animation_stand);
 	}
 	
 	public override void OnExit(){
-		Debug.Log(character.name + ": TalkState Exit");
 	}
 }

@@ -133,7 +133,7 @@ public class SunriseSunsetTimer : ShaderBase {
 	protected virtual float ChangeBrightness(bool isSunrise) {
 		float currentTime;
 		if (sunsetDuration <= 0) return minBrightness;
-			currentTime = (Time.time - sunsetStartTime) / sunsetDuration;
+			currentTime = (Time.timeSinceLevelLoad - sunsetStartTime) / sunsetDuration;
 			//Debug.Log (currentTime);
 			return Mathf.Lerp(maxBrightness, minBrightness, currentTime);
 	}

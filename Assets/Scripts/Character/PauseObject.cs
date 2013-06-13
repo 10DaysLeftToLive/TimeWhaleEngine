@@ -36,4 +36,8 @@ public abstract class PauseObject : MonoBehaviour {
 			UpdateObject();
 		}
 	}
+	
+	public void OnDestroy(){
+		EventManager.instance.mOnPauseToggleEvent -= TogglePauseEvent;
+	}
 }
