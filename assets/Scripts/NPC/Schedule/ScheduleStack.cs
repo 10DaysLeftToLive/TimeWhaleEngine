@@ -66,8 +66,14 @@ public class ScheduleStack {
 			Debug.LogWarning("No schedule to go to");
 			return;
 		}
-		//Debug.Log((current == null) ? "Current was null" : "Current was not null");
 		current.Resume();
+	}
+	
+	public void ClearAndReplace(NPC npc, Schedule newSchedule){
+		_schedulesToDo.Clear();
+		current = null;
+		Add(new DefaultSchedule(npc)); 
+		Add(newSchedule);
 	}
 	
 	public void Add(Schedule schedule) {		

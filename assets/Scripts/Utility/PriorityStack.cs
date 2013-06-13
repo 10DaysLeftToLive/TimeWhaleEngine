@@ -50,6 +50,10 @@ public class PriorityStack {
 		}
     }
 	
+	public void Clear(){
+		_schedulesToDo.Clear ();
+	}
+	
 	public void RemoveScheduleWithFlag(string flag) {
 		foreach (Schedule sched in _schedulesToDo) {
 			sched.RemoveScheduleWithFlag(flag);

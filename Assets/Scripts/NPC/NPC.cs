@@ -121,7 +121,7 @@ public abstract class NPC : Character {
 		GUIManager.Instance.CloseInteractionMenu();
 	}
 	
-	public void StarTalkingWithPlayer(){
+	public virtual void StarTalkingWithPlayer(){
 		currentEmotion.OnInteractionOpens();
 		chatingWithPlayer = true;
 		PassiveChatToPlayer.instance.RemoveNPCChat(this);
@@ -193,6 +193,10 @@ public abstract class NPC : Character {
 	
 	public void RemoveScheduleWithFlag(string flag) {
 		scheduleStack.RemoveScheduleWithFlag(flag);
+	}
+	
+	public void ClearAndReplaceSchedule(Schedule newSchedule){
+		scheduleStack.ClearAndReplace(this, newSchedule);
 	}
 	#endregion
 	
