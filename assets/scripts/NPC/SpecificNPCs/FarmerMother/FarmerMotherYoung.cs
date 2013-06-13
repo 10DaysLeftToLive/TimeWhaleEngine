@@ -261,10 +261,12 @@ public class FarmerMotherYoung : NPC {
 			TellOnDaughterReaction.AddAction(new UpdateCurrentTextAction(toControl, "*Sigh* Thanks fer talking ta me bout this."));
 		}
 		public void UpdateGiveSeeds(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_allItemReactions.Remove(StringsItem.SunflowerSeeds);
 			FlagManager.instance.SetFlag(FlagStrings.FarmAlive);	
 		}
 		public void UpdateTellOnDaughter(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(TellOnDaughterChoice);
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Thanks fer talkin to me bout that.  That girl needs ta learn responsibility.");
@@ -275,6 +277,7 @@ public class FarmerMotherYoung : NPC {
 		}
 		
 		public void UpdateStoriesHelpRelate(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
 			_allChoiceReactions.Remove(StoriesSillyChoice);
 			_allChoiceReactions.Remove(StoriesFunChoice);
 			_allChoiceReactions.Remove(StoriesHelpRelateChoice);
@@ -283,6 +286,7 @@ public class FarmerMotherYoung : NPC {
 			GUIManager.Instance.RefreshInteraction();
 		}
 		public void UpdateWhyNot(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(WhyNotChoice);
 			_allChoiceReactions.Remove(MyMomChoice);
 			if(setTellOn == true && FinishedTellOnConversation == false){
