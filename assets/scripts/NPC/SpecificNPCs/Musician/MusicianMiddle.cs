@@ -235,7 +235,7 @@ public class MusicianMiddle : NPC {
 		}
 		
 		void BecomeNetural() {
-			_npcInState.SetCharacterPortrait(StringsNPC.Smile);
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 		}
 		
 		public override void UpdateEmotionState() {

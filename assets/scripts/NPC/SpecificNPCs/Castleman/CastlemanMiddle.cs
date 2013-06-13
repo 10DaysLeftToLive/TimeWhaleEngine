@@ -295,12 +295,14 @@ public class CastlemanMiddle : NPC {
 		}
 		
 		public void JudgeItResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Clear();
 			SetDefaultText("So...What did she think of the letter?");
 			GUIManager.Instance.RefreshInteraction();
 		}
 		
 		public void WhatResponse(){
+			
 			_allChoiceReactions.Clear();
 			_allChoiceReactions.Add(JudgeItChoice, new DispositionDependentReaction(JudgeItReaction));
 			GUIManager.Instance.RefreshInteraction();

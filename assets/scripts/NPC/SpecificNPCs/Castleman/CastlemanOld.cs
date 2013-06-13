@@ -8,7 +8,7 @@ public class CastlemanOld : NPC {
 	protected override void Init() {
 		id = NPCIDs.CASTLE_MAN;
 		base.Init();
-		this.SetCharacterPortrait(StringsNPC.Crazy);
+		//this.SetCharacterPortrait(StringsNPC.Crazy);
 	}
 	/*
 	 * THE PLAN
@@ -35,14 +35,17 @@ public class CastlemanOld : NPC {
 		Reaction castleMarriage = new Reaction();
 		castleMarriage.AddAction(new NPCCallbackSetStringAction(MoveForMarriage, this, "castle"));
 		castleMarriage.AddAction(new NPCEmotionUpdateAction(this, new MarriedEmotionState(this, "Today is a good day")));
+		castleMarriage.AddAction(new NPCChangePortraitAction(this, StringsNPC.Happy));
 		flagReactions.Add(FlagStrings.CastleMarriage, castleMarriage);
 		
 		Reaction castleSad = new Reaction();
 		castleSad.AddAction(new NPCEmotionUpdateAction(this, new SadEmotionState(this, "I missed my chance...")));
+		castleSad.AddAction(new NPCChangePortraitAction(this, StringsNPC.Sad));
 		flagReactions.Add(FlagStrings.StartTalkingToLighthouse, castleSad);
 		flagReactions.Add(FlagStrings.FinishedInitialConversationWithCSONFriend, castleSad);
 		
 		Reaction castleAngry = new Reaction();
+		castleAngry.AddAction(new NPCChangePortraitAction(this, StringsNPC.Angry));
 		castleAngry.AddAction(new NPCEmotionUpdateAction(this, new AngryEmotionState(this, "What are YOU doing here?")));
 		flagReactions.Add(FlagStrings.PostDatingCarpenter, castleAngry);
 	}

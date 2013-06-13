@@ -435,12 +435,14 @@ public class CarpenterSonMiddle : NPC {
 		}
 			
 		void selectCuriousMoodChoice() {
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Clear();
 			_allChoiceReactions.Add (presentForDad, new DispositionDependentReaction(assistGettingWood));
 			GUIManager.Instance.RefreshInteraction();
 		}
 			
 		void helpCarpenterSon() {
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(presentForDad);
 			GUIManager.Instance.RefreshInteraction();
 		}
@@ -451,6 +453,7 @@ public class CarpenterSonMiddle : NPC {
 		}
 		
 		public void DateResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			if (!flagSet){
 				_allChoiceReactions.Remove(DateChoice);
 				GUIManager.Instance.CloseInteractionMenu();
