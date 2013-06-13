@@ -8,6 +8,9 @@ using System.Collections;
 public class FarmerFatherYoung : NPC {	
 	//Known Bugs, can override two conversations by talking to him.
 	//Conversation speed is currently bugged
+	
+	Schedule beALazyFarmer;
+	
 	protected override void Init() {
 		id = NPCIDs.FARMER_FATHER;
 		base.Init();
@@ -31,6 +34,11 @@ public class FarmerFatherYoung : NPC {
 		Reaction NewDialogueReaction = new Reaction();
 		NewDialogueReaction.AddAction (new NPCCallbackAction(UpdateConversation));
 		flagReactions.Add(FlagStrings.ConversationInMiddleFather, NewDialogueReaction);
+		
+		Reaction FarmerBecomesLazy = new Reaction();
+		FarmerBecomesLazy.AddAction(new NPCAddScheduleAction(this, beALazyFarmer));
+		flagReactions.Add(FlagStrings.FarmAfterDialogue, FarmerBecomesLazy);
+		
 	}
 	public void UpdateBusiness(){
 		currentEmotion.PassStringToEmotionState(FlagStrings.BusinessConversation);
@@ -48,7 +56,8 @@ public class FarmerFatherYoung : NPC {
 	}
 
 	protected override void SetUpSchedules(){
-		
+		beALazyFarmer = new Schedule(this);
+		beALazyFarmer.Add(new Task(new AbstractAnimationState(this, "Shovel Idle")));
 	}
 	
 	
@@ -212,6 +221,7 @@ public class FarmerFatherYoung : NPC {
 			_allChoiceReactions.Clear();
 			GUIManager.Instance.RefreshInteraction();
 			startedConversation = true;
+			_npcInState.animationData.Play("Shovel Idle");
 			SetDefaultText("Thanks for your help!  I'm proud of my daughter");
 			FlagManager.instance.SetFlag(FlagStrings.BusinessTimer);
 			FlagManager.instance.SetFlag(FlagStrings.AlreadyBrave);
@@ -243,6 +253,7 @@ public class FarmerFatherYoung : NPC {
 			_allChoiceReactions.Remove(CowardChoice);
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("I'd rather not talk anymore.");
+			_npcInState.animationData.Play("Shovel Idle");
 			FlagManager.instance.SetFlag(FlagStrings.BusinessTimer);
 			FlagManager.instance.SetFlag(FlagStrings.YourCoward);
 		}
@@ -252,6 +263,7 @@ public class FarmerFatherYoung : NPC {
 			_allChoiceReactions.Remove(OnYourOwnChoice);
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("I doubt you'll get anywhere talking with my wife.");
+			//_npcInState.animationData.Play("Shovel Idle");
 			FlagManager.instance.SetFlag(FlagStrings.BusinessTimer);
 			FlagManager.instance.SetFlag(FlagStrings.IllDoIt);
 		}
@@ -261,6 +273,7 @@ public class FarmerFatherYoung : NPC {
 			_allChoiceReactions.Remove(OnYourOwnChoice);
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Thanks for what little you could do.");
+			//_npcInState.animationData.Play("Shovel Idle");
 			FlagManager.instance.SetFlag(FlagStrings.BusinessTimer);
 		}
 		#endregion

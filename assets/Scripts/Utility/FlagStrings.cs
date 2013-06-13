@@ -210,7 +210,7 @@ public static class FlagStrings {
 	public static string GiveRopeToFarmer = "Give Rope to Farmer";
 	public static string FarmerOnBoard = "Farmer on Board";
 	public static string OpeningConversationFarmerMotherToFarmerFather = "Opening Conversation Farmer Mother to Farmer Father";
-	public static string HoeAfterDialogue = "Hoe After Dialogue";
+	public static string FarmAfterDialogue = "Hoe After Dialogue";
 	#endregion
 	
 	#region Sea Captain

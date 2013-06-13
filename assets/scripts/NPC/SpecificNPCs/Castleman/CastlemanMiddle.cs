@@ -179,12 +179,17 @@ public class CastlemanMiddle : NPC {
 		ShowMultipartChatAction castleDateThreeDialogue = new ShowMultipartChatAction(this);
 		castleDateThreeDialogue.AddChat("You remember me!", 2f);
 		castleDateThree.AddAction(castleDateThreeDialogue);
+		castleDateThree.AddAction(new NPCCallbackAction(FlexMusclesDuringDate));
+	}
+	
+	protected void FlexMusclesDuringDate() {
+		animationData.Play("Flexing");
 	}
 	
 	
 	#region EmotionStates
 	#region Initial Emotion State
-	private class InitialEmotionState : EmotionState{
+	private class InitialEmotionState : EmotionState {
 		Reaction gaveSeashell;
 		Reaction gaveRose;
 		Reaction lookLike;

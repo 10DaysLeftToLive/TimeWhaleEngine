@@ -47,7 +47,7 @@ public class FarmerMotherYoung : NPC {
 		
 		Reaction StartHoeing = new Reaction();
 		StartHoeing.AddAction(new NPCAddScheduleAction(this, postOpenningSchedule));
-		flagReactions.Add(FlagStrings.HoeAfterDialogue, StartHoeing);
+		flagReactions.Add(FlagStrings.FarmAfterDialogue, StartHoeing);
 		
 	}
 	public void UpdateConversationInMiddleFarmerMother(){
@@ -82,12 +82,11 @@ public class FarmerMotherYoung : NPC {
 		InitialConversation = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerFatherYoung), 
 			new YoungFarmerMotherToFarmerFatherOpenningScriptedDialogue(),Schedule.priorityEnum.DoConvo);
 		InitialConversation.SetCanNotInteractWithPlayer();
-		InitialConversation.SetFlagOnComplete(FlagStrings.HoeAfterDialogue);
+		InitialConversation.SetFlagOnComplete(FlagStrings.FarmAfterDialogue);
 		
 		postOpenningSchedule = new Schedule(this, Schedule.priorityEnum.Medium);
-		Task goToField = new Task(new MoveState(this, new Vector3(transform.position.x - 4, transform.position.y, transform.position.z)));
-		Task hoeField = new Task(new AbstractAnimationState(this, "Hoe"));
-		postOpenningSchedule.Add(hoeField);
+		Task goToFieldAndHoe = new Task(new MoveThenDoState(this, new Vector3(52.65976f, 15.13193f, transform.position.z), new AbstractAnimationState(this, "Hoe")));
+		postOpenningSchedule.Add(goToFieldAndHoe);
 		
 	}
 	
@@ -208,12 +207,13 @@ public class FarmerMotherYoung : NPC {
 			IllConvinceChoice = new Choice("I'll convince them!", "Naw...its okay, I know how to handle my own family!  I'll make sure that they see my way in time!");
 			IllConvinceReaction = new Reaction();
 			IllConvinceReaction.AddAction(new NPCCallbackAction(UpdateIllConvince));
+			IllConvinceReaction.AddAction(new SetOffFlagAction(FlagStrings.FarmAfterDialogue));
 			IllConvinceReaction.AddAction(new UpdateCurrentTextAction(toControl, "Naw...its okay, I know how to handle my own family!  I'll make sure that they see my way in time!"));
 			
 			CanReadAndWorkChoice = new Choice("You can work and read stories.", "*Sigh*  You're just too young ta understand.");
 			CanReadAndWorkReaction = new Reaction();
 			CanReadAndWorkReaction.AddAction(new NPCCallbackAction(UpdateCanReadAndWork));
-			CanReadAndWorkReaction.AddAction(new SetOffFlagAction(FlagStrings.HoeAfterDialogue));
+			CanReadAndWorkReaction.AddAction(new SetOffFlagAction(FlagStrings.FarmAfterDialogue));
 			CanReadAndWorkReaction.AddAction(new UpdateCurrentTextAction(toControl, "*Sigh*  You're just too young ta understand."));
 			
 			SheShouldDecideChoice = new Choice("Maybe she should decide.", "That silly girl don't know what's best for her!  She's nearly got herself killed tryin to pretend to be some tragic hero by jumpin off the cliff.");
@@ -229,12 +229,13 @@ public class FarmerMotherYoung : NPC {
 			NotSillyChoice = new Choice("She's not silly!", "*Sigh*  You're just too young ta understand.");
 			NotSillyReaction = new Reaction();
 			NotSillyReaction.AddAction(new NPCCallbackAction(UpdateNotSilly));
-			NotSillyReaction.AddAction(new SetOffFlagAction(FlagStrings.HoeAfterDialogue));
+			NotSillyReaction.AddAction(new SetOffFlagAction(FlagStrings.FarmAfterDialogue));
 			NotSillyReaction.AddAction(new UpdateCurrentTextAction(toControl, "*Sigh*  You're just too young ta understand."));
 			
 			YouAreRightChoice = new Choice("You're right.", "Course I am!");
 			YouAreRightReaction = new Reaction();
 			YouAreRightReaction.AddAction(new NPCCallbackAction(UpdateYouAreRight));
+			YouAreRightReaction.AddAction(new SetOffFlagAction(FlagStrings.FarmAfterDialogue));
 			YouAreRightReaction.AddAction(new UpdateCurrentTextAction(toControl, "Course I am!"));
 			
 			StoriesHelpRelateChoice = new Choice("Stories help her get closer to her dad.", "Ya don't need ta be close to yah parents!  Ya just need them ta discipline ya.");
@@ -245,19 +246,19 @@ public class FarmerMotherYoung : NPC {
 			WhyNotChoice = new Choice("Why not?", "My dad didn't tell stories, and I came out okay!");
 			WhyNotReaction = new Reaction();
 			WhyNotReaction.AddAction(new NPCCallbackAction(UpdateWhyNot));
-			WhyNotReaction.AddAction(new SetOffFlagAction(FlagStrings.HoeAfterDialogue));
+			WhyNotReaction.AddAction(new SetOffFlagAction(FlagStrings.FarmAfterDialogue));
 			WhyNotReaction.AddAction(new UpdateCurrentTextAction(toControl, "My dad didn't tell stories, and I came out okay!"));
 			
 			MyMomChoice = new Choice("My mom tells me stories.", "Yeah?  Well...I guess you don't jump off of cliffs...Perhaps the stories ain't the problem...I'll let her keep the stories so long as she don't jump off cliffs again.");
 			MyMomReaction = new Reaction();
 			MyMomReaction.AddAction(new NPCCallbackAction(UpdateMyMom));
-			MyMomReaction.AddAction(new SetOffFlagAction(FlagStrings.HoeAfterDialogue));
+			MyMomReaction.AddAction(new SetOffFlagAction(FlagStrings.FarmAfterDialogue));
 			MyMomReaction.AddAction(new UpdateCurrentTextAction(toControl, "Yeah?  Well...I guess you don't jump off of cliffs...Perhaps the stories ain't the problem...I'll let her keep the stories so long as she don't jump off cliffs again."));
 			
 			TellOnDaughterChoice = new Choice ("Tell on daughter.", "*Sigh* Thanks fer talkin ta me bout this.");
 			TellOnDaughterReaction = new Reaction();
 			TellOnDaughterReaction.AddAction(new NPCCallbackAction(UpdateTellOnDaughter));
-			TellOnDaughterReaction.AddAction(new SetOffFlagAction(FlagStrings.HoeAfterDialogue));
+			TellOnDaughterReaction.AddAction(new SetOffFlagAction(FlagStrings.FarmAfterDialogue));
 			TellOnDaughterReaction.AddAction(new UpdateCurrentTextAction(toControl, "*Sigh* Thanks fer talking ta me bout this."));
 		}
 		public void UpdateGiveSeeds(){
@@ -270,7 +271,7 @@ public class FarmerMotherYoung : NPC {
 			_allChoiceReactions.Remove(TellOnDaughterChoice);
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Thanks fer talkin to me bout that.  That girl needs ta learn responsibility.");
-			_npcInState.PlayAnimation("Hoe");
+			//_npcInState.PlayAnimation("Hoe");
 			FinishedTellOnConversation = true;
 			FlagManager.instance.SetFlag(FlagStrings.TellOnLighthouseConversation);
 			FlagManager.instance.SetFlag(FlagStrings.TellOnDaughter);
@@ -294,7 +295,7 @@ public class FarmerMotherYoung : NPC {
 			}
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("I reckon you were right bout those stories.");
-			_npcInState.PlayAnimation("Hoe");
+			//_npcInState.PlayAnimation("Hoe");
 			FinishedStoriesConversation = true;
 		}
 		public void UpdateMyMom(){
@@ -305,7 +306,7 @@ public class FarmerMotherYoung : NPC {
 			}
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Don't come to me talkin bout those silly stories again.");
-			_npcInState.PlayAnimation("Hoe");
+			//_npcInState.PlayAnimation("Hoe");
 			FinishedStoriesConversation = true;
 			//Setflag here
 		}
@@ -356,7 +357,6 @@ public class FarmerMotherYoung : NPC {
 			}
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Stop botherin me I got work ta do!");
-			_npcInState.PlayAnimation("Hoe");
 			FinishedStoriesConversation = true;
 		}
 		public void UpdateCanReadAndWork(){
@@ -367,7 +367,6 @@ public class FarmerMotherYoung : NPC {
 			}
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Stop botherin me I got work ta do!");
-			_npcInState.PlayAnimation("Hoe");
 			FinishedStoriesConversation = true;
 			FlagManager.instance.SetFlag(FlagStrings.WorkAndStories);
 		}
@@ -397,7 +396,6 @@ public class FarmerMotherYoung : NPC {
 			}
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Stop botherin me I got work ta do!");
-			_npcInState.PlayAnimation("Hoe");
 			FinishedStoriesConversation = true;
 			FlagManager.instance.SetFlag(FlagStrings.NotSilly);
 		}
