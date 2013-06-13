@@ -364,6 +364,7 @@ public class FarmerFatherMiddle : NPC {
 			StrangeReaction.AddAction(new NPCCallbackAction(StrangeResponse));
 		}
 		public void StrangeResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Clear();
 			_allChoiceReactions.Add(MarriageChoice, new DispositionDependentReaction(MarriageReaction));
 			_allChoiceReactions.Add(BusinessChoice, new DispositionDependentReaction(BusinessReaction));
@@ -371,6 +372,7 @@ public class FarmerFatherMiddle : NPC {
 		}
 		
 		public void IHelpedMarriageResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_allChoiceReactions.Clear();
 			control.UpdateDisposition(20);
 			_allChoiceReactions.Add(MarriageChoice, new DispositionDependentReaction(MarriageReaction));
@@ -379,6 +381,7 @@ public class FarmerFatherMiddle : NPC {
 		}
 		
 		public void NoResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Clear();
 			_allChoiceReactions.Add(MarriageChoice, new DispositionDependentReaction(MarriageReaction));
 			_allChoiceReactions.Add(BusinessChoice, new DispositionDependentReaction(BusinessReaction));
@@ -387,6 +390,7 @@ public class FarmerFatherMiddle : NPC {
 		}
 		
 		public void ConvinceDaughterResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Clear();
 			SetDefaultText("Any luck convincing my daughter?");
 			if (!convinceFlag){
@@ -396,6 +400,7 @@ public class FarmerFatherMiddle : NPC {
 		}
 		
 		public void MarriageIdeaResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Clear();
 			_allChoiceReactions.Add(ConvinceDaughterChoice, new DispositionDependentReaction(ConvinceDaughterReaction));
 			SetDefaultText("So what was your marriage idea?");
@@ -430,6 +435,7 @@ public class FarmerFatherMiddle : NPC {
 		}
 		
 		public void UpdateYouSure(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(YouSureChoice);
 			_allChoiceReactions.Remove(DontLikeItChoice);
 			_allChoiceReactions.Add(SoundSureChoice, new DispositionDependentReaction(SoundSureReaction));
@@ -445,6 +451,7 @@ public class FarmerFatherMiddle : NPC {
 			
 		}
 		public void UpdateSoundSure(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(SoundSureChoice);
 			_allChoiceReactions.Add(StandUpChoice, new DispositionDependentReaction (StandUpReaction));
 			_allChoiceReactions.Add (HelpHerChoice, new DispositionDependentReaction(HelpHerReaction));
@@ -452,6 +459,7 @@ public class FarmerFatherMiddle : NPC {
 			
 		}
 		public void UpdateHelpHer(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(StandUpChoice);
 			_allChoiceReactions.Remove(HelpHerChoice);
 			_allChoiceReactions.Add(YouCanChoice, new DispositionDependentReaction (YouCanReaction));
@@ -460,6 +468,7 @@ public class FarmerFatherMiddle : NPC {
 			
 		}
 		public void UpdateStandUp(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(StandUpChoice);
 			_allChoiceReactions.Remove(HelpHerChoice);
 			_allChoiceReactions.Add(YouCanChoice, new DispositionDependentReaction (YouCanReaction));
@@ -468,17 +477,19 @@ public class FarmerFatherMiddle : NPC {
 			
 		}
 		public void UpdateYouCan(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_allChoiceReactions.Remove(YouCanChoice);
 			_allChoiceReactions.Remove(YouHaveItChoice);
 			GUIManager.Instance.RefreshInteraction();
-			SetDefaultText("Finished Convo");
+			SetDefaultText("Thanks");
 			
 		}
 		public void UpdateYouHaveIt(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_allChoiceReactions.Remove(YouCanChoice);
 			_allChoiceReactions.Remove(YouHaveItChoice);
 			GUIManager.Instance.RefreshInteraction();
-			SetDefaultText("Finished Convo");
+			SetDefaultText("Thanks");
 		}
 		
 		public override void UpdateEmotionState(){

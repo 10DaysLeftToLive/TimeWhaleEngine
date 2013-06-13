@@ -1488,6 +1488,7 @@ public class CastlemanYoung : NPC {
 			SetDefaultText("I'm scared to talk to her.");
 		}
 		public void UpdateDoYouWantToBeFriends(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(DoYouWantToBeFriendsChoice);
 			_allChoiceReactions.Remove(OfCourseItIsChoice);
 			_allChoiceReactions.Add(ThenStopWorryingChoice, new DispositionDependentReaction(ThenStopWorryingReaction));
@@ -1496,6 +1497,7 @@ public class CastlemanYoung : NPC {
 			SetDefaultText("I wish I could be friends with the farmer's daughter.");
 		}
 		public void UpdateThenStopWorrying(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Blink);
 			_allChoiceReactions.Remove(ThenStopWorryingChoice);
 			_allChoiceReactions.Remove(ToughLuckChoice);
 			GUIManager.Instance.CloseInteractionMenu();
@@ -1512,6 +1514,7 @@ public class CastlemanYoung : NPC {
 			FlagManager.instance.SetFlag(FlagStrings.BeachNotPreparedForConvo);
 		}
 		public void UpdateOfCourseItIs(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(DoYouWantToBeFriendsChoice);
 			_allChoiceReactions.Remove(OfCourseItIsChoice);
 			_allChoiceReactions.Add(NewThingsAreAlwaysScaryChoice, new DispositionDependentReaction(NewThingsAreAlwaysScareReaction));
@@ -1520,6 +1523,7 @@ public class CastlemanYoung : NPC {
 			SetDefaultText("How do I get over fear?");
 		}
 		public void UpdateNoChance(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(NoChanceChoice);
 			_allChoiceReactions.Remove(NewThingsAreAlwaysScaryChoice);
 			GUIManager.Instance.CloseInteractionMenu();
@@ -1528,6 +1532,7 @@ public class CastlemanYoung : NPC {
 			FlagManager.instance.SetFlag(FlagStrings.BeachNotPreparedForConvo);
 		}
 		public void UpdateNewThingsAreAlwaysScary(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(NoChanceChoice);
 			_allChoiceReactions.Remove(NewThingsAreAlwaysScaryChoice);
 			_allChoiceReactions.Add(JustActNaturallyChoice, new DispositionDependentReaction(JustActNaturallyReaction));
@@ -1536,6 +1541,7 @@ public class CastlemanYoung : NPC {
 			SetDefaultText("How do I deal with fear?");
 		}
 		public void UpdateJustActNaturally(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Blink);
 			_allChoiceReactions.Remove(JustActNaturallyChoice);
 			_allChoiceReactions.Remove(GiveUpChoice);
 			GUIManager.Instance.CloseInteractionMenu();
@@ -1544,6 +1550,7 @@ public class CastlemanYoung : NPC {
 			FlagManager.instance.SetFlag(FlagStrings.BeachPreparedForConvo);
 		}
 		public void UpdateGiveUp(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(JustActNaturallyChoice);
 			_allChoiceReactions.Remove(GiveUpChoice);
 			GUIManager.Instance.CloseInteractionMenu();
@@ -1647,6 +1654,7 @@ public class CastlemanYoung : NPC {
 			GiveUpReaction.AddAction(new ShowOneOffChatAction(toControl, "I've got no chance do I."));
 		}
 		public void UpdateHaveAFunTime(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Embarassed);
 			_allChoiceReactions.Remove(HaveAFunTimeChoice);
 			_allChoiceReactions.Add(IHearWeddingBellsChoice, new DispositionDependentReaction(IHearWeddingBellsReaction));
 			_allChoiceReactions.Add(MaybeYouShouldBeFriendsChoice, new DispositionDependentReaction(MaybeYouShouldBeFriendsReaction));
@@ -1654,12 +1662,14 @@ public class CastlemanYoung : NPC {
 			SetDefaultText("The farmer's daughter...");
 		}
 		public void UpdateIHearWeddingBells(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(IHearWeddingBellsChoice);
 			_allChoiceReactions.Remove(MaybeYouShouldBeFriendsChoice);
 			GUIManager.Instance.CloseInteractionMenu();
 			SetDefaultText("You are so mean!");
 		}
 		public void UpdateMaybeYouShouldBeFriends(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(IHearWeddingBellsChoice);
 			_allChoiceReactions.Remove(MaybeYouShouldBeFriendsChoice);
 			_allChoiceReactions.Add(YouDontNeedToKnowChoice, new DispositionDependentReaction(YouDontNeedToKnowReaction));
@@ -1668,6 +1678,7 @@ public class CastlemanYoung : NPC {
 		}
 		
 		public void UpdateYouDontNeedToKnow(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(YouDontNeedToKnowChoice);
 			_allChoiceReactions.Add(DoYouWantToBeFriendsChoice, new DispositionDependentReaction(DoYouWantToBeFriendsReaction));
 			_allChoiceReactions.Add(OfCourseItIsChoice, new DispositionDependentReaction(OfCourseItIsReaction));
@@ -1675,6 +1686,7 @@ public class CastlemanYoung : NPC {
 			SetDefaultText("I'm scared to talk to her.");
 		}
 		public void UpdateDoYouWantToBeFriends(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(DoYouWantToBeFriendsChoice);
 			_allChoiceReactions.Remove(OfCourseItIsChoice);
 			_allChoiceReactions.Add(ThenStopWorryingChoice, new DispositionDependentReaction(ThenStopWorryingReaction));
@@ -1683,6 +1695,7 @@ public class CastlemanYoung : NPC {
 			SetDefaultText("I wish I could be friends with the farmer's daughter.");
 		}
 		public void UpdateThenStopWorrying(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Blink);
 			_allChoiceReactions.Remove(ThenStopWorryingChoice);
 			_allChoiceReactions.Remove(ToughLuckChoice);
 			GUIManager.Instance.CloseInteractionMenu();
@@ -1691,6 +1704,7 @@ public class CastlemanYoung : NPC {
 			FlagManager.instance.SetFlag(FlagStrings.BeachPreparedForConvo);
 		}
 		public void UpdateToughLuck(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(ThenStopWorryingChoice);
 			_allChoiceReactions.Remove(ToughLuckChoice);
 			GUIManager.Instance.CloseInteractionMenu();
@@ -1699,6 +1713,7 @@ public class CastlemanYoung : NPC {
 			FlagManager.instance.SetFlag(FlagStrings.BeachNotPreparedForConvo);
 		}
 		public void UpdateOfCourseItIs(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(DoYouWantToBeFriendsChoice);
 			_allChoiceReactions.Remove(OfCourseItIsChoice);
 			_allChoiceReactions.Add(NewThingsAreAlwaysScaryChoice, new DispositionDependentReaction(NewThingsAreAlwaysScareReaction));
@@ -1707,6 +1722,7 @@ public class CastlemanYoung : NPC {
 			SetDefaultText("How do I get over fear?");
 		}
 		public void UpdateNoChance(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(NoChanceChoice);
 			_allChoiceReactions.Remove(NewThingsAreAlwaysScaryChoice);
 			GUIManager.Instance.CloseInteractionMenu();
@@ -1715,6 +1731,7 @@ public class CastlemanYoung : NPC {
 			FlagManager.instance.SetFlag(FlagStrings.BeachNotPreparedForConvo);
 		}
 		public void UpdateNewThingsAreAlwaysScary(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(NoChanceChoice);
 			_allChoiceReactions.Remove(NewThingsAreAlwaysScaryChoice);
 			_allChoiceReactions.Add(JustActNaturallyChoice, new DispositionDependentReaction(JustActNaturallyReaction));
@@ -1723,6 +1740,7 @@ public class CastlemanYoung : NPC {
 			SetDefaultText("How do I deal with fear?");
 		}
 		public void UpdateJustActNaturally(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Blink);
 			_allChoiceReactions.Remove(JustActNaturallyChoice);
 			_allChoiceReactions.Remove(GiveUpChoice);
 			GUIManager.Instance.CloseInteractionMenu();
@@ -1731,6 +1749,7 @@ public class CastlemanYoung : NPC {
 			FlagManager.instance.SetFlag(FlagStrings.BeachPreparedForConvo);
 		}
 		public void UpdateGiveUp(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(JustActNaturallyChoice);
 			_allChoiceReactions.Remove(GiveUpChoice);
 			GUIManager.Instance.CloseInteractionMenu();
