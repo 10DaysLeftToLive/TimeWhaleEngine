@@ -113,9 +113,13 @@ public static class FlagStrings {
 	
 	public static string carpenterSonFinishesWindmill = "Carpenter Son Finish Windmill";
 	public static string carpenterSonWhittleMiddleAge = "Carpenter Son Whittle Rocking Chair";
+	
 	public static string carpenterSonBecomesFisherman = "Carpenter Son Becomes Fisherman";
 	
 	public static string carpenterSonTalkWithFatherMorning = "Carpenter Son Talk to Father"; 
+	
+	public static string elderCarpenterSonChat = "elderCarpenterSonChat";
+	public static string elderCarpenterFishingTime = "elderCarpenterFishingTime";
 	
 	public static string CarpenterDating = "Carpenter dating";
 	public static string CarpenterNoShow = "Carpenter no show";

@@ -134,6 +134,7 @@ public class CarpenterSonYoung : NPC {
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
 			giveFishingRodReaction.AddAction(new NPCTakeItemAction(toControl));
 			giveFishingRodReaction.AddAction(new SetOffFlagAction(FlagStrings.gaveFishingRodToCarpenterSon));
+			giveFishingRodReaction.AddAction(new SetOffFlagAction(FlagStrings.carpenterSonEncouragedFishing));
 			giveFishingRodReaction.AddAction(new NPCEmotionUpdateAction(toControl, new GaveFishingRodEmotionState(toControl, gaveFishingRodDialogue)));
 			_allItemReactions.Add(StringsItem.FishingRod, new DispositionDependentReaction(giveFishingRodReaction));
 			
@@ -256,6 +257,7 @@ public class CarpenterSonYoung : NPC {
 		public MadeFishingRodEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
 			giveFishingRodReaction.AddAction(new NPCTakeItemAction(toControl));
 			giveFishingRodReaction.AddAction(new SetOffFlagAction(FlagStrings.gaveFishingRodToCarpenterSon));
+			giveFishingRodReaction.AddAction(new SetOffFlagAction(FlagStrings.carpenterSonEncouragedFishing));
 			giveFishingRodReaction.AddAction(new NPCEmotionUpdateAction(toControl, new GaveFishingRodEmotionState(toControl, gaveFishingRodDialogue)));
 			_allItemReactions.Add(StringsItem.FishingRod, new DispositionDependentReaction(giveFishingRodReaction));
 			

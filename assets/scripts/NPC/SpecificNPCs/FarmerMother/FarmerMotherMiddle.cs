@@ -325,9 +325,11 @@ public class FarmerMotherMiddle : NPC {
 		
 		public void ConvinceDaughterResponse(){
 			if (farmerOnBoard){
+				_npcInState.SetCharacterPortrait(StringsNPC.Default);
 				FlagManager.instance.SetFlag(FlagStrings.FarmerOnBoard);
 				_allChoiceReactions.Remove(ConvinceDaughterChoice);
 			}else {
+				_npcInState.SetCharacterPortrait(StringsNPC.Angry);
 				_allChoiceReactions.Remove(ConvinceDaughterChoice);
 				_allChoiceReactions.Add(MarriageIdeaChoice, new DispositionDependentReaction(MarriageIdeaReaction));
 			}
@@ -335,6 +337,7 @@ public class FarmerMotherMiddle : NPC {
 		}
 		
 		public void MarriageIdeaResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(MarriageIdeaChoice);
 			_allChoiceReactions.Add(ConvinceDaughterChoice, new DispositionDependentReaction(ConvinceDaughterReaction));
 			GUIManager.Instance.RefreshInteraction();
@@ -344,6 +347,7 @@ public class FarmerMotherMiddle : NPC {
 			
 		}
 		public void UpdateWhysNot(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(WhyNotChoice);
 			GUIManager.Instance.RefreshInteraction();
 			FlagManager.instance.SetFlag(FlagStrings.ConversationInMiddleFarmerMother);

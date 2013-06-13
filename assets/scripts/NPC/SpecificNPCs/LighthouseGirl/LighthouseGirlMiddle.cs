@@ -475,7 +475,7 @@ public class LighthouseGirlMiddle : NPC {
 		Choice CastleManChoice = new Choice("Castle man", "If you're seeing this...you have entered..the twilight zone!!!");
 		Choice NotBadChoice = new Choice("He's not THAT bad...", "Hmmph. Yeah right! He's just a thick headed barbarian, just like Genghis Khan in all of the stories I've read. I'll have nothing to do with him!");
 		Choice YourRightChoice = new Choice("You're right", "Such a nice letter.");
-		Choice TalkedChoice = new Choice("Have you even talked with him?", "No...But I'm sure that I'm right! My books have never proved me worng! In fact if you help me find a way to sneak out without my parents seeing, I'll prive it to you!");
+		Choice TalkedChoice = new Choice("Have you even talked with him?", "No...But I'm sure that I'm right! My books have never proved me worng! In fact if you help me find a way to sneak out without my parents seeing, I'll prove it to you!");
 		
 		Reaction GoOnReaction = new Reaction();
 		Reaction OkReaction = new Reaction();
@@ -562,12 +562,14 @@ public class LighthouseGirlMiddle : NPC {
 		}
 		
 		public void TalkedResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Clear();
 			_allItemReactions.Add(StringsItem.Rope, new DispositionDependentReaction(RopeReaction));
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("I need a way to sneak out without my parents seeing.");
 		}
 		public void ToolsResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
 			_allChoiceReactions.Clear();
 			
 			if (!gaveTools){
@@ -578,6 +580,7 @@ public class LighthouseGirlMiddle : NPC {
 			SetDefaultText("ARRGGHH. I can't believe that didn't work. I've tried everything to get out of this! Why can't it just be like in the stories where the hero always wins!");
 		}
 		public void RopeResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			if (carpenterPath){
 				SetDefaultText("Tell the carpenter's son to meet me at the beach!");
 				FlagManager.instance.SetFlag(FlagStrings.CarpenterDate);
@@ -590,6 +593,7 @@ public class LighthouseGirlMiddle : NPC {
 				//FlagManager.instance.SetFlag(FlagStrings.WaitingForDate);
 		}
 		public void NotBadResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
 			_allChoiceReactions.Clear();
 			_allItemReactions.Clear();
 			
@@ -598,6 +602,7 @@ public class LighthouseGirlMiddle : NPC {
 			SetDefaultText("The carpenter is a thick headed barbarian. I'll have nothing to do with him!");
 		}
 		public void YourRightResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_allChoiceReactions.Clear();
 			if (planStarted){
 				SetDefaultText("Exactly! There's no time worth wasting. Now to get back to our plan and ruin this marriage!");
@@ -615,6 +620,7 @@ public class LighthouseGirlMiddle : NPC {
 			
 		}
 		public void CarpenterResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_allChoiceReactions.Clear();
 			
 			carpenterPath = true;
@@ -625,6 +631,7 @@ public class LighthouseGirlMiddle : NPC {
 			SetDefaultText("I don't believe the carpenter wrote this letter.");
 		}
 		public void CastleManResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Embarassed);
 			_allChoiceReactions.Clear();
 			_allItemReactions.Clear();
 			FlagManager.instance.SetFlag(FlagStrings.NotInsane);
@@ -639,6 +646,7 @@ public class LighthouseGirlMiddle : NPC {
 		}
 		#region response func
 		public void NoteResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_allChoiceReactions.Clear();
 			
 			_allChoiceReactions.Add(CarpenterChoice,new DispositionDependentReaction(CarpenterReaction));
@@ -650,6 +658,7 @@ public class LighthouseGirlMiddle : NPC {
 		
 		public void GoOnResponse(){		}
 		public void OkResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(OkChoice);
 
 			_allChoiceReactions.Add(ContinueChoice,new DispositionDependentReaction(ContinueReaction));
@@ -658,6 +667,7 @@ public class LighthouseGirlMiddle : NPC {
 			SetDefaultText("I want you to try and find ways to get the carpenter and my mom upset with each other");
 		}
 		public void ContinueResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_allChoiceReactions.Remove(ContinueChoice);
 			
 			_allChoiceReactions.Add(AnotherTimeChoice,new DispositionDependentReaction(AnotherTimeReaction));
@@ -667,6 +677,7 @@ public class LighthouseGirlMiddle : NPC {
 			SetDefaultText("You on board with this plan?");
 		}
 		public void PlanResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Clear();
 			_allItemReactions.Clear();
 			
@@ -683,6 +694,7 @@ public class LighthouseGirlMiddle : NPC {
 			//GUIManager.Instance.CloseInteractionMenu();
 		}
 		public void MarriageResponse(){	
+			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
 			_allChoiceReactions.Remove(PlanChoice);
 			_allChoiceReactions.Remove(MarriageChoice);
 			GUIManager.Instance.RefreshInteraction();
@@ -691,6 +703,7 @@ public class LighthouseGirlMiddle : NPC {
 			_allChoiceReactions.Add(MarriageChoice,new DispositionDependentReaction(MarriageReaction));
 		}
 		public void YesResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_allChoiceReactions.Clear();
 			_allItemReactions.Clear();
 			
@@ -701,6 +714,7 @@ public class LighthouseGirlMiddle : NPC {
 			GUIManager.Instance.RefreshInteraction();
 		}
 		public void AnotherTimeResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(YesChoice);
 			_allChoiceReactions.Remove(AnotherTimeChoice);
 			GUIManager.Instance.RefreshInteraction();
@@ -762,23 +776,27 @@ public class LighthouseGirlMiddle : NPC {
 		public void CaptainsLogResponse(){}
 		
 		public void GiveUpResponse(){
-			 _allChoiceReactions.Clear();
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
+			_allChoiceReactions.Clear();
 			_allChoiceReactions.Add(AnyoneNiceChoice,new DispositionDependentReaction(AnyoneNiceReaction));
 			_allChoiceReactions.Add(NiceToMomChoice,new DispositionDependentReaction(NiceToMomReaction));
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("I wish there was someone who was willing to help me with this...");
 		}
 		public void NotSoBadResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
 			_allChoiceReactions.Clear();
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("I need time to think of more ways to sabotage this marriage.");
 		}
 		public void AnyoneNiceResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Clear();
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("My dad is too afraid to stand up to my mom...");
 		}
 		public void NiceToMomResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
 			_allChoiceReactions.Clear();
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("My mom will never back down.");
@@ -800,6 +818,7 @@ public class LighthouseGirlMiddle : NPC {
 		}
 		
 		public void ToolsResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_allChoiceReactions.Clear();
 			_allItemReactions.Clear();
 			if (!gaveTools){
@@ -839,6 +858,7 @@ public class LighthouseGirlMiddle : NPC {
 		}
 		
 		public void ToolsResponse(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_allChoiceReactions.Clear();
 			
 			if (!gaveTools){

@@ -317,7 +317,7 @@ public class CarpenterSonMiddle : NPC {
 			reconcileReaction.AddAction(new UpdateDefaultTextAction(toControl, "I'll go talk to him soon."));
 			reconcileReaction.AddAction(new NPCCallbackAction(removeChoices));
 			
-			youDontNeedHimReaction.AddAction(new UpdateDefaultTextAction(toControl, "Who needs his aproval anyway?"));
+			youDontNeedHimReaction.AddAction(new UpdateDefaultTextAction(toControl, "Who needs his approval anyway?"));
 			youDontNeedHimReaction.AddAction(new NPCCallbackAction(removeChoices));
 			
 			_allChoiceReactions.Add(reconcileWithFather, new DispositionDependentReaction(reconcileReaction));
