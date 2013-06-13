@@ -13,6 +13,8 @@ public class NPCChangePortraitAction : NPCValueUpdateAction {
 	
 	public override void Perform(){
 		npcToUpdate.SetCharacterPortrait(portait);
-		GUIManager.Instance.RefreshInteraction();
+		if (npcToUpdate.IsInteracting()){
+			GUIManager.Instance.RefreshInteraction();
+		}
 	}
 }
