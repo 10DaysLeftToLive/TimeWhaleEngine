@@ -314,6 +314,7 @@ public class FarmerMotherYoung : NPC {
 		
 		
 		public void UpdateStoriesFun(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(StoriesFunChoice);
 			_allChoiceReactions.Remove(StoriesSillyChoice);
 			_allChoiceReactions.Add(StoriesUsefulChoice, new DispositionDependentReaction(StoriesUsefulReaction));
@@ -321,6 +322,7 @@ public class FarmerMotherYoung : NPC {
 			GUIManager.Instance.RefreshInteraction();
 		}
 		public void UpdateStoriesSilly(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_allChoiceReactions.Remove(StoriesFunChoice);
 			_allChoiceReactions.Remove(StoriesSillyChoice);
 			_allChoiceReactions.Add(StoriesArentHorribleChoice, new DispositionDependentReaction(StoriesArentHorribleReaction));
@@ -329,6 +331,7 @@ public class FarmerMotherYoung : NPC {
 			FlagManager.instance.SetFlag(FlagStrings.StoriesAreSilly);
 		}
 		public void UpdateStoriesUseful(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(StoriesUsefulChoice);
 			_allChoiceReactions.Remove(GuessSoChoice);
 			_allChoiceReactions.Add(CanReadAndWorkChoice, new DispositionDependentReaction(CanReadAndWorkReaction));
@@ -336,6 +339,7 @@ public class FarmerMotherYoung : NPC {
 			GUIManager.Instance.RefreshInteraction();
 		}
 		public void UpdateGuessSo(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(StoriesUsefulChoice);
 			_allChoiceReactions.Remove(GuessSoChoice);
 			_allChoiceReactions.Add(DaughterFarmerChoice, new DispositionDependentReaction(DaughterFarmerReaction));
@@ -343,6 +347,7 @@ public class FarmerMotherYoung : NPC {
 			GUIManager.Instance.RefreshInteraction();
 		}
 		public void UpdateStoriesArentHorrible(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(StoriesArentHorribleChoice);
 			_allChoiceReactions.Remove(IllConvinceChoice);
 			_allChoiceReactions.Add(DaughterFarmerChoice, new DispositionDependentReaction(DaughterFarmerReaction));
@@ -350,6 +355,7 @@ public class FarmerMotherYoung : NPC {
 			GUIManager.Instance.RefreshInteraction();
 		}
 		public void UpdateIllConvince(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(StoriesArentHorribleChoice);
 			_allChoiceReactions.Remove(IllConvinceChoice);
 			if(setTellOn == true && FinishedTellOnConversation == false){
@@ -360,6 +366,7 @@ public class FarmerMotherYoung : NPC {
 			FinishedStoriesConversation = true;
 		}
 		public void UpdateCanReadAndWork(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(CanReadAndWorkChoice);
 			_allChoiceReactions.Remove(SheShouldDecideChoice);
 			if(setTellOn == true && FinishedTellOnConversation == false){
@@ -371,6 +378,7 @@ public class FarmerMotherYoung : NPC {
 			FlagManager.instance.SetFlag(FlagStrings.WorkAndStories);
 		}
 		public void UpdateSheShouldDecide(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(SheShouldDecideChoice);
 			if(_allChoiceReactions.ContainsKey(CanReadAndWorkChoice)){
 				_allChoiceReactions.Remove(CanReadAndWorkChoice);	
@@ -383,12 +391,14 @@ public class FarmerMotherYoung : NPC {
 			GUIManager.Instance.RefreshInteraction();
 		}
 		public void UpdateDaughterFarmer(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(SheShouldDecideChoice);
 			_allChoiceReactions.Remove(DaughterFarmerChoice);
 			_allChoiceReactions.Add(YouAreRightChoice, new DispositionDependentReaction(YouAreRightReaction));
 			GUIManager.Instance.RefreshInteraction();
 		}
 		public void UpdateNotSilly(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(NotSillyChoice);
 			_allChoiceReactions.Remove(YouAreRightChoice);
 			if(setTellOn == true && FinishedTellOnConversation == false){
@@ -400,6 +410,7 @@ public class FarmerMotherYoung : NPC {
 			FlagManager.instance.SetFlag(FlagStrings.NotSilly);
 		}
 		public void UpdateYouAreRight(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_allChoiceReactions.Remove(YouAreRightChoice);
 			if(_allChoiceReactions.ContainsKey(NotSillyChoice)){
 				_allChoiceReactions.Remove(NotSillyChoice);	
@@ -429,6 +440,7 @@ public class FarmerMotherYoung : NPC {
 		}
 			
 		private void askedWhatAbout(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(whatAboutChoice);
 			if (_allChoiceReactions.ContainsKey(TellOnDaughterChoice)){
 				_allChoiceReactions.Remove(TellOnDaughterChoice);
@@ -442,12 +454,14 @@ public class FarmerMotherYoung : NPC {
 		}
 		
 		private void tellOnDaughter(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
 			farmerMotherYoung.AddSchedule(new NPCConvoSchedule(farmerMotherYoung, NPCManager.instance.getNPC(StringsNPC.LighthouseGirlYoung), 
 				new YoungFarmerMotherToLighthouseGirlToldOn(),Schedule.priorityEnum.DoNow));
 				
 		}
 
 		private void givePendant(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(whatAboutChoice);
 			Reaction reactionToGiveSunflowerSeeds = new Reaction(new NPCCallbackAction(dropSunflowerSeeds));
 			
