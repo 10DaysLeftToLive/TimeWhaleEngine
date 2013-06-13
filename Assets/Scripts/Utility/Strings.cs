@@ -38,6 +38,7 @@ public static class Strings{
 	public static string animation_stand = "Idle";
 	public static string animation_pickup = "Pick Up";
 	public static string animation_dig = "Dig";
+	public static string animation_fish = "Fish";
 	
 	public static string NextLevel = "NextLevelToLoad";
 	public static string LoadingScreen = "LoadingScreen";

@@ -8,6 +8,9 @@ using System.Collections;
 public class FarmerFatherYoung : NPC {	
 	//Known Bugs, can override two conversations by talking to him.
 	//Conversation speed is currently bugged
+	
+	Schedule beALazyFarmer;
+	
 	protected override void Init() {
 		id = NPCIDs.FARMER_FATHER;
 		base.Init();
@@ -31,6 +34,11 @@ public class FarmerFatherYoung : NPC {
 		Reaction NewDialogueReaction = new Reaction();
 		NewDialogueReaction.AddAction (new NPCCallbackAction(UpdateConversation));
 		flagReactions.Add(FlagStrings.ConversationInMiddleFather, NewDialogueReaction);
+		
+		Reaction FarmerBecomesLazy = new Reaction();
+		FarmerBecomesLazy.AddAction(new NPCAddScheduleAction(this, beALazyFarmer));
+		flagReactions.Add(FlagStrings.FarmAfterDialogue, FarmerBecomesLazy);
+		
 	}
 	public void UpdateBusiness(){
 		currentEmotion.PassStringToEmotionState(FlagStrings.BusinessConversation);
@@ -48,7 +56,8 @@ public class FarmerFatherYoung : NPC {
 	}
 
 	protected override void SetUpSchedules(){
-		
+		beALazyFarmer = new Schedule(this);
+		beALazyFarmer.Add(new Task(new AbstractAnimationState(this, "Shovel Idle")));
 	}
 	
 	
@@ -203,19 +212,23 @@ public class FarmerFatherYoung : NPC {
 			AlreadyBraveReaction.AddAction(new UpdateCurrentTextAction(toControl, "I...I guess you're right.  Maybe my daughter doesn't need stories, maybe she is already brave...thanks for your help!"));
 		}
 		public void UpdateGiveSeeds(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_allItemReactions.Remove(StringsItem.SunflowerSeeds);
 			FlagManager.instance.SetFlag(FlagStrings.FarmAlive);	
 		}
 		public void UpdateAlreadyBrave(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_allChoiceReactions.Clear();
 			GUIManager.Instance.RefreshInteraction();
 			startedConversation = true;
+			_npcInState.animationData.Play("Shovel Idle");
 			SetDefaultText("Thanks for your help!  I'm proud of my daughter");
 			FlagManager.instance.SetFlag(FlagStrings.BusinessTimer);
 			FlagManager.instance.SetFlag(FlagStrings.AlreadyBrave);
 		}
 		#region UpdatePathOne
 		public void UpdateStandUp(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			//_allChoiceReactions.Remove(StandUpChoice);
 			//_allChoiceReactions.Remove(StoriesSillyChoice);
 			_allChoiceReactions.Clear();
@@ -226,6 +239,7 @@ public class FarmerFatherYoung : NPC {
 			//SetDefaultDialogue();
 		}
 		public void UpdateNotHard(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(NotHardChoice);
 			_allChoiceReactions.Remove(CowardChoice);
 			_allChoiceReactions.Add(DoItChoice, new DispositionDependentReaction(DoItReaction));
@@ -234,32 +248,39 @@ public class FarmerFatherYoung : NPC {
 			//SetDefaultDialogue();
 		}
 		public void UpdateCoward (){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(NotHardChoice);
 			_allChoiceReactions.Remove(CowardChoice);
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("I'd rather not talk anymore.");
+			_npcInState.animationData.Play("Shovel Idle");
 			FlagManager.instance.SetFlag(FlagStrings.BusinessTimer);
 			FlagManager.instance.SetFlag(FlagStrings.YourCoward);
 		}
 		public void UpdateDoIt(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(DoItChoice);
 			_allChoiceReactions.Remove(OnYourOwnChoice);
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("I doubt you'll get anywhere talking with my wife.");
+			//_npcInState.animationData.Play("Shovel Idle");
 			FlagManager.instance.SetFlag(FlagStrings.BusinessTimer);
 			FlagManager.instance.SetFlag(FlagStrings.IllDoIt);
 		}
 		public void UpdateOnYourOwn(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_allChoiceReactions.Remove(DoItChoice);
 			_allChoiceReactions.Remove(OnYourOwnChoice);
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("Thanks for what little you could do.");
+			//_npcInState.animationData.Play("Shovel Idle");
 			FlagManager.instance.SetFlag(FlagStrings.BusinessTimer);
 		}
 		#endregion
 		
 		#region UpdatePathTwo
 		public void UpdateStoriesSilly(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Clear();
 			startedConversation = true;
 			_allChoiceReactions.Add(DoYouMeanChoice, new DispositionDependentReaction(DoYouMeanReaction));
@@ -269,12 +290,14 @@ public class FarmerFatherYoung : NPC {
 			//SetDefaultDialogue();
 		}
 		public void UpdateDoYouMean(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
 			_allChoiceReactions.Remove(DoYouMeanChoice);
 			_allChoiceReactions.Add(StandUpChoice, new DispositionDependentReaction(StandUpReaction));
 			GUIManager.Instance.RefreshInteraction();
 			//SetDefaultDialogue();
 		}
 		public void UpdateNoStoriesSilly(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Clear();
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("If you find a story tell me...");

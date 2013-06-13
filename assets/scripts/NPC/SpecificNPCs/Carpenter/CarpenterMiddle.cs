@@ -115,8 +115,6 @@ public class CarpenterMiddle : NPC {
 		return (openningWaitingSchedule);
 	}
 	
-	
-
 	protected override void SetUpSchedules() {
 		Vector3 startingPosition = transform.position;
 		startingPosition.y += LevelManager.levelYOffSetFromCenter;
@@ -156,8 +154,8 @@ public class CarpenterMiddle : NPC {
 		Task flagTask = new TimeTask(0f, new IdleState(this));
 		flagTask.AddFlagToSet(FlagStrings.AfterProudOfSonConversation);
 		AfterAcceptFishing.Add(flagTask);
-		AfterAcceptFishing.Add(new Task (new MoveThenMarkDoneState(this, startingPosition)));
-		AfterAcceptFishing.Add(new TimeTask(10000f, new IdleState(this)));
+		AfterAcceptFishing.Add(new Task (new MoveThenMarkDoneState(this, MapLocations.BaseOfPierMiddle)));
+		AfterAcceptFishing.Add(new TimeTask(10000f, new AbstractAnimationState(this, "Fishing")));
 		#endregion
 		#region Carpentry
 		happyAtSonForBeingCarpenter = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), 
@@ -181,7 +179,7 @@ public class CarpenterMiddle : NPC {
 		ConversationAboutNotDoingAnything.SetCanNotInteractWithPlayer();
 		
 		AfterConversation = new Schedule(this, Schedule.priorityEnum.High);
-		AfterConversation.Add(new TimeTask(10000f, new IdleState(this)));
+		AfterConversation.Add(new TimeTask(10000f, new AbstractAnimationState(this, "Whittle")));
 		#endregion
 //CONVERSATION SCHEDULE BUG!!!! PLEASE FIX		
 //CONVERSATION SCHEDULE BUG!!!! PLEASE FIX		
@@ -196,20 +194,15 @@ public class CarpenterMiddle : NPC {
 	}
 	
 	private void SetupPrimaryCarpentrySchedules() {
-
-		
 		afterHappyForSonBeingACarpenter = new Schedule(this, Schedule.priorityEnum.Medium);
-		TimeTask stormOffToWindmill = new TimeTask(50f, new MoveState(this, MapLocations.WindmillMiddle));
+		Task stormOffToWindmill = new Task(new MoveState(this, MapLocations.WindmillMiddle));
+		TimeTask workOnWindmill = new TimeTask(1000f, new AbstractAnimationState(this, "Hammer", false));
 		afterHappyForSonBeingACarpenter.Add(stormOffToWindmill);
+		afterHappyForSonBeingACarpenter.Add(workOnWindmill);
 		
 		talkToSonAfterWhittle = new NPCConvoSchedule(this, 
 			NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), new MiddleCarpenterToSonCarpentryScriptedConvo(), Schedule.priorityEnum.Low);
 		talkToSonAfterWhittle.SetCanNotInteractWithPlayer();
-		
-		
-//		AddSchedule(happyAtSonForBeingCarpenter);
-//		AddSchedule(afterHappyForSonBeingACarpenter);
-//		AddSchedule(talkToSonAfterWhittle);
 		
 		talkToSonWithoutWhittle = new NPCConvoSchedule(this,
 			NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), new MiddleCarpenterToSonCarpentryScriptedConvo(), Schedule.priorityEnum.Low);

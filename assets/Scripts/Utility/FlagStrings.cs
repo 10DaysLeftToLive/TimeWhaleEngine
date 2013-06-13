@@ -113,6 +113,7 @@ public static class FlagStrings {
 	
 	public static string carpenterSonFinishesWindmill = "Carpenter Son Finish Windmill";
 	public static string carpenterSonWhittleMiddleAge = "Carpenter Son Whittle Rocking Chair";
+	public static string carpenterSonBecomesFisherman = "Carpenter Son Becomes Fisherman";
 	
 	public static string carpenterSonTalkWithFatherMorning = "Carpenter Son Talk to Father"; 
 	
@@ -209,6 +210,7 @@ public static class FlagStrings {
 	public static string GiveRopeToFarmer = "Give Rope to Farmer";
 	public static string FarmerOnBoard = "Farmer on Board";
 	public static string OpeningConversationFarmerMotherToFarmerFather = "Opening Conversation Farmer Mother to Farmer Father";
+	public static string FarmAfterDialogue = "Hoe After Dialogue";
 	#endregion
 	
 	#region Sea Captain
@@ -274,7 +276,7 @@ public static class FlagStrings {
 	public static string BuiltRockingChairTalk = "BuiltRockingChairTalk";
 	public static string DidntBuildRockingChairConversation = "Didn't build rocking chair conversation";
 	#endregion
-	
+	public static string UselessFlag = "Useless flag";
 	#region NewCastleManYoungStrings
 	public static string FinishedMeetingTheTown = "Castle Man finished meeting the town.";
 	public static string PreparedForConversationWithLighthouse = "Castle Man Prepared for conversation with the Lighthouse girl.";

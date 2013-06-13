@@ -19,6 +19,13 @@ public static class FarmerFamilyFlagStrings {
 	public static string GirlCastleDateFive = "Girl to castle date five";
 	public static string GirlCastleDateSix = "Girl to castle date six";
 	
+	public static string GirlCarpenterDateOne = "Girl to carpenter date one";
+	public static string GirlCarpenterDateTwo = "Girl to carpenter date two";
+	public static string GirlCarpenterDateThree = "Girl to carpenter date three";
+	public static string GirlCarpenterDateFour = "Girl to carpenter date four";
+	public static string GirlCarpenterDateFive = "Girl to carpenter date five";
+	public static string GirlCarpenterDateSix = "Girl to carpenter date six";
+	
 	public static string GirlCastleMarriageOne = "Girl to castle marriage one";
 	public static string GirlCastleMarriageTwo = "Girl to castle marriage two";
 	public static string GirlCastleMarriageThree = "Girl to castle marriage three";

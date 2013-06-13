@@ -11,6 +11,7 @@ public class LighthouseGirlYoung : NPC {
 	Schedule WalkToBeach;
 	Schedule GaveApple;
 	Schedule GaveNothingSchedule;
+
 	NPCConvoSchedule LighthouseGoingToBeach;
 	protected override void Init() {
 		id = NPCIDs.LIGHTHOUSE_GIRL;
@@ -75,6 +76,7 @@ public class LighthouseGirlYoung : NPC {
 		Reaction RemoveConvoWithCastleman = new Reaction();
 		RemoveConvoWithCastleman.AddAction(new NPCCallbackAction(DoRemoveConvoWithCastleman));
 		flagReactions.Add(FlagStrings.StartTalkingToLighthouse, RemoveConvoWithCastleman);
+		
 	}
 	public void DoRemoveConvoWithCastleman(){
 		this.RemoveScheduleWithFlag("TalkWithCastleman");
@@ -89,11 +91,18 @@ public class LighthouseGirlYoung : NPC {
 		//Schedule schedule = new DefaultSchedule(this);
 		return (InitialSchedule);
 	}
-	Schedule InitialSchedule;
-	protected override void SetUpSchedules(){
-		InitialSchedule = new Schedule(this, Schedule.priorityEnum.Medium);
-		InitialSchedule.Add(new TimeTask(1500, new WaitTillPlayerCloseState(this, ref player)));
-		InitialSchedule.Add(new Task(new IdleState(this), this, 0.1f, "Psst!  Come over here!"));
+	ScheduleLoop InitialSchedule;
+	protected override void SetUpSchedules() {
+		InitialSchedule = new ScheduleLoop(this, Schedule.priorityEnum.Medium);
+		Task waitForPlayer = new Task(new WaitTillPlayerCloseState(this, ref player));
+		InitialSchedule.Add(waitForPlayer);
+		Task SayHi = new Task(new AbstractAnimationState(this, "Hi"), this, 0.1f, "Psst! Come over here!");
+		InitialSchedule.Add(SayHi);
+		InitialSchedule.Add(new Task(new WaitTillPlayerCloseState(this, ref player)));
+		Task playWithSword = new Task(new AbstractAnimationState(this, "Play With Sword"));
+		InitialSchedule.Add(playWithSword);
+		
+		
 		
 		AttemptToTellOnLighthouse = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerFatherYoung), 
 			new LightHouseToFarmerFather(),Schedule.priorityEnum.DoConvo);
@@ -112,7 +121,7 @@ public class LighthouseGirlYoung : NPC {
 		TalkWithCastleman.AddFlagGroup("TalkWithCastleman");
 		
 		GaveApple = new Schedule(this, Schedule.priorityEnum.High);
-		GaveApple.Add(new TimeTask(10f, new IdleState(this)));
+		GaveApple.Add(new TimeTask(10f, new AbstractAnimationState(this, "Play With Sword")));
 		GaveApple.Add(SetFlagToBeach);
 		//GaveApple.Add(new TimeTask(500f, new IdleState(this)));
 		
@@ -201,21 +210,25 @@ public class LighthouseGirlYoung : NPC {
 			TakePieReaction = new Reaction();
 			TakePieReaction.AddAction(new NPCTakeItemAction(toControl));
 			TakePieReaction.AddAction(new NPCCallbackAction(UpdateTakeApplePie));
+			TakePieReaction.AddAction(new NPCRemoveScheduleAction(toControl, FlagStrings.UselessFlag));
 			_allItemReactions.Add(StringsItem.ApplePie, new DispositionDependentReaction(TakePieReaction));
 			
 			TakeAppleReaction = new Reaction();
 			TakeAppleReaction.AddAction(new NPCTakeItemAction(toControl));
 			TakeAppleReaction.AddAction(new NPCCallbackAction(UpdateTakeApple));
+			TakeAppleReaction.AddAction(new NPCRemoveScheduleAction(toControl, FlagStrings.UselessFlag));
 			TakeAppleReaction.AddAction(new ShowOneOffChatAction(toControl, "*Sigh*  time to bake I guess..."));
 			
 			DenyAppleReaction = new Reaction();
 			DenyAppleReaction.AddAction(new NPCCallbackAction(UpdateDenyApple));
+			DenyAppleReaction.AddAction(new NPCRemoveScheduleAction(toControl, FlagStrings.UselessFlag));
 			_allItemReactions.Add(StringsItem.Apple, new DispositionDependentReaction(DenyAppleReaction));
 			
 			
 			EvilPlanChoice = new Choice ("What evil plan?", "She wants to drain my strength through constant chores!\n But I'm a great warrior and can see through her cunning schemes to make me cook!");
 			EvilPlanReaction = new Reaction ();
 			EvilPlanReaction.AddAction(new NPCCallbackAction(UpdateEvilPlan));
+			EvilPlanReaction.AddAction(new NPCRemoveScheduleAction(toControl, FlagStrings.UselessFlag));
 			EvilPlanReaction.AddAction(new UpdateCurrentTextAction(toControl, "She wants to drain my strength through constant chores!\n But I'm a great warrior and can see through her cunning schemes to make me cook!"));
 			_allChoiceReactions.Add(EvilPlanChoice, new DispositionDependentReaction(EvilPlanReaction));
 			

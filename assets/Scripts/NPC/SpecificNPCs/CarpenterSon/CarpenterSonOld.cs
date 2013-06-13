@@ -11,6 +11,9 @@ public class CarpenterSonOld : NPC {
 		base.Init();
 	}
 	internal static bool ateBool = false;
+	protected string currentIdlePose = "Idle";
+	protected string currentWalkPose = "Walk";
+	
 	protected override void SetFlagReactions() {
 	
 		
@@ -172,6 +175,10 @@ public class CarpenterSonOld : NPC {
 		Reaction carpenterMarriage = new Reaction();
 		carpenterMarriage.AddAction(new NPCCallbackSetStringAction(MoveForMarriage, this, "carpenter"));
 		flagReactions.Add(FlagStrings.CastleMarriage, carpenterMarriage);
+		
+		Reaction becomesAFisherman = new Reaction();
+		becomesAFisherman.AddAction(new NPCCallbackAction(TransitionToFisherman));
+		flagReactions.Add(FlagStrings.carpenterSonBecomesFisherman, becomesAFisherman);
 	}
 	 	
 	protected override EmotionState GetInitEmotionState(){
@@ -183,7 +190,7 @@ public class CarpenterSonOld : NPC {
 		//Schedule schedule = new DefaultSchedule(this);
 		//return (schedule);
 		Schedule schedule = new Schedule(this, Schedule.priorityEnum.Low); 
-		schedule.Add(new TimeTask(120f, new IdleState(this)));
+		schedule.Add(new TimeTask(120f, new AbstractAnimationState(this, currentIdlePose)));
 		return (schedule);
 	}
 
@@ -201,6 +208,11 @@ public class CarpenterSonOld : NPC {
 		if (text == "carpenter"){
 			this.transform.position = new Vector3(1,0+LevelManager.levelYOffSetFromCenter*2, this.transform.position.z);
 		}
+	}
+	
+	protected void TransitionToFisherman() {
+		currentIdlePose = "Fisherman Idle";
+		currentWalkPose = "Fisherman Walk";
 	}
 	
 	#region EmotionStates

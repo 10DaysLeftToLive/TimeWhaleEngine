@@ -9,7 +9,7 @@ public class MiddleSeaCaptainFortuneTellerSecondConvo : NPCConversation {
 		Add (2, "To start, you didn't drop your anchor and your boat floated away");
 		Add (1, "It was an 'onest mistake.");
 		Add (2, "Then you don't know how to read a treasure map.");
-		Add (1, "Hey! Now yer just instulting me.");
+		Add (1, "Hey! Now yer just insulting me.");
 		Add (2, "You came to me. I am only telling you what I see.");
 		Add (1, "AAAGH! Yer just bein' mean!");
 	}

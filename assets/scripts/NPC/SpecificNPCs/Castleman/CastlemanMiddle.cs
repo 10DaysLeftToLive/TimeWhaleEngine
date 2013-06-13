@@ -46,6 +46,8 @@ public class CastlemanMiddle : NPC {
 		flagReactions.Add(FlagStrings.NotInsane, notInsane);
 		
 		waitingForDate.AddAction(new NPCEmotionUpdateAction(this, dateState));
+//CONFLICTS WITH LINE 61		
+		flagReactions.Add(FlagStrings.CastleDate, waitingForDate);
 		flagReactions.Add(FlagStrings.WaitingForDate, waitingForDate);
 		
 		datingThyEnemy.AddAction(new NPCCallbackAction(setFlagCarpenterDateSuccess));
@@ -55,8 +57,8 @@ public class CastlemanMiddle : NPC {
 		gotTheGirl.AddAction(new NPCEmotionUpdateAction(this, dateSuccessState));
 		flagReactions.Add(FlagStrings.PostCastleDate, gotTheGirl);
 		
-		iBeDating.AddAction(new NPCCallbackAction(setFlagDateForMe));
-		flagReactions.Add(FlagStrings.CastleDate, iBeDating);
+//		iBeDating.AddAction(new NPCCallbackAction(setFlagDateForMe));
+//		flagReactions.Add(FlagStrings.CastleDate, iBeDating);
 		
 		endOfDate.AddAction(new NPCCallbackAction(dateOver));
 		endOfDate.AddAction(new NPCAddScheduleAction(this, moveBack));
@@ -138,6 +140,7 @@ public class CastlemanMiddle : NPC {
 		reachedBeachEnd.AddFlagToSet(FlagStrings.EndOfDate);
 		moveToBeach.Add(reachedBeachEnd);
 		moveToBeach.Add(new TimeTask(3f, new IdleState(this)));
+		moveToBeach.SetCanInteract(false);
 		
 		
 		/*dateWithLG =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.LighthouseGirlMiddle),
@@ -176,12 +179,17 @@ public class CastlemanMiddle : NPC {
 		ShowMultipartChatAction castleDateThreeDialogue = new ShowMultipartChatAction(this);
 		castleDateThreeDialogue.AddChat("You remember me!", 2f);
 		castleDateThree.AddAction(castleDateThreeDialogue);
+		castleDateThree.AddAction(new NPCCallbackAction(FlexMusclesDuringDate));
+	}
+	
+	protected void FlexMusclesDuringDate() {
+		animationData.Play("Flexing");
 	}
 	
 	
 	#region EmotionStates
 	#region Initial Emotion State
-	private class InitialEmotionState : EmotionState{
+	private class InitialEmotionState : EmotionState {
 		Reaction gaveSeashell;
 		Reaction gaveRose;
 		Reaction lookLike;

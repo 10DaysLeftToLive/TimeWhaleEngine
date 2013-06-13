@@ -8,6 +8,7 @@ public class CarpenterSonMiddle : NPC {
 	StormOffEmotionState stormoffState;
 	Date dateState;
 	BlankEmotionState initialState;
+	BecomeACarpenter carpenterState;
 	Vector3 startingPosition;
 	bool castlemanDateSuccess = false;
 	bool dateForMe = false;
@@ -16,7 +17,6 @@ public class CarpenterSonMiddle : NPC {
 	Schedule stormOffSchedule, moveToBeach, moveBack, moveToWindmill;
 	Schedule MoveToPierToFish, AfterSeaCaptainTalk, TeleportToStartConvo;
 	NPCConvoSchedule dateWithLG;
-	
 	NPCConvoSchedule reportedDidHardWorkToFather, reportedDidNoWorkToFather;
 	Schedule EndState;
 	Schedule StartCarpentry;
@@ -29,32 +29,11 @@ public class CarpenterSonMiddle : NPC {
 	}
 	
 	protected override void SetFlagReactions(){
-//		Reaction waitingForDate = new Reaction();
-//		waitingForDate.AddAction(new NPCEmotionUpdateAction(this, dateState));
-//		flagReactions.Add(FlagStrings.WaitingForDate, waitingForDate);
-//		
-//		Reaction gotTheGirl = new Reaction();
-//		gotTheGirl.AddAction(new NPCEmotionUpdateAction(this, initialState)); //change state after successfuldate
-//		flagReactions.Add(FlagStrings.PostDatingCarpenter, gotTheGirl);
-//		
-//		Reaction iBeDating = new Reaction();
-//		iBeDating.AddAction(new NPCCallbackAction(setFlagDateForMe));
-//		flagReactions.Add(FlagStrings.CarpenterDate, iBeDating);
-//		
-//		Reaction endOfDate = new Reaction();
-//		endOfDate.AddAction(new NPCCallbackAction(dateOver));
-//		endOfDate.AddAction(new NPCAddScheduleAction(this, moveBack));
-//		flagReactions.Add(FlagStrings.EndOfDate, endOfDate);
-//		
-//		
 ////		Reaction stoodUpLG = new Reaction();
 ////		stoodUpLG.AddAction(new NPCEmotionUpdateAction(this, StoodUpState));
 ////		flagReactions.Add(FlagStrings.CarpenterNoShow, stoodUpLG);
 //		
-//		Reaction moveToDate = new Reaction();
-//		moveToDate.AddAction(new NPCAddScheduleAction(this, dateWithLG));
-//		flagReactions.Add(FlagStrings.CarpenterDating, moveToDate);
-		
+
 		startingPosition = transform.position;
 		startingPosition.y += LevelManager.levelYOffSetFromCenter;
 		//Schedule for the default path
@@ -70,6 +49,7 @@ public class CarpenterSonMiddle : NPC {
 		Reaction MovePiecesForFishing =  new Reaction();
 		//MovePiecesForFishing.AddAction
 		MovePiecesForFishing.AddAction(new NPCTeleportToAction(this, startingPosition));
+		MovePiecesForFishing.AddAction(new NPCCallbackAction(AcquireFishingPole));
 		MovePiecesForFishing.AddAction(new NPCAddScheduleAction(this, TeleportToStartConvo));
 		flagReactions.Add(FlagStrings.carpenterSonEncouragedFishing, MovePiecesForFishing);
 		
@@ -108,7 +88,7 @@ public class CarpenterSonMiddle : NPC {
 		#endregion
 		
 		Reaction DoNothing = new Reaction();
-		DoNothing.AddAction(new NPCEmotionUpdateAction(this, new BecomeACarpenter(this, "")));
+		DoNothing.AddAction(new NPCEmotionUpdateAction(this, carpenterState));
 		DoNothing.AddAction(new NPCAddScheduleAction(this, DoNothingSchedule));
 		flagReactions.Add(FlagStrings.IntroConvoCarpentry, DoNothing);
 		
@@ -117,12 +97,50 @@ public class CarpenterSonMiddle : NPC {
 		EndOfDayConvo.AddAction(new NPCAddScheduleAction(this, AfterConversationCarpentery));
 		flagReactions.Add(FlagStrings.CarpenterReturnedHome, EndOfDayConvo);
 		#endregion
-
 		
+		Reaction dating = new Reaction();
+		dating.AddAction(new NPCCallbackAction(setFlagDateForMe));
+		dating.AddAction(new NPCCallbackSetStringAction(FlagToNPC, this, "date"));
+		flagReactions.Add(FlagStrings.CarpenterDate, dating);
+		
+		Reaction moveToDate = new Reaction();
+		moveToDate.AddAction(new NPCAddScheduleAction(this, moveToBeach));
+		flagReactions.Add(FlagStrings.CarpenterDating, moveToDate);
+		
+		Reaction endOfDate = new Reaction();
+		endOfDate.AddAction(new NPCCallbackAction(dateOver));
+		endOfDate.AddAction(new NPCAddScheduleAction(this, moveBack));
+		flagReactions.Add(FlagStrings.EndOfDate, endOfDate);
+		
+		//chat stuff
+		Reaction carpenterDateOne = new Reaction();
+		ShowMultipartChatAction carpenterDateOneDialogue = new ShowMultipartChatAction(this);
+		carpenterDateOneDialogue.AddChat("*Out of Breath* At long last I get to try and court you my fair lady!", 5f);
+		carpenterDateOne.AddAction(carpenterDateOneDialogue);
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlCarpenterDateOne, carpenterDateOne);
+		
+		
+		Reaction carpenterDateTwo = new Reaction();
+		ShowMultipartChatAction carpenterDateTwoDialogue = new ShowMultipartChatAction(this);
+		carpenterDateTwoDialogue.AddChat("Endearing? My dear woman, I always speak this way!", 3f);
+		carpenterDateTwo.AddAction(carpenterDateTwoDialogue);
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlCarpenterDateThree, carpenterDateTwo);
+		
+		
+		Reaction carpenterDateThree = new Reaction();
+		ShowMultipartChatAction carpenterDateThreeDialogue = new ShowMultipartChatAction(this);
+		carpenterDateThreeDialogue.AddChat("You remember me!", 2f);
+		carpenterDateThree.AddAction(carpenterDateThreeDialogue);
+		flagReactions.Add(FarmerFamilyFlagStrings.GirlCarpenterDateFive, carpenterDateThree);
+		
+		
+		Reaction carpenterDateFour = new Reaction();
+		Reaction carpenterDateFive = new Reaction();
+		Reaction carpenterDateSix = new Reaction();
 	}
 	
 	protected override EmotionState GetInitEmotionState() {
-		
+		carpenterState = new BecomeACarpenter(this, "");
 		return (new BlankEmotionState(this, "One Second, I am talking to someone"));
 	}
 	
@@ -140,9 +158,9 @@ public class CarpenterSonMiddle : NPC {
 		#region PathOne
 		//Schedule for the Default path
 		moveToWindmill = new Schedule(this, Schedule.priorityEnum.Low);
-		moveToWindmill.Add (new Task(new MoveThenMarkDoneState(this, MapLocations.WindmillMiddle, "Somber Walk", 0.000000000025f)));
-		moveToWindmill.Add (new TimeTask(100f, new IdleState(this)));
-		moveToWindmill.Add (new Task(new MoveThenMarkDoneState(this, this.gameObject.transform.position)));
+		moveToWindmill.Add (new Task(new MoveThenMarkDoneState(this, MapLocations.WindmillMiddle, "Somber Walk", 2f)));
+		moveToWindmill.Add (new TimeTask(100f, new AbstractAnimationState(this, "Hammer", false, false)));
+		moveToWindmill.Add (new Task(new MoveThenMarkDoneState(this, startingPosition)));
 		#endregion
 		
 		#region FishingPath
@@ -155,7 +173,7 @@ public class CarpenterSonMiddle : NPC {
 		
 		MoveToPierToFish = new Schedule(this, Schedule.priorityEnum.DoNow);
 		MoveToPierToFish.Add(new Task(new MoveThenMarkDoneState(this, MapLocations.BaseOfPierMiddle)));
-		MoveToPierToFish.Add(new TimeTask(100f, new AbstractAnimationState(this, "Fish")));
+		MoveToPierToFish.Add(new TimeTask(100f, new AbstractAnimationState(this, "Fishing", true, true)));
 		Task SetOffConversationWithSeaCaptain = new TimeTask(0f, new IdleState(this));
 		SetOffConversationWithSeaCaptain.AddFlagToSet(FlagStrings.StartConversationWithSeaCaptainAboutBuildingShip);
 		MoveToPierToFish.Add(SetOffConversationWithSeaCaptain);
@@ -164,6 +182,8 @@ public class CarpenterSonMiddle : NPC {
 		AfterSeaCaptainTalk.Add(new Task(new MoveThenMarkDoneState(this, MapLocations.MiddleOfBeachMiddle)));
 		Task SetOffAfterSeaCaptain = new TimeTask(100f, new AbstractAnimationState(this, "Whittle"));
 		SetOffAfterSeaCaptain.AddFlagToSet(FlagStrings.StartProudOfSonConversation);
+		Task CarpenterSonTransitionToFisherman = new Task(new IdleState(this));
+		CarpenterSonTransitionToFisherman.AddFlagToSet(FlagStrings.carpenterSonBecomesFisherman);
 		AfterSeaCaptainTalk.Add(SetOffAfterSeaCaptain);
 		
 		EndState = new Schedule(this, Schedule.priorityEnum.High);
@@ -197,6 +217,54 @@ public class CarpenterSonMiddle : NPC {
 		AfterConversationCarpentery.Add(new TimeTask(10000f, new IdleState(this)));
 		#region NPCConvoSchedules
 		#endregion
+		
+		#region carpenterDate
+		moveBack = new Schedule(this, Schedule.priorityEnum.High);
+		moveBack.Add(new Task(new MoveThenDoState(this, startingPosition, new MarkTaskDone(this))));
+		
+		moveToBeach = new Schedule(this, Schedule.priorityEnum.DoNow);
+		moveToBeach.Add(new Task(new MoveThenDoState(this, new Vector3(MapLocations.MiddleOfBeachMiddle.x+1.5f, MapLocations.MiddleOfBeachMiddle.y, MapLocations.MiddleOfBeachMiddle.z), new MarkTaskDone(this))));
+		Task reachedBeach = new TimeTask(.1f,new IdleState(this));
+		reachedBeach.AddFlagToSet(FarmerFamilyFlagStrings.GirlCarpenterDateOne);
+		moveToBeach.Add(reachedBeach);
+		moveToBeach.Add(new TimeTask(5.3f, new IdleState(this)));
+		
+		Task reachedBeachTwo = new TimeTask(.1f,new IdleState(this));
+		reachedBeachTwo.AddFlagToSet(FarmerFamilyFlagStrings.GirlCarpenterDateTwo);
+		moveToBeach.Add(reachedBeachTwo);
+		moveToBeach.Add(new TimeTask(7.3f, new IdleState(this)));
+		
+		Task reachedBeachThree = new TimeTask(.1f,new IdleState(this));
+		reachedBeachThree.AddFlagToSet(FarmerFamilyFlagStrings.GirlCarpenterDateThree);
+		moveToBeach.Add(reachedBeachThree);
+		moveToBeach.Add(new TimeTask(3.3f, new IdleState(this)));
+		
+		
+		Task reachedBeachFour = new TimeTask(.1f,new IdleState(this));
+		reachedBeachFour.AddFlagToSet(FarmerFamilyFlagStrings.GirlCarpenterDateFour);
+		moveToBeach.Add(reachedBeachFour);
+		moveToBeach.Add(new TimeTask(6.3f, new IdleState(this)));
+		
+		Task reachedBeachFive = new TimeTask(.1f,new IdleState(this));
+		reachedBeachFive.AddFlagToSet(FarmerFamilyFlagStrings.GirlCarpenterDateFive);
+		moveToBeach.Add(reachedBeachFive);
+		moveToBeach.Add(new TimeTask(2.3f, new IdleState(this)));
+		
+		Task reachedBeachSix = new TimeTask(.1f,new IdleState(this));
+		reachedBeachSix.AddFlagToSet(FarmerFamilyFlagStrings.GirlCarpenterDateSix);
+		moveToBeach.Add(reachedBeachSix);
+		moveToBeach.Add(new TimeTask(6f, new IdleState(this)));
+		
+		Task reachedBeachEnd = new TimeTask(.1f,new IdleState(this));
+		reachedBeachEnd.AddFlagToSet(FlagStrings.EndOfDate);
+		moveToBeach.Add(reachedBeachEnd);
+		moveToBeach.Add(new TimeTask(3f, new IdleState(this)));
+		moveToBeach.SetCanInteract(false);
+		#endregion
+	}
+	
+	protected void AcquireFishingPole() {
+		
 	}
 	
 	protected void dateOver(){
@@ -207,6 +275,12 @@ public class CarpenterSonMiddle : NPC {
 	
 	protected void setFlagDateForMe(){
 		dateForMe = true;
+	}
+	
+	protected void FlagToNPC(NPC npc, string text){
+		if (text == "date"){
+			carpenterState.PassStringToEmotionState(text);	
+		}
 	}
 	
 	
@@ -330,11 +404,14 @@ public class CarpenterSonMiddle : NPC {
 		Choice curiousAboutMood = new Choice("What are you up to?", 
 			"Well, I thought I'd make a present for my Dad, I thought I'd make him a Harp");
 		Choice presentForDad = new Choice("Can I help?", "Yeah Sure, I'll need some wood.  Can you get it from the beach");
+		Choice DateChoice = new Choice("You have a date!", "Really? This...this...this is the most beauteous day of my life! Hurry to the beach. I cannot tarry!");
 		
 		Reaction curiousAboutMoodReaction = new Reaction();
 		Reaction assistGettingWood = new Reaction();
 		Reaction helpAppreciated = new Reaction();
+		Reaction DateReaction = new Reaction();
 		
+		bool flagSet = false;
 		public BecomeACarpenter(NPC toControl, string currentDialogue) : base(toControl, "Hi there.  I'm a bit busy right now.") {
 				
 			curiousAboutMoodReaction.AddAction(new NPCCallbackAction(selectCuriousMoodChoice));
@@ -371,6 +448,22 @@ public class CarpenterSonMiddle : NPC {
 		void removeAllOtherReactions() {
 			_allChoiceReactions.Clear();
 			GUIManager.Instance.RefreshInteraction();
+		}
+		
+		public void DateResponse(){
+			if (!flagSet){
+				_allChoiceReactions.Remove(DateChoice);
+				GUIManager.Instance.CloseInteractionMenu();
+				FlagManager.instance.SetFlag(FlagStrings.CarpenterDating);
+				flagSet = true;
+			}
+		}
+		
+		public override void PassStringToEmotionState(string text){
+			if (text == "date"){
+				DateReaction.AddAction(new NPCCallbackAction(DateResponse));
+				_allChoiceReactions.Add(DateChoice, new DispositionDependentReaction(DateReaction));
+			}
 		}
 	}
 	
