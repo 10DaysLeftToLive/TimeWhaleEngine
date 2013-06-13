@@ -10,6 +10,7 @@ using System.Collections.Generic;
 /// </summary>
 public abstract class NPC : Character {
 	#region Fields
+	protected string initialPortrait = "";
 	protected int id = -1;
 	private int npcDisposition;
 	public string textureAtlasName;
@@ -57,7 +58,7 @@ public abstract class NPC : Character {
 	}
 	
 	private void FindInitialObjects(){
-		SetCharacterPortrait("");
+		SetCharacterPortrait(initialPortrait);
 		player = GameObject.Find("PlayerCharacter").GetComponent<Player>();
 		animationData = GetComponent<SmoothMoves.BoneAnimation>();
 		if (animationData == null && !(this is Sibling)){
