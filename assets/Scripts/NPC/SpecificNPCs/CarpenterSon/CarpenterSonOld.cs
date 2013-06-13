@@ -7,6 +7,7 @@ using System.Collections;
 public class CarpenterSonOld : NPC {
 	protected override void Init() {
 		id = NPCIDs.CARPENTER_SON;
+		//SetCharacterPortrait();
 		//AudioListener.volume = 0;
 		base.Init();
 	}
@@ -14,6 +15,7 @@ public class CarpenterSonOld : NPC {
 	protected string currentIdlePose = "Idle";
 	protected string currentWalkPose = "Walk";
 	protected string currentFishingPose = "Fishing";
+	//protected string CarpenterSonOldAngry = "CarpenterSonOldAngry";
 	
 	protected override void SetFlagReactions() {
 	
@@ -57,7 +59,7 @@ public class CarpenterSonOld : NPC {
 		
 		#region Greet Old Sibling
 		Reaction introductionToSiblingOld = new Reaction();
-		introductionToSiblingOld.AddAction(new UpdateDefaultTextAction(this, "Best wind in years today, and with my father with me I'm sure I'll get my best catch yet."));
+		//introductionToSiblingOld.AddAction(new UpdateDefaultTextAction(this, "Best wind in years today, and with my father with me I'm sure I'll get my best catch yet."));
 		introductionToSiblingOld.AddAction(new NPCAddScheduleAction(this, greetSiblingOldSchedule));
 		flagReactions.Add(FlagStrings.siblingOldReachedCarpenterSonFlag, introductionToSiblingOld);
 		
@@ -101,12 +103,13 @@ public class CarpenterSonOld : NPC {
 		
 		Reaction GoToBeachPartTwo = new Reaction();
 		ShowMultipartChatAction goToBeachChatPartTwo = new ShowMultipartChatAction(this);
+		GoToBeachPartTwo.AddAction(new NPCCallbackAction(SetSad));
 		goToBeachChatPartTwo.AddChat("Hey.", 2f);
 		goToBeachChatPartTwo.AddChat("Glad you could join me.", 2f);
 		goToBeachChatPartTwo.AddChat("It means a lot to have a friend like you here.", 2f);
 		GoToBeachPartTwo.AddAction(goToBeachChatPartTwo);
 		flagReactions.Add(FlagStrings.oldCarpenterGoToBeachPartTwoFlag, GoToBeachPartTwo);
-		
+	
 //Have discussions about his life - I'm Glad too., Everything ok?, ???		
 		
 		Reaction GoToBeachPartThree = new Reaction();
@@ -128,10 +131,14 @@ public class CarpenterSonOld : NPC {
 		#endregion
 	}
 	 	
+	public void SetSad() {
+		this.SetCharacterPortrait(StringsNPC.Sad);	
+	}
+	
 	protected override EmotionState GetInitEmotionState(){
 		//return (new InitialEmotionState(this, "My back aches, my arms are tired. I wish I never got into this lousy carpentry business."));
-		//return (new InitialEmotionState(this, "Hey. I'm busy at work." + "\n" + "Got anything you need from me?"));
-		return (new InitialFishingState(this, "Hey. I'm busy at work." + "\n" + "Got anything you need from me?"));
+		return (new InitialEmotionState(this, "Hey. I'm busy at work." + "\n" + "Got anything you need from me?"));
+		//return (new InitialFishingState(this, "Hey. I'm busy at work." + "\n" + "Got anything you need from me?"));
 	}
 	
 	protected override Schedule GetSchedule() {
@@ -198,8 +205,8 @@ public class CarpenterSonOld : NPC {
 		
 		
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){		
-			_allChoiceReactions.Add(aChoice, new DispositionDependentReaction(aReaction));
-			_allChoiceReactions.Add(bChoice, new DispositionDependentReaction(bReaction));
+			//_allChoiceReactions.Add(aChoice, new DispositionDependentReaction(aReaction));
+			//_allChoiceReactions.Add(bChoice, new DispositionDependentReaction(bReaction));
 		}
 		
 		public override void UpdateEmotionState(){
@@ -226,7 +233,7 @@ public class CarpenterSonOld : NPC {
 		}
 		
 		public void MethodA(NPC toControl) {
-			toControl.SetCharacterPortrait(StringsNPC.Happy);
+			toControl.SetCharacterPortrait(StringsNPC.Sad);
 		}
 		
 		public void MethodB() {
@@ -504,24 +511,25 @@ public class CarpenterSonOld : NPC {
 		Reaction didntGiveApple = new Reaction();
 		Reaction giveApple = new Reaction();
 		public WantAppleState(NPC toControl, string currentDialogue) : base (toControl, currentDialogue) {
-			didntGiveApple.AddAction(new NPCCallbackAction(DidntGiveApple));
+			didntGiveApple.AddAction(new NPCCallbackOnNPCAction(DidntGiveApple,toControl));
 			didntGiveApple.AddAction(new NPCEmotionUpdateAction(toControl, new GaveAppleState(toControl, "hey!")));
-			
-			giveApple.AddAction(new NPCCallbackAction(GiveApple));
+			giveApple.AddAction(new NPCCallbackOnNPCAction(GiveApple,toControl));
 			giveApple.AddAction(new NPCTakeItemAction(toControl));
 			giveApple.AddAction(new NPCEmotionUpdateAction(toControl, new GaveAppleState(toControl, "hey!")));
 			
 			_allItemReactions.Add(StringsItem.Apple, new DispositionDependentReaction(giveApple));
 			_allChoiceReactions.Add(new Choice ("I don't", "Ohh ok.."), new DispositionDependentReaction(didntGiveApple));
 		}
-		public void GiveApple() {
+		public void GiveApple(NPC toControl) {
 			SetDefaultText("Hey, thanks!");
+			toControl.SetCharacterPortrait(StringsNPC.Happy);
 			GUIManager.Instance.RefreshInteraction();
 			GUIManager.Instance.CloseInteractionMenu();
 			FlagManager.instance.SetFlag(FlagStrings.oldCarpenterActivateGoToBeachHappyFlag);
 		}
 		
-		public void DidntGiveApple() {
+		public void DidntGiveApple(NPC toControl) {
+			toControl.SetCharacterPortrait(StringsNPC.Sad);
 			SetDefaultText("Ohh.. Ok.");
 			GUIManager.Instance.CloseInteractionMenu();
 			FlagManager.instance.SetFlag(FlagStrings.oldCarpenterActivateGoToBeachUpsetFlag);
