@@ -45,6 +45,7 @@ public class CastlemanYoung : NPC {
 		this.SetCharacterPortrait(StringsNPC.Default);
 	}
 	protected void setEmbarrased(){
+		animationData.Play("Embarrassed");
 		this.SetCharacterPortrait(StringsNPC.Embarassed);
 	}
 	protected void setHappy(){
