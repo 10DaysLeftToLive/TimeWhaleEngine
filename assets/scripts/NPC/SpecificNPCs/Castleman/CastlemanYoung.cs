@@ -913,6 +913,7 @@ public class CastlemanYoung : NPC {
 		}
 		
 		public void UpdateImSureHeDoesntHateYou(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(ImSureHeDoesntHateYouChoice);
 			_allChoiceReactions.Remove (HeTotallyHatesYouChoice);
 			_allChoiceReactions.Add(DontBeSoScaredChoice, new DispositionDependentReaction(DontBeSoScaredReaction));
@@ -921,6 +922,7 @@ public class CastlemanYoung : NPC {
 			SetDefaultText("I dunno if your right about him not hating me...");
 		}
 		public void UpdateHeTotallyHatesYou(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
 			_allChoiceReactions.Remove(ImSureHeDoesntHateYouChoice);
 			_allChoiceReactions.Remove (HeTotallyHatesYouChoice);
 			GUIManager.Instance.CloseInteractionMenu();
@@ -930,11 +932,13 @@ public class CastlemanYoung : NPC {
 			
 		}
 		public void UpdateDontBeSoScared(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(DontBeSoScaredChoice);
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("I wouldn't be scared if I knew what to say.");
 		}
 		public void UpdateJustTalkAboutFish(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
 			if(_allChoiceReactions.ContainsKey(DontBeSoScaredChoice)){
 				_allChoiceReactions.Remove(DontBeSoScaredChoice);	
 			}
@@ -946,6 +950,7 @@ public class CastlemanYoung : NPC {
 			SetDefaultText("I think fishing is stupid.");
 		}
 		public void UpdateNotToHim(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(NotToHimChoice);
 			_allChoiceReactions.Remove(GoodPointLetsMoveOnChoice);
 			if (_allChoiceReactions.ContainsKey(PoetryIsntBoringToYouChoice)){
@@ -957,6 +962,7 @@ public class CastlemanYoung : NPC {
 			SetDefaultText("I guess I'll just give it another try.");
 		}
 		public void UpdatePoetryIsntBoring(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(NotToHimChoice);
 			_allChoiceReactions.Remove(GoodPointLetsMoveOnChoice);
 			if (_allChoiceReactions.ContainsKey(PoetryIsntBoringToYouChoice)){
@@ -968,6 +974,7 @@ public class CastlemanYoung : NPC {
 			SetDefaultText("I guess I'll just give it another try.");
 		}
 		public void UpdateGoodPointLetsMoveOn(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(NotToHimChoice);
 			_allChoiceReactions.Remove(GoodPointLetsMoveOnChoice);
 			if (_allChoiceReactions.ContainsKey(PoetryIsntBoringToYouChoice)){
@@ -1046,6 +1053,7 @@ public class CastlemanYoung : NPC {
 			FineLiveInFearReaction.AddAction(new ShowOneOffChatAction(toControl, "I will!  Let's get outta here!"));
 		}
 		public void UpdateWhatIfYouWereYourself(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(WhatIfYouWereYourselfChoice);
 			_allChoiceReactions.Remove(YeahHeProbablyHatesYouChoice);
 			_allChoiceReactions.Add(MaybeYouJustNeedToTryChoice, new DispositionDependentReaction(MaybeYouJustNeedToTryReaction));
@@ -1054,6 +1062,7 @@ public class CastlemanYoung : NPC {
 			SetDefaultText("No one likes who I am.");
 		}
 		public void UpdateYeahHeProbablyHatesYou(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
 			_allChoiceReactions.Remove(YeahHeProbablyHatesYouChoice);
 			_allChoiceReactions.Remove(WhatIfYouWereYourselfChoice);
 			GUIManager.Instance.CloseInteractionMenu();
@@ -1062,6 +1071,7 @@ public class CastlemanYoung : NPC {
 			FlagManager.instance.SetFlag(FlagStrings.FinishedCSONConversation);
 		}
 		public void UpdateIDontHateYou(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(IDontHateYouChoice);
 			_allChoiceReactions.Remove(MaybeYouJustNeedToTryChoice);
 			_allChoiceReactions.Add(FineLiveInFearChoice, new DispositionDependentReaction(FineLiveInFearReaction));
@@ -1070,6 +1080,7 @@ public class CastlemanYoung : NPC {
 			SetDefaultText("He might hate me...");
 		}
 		public void UpdateMaybeYouJustNeedToTry(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(IDontHateYouChoice);
 			_allChoiceReactions.Remove(MaybeYouJustNeedToTryChoice);
 			_allChoiceReactions.Add(JustBeYourselfChoice, new DispositionDependentReaction(JustBeYourselfReaction));
@@ -1078,6 +1089,7 @@ public class CastlemanYoung : NPC {
 			SetDefaultText("I don't think I should talk to him again...");
 		}
 		public void UpdateJustBeYourself(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(JustBeYourselfChoice);
 			_allChoiceReactions.Remove(OnSecondThoughtHeHatesYouChoice);
 			GUIManager.Instance.CloseInteractionMenu();
@@ -1086,6 +1098,7 @@ public class CastlemanYoung : NPC {
 			FlagManager.instance.SetFlag(FlagStrings.ThirdConvoWithCSONFriend);
 		}
 		public void UpdateOnSecondThoughtHeHatesYou(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(JustBeYourselfChoice);
 			_allChoiceReactions.Remove(OnSecondThoughtHeHatesYouChoice);
 			GUIManager.Instance.CloseInteractionMenu();
@@ -1094,6 +1107,7 @@ public class CastlemanYoung : NPC {
 			FlagManager.instance.SetFlag(FlagStrings.FinishedCSONConversation);
 		}
 		public void UpdateIfImYourFriendThenHeCanBeToo(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(IfImYourFriendThenHeCanBeTooChoice);
 			_allChoiceReactions.Remove(IfImYourFriendThenHeCanBeTooChoice);
 			GUIManager.Instance.CloseInteractionMenu();
@@ -1102,6 +1116,7 @@ public class CastlemanYoung : NPC {
 			FlagManager.instance.SetFlag(FlagStrings.ThirdConvoWithCSONFriend);
 		}
 		public void UpdateFineLiveInFear(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(IfImYourFriendThenHeCanBeTooChoice);
 			_allChoiceReactions.Remove(FineLiveInFearChoice);
 			GUIManager.Instance.CloseInteractionMenu();
@@ -1170,6 +1185,7 @@ public class CastlemanYoung : NPC {
 		}
 		
 		public void UpdateMaybeYouShouldTryTalkingToHimAgain(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
 			_allChoiceReactions.Remove(MaybeYouShouldTryTalkingToHimAgainChoice);
 			_allChoiceReactions.Remove (PrettyMuchChoice);
 			_allChoiceReactions.Add(WhyWouldIWantToTrickYouChoice, new DispositionDependentReaction(WhyWouldIWantToTrickYouReaction));
@@ -1178,6 +1194,7 @@ public class CastlemanYoung : NPC {
 			SetDefaultText("Everyone is out to get me!");
 		}
 		public void UpdatePrettyMuch(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
 			_allChoiceReactions.Remove(MaybeYouShouldTryTalkingToHimAgainChoice);
 			_allChoiceReactions.Remove (PrettyMuchChoice);
 			GUIManager.Instance.CloseInteractionMenu();
@@ -1187,11 +1204,13 @@ public class CastlemanYoung : NPC {
 			
 		}
 		public void UpdateWhyWouldIWantToTrickYou(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
 			_allChoiceReactions.Remove(WhyWouldIWantToTrickYouChoice);
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("I know for sure you are trying to trick me!");
 		}
 		public void UpdateJustTalkAboutFish(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
 			if(_allChoiceReactions.ContainsKey(WhyWouldIWantToTrickYouChoice)){
 				_allChoiceReactions.Remove(WhyWouldIWantToTrickYouChoice);	
 			}
@@ -1203,6 +1222,7 @@ public class CastlemanYoung : NPC {
 			SetDefaultText("I think fishing is stupid.");
 		}
 		public void UpdateJustTalkToHim(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(JustTalkToHimChoice);
 			_allChoiceReactions.Remove(UghFineLetsMoveOnChoice);
 			if (_allChoiceReactions.ContainsKey(JustTrustMeChoice)){
@@ -1214,6 +1234,7 @@ public class CastlemanYoung : NPC {
 			SetDefaultText("I guess so...");
 		}
 		public void UpdateJustTrustMe(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(JustTalkToHimChoice);
 			_allChoiceReactions.Remove(UghFineLetsMoveOnChoice);
 			if (_allChoiceReactions.ContainsKey(JustTrustMeChoice)){
@@ -1225,6 +1246,7 @@ public class CastlemanYoung : NPC {
 			SetDefaultText("Fine!  But if this is a trick...");
 		}
 		public void UpdateUghFineLetsMoveOn(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(JustTalkToHimChoice);
 			_allChoiceReactions.Remove(UghFineLetsMoveOnChoice);
 			if (_allChoiceReactions.ContainsKey(JustTrustMeChoice)){
@@ -1302,6 +1324,7 @@ public class CastlemanYoung : NPC {
 			IveHadEnoughReaction.AddAction(new ShowOneOffChatAction(toControl, "This is stupid, let's go!"));
 		}
 		public void UpdateStopBeingParanoid(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
 			_allChoiceReactions.Remove(StopBeingParanoidChoice);
 			_allChoiceReactions.Remove(YupPrettyMuchChoice);
 			_allChoiceReactions.Add(JustTryBeingYourselfChoice, new DispositionDependentReaction(JustTryBeingYourselfReaction));
@@ -1310,6 +1333,7 @@ public class CastlemanYoung : NPC {
 			SetDefaultText("He won't talk with me!");
 		}
 		public void UpdateYupPrettyMuch(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
 			_allChoiceReactions.Remove(YupPrettyMuchChoice);
 			_allChoiceReactions.Remove(StopBeingParanoidChoice);
 			GUIManager.Instance.CloseInteractionMenu();
@@ -1318,6 +1342,7 @@ public class CastlemanYoung : NPC {
 			FlagManager.instance.SetFlag(FlagStrings.FinishedCSONConversation);
 		}
 		public void UpdateLookJustActNatural(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(LookJustActNaturalChoice);
 			_allChoiceReactions.Remove(JustTryBeingYourselfChoice);
 			_allChoiceReactions.Add(IveHadEnoughChoice, new DispositionDependentReaction(IveHadEnoughReaction));
@@ -1326,6 +1351,7 @@ public class CastlemanYoung : NPC {
 			SetDefaultText("What does look natural mean?");
 		}
 		public void UpdateJustTryBeingYourself(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(LookJustActNaturalChoice);
 			_allChoiceReactions.Remove(JustTryBeingYourselfChoice);
 			_allChoiceReactions.Add(HeWontTrustMeAlreadyChoice, new DispositionDependentReaction(HeWontTrustMeAlreadyReaction));
@@ -1334,6 +1360,7 @@ public class CastlemanYoung : NPC {
 			SetDefaultText("Everyone hates who I really am");
 		}
 		public void UpdateHeWontTrustMeAlready(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(HeWontTrustMeAlreadyChoice);
 			_allChoiceReactions.Remove(FairEnoughChoice);
 			GUIManager.Instance.CloseInteractionMenu();
@@ -1342,6 +1369,7 @@ public class CastlemanYoung : NPC {
 			FlagManager.instance.SetFlag(FlagStrings.ThirdConvoWithCSONNOTFriend);
 		}
 		public void UpdateFairEnough(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(HeWontTrustMeAlreadyChoice);
 			_allChoiceReactions.Remove(FairEnoughChoice);
 			GUIManager.Instance.CloseInteractionMenu();
@@ -1350,6 +1378,7 @@ public class CastlemanYoung : NPC {
 			FlagManager.instance.SetFlag(FlagStrings.FinishedCSONConversation);
 		}
 		public void UpdateBeYourself(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_allChoiceReactions.Remove(BeYourselfChoice);
 			_allChoiceReactions.Remove(BeYourselfChoice);
 			GUIManager.Instance.CloseInteractionMenu();
@@ -1358,6 +1387,7 @@ public class CastlemanYoung : NPC {
 			FlagManager.instance.SetFlag(FlagStrings.ThirdConvoWithCSONNOTFriend);
 		}
 		public void IveHadEnough(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
 			_allChoiceReactions.Remove(BeYourselfChoice);
 			_allChoiceReactions.Remove(IveHadEnoughChoice);
 			GUIManager.Instance.CloseInteractionMenu();
@@ -1400,6 +1430,7 @@ public class CastlemanYoung : NPC {
 		Choice GiveUpChoice;
 		Reaction GiveUpReaction;
 		public WaitingAtBeachFriend(NPC toControl, string currentDialogue) : base(toControl, "I don't know what to do around the farmer's daughter.  She makes me nervous!"){
+			toControl.SetCharacterPortrait(StringsNPC.Embarassed);
 			YouDontNeedToKnowChoice = new Choice("You don't need to know.", "But its scary to talk with her.  What if I mess up?");
 			YouDontNeedToKnowReaction = new Reaction();
 			YouDontNeedToKnowReaction.AddAction(new NPCCallbackAction(UpdateYouDontNeedToKnow));
@@ -1449,6 +1480,7 @@ public class CastlemanYoung : NPC {
 		}
 		
 		public void UpdateYouDontNeedToKnow(){
+			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Remove(YouDontNeedToKnowChoice);
 			_allChoiceReactions.Add(DoYouWantToBeFriendsChoice, new DispositionDependentReaction(DoYouWantToBeFriendsReaction));
 			_allChoiceReactions.Add(OfCourseItIsChoice, new DispositionDependentReaction(OfCourseItIsReaction));
