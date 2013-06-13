@@ -18,8 +18,8 @@ public static class StringsItem {
 	public static string Rope = "Rope";
 	public static string Rose = "Rose";
 	public static string Seashell = "Seashell";
-	public static string SeashellTwo = "SeashellTwo!";
-	public static string Shovel = "Shovel";
+	public static string SeashellTwo = "SeashellTwo";
+	public static string Shovel = "shovel";
 	public static string SunflowerSeeds = "SunflowerSeeds";
 	public static string TimeWhale = "TimeWhale";
 	public static string Toolbox = "Toolbox";

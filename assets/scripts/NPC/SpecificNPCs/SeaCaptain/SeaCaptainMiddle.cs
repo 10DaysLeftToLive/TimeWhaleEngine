@@ -97,7 +97,6 @@ public class SeaCaptainMiddle : NPC {
 		Reaction shovelReaction;
 		Reaction toyShipReaction;
 		Reaction seaShellReaction;
-		Reaction portraitReaction;
 	
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
 			#region item reactions
@@ -130,12 +129,7 @@ public class SeaCaptainMiddle : NPC {
 			Reaction seaShellReaction = new Reaction();
 			seaShellReaction.AddAction(new NPCTakeItemAction(toControl));
 			seaShellReaction.AddAction(new UpdateCurrentTextAction(toControl, "What is this? There is a pearl inside! My search has not been in vain."));
-			_allItemReactions.Add(StringsItem.Seashell,  new DispositionDependentReaction(seaShellReaction));
-			
-			Reaction portraitReaction = new Reaction();
-			portraitReaction.AddAction(new NPCTakeItemAction(toControl));
-			portraitReaction.AddAction(new UpdateCurrentTextAction(toControl, "I don't know what use I have for a portrait, but I guess I should take it since I found it."));
-			_allItemReactions.Add(StringsItem.Portrait,  new DispositionDependentReaction(portraitReaction));
+			_allItemReactions.Add(StringsItem.SeashellTwo,  new DispositionDependentReaction(seaShellReaction));
 			#endregion
 			
 			#region choices
