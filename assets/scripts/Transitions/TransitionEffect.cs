@@ -19,7 +19,7 @@ public abstract class TransitionEffect : PauseObject {
 	void Start () {
 		cameraMain = Camera.main;
 		if (cameraMain == null){
-			Debug.LogError("No main camera found");
+			//Debug.LogError("No main camera found");
 			cameraMain = GameObject.Find("Camera").GetComponent<Camera>();
 		}
 		emitter = GetComponent<ParticleSystem>();

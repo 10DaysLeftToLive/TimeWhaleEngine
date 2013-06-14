@@ -22,7 +22,8 @@ public class LighthouseGirlOld : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "|||| When did I get this old?"));
+		//return (new InitialEmotionState(this, "|||| When did I get this old?"));
+		return (new InitialEmotionState(this, "I wish I was never a bride."));
 	}
 	
 	protected override Schedule GetSchedule(){
