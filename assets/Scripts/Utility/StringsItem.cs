@@ -8,7 +8,7 @@ public static class StringsItem {
 	public static string FishingRod = "FishingRod";
 	public static string Flute = "Flute";
 	public static string Harp = "Harp";
-	public static string LilySeeds = "Lily Seeds";
+	public static string LilySeeds = "LilySeeds";
 	public static string MusicalNote = "MusicalNote";
 	public static string Note = "Note";
 	public static string Pendant = "Pendant";
