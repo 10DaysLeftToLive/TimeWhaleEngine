@@ -134,16 +134,20 @@ public class SiblingYoung : Sibling {
 		
 		carpenterRaceSchedule = new Schedule(this, Schedule.priorityEnum.Medium); 
 		carpenterRaceSchedule.Add(new TimeTask(1f, new IdleState(this)));
-		carpenterRaceSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (27, .2f, .3f), new MarkTaskDone(this))));
-		carpenterRaceSchedule.Add(new TimeTask(1f, new IdleState(this)));
+		//carpenterRaceSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (15f, .2f, .3f), new MarkTaskDone(this))));
+		carpenterRaceSchedule.Add(new TimeTask(4f, new IdleState(this)));
+		carpenterRaceSchedule.Add(new TimeTask(10f, new WaitTillPlayerCloseState(this, ref player)));
+		carpenterRaceSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (31, .2f, .3f), new MarkTaskDone(this))));
+		carpenterRaceSchedule.Add(new TimeTask(.5f, new IdleState(this)));
 		carpenterRaceSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (29, .2f, .3f), new MarkTaskDone(this))));
 		carpenterRaceSchedule.Add(new TimeTask(.5f, new IdleState(this)));
-		carpenterRaceSchedule.Add(new Task(new MoveThenDoState(this, new Vector3 (27, .2f, .3f), new MarkTaskDone(this))));
-		carpenterRaceSchedule.Add(new TimeTask(.5f, new IdleState(this)));
-		Task setOffBeachFlag = (new Task(new MoveThenDoState(this, new Vector3 (29, .2f, .3f), new MarkTaskDone(this))));
+		
+		Task setOffBeachFlag = (new Task(new MoveThenDoState(this, new Vector3 (34f, .2f, .3f), new MarkTaskDone(this))));
 		setOffBeachFlag.AddFlagToSet(FlagStrings.RunToBeach);
 		carpenterRaceSchedule.Add(setOffBeachFlag);
-		carpenterRaceSchedule.Add(new TimeTask(.2f, new IdleState(this)));
+		
+		carpenterRaceSchedule.Add(new TimeTask(10f, new WaitTillPlayerCloseState(this, ref player)));
+		//carpenterRaceSchedule.Add(new TimeTask(.2f, new IdleState(this)));
 		
 		walkToBeach = (new YoungRunIslandToBeachScript(this));
 		walkToFarmerHouse = (new YoungRunIslandToFarmerScript(this));
@@ -183,15 +187,15 @@ public class SiblingYoung : Sibling {
 				
 				activateWalkToBridgeState.AddAction(new NPCEmotionUpdateAction(toControl, new WalkToBridgeState(toControl)));	
 				activateWalkToBridgeState.AddAction(new NPCCallbackAction(updateFlag));
-				activateWalkToBridgeState.AddAction(new NPCChangePortraitAction(toControl, "this is a test"));
-				_allChoiceReactions.Add(new Choice("Ready to keep going?", str_readyToRace), new DispositionDependentReaction(activateWalkToBridgeState));		
-				_allChoiceReactions.Add(new Choice("Hold on.", str_readyToRace), new DispositionDependentReaction(activateWalkToBridgeState));
+				//activateWalkToBridgeState.AddAction(new NPCChangePortraitAction(toControl, "this is a test"));
+				//_allChoiceReactions.Add(new Choice("Ready to keep going?", str_readyToRace), new DispositionDependentReaction(activateWalkToBridgeState));		
+				//_allChoiceReactions.Add(new Choice("Hold on.", str_readyToRace), new DispositionDependentReaction(activateWalkToBridgeState));
 			}
 		
 			public void updateFlag() {
 				if (!flagSet) {
 					FlagManager.instance.SetFlag(FlagStrings.RunToCarpenter);
-					FlagManager.instance.SetFlag(FlagStrings.StartedRace);
+					//FlagManager.instance.SetFlag(FlagStrings.StartedRace);
 					flagSet = true;
 					SetDefaultText("I'm going to beat you!!!");
 				}
@@ -214,8 +218,8 @@ public class SiblingYoung : Sibling {
 				
 				//activateWalkToBridgeState.AddAction(new NPCEmotionUpdateAction(toControl, new WalkToBridgeState(toControl)));	
 				//activateWalkToBridgeState.AddAction(new NPCCallbackAction(updateFlag));
-				_allChoiceReactions.Add(new Choice("You're On!", str_readyToRace), new DispositionDependentReaction(activateWalkToBridgeState));		
-				_allChoiceReactions.Add(new Choice("Hold on.", str_readyToRace), new DispositionDependentReaction(activateWalkToBridgeState));
+				//_allChoiceReactions.Add(new Choice("You're On!", str_readyToRace), new DispositionDependentReaction(activateWalkToBridgeState));		
+				//_allChoiceReactions.Add(new Choice("Hold on.", str_readyToRace), new DispositionDependentReaction(activateWalkToBridgeState));
 			}
 		
 			public void updateFlag() {
@@ -312,8 +316,8 @@ public class SiblingYoung : Sibling {
 			public ReflectionTreeState(NPC toControl) : base(toControl, "I'm going to beat you!") {//He's mean.") {
 				walkToTreeReaction = new Reaction();
 				//walkToTreeReaction.AddAction(new NPCEmotionUpdateAction(toControl, new WalkToCarpenterState(toControl)));
-				_allChoiceReactions.Add(new Choice("Let's go!", "Yay! First one to the top wins!"), new DispositionDependentReaction(walkToTreeReaction));
-				_allChoiceReactions.Add(new Choice("No Way!", "You're never any fun.. You've ruined the race. Let's go back home."), new DispositionDependentReaction(walkHomeReaction));
+				//_allChoiceReactions.Add(new Choice("Let's go!", "Yay! First one to the top wins!"), new DispositionDependentReaction(walkToTreeReaction));
+				//_allChoiceReactions.Add(new Choice("No Way!", "You're never any fun.. You've ruined the race. Let's go back home."), new DispositionDependentReaction(walkHomeReaction));
 				walkHomeReaction.AddAction(new NPCCallbackAction(SetMotherAfterRace));
 			}
 			public void SetMotherAfterRace() { // lets the mother know to ask where you've been when you get back
@@ -368,13 +372,13 @@ public class SiblingYoung : Sibling {
 				activateWalkToBeachState.AddAction(new NPCEmotionUpdateAction(toControl, new WalkToBeachState(toControl)));
 				activateWalkToBeachState.AddAction(new NPCCallbackAction(updatePassiveText));
 				activateWalkToBeachState.AddAction(new ShowOneOffChatAction(toControl, "Hehehe, You're silly! Hurry up! :)"));
-				_allChoiceReactions.Add(new Choice(">:[", "Mm hmm!"), new DispositionDependentReaction(activateWalkToBeachState));	
+				//_allChoiceReactions.Add(new Choice(">:[", "Mm hmm!"), new DispositionDependentReaction(activateWalkToBeachState));	
 			
 				choiceTwoReaction = new Reaction();
 				choiceTwoReaction.AddAction(new NPCEmotionUpdateAction(toControl, new WalkToBeachState(toControl)));
 				choiceTwoReaction.AddAction(new NPCCallbackAction(updatePassiveText));
 				choiceTwoReaction.AddAction(new ShowOneOffChatAction(toControl, "He's behind us! Run!!!"));
-				_allChoiceReactions.Add(new Choice("...", str_readyToRace), new DispositionDependentReaction(choiceTwoReaction));
+				//_allChoiceReactions.Add(new Choice("...", str_readyToRace), new DispositionDependentReaction(choiceTwoReaction));
 			}
 			
 			public void updatePassiveText() {
@@ -402,19 +406,19 @@ public class SiblingYoung : Sibling {
 				activateWalkToBeachState.AddAction(new NPCEmotionUpdateAction(toControl, new WalkToFarmerState(toControl)));
 				activateWalkToBeachState.AddAction(new NPCCallbackAction(updatePassiveText));
 				activateWalkToBeachState.AddAction(new ShowOneOffChatAction(toControl, "Hehehe, You're silly! Hurry up! :)"));
-				_allChoiceReactions.Add(new Choice("Ocean", "Good Choice~"), new DispositionDependentReaction(activateWalkToBeachState));	
+				//_allChoiceReactions.Add(new Choice("Ocean", "Good Choice~"), new DispositionDependentReaction(activateWalkToBeachState));	
 //edit later to go to the edge of the pier			
 				choiceTwoReaction = new Reaction();
 				choiceTwoReaction.AddAction(new NPCEmotionUpdateAction(toControl, new WalkToFarmerState(toControl)));
 				choiceTwoReaction.AddAction(new NPCCallbackAction(updatePassiveText));
 				choiceTwoReaction.AddAction(new ShowOneOffChatAction(toControl, "I love the pier, let's go!!"));
-				_allChoiceReactions.Add(new Choice("Pier", "I like to look off the pier. The world out there is bigger than we can imagine."), new DispositionDependentReaction(choiceTwoReaction));
+				//_allChoiceReactions.Add(new Choice("Pier", "I like to look off the pier. The world out there is bigger than we can imagine."), new DispositionDependentReaction(choiceTwoReaction));
 
 				choiceThreeReaction = new Reaction();
 				choiceThreeReaction.AddAction(new NPCEmotionUpdateAction(toControl, new WalkToFarmerState(toControl)));
 				choiceThreeReaction.AddAction(new NPCCallbackAction(updatePassiveText));
 				choiceThreeReaction.AddAction(new ShowOneOffChatAction(toControl, "It's steep, be careful! I'm going to beat you!"));
-				_allChoiceReactions.Add(new Choice("Cliffside", "Up we go!"), new DispositionDependentReaction(choiceThreeReaction));
+				//_allChoiceReactions.Add(new Choice("Cliffside", "Up we go!"), new DispositionDependentReaction(choiceThreeReaction));
 			}
 		
 			public void updatePassiveText() {
@@ -438,7 +442,7 @@ public class SiblingYoung : Sibling {
 				activateWalkToLighthouseState.AddAction(new NPCEmotionUpdateAction(toControl, new WalkToLighthouseState(toControl)));
 				activateWalkToLighthouseState.AddAction(new NPCCallbackAction(updatePassiveText));
 				activateWalkToLighthouseState.AddAction(new ShowOneOffChatAction(toControl, "Let's go to the lighthouse!"));
-				_allChoiceReactions.Add(new Choice("Lighthouse!", "Good Choice~"), new DispositionDependentReaction(activateWalkToLighthouseState));	
+				//_allChoiceReactions.Add(new Choice("Lighthouse!", "Good Choice~"), new DispositionDependentReaction(activateWalkToLighthouseState));	
 			}
 		
 				public void updatePassiveText() {
@@ -463,7 +467,7 @@ public class SiblingYoung : Sibling {
 				activateWalkToMarketState.AddAction(new NPCEmotionUpdateAction(toControl, new WalkToMarketState(toControl)));
 				activateWalkToMarketState.AddAction(new NPCCallbackAction(updatePassiveText));
 				activateWalkToMarketState.AddAction(new ShowOneOffChatAction(toControl, "Shopping time!"));
-				_allChoiceReactions.Add(new Choice("Market", "Good Choice~"), new DispositionDependentReaction(activateWalkToMarketState));	
+				//_allChoiceReactions.Add(new Choice("Market", "Good Choice~"), new DispositionDependentReaction(activateWalkToMarketState));	
 			}
 		
 			public void updatePassiveText() {
@@ -488,7 +492,7 @@ public class SiblingYoung : Sibling {
 				activateWalkToReflectionTreeState.AddAction(new NPCEmotionUpdateAction(toControl, new WalkToReflectionTreeState(toControl)));
 				activateWalkToReflectionTreeState.AddAction(new NPCCallbackAction(updatePassiveText));
 				activateWalkToReflectionTreeState.AddAction(new ShowOneOffChatAction(toControl, "This is the best place on the island!!"));
-				_allChoiceReactions.Add(new Choice("ReflectionTree", "Good Choice~"), new DispositionDependentReaction(activateWalkToReflectionTreeState));
+				//_allChoiceReactions.Add(new Choice("ReflectionTree", "Good Choice~"), new DispositionDependentReaction(activateWalkToReflectionTreeState));
 			}
 		
 			public void updatePassiveText() {
@@ -514,7 +518,7 @@ public class SiblingYoung : Sibling {
 				activateWalkToHomeState.AddAction(new NPCEmotionUpdateAction(toControl, new WalkToHomeState(toControl)));
 				activateWalkToHomeState.AddAction(new NPCCallbackAction(updatePassiveText));
 				activateWalkToHomeState.AddAction(new ShowOneOffChatAction(toControl, "Race you home!!! I'm going to win!"));
-				_allChoiceReactions.Add(new Choice("Home", "Ready for the last sprint?"), new DispositionDependentReaction(activateWalkToHomeState));
+				//_allChoiceReactions.Add(new Choice("Home", "Ready for the last sprint?"), new DispositionDependentReaction(activateWalkToHomeState));
 			}
 			
 			public void updatePassiveText() {
@@ -545,7 +549,7 @@ public class SiblingYoung : Sibling {
 				//activatePostSiblingExplore.AddAction(new NPCEmotionUpdateAction(toControl, new MotherUpsetState(toControl)));	
 				choiceTwoReaction.AddAction(new NPCCallbackAction(changeLocation));
 				choiceTwoReaction.AddAction(new NPCEmotionUpdateAction(toControl, new MotherUpsetState(toControl)));
-				_allChoiceReactions.Add(choice, new DispositionDependentReaction(activatePostSiblingExplore));
+				//_allChoiceReactions.Add(choice, new DispositionDependentReaction(activatePostSiblingExplore));
 			}
 		
 			public void updatePassiveText(NPC toControl) {
@@ -558,11 +562,11 @@ public class SiblingYoung : Sibling {
 					//Schedule testSchedule = new Schedule(toControl, Schedule.priorityEnum.DoNow);
 					//testSchedule.Add(new TimeTask(.5f, new IdleState(toControl)));
 					//testSchedule.Add(new Task(new MoveThenDoState(toControl, new Vector3 (10, -1.5f, .3f), new MarkTaskDone(toControl))));	
-					_allChoiceReactions.Remove(choice);
+					//_allChoiceReactions.Remove(choice);
 					SetDefaultText ("Should we tell mom about our adventure?");
 					choice = new Choice("Sure!", "Yay! Let's go!");
-					_allChoiceReactions.Add(choice, new DispositionDependentReaction(choiceTwoReaction));
-					_allChoiceReactions.Add(new Choice ("Don't!","Too bad, I'm going to tell her anyways!"), new DispositionDependentReaction(choiceTwoReaction));
+					//_allChoiceReactions.Add(choice, new DispositionDependentReaction(choiceTwoReaction));
+					//_allChoiceReactions.Add(new Choice ("Don't!","Too bad, I'm going to tell her anyways!"), new DispositionDependentReaction(choiceTwoReaction));
 					GUIManager.Instance.RefreshInteraction();
 				}
 			}
@@ -583,13 +587,13 @@ public class SiblingYoung : Sibling {
 		
 			public MotherUpsetState(NPC toControl) : base(toControl, " ") {
 				activatePostSiblingExplore = new Reaction();
-				SetDefaultText("Opps.. I got us in trouble.");	
+				SetDefaultText("Opps.. I got us in trouble. Mom said not to go to far..");	
 				activatePostSiblingExplore.AddAction(new NPCCallbackOnNPCAction(talkToMother,toControl));
-				_allChoiceReactions.Add(new Choice("Mom!", "fdsfds"), new DispositionDependentReaction(activatePostSiblingExplore));
+				//_allChoiceReactions.Add(new Choice("Mom!", "fdsfds"), new DispositionDependentReaction(activatePostSiblingExplore));
 			}
 		
 			public void talkToMother(NPC toControl) {
-				toControl.AddSchedule(new NPCConvoSchedule(toControl, NPCManager.instance.getNPC(StringsNPC.MomYoung), new ExampleNPCConverastion(),Schedule.priorityEnum.DoNow));	
+				//toControl.AddSchedule(new NPCConvoSchedule(toControl, NPCManager.instance.getNPC(StringsNPC.MomYoung), new ExampleNPCConverastion(),Schedule.priorityEnum.DoNow));	
 			}
 		}
 		#endregion
