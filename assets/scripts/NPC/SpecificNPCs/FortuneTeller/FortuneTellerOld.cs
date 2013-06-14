@@ -72,7 +72,7 @@ public class FortuneTellerOld : NPC {
 		speakWithSiblingChatPartSeven.AddChat("Such a loud one she is...", 3f);
 		speakWithSiblingChatPartSeven.AddChat("Ohh.", 1.25f);
 		speakWithSiblingChatPartSeven.AddChat("Hello there quiet one.", 2f);
-		speakWithSiblingChatPartSeven.AddChat("Care for your fortune?", 1.25f);
+		//speakWithSiblingChatPartSeven.AddChat("Care for your fortune?", 1.25f);
 		speakWithSiblingReactionPartSeven.AddAction(speakWithSiblingChatPartSeven);
 		speakWithSiblingReactionPartSeven.AddAction(new NPCEmotionUpdateAction(this, new EnterFortuneState(this, "Decided to learn your fate?")));
 		speakWithSiblingReactionPartSeven.AddAction(new NPCAddScheduleAction(this, fortunetellerFortuneWithPlayer));
@@ -202,17 +202,19 @@ public class FortuneTellerOld : NPC {
 		Reaction Path_F10 = new Reaction();
 		#endregion
 		
-		Choice beginFortuneChoice = new Choice("I Have", "Then Let us Begin" + "\n\n" + "What is it that you wish for?");
+		Choice beginFortuneChoice = new Choice("I Have", "Hmm...Your life... it seems like it's missing something. Are there troubles from your past?");
 		Choice stallFortuneChoice = new Choice("No", "Patience is perhaps the path we all should take. Take your time, but remember that your time is limited in this world.");
 		Choice stallFortuneChoiceA = new Choice("Not Now", "Time is ticking and the sun is slowly setting. Come back soon or it may be too late.");
+		
 		Choice stallFortuneChoiceB = new Choice("I'll Pass", "Good bye till we meet again.");
+		/*
 		Choice secretFortuneChoice = new Choice(".", "..");
 		Choice secretFortuneChoiceA = new Choice("..", "...");
 		Choice secretFortuneChoiceB = new Choice("...", "... .");
 		Choice secretFortuneChoiceC = new Choice("... .", "... ..");
 		Choice secretFortuneChoiceD = new Choice("... ..", "... ...");
 		Choice secretFortuneChoiceE = new Choice("... ...", "Take this. Fairwell.");
-		
+		*/
 		#region Choice_A
 		Choice Choice_A1a = new Choice("", ""); Choice Choice_A2a = new Choice("", "");
 		Choice Choice_A1b = new Choice("", ""); Choice Choice_A2b = new Choice("", "");
@@ -303,7 +305,8 @@ public class FortuneTellerOld : NPC {
 			stallFortuneReactionB.AddAction(new NPCCallbackOnNPCAction(OnOpenWindowTwo, toControl));
 			stallFortuneReactionC.AddAction(new NPCCallbackAction(ClearChoiceReactions));
 			#endregion
-			#region Secret Fortune Reaction			
+			#region Secret Fortune Reaction	
+		/*	
 			secretFortuneReaction.AddAction(new NPCRemoveChoiceAction(toControl, beginFortuneChoice));
 			secretFortuneReaction.AddAction(new NPCRemoveChoiceAction(toControl, stallFortuneChoiceB));
 			secretFortuneReaction.AddAction(new NPCAddChoiceAction(toControl, secretFortuneChoiceA, new DispositionDependentReaction(secretFortuneReactionA)));
@@ -322,13 +325,16 @@ public class FortuneTellerOld : NPC {
 			
 			secretFortuneReactionE.AddAction(new NPCRemoveChoiceAction(toControl, secretFortuneChoiceE));
 			secretFortuneReactionE.AddAction(new NPCGiveItemAction(toControl, StringsItem.TimeWhale));
+			
 	//EDIT THIS
 			secretFortuneReactionE.AddAction(new NPCEmotionUpdateAction(toControl, new InitialEmotionState(toControl, "")));
+			*/
 			#endregion
 			
 			#region Path_A
-			Path_A1.AddAction(new NPCAddChoiceAction(toControl, Choice_A1a, new DispositionDependentReaction(Path_B2)));
-			Path_A1.AddAction(new NPCAddChoiceAction(toControl, Choice_A1b, new DispositionDependentReaction(Path_C2)));
+			Path_A1.AddAction(new NPCEmotionUpdateAction(toControl, new EndState(toControl, "Let's see... I feel that something is troubling you." + "\n\n" + "Don't be afraid to listening to your beliefs. In due time we may talk again")));
+			//Path_A1.AddAction
+			//Path_A1.AddAction(new NPCAddChoiceAction(toControl, Choice_A1b, new DispositionDependentReaction(Path_C2)));
 			
 			Path_A2.AddAction(new NPCAddChoiceAction(toControl, Choice_A2a, new DispositionDependentReaction(Path_B3)));
 			Path_A2.AddAction(new NPCAddChoiceAction(toControl, Choice_A2b, new DispositionDependentReaction(Path_C3)));
@@ -455,14 +461,15 @@ public class FortuneTellerOld : NPC {
 			//GUIManager.Instance.RefreshInteraction();
 			SetOnOpenInteractionReaction(new DispositionDependentReaction(stallFortuneReactionB));
 			stallFortuneReactionB.AddAction(new NPCAddChoiceAction(toControl, beginFortuneChoice,  new DispositionDependentReaction(Path_A1)));
-			stallFortuneReactionB.AddAction(new NPCAddChoiceAction(toControl, secretFortuneChoice,  new DispositionDependentReaction(secretFortuneReaction)));
+			//stallFortuneReactionB.AddAction(new NPCAddChoiceAction(toControl, secretFortuneChoice,  new DispositionDependentReaction(secretFortuneReaction)));
 			stallFortuneReactionB.AddAction(new NPCAddChoiceAction(toControl, stallFortuneChoiceB, new DispositionDependentReaction(stallFortuneReactionC)));
 		}
 		
 		public void OnOpenWindowTwo(NPC toControl) {
 			SetOnOpenInteractionReaction(new DispositionDependentReaction(stallFortuneReactionC));
 			stallFortuneReactionC.AddAction(new NPCCallbackAction(ClearChoiceReactions));
-			stallFortuneReactionC.AddAction(new NPCEmotionUpdateAction(toControl, new InitialEmotionState(toControl,"The spirits will guide me~")));
+			stallFortuneReactionC.AddAction(new NPCChangePortraitAction(toControl, StringsNPC.Blink));
+			stallFortuneReactionC.AddAction(new NPCEmotionUpdateAction(toControl, new InitialEmotionState(toControl,"Spirits, guide me~")));
 		}
 		
 		#endregion
@@ -471,8 +478,27 @@ public class FortuneTellerOld : NPC {
 		}
 		
 		public void ClearChoiceReactions() {
+			//toControl.SetCharacterPortrait(StringsNPC.Sad);
 			_allChoiceReactions.Clear();
 		}
-
+		
+		private class EndState : EmotionState{
+			Reaction reactionA = new Reaction();
+			public EndState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
+				reactionA.AddAction(new NPCCallbackAction(methodA));
+				reactionA.AddAction(new NPCChangePortraitAction(toControl, StringsNPC.Blink));
+				SetOnCloseInteractionReaction(new DispositionDependentReaction(reactionA));
+			}
+		
+			public void methodA() {
+				SetDefaultText("For now... let me be..");
+				GUIManager.Instance.RefreshInteraction();
+			}
+			
+			public override void UpdateEmotionState() {
+			
+			}
+		}
+		
 	}
 }
