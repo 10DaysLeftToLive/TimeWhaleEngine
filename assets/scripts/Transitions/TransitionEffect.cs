@@ -8,8 +8,8 @@ public abstract class TransitionEffect : PauseObject {
 	protected DragDirection directionFacing = DragDirection.Up;// defaults to up
 	protected bool isChanging = false;
 	
-	private float time = 0;
-	private bool didChange = false;
+	protected float time = 0;
+	protected bool didChange = false;
 	
 	public int minimumDragDistance = 5;
 	public float timeToChange = .6f;
@@ -19,7 +19,7 @@ public abstract class TransitionEffect : PauseObject {
 	void Start () {
 		cameraMain = Camera.main;
 		if (cameraMain == null){
-			//Debug.LogError("No main camera found");
+			Debug.LogError("No main camera found");
 			cameraMain = GameObject.Find("Camera").GetComponent<Camera>();
 		}
 		emitter = GetComponent<ParticleSystem>();
