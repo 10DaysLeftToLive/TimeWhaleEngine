@@ -169,6 +169,7 @@ public class CarpenterSonYoung : NPC {
 			string completeSwordText = "I could sharpen it but I think my Dad would get mad.";
 			string completeDollText = "Wow, I have no idea how that happened.";
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
+_npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			NPC toControl = NPCManager.instance.getNPC(StringsNPC.CarpenterSonYoung);
 			_allChoiceReactions.Remove(giveToolsChoice);
 			SetDefaultText("Hey, now that I have my tools back I need to make something. Do you have any suggestions?");
@@ -202,6 +203,7 @@ public class CarpenterSonYoung : NPC {
 				
 		private void TellToMakeFishingRod(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Smile);
+            _npcInState.ChangeFacialExpression(StringsNPC.Smile);
 			((CarpenterSonYoung)_npcInState).madeFishingRod = true;
 			_allChoiceReactions.Remove(makeFishingRodChoice);
 			_allChoiceReactions.Remove(makeSwordChoice);
@@ -212,6 +214,7 @@ public class CarpenterSonYoung : NPC {
 			
 		private void TellToMakeSword(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Smile);
+            _npcInState.ChangeFacialExpression(StringsNPC.Smile);
 			_allChoiceReactions.Remove(makeFishingRodChoice);
 			_allChoiceReactions.Remove(makeSwordChoice);
 			_allChoiceReactions.Remove(makeDollChoice);
@@ -222,6 +225,7 @@ public class CarpenterSonYoung : NPC {
 		
 		private void TellToMakeDoll(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
+_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			_allChoiceReactions.Remove(makeFishingRodChoice);
 			_allChoiceReactions.Remove(makeSwordChoice);
 			_allChoiceReactions.Remove(makeDollChoice);
@@ -284,6 +288,7 @@ public class CarpenterSonYoung : NPC {
 		
 		private void RecieveItemResult(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Smile);
+            _npcInState.ChangeFacialExpression(StringsNPC.Smile);
 			_allChoiceReactions.Clear();
 			_allChoiceReactions.Add(EncourageFishingChoice, new DispositionDependentReaction(EncourageFishingReaction));
 			_allChoiceReactions.Add(ComplimentWorkChoice, new DispositionDependentReaction(EncourageCarpentryReaction));
@@ -295,6 +300,7 @@ public class CarpenterSonYoung : NPC {
 		
 		private void EncouragedCarpentryResult(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
+_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			SetDefaultText("Alright, now I just need to work on my carpentry.");
 			_allChoiceReactions.Clear();
 			DebugManager.print("Inside Carpentry Result");
@@ -346,6 +352,7 @@ public class CarpenterSonYoung : NPC {
 		
 		private void RecieveItemResult(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
+_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			_allChoiceReactions.Clear();
 			_npcInState.PlayAnimation(Strings.animation_stand);
 			_allChoiceReactions.Add(ComplimentWorkChoice, new DispositionDependentReaction(EncourageCarpentryReaction));
@@ -356,6 +363,7 @@ public class CarpenterSonYoung : NPC {
 				
 		private void EncouragedCarpentryResult(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
+_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			SetDefaultText("I'll make sure the next thing I make is made of wood.");
 			_allChoiceReactions.Clear();
 			GUIManager.Instance.RefreshInteraction();
@@ -393,6 +401,7 @@ public class CarpenterSonYoung : NPC {
 		
 		private void RecieveItemResult(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
+_npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			_allChoiceReactions.Clear();
 			_npcInState.PlayAnimation(Strings.animation_stand);
 			CritisizeNameReaction.AddAction(new NPCCallbackAction(CritisizeNameResult));
@@ -408,6 +417,7 @@ public class CarpenterSonYoung : NPC {
 		
 		private void EncouragedCarpentryResult(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
+_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			SetDefaultText("Alright, now I just need to work on my carpentry.");
 			_allChoiceReactions.Clear();
 			DebugManager.print("Inside Carpentry Result");
@@ -416,6 +426,7 @@ public class CarpenterSonYoung : NPC {
 		
 		private void CritisizeNameResult(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
+_npcInState.ChangeFacialExpression(StringsNPC.Angry);
 			SetDefaultText("\"Swordwielder\" is an awesome name.");
 			_allChoiceReactions.Remove(CritisizeNameChoice);
 			GUIManager.Instance.RefreshInteraction();

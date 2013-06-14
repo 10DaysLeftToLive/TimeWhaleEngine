@@ -568,6 +568,7 @@ public class LighthouseGirlMiddle : NPC {
 		
 		public void TalkedResponse(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
+_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			_allChoiceReactions.Clear();
 			_allItemReactions.Add(StringsItem.Rope, new DispositionDependentReaction(RopeReaction));
 			GUIManager.Instance.RefreshInteraction();
@@ -575,6 +576,7 @@ public class LighthouseGirlMiddle : NPC {
 		}
 		public void ToolsResponse(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
+_npcInState.ChangeFacialExpression(StringsNPC.Angry);
 			_allChoiceReactions.Clear();
 			
 			if (!gaveTools){
@@ -586,6 +588,7 @@ public class LighthouseGirlMiddle : NPC {
 		}
 		public void RopeResponse(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
+_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			if (carpenterPath){
 				SetDefaultText("Tell the carpenter's son to meet me at the beach!");
 				FlagManager.instance.SetFlag(FlagStrings.CarpenterDate);
@@ -599,6 +602,7 @@ public class LighthouseGirlMiddle : NPC {
 		}
 		public void NotBadResponse(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
+_npcInState.ChangeFacialExpression(StringsNPC.Angry);
 			_allChoiceReactions.Clear();
 			_allItemReactions.Clear();
 			
@@ -608,6 +612,7 @@ public class LighthouseGirlMiddle : NPC {
 		}
 		public void YourRightResponse(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
+_npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			_allChoiceReactions.Clear();
 			if (planStarted){
 				SetDefaultText("Exactly! There's no time worth wasting. Now to get back to our plan and ruin this marriage!");
@@ -626,6 +631,7 @@ public class LighthouseGirlMiddle : NPC {
 		}
 		public void CarpenterResponse(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
+_npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			_allChoiceReactions.Clear();
 			
 			carpenterPath = true;
@@ -637,6 +643,7 @@ public class LighthouseGirlMiddle : NPC {
 		}
 		public void CastleManResponse(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Embarassed);
+_npcInState.ChangeFacialExpression(StringsNPC.Embarassed);
 			_allChoiceReactions.Clear();
 			_allItemReactions.Clear();
 			FlagManager.instance.SetFlag(FlagStrings.NotInsane);
@@ -652,6 +659,7 @@ public class LighthouseGirlMiddle : NPC {
 		#region response func
 		public void NoteResponse(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
+_npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			_allChoiceReactions.Clear();
 			
 			_allChoiceReactions.Add(CarpenterChoice,new DispositionDependentReaction(CarpenterReaction));
@@ -664,6 +672,7 @@ public class LighthouseGirlMiddle : NPC {
 		public void GoOnResponse(){		}
 		public void OkResponse(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
+_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			_allChoiceReactions.Remove(OkChoice);
 
 			_allChoiceReactions.Add(ContinueChoice,new DispositionDependentReaction(ContinueReaction));
@@ -673,6 +682,7 @@ public class LighthouseGirlMiddle : NPC {
 		}
 		public void ContinueResponse(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
+_npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			_allChoiceReactions.Remove(ContinueChoice);
 			
 			_allChoiceReactions.Add(AnotherTimeChoice,new DispositionDependentReaction(AnotherTimeReaction));
@@ -683,6 +693,7 @@ public class LighthouseGirlMiddle : NPC {
 		}
 		public void PlanResponse(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
+_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			_allChoiceReactions.Clear();
 			_allItemReactions.Clear();
 			
@@ -700,6 +711,7 @@ public class LighthouseGirlMiddle : NPC {
 		}
 		public void MarriageResponse(){	
 			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
+_npcInState.ChangeFacialExpression(StringsNPC.Angry);
 			_allChoiceReactions.Remove(PlanChoice);
 			_allChoiceReactions.Remove(MarriageChoice);
 			GUIManager.Instance.RefreshInteraction();
@@ -709,6 +721,7 @@ public class LighthouseGirlMiddle : NPC {
 		}
 		public void YesResponse(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
+_npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			_allChoiceReactions.Clear();
 			_allItemReactions.Clear();
 			
@@ -720,6 +733,7 @@ public class LighthouseGirlMiddle : NPC {
 		}
 		public void AnotherTimeResponse(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
+_npcInState.ChangeFacialExpression(StringsNPC.Sad);
 			_allChoiceReactions.Remove(YesChoice);
 			_allChoiceReactions.Remove(AnotherTimeChoice);
 			GUIManager.Instance.RefreshInteraction();
@@ -782,6 +796,7 @@ public class LighthouseGirlMiddle : NPC {
 		
 		public void GiveUpResponse(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
+_npcInState.ChangeFacialExpression(StringsNPC.Sad);
 			_allChoiceReactions.Clear();
 			_allChoiceReactions.Add(AnyoneNiceChoice,new DispositionDependentReaction(AnyoneNiceReaction));
 			_allChoiceReactions.Add(NiceToMomChoice,new DispositionDependentReaction(NiceToMomReaction));
@@ -790,12 +805,14 @@ public class LighthouseGirlMiddle : NPC {
 		}
 		public void NotSoBadResponse(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
+_npcInState.ChangeFacialExpression(StringsNPC.Angry);
 			_allChoiceReactions.Clear();
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("I need time to think of more ways to sabotage this marriage.");
 		}
 		public void AnyoneNiceResponse(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
+_npcInState.ChangeFacialExpression(StringsNPC.Sad);
 			_allChoiceReactions.Clear();
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("My dad is too afraid to stand up to my mom...");
@@ -803,6 +820,7 @@ public class LighthouseGirlMiddle : NPC {
 		}
 		public void NiceToMomResponse(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
+_npcInState.ChangeFacialExpression(StringsNPC.Angry);
 			_allChoiceReactions.Clear();
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("My mom will never back down.");
@@ -832,6 +850,7 @@ public class LighthouseGirlMiddle : NPC {
 		
 		public void ToolsResponse(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
+_npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			_allChoiceReactions.Clear();
 			_allItemReactions.Clear();
 			if (!gaveTools){
@@ -873,6 +892,7 @@ public class LighthouseGirlMiddle : NPC {
 		
 		public void ToolsResponse(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
+_npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			_allChoiceReactions.Clear();
 			
 			if (!gaveTools){

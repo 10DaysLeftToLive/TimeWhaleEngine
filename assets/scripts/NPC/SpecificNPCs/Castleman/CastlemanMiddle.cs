@@ -297,6 +297,7 @@ public class CastlemanMiddle : NPC {
 		
 		public void JudgeItResponse(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
+_npcInState.ChangeFacialExpression(StringsNPC.Sad);
 			_allChoiceReactions.Clear();
 			SetDefaultText("So...What did she think of the letter?");
 			GUIManager.Instance.RefreshInteraction();
@@ -304,6 +305,7 @@ public class CastlemanMiddle : NPC {
 		
 		public void WhatResponse(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
+_npcInState.ChangeFacialExpression(StringsNPC.Sad);
 			_allChoiceReactions.Clear();
 			_allChoiceReactions.Add(JudgeItChoice, new DispositionDependentReaction(JudgeItReaction));
 			GUIManager.Instance.RefreshInteraction();
@@ -327,6 +329,7 @@ public class CastlemanMiddle : NPC {
 		
 		public void DateResponse(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
+_npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			if (!flagSet){
 				_allChoiceReactions.Clear();
 				_allItemReactions.Clear();
