@@ -66,7 +66,7 @@ public class FortuneTellerMiddle : NPC {
 			_allItemReactions.Add(StringsItem.Apple,  new DispositionDependentReaction(giveAppleReaction));
 			
 			//Apple Pie
-			giveApplePieReaction.AddAction(new UpdateCurrentTextAction(toControl, "Mmm. Who you give this to will surely appreciate your visit in their time of new arrival~"));
+			giveApplePieReaction.AddAction(new UpdateCurrentTextAction(toControl, "Mmm. I sense a new beginning, a celebration bittersweet~"));
 			_allItemReactions.Add(StringsItem.ApplePie,  new DispositionDependentReaction(giveApplePieReaction));
 			
 			//Captain Log
@@ -91,7 +91,7 @@ public class FortuneTellerMiddle : NPC {
 			_allItemReactions.Add(StringsItem.LilySeeds,  new DispositionDependentReaction(giveLilySeedsReaction));
 						
 			//Note
-			giveNoteReaction.AddAction(new UpdateCurrentTextAction(toControl, "Love can be determined with something as simple as this~"));
+			giveNoteReaction.AddAction(new UpdateCurrentTextAction(toControl, "I feel great emotions behind this and a great decision before you~"));
 			_allItemReactions.Add(StringsItem.Note,  new DispositionDependentReaction(giveNoteReaction));
 			
 			//Pendant

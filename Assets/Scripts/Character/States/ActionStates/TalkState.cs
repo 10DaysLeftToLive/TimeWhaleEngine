@@ -17,7 +17,7 @@ public class TalkState : AbstractState {
 		if (!_toTalkWith.IsInteracting() 
 				&& _toTalkWith.CanTalk() 
 				&& Utils.InDistance(character.gameObject, _toTalkWith.gameObject, NEARPLAYERDISTANCE)){
-			character.PlayAnimation(Strings.animation_stand);
+			//character.PlayAnimation(Strings.animation_stand);
 			
 			if (((Player) character).npcTalkingWith != null){
 				((Player) character).npcTalkingWith.LeaveInteraction();

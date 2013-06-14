@@ -164,7 +164,7 @@ public class CarpenterMiddle : NPC {
 		
 		WorkOnWindmill = new Schedule(this, Schedule.priorityEnum.High);
 		WorkOnWindmill.Add(new Task(new MoveThenMarkDoneState(this, MapLocations.WindmillMiddle)));
-		WorkOnWindmill.Add(new TimeTask(250f, new IdleState(this)));
+		WorkOnWindmill.Add(new TimeTask(250f, new AbstractAnimationState(this, "Hammer", true, true)));
 		WorkOnWindmill.Add(new Task(new MoveThenMarkDoneState(this, startingPosition)));
 		Task setCarpentryFlag = new TimeTask(0f, new IdleState(this));
 		setCarpentryFlag.AddFlagToSet(FlagStrings.CarpenterReturnedHome);
@@ -185,35 +185,7 @@ public class CarpenterMiddle : NPC {
 //CONVERSATION SCHEDULE BUG!!!! PLEASE FIX		
 	}
 	
-	
-	#region CarpentryBranch
-	
-	private void SetupCarpentrySchedules() {
-		SetupPrimaryCarpentrySchedules();
-		SetupPassiveCarpentrySchedules();
-	}
-	
-	private void SetupPrimaryCarpentrySchedules() {
-		afterHappyForSonBeingACarpenter = new Schedule(this, Schedule.priorityEnum.Medium);
-		Task stormOffToWindmill = new Task(new MoveState(this, MapLocations.WindmillMiddle));
-		TimeTask workOnWindmill = new TimeTask(1000f, new AbstractAnimationState(this, "Hammer", true, true));
-		afterHappyForSonBeingACarpenter.Add(stormOffToWindmill);
-		afterHappyForSonBeingACarpenter.Add(workOnWindmill);
-		
-		talkToSonAfterWhittle = new NPCConvoSchedule(this, 
-			NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), new MiddleCarpenterToSonCarpentryScriptedConvo(), Schedule.priorityEnum.Low);
-		talkToSonAfterWhittle.SetCanNotInteractWithPlayer();
-		
-		talkToSonWithoutWhittle = new NPCConvoSchedule(this,
-			NPCManager.instance.getNPC(StringsNPC.CarpenterSonMiddle), new MiddleCarpenterToSonCarpentryScriptedConvo(), Schedule.priorityEnum.Low);
-		talkToSonWithoutWhittle.SetCanNotInteractWithPlayer();
-	}
-	
-	private void SetupPassiveCarpentrySchedules() {
-		
-	}
-	#endregion
-	
+
 	
 	#region EmotionStates
 	#region Initial Emotion State
