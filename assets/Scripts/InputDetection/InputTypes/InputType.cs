@@ -97,7 +97,7 @@ public abstract class InputType  {
 		
 		RaycastHit hit;
 		
-		if (Physics.Raycast(ray, out hit, 15) && !hit.transform.CompareTag("Untagged")) {
+		if (Physics.Raycast(ray, out hit, 30) && !hit.transform.CompareTag("Untagged")) {
 			NotifyObjectClickedOn(hit.transform.gameObject);
 		} else {
 			NotifyNoObjectClickedOn(inputScreenPos);
