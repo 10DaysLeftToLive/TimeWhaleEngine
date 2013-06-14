@@ -354,6 +354,7 @@ public class CarpenterSonMiddle : NPC {
 		public void DateResponse(){
 			if (!flagSet){
 				FlagManager.instance.SetFlag(FlagStrings.CarpenterDating);
+				FlagManager.instance.SetFlag(FlagStrings.MarryingCarpenter);
 			}
 		}
 		

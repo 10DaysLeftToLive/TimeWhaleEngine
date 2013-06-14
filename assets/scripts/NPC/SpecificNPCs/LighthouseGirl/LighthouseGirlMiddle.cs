@@ -830,6 +830,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Angry);
 			if (text == "marriage"){
 				_allItemReactions.Clear();
 				SetDefaultText("That was amazing! I have never seen my dad stand up to mom like that before.");
+				FlagManager.instance.SetFlag(FlagStrings.CastleMarriage);
 			}
 		}
 		
