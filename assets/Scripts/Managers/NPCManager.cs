@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 
 public class NPCManager : ManagerSingleton<NPCManager> {
-	private static Dictionary<string, NPC> dictNPC = new Dictionary<string, NPC>();
+	private Dictionary<string, NPC> dictNPC = new Dictionary<string, NPC>();
+	
+	public void Init(){
+		dictNPC.Clear();
+	}
 
 	public void Add(GameObject npc) {
 		if (dictNPC.ContainsKey(npc.name)){
