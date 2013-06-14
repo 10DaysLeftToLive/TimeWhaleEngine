@@ -108,7 +108,7 @@ public class LighthouseGirlMiddle : NPC {
 		moveAway.AddAction(new NPCAddScheduleAction(this, openningWaitingSchedule));
 		flagReactions.Add(FlagStrings.FarmAlive, moveAway);
 		
-		antiMarriagePlanInAction.AddAction(new NPCAddScheduleAction(this, noMarriageSchedule));
+		antiMarriagePlanInAction.AddAction(new NPCAddScheduleAction(this, castleMarriage));
 		antiMarriagePlanInAction.AddAction(new NPCEmotionUpdateAction(this, noMarriageState));
 		flagReactions.Add(FlagStrings.ToolsToGirl, antiMarriagePlanInAction);
 		
@@ -166,6 +166,7 @@ public class LighthouseGirlMiddle : NPC {
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlCarpenterDateFour, carpenterDateTwo);
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlCarpenterDateSix, carpenterDateThree);
 		
+		castleMarriageStart.AddAction(new NPCEmotionUpdateAction(this, noMarriageState));
 		castleMarriageStart.AddAction(new NPCAddScheduleAction(this, castleMarriage));
 		flagReactions.Add(FlagStrings.ToolsForMarriage, castleMarriageStart);
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleMarriageOne, castleMarriageOne);
@@ -174,6 +175,7 @@ public class LighthouseGirlMiddle : NPC {
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlCastleMarriageSeven, castleMarriageFour);
 		
 		
+		girlEndStart.AddAction(new NPCCallbackSetStringAction(FlagToNPC, this, "marriage"));
 		girlEndStart.AddAction(new NPCAddScheduleAction(this, girlEnd));
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlPathEndStart, girlEndStart);
 		flagReactions.Add(FarmerFamilyFlagStrings.GirlPathEndTwo, girlEndOne);
@@ -369,6 +371,9 @@ public class LighthouseGirlMiddle : NPC {
 	protected void FlagToNPC(NPC npc, string text){
 		if (text == "startDate")
 			initialState.PassStringToEmotionState(text);
+		if (text == "marriage"){
+			noMarriageState.PassStringToEmotionState(text);	
+		}
 	}
 	
 	protected void SendFarmerOnBoard(){
@@ -794,12 +799,20 @@ public class LighthouseGirlMiddle : NPC {
 			_allChoiceReactions.Clear();
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("My dad is too afraid to stand up to my mom...");
+			FlagManager.instance.SetFlag(FarmerFamilyFlagStrings.DaughterReady);
 		}
 		public void NiceToMomResponse(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
 			_allChoiceReactions.Clear();
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("My mom will never back down.");
+		}
+		
+		public override void PassStringToEmotionState(string text){
+			if (text == "marriage"){
+				_allItemReactions.Clear();
+				SetDefaultText("That was amazing! I have never seen my dad stand up to mom like that before.");
+			}
 		}
 		
 	}
@@ -824,6 +837,7 @@ public class LighthouseGirlMiddle : NPC {
 			if (!gaveTools){
 				gaveTools = true;
 				FlagManager.instance.SetFlag(FlagStrings.ToolsForMarriage);
+				GUIManager.Instance.CloseInteractionMenu();
 			}
 		}
 		

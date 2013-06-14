@@ -196,6 +196,7 @@ public static class FlagStrings {
 	public static string IllSellForYou = "Ill sell for you";
 	public static string HusbandHappy = "Husband Happy";
 	public static string HusbandOnBoard = "Husband on board";
+	public static string FarmersBetrayed = "Farmers Betrayed";
 	#endregion
 	
 	#region FarmerMother
