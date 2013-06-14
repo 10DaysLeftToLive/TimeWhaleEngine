@@ -83,7 +83,7 @@ public abstract class Character : PauseObject {
 	
 	public void PlayAnimation(string animation){
 		try {
-			if (animationData.GetClipCount() > 0) {
+			if (animationData.AnimationClipExists(animation)) {
 				try {
 					if (!animationData.isPlaying) {
 						animationData.Play(animation);

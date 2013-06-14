@@ -12,6 +12,7 @@ public class CarpenterYoung : NPC
 {
 	Schedule WalkSitWhittle;
 	Reaction conversationWithSonDone;
+    Reaction toolboxGotten;
     Reaction toolboxGivenToSonDone;
 
 	protected override void Init()
@@ -24,11 +25,17 @@ public class CarpenterYoung : NPC
 	{
 		conversationWithSonDone = new Reaction();
 		conversationWithSonDone.AddAction(new NPCAddScheduleAction(this, WalkSitWhittle));
-		conversationWithSonDone.AddAction(new NPCEmotionUpdateAction(this, new RandomMessageEmotionState(this, "Sorry, my son is busy today.  Hopefully he won't spend the whole day searching for his tools and can practice some carpentry.")));
+		conversationWithSonDone.AddAction(new NPCEmotionUpdateAction(this, new ToolboxNotFoundEmotionState(this, "Sorry, my son is busy today.  Hopefully he won't spend the whole day searching for his tools and can practice some carpentry.")));
+        
 		flagReactions.Add(FlagStrings.carpenterSonYoungConvoWithDadFinished, conversationWithSonDone);
 
+        /*toolboxGotten = new Reaction();
+        toolboxGotten.AddAction(new NPCCallbackAction(PlayerHoldingToolbox));
+        toolboxGotten.AddAction(new NPCEmotionUpdateAction(this, new ToolboxFoundEmotionState(this, "Oh? You found my son's toolbox. Go along and give it to him so he can get started.")));
+        flagReactions.Add(FlagStrings.ToolboxFoundButNotGiven, toolboxGotten);*/
+
         toolboxGivenToSonDone = new Reaction();
-        toolboxGivenToSonDone.AddAction(new NPCEmotionUpdateAction(this, new GivenSonToolboxEmotionState(this, "Thanks for finding my son his toolbox, again.")));
+        toolboxGivenToSonDone.AddAction(new NPCEmotionUpdateAction(this, new ToolboxGivenToSonEmotionState(this, "Thanks for finding my son his toolbox, again.")));
         flagReactions.Add(FlagStrings.carpenterSonYoungGottenTools, toolboxGivenToSonDone);
 	}
 
@@ -74,6 +81,18 @@ public class CarpenterYoung : NPC
 		this.SetCharacterPortrait(StringsNPC.Smile);	
 	}
 
+    protected void PlayerHoldingToolbox()
+    {
+        if (player.Inventory.HasItem())
+        {
+            //if (player.Inventory.GetItem().name == "Toolbox")
+            if (player.Inventory.GetItem().name.Equals("Toolbox"))
+            {
+                Debug.Log("Player is holding " + player.Inventory.GetItem().name);
+                FlagManager.instance.SetFlag(FlagStrings.ToolboxFoundButNotGiven);
+            }
+        }
+    }
 
 	#region EmotionStates
 	#region Initial Emotion State
@@ -83,18 +102,19 @@ public class CarpenterYoung : NPC
 			: base(toControl, currentDialogue)
 		{
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
+            _npcInState.ChangeFacialExpression(StringsNPC.Happy);
 		}
 
 	}
 	#endregion
-	#region Random Message Emotion State
-	private class RandomMessageEmotionState : EmotionState
+	#region Toolbox Not Found Emotion State
+	private class ToolboxNotFoundEmotionState : EmotionState
 	{
-		string[] stringList = new string[30];
-		Reaction randomMessage;
-		int stringCounter = 0;
+        string[] stringList = new string[30];
+        Reaction randomMessage;
+        int stringCounter = 0;
 
-		public RandomMessageEmotionState(NPC toControl, string currentDialogue)
+		public ToolboxNotFoundEmotionState(NPC toControl, string currentDialogue)
 			: base(toControl, currentDialogue)
 		{
 			randomMessage = new Reaction();
@@ -111,22 +131,52 @@ public class CarpenterYoung : NPC
 		public void RandomMessage()
 		{
 			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
+            _npcInState.ChangeFacialExpression(StringsNPC.Angry);
 
 			SetDefaultText(stringList[(int)Random.Range(0, stringCounter)]);
 		}
 	}
 	#endregion
-    #region Given Son Toolbox
-    private class GivenSonToolboxEmotionState : EmotionState
+    #region Toolbox Found Emotion State
+    private class ToolboxFoundEmotionState : EmotionState
     {
         string[] stringList = new string[30];
         Reaction randomMessage;
         int stringCounter = 0;
 
-        public GivenSonToolboxEmotionState(NPC toControl, string currentDialogue)
+        public ToolboxFoundEmotionState(NPC toControl, string currentDialogue)
+            : base(toControl, currentDialogue)
+        {
+            randomMessage = new Reaction();
+
+            randomMessage.AddAction(new NPCCallbackAction(RandomMessage));
+            SetOnOpenInteractionReaction(new DispositionDependentReaction(randomMessage));
+
+            stringList[0] = "Give those tools to my son sometime soon, alright?";
+            stringList[1] = "";
+            stringList[2] = "";
+            stringCounter = 3;
+        }
+
+        public void RandomMessage()
+        {
+            _npcInState.SetCharacterPortrait(StringsNPC.Happy);
+            _npcInState.ChangeFacialExpression(StringsNPC.Happy);
+
+            SetDefaultText(stringList[(int)Random.Range(0, stringCounter)]);
+        }
+    }
+    #endregion
+    #region Toolbox Given to Son Emotion State
+    private class ToolboxGivenToSonEmotionState : EmotionState
+    {
+        string[] stringList = new string[30];
+        Reaction randomMessage;
+        int stringCounter = 0;
+
+        public ToolboxGivenToSonEmotionState(NPC toControl, string currentDialogue)
 			: base(toControl, currentDialogue)
 		{
-
             randomMessage = new Reaction();
 
             randomMessage.AddAction(new NPCCallbackAction(RandomMessage));
@@ -141,6 +191,7 @@ public class CarpenterYoung : NPC
         public void RandomMessage()
         {
             _npcInState.SetCharacterPortrait(StringsNPC.Default);
+            _npcInState.ChangeFacialExpression(StringsNPC.Default);
 
             SetDefaultText(stringList[(int)Random.Range(0, stringCounter)]);
         }

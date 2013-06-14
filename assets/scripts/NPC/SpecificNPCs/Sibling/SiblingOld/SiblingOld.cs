@@ -322,7 +322,6 @@ gameStartPassiveChat.AddAction(new NPCAddScheduleAction(this, oldSiblingIntroduc
 		#region reactivate after debugging <&^&>
 //
 		Schedule schedule = new Schedule(this, Schedule.priorityEnum.DoNow); 
-		schedule.Add(new TimeTask(600f, new WaitTillPlayerCloseState(this, ref player)));
 		schedule.Add(new TimeTask(1.25f, new IdleState(this)));
 		Task oldSiblingMoveToBridge = new Task(new MoveThenDoState(this, new Vector3(2f,Y_COORDINATE, .3f), new MarkTaskDone(this)));
 		oldSiblingMoveToBridge.AddFlagToSet(FlagStrings.oldSiblingIntroChatFlag);

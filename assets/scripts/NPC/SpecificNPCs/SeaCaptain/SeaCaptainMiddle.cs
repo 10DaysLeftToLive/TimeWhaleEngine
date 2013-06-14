@@ -156,12 +156,14 @@ public class SeaCaptainMiddle : NPC {
 		public void UpdateWhyHere(){
 			_allChoiceReactions.Remove(whyHereChoice);
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
+            _npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			GUIManager.Instance.RefreshInteraction();
 		}
 		
 		public void UpdateWhereShip(){
 			_allChoiceReactions.Remove(whereShipChoice);
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
+            _npcInState.ChangeFacialExpression(StringsNPC.Default);
 			GUIManager.Instance.RefreshInteraction();
 		}
 		
@@ -169,6 +171,7 @@ public class SeaCaptainMiddle : NPC {
 			GUIManager.Instance.CloseInteractionMenu();
 			FlagManager.instance.SetFlag(FlagStrings.TreasureHuntBegin);
 			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
+            _npcInState.ChangeFacialExpression(StringsNPC.Sad);
 		}
 		#endregion
 	

@@ -156,6 +156,7 @@ public class MusicianYoung : NPC {
 		}
 		public void UpdateWhatKindOfMusic(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
+_npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			_allChoiceReactions.Remove(WhatKindOfMusicChoice);
 			if(_allChoiceReactions.ContainsKey(WhereDoYouComeFromChoice)){
 				_allChoiceReactions.Remove(WhereDoYouComeFromChoice);
@@ -168,6 +169,7 @@ public class MusicianYoung : NPC {
 		}
 		public void UpdatePlayForMe(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
+_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			_allChoiceReactions.Remove(PlayForMeChoice);
 			_allChoiceReactions.Remove(IsThereAnyYouLikeChoice);
 			if(hasTalkedAboutTrip == false){
@@ -180,6 +182,7 @@ public class MusicianYoung : NPC {
 		}
 		public void UpdateIsThereAnyYouLike(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
+_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			_allChoiceReactions.Remove(PlayForMeChoice);
 			_allChoiceReactions.Remove(IsThereAnyYouLikeChoice);
 			if(hasTalkedAboutTrip == false){
@@ -192,6 +195,7 @@ public class MusicianYoung : NPC {
 		}
 		public void UpdateWhereDoYouComeFrom(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
+_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			_allChoiceReactions.Remove(WhereDoYouComeFromChoice);
 			if(_allChoiceReactions.ContainsKey(WhatKindOfMusicChoice)){
 				_allChoiceReactions.Remove(WhatKindOfMusicChoice);
@@ -203,6 +207,7 @@ public class MusicianYoung : NPC {
 		}
 		public void UpdateWhyDidYouCome(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
+_npcInState.ChangeFacialExpression(StringsNPC.Sad);
 			_allChoiceReactions.Remove(WhyDidYouComeChoice);
 			_allChoiceReactions.Remove(WhatWasTheTripLikeChoice);
 			_allChoiceReactions.Add (WasYourSonCloseToHisFatherChoice, new DispositionDependentReaction(WasYourSonCloseToHisFatherReaction));
@@ -212,12 +217,14 @@ public class MusicianYoung : NPC {
 		}
 		public void UpdateWhatWasTheTripLike(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
+_npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			_allChoiceReactions.Remove(WhatWasTheTripLikeChoice);
 			GUIManager.Instance.RefreshInteraction();
 			SetDefaultText("The trip wasn't too bad.");
 		}
 		public void UpdateWasYourSonCloseToHisFatherReaction(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
+_npcInState.ChangeFacialExpression(StringsNPC.Sad);
 			_allChoiceReactions.Remove(WasYourSonCloseToHisFatherChoice);
 			_allChoiceReactions.Remove(HowAreYouDoingChoice);
 			_allChoiceReactions.Add(CanIHelpChoice, new DispositionDependentReaction(CanIHelpReaction));
@@ -226,6 +233,7 @@ public class MusicianYoung : NPC {
 		}
 		public void UpdateHowAreYouDoing(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
+_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			_allChoiceReactions.Remove(WasYourSonCloseToHisFatherChoice);
 			_allChoiceReactions.Remove(HowAreYouDoingChoice);
 			_allChoiceReactions.Add(CanIHelpChoice, new DispositionDependentReaction(CanIHelpReaction));
@@ -234,6 +242,7 @@ public class MusicianYoung : NPC {
 		}
 		public void UpdateCanIHelp(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
+_npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			_allChoiceReactions.Remove(CanIHelpChoice);
 			GUIManager.Instance.RefreshInteraction();
 			hasTalkedAboutTrip = true;

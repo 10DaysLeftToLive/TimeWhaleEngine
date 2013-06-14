@@ -81,6 +81,7 @@ public class CastlemanOld : NPC {
 		
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
+_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			noThanksReaction.AddAction(new NPCCallbackAction(noThanksResult));
 			noThanksReaction.AddAction(new NPCEmotionUpdateAction(toControl, new CrazyTalkEmotionState(toControl, "...")));
 			sureReaction.AddAction(new NPCCallbackAction(sureResult));
@@ -96,6 +97,7 @@ public class CastlemanOld : NPC {
 		private void noThanksResult()
 		{
 			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
+_npcInState.ChangeFacialExpression(StringsNPC.Sad);
 			_allChoiceReactions.Clear();
 		}
 		
@@ -104,6 +106,7 @@ public class CastlemanOld : NPC {
 			_allChoiceReactions.Clear();
 			SetDefaultText("Thank you thank you thank you.");
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
+_npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			GUIManager.Instance.RefreshInteraction();
 			//Set Portrait to CastleManCrazyHappy
 		}
@@ -135,6 +138,7 @@ public class CastlemanOld : NPC {
 		public void RandomMessage()
 		{
 			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
+_npcInState.ChangeFacialExpression(StringsNPC.Angry);
 
 			SetDefaultText(stringList[(int)Random.Range(0, stringCounter)]);
 		}
@@ -149,6 +153,7 @@ public class CastlemanOld : NPC {
 		public AngryEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue)
 		{
 			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
+_npcInState.ChangeFacialExpression(StringsNPC.Angry);
 			_allChoiceReactions.Add(whySoBitterChoice, new DispositionDependentReaction(whySoBitterReaction));
 			whySoBitterReaction.AddAction(new NPCCallbackAction(AngryReply));
 			whySoBitterReaction.AddAction(new ShowOneOffChatAction(toControl, "You ruined everything, and you dare to ask me if I'm in the wrong!?"));
@@ -157,6 +162,7 @@ public class CastlemanOld : NPC {
 		private void AngryReply()
 		{
 			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
+_npcInState.ChangeFacialExpression(StringsNPC.Angry);
 			GUIManager.Instance.CloseInteractionMenu();
 			_allChoiceReactions.Clear();
 			SetDefaultText("Go Away");
@@ -183,6 +189,7 @@ public class CastlemanOld : NPC {
 		{
 			howisLifeReaction.AddAction(new NPCCallbackAction(HowIsLifeResult));
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
+_npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			
 			_allChoiceReactions.Add(howIsLifeChoice, new DispositionDependentReaction(howisLifeReaction));
 		}
@@ -191,6 +198,7 @@ public class CastlemanOld : NPC {
 		{
 			_allChoiceReactions.Remove(howIsLifeChoice);
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
+_npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			SetDefaultText("Thanks for everything you've done!");
 		}
 		
@@ -231,6 +239,7 @@ public class CastlemanOld : NPC {
 			_allChoiceReactions.Clear();
 			SetDefaultText("Sorry about that, the mind's been wandering a bit lately.");
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
+_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			GUIManager.Instance.RefreshInteraction();
 		}
 		
@@ -240,6 +249,7 @@ public class CastlemanOld : NPC {
 			_allChoiceReactions.Add(whatCastleChoice, new DispositionDependentReaction(whatCastleReaction));
 			SetDefaultText("My Castle... My Castle...");
 			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
+_npcInState.ChangeFacialExpression(StringsNPC.Sad);
 			GUIManager.Instance.RefreshInteraction();
 		}
 		

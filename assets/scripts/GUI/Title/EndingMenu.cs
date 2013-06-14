@@ -6,8 +6,7 @@ public class EndingMenu : MonoBehaviour {
 	
 	public DeathBedObject[] deathBedObjects;
 	
-	public GameObject malePC;
-	public GameObject femalePC;
+	
 		
 	public UIPanel[] autoPlayPanels;
 	private int autoPlayPanelsIndex = 0;
@@ -52,15 +51,6 @@ public class EndingMenu : MonoBehaviour {
 							
 					}
 					
-					float gender = PlayerPrefs.GetFloat(Strings.Gender);
-					if (gender == (float)CharacterGender.MALE){
-						toEnable.Add(femalePC);
-						toDisable.Add(malePC);
-					} else {
-						toEnable.Add(malePC);
-						toDisable.Add(femalePC);
-					}
-					
 					fadeToBlackSprite.StartFadeToBlack(toDisable,toEnable);
 				}else{
 					fadeToBlackSprite.StartFadeToBlack(
@@ -88,11 +78,11 @@ public class EndingMenu : MonoBehaviour {
 		if(flags.Length <= 0) return false;
 
 		foreach(string flag in flags){
-			if(FlagManager.instance.FlagIsSet(flag)){
-				return true;
+			if(!FlagManager.instance.FlagIsSet(flag)){
+				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 						
 	void BeginFadeTimer(){
@@ -121,7 +111,8 @@ public class EndingMenu : MonoBehaviour {
 	public void ChooseNo(){
 		Game.GoToMainMenu();
 		FadeToNextAutoPanel();
-	}	
+	}
+	
 }
 
 [System.Serializable]

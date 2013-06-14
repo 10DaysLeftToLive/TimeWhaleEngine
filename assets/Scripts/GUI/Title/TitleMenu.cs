@@ -3,16 +3,13 @@ using System.Collections;
 using SmoothMoves;
 
 public class TitleMenu : MonoBehaviour {
-	//public FadeEffect fadeCamera;
-	
-	public MenuTransition menuTransition;
+	public FadeEffect fadeCamera;
 	
 	public UIPanel titleMenuPanel;
 	public UISlider titleMenuSlider;
 	
 	public UIPanel mainMenuPanel;
 	public UISlider newGameSlider;
-	private bool newGameSliderEnabled = true;
 	
 	public UIPanel openingScenePanel;
 	
@@ -32,8 +29,6 @@ public class TitleMenu : MonoBehaviour {
 	public float holdTimeInSeconds = 5.0f;
 	
 	public bool fadedOpeningScene = false;
-	
-	private readonly float PERCENTAGE_OF_SWITCH_EFFECT_TO_WAIT = 0.75f;
 	
 	// Use this for initialization
 	void Start () {
@@ -81,9 +76,8 @@ public class TitleMenu : MonoBehaviour {
 		if(newGameSlider.sliderValue != 0 && !Input.GetMouseButton(0)){
 			newGameSlider.sliderValue = 0;
 		}
-		if(newGameSlider.sliderValue == 1 && newGameSliderEnabled){
+		if(newGameSlider.sliderValue == 1){
 			DisableArrows();
-			newGameSliderEnabled = false;
 			TransitionPanels(mainMenuPanel, openingScenePanel);
 			FadeToText();
 		}
@@ -96,11 +90,11 @@ public class TitleMenu : MonoBehaviour {
 	}
 	
 	IEnumerator FadePanels(UIPanel toDisable, UIPanel toEnable, bool forceFade){
-		Debug.Log("Start Fade. ToDisable: " + toDisable.name + " || ToEnable: " + toEnable.name);
+		Debug.Log("Start Fade");
 		if(forceFade)
-			menuTransition.DoTheFade();
+			fadeCamera.DoFade();
 
-		yield return new WaitForSeconds(menuTransition.SWITCHTIMESECONDS * PERCENTAGE_OF_SWITCH_EFFECT_TO_WAIT);
+		yield return new WaitForSeconds(fadeCamera.fadeDuration * 0.5f);
 
         if (toDisable == titleMenuPanel && !Crossfade.instance.LighthouseAmbient.isPlaying)
         {
@@ -140,12 +134,6 @@ public class TitleMenu : MonoBehaviour {
 	
 	void FadeToNextAutoPanel(){
 		autoPlayPanelsIndex++;
-		BeginFadeTimer();
-	}
-	
-	void FadetoNextAutoPanelImmediately(){
-		autoPlayPanelsIndex++;
-		holdTimeInSeconds = 0.0f;
 		BeginFadeTimer();
 	}
 	
