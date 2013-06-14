@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class MapLocations {
-	static Vector3 _carpenterHouse = new Vector3(30, -1.5f, -0.5f);
+	static Vector3 _carpenterHouse = new Vector3(30, -1.5f, 1f);
 	public static Vector3 CarpenterHouseYoung{
 		get{return _carpenterHouse;}
 	}
@@ -13,7 +13,7 @@ public class MapLocations {
 		get{return new Vector3(_carpenterHouse.x, _carpenterHouse.y + (LevelManager.levelYOffSetFromCenter * 2), _carpenterHouse.z);}
 	}
 	
-	static Vector3 _TopOfFirstFloorStairsRight = new Vector3(38.27f, 7.73f, -0.5f);
+	static Vector3 _TopOfFirstFloorStairsRight = new Vector3(38.27f, 7.73f, 1f);
 	public static Vector3 TopOfFirstFloorStairsRightYoung{
 		get{return _TopOfFirstFloorStairsRight;}
 	}
@@ -26,7 +26,7 @@ public class MapLocations {
 		get{return new Vector3(_TopOfFirstFloorStairsRight.x, _TopOfFirstFloorStairsRight.y + (LevelManager.levelYOffSetFromCenter * 2), _TopOfFirstFloorStairsRight.z);}
 	}
 	
-	static Vector3 _baseOfPier = new Vector3(69.0f, -3.5f, -0.5f);
+	static Vector3 _baseOfPier = new Vector3(69.0f, -3.5f, 1f);
 	public static Vector3 BaseOfPierYoung{
 		get{return _baseOfPier;}
 	}
@@ -38,7 +38,7 @@ public class MapLocations {
 	public static Vector3 BaseOfPierOld{
 		get{return new Vector3(_baseOfPier.x, _baseOfPier.y + (LevelManager.levelYOffSetFromCenter * 2), _baseOfPier.z);}
 	}
-	static Vector3 _middleOfBeach = new Vector3(49.7f, -7.4f, 0f);
+	static Vector3 _middleOfBeach = new Vector3(49.7f, -7.4f, 1f);
 	public static Vector3 MiddleOfBeachYoung{
 		get{return _middleOfBeach;}
 	}
@@ -50,7 +50,7 @@ public class MapLocations {
 		get{return new Vector3(_middleOfBeach.x, _middleOfBeach.y + (LevelManager.levelYOffSetFromCenter * 2), _middleOfBeach.z);}
 	}
 	
-	static Vector3 _upperMiddleBeach = new Vector3(62f, -6f, -.5f);
+	static Vector3 _upperMiddleBeach = new Vector3(62f, -6f, 1f);
 	public static Vector3 UpperMiddleBeachYoung{
 		get{return _upperMiddleBeach;}	
 	}
@@ -62,7 +62,7 @@ public class MapLocations {
 	}
 	
 	#region WindMill Location
-	static Vector3 _windMillLedge = new Vector3(-4.283016f, 11.34081f, 0f);
+	static Vector3 _windMillLedge = new Vector3(-4.283016f, 11.34081f, 1f);
 	public static Vector3 WindmillYoung {
 		get{return new Vector3(_windMillLedge.x, _windMillLedge.y, _upperMiddleBeach.z);}	
 	}
@@ -77,7 +77,7 @@ public class MapLocations {
 	
 	#region LightHouse Location
 	
-	static Vector3 _lighthouse = new Vector3(58.92967f, 14.97302f, 0f);
+	static Vector3 _lighthouse = new Vector3(58.92967f, 14.97302f, 1f);
 	public static Vector3 LightHouseYoung {
 		get { return new Vector3(_lighthouse.x, _lighthouse.y, _lighthouse.z); }
 	}
@@ -94,7 +94,7 @@ public class MapLocations {
 	
 	#region Reflection Tree
 	
-	static Vector3 _reflectionTree = new Vector3(-41.09068f, 17.48419f, 0f);
+	static Vector3 _reflectionTree = new Vector3(-41.09068f, 17.48419f, 1f);
 	
 	public static Vector3 ReflectionTreeYoung {
 		get{return new Vector3(_reflectionTree.x, _reflectionTree.y, _reflectionTree.z);}	
@@ -108,7 +108,7 @@ public class MapLocations {
 	#endregion
 	
 	#region Bridge
-		static Vector3 _bridge = new Vector3(58.92967f, 14.97302f, 0f);
+		static Vector3 _bridge = new Vector3(58.92967f, 14.97302f, 1f);
 		public static Vector3 BridgeYoung {
 			get { return new Vector3(_bridge.x, _bridge.y, _bridge.z); }
 		}
@@ -124,12 +124,12 @@ public class MapLocations {
 	
 	
 	#region SiblingOld
-	static Vector3 _playerHouseWaterWell = new Vector3 (-2.4f, -2.4f, 0);
+	static Vector3 _playerHouseWaterWell = new Vector3 (-2.4f, -2.4f, 1);
 	public static Vector3 PlayerHouseWaterWellOld {
 		get	{return new Vector3 (_playerHouseWaterWell.x, _playerHouseWaterWell.y + (LevelManager.levelYOffSetFromCenter * 2), _playerHouseWaterWell.z);}
 	}
 	
-	static Vector3 _MiddleOfHauntedForest = new Vector3 (-28.25f, -2.4f, 0);
+	static Vector3 _MiddleOfHauntedForest = new Vector3 (-28.25f, -2.4f, 1);
 	public static Vector3 MiddleOfHauntedForestOld {
 		get	{return new Vector3 (_MiddleOfHauntedForest.x, _MiddleOfHauntedForest.y + (LevelManager.levelYOffSetFromCenter * 2), _MiddleOfHauntedForest.z);}
 	}
