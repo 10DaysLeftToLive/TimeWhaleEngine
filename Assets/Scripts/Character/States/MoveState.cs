@@ -262,14 +262,14 @@ public class MoveState : AbstractState {
 		Vector3 charPos = character.transform.position;
 		charPos.z = maxZ;
 		character.transform.position = charPos;
-		Debug.Log("changing to max z");
+		//Debug.Log("changing to max z");
 	}
 	
 	private void SetMinZ(){
 		Vector3 charPos = character.transform.position;
 		charPos.z = minZ;
 		character.transform.position = charPos;
-		Debug.Log("changing to min z");
+		//Debug.Log("changing to min z");
 	}
 	
     private void TransitionSounds()
