@@ -196,7 +196,7 @@ public class CarpenterMiddle : NPC {
 	private void SetupPrimaryCarpentrySchedules() {
 		afterHappyForSonBeingACarpenter = new Schedule(this, Schedule.priorityEnum.Medium);
 		Task stormOffToWindmill = new Task(new MoveState(this, MapLocations.WindmillMiddle));
-		TimeTask workOnWindmill = new TimeTask(1000f, new AbstractAnimationState(this, "Hammer", false));
+		TimeTask workOnWindmill = new TimeTask(1000f, new AbstractAnimationState(this, "Hammer", true, true));
 		afterHappyForSonBeingACarpenter.Add(stormOffToWindmill);
 		afterHappyForSonBeingACarpenter.Add(workOnWindmill);
 		
