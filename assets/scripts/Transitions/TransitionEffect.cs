@@ -8,8 +8,8 @@ public abstract class TransitionEffect : PauseObject {
 	protected DragDirection directionFacing = DragDirection.Up;// defaults to up
 	protected bool isChanging = false;
 	
-	private float time = 0;
-	private bool didChange = false;
+	protected float time = 0;
+	protected bool didChange = false;
 	
 	public int minimumDragDistance = 5;
 	public float timeToChange = .6f;

@@ -160,7 +160,7 @@ public class FortuneTellerYoung : NPC {
 			//Choice itemFive = new Choice ("itemFive","");
 			//Choice itemSix =  new Choice ("itemSix","");
 				
-		Choice rightChoice = new Choice("Right", "I see.." + "\n\n" + "Do you prefer being right or hearing how you might be wrong?");
+		Choice rightChoice = new Choice("Right", "Interesting.." + "\n\n" + "Do you prefer being left alone or being with others?");
 			
 		
 //Add more choices 

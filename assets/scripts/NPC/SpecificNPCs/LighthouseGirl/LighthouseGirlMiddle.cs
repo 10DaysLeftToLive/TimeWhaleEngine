@@ -206,7 +206,7 @@ public class LighthouseGirlMiddle : NPC {
 
 	protected override void SetUpSchedules(){
 		
-		float dateTime = 50;
+		float dateTime = 100;
 		
 		openningWaitingSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
 		openningWaitingSchedule.Add(new TimeTask(200, new WaitTillPlayerCloseState(this, ref player)));
