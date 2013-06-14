@@ -26,6 +26,7 @@ public class FlagManager : MonoBehaviour {
 	
 	public void Init(){
 		_flags = NPCManager.instance.GetFlags();
+		if (_flags == null) _flags = new List<Flag>();
 	}
 	
 	public void SetFlags(List<Flag> flags){
