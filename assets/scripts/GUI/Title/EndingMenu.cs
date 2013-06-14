@@ -109,7 +109,7 @@ public class EndingMenu : MonoBehaviour {
 	}
 	
 	public void ChooseNo(){
-
+		Game.GoToMainMenu();
 		FadeToNextAutoPanel();
 	}
 	

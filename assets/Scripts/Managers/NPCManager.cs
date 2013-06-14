@@ -59,7 +59,6 @@ public class NPCManager : ManagerSingleton<NPCManager> {
 			}
 			currentNPCFlags.Clear();
 		}
-		Debug.Log(allNPCFlags.Count);
 		return(allNPCFlags);
 	}
 }

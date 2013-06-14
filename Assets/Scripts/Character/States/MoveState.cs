@@ -22,28 +22,36 @@ public class MoveState : AbstractState {
     private static bool traverseStair = false;
     private static bool towardStair = true;
 	private static float MIN_DISTANCE_TO_POINT = 4;
-	private static float zDepthChange = .2f;
+	private static float zDepthChange = .4f;
+	
+	private float baseZ;
+	private float maxZ;
+	private float minZ;
         
     public MoveState(Character toControl, Vector3 goal) : base(toControl){
         _goal = goal;
 		this.animationWalk = Strings.animation_walk;
+		SetZValues();
     }
 	
 	public MoveState(Character toControl, string walkAnimation, Vector3 goal) : base(toControl) {
 		this.animationWalk = walkAnimation;
 		this.animationWalk = Strings.animation_walk;
+		SetZValues();
 		_goal = goal;
 	}
 	
 	public MoveState(Character toControl, Vector3 goal, float speed) : base (toControl) {
 		_goal = goal;
 		this.animationWalk = Strings.animation_walk;
+		SetZValues();
 		this.speed = speed;
 	}
 	
 	public MoveState(Character toControl, string walkAnimation, Vector3 goal, float speed) : base(toControl) {
 		this.animationWalk = walkAnimation;
 		_goal = goal;
+		SetZValues();
 		this.speed = speed;
 	}
     
@@ -133,8 +141,6 @@ public class MoveState : AbstractState {
         RaycastHit hitDown, hitUp;
 		float distance = MIN_DISTANCE_TO_POINT;
 		Vector3 hitPos = Vector3.zero;
-        
-		
 		
         if (Physics.Raycast(_goal, Vector3.down , out hitDown, 10, mask)) {
 			if (hitDown.distance < distance){
@@ -246,20 +252,37 @@ public class MoveState : AbstractState {
         }
 	}
 	
+	private void SetZValues(){
+		baseZ = character.transform.position.z;
+		minZ = baseZ - zDepthChange;
+		maxZ = baseZ + zDepthChange;
+	}
+	
+	private void SetMaxZ(){
+		Vector3 charPos = character.transform.position;
+		charPos.z = maxZ;
+		character.transform.position = charPos;
+		Debug.Log("changing to max z");
+	}
+	
+	private void SetMinZ(){
+		Vector3 charPos = character.transform.position;
+		charPos.z = minZ;
+		character.transform.position = charPos;
+		Debug.Log("changing to min z");
+	}
+	
     private void TransitionSounds()
     {
         if (SoundManager.instance.AudioOn)
         {
             lastWay = _pathFollowing.GetLastWayPointName();
-            //Debug.Log("lastWay is " + lastWay);
             NameStartCounter = lastWay.IndexOf(".");
             NameEndCounter = lastWay.IndexOf("Stair");
             // since we're heading towards the stairs, we need to grab the name of the area we are leaving and the area we're heading towards
             if (lastWay.IndexOf("StairBase") > 0 || lastWay.IndexOf("StairTop") > 0 || lastWay == "Forest.010")
             {
-				Vector3 charPos = character.transform.position;
-				charPos.z -= zDepthChange;
-				character.transform.position = character.transform.position;
+				
                 if (lastWay.IndexOf("StairBase") > 0)
                 {
                     Strings.BOTTOMOFSTAIRS = lastWay.Substring(0, NameStartCounter);
@@ -274,17 +297,21 @@ public class MoveState : AbstractState {
             }
             else if (towardStair)
             { // possibly walking towards stairs
+				
                 if (lastWay.EndsWith("High") || lastWay.EndsWith("Low"))
                 {
+					
                     if (lastWay.IndexOf("Low") > 0)
                     {
                         Strings.PREVIOUSAREA = Strings.BOTTOMOFSTAIRS;
                         Crossfade.instance.StartCoroutineFadeDown();
+						SetMaxZ();
                     }
                     else
                     {
                         Strings.PREVIOUSAREA = Strings.TOPOFSTAIRS;
                         Crossfade.instance.StartCoroutineFadeDown();
+						SetMaxZ();
                     }
                     towardStair = false;
                     traverseStair = true;
@@ -301,15 +328,14 @@ public class MoveState : AbstractState {
                 else if (lastWay.IndexOf("Stair") == -1 && lastWay.IndexOf("Pier") == -1 && lastWay.IndexOf("Bridge") == -1)
                 { // passed by the stairs, rather than going up them
                     towardStair = false;
+					SetMinZ();
                 }
             }
             else if (traverseStair)
             { // finished traversing the stairs
-				Vector3 charPos = character.transform.position;
-				charPos.z += zDepthChange;
-				character.transform.position = character.transform.position;
                 if (lastWay.EndsWith("High") || lastWay.EndsWith("Low"))
                 {
+					SetMinZ();
                     traverseStair = false;
                     towardStair = true;
 
