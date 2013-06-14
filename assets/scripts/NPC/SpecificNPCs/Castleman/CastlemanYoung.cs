@@ -8,6 +8,7 @@ public class CastlemanYoung : NPC {
 	MeetFamily BecomingFriends;
 	protected override void Init() {
 		id = NPCIDs.CASTLE_MAN;
+		SetCharacterPortrait(StringsNPC.Sad);
 		base.Init();
 	}
 	bool talkedToLighthouse = false;
@@ -15,6 +16,7 @@ public class CastlemanYoung : NPC {
 	bool friends = false;
 	bool prepared = false;
 	bool goingDownToBeach = false;
+	public string animationOnApproach = "Timid";
 	int NumberAtBeach = 0;
 	Schedule CastleManTalksFirstFriends;
 	Schedule CastleManTalksFirstNOTFriends;
@@ -46,7 +48,7 @@ public class CastlemanYoung : NPC {
 	}
 	protected void setEmbarrased(){
 		animationData.Play("Embarrassed");
-		this.SetCharacterPortrait(StringsNPC.Embarassed);
+		this.SetCharacterPortrait(StringsNPC.Embarrassed);
 	}
 	protected void setHappy(){
 		this.SetCharacterPortrait(StringsNPC.Happy);	
@@ -399,6 +401,7 @@ public class CastlemanYoung : NPC {
 		Reaction WellTellMeReaction;
 	
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, "..."){
+			toControl.SetCharacterPortrait(StringsNPC.Sad);
 			AppleReaction = new Reaction();
 			AppleReaction.AddAction(new UpdateCurrentTextAction(toControl, "......"));
 			_allItemReactions.Add(StringsItem.Apple, new DispositionDependentReaction(AppleReaction));
@@ -430,11 +433,7 @@ public class CastlemanYoung : NPC {
 			ToySwordReaction = new Reaction();
 			ToySwordReaction.AddAction(new UpdateCurrentTextAction(toControl, "......"));
 			_allItemReactions.Add(StringsItem.ToySword, new DispositionDependentReaction(ToySwordReaction));
-			/*
-			PortraitReaction = new Reaction();
-			PortraitReaction.AddAction(new UpdateCurrentTextAction(toControl, "......"));
-			_allItemReactions.Add(StringsItem.Portrait, new DispositionDependentReaction(PortraitReaction));
-			*/
+
 			RopeReaction = new Reaction();
 			RopeReaction.AddAction(new UpdateCurrentTextAction(toControl, "......"));
 			_allItemReactions.Add(StringsItem.Rope, new DispositionDependentReaction(RopeReaction));
@@ -546,6 +545,7 @@ public class CastlemanYoung : NPC {
 			_allChoiceReactions.Add(DontYouSpeakChoice, new DispositionDependentReaction(DontYouSpeakReaction));
 			GUIManager.Instance.RefreshInteraction();
 			//_npcInState.PlayAnimation("Timid");
+			(_npcInState as CastlemanYoung).animationOnApproach = Strings.animation_stand;
 			FlagManager.instance.SetFlag(FlagStrings.MusicianCommentOnSon);
 		}
 		public void UpdateWhatsYourName(){
@@ -556,6 +556,7 @@ public class CastlemanYoung : NPC {
 			_allChoiceReactions.Add(DontYouSpeakChoice, new DispositionDependentReaction(DontYouSpeakReaction));
 			GUIManager.Instance.CloseInteractionMenu();
 			//_npcInState.PlayAnimation("Timid");
+			(_npcInState as CastlemanYoung).animationOnApproach = Strings.animation_stand;
 			FlagManager.instance.SetFlag(FlagStrings.MusicianCommentOnSon);
 			//FlagManager.instance.SetFlag(FlagStrings.PlayerAndCastleNOTFriends);
 		}
@@ -1438,7 +1439,7 @@ public class CastlemanYoung : NPC {
 		Choice GiveUpChoice;
 		Reaction GiveUpReaction;
 		public WaitingAtBeachFriend(NPC toControl, string currentDialogue) : base(toControl, "I don't know what to do around the farmer's daughter.  She makes me nervous!"){
-			toControl.SetCharacterPortrait(StringsNPC.Embarassed);
+			//toControl.SetCharacterPortrait(StringsNPC.Embarrassed);
 			YouDontNeedToKnowChoice = new Choice("You don't need to know.", "But its scary to talk with her.  What if I mess up?");
 			YouDontNeedToKnowReaction = new Reaction();
 			YouDontNeedToKnowReaction.AddAction(new NPCCallbackAction(UpdateYouDontNeedToKnow));
@@ -1662,7 +1663,7 @@ public class CastlemanYoung : NPC {
 			GiveUpReaction.AddAction(new ShowOneOffChatAction(toControl, "I've got no chance do I."));
 		}
 		public void UpdateHaveAFunTime(){
-			_npcInState.SetCharacterPortrait(StringsNPC.Embarassed);
+			_npcInState.SetCharacterPortrait(StringsNPC.Embarrassed);
 			_allChoiceReactions.Remove(HaveAFunTimeChoice);
 			_allChoiceReactions.Add(IHearWeddingBellsChoice, new DispositionDependentReaction(IHearWeddingBellsReaction));
 			_allChoiceReactions.Add(MaybeYouShouldBeFriendsChoice, new DispositionDependentReaction(MaybeYouShouldBeFriendsReaction));

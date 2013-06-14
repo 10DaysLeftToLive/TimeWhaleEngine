@@ -55,7 +55,7 @@ public static class StringsNPC {
 	public static string Blink = "Blink";
 	public static string Yelling = "Yelling";
 	public static string Smile = "Smile";
-	public static string Embarassed = "Embarrassed";
+	public static string Embarrassed = "Embarrassed";
 	
 	#endregion
 }

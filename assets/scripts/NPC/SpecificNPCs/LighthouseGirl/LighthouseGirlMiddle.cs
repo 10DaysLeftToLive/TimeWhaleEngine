@@ -32,7 +32,7 @@ public class LighthouseGirlMiddle : NPC {
 		this.SetCharacterPortrait(StringsNPC.Happy);	
 	}
 	protected void setEmbarrassed(){
-		this.SetCharacterPortrait(StringsNPC.Embarassed);	
+		this.SetCharacterPortrait(StringsNPC.Embarrassed);	
 	}
 	
 	protected override void CharacterUpdate ()
@@ -636,7 +636,7 @@ public class LighthouseGirlMiddle : NPC {
 			SetDefaultText("I don't believe the carpenter wrote this letter.");
 		}
 		public void CastleManResponse(){
-			_npcInState.SetCharacterPortrait(StringsNPC.Embarassed);
+			_npcInState.SetCharacterPortrait(StringsNPC.Embarrassed);
 			_allChoiceReactions.Clear();
 			_allItemReactions.Clear();
 			FlagManager.instance.SetFlag(FlagStrings.NotInsane);

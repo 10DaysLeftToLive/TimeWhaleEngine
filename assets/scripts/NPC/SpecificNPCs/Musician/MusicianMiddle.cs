@@ -46,8 +46,6 @@ public class MusicianMiddle : NPC {
 		runAwayFromPlayer.AddAction(new NPCAddScheduleAction(this, runAway));
 		flagReactions.Add("Scared By Player", runAwayFromPlayer);
 		
-		Reaction roamAroundPlayingMusic = new Reaction();
-		
 		Reaction makePlayerGoAway = new Reaction();
 		ShowMultipartChatAction multiChat = new ShowMultipartChatAction(this);
 		multiChat.AddChat("Leave me alone.", 0.2f);

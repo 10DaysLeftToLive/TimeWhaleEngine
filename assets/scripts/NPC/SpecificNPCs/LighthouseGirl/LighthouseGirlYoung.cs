@@ -30,7 +30,7 @@ public class LighthouseGirlYoung : NPC {
 		this.SetCharacterPortrait(StringsNPC.Default);
 	}
 	public void setEmbarrased(){
-		this.SetCharacterPortrait(StringsNPC.Embarassed);
+		this.SetCharacterPortrait(StringsNPC.Embarrassed);
 	}
 	public void setHappy(){
 		this.SetCharacterPortrait(StringsNPC.Smile);	

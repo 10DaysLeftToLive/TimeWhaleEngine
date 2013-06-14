@@ -30,7 +30,7 @@ public class FarmerFatherMiddle : NPC {
 		this.SetCharacterPortrait(StringsNPC.Smile);	
 	}
 	protected void setEmbarrassed(){
-		this.SetCharacterPortrait(StringsNPC.Embarassed);	
+		this.SetCharacterPortrait(StringsNPC.Embarrassed);	
 	}
 	protected void setHappy(){
 		this.SetCharacterPortrait(StringsNPC.Happy);	
