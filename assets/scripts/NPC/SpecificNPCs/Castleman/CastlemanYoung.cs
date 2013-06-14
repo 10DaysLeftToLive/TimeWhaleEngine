@@ -209,6 +209,15 @@ public class CastlemanYoung : NPC {
 		
 		
 	}
+	
+	public override void StarTalkingWithPlayer() {
+		currentEmotion.OnInteractionOpens();
+		chatingWithPlayer = true;
+		PassiveChatToPlayer.instance.RemoveNPCChat(this);
+		scheduleStack.Pause();
+		EnterState(new InteractingWithPlayerState(this, "Timid"));
+	}
+	
 	public void TimerAndBeach(){
 		Debug.Log("It made it here!");
 		if(goingDownToBeach == false){	
@@ -547,7 +556,6 @@ public class CastlemanYoung : NPC {
 			_allChoiceReactions.Add(DontYouSpeakChoice, new DispositionDependentReaction(DontYouSpeakReaction));
 			GUIManager.Instance.CloseInteractionMenu();
 			//_npcInState.PlayAnimation("Timid");
-			//FlagManager.instance.SetFlag(FlagStrings.TestFlag);
 			FlagManager.instance.SetFlag(FlagStrings.MusicianCommentOnSon);
 			//FlagManager.instance.SetFlag(FlagStrings.PlayerAndCastleNOTFriends);
 		}

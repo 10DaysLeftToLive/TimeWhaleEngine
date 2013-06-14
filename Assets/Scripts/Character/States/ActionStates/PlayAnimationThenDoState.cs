@@ -37,8 +37,11 @@ public class PlayAnimationThenDoState : AbstractAnimationState {
 	}
 	
 	public override void OnExit() {
-		if (_animationToPlayOnExit.Equals("")) {
+		if (!_animationToPlayOnExit.Equals("")) {
 			character.PlayAnimation(_animationToPlayOnExit);
+		}
+		else {
+			character.PlayAnimation(Strings.animation_stand);
 		}
 	}
 }

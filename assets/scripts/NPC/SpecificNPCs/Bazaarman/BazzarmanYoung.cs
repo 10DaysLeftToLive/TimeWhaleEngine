@@ -35,11 +35,12 @@ public class BazzarmanYoung : NPC {
 	}
 	
 	public override void StarTalkingWithPlayer(){
+		
 		currentEmotion.OnInteractionOpens();
 		chatingWithPlayer = true;
 		PassiveChatToPlayer.instance.RemoveNPCChat(this);
 		scheduleStack.Pause();
-		EnterState(new PlayAnimationThenDoState(this, Strings.bazaarmanBow, new InteractingWithPlayerState(this)));
+		EnterState(new InteractingWithPlayerState(this, Strings.bazaarmanBow));
 	}
 	
 	
