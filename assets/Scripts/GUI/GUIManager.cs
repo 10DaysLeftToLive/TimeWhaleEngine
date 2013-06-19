@@ -11,7 +11,6 @@ public class GUIManager : MonoBehaviour {
 	private List<GUIControl> activeControls;
 	private List<GUIControl> controlsToRemove;
 	private List<GUIControl> controlsToAdd;
-	private static bool alreadyMade = false; // denotes if this is the first gui manager that has been awakened
 	
 	private static GUIManager instance = null;
 	public static GUIManager Instance {
@@ -24,12 +23,10 @@ public class GUIManager : MonoBehaviour {
 	private PauseMenu pauseMenu;
 	
 	void Awake(){
-		if (alreadyMade){
-			Destroy(this); // no need for 2 gui managers
-			return;
+		if (instance != null){
+			Debug.LogWarning("There are 2 gui managers");
 		}
 		instance = this;
-		alreadyMade = true;
 		activeControls = new List<GUIControl>();
 		controlsToRemove = new List<GUIControl>();
 		controlsToAdd = new List<GUIControl>();

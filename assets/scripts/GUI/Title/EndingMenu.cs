@@ -122,6 +122,11 @@ public class EndingMenu : MonoBehaviour {
 		Game.GoToMainMenu();
 		FadeToNextAutoPanel();
 	}	
+	
+	public void OnDestroy(){
+		EventManager.instance.mOnClickHoldEvent -= OnHoldClick;
+		EventManager.instance.mOnClickHoldReleaseEvent -= OnHoldRelease;
+	}
 }
 
 [System.Serializable]

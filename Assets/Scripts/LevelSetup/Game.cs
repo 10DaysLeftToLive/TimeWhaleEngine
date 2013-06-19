@@ -7,6 +7,7 @@ using System.Collections;
 /// </summary>
 public class Game  {
 	public static void Reset(){
+		Time.timeScale = 1;
 		OneDayClock.Instance.Restart();
 		Application.LoadLevel(Strings.LevelBase);
 	}

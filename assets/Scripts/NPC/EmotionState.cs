@@ -128,13 +128,7 @@ public class EmotionState {
 	/// Reaction to do
 	/// </param>
 	private void PerformReactionBasedOnDisposition(DispositionDependentReaction reaction){
-		if (_npcInState.GetDisposition() >= _npcInState.GetHighDisposition() && reaction.HasHighReaction()){
-			reaction.PerformHighReaction();
-		} else if (_npcInState.GetDisposition() <= _npcInState.GetLowDisposition() && reaction.HasLowReaction()){
-			reaction.PerformLowReaction();
-		} else {
-			reaction.PerformReaction();
-		}
+		reaction.PerformReaction();
 	}
 	public virtual void ReactToItemInteraction(string npc, GameObject item){}
 	public virtual void ReactToChoiceInteraction(string npc, string choice){}

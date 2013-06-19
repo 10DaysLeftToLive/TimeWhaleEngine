@@ -391,7 +391,6 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 _npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			_allChoiceReactions.Clear();
-			control.UpdateDisposition(20);
 			_allChoiceReactions.Add(MarriageChoice, new DispositionDependentReaction(MarriageReaction));
 			_allChoiceReactions.Add(BusinessChoice, new DispositionDependentReaction(BusinessReaction));
 			GUIManager.Instance.RefreshInteraction();

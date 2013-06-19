@@ -7,8 +7,5 @@ public class NPCClassContainer  : LinkObjectContainer<NPC> {
 	}
 	
 	public void UpdateAll(int newDisposition){
-		foreach(CharacterAgeState state in linkedObjects.Keys){
-			Get(state).SetDisposition(newDisposition);
-		}
 	}
 }

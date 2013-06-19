@@ -25,6 +25,11 @@ public class CheatListener : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.E)) {
 			EndGame();
 		}
+		if (Input.GetKeyDown(KeyCode.UpArrow)){
+			Time.timeScale += .2f;
+		} else if (Input.GetKeyDown(KeyCode.DownArrow)){
+			Time.timeScale -= .2f;
+		}
         /*Fly();
         MoveFast();
         ToggleSound();

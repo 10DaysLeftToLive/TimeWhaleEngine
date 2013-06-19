@@ -32,10 +32,6 @@ public abstract class NPC : Character {
 	private static int TIME_TRUNCATION = 10; // should be a power of 10
 	private static int NEAR_DISTANCE = 8;
 	private static int DISTANCE_TO_CHAT = 4;
-	private static int DISPOSITION_LOW_END = 0;
-	private static int DISPOSITION_HIGH_END = 10;
-	public static int DISPOSITION_LOW = 3; // these should not be hard set
-	public static int DISPOSITION_HIGH = 7;
 	#endregion
 	
 	#region Initialization
@@ -315,32 +311,5 @@ public abstract class NPC : Character {
 	}
 	#endregion
 	
-	#region Disposition
-	public void SetDisposition(int disp) {
-		npcDisposition = disp;
-	}
-	
-	public int GetDisposition() {
-		return npcDisposition;	
-	}
-	
-	// Changes the disposition to be within the disposition bounds
-	public void UpdateDisposition(int deltaDisp) {
-		Debug.Log("Updating disposition to " + deltaDisp);
-		int disp = npcDisposition + deltaDisp;
-		
-		if (disp < DISPOSITION_LOW_END){
-			disp = DISPOSITION_LOW_END;
-		}
-		else if (disp > DISPOSITION_HIGH_END) {
-			disp = DISPOSITION_HIGH_END;
-		}
-		
-		NPCDispositionManager.instance.UpdateWithId(id, disp);
-	}
-	#endregion
-	
-	public virtual void SendStringToNPC(string text){
-		
-	}
+	public virtual void SendStringToNPC(string text){}
 }
