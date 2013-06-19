@@ -22,6 +22,9 @@ public class CheatListener : MonoBehaviour {
     }
     
     void Update() {
+        if (Input.GetKeyDown(KeyCode.E)) {
+			EndGame();
+		}
         /*Fly();
         MoveFast();
         ToggleSound();
@@ -102,4 +105,8 @@ public class CheatListener : MonoBehaviour {
             }
         }
     }
+	
+	void EndGame(){
+		Game.GoToEndScene();
+	}
 }
