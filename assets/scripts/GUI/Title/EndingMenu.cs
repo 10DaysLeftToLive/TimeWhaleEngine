@@ -31,6 +31,11 @@ public class EndingMenu : MonoBehaviour {
 	}
 	
 	void Update () {
+        if (Input.GetKeyDown(KeyCode.Y)) {
+			ChooseYes();
+		} else if (Input.GetKeyDown(KeyCode.N)){
+			ChooseNo();
+		}
 		if(timerStarted) TickFadeTimer();
 
 		if(sceneTimer > holdTimeInSeconds){
