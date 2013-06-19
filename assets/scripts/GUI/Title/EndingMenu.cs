@@ -3,65 +3,40 @@ using System.Collections;
 using SmoothMoves;
 
 public class EndingMenu : MonoBehaviour {
-	
 	public DeathBedObject[] deathBedObjects;
-	
 	public GameObject malePC;
 	public GameObject femalePC;
-		
 	public UIPanel[] autoPlayPanels;
-	private int autoPlayPanelsIndex = 0;
-	
 	public UIPanel deathBedPanelWithObjects;
-	
-	
 	public FadeToBlackTransition fadeToBlackSprite;
-	
-	private bool timerStarted = false;
-	private float sceneTimer = 0.0f;
 	public float holdTimeInSeconds = 2.0f;
-	
+	public float MAXSPEEDMULTIPLIER = 10;
 	public bool fadedOpeningScene = false;
 	
-	// Use this for initialization
+	private int autoPlayPanelsIndex = 0;
+	private bool timerStarted = false;
+	private float sceneTimer = 0.0f;
+	
 	void Start () {
-
+		EventManager.instance.mOnClickHoldEvent += new EventManager.mOnClickHoldDelegate (OnHoldClick);
+		EventManager.instance.mOnClickHoldReleaseEvent += new EventManager.mOnClickHoldReleaseDelegate(OnHoldRelease);
 	}
 	
-	// Update is called once per frame
+	private void OnHoldClick(EventManager EM, ClickPositionArgs e){
+		Time.timeScale = MAXSPEEDMULTIPLIER;
+	}
+	
+	private void OnHoldRelease(EventManager EM){
+		Time.timeScale = 1;
+	}
+	
 	void Update () {
-		
 		if(timerStarted) TickFadeTimer();
 
 		if(sceneTimer > holdTimeInSeconds){
 			if(autoPlayPanelsIndex <= autoPlayPanels.Length){
 				if(autoPlayPanels[autoPlayPanelsIndex].gameObject == deathBedPanelWithObjects.gameObject){
-					ArrayList toDisable = new ArrayList();
-					ArrayList toEnable = new ArrayList();
-					
-					toDisable.Add(autoPlayPanels[autoPlayPanelsIndex - 1].gameObject);
-					toEnable.Add(autoPlayPanels[autoPlayPanelsIndex].gameObject);
-					
-					//disable all the deathbedobjects that dont have the right flags
-					foreach(DeathBedObject dbo in deathBedObjects){
-						if(!CheckFlagsForEnable(dbo.flagsEnabledRequirements)){
-							toDisable.Add(dbo.gameObject);	
-						}else{
-							Debug.Log("Leaving Enabled: " + dbo.gameObject.name);	
-						}
-							
-					}
-					
-					float gender = PlayerPrefs.GetFloat(Strings.Gender);
-					if (gender == (float)CharacterGender.MALE){
-						toEnable.Add(femalePC);
-						toDisable.Add(malePC);
-					} else {
-						toEnable.Add(malePC);
-						toDisable.Add(femalePC);
-					}
-					
-					fadeToBlackSprite.StartFadeToBlack(toDisable,toEnable);
+					SetDeathbedObjects();
 				}else{
 					fadeToBlackSprite.StartFadeToBlack(
 						autoPlayPanels[autoPlayPanelsIndex - 1].gameObject,
@@ -75,15 +50,35 @@ public class EndingMenu : MonoBehaviour {
 		}
 	}
 	
+	private void SetDeathbedObjects(){
+		ArrayList toDisable = new ArrayList();
+		ArrayList toEnable = new ArrayList();
+		
+		toDisable.Add(autoPlayPanels[autoPlayPanelsIndex - 1].gameObject);
+		toEnable.Add(autoPlayPanels[autoPlayPanelsIndex].gameObject);
+		
+		//disable all the deathbedobjects that dont have the right flags
+		foreach(DeathBedObject dbo in deathBedObjects){
+			if(!CheckFlagsForEnable(dbo.flagsEnabledRequirements)){
+				toDisable.Add(dbo.gameObject);	
+			}
+		}
+		
+		float gender = PlayerPrefs.GetFloat(Strings.Gender);
+		if (gender == (float)CharacterGender.MALE){
+			toEnable.Add(femalePC);
+			toDisable.Add(malePC);
+		} else {
+			toEnable.Add(malePC);
+			toDisable.Add(femalePC);
+		}
+		
+		fadeToBlackSprite.StartFadeToBlack(toDisable,toEnable);
+	}
+	
 	/// <summary>
 	/// If all flags are set, return true
 	/// </summary>
-	/// <returns>
-	/// The flags for enable.
-	/// </returns>
-	/// <param name='flags'>
-	/// If set to <c>true</c> flags.
-	/// </param>
 	bool CheckFlagsForEnable(string[] flags){
 		if(flags.Length <= 0) return false;
 

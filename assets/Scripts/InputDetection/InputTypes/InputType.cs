@@ -61,8 +61,7 @@ public abstract class InputType  {
 	
 	// called when a click/tap occurs
 	protected void SingleClickEvent(Vector2 inputScreenPos){
-		if (Application.loadedLevel.Equals("TitleScreen")) return;
-		if (!GUIManager.Instance.ClickOnGUI(inputScreenPos)){
+		if (IsMenu() || !GUIManager.Instance.ClickOnGUI(inputScreenPos)){
 			DelegateClickForObjects(inputScreenPos);
 		}
 	}
@@ -73,7 +72,7 @@ public abstract class InputType  {
 	}	
 	
 	protected void OnHoldClick(Vector2 inputScreenPos){
-		if (!GUIManager.Instance.ClickOnGUI(inputScreenPos)){
+		if (IsMenu() || !GUIManager.Instance.ClickOnGUI(inputScreenPos)){
 			EventManager.instance.RiseOnClickHoldEvent(new ClickPositionArgs(inputScreenPos));
 		}
 	}
@@ -113,5 +112,9 @@ public abstract class InputType  {
 		} else {
 			return (false);
 		}
+	}
+	
+	private bool IsMenu(){
+		return (Application.loadedLevelName.Equals(Strings.TitleMenu) || Application.loadedLevelName.Equals(Strings.EndScreen));
 	}
 }

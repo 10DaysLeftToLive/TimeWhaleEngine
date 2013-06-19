@@ -43,6 +43,7 @@ public class FlagManager : MonoBehaviour {
 	}
 	
 	public bool FlagIsSet(string flagName){
+		if (_flags == null) return (false);
 		foreach (Flag flag in _flags){
 			if (flag.Equals(flagName)){
 				return (flag._isSetOff);
