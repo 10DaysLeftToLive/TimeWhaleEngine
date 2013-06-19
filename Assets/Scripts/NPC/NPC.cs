@@ -197,7 +197,7 @@ public abstract class NPC : Character {
 	#endregion
 	
 	#region Functions specific to each NPC
-	protected abstract void SetFlagReactions();
+	protected virtual void SetFlagReactions(){}
 	protected abstract Schedule GetSchedule(); // TODO read/set this from file?
 	protected abstract EmotionState GetInitEmotionState();
 	#endregion

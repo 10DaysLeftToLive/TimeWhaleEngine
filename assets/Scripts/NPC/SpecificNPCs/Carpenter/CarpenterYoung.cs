@@ -35,13 +35,13 @@ public class CarpenterYoung : NPC
         flagReactions.Add(FlagStrings.ToolboxFoundButNotGiven, toolboxGotten);*/
 
         toolboxGivenToSonDone = new Reaction();
-        toolboxGivenToSonDone.AddAction(new NPCEmotionUpdateAction(this, new ToolboxGivenToSonEmotionState(this, "Thanks for finding my son his toolbox, again.")));
+        toolboxGivenToSonDone.AddAction(new NPCEmotionUpdateAction(this, new ToolboxGivenToSonEmotionState(this, "Thanks for finding my son his toolbox... again.")));
         flagReactions.Add(FlagStrings.carpenterSonYoungGottenTools, toolboxGivenToSonDone);
 	}
 
 	protected override EmotionState GetInitEmotionState()
 	{
-		return (new InitialEmotionState(this, "Sorry, my son can't play with you today. He'll be working with me today, practicing his carpentry."));
+		return (new InitialEmotionState(this, "Sorry, my son can't play with you today. He'll be working with me today. Practicing his carpentry."));
 	}
 
 	protected override Schedule GetSchedule()
@@ -88,7 +88,6 @@ public class CarpenterYoung : NPC
             //if (player.Inventory.GetItem().name == "Toolbox")
             if (player.Inventory.GetItem().name.Equals("Toolbox"))
             {
-                Debug.Log("Player is holding " + player.Inventory.GetItem().name);
                 FlagManager.instance.SetFlag(FlagStrings.ToolboxFoundButNotGiven);
             }
         }
@@ -183,7 +182,7 @@ public class CarpenterYoung : NPC
             SetOnOpenInteractionReaction(new DispositionDependentReaction(randomMessage));
 
             stringList[0] = "How many times has he relied on you already?";
-            stringList[1] = "Sorry you had to go out of your way to help my son, again.";
+            stringList[1] = "Sorry you had to go out of your way to help my son... again.";
             stringList[2] = "I hope my son isn't relying on you to find his tools all the time.";
             stringCounter = 3;
 		}

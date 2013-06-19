@@ -12,12 +12,8 @@ public class BazzarmanYoung : NPC {
 		base.Init();
 	}
 	
-	protected override void SetFlagReactions(){
-		
-	}
-	
 	protected override EmotionState GetInitEmotionState(){
-		state  = new InitialEmotionState(this, "Eric is adding stuff here!");
+		state  = new InitialEmotionState(this, "Hello there!");
 		state.PassStringToEmotionState("We have the best deals in town!");
 		state.PassStringToEmotionState("Come one, come all to the best prices!");
 		state.PassStringToEmotionState("We take anything!");
@@ -30,19 +26,13 @@ public class BazzarmanYoung : NPC {
 		return (schedule);
 	}
 
-	protected override void SetUpSchedules(){
-		
-	}
-	
-	public override void StarTalkingWithPlayer(){
-		
+	public override void StarTalkingWithPlayer(){		
 		currentEmotion.OnInteractionOpens();
 		chatingWithPlayer = true;
 		PassiveChatToPlayer.instance.RemoveNPCChat(this);
 		scheduleStack.Pause();
 		EnterState(new InteractingWithPlayerState(this, Strings.bazaarmanBow));
 	}
-	
 	
 	#region EmotionStates
 	#region Initial Emotion State
@@ -100,13 +90,13 @@ public class BazzarmanYoung : NPC {
 			_allItemReactions.Add(StringsItem.Rose,  new DispositionDependentReaction(gaveRose));
 			
 			gaveCaptainsLog.AddAction(new NPCTakeItemAction(toControl));
-			gaveCaptainsLog.AddAction(new NPCCallbackSetStringAction(AddTextToList, toControl, "The sea capatin has had quite an adventure"));
+			gaveCaptainsLog.AddAction(new NPCCallbackSetStringAction(AddTextToList, toControl, "The Sea Capatin has had quite an adventure."));
 			gaveCaptainsLog.AddAction(new NPCGiveItemAction(toControl,GiveItem)); // gives random item
 			gaveCaptainsLog.AddAction(new UpdateCurrentTextAction(toControl, "A pleasure doing business with you my friend!"));
 			_allItemReactions.Add(StringsItem.CaptainLog,  new DispositionDependentReaction(gaveCaptainsLog));
 			
 			gaveToySword.AddAction(new NPCTakeItemAction(toControl));
-			gaveToySword.AddAction(new NPCCallbackSetStringAction(AddTextToList, toControl, "That toy sword has brought back some fond memories"));
+			gaveToySword.AddAction(new NPCCallbackSetStringAction(AddTextToList, toControl, "That toy sword brings back some fond memories."));
 			gaveToySword.AddAction(new NPCGiveItemAction(toControl,GiveItem)); // gives random item
 			gaveToySword.AddAction(new UpdateCurrentTextAction(toControl, "A pleasure doing business with you my friend!"));
 			_allItemReactions.Add(StringsItem.ToySword,  new DispositionDependentReaction(gaveToySword));
@@ -124,7 +114,7 @@ public class BazzarmanYoung : NPC {
 			_allItemReactions.Add(StringsItem.Rope,  new DispositionDependentReaction(gaveRope));
 			
 			gaveVegetable.AddAction(new NPCTakeItemAction(toControl));
-			gaveVegetable.AddAction(new NPCCallbackSetStringAction(AddTextToList, toControl, "Those families over on the other side of the island really made good use of these vegetales"));
+			gaveVegetable.AddAction(new NPCCallbackSetStringAction(AddTextToList, toControl, "Those families over on the other side of the island really made good use of these vegetables."));
 			gaveVegetable.AddAction(new NPCGiveItemAction(toControl,GiveItem)); // gives random item
 			gaveVegetable.AddAction(new UpdateCurrentTextAction(toControl, "A pleasure doing business with you my friend!"));
 			_allItemReactions.Add(StringsItem.Vegetable,  new DispositionDependentReaction(gaveVegetable));
@@ -132,14 +122,14 @@ public class BazzarmanYoung : NPC {
 			
 			gavePendant.AddAction(new NPCTakeItemAction(toControl));
 			//gavePendant.AddAction(new NPCCallbackAction(SetPendant)); 
-			gavePendant.AddAction(new NPCGiveItemAction(toControl,StringsItem.Pendant)); // CHANGE APPLE TO TULIP SEEDS
-			gavePendant.AddAction(new UpdateCurrentTextAction(toControl, "Your mother wants some seeds to plant flowers? Well I have just the thing! Tulip's! They are sure to liven her day up!"));
+			gavePendant.AddAction(new NPCGiveItemAction(toControl,StringsItem.Pendant));
+			gavePendant.AddAction(new UpdateCurrentTextAction(toControl, "Your mother wants some seeds to plant flowers? Well I have just the thing! Tulips! They are sure to liven her day up!"));
 			_allItemReactions.Add(StringsItem.Pendant,  new DispositionDependentReaction(gavePendant));
 			
 			gaveSunflowerSeed.AddAction(new NPCTakeItemAction(toControl));
 			//gaveSunflowerSeed.AddAction(new NPCCallbackAction(SetPendant)); 
-			gaveSunflowerSeed.AddAction(new NPCGiveItemAction(toControl,StringsItem.SunflowerSeeds)); // CHANGE APPLE TO TULIP SEEDS
-			gaveSunflowerSeed.AddAction(new UpdateCurrentTextAction(toControl, "You don't like sunflower's? Well i have an idea! Have some tulip seeds, much better on the eyes in my opinion!"));
+			gaveSunflowerSeed.AddAction(new NPCGiveItemAction(toControl,StringsItem.SunflowerSeeds));
+			gaveSunflowerSeed.AddAction(new UpdateCurrentTextAction(toControl, "You don't like sunflowers? Well, I have an idea! Have some tulip seeds, much better on the eyes in my opinion!"));
 			_allItemReactions.Add(StringsItem.SunflowerSeeds,  new DispositionDependentReaction(gaveSunflowerSeed));
 			
 			randomMessage.AddAction(new NPCCallbackAction(RandomMessage));
@@ -148,8 +138,7 @@ public class BazzarmanYoung : NPC {
 		}
 		
 		public string GiveItem(){
-			Debug.Log("Bazaarman trying to give the item: " + inventory.Peek());
-				return inventory.Dequeue();
+			return inventory.Dequeue();
 		}
 		
 		public void AddTextToList(NPC npc, string text){
@@ -189,20 +178,23 @@ public class BazzarmanYoung : NPC {
 		}
 		
 		public void RandomMessage(){
-			SetDefaultText(stringList[(int)Random.Range(0,stringCounter)]);
+			if (_npcInState.player.Inventory.HasItem()){
+				string itemName = _npcInState.player.Inventory.GetItem().name;
+				if (_npcInState.CanTakeItem(itemName)){
+					SetDefaultText("Oh that is a nice " + itemName.ToLower() + ". Would you care to trade?");
+				} else {
+					SetDefaultText("Nice " + itemName.ToLower() + ". I already have several though.");
+				}
+			} else {
+				SetDefaultText(stringList[(int)Random.Range(0,stringCounter)]);
+			}
 			if (currentInventory == 0) SetupInventory();
-		}
-		
-		public override void UpdateEmotionState(){
 		}
 		
 		public override void PassStringToEmotionState(string text){
 			stringList[stringCounter] = text;
 			stringCounter++;
 		}
-		
-		
-	
 	}
 	#endregion
 	#endregion

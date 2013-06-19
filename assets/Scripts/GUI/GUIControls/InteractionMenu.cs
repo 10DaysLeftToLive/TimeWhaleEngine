@@ -88,28 +88,33 @@ public class InteractionMenu : GUIControl {
 	#region Display Functions
 	private int currentButtonIndex;
 	private void DisplayButtonChoices(){
-		currentButtonIndex = 0;
-		
-		foreach (string text in buttonTexts){
-			if (currentButtonIndex == 3){
-				Debug.LogError("Trying to display more than 3 choices");
-				return;
-			}
-			try {
-				if (ButtonClick(buttonRects[currentButtonIndex], text, buttonStyle)){
-					DoClickOnChoice(text);
+		try {
+			currentButtonIndex = 0;
+			
+			foreach (string text in buttonTexts){
+				if (currentButtonIndex == 3){
+					Debug.LogError("Trying to display more than 3 choices");
+					return;
 				}
-			} catch (Exception e){
-				Debug.LogWarning("Button choices were not altered correctly for " + npcChattingWith.name + " updating them");
-				GetChoicesFromNPC();
-				return;
+				try {
+					if (ButtonClick(buttonRects[currentButtonIndex], text, buttonStyle)){
+						DoClickOnChoice(text);
+					}
+				} catch (Exception e){
+					Debug.LogWarning("Button choices were not altered correctly for " + npcChattingWith.name + " updating them");
+					GetChoicesFromNPC();
+					return;
+				}
+				currentButtonIndex++;
 			}
-			currentButtonIndex++;
-		}
-		if (player.Inventory.HasItem() && npcChattingWith.CanTakeItem(player.Inventory.GetItem().name)){
-			if (ButtonClick(buttonRects[currentButtonIndex], "Give " + player.Inventory.GetItem().name, buttonStyle)){
-				DoGiveClick();
+			if (player.Inventory.HasItem() && npcChattingWith.CanTakeItem(player.Inventory.GetItem().name)){
+				if (ButtonClick(buttonRects[currentButtonIndex], "Give " + player.Inventory.GetItem().name, buttonStyle)){
+					DoGiveClick();
+				}
 			}
+		} catch {
+			Debug.LogWarning("Choices were changed mid-interaction. Refreshing them");
+			GetChoicesFromNPC();
 		}
 	}
 	
