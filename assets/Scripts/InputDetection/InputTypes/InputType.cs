@@ -61,6 +61,7 @@ public abstract class InputType  {
 	
 	// called when a click/tap occurs
 	protected void SingleClickEvent(Vector2 inputScreenPos){
+		if (Application.loadedLevel.Equals("TitleScreen")) return;
 		if (!GUIManager.Instance.ClickOnGUI(inputScreenPos)){
 			DelegateClickForObjects(inputScreenPos);
 		}
@@ -97,7 +98,7 @@ public abstract class InputType  {
 		
 		RaycastHit hit;
 		
-		if (Physics.Raycast(ray, out hit, 15) && !hit.transform.CompareTag("Untagged")) {
+		if (Physics.Raycast(ray, out hit, 25) && !hit.transform.CompareTag("Untagged")) {
 			NotifyObjectClickedOn(hit.transform.gameObject);
 		} else {
 			NotifyNoObjectClickedOn(inputScreenPos);

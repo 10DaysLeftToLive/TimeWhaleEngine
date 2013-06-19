@@ -75,6 +75,10 @@ public abstract class TransitionEffect : PauseObject {
 		}
 	}
 	
+	/*public void OnDestroy(){
+		//EventManager.instance.mOnPauseToggleEvent -= TogglePauseEvent;
+	}*/
+	
 	protected virtual void DoSwitchAction(){}
 	protected virtual bool CanShift(){return (true);}
 }
