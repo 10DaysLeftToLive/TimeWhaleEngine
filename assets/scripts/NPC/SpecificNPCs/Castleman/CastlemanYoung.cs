@@ -500,7 +500,7 @@ public class CastlemanYoung : NPC {
 			AreYouNewReaction.AddAction(new UpdateCurrentTextAction(toControl, "......"));
 			_allChoiceReactions.Add(AreYouNewChoice, new DispositionDependentReaction(AreYouNewReaction));
 			
-			FineHaveItYourWayChoice = new Choice("Fine!  Have it your way!", "..................");
+			FineHaveItYourWayChoice = new Choice("Fine! Have it your way!", "..................");
 			FineHaveItYourWayReaction = new Reaction();
 			FineHaveItYourWayReaction.AddAction(new NPCCallbackAction(UpdateFineHaveItYourWay));
 			FineHaveItYourWayReaction.AddAction(new UpdateCurrentTextAction(toControl, "................."));
@@ -690,10 +690,10 @@ public class CastlemanYoung : NPC {
 			PoetryIsSillyReaction.AddAction(new NPCCallbackAction(UpdatePoetryIsSilly));
 			PoetryIsSillyReaction.AddAction(new UpdateCurrentTextAction(toControl, "You're mean! Just like the people back home!"));
 			
-			ThatSoundsCoolChoice = new Choice("That sounds cool!", "It is!  My dad used to read it to me before... Never mind..I think I hear my mom calling me.");
+			ThatSoundsCoolChoice = new Choice("That sounds cool!", "It is! My dad used to read it to me before... Never mind..I think I hear my mom calling me.");
 			ThatSoundsCoolReaction = new Reaction();
 			ThatSoundsCoolReaction.AddAction(new NPCCallbackAction(UpdateThatSoundsCool));
-			ThatSoundsCoolReaction.AddAction(new UpdateCurrentTextAction(toControl, "It is!  My dad used to read it to me before... Never mind..I think I hear my mom calling me."));
+			ThatSoundsCoolReaction.AddAction(new UpdateCurrentTextAction(toControl, "It is! My dad used to read it to me before... Never mind..I think I hear my mom calling me."));
 			
 			ILikePoetryChoice = new Choice("I like poetry!", "Yeah Poetry is awesome! Maybe this new village isn't that bad...");
 			ILikePoetryReaction = new Reaction();
@@ -888,10 +888,10 @@ public class CastlemanYoung : NPC {
 			ImSureHeDoesntHateYouReaction.AddAction(new UpdateCurrentTextAction(toControl, "I...I dunno..."));
 			_allChoiceReactions.Add(ImSureHeDoesntHateYouChoice, new DispositionDependentReaction(ImSureHeDoesntHateYouReaction));
 			
-			HeTotallyHatesYouChoice = new Choice("He totally hates you!", "I'm not surprised!  Everyone I meet hates me...");
+			HeTotallyHatesYouChoice = new Choice("He totally hates you!", "I'm not surprised! Everyone I meet hates me...");
 			HeTotallyHatesYouReaction = new Reaction();
 			HeTotallyHatesYouReaction.AddAction(new NPCCallbackAction(UpdateHeTotallyHatesYou));
-			HeTotallyHatesYouReaction.AddAction(new ShowOneOffChatAction(toControl, "I'm not surprised!  Everyone I meet hates me..."));
+			HeTotallyHatesYouReaction.AddAction(new ShowOneOffChatAction(toControl, "I'm not surprised! Everyone I meet hates me..."));
 			_allChoiceReactions.Add(HeTotallyHatesYouChoice, new DispositionDependentReaction(HeTotallyHatesYouReaction));
 			
 			DontBeSoScaredChoice = new Choice("Don't be so scared.", "But I don't know what to say!");
@@ -1002,11 +1002,6 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 			FlagManager.instance.SetFlag(FlagStrings.FinishedCSONConversation);
 			SetDefaultText("Let's go.");
 		}
-		
-		public override void UpdateEmotionState(){
-			
-		}
-	
 	}
 	private class TalkWithCarpenterSonAsFriendRoundTwo : EmotionState{
 		Choice WhatIfYouWereYourselfChoice;
@@ -1038,10 +1033,10 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 			YeahHeProbablyHatesYouReaction.AddAction(new ShowOneOffChatAction(toControl, "Let's go, I'm tired of being here."));
 			_allChoiceReactions.Add(YeahHeProbablyHatesYouChoice, new DispositionDependentReaction(YeahHeProbablyHatesYouReaction));
 			
-			IDontHateYouChoice =  new Choice("I don't hate you.", "Yeah?  But he might...");
+			IDontHateYouChoice =  new Choice("I don't hate you.", "Yeah? But he might...");
 			IDontHateYouReaction =  new Reaction();
 			IDontHateYouReaction.AddAction(new NPCCallbackAction(UpdateIDontHateYou));
-			IDontHateYouReaction.AddAction(new UpdateCurrentTextAction(toControl, "Yeah?  But he might..."));
+			IDontHateYouReaction.AddAction(new UpdateCurrentTextAction(toControl, "Yeah? But he might..."));
 			
 			MaybeYouJustNeedToTryChoice =  new Choice("Maybe you just need to try.", "I dunno about this...");
 			MaybeYouJustNeedToTryReaction =  new Reaction();
@@ -1053,20 +1048,20 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 			JustBeYourselfReaction.AddAction(new NPCCallbackAction(UpdateJustBeYourself));
 			JustBeYourselfReaction.AddAction(new ShowOneOffChatAction(toControl, "All right I'll try..."));
 			
-			OnSecondThoughtHeHatesYouChoice = new Choice("On second thought he hates you.", "I knew it!  Let's get out of here...");
+			OnSecondThoughtHeHatesYouChoice = new Choice("On second thought he hates you.", "I knew it! Let's get out of here...");
 			OnSecondThoughtHeHatesYouReaction = new Reaction();
 			OnSecondThoughtHeHatesYouReaction.AddAction(new NPCCallbackAction(UpdateOnSecondThoughtHeHatesYou));
-			OnSecondThoughtHeHatesYouReaction.AddAction(new ShowOneOffChatAction(toControl, "I knew it!  Let's get out of here..."));
+			OnSecondThoughtHeHatesYouReaction.AddAction(new ShowOneOffChatAction(toControl, "I knew it! Let's get out of here..."));
 			
 			IfImYourFriendThenHeCanBeTooChoice = new Choice("If I'm your friend, then he can be too.", "I guess so...\n I should at least make an effort.");
 			IfImYourFriendThenHeCanBeTooReaction = new Reaction();
 			IfImYourFriendThenHeCanBeTooReaction.AddAction(new NPCCallbackAction(UpdateIfImYourFriendThenHeCanBeToo));
 			IfImYourFriendThenHeCanBeTooReaction.AddAction(new ShowOneOffChatAction(toControl, "I guess so...\nI should at least make an effort."));
 			
-			FineLiveInFearChoice =  new Choice ("Fine live in fear!", "I will!  Let's get outta here!");
+			FineLiveInFearChoice =  new Choice ("Fine live in fear!", "I will! Let's get outta here!");
 			FineLiveInFearReaction = new Reaction();
 			FineLiveInFearReaction.AddAction(new NPCCallbackAction(UpdateFineLiveInFear));
-			FineLiveInFearReaction.AddAction(new ShowOneOffChatAction(toControl, "I will!  Let's get outta here!"));
+			FineLiveInFearReaction.AddAction(new ShowOneOffChatAction(toControl, "I will! Let's get outta here!"));
 		}
 		public void UpdateWhatIfYouWereYourself(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
@@ -1186,15 +1181,15 @@ _npcInState.ChangeFacialExpression(StringsNPC.Sad);
 			WhyWouldIWantToTrickYouReaction.AddAction(new NPCCallbackAction(UpdateWhyWouldIWantToTrickYou));
 			WhyWouldIWantToTrickYouReaction.AddAction(new UpdateCurrentTextAction(toControl, "That's what someone trying to trick me would say!"));
 			
-			JustTalkAboutFishChoice = new Choice("Just talk to him about fishing!", "I'm not stupid!  I'm not going to fall for your trap!");
+			JustTalkAboutFishChoice = new Choice("Just talk to him about fishing!", "I'm not stupid! I'm not going to fall for your trap!");
 			JustTalkAboutFishReaction = new Reaction ();
 			JustTalkAboutFishReaction.AddAction(new NPCCallbackAction(UpdateJustTalkAboutFish));
-			JustTalkAboutFishReaction.AddAction(new UpdateCurrentTextAction(toControl, "I'm not stupid!  I'm not going to fall for your trap!"));
+			JustTalkAboutFishReaction.AddAction(new UpdateCurrentTextAction(toControl, "I'm not stupid! I'm not going to fall for your trap!"));
 			
-			JustTalkToHimChoice =  new Choice ("Just talk to him!", "Fine!  But if this is a joke at my expense...");
+			JustTalkToHimChoice =  new Choice ("Just talk to him!", "Fine! But if this is a joke at my expense...");
 			JustTalkToHimReaction = new Reaction ();
 			JustTalkToHimReaction.AddAction(new NPCCallbackAction(UpdateJustTalkToHim));
-			JustTalkToHimReaction.AddAction(new ShowOneOffChatAction(toControl, "Fine!  But if this is a joke at my expense..."));
+			JustTalkToHimReaction.AddAction(new ShowOneOffChatAction(toControl, "Fine! But if this is a joke at my expense..."));
 			
 			JustTrustMeChoice = new Choice("Just trust me!", "Hmph fine!");
 			JustTrustMeReaction = new Reaction ();
@@ -1468,12 +1463,12 @@ _npcInState.ChangeFacialExpression(StringsNPC.Angry);
 		Reaction JustActNaturallyReaction;
 		Choice GiveUpChoice;
 		Reaction GiveUpReaction;
-		public WaitingAtBeachFriend(NPC toControl, string currentDialogue) : base(toControl, "I don't know what to do around the farmer's daughter.  She makes me nervous!"){
+		public WaitingAtBeachFriend(NPC toControl, string currentDialogue) : base(toControl, "I don't know what to do around the farmer's daughter. She makes me nervous!"){
 			//toControl.SetCharacterPortrait(StringsNPC.Embarrassed);
-			YouDontNeedToKnowChoice = new Choice("You don't need to know.", "But its scary to talk with her.  What if I mess up?");
+			YouDontNeedToKnowChoice = new Choice("You don't need to know.", "But its scary to talk with her. What if I mess up?");
 			YouDontNeedToKnowReaction = new Reaction();
 			YouDontNeedToKnowReaction.AddAction(new NPCCallbackAction(UpdateYouDontNeedToKnow));
-			YouDontNeedToKnowReaction.AddAction(new UpdateCurrentTextAction(toControl, "But its scary to talk with her.  What if I mess up?"));
+			YouDontNeedToKnowReaction.AddAction(new UpdateCurrentTextAction(toControl, "But its scary to talk with her. What if I mess up?"));
 			_allChoiceReactions.Add(YouDontNeedToKnowChoice, new DispositionDependentReaction(YouDontNeedToKnowReaction));
 			
 			DoYouWantToBeFriendsChoice = new Choice("Do you want to be friends?", "Yeah...I want to be friends with her...");
@@ -1665,10 +1660,10 @@ _npcInState.ChangeFacialExpression(StringsNPC.Sad);
 			DoYouWantToBeFriendsReaction.AddAction(new NPCCallbackAction(UpdateDoYouWantToBeFriends));
 			DoYouWantToBeFriendsReaction.AddAction(new UpdateCurrentTextAction(toControl, "Yeah...I want to be friends with her..."));
 			
-			ThenStopWorryingChoice = new Choice("Then stop worrying.", "But...but...All right...I'll try to remain calm.");
+			ThenStopWorryingChoice = new Choice("Then stop worrying.", "But...but...all right...I'll try to remain calm.");
 			ThenStopWorryingReaction = new Reaction();
 			ThenStopWorryingReaction.AddAction(new NPCCallbackAction(UpdateThenStopWorrying));
-			ThenStopWorryingReaction.AddAction(new ShowOneOffChatAction(toControl, "But...but...All right...I'll try to remain calm."));
+			ThenStopWorryingReaction.AddAction(new ShowOneOffChatAction(toControl, "But...but...all right...I'll try to remain calm."));
 			
 			ToughLuckChoice = new Choice("Tough luck.", "*sigh* I've got no chance here do I...");
 			ToughLuckReaction = new Reaction();
@@ -1752,7 +1747,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Blink);
 			_allChoiceReactions.Remove(ThenStopWorryingChoice);
 			_allChoiceReactions.Remove(ToughLuckChoice);
 			GUIManager.Instance.CloseInteractionMenu();
-			SetDefaultText("Stop worrying.  Stop worrying. Stop worrying.\nSorry I'm trying to get in a groove.");
+			SetDefaultText("Stop worrying. Stop worrying. Stop worrying. Sorry I'm trying to get in a groove.");
 			//Set flag here too!
 			FlagManager.instance.SetFlag(FlagStrings.BeachPreparedForConvo);
 		}
@@ -1802,7 +1797,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Blink);
 			_allChoiceReactions.Remove(JustActNaturallyChoice);
 			_allChoiceReactions.Remove(GiveUpChoice);
 			GUIManager.Instance.CloseInteractionMenu();
-			SetDefaultText("Act naturally. Act naturally. Act naturally.\nSorry trying to get in my groove.");
+			SetDefaultText("Act naturally. Act naturally. Act naturally. Sorry trying to get in my groove.");
 			//Set flag here!
 			FlagManager.instance.SetFlag(FlagStrings.BeachPreparedForConvo);
 		}
@@ -1820,7 +1815,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Sad);
 	//After the talk if things went poorly this is the end state for the castleman
 	private class AfterWaitingAtBeachBadResult : EmotionState{
 				
-		public AfterWaitingAtBeachBadResult(NPC toControl, string currentDialogue) : base(toControl, "I failed at talking to the farmer's daughter!\nI don't know what to do now."){
+		public AfterWaitingAtBeachBadResult(NPC toControl, string currentDialogue) : base(toControl, "I failed at talking to the farmer's daughter! I don't know what to do now."){
 					
 		}
 	}
