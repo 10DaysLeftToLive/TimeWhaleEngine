@@ -41,7 +41,7 @@ public class CarpenterSonMiddle : NPC {
 		Reaction independentStormOffReaction = new Reaction();
 		independentStormOffReaction.AddAction(new NPCAddScheduleAction(this, moveToWindmill));
 		independentStormOffReaction.AddAction(new NPCEmotionUpdateAction(this, new StormOffToWindmill(this, 
-			"I knew I was going to screw up somewhere. I left my specialized tools someplace")));
+			"I knew I was going to screw up somewhere. I left my specialized tools someplace.")));
 		flagReactions.Add (FlagStrings.carpenterSonTalkWithFatherMorning, independentStormOffReaction);
 		#endregion 
 		#region FishSection
@@ -141,7 +141,7 @@ public class CarpenterSonMiddle : NPC {
 	
 	protected override EmotionState GetInitEmotionState() {
 		carpenterState = new BecomeACarpenter(this, "");
-		return (new BlankEmotionState(this, "One Second, I am talking to someone"));
+		return (new BlankEmotionState(this, "One second, I am talking to someone"));
 	}
 	
 	protected override Schedule GetSchedule(){
@@ -367,7 +367,7 @@ public class CarpenterSonMiddle : NPC {
 	private class StormOffToWindmill : EmotionState {
 		
 		#region Independent
-		Choice askAboutToolBox = new Choice("Want me to get your ToolBox?", "Thanks! could you please find them for me?");
+		Choice askAboutToolBox = new Choice("Want me to get your toolbox?", "Thanks! could you please find it for me?");
 		
 		Reaction searchForToolBox = new Reaction();
 		Reaction toolsFound = new Reaction();
@@ -379,8 +379,8 @@ public class CarpenterSonMiddle : NPC {
 			
 			toolsFound.AddAction(new NPCTakeItemAction(toControl));
 			toolsFound.AddAction(new NPCCallbackAction(removeChoices));
-			toolsFound.AddAction(new UpdateCurrentTextAction(toControl, "Awesome! Now I can finish my repairs on this.. Windmill"));
-			toolsFound.AddAction(new UpdateDefaultTextAction(toControl, "Thanks for getting the tools for me, now I can continue to work on this... Windmill."));
+			toolsFound.AddAction(new UpdateCurrentTextAction(toControl, "Awesome! Now I can finish my repairs on this windmill"));
+			toolsFound.AddAction(new UpdateDefaultTextAction(toControl, "Thanks for getting the tools for me, now I can continue to work on this windmill."));
 			//Makes it so you cannot click on Carpenter Middle
 			
 			_allChoiceReactions.Add(askAboutToolBox, new DispositionDependentReaction(searchForToolBox));
@@ -417,14 +417,14 @@ public class CarpenterSonMiddle : NPC {
 				
 			curiousAboutMoodReaction.AddAction(new NPCCallbackAction(selectCuriousMoodChoice));
 			
-			assistGettingWood.AddAction(new UpdateDefaultTextAction(toControl, "Would you like to help make me a present for my Dad?"));
-			assistGettingWood.AddAction(new UpdateCurrentTextAction(toControl, "Yeah Sure, I'll need some wood.  Can you get it from the beach"));
+			assistGettingWood.AddAction(new UpdateDefaultTextAction(toControl, "Would you like to help make me a present for my dad?"));
+			assistGettingWood.AddAction(new UpdateCurrentTextAction(toControl, "Yeah sure, I'll need some wood. Can you get it from the beach?"));
 			assistGettingWood.AddAction(new NPCCallbackAction(removeAllOtherReactions));
 			
 			helpAppreciated.AddAction(new NPCTakeItemAction(toControl));
 			helpAppreciated.AddAction(new NPCCallbackAction(removeAllOtherReactions));
 			helpAppreciated.AddAction(new UpdateCurrentTextAction(toControl, "Thanks!"));
-			helpAppreciated.AddAction(new UpdateDefaultTextAction(toControl, "Come back later and I should have the Harp done!"));
+			helpAppreciated.AddAction(new UpdateDefaultTextAction(toControl, "Come back later and I should have the harp done!"));
 			helpAppreciated.AddAction(new SetOffFlagAction(FlagStrings.carpenterSonWhittleMiddleAge));
 
 			_allChoiceReactions.Add (curiousAboutMood, new DispositionDependentReaction(curiousAboutMoodReaction));

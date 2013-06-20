@@ -34,7 +34,7 @@ public class CastlemanOld : NPC {
 	protected override void SetFlagReactions(){
 		Reaction castleMarriage = new Reaction();
 		castleMarriage.AddAction(new NPCCallbackSetStringAction(MoveForMarriage, this, "castle"));
-		castleMarriage.AddAction(new NPCEmotionUpdateAction(this, new MarriedEmotionState(this, "Today is a good day")));
+		castleMarriage.AddAction(new NPCEmotionUpdateAction(this, new MarriedEmotionState(this, "Today is a good day.")));
 		castleMarriage.AddAction(new NPCChangePortraitAction(this, StringsNPC.Happy));
 		flagReactions.Add(FlagStrings.CastleMarriage, castleMarriage);
 		
@@ -219,7 +219,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Happy);
 		Choice brightChoice = new Choice("Bright?", "She shone brighter than the grandest sword... \nIt burned a fire that I ignored...");
 		Reaction brightReaction = new Reaction();
 		
-		Choice ignoredChoice = new Choice("Ignored?", "I waited and waited on every dawn... \nI waited, and now she's gone...");
+		Choice ignoredChoice = new Choice("Ignored?", "I waited and waited on every dawn... I waited, and now she's gone...");
 		Reaction ignoredReaction = new Reaction();
 		
 		public SadEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue)
@@ -247,7 +247,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 		{
 			_allChoiceReactions.Remove(whatChanceDidYouMissChoice);
 			_allChoiceReactions.Add(whatCastleChoice, new DispositionDependentReaction(whatCastleReaction));
-			SetDefaultText("My Castle... My Castle...");
+			SetDefaultText("My castle... my castle...");
 			_npcInState.SetCharacterPortrait(StringsNPC.Sad);
 _npcInState.ChangeFacialExpression(StringsNPC.Sad);
 			GUIManager.Instance.RefreshInteraction();

@@ -16,7 +16,7 @@ public class CarpenterSonYoung : NPC {
 	public static Schedule whittleSchedule;
 	public static Schedule whittleDoneSchedule;
 	public bool madeFishingRod = false;
-	internal static string encourageString = "..and there. Done.";
+	internal static string encourageString = "...and there. Done.";
 	public string itemCarpenterMakes = "None";
 	Schedule BeginDayWithDad;
 	NPCConvoSchedule BeginDayChat;
@@ -48,12 +48,9 @@ public class CarpenterSonYoung : NPC {
 		flagReactions.Add(FlagStrings.InitialConversationWithCSONNOTFriend, ReactToMeetingCSON);
 		
 		Reaction CarpenterSonCompleteWhittle = new Reaction();
-		//flagReactions.Add(FlagStrings.carpenterSonYoungCompletedWhittling, 
-		
 	}
 	
 	public void UpdateReactToMeetingCSON(){
-		//Debug.Log("This should go away!");
 		this.RemoveScheduleWithFlag("CSONMEETCASTLEMAN");	
 	}
 	protected override EmotionState GetInitEmotionState(){
@@ -73,14 +70,12 @@ public class CarpenterSonYoung : NPC {
 		TalkWithCastleman.Add(setFlag);
 		TalkWithCastleman.AddFlagGroup("CSONMEETCASTLEMAN");
 		
-		
 		TalkWithCastlemanNotFriend = new Schedule (this, Schedule.priorityEnum.High);
 		TalkWithCastlemanNotFriend.Add(new TimeTask(300, new WaitTillPlayerCloseState(this, ref player)));
 		Task setFlagNOT = (new TimeTask(2f, new IdleState(this)));
 		setFlagNOT.AddFlagToSet(FlagStrings.InitialConversationWithCSONNOTFriend);
 		TalkWithCastlemanNotFriend.Add(setFlagNOT);
 		TalkWithCastleman.AddFlagGroup("CSONMEETCASTLEMAN");
-		
 		
 		Woodworking = new Schedule( this, Schedule.priorityEnum.Medium);
 		//Woodworking.Add (new TimeTask(300, new WaitState(this)));
@@ -100,10 +95,7 @@ public class CarpenterSonYoung : NPC {
 	
 	#region EmotionStates
 	#region Initial Emotion State
-	
 	private class InitialEmotionState : EmotionState{
-		
-		
 		Reaction giveFishingRodReaction = new Reaction();
 		string gaveFishingRodDialogue = "Oh man, thanks so much!";
 		
@@ -120,7 +112,7 @@ public class CarpenterSonYoung : NPC {
 		Choice makeSwordChoice = new Choice("Make Sword.", "That sounds cool, I'll get right on it!");
 		Reaction makeSwordReaction = new Reaction();
 		
-		Choice makeDollChoice = new Choice("Make Doll", "That's kind of lame, but it's something");
+		Choice makeDollChoice = new Choice("Make Doll.", "That's kind of lame, but it's something.");
 		Reaction makeDollReaction = new Reaction();
 		
 		Choice recieveItemChoice = new Choice("Are you done yet?", "Yep!");
@@ -141,35 +133,18 @@ public class CarpenterSonYoung : NPC {
 			giveToolsReaction.AddAction(new NPCCallbackAction(GiveToolsToCarpenterSon));
 			giveToolsReaction.AddAction(new NPCTakeItemAction(toControl));
 			giveToolsReaction.AddAction(new SetOffFlagAction(FlagStrings.carpenterSonYoungGottenTools));
-			//giveToolsReaction.AddAction(new ShowOneOffChatAction(NPCManager.instance.getNPC(StringsNPC.CarpenterYoung),
-			//	"Oh! You founds your tools? " +
-			//	"You should get started on something then. You'll need to practice if you want to be a Carpenter one day."));
 			recieveItemReaction.AddAction(new NPCEmotionUpdateAction(toControl, new CarpenterSonYoung.EncourageEmotionState(toControl, encourageString)));
 			
-			//EncourageCarpentryReaction.AddAction(SetDefaultText("I'll be sure to work more on my carpentry."));
-
 			_allItemReactions.Add(StringsItem.Toolbox,  new DispositionDependentReaction(giveToolsReaction));
-			//giveToolsReaction.AddAction
 			transferEmotionStateReaction.AddAction(new NPCEmotionUpdateAction(toControl, new CarpenterSonYoung.EncourageEmotionState(toControl, encourageString)));
-			
-
 		}
-		
-		
-		public override void UpdateEmotionState(){
-			
-		}
-		/*private void GaveToolbox() {
-			_allChoiceReactions.Remove(createToolboxChoice);
-			GUIManager.Instance.RefreshInteraction();
-		}*/
 		
 		private void GiveToolsToCarpenterSon(){
-			string completeRodText = "..and there. Done.";
-			string completeSwordText = "I could sharpen it but I think my Dad would get mad.";
+			string completeRodText = "...and there. Done.";
+			string completeSwordText = "I could sharpen it but I think my dad would get mad.";
 			string completeDollText = "Wow, I have no idea how that happened.";
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
-_npcInState.ChangeFacialExpression(StringsNPC.Happy);
+			_npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			NPC toControl = NPCManager.instance.getNPC(StringsNPC.CarpenterSonYoung);
 			_allChoiceReactions.Remove(giveToolsChoice);
 			SetDefaultText("Hey, now that I have my tools back I need to make something. Do you have any suggestions?");
@@ -177,19 +152,19 @@ _npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			
 			makeFishingRodReaction.AddAction(new NPCCallbackAction(TellToMakeFishingRod));
 			makeFishingRodReaction.AddAction(new NPCEmotionUpdateAction(toControl, new CarpenterSonYoung.MadeFishingRodEmotionState(toControl, completeRodText)));
-			makeFishingRodReaction.AddAction(new ShowOneOffChatAction(toControl, "Come back later, I'll be working on this for a while"));
+			makeFishingRodReaction.AddAction(new ShowOneOffChatAction(toControl, "Come back later, I'll be working on this for a while."));
 			makeFishingRodReaction.AddAction(new NPCAddScheduleAction(toControl, whittleSchedule));
 			makeFishingRodReaction.AddAction(new NPCAddScheduleAction(toControl, whittleDoneSchedule));
 			
 			makeSwordReaction.AddAction(new NPCCallbackAction(TellToMakeSword));
 			makeSwordReaction.AddAction(new NPCEmotionUpdateAction(toControl, new CarpenterSonYoung.EncourageEmotionState(toControl, completeSwordText)));
-			makeSwordReaction.AddAction(new ShowOneOffChatAction(toControl, "This is going to take some time, the wait will be worth it though"));
+			makeSwordReaction.AddAction(new ShowOneOffChatAction(toControl, "This is going to take some time, the wait will be worth it though."));
 			makeSwordReaction.AddAction(new NPCAddScheduleAction(toControl, whittleSchedule));
 			makeSwordReaction.AddAction(new NPCAddScheduleAction(toControl, whittleDoneSchedule));
 			
 			makeDollReaction.AddAction(new NPCCallbackAction(TellToMakeDoll));
 			makeDollReaction.AddAction(new NPCEmotionUpdateAction(toControl, new CarpenterSonYoung.GaveDollEmotionState(toControl, completeDollText)));
-			makeDollReaction.AddAction(new ShowOneOffChatAction(toControl, "I got a bad feeling about this, but swing by later to come see it"));
+			makeDollReaction.AddAction(new ShowOneOffChatAction(toControl, "I got a bad feeling about this, but swing by later to come see it."));
 			makeDollReaction.AddAction(new NPCAddScheduleAction(toControl, whittleSchedule));
 			makeDollReaction.AddAction(new NPCAddScheduleAction(toControl, whittleDoneSchedule));
 			
@@ -230,7 +205,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 			_allChoiceReactions.Remove(makeSwordChoice);
 			_allChoiceReactions.Remove(makeDollChoice);
 			//_allItemReactions.Remove(giveToolsChoice);
-			SetDefaultText("The more I whittle this, the creepier it looks.");
+			SetDefaultText("The more I whittle this... the creepier it looks.");
 			CompleteCommand();
 		}
 		
@@ -244,7 +219,6 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 	#endregion
 	#region GivenFishingRod
 	private class MadeFishingRodEmotionState : EmotionState{
-	
 		string gaveFishingRodDialogue = "Oh man, thanks so much!";
 		Choice EncourageFishingChoice = new Choice("Try fishing with it", "Huh? Oh yeah, I totally should.");
 		Reaction EncourageFishingReaction = new Reaction();
@@ -303,14 +277,12 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 _npcInState.ChangeFacialExpression(StringsNPC.Default);
 			SetDefaultText("Alright, now I just need to work on my carpentry.");
 			_allChoiceReactions.Clear();
-			DebugManager.print("Inside Carpentry Result");
 			GUIManager.Instance.RefreshInteraction();
 		}
 		
 		private void EncouragedFishingResult(){
 			SetDefaultText("I think I'll try it sometime. Thanks!");
 			_allChoiceReactions.Clear();
-			DebugManager.print("Inside Fishing Result");
 			GUIManager.Instance.RefreshInteraction();
 		}
 	}
@@ -330,8 +302,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 	#endregion
 	#region GivenDoll
 	private class GaveDollEmotionState : EmotionState{
-		
-		Choice ComplimentWorkChoice = new Choice("At least it looks nice", "Yeah, I guess");
+		Choice ComplimentWorkChoice = new Choice("At least it looks nice", "Yeah, I guess.");
 		Choice CritisizeWorkChoice = new Choice("Did you use wood?", "Yeah I did, but, it just kind of turned out like this.");
 		Reaction EncourageCarpentryReaction = new Reaction();
 		
@@ -352,7 +323,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 		
 		private void RecieveItemResult(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
-_npcInState.ChangeFacialExpression(StringsNPC.Default);
+			_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			_allChoiceReactions.Clear();
 			_npcInState.PlayAnimation(Strings.animation_stand);
 			_allChoiceReactions.Add(ComplimentWorkChoice, new DispositionDependentReaction(EncourageCarpentryReaction));
@@ -363,7 +334,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 				
 		private void EncouragedCarpentryResult(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
-_npcInState.ChangeFacialExpression(StringsNPC.Default);
+			_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			SetDefaultText("I'll make sure the next thing I make is made of wood.");
 			_allChoiceReactions.Clear();
 			GUIManager.Instance.RefreshInteraction();
@@ -372,7 +343,6 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 	#endregion
 	#region EncourageEmotionState
 	private class EncourageEmotionState : EmotionState{
-				
 		Choice ComplimentWorkChoice = new Choice("Oh man this is so cool", "I know right?");
 		Choice CritisizeWorkChoice = new Choice("You could use some work", "Uh, alright. Guess I'll just have to make myself better.");
 		Reaction EncourageCarpentryReaction = new Reaction();
@@ -383,25 +353,18 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 		Choice RecieveItemChoice = new Choice("Can I see it?", "Check it out. Everyone will now know you as \"Swordwielder\".");
 		Reaction RecieveItemReaction = new Reaction();
 	
-		
 		public EncourageEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
 			EncourageCarpentryReaction.AddAction(new SetOffFlagAction(FlagStrings.carpenterSonEncouragedCarpentry));
 			EncourageCarpentryReaction.AddAction(new NPCCallbackAction(EncouragedCarpentryResult));
-			
-			//CritisizeNameReaction.AddAction(new NPCCallbackAction
 			
 			RecieveItemReaction.AddAction(new NPCCallbackAction(RecieveItemResult));
 			RecieveItemReaction.AddAction(new NPCGiveItemAction(toControl, StringsItem.ToySword));
 			_allChoiceReactions.Add(RecieveItemChoice, new DispositionDependentReaction(RecieveItemReaction));
 		}
 		
-		public override void UpdateEmotionState(){
-			
-		}
-		
 		private void RecieveItemResult(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
-_npcInState.ChangeFacialExpression(StringsNPC.Happy);
+			_npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			_allChoiceReactions.Clear();
 			_npcInState.PlayAnimation(Strings.animation_stand);
 			CritisizeNameReaction.AddAction(new NPCCallbackAction(CritisizeNameResult));
@@ -417,21 +380,19 @@ _npcInState.ChangeFacialExpression(StringsNPC.Happy);
 		
 		private void EncouragedCarpentryResult(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
-_npcInState.ChangeFacialExpression(StringsNPC.Default);
+			_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			SetDefaultText("Alright, now I just need to work on my carpentry.");
 			_allChoiceReactions.Clear();
-			DebugManager.print("Inside Carpentry Result");
 			GUIManager.Instance.RefreshInteraction();
 		}
 		
 		private void CritisizeNameResult(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
-_npcInState.ChangeFacialExpression(StringsNPC.Angry);
+			_npcInState.ChangeFacialExpression(StringsNPC.Angry);
 			SetDefaultText("\"Swordwielder\" is an awesome name.");
 			_allChoiceReactions.Remove(CritisizeNameChoice);
 			GUIManager.Instance.RefreshInteraction();
 		}
-		
 	}
 	#endregion
 	#endregion

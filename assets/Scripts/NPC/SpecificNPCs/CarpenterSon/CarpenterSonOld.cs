@@ -7,8 +7,6 @@ using System.Collections;
 public class CarpenterSonOld : NPC {
 	protected override void Init() {
 		id = NPCIDs.CARPENTER_SON;
-		//SetCharacterPortrait();
-		//AudioListener.volume = 0;
 		base.Init();
 	}
 	internal static bool ateBool = false;
@@ -65,11 +63,11 @@ public class CarpenterSonOld : NPC {
 		
 		Reaction greetSiblingPartOne = new Reaction();
 		ShowMultipartChatAction greetSiblingPartOneChat = new ShowMultipartChatAction(this);
-		greetSiblingPartOneChat.AddChat("I'm fine..", 2f);
+		greetSiblingPartOneChat.AddChat("I'm fine...", 2f);
 		greetSiblingPartOneChat.AddChat("Work as usual.", 2f);
 		greetSiblingPartOneChat.AddChat("Brought an apple you say?", 2f);
 		greetSiblingPartOne.AddAction(greetSiblingPartOneChat);
-		greetSiblingPartOne.AddAction(new NPCEmotionUpdateAction(this, new WantAppleState(this,"Got an apple you say?")));
+		greetSiblingPartOne.AddAction(new NPCEmotionUpdateAction(this, new WantAppleState(this, "Got an apple you say?")));
 		flagReactions.Add(FlagStrings.oldCarpenterGreetSiblingPartOneFlag, greetSiblingPartOne);
 		#endregion	
 		#region Go To Beach
@@ -86,7 +84,7 @@ public class CarpenterSonOld : NPC {
 			#region Didn'tGiveApple
 		Reaction GoToBeachIntroUpset = new Reaction();
 		ShowMultipartChatAction goToBeachChatIntroUpset = new ShowMultipartChatAction(this); // 4 seconds
-		goToBeachChatIntroUpset.AddChat("Ohh.. Ok.", 2f);
+		goToBeachChatIntroUpset.AddChat("Ohh... Ok.", 2f);
 		goToBeachChatIntroUpset.AddChat("Well, I'm about to take a break on the beach.", 2f);
 		goToBeachChatIntroUpset.AddChat("You two care to join me?", 2f);
 		GoToBeachIntroUpset.AddAction(goToBeachChatIntroUpset);
@@ -137,7 +135,7 @@ public class CarpenterSonOld : NPC {
 	
 	protected override EmotionState GetInitEmotionState(){
 		//return (new InitialEmotionState(this, "My back aches, my arms are tired. I wish I never got into this lousy carpentry business."));
-		return (new InitialEmotionState(this, "Hey. I'm busy at work." + "\n" + "Got anything you need from me?"));
+		return (new InitialEmotionState(this, "Hey. I'm busy at work. Got anything you need from me?"));
 		//return (new InitialFishingState(this, "Hey. I'm busy at work." + "\n" + "Got anything you need from me?"));
 	}
 	
@@ -264,13 +262,13 @@ public class CarpenterSonOld : NPC {
 		public AnswerLivedAGoodLifeState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue) {	
 			//toControl.SetCharacterPortrait(StringsNPC.Sad);
 			choiceLeftReaction.AddAction(new NPCCallbackOnNPCAction(ContinueCarpenterSonChatPartOne,toControl));
-			choiceLeftReaction.AddAction(new ShowOneOffChatAction(toControl, "Then you understand." + "\n" + "I feel like I lived my father's dream and not my own.",2f));
+			choiceLeftReaction.AddAction(new ShowOneOffChatAction(toControl, "Then you understand. I feel like I lived my father's dream and not my own.",2f));
 			choiceLeftReaction.AddAction(new NPCCallbackOnNPCAction(setPortraitSad, toControl));
 			choiceRightReaction.AddAction(new NPCCallbackOnNPCAction(ContinueCarpenterSonChatPartOne,toControl));
-			choiceRightReaction.AddAction(new ShowOneOffChatAction(toControl,"Well I definitely have." + "\n" + "I feel like I lived my father's dream and not my own.",2f));
+			choiceRightReaction.AddAction(new ShowOneOffChatAction(toControl,"Well I definitely have. I feel like I lived my father's dream and not my own.",2f));
 			choiceRightReaction.AddAction(new NPCCallbackOnNPCAction(setPortraitSad,toControl));
-			_allChoiceReactions.Add(new Choice(" I have before.","Then you understand." + "\n" + "I feel like I lived my father's dream and not my own."), new DispositionDependentReaction(choiceLeftReaction));
-			_allChoiceReactions.Add(new Choice("I haven't before.","Well I definitely have." + "\n" + "I feel like I lived my father's dream and not my own."), new DispositionDependentReaction(choiceRightReaction));
+			_allChoiceReactions.Add(new Choice("I have before.", "Then you understand. I feel like I lived my father's dream and not my own."), new DispositionDependentReaction(choiceLeftReaction));
+			_allChoiceReactions.Add(new Choice("I haven't before.", "Well I definitely have. I feel like I lived my father's dream and not my own."), new DispositionDependentReaction(choiceRightReaction));
 		}	
 		
 		public void setPortraitAngry(NPC toControl) {
@@ -300,9 +298,9 @@ public class CarpenterSonOld : NPC {
 			//choiceCenterReaction.AddAction(new ShowOneOffChatAction(toControl, "No! I NEVER wanted to be a Carpenter.",2f));
 			choiceRightReaction.AddAction(new NPCCallbackOnNPCAction(ContinueCarpenterSonChatPartTwoApologetic,toControl));
 			//choiceRightReaction.AddAction(new ShowOneOffChatAction(toControl, "It's ok."+ "\n" + "Sometimes we don't think about it till it's too late.",2f));
-			_allChoiceReactions.Add(new Choice("Why do you say that?","I never really wanted to be a Carpenter."), new DispositionDependentReaction(choiceLeftReaction));
-			_allChoiceReactions.Add(new Choice("Maybe you did?","No! I NEVER wanted to be a Carpenter."), new DispositionDependentReaction(choiceCenterReaction));
-			_allChoiceReactions.Add(new Choice("I'm sorry.","It's ok."+ "\n" + "Sometimes we don't think about it till it's too late."), new DispositionDependentReaction(choiceRightReaction));
+			_allChoiceReactions.Add(new Choice("Why do you say that?","I never really wanted to be a carpenter."), new DispositionDependentReaction(choiceLeftReaction));
+			_allChoiceReactions.Add(new Choice("Maybe you did?","No! I NEVER wanted to be a carpenter."), new DispositionDependentReaction(choiceCenterReaction));
+			_allChoiceReactions.Add(new Choice("I'm sorry.","It's ok. Sometimes we don't think about it till it's too late."), new DispositionDependentReaction(choiceRightReaction));
 		
 			GUIManager.Instance.RefreshInteraction();
 		}
@@ -313,7 +311,7 @@ public class CarpenterSonOld : NPC {
 			choiceRightReaction.AddAction(new NPCCallbackOnNPCAction(ContinueCarpenterSonChatPartThreeDream, toControl));
 			//choiceRightReaction.AddAction(new NPCCallbackOnNPCAction(setPortraitSad,toControl));
 			//choiceRightReaction.AddAction(new ShowOneOffChatAction(toControl, "The family tradition is a big burden and it just wasn't my dream.",2f));
-			_allChoiceReactions.Add(new Choice("What did you want to be?","I wanted to be a fisherman."+ "\n" + "I have the passion for it."), new DispositionDependentReaction(choiceLeftReaction));
+			_allChoiceReactions.Add(new Choice("What did you want to be?","I wanted to be a fisherman. I have the passion for it."), new DispositionDependentReaction(choiceLeftReaction));
 			_allChoiceReactions.Add(new Choice("Why not?","The family legacy is a big burden and it just wasn't my dream."), new DispositionDependentReaction(choiceRightReaction));
 			GUIManager.Instance.RefreshInteraction();
 		}
@@ -326,12 +324,12 @@ public class CarpenterSonOld : NPC {
 			//choiceCenterReaction.AddAction(new ShowOneOffChatAction(toControl,"Don't remind me." + "\n" +"I've been sorry for myself enough over the years.",2f));
 			//choiceCenterReaction.AddAction(new NPCCallbackOnNPCAction(setPortraitAngry,toControl));
 			choiceRightReaction.AddAction(new NPCCallbackOnNPCAction(ContinueCarpenterSonChatPartThreeRegret, toControl));
-			choiceRightReaction.AddAction(new ShowOneOffChatAction(toControl, "I'm sorry for getting worked up." + "\n" + "It's just difficult thinking you've lived a life that wasn't yours.",3f));
+			choiceRightReaction.AddAction(new ShowOneOffChatAction(toControl, "I'm sorry for getting worked up. It's just difficult thinking you've lived a life that wasn't yours.",3f));
 			//choiceRightReaction.AddAction(new NPCCallbackOnNPCAction(setPortraitSad,toControl));
 			
-			_allChoiceReactions.Add(new Choice("Don't get so defensive.","Sorry, I didn't mean to yell."+ "\n" + "I just regret that I never did anything to stop him."), new DispositionDependentReaction(choiceLeftReaction));
-			_allChoiceReactions.Add(new Choice("My apologies.","Don't remind me." + "\n" +"I've been sorry for myself enough over the years."), new DispositionDependentReaction(choiceCenterReaction));
-			_allChoiceReactions.Add(new Choice("...","I'm sorry for getting worked up." + "\n" + "It's just difficult thinking you've lived a life that wasn't yours."), new DispositionDependentReaction(choiceRightReaction));
+			_allChoiceReactions.Add(new Choice("Don't get so defensive.","Sorry, I didn't mean to yell. I just regret that I never did anything to stop him."), new DispositionDependentReaction(choiceLeftReaction));
+			_allChoiceReactions.Add(new Choice("My apologies.","Don't remind me. I've been sorry for myself enough over the years."), new DispositionDependentReaction(choiceCenterReaction));
+			_allChoiceReactions.Add(new Choice("...","I'm sorry for getting worked up. It's just difficult thinking you've lived a life that wasn't yours."), new DispositionDependentReaction(choiceRightReaction));
 			GUIManager.Instance.RefreshInteraction();
 		}
 		public void ContinueCarpenterSonChatPartTwoApologetic(NPC toControl) {
@@ -340,8 +338,8 @@ public class CarpenterSonOld : NPC {
 			//choiceLeftReaction.AddAction(new ShowOneOffChatAction(toControl, "I wanted to be a fisherman." + "\n" + "I love fish and the sea.",2f));
 			choiceRightReaction.AddAction(new NPCCallbackOnNPCAction(ContinueCarpenterSonChatPartThreeRegret, toControl));
 			//choiceRightReaction.AddAction(new ShowOneOffChatAction(toControl, "Ya, I'm ok." + "\n" + "I just regret that I never took a chance.",2f));
-			_allChoiceReactions.Add(new Choice("What did you want to be?","I wanted to be a fisherman." + "\n" + "I love fish and the sea."), new DispositionDependentReaction(choiceLeftReaction));
-			_allChoiceReactions.Add(new Choice("Are you ok?","Ya, I'm ok." + "\n" + "I just regret that I never took a chance."), new DispositionDependentReaction(choiceRightReaction));
+			_allChoiceReactions.Add(new Choice("What did you want to be?","I wanted to be a fisherman. I love fish and the sea."), new DispositionDependentReaction(choiceLeftReaction));
+			_allChoiceReactions.Add(new Choice("Are you ok?","Ya, I'm ok. I just regret that I never took a chance."), new DispositionDependentReaction(choiceRightReaction));
 			GUIManager.Instance.RefreshInteraction();
 		}
 		public void ContinueCarpenterSonChatPartThreeDream(NPC toControl) {
@@ -350,8 +348,8 @@ public class CarpenterSonOld : NPC {
 			//choiceLeftReaction.AddAction(new ShowOneOffChatAction(toControl, "I dreamed of being be a fisherman. A legendary Angler." + "\n" + "I wanted to be known all across the sea.",3f));
 			choiceRightReaction.AddAction(new NPCCallbackOnNPCAction(ContinueCarpenterSonChatPartFourFamily, toControl));
 			//choiceRightReaction.AddAction(new ShowOneOffChatAction(toControl, "I know family is important, but..",2f));
-			_allChoiceReactions.Add(new Choice("What was your dream?","I dreamed of being be a fisherman. A legendary Angler." + "\n" + "I wanted to be known all across the sea."), new DispositionDependentReaction(choiceLeftReaction));
-			_allChoiceReactions.Add(new Choice("What about the legacy?","I know family is important, but.." + "\n" + "Sometimes you just know it's not for you."), new DispositionDependentReaction(choiceRightReaction));
+			_allChoiceReactions.Add(new Choice("What was your dream?","I dreamed of being be a fisherman. A legendary angler. I wanted to be known all across the sea."), new DispositionDependentReaction(choiceLeftReaction));
+			_allChoiceReactions.Add(new Choice("What about the legacy?","I know family is important, but... Sometimes you just know it's not for you."), new DispositionDependentReaction(choiceRightReaction));
 			GUIManager.Instance.RefreshInteraction();
 		}
 		public void ContinueCarpenterSonChatPartThreeUpset(NPC toControl) {
@@ -360,8 +358,8 @@ public class CarpenterSonOld : NPC {
 			//choiceLeftReaction.AddAction(new ShowOneOffChatAction(toControl, "Are you just saying that to comfort me?" + "I'm living a life I regret.",2f));
 			choiceRightReaction.AddAction(new NPCCallbackOnNPCAction(ContinueCarpenterSonChatPartThreeRegret, toControl));
 			//choiceRightReaction.AddAction(new ShowOneOffChatAction(toControl, "I'm sorry." + "\n" + "I just wish I faced my fears and followed me dream.",2f));
-			_allChoiceReactions.Add(new Choice("But you are good enough.","Are you just saying that to comfort me?" + "I'm living a life I regret."), new DispositionDependentReaction(choiceLeftReaction));
-			_allChoiceReactions.Add(new Choice("I didn't mean it like that.","I'm sorry." + "\n" + "I just wish I faced my fears and followed me dream."), new DispositionDependentReaction(choiceRightReaction));
+			_allChoiceReactions.Add(new Choice("But you are good enough.","Are you just saying that to comfort me? I'm living a life I regret."), new DispositionDependentReaction(choiceLeftReaction));
+			_allChoiceReactions.Add(new Choice("I didn't mean it like that.","I'm sorry, I just wish I faced my fears and followed me dream."), new DispositionDependentReaction(choiceRightReaction));
 			GUIManager.Instance.RefreshInteraction();
 		}	
 		public void ContinueCarpenterSonChatPartThreeRegret(NPC toControl) {
@@ -370,8 +368,8 @@ public class CarpenterSonOld : NPC {
 			//choiceLeftReaction.AddAction(new ShowOneOffChatAction(toControl, "Thanks." + "\n" + "But I think it's too late. I'm too old now.",2f));
 			choiceRightReaction.AddAction(new NPCCallbackOnNPCAction(ContinueCarpenterSonChatPartFourLearn, toControl));
 			//choiceRightReaction.AddAction(new ShowOneOffChatAction(toControl, "I did learn carpentry, but it wasn't satisfying.",2f));
-			_allChoiceReactions.Add(new Choice("It's not too late!","Thanks." + "\n" + "But I think it's too late. I'm too old now."), new DispositionDependentReaction(choiceLeftReaction));
-			_allChoiceReactions.Add(new Choice("Did you learn though?","Not really." +"\n" + "Most of what I did was a waste of time."), new DispositionDependentReaction(choiceRightReaction));
+			_allChoiceReactions.Add(new Choice("It's not too late!","Thanks, but I think it's too late. I'm too old now."), new DispositionDependentReaction(choiceLeftReaction));
+			_allChoiceReactions.Add(new Choice("Did you learn though?","Not really, most of what I did was a waste of time."), new DispositionDependentReaction(choiceRightReaction));
 			GUIManager.Instance.RefreshInteraction();
 		}	
 		public void ContinueCarpenterSonChatPartThreeFisherman(NPC toControl) {
@@ -465,11 +463,11 @@ public class CarpenterSonOld : NPC {
 		public void ContinueCarpenterSonChatPartFiveUnderstanding(NPC toControl) {
 			RefreshOptions();
 			choiceLeftReaction.AddAction(new NPCCallbackOnNPCAction(ContinueCarpenterSonChatCompleteSupported, toControl));
-			choiceLeftReaction.AddAction(new ShowOneOffChatAction(toControl, "Are you just saying that to comfort me?" + "I'm living a life I regret.",2f));
+			choiceLeftReaction.AddAction(new ShowOneOffChatAction(toControl, "Are you just saying that to comfort me? I'm living a life I regret.",2f));
 			choiceRightReaction.AddAction(new NPCCallbackOnNPCAction(ContinueCarpenterSonChatCompleteRegret, toControl));
-			choiceRightReaction.AddAction(new ShowOneOffChatAction(toControl, "It's ok, this is my own battle." + "I'll figure it out one day..",2f));
-			_allChoiceReactions.Add(new Choice("I truly understand.","I'm glad. It's nice to have someone to relate to. " + "\n" + "thanks for listening."), new DispositionDependentReaction(choiceLeftReaction));
-			_allChoiceReactions.Add(new Choice("I'm not sure.","It's ok, this is my own battle." + "I'll figure it out one day.."), new DispositionDependentReaction(choiceRightReaction));
+			choiceRightReaction.AddAction(new ShowOneOffChatAction(toControl, "It's ok, this is my own battle. I'll figure it out one day..",2f));
+			_allChoiceReactions.Add(new Choice("I truly understand.","I'm glad. It's nice to have someone to relate to. Thanks for listening."), new DispositionDependentReaction(choiceLeftReaction));
+			_allChoiceReactions.Add(new Choice("I'm not sure.","It's ok, this is my own battle. I'll figure it out one day.."), new DispositionDependentReaction(choiceRightReaction));
 			GUIManager.Instance.RefreshInteraction();
 		}
 				
@@ -481,7 +479,7 @@ public class CarpenterSonOld : NPC {
 		
 		public void ContinueCarpenterSonChatCompleteWasted(NPC toControl) {
 			RefreshOptions();	
-			SetDefaultText("Ya.. I think I wasted my life");
+			SetDefaultText("Ya... I think I wasted my life");
 			GUIManager.Instance.RefreshInteraction();
 		}
 		
@@ -493,18 +491,15 @@ public class CarpenterSonOld : NPC {
 		
 		public void ContinueCarpenterSonChatCompleteRegret(NPC toControl) {
 			RefreshOptions();	
-			SetDefaultText(".. I regret my past lfe..");
+			SetDefaultText(".. I regret my past life..");
 			GUIManager.Instance.RefreshInteraction();
 		}
 	
 		public void ContinueCarpenterSonChatCompleteSecretDefeated(NPC toControl) {
 			RefreshOptions();	
-			SetDefaultText("You're right... Here, take this.");
-			//toControl.A
+			SetDefaultText("You're right... here take this.");
 			GUIManager.Instance.RefreshInteraction();
 		}
-
-	
 	}
 		
 	private class WantAppleState : EmotionState {
@@ -518,7 +513,7 @@ public class CarpenterSonOld : NPC {
 			giveApple.AddAction(new NPCEmotionUpdateAction(toControl, new GaveAppleState(toControl, "hey!")));
 			
 			_allItemReactions.Add(StringsItem.Apple, new DispositionDependentReaction(giveApple));
-			_allChoiceReactions.Add(new Choice ("I don't", "Ohh ok.."), new DispositionDependentReaction(didntGiveApple));
+			_allChoiceReactions.Add(new Choice ("I don't", "Ohh ok.,."), new DispositionDependentReaction(didntGiveApple));
 		}
 		public void GiveApple(NPC toControl) {
 			SetDefaultText("Hey, thanks!");
@@ -530,7 +525,7 @@ public class CarpenterSonOld : NPC {
 		
 		public void DidntGiveApple(NPC toControl) {
 			toControl.SetCharacterPortrait(StringsNPC.Sad);
-			SetDefaultText("Ohh.. Ok.");
+			SetDefaultText("Ohh... Ok.");
 			GUIManager.Instance.CloseInteractionMenu();
 			FlagManager.instance.SetFlag(FlagStrings.oldCarpenterActivateGoToBeachUpsetFlag);
 		}
@@ -538,8 +533,6 @@ public class CarpenterSonOld : NPC {
 		
 	private class GaveAppleState : EmotionState {
 		public GaveAppleState(NPC toControl, string currentDialogue) : base (toControl, currentDialogue) {
-			//_allItemReactions.Add("apple", 
-			
 		}
 	}					
 	#endregion
