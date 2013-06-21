@@ -80,7 +80,6 @@ public class InteractionMenu : GUIControl {
 	
 	public override void Render(){	
 		GUI.color = new Color(1,1,1, currentAlpha);
-		
 		if (npcChattingWith == null){
 			Debug.LogError("Trying to display a chat with no npc.");
 			return;
@@ -91,7 +90,6 @@ public class InteractionMenu : GUIControl {
 		DisplayPortrait();	
 		DisplayTalkingIndicator();
 		GUI.color = new Color(1,1,1,1);
-		
 	}
 	
 	public override void UpdateControl(){

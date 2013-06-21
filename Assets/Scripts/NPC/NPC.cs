@@ -74,7 +74,12 @@ public abstract class NPC : Character {
 		if (chatingWithPlayer && !NearPlayerToChat()){
 			StopTalkingWithPlayer();
 		}
-		scheduleStack.Run(Time.deltaTime);
+		try {
+			scheduleStack.Run(Time.deltaTime);
+		} catch {
+			Debug.LogError("Something went wrong with " + name + "'s schedule switching it to the default one.");
+			ClearAndReplaceSchedule(new DefaultSchedule(this));
+		}
 	}
 	#endregion
 	

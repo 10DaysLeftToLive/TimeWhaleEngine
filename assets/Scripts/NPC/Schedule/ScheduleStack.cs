@@ -6,6 +6,7 @@ using System.Reflection;
 // Used for scheduling
 // The end of the list is the highest priority
 // high 1 - 10 low
+[System.Serializable]
 public class ScheduleStack {
 	Schedule current;
 	PriorityStack _schedulesToDo;

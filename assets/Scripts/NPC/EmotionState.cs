@@ -3,7 +3,10 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+[System.Serializable]
 public class EmotionState {
+	private string className; // For debuging only so you know the current emotion state's name
+	
 	protected NPC _npcInState;
 	public string _defaultTextToSay;
 	protected ChatChoiceInfo _chatInfo;
@@ -14,6 +17,7 @@ public class EmotionState {
 	protected DispositionDependentReaction interactionClosingReaction;
 	
 	public EmotionState(NPC npcInState, string textToSay){
+		className = this.GetType().FullName;
 		_npcInState = npcInState;
 		_defaultTextToSay = textToSay;
 		_allChoiceReactions = new Dictionary<Choice, DispositionDependentReaction>();

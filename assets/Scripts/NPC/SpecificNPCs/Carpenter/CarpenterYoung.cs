@@ -52,7 +52,7 @@ public class CarpenterYoung : NPC
 
 	protected override void SetUpSchedules()
 	{
-		TimeTask WaitTask = new TimeTask(0f, new IdleState(this));
+		TimeTask WaitTask = new TimeTask(1f, new IdleState(this));
 		Task MoveTask = new Task(new MoveState(this, new Vector3(34.1062f, -1.041937f, 0.3f)));
 		TimeTask SitTask = new TimeTask(0f, new AbstractAnimationState(this, "Sit"));
 		Task WhittleTask = new Task(new AbstractAnimationState(this, "Idle Sit"));

@@ -46,8 +46,14 @@ public abstract class Character : PauseObject {
 	protected virtual void CharacterUpdate(){}
 	
 	protected override void UpdateObject(){
-		currentState.Update();
-		CharacterUpdate();
+		try {
+			currentState.Update();
+			CharacterUpdate();
+		} catch (NullReferenceException nullRefExcept){
+			Debug.LogError("When updating " + this.name + " ran into null reference " + nullRefExcept.Message);
+		} catch (SystemException systemExcept) {
+			Debug.LogError("Error when updating " + this.name + ": " + systemExcept.ToString());
+		}
 	}
 	
 	protected override void OnPause(){

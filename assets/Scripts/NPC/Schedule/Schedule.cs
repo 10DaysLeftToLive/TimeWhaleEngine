@@ -12,7 +12,10 @@ using System.Collections.Generic;
  *  See Task and TimeTask for the basics of what you can schedule
  *  defaults to not being able to passive chat or be interupted by the player
  */
+[System.Serializable]
 public class Schedule {
+	private string scheduleName;
+	
 	public List<List<string>> flagList;
 	protected Queue<Task> _tasksToDo;
 	protected NPC _toManage;
@@ -36,54 +39,60 @@ public class Schedule {
 		Default
 	};
 	
-	public Schedule(NPC toManage){
+	public Schedule(NPC toManage) : base(){
 		_tasksToDo = new Queue<Task>();
 		_toManage = toManage;
 		schedulePriority = (int)priorityEnum.Low;
 		flagList = new List<List<string>>();
+		scheduleName = this.GetType().ToString();
 		Init ();
 	}
 	
-	public Schedule(NPC toManage, bool _canPassiveChat){
+	public Schedule(NPC toManage, bool _canPassiveChat) : base(){
 		_tasksToDo = new Queue<Task>();
 		_toManage = toManage;
 		canPassiveChat = _canPassiveChat;
 		schedulePriority = (int)priorityEnum.Low;
 		flagList = new List<List<string>>();
+		scheduleName = this.GetType().ToString();
 		Init ();
 	}
 	
-	public Schedule(NPC toManage, Enum priority){
+	public Schedule(NPC toManage, Enum priority) : base(){
 		_tasksToDo = new Queue<Task>();
 		_toManage = toManage;
 		schedulePriority = Convert.ToInt32(priority);
 		flagList = new List<List<string>>();
+		scheduleName = this.GetType().ToString();
 		Init ();
 	}
 	
-	public Schedule(NPC toManage, Enum priority, bool _canPassiveChat){
+	public Schedule(NPC toManage, Enum priority, bool _canPassiveChat) : base(){
 		_tasksToDo = new Queue<Task>();
 		_toManage = toManage;
 		canPassiveChat = _canPassiveChat;
 		schedulePriority = Convert.ToInt32(priority);
 		flagList = new List<List<string>>();
+		scheduleName = this.GetType().ToString();
 		Init ();
 	}
 	
-	public Schedule(Queue<Task> tasksToDo, NPC toManage, Enum priority){
+	public Schedule(Queue<Task> tasksToDo, NPC toManage, Enum priority) : base(){
 		_tasksToDo = tasksToDo;
 		_toManage = toManage;
 		schedulePriority = Convert.ToInt32(priority);
 		flagList = new List<List<string>>();
+		scheduleName = this.GetType().ToString();
 		Init ();
 	}
 	
-	public Schedule(Queue<Task> tasksToDo, NPC toManage, Enum priority, bool _canPassiveChat){
+	public Schedule(Queue<Task> tasksToDo, NPC toManage, Enum priority, bool _canPassiveChat) : base(){
 		_tasksToDo = tasksToDo;
 		_toManage = toManage;
 		canPassiveChat = _canPassiveChat;
 		schedulePriority = Convert.ToInt32(priority);
 		flagList = new List<List<string>>();
+		scheduleName = this.GetType().ToString();
 		Init ();
 	}
 	

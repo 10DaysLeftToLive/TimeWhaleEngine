@@ -6,6 +6,7 @@ using System.Collections;
  *  A basic action of what an npc should do until interupted 
  *  if you want it to go one for a specified amount of time use TimeTask
  */
+[System.Serializable]
 public class Task {
 	protected State _stateToPerform;
 	protected bool _taskFinished = false;
