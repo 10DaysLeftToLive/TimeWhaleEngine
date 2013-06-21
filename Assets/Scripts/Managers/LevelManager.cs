@@ -43,10 +43,10 @@ public class LevelManager : MonoBehaviour {
 		cloudManager = GameObject.Find(Strings.CLOUDMANAGER).GetComponent<CloudManager>();
 		ScreenSetup.CalculateSettings();
 		StartCoroutine(Init());
-		GUIManager.Instance.AddInGameMenu();
 	}
 	
 	private IEnumerator Init(){
+		GUIManager.Instance.ShowLoadingScreen();
 		StartCoroutine(levelLoader.Load("LevelYoung", "LevelMiddle", "LevelOld"));
 		while (levelLoader.HasNotFinished()){ // wait untill the outside scenes have been loaded in.
 			yield return new WaitForSeconds(.1f);
@@ -62,14 +62,14 @@ public class LevelManager : MonoBehaviour {
 		FlagManager.instance.Init();
 		ManagerLoader.LoadManagers(youngSectionTarget, middleSectionTarget, oldSectionTarget);
 		
-		
-		
 		parallaxManager.Init();
 		cloudManager.Init();
 		
 		if (initialAge != CharacterAgeState.YOUNG){
 			MovePlayerToRightAge(initialAge);
 		}
+		GUIManager.Instance.StartFadingLoadingScreen();
+		GUIManager.Instance.AddInGameMenu();
 	}
 	
 	private void FindSections(){

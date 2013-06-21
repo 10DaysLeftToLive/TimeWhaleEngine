@@ -21,6 +21,7 @@ public class GUIManager : MonoBehaviour {
 	private InGameMenu inGameMenu;
 	private InteractionMenu interactionMenu;
 	private PauseMenu pauseMenu;
+	private LoadingScreen loadingScreen;
 	
 	void Awake(){
 		if (instance != null){
@@ -35,6 +36,22 @@ public class GUIManager : MonoBehaviour {
 		inGameMenu = GetComponent<InGameMenu>();
 		interactionMenu = GetComponent<InteractionMenu>();
 		pauseMenu = GetComponent<PauseMenu>();
+		loadingScreen = GetComponent<LoadingScreen>();
+	}
+	
+	public void ShowLoadingScreen(){
+		MarkControlForAdding(loadingScreen);
+	}
+	
+	public void StartFadingLoadingScreen(){
+		loadingScreen.StartFadeOut();
+	}
+	
+	/// <summary>
+	/// Hides the loading screen. Do not call directly instead see StartFadingLoadingScreen.
+	/// </summary>
+	public void HideLoadingScreen(){
+		MarkControlForRemoval(loadingScreen);
 	}
 	
 	public void AddNPCChat(NPCChat npcChatToAdd){
