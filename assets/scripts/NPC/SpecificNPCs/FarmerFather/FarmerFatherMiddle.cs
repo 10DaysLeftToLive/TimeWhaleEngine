@@ -96,7 +96,7 @@ public class FarmerFatherMiddle : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		initialState = new InitialEmotionState(this, "H-hey there. D-do you have some time to listen? If you do, come back later when my wife isn't around..");
+		initialState = new InitialEmotionState(this, "H-hey there. D-do you have some time to listen? If you do, come back later when my wife isn't around...");
 		startingPosition = transform.position;
 		startingPosition.y += LevelManager.levelYOffSetFromCenter;
 		//this.transform.position = new Vector3(200,0,0);
@@ -292,24 +292,24 @@ public class FarmerFatherMiddle : NPC {
 		bool convinceFlag = false;
 		bool daughterOnBoard = false;
 		bool newMarriagePlan = false;
-		Choice BusinessChoice = new Choice("How's your business?", "It's going poorly...I just can never find the strength to be a hawk when it comes to business...");
-		Choice MarriageChoice = new Choice("So about this marriage?", "I...I don't like it...but I'm sure my wife knows what she's doing.");
+		Choice BusinessChoice = new Choice("How's your business?", "It's going poorly... I just can never find the strength to be a hawk when it comes to business...");
+		Choice MarriageChoice = new Choice("So about this marriage?", "I... I don't like it... but I'm sure my wife knows what she's doing.");
 		Reaction BusinessReaction = new Reaction();
 		Reaction MarriageReaction = new Reaction();
 		
-		Choice DontLikeItChoice = new Choice("Why don't you like it?", "I dunno...I...think my daughter should be allowed to think for herself..");
-		Choice YouSureChoice = new Choice("Are you sure?", "She's always dealt with things.  I'm sure she knows what she's doing...");
-		Choice StandUpChoice = new Choice("Then stand up for her!", "But...I can't!  Its too hard...it's too hard..");
-		Choice HelpHerChoice = new Choice("Help her think then!", "But...I can't!  Its too hard...it's too hard..");
-		Choice SoundSureChoice = new Choice("You don't sound sure.", "I dunno...I...think my daughter should be allowed to think for herself..");
-		Choice YouCanChoice = new Choice("If she can do it you can!", "It's going poorly...I just can never find the strength to be a hawk when it comes to business...");
-		Choice YouHaveItChoice = new Choice("I know you have it in you!", "It's going poorly...I just can never find the strength to be a hawk when it comes to business...");
+		Choice DontLikeItChoice = new Choice("Why don't you like it?", "I dunno... I... think my daughter should be allowed to think for herself...");
+		Choice YouSureChoice = new Choice("Are you sure?", "She's always dealt with things. I'm sure she knows what she's doing...");
+		Choice StandUpChoice = new Choice("Then stand up for her!", "But... I can't! Its too hard... it's too hard.");
+		Choice HelpHerChoice = new Choice("Help her think then!", "But...I can't! It's too hard...it's too hard..");
+		Choice SoundSureChoice = new Choice("You don't sound sure.", "I dunno... I... think my daughter should be allowed to think for herself.");
+		Choice YouCanChoice = new Choice("If she can do it you can!", "It's going poorly... I just can never find the strength to be a hawk when it comes to business...");
+		Choice YouHaveItChoice = new Choice("I know you have it in you!", "It's going poorly... I just can never find the strength to be a hawk when it comes to business...");
 		Choice MarriageIdeaChoice = new Choice("I have an idea about the marriage.", "I'm listening");
-		Choice ConvinceDaughterChoice = new Choice("Convince daughter to marry", "I have tried that before with no luck but if you want to give it a try then go ahead.");
-		Choice WorkingOnItChoice = new Choice("I'm still working on it", "Give up now..");
-		Choice NoChoice = new Choice("No", "It's no hope.");
-		Choice IHelpedMarriageChoice = new Choice("I got her to go on a date.", "Really! Thats great, if only we had known earlier that convincing her was that easy.");
-		Choice StrangeChoice = new Choice("That is strange", "Strange indeed.");
+		Choice ConvinceDaughterChoice = new Choice("Convince daughter to marry.", "I have tried that before with no luck but if you want to give it a try then go ahead.");
+		Choice WorkingOnItChoice = new Choice("I'm still working on it.", "Give up now...");
+		Choice NoChoice = new Choice("No.", "It's no hope.");
+		Choice IHelpedMarriageChoice = new Choice("I got her to go on a date.", "Really?! That's great, if only we had known earlier that convincing her was that easy.");
+		Choice StrangeChoice = new Choice("That is strange.", "Strange indeed.");
 		
 		Reaction DontLikeItReaction = new Reaction();
 		Reaction YouSureReaction = new Reaction();
@@ -333,7 +333,7 @@ public class FarmerFatherMiddle : NPC {
 		Reaction PortraitReaction = new Reaction();
 	
 		NPC control;
-		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, "Hello there!  How's it going?"){
+		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, "Hello there! How's it going?"){
 			control = toControl;
 			SetupReactions();
 //			_allItemReactions.Add(StringsItem.Portrait,  new DispositionDependentReaction(PortraitReaction)); // change item to shell
@@ -349,17 +349,17 @@ public class FarmerFatherMiddle : NPC {
 		
 		public void SetupReactions(){
 			PortraitReaction.AddAction(new NPCTakeItemAction(control));
-			PortraitReaction.AddAction(new UpdateCurrentTextAction(control, "Thanks a ton this will make a great addition to my study.  Can't let my wife see it though...she'll have me throw it out."));
+			PortraitReaction.AddAction(new UpdateCurrentTextAction(control, "Thanks a ton this will make a great addition to my study. Can't let my wife see it though... she'll have me throw it out."));
 			SeaShellReaction.AddAction(new NPCTakeItemAction(control));
-			SeaShellReaction.AddAction(new UpdateCurrentTextAction(control, "This looks pretty nice.."));
+			SeaShellReaction.AddAction(new UpdateCurrentTextAction(control, "This looks pretty nice."));
 			ToyPuzzleReaction.AddAction(new NPCTakeItemAction(control));
-			ToyPuzzleReaction.AddAction(new UpdateCurrentTextAction(control, "Heh...this looks like an interesting problem...I'm gonna try and solve it."));
+			ToyPuzzleReaction.AddAction(new UpdateCurrentTextAction(control, "Heh... this looks like an interesting problem... I'm gonna try and solve it."));
 			AppleReaction.AddAction(new NPCTakeItemAction(control));
-			AppleReaction.AddAction(new UpdateCurrentTextAction(control, "That tasted great.  You'll have to tell me where you got it some time..."));
+			AppleReaction.AddAction(new UpdateCurrentTextAction(control, "That tasted great. You'll have to tell me where you got it some time..."));
 			ApplePieReaction.AddAction(new NPCTakeItemAction(control));
-			ApplePieReaction.AddAction(new UpdateCurrentTextAction(control, "That tasted great.  You'll have to tell me where you got it some time..."));
+			ApplePieReaction.AddAction(new UpdateCurrentTextAction(control, "That tasted great. You'll have to tell me where you got it some time..."));
 			CaptainsLogReaction.AddAction(new NPCCallbackAction(UpdateCaptainsLog));
-			CaptainsLogReaction.AddAction(new UpdateCurrentTextAction(control, "I wish I had stories like this to give to my daughter earlier...but I guess its okay, she turned out to be very brave anyways..."));
+			CaptainsLogReaction.AddAction(new UpdateCurrentTextAction(control, "I wish I had stories like this to give to my daughter earlier... but I guess its okay, she turned out to be very brave anyways..."));
 			
 			
 			MarriageIdeaReaction.AddAction(new NPCCallbackAction(MarriageIdeaResponse));
@@ -402,7 +402,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Sad);
 			_allChoiceReactions.Clear();
 			_allChoiceReactions.Add(MarriageChoice, new DispositionDependentReaction(MarriageReaction));
 			_allChoiceReactions.Add(BusinessChoice, new DispositionDependentReaction(BusinessReaction));
-			SetDefaultText("Hello there!  How's it going?");
+			SetDefaultText("Hello there! How's it going?");
 			GUIManager.Instance.RefreshInteraction();
 		}
 		
@@ -543,12 +543,12 @@ _npcInState.ChangeFacialExpression(StringsNPC.Happy);
 				SetDefaultText("I've heard what you did for my daughter. Your idea worked!");
 			}
 			if (text == "daughterOnBoard"){ //successful date with carpenter, farmers unaware
-				SetDefaultText("Hello there!  How's it going?");
+				SetDefaultText("Hello there! How's it going?");
 				daughterOnBoard = true;
-				MarriageChoice = new Choice("So about this marriage?", "Great! I think? My daughter all of the sudden is now happy about the marriage...that's not like her.");
+				MarriageChoice = new Choice("So about this marriage?", "Great! I think? My daughter all of the sudden is now happy about the marriage... that's not like her.");
 			}
 			if (text == "stoodUp"){
-				SetDefaultText("Went through all that trouble...for nothing.");
+				SetDefaultText("Went through all that trouble... for nothing.");
 			}
 			if (text == "daughterReady"){
 				newMarriagePlan = true;
