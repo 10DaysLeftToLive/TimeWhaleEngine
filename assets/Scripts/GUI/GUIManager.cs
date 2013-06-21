@@ -113,6 +113,12 @@ public class GUIManager : MonoBehaviour {
 			return;
 		}
 		interactionMenu.Close();
+	}
+	
+	/// <summary>
+	/// Removes the interaction menu. Do not call this directly see CloseInteractionMenu()
+	/// </summary>
+	public void RemoveInteractionMenu(){
 		MarkControlForRemoval(interactionMenu);	
 	}
 	

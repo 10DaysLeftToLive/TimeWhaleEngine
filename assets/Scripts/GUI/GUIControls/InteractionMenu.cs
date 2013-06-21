@@ -14,6 +14,10 @@ using System.Collections.Generic;
 public class InteractionMenu : GUIControl {
 	private NPC npcChattingWith;
 	private Player player;
+	private float currentFadeTime = 0;
+	private float currentAlpha;
+	private bool isFadingIn = false;
+	private bool isFadingOut = false;
 	
 	#region Publicly edited visual data
 	public Texture talkingIndicator;
@@ -23,6 +27,7 @@ public class InteractionMenu : GUIControl {
 	public GUIStyle portraitStyle;
 	public GUIStyle interactionBoxStyle;
 	public GUIStyle talkingIndicatorStyle;
+	public float fadeInTime = .5f; // in seconds
 	#endregion
 	
 	#region Saved Data for this interaction
@@ -73,7 +78,9 @@ public class InteractionMenu : GUIControl {
         buttonStyle.fontSize = (Mathf.RoundToInt(Mathf.Min(ScreenSetup.screenWidth, ScreenSetup.screenHeight) / FONTRATIOBUTTONS));
 	}
 	
-	public override void Render(){		
+	public override void Render(){	
+		GUI.color = new Color(1,1,1, currentAlpha);
+		
 		if (npcChattingWith == null){
 			Debug.LogError("Trying to display a chat with no npc.");
 			return;
@@ -83,6 +90,25 @@ public class InteractionMenu : GUIControl {
 		DisplayButtonChoices();
 		DisplayPortrait();	
 		DisplayTalkingIndicator();
+		GUI.color = new Color(1,1,1,1);
+		
+	}
+	
+	public override void UpdateControl(){
+		if (isFadingIn){
+			if (currentFadeTime < fadeInTime){
+				FadeIn(Time.deltaTime);
+			} else {
+				StopFade();
+			}
+		}
+		if (isFadingOut){
+			if (currentFadeTime < fadeInTime){
+				FadeOut(Time.deltaTime);
+			} else {
+				StopFadeOut();
+			}
+		}
 	}
 	
 	#region Display Functions
@@ -125,6 +151,7 @@ public class InteractionMenu : GUIControl {
 	public void Close(){
 		npcChattingWith.LeaveInteraction();	
 		player.LeaveInteraction();
+		StartFadeOut();
 	}
 	
 	private void DisplayPortrait(){
@@ -145,6 +172,7 @@ public class InteractionMenu : GUIControl {
 	}
 	#endregion
 	
+	#region Click Handling
 	public void DoClickOnChoice(string choice){
 		npcChattingWith.ReactToChoice(choice);
 	}
@@ -152,12 +180,15 @@ public class InteractionMenu : GUIControl {
 	private void DoGiveClick(){
 		npcChattingWith.ReactToBeingGivenItem(player.Inventory.GetItem());
 	}
+	#endregion
 
 	public void OpenChatForNPC(NPC _newNpcChatting){
+		StartFadeIn();
 		npcChattingWith = _newNpcChatting;
 		Refresh();
 	}
 	
+	#region Refreshing
 	public void Refresh(){
 		UpdateDisplayText(GetDisplayText());
 		GetChoicesFromNPC();
@@ -191,6 +222,37 @@ public class InteractionMenu : GUIControl {
 		for (int i = 0; i < numChoices; i++){
 			buttonRects.Add(ScreenRectangle.NewRect(button1TopLeftX + (spaceBetweenTopPointXs * i), buttonBoxTopLeftY, buttonWidth, buttonHeight));
 		}
+	}
+	#endregion
+	
+	private void StartFadeIn(){
+		isFadingIn = true;
+		currentFadeTime = 0;
+	}
+	
+	private void StartFadeOut(){
+		currentFadeTime = 0;
+		currentAlpha = 1;
+		isFadingOut = true;
+	}
+	
+	private void StopFade(){
+		isFadingIn = false;
+	}
+	
+	private void StopFadeOut(){
+		isFadingOut = false;
+		GUIManager.Instance.RemoveInteractionMenu();
+	}
+	
+	private void FadeIn(float deltaTime){
+		currentFadeTime += deltaTime;
+		currentAlpha = currentFadeTime/fadeInTime;
+	}
+	
+	private void FadeOut(float deltaTime){
+		currentFadeTime += deltaTime;
+		currentAlpha = 1-currentFadeTime/fadeInTime;
 	}
 	
 	private void SetChatRectangles(){	
