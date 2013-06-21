@@ -27,7 +27,7 @@ public class InteractionMenu : GUIControl {
 	public GUIStyle portraitStyle;
 	public GUIStyle interactionBoxStyle;
 	public GUIStyle talkingIndicatorStyle;
-	public float fadeInTime = .5f; // in seconds
+	public float fadeTime = .5f; // in seconds
 	#endregion
 	
 	#region Saved Data for this interaction
@@ -94,14 +94,14 @@ public class InteractionMenu : GUIControl {
 	
 	public override void UpdateControl(){
 		if (isFadingIn){
-			if (currentFadeTime < fadeInTime){
+			if (currentFadeTime < fadeTime){
 				FadeIn(Time.deltaTime);
 			} else {
 				StopFade();
 			}
 		}
 		if (isFadingOut){
-			if (currentFadeTime < fadeInTime){
+			if (currentFadeTime < fadeTime){
 				FadeOut(Time.deltaTime);
 			} else {
 				StopFadeOut();
@@ -245,12 +245,12 @@ public class InteractionMenu : GUIControl {
 	
 	private void FadeIn(float deltaTime){
 		currentFadeTime += deltaTime;
-		currentAlpha = currentFadeTime/fadeInTime;
+		currentAlpha = currentFadeTime/fadeTime;
 	}
 	
 	private void FadeOut(float deltaTime){
 		currentFadeTime += deltaTime;
-		currentAlpha = 1-currentFadeTime/fadeInTime;
+		currentAlpha = 1-currentFadeTime/fadeTime;
 	}
 	
 	private void SetChatRectangles(){	
