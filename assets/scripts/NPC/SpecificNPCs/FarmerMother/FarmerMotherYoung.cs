@@ -116,10 +116,10 @@ public class FarmerMotherYoung : NPC {
 		Choice whatAboutChoice = new Choice("What was that about?", "You saw our little spat? Don't worry about it! " +
 			"It's just some talk on how ta raise our daughter. Don't need ta fill her head with silly stories...");
 		
-		Choice growGardenChoice = new Choice("Yes", "Well then, ya should be well versed in how ta plant seeds." +
-										"Here in exchange for tha pendant! I'll give ya these sunflower seeds. ");
+		Choice growGardenChoice = new Choice("Yes", "Well then, ya should be well versed in how ta plant seeds. " +
+										"Here in exchange for tha pendant! I'll give ya these sunflower seeds.");
 		Choice dontGrowGardenChoice = new Choice("No", "Well, I can teach ya how if ya want ta! " +
-			"Just find a mound of earth and put tha seeds you're carrying in it. Then just let time do its work."  +
+			"Just find a mound of earth and put tha seeds you're carrying in it. Then just let time do its work. "  +
 				"Here in exchange for tha pendant! I'll give ya these sunflower seeds.");
 		
 		bool updateConversationFarmerMotherYoungFlag = false;
@@ -176,61 +176,61 @@ public class FarmerMotherYoung : NPC {
 			GiveSeedsReaction = new Reaction();
 			GiveSeedsReaction.AddAction(new NPCCallbackAction(UpdateGiveSeeds));
 			GiveSeedsReaction.AddAction(new NPCTakeItemAction(toControl));
-			GiveSeedsReaction.AddAction(new UpdateCurrentTextAction(toControl, "Thanks fer tha seeds!  Just what we needed after my idiot husband fergot ta buy them!"));
+			GiveSeedsReaction.AddAction(new UpdateCurrentTextAction(toControl, "Thanks fer tha seeds! Just what we needed after my idiot husband fergot ta buy them!"));
 			_allItemReactions.Add(StringsItem.SunflowerSeeds, new DispositionDependentReaction(GiveSeedsReaction));
 			
-			StoriesFunChoice = new Choice("But stories are fun!", "Hmmpphh...I didn't need any fancy stories when I was growing up!  What ya need kid is discipline!");
+			StoriesFunChoice = new Choice("But stories are fun!", "Hmmpphh... I didn't need any fancy stories when I was growing up! What ya need kid is discipline!"); 
 			StoriesFunReaction = new Reaction();
 			StoriesFunReaction.AddAction(new NPCCallbackAction(UpdateStoriesFun));
-			StoriesFunReaction.AddAction(new UpdateCurrentTextAction(toControl, "Hmmpphh...I didn't need any fancy stories when I was growing up!  What ya need kid is discipline!"));
+			StoriesFunReaction.AddAction(new UpdateCurrentTextAction(toControl, "Hmmpphh... I didn't need any fancy stories when I was growing up! What ya need kid is discipline!"));
 			
-			StoriesSillyChoice = new Choice("Stories are silly.", "Haw!  A kid aftah my own heart!  If only my fool daughter and husband could see things the way I do!");
+			StoriesSillyChoice = new Choice("Stories are silly.", "Haw! A kid aftah my own heart! If only my fool daughter and husband could see things the way I do!");
 			StoriesSillyReaction = new Reaction();
 			StoriesSillyReaction.AddAction(new NPCCallbackAction(UpdateStoriesSilly));
-			StoriesSillyReaction.AddAction(new UpdateCurrentTextAction(toControl, "Haw!  A kid aftah my own heart!  If only my fool daughter and husband could see things the way I do!"));
+			StoriesSillyReaction.AddAction(new UpdateCurrentTextAction(toControl, "Haw! A kid aftah my own heart! If only my fool daughter and husband could see things the way I do!"));
 			
 			StoriesUsefulChoice = new Choice("But stories are useful!", "Kid, I know your too young to understand, but we all have a job, and mine and my daughters isn't telling stories but taking care of this farm!");
 			StoriesUsefulReaction = new Reaction();
 			StoriesUsefulReaction.AddAction(new NPCCallbackAction(UpdateStoriesUseful));
 			StoriesUsefulReaction.AddAction(new UpdateCurrentTextAction(toControl, "Kid, I know your too young to understand, but we all have a job, and mine and my daughters isn't telling stories but taking care of this farm!"));
 			
-			GuessSoChoice = new Choice("I guess so...", "Look.  What you need ta understand is that, we all have jobs ta do, and we don't need ta waste our time filling our heads with nonsense bout castles and warriors.  We're a family of farmers, not fighters!");
+			GuessSoChoice = new Choice("I guess so...", "Look. What you need ta understand is that, we all have jobs ta do, and we don't need ta waste our time filling our heads with nonsense bout castles and warriors. We're a family of farmers, not fighters!");
 			GuessSoReaction = new Reaction();
 			GuessSoReaction.AddAction(new NPCCallbackAction(UpdateGuessSo));
-			GuessSoReaction.AddAction(new UpdateCurrentTextAction(toControl, "Look.  What you need ta understand is that, we all have jobs ta do, and we don't need ta waste our time filling our heads with nonsense bout castles and warriors.  We're a family of farmers, not fighters!"));
+			GuessSoReaction.AddAction(new UpdateCurrentTextAction(toControl, "Look. What you need ta understand is that, we all have jobs ta do, and we don't need ta waste our time filling our heads with nonsense bout castles and warriors. We're a family of farmers, not fighters!"));
 			
-			StoriesArentHorribleChoice = new Choice("Stories aren't horrible though.", "Look.  What you need ta understand is that, we all have jobs ta do, and we don't need ta waste our time filling our heads with nonsense bout castles and warriors.  We're a family of farmers, not fighters!");
+			StoriesArentHorribleChoice = new Choice("Stories aren't horrible though.", "Look. What you need ta understand is that, we all have jobs ta do, and we don't need ta waste our time filling our heads with nonsense bout castles and warriors. We're a family of farmers, not fighters!");
 			StoriesArentHorribleReaction = new Reaction();
 			StoriesArentHorribleReaction.AddAction(new NPCCallbackAction(UpdateStoriesArentHorrible));
-			StoriesArentHorribleReaction.AddAction(new UpdateCurrentTextAction(toControl, "Look.  What you need ta understand is that, we all have jobs ta do, and we don't need ta waste our time filling our heads with nonsense bout castles and warriors.  We're a family of farmers, not fighters!"));
+			StoriesArentHorribleReaction.AddAction(new UpdateCurrentTextAction(toControl, "Look.  What you need ta understand is that, we all have jobs ta do, and we don't need ta waste our time filling our heads with nonsense bout castles and warriors. We're a family of farmers, not fighters!"));
 			
-			IllConvinceChoice = new Choice("I'll convince them!", "Naw...its okay, I know how to handle my own family!  I'll make sure that they see my way in time!");
+			IllConvinceChoice = new Choice("I'll convince them!", "Naw... its okay, I know how to handle my own family! I'll make sure that they see my way in time!");
 			IllConvinceReaction = new Reaction();
 			IllConvinceReaction.AddAction(new NPCCallbackAction(UpdateIllConvince));
 			IllConvinceReaction.AddAction(new SetOffFlagAction(FlagStrings.FarmAfterDialogue));
-			IllConvinceReaction.AddAction(new UpdateCurrentTextAction(toControl, "Naw...its okay, I know how to handle my own family!  I'll make sure that they see my way in time!"));
+			IllConvinceReaction.AddAction(new UpdateCurrentTextAction(toControl, "Naw... its okay, I know how to handle my own family! I'll make sure that they see my way in time!"));
 			
-			CanReadAndWorkChoice = new Choice("You can work and read stories.", "*Sigh*  You're just too young ta understand.");
+			CanReadAndWorkChoice = new Choice("You can work and read stories.", "*Sigh* You're just too young ta understand.");
 			CanReadAndWorkReaction = new Reaction();
 			CanReadAndWorkReaction.AddAction(new NPCCallbackAction(UpdateCanReadAndWork));
 			CanReadAndWorkReaction.AddAction(new SetOffFlagAction(FlagStrings.FarmAfterDialogue));
-			CanReadAndWorkReaction.AddAction(new UpdateCurrentTextAction(toControl, "*Sigh*  You're just too young ta understand."));
+			CanReadAndWorkReaction.AddAction(new UpdateCurrentTextAction(toControl, "*Sigh* You're just too young ta understand."));
 			
-			SheShouldDecideChoice = new Choice("Maybe she should decide.", "That silly girl don't know what's best for her!  She's nearly got herself killed tryin to pretend to be some tragic hero by jumpin off the cliff.");
+			SheShouldDecideChoice = new Choice("Maybe she should decide.", "That silly girl don't know what's best for her! She's nearly got herself killed tryin to pretend to be some tragic hero by jumpin off the cliff.");
 			SheShouldDecideReaction = new Reaction();
 			SheShouldDecideReaction.AddAction(new NPCCallbackAction(UpdateSheShouldDecide));
-			SheShouldDecideReaction.AddAction(new UpdateCurrentTextAction(toControl, "That silly girl don't know what's best for her!  She's nearly got herself killed tryin to pretend to be some tragic hero by jumpin off the cliff."));
+			SheShouldDecideReaction.AddAction(new UpdateCurrentTextAction(toControl, "That silly girl don't know what's best for her! She's nearly got herself killed tryin to pretend to be some tragic hero by jumpin off the cliff."));
 			
-			DaughterFarmerChoice = new Choice("So your daughter will be a farmer?", "Of course!  What else would she be?  A warrior like she says she will?  Don't make me laugh!");
+			DaughterFarmerChoice = new Choice("So your daughter will be a farmer?", "Of course! What else would she be? A warrior like she says she will? Don't make me laugh!");
 			DaughterFarmerReaction = new Reaction();
 			DaughterFarmerReaction.AddAction(new NPCCallbackAction(UpdateDaughterFarmer));
-			DaughterFarmerReaction.AddAction(new UpdateCurrentTextAction(toControl, "Of course!  What else would she be?  A warrior like she says she will?  Don't make me laugh!"));
+			DaughterFarmerReaction.AddAction(new UpdateCurrentTextAction(toControl, "Of course! What else would she be? A warrior like she says she will? Don't make me laugh!"));
 			
-			NotSillyChoice = new Choice("She's not silly!", "*Sigh*  You're just too young ta understand.");
+			NotSillyChoice = new Choice("She's not silly!", "*Sigh* You're just too young ta understand.");
 			NotSillyReaction = new Reaction();
 			NotSillyReaction.AddAction(new NPCCallbackAction(UpdateNotSilly));
 			NotSillyReaction.AddAction(new SetOffFlagAction(FlagStrings.FarmAfterDialogue));
-			NotSillyReaction.AddAction(new UpdateCurrentTextAction(toControl, "*Sigh*  You're just too young ta understand."));
+			NotSillyReaction.AddAction(new UpdateCurrentTextAction(toControl, "*Sigh* You're just too young ta understand."));
 			
 			YouAreRightChoice = new Choice("You're right.", "Course I am!");
 			YouAreRightReaction = new Reaction();
@@ -238,10 +238,10 @@ public class FarmerMotherYoung : NPC {
 			YouAreRightReaction.AddAction(new SetOffFlagAction(FlagStrings.FarmAfterDialogue));
 			YouAreRightReaction.AddAction(new UpdateCurrentTextAction(toControl, "Course I am!"));
 			
-			StoriesHelpRelateChoice = new Choice("Stories help her get closer to her dad.", "Ya don't need ta be close to yah parents!  Ya just need them ta discipline ya.");
+			StoriesHelpRelateChoice = new Choice("Stories help her get closer to her dad.", "Ya don't need ta be close to yah parents! Ya just need them ta discipline.");
 			StoriesHelpRelateReaction = new Reaction();
 			StoriesHelpRelateReaction.AddAction(new NPCCallbackAction(UpdateStoriesHelpRelate));
-			StoriesHelpRelateReaction.AddAction(new UpdateCurrentTextAction(toControl, "Ya don't need ta be close to yah parents!  Ya just need them ta discipline ya."));
+			StoriesHelpRelateReaction.AddAction(new UpdateCurrentTextAction(toControl, "Ya don't need ta be close to yah parents! Ya just need them ta discipline."));
 			
 			WhyNotChoice = new Choice("Why not?", "My dad didn't tell stories, and I came out okay!");
 			WhyNotReaction = new Reaction();
@@ -249,11 +249,11 @@ public class FarmerMotherYoung : NPC {
 			WhyNotReaction.AddAction(new SetOffFlagAction(FlagStrings.FarmAfterDialogue));
 			WhyNotReaction.AddAction(new UpdateCurrentTextAction(toControl, "My dad didn't tell stories, and I came out okay!"));
 			
-			MyMomChoice = new Choice("My mom tells me stories.", "Yeah?  Well...I guess you don't jump off of cliffs...Perhaps the stories ain't the problem...I'll let her keep the stories so long as she don't jump off cliffs again.");
+			MyMomChoice = new Choice("My mom tells me stories.", "Yeah? Well... I guess you don't jump off of cliffs... Perhaps the stories ain't the problem... I'll let her keep the stories so long as she don't jump off cliffs again.");
 			MyMomReaction = new Reaction();
 			MyMomReaction.AddAction(new NPCCallbackAction(UpdateMyMom));
 			MyMomReaction.AddAction(new SetOffFlagAction(FlagStrings.FarmAfterDialogue));
-			MyMomReaction.AddAction(new UpdateCurrentTextAction(toControl, "Yeah?  Well...I guess you don't jump off of cliffs...Perhaps the stories ain't the problem...I'll let her keep the stories so long as she don't jump off cliffs again."));
+			MyMomReaction.AddAction(new UpdateCurrentTextAction(toControl, "Yeah?  Well... I guess you don't jump off of cliffs... Perhaps the stories ain't the problem... I'll let her keep the stories so long as she don't jump off cliffs again."));
 			
 			TellOnDaughterChoice = new Choice ("Tell on daughter.", "*Sigh* Thanks fer talkin ta me bout this.");
 			TellOnDaughterReaction = new Reaction();
@@ -263,16 +263,16 @@ public class FarmerMotherYoung : NPC {
 		}
 		public void UpdateGiveSeeds(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
-_npcInState.ChangeFacialExpression(StringsNPC.Happy);
+			_npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			_allItemReactions.Remove(StringsItem.SunflowerSeeds);
 			FlagManager.instance.SetFlag(FlagStrings.FarmAlive);	
 		}
 		public void UpdateTellOnDaughter(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
-_npcInState.ChangeFacialExpression(StringsNPC.Default);
+			_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			_allChoiceReactions.Remove(TellOnDaughterChoice);
 			GUIManager.Instance.RefreshInteraction();
-			SetDefaultText("Thanks fer talkin to me bout that.  That girl needs ta learn responsibility.");
+			SetDefaultText("Thanks fer talkin to me bout that. That girl needs ta learn responsibility.");
 			//_npcInState.PlayAnimation("Hoe");
 			FinishedTellOnConversation = true;
 			FlagManager.instance.SetFlag(FlagStrings.TellOnLighthouseConversation);
@@ -281,7 +281,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 		
 		public void UpdateStoriesHelpRelate(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
-_npcInState.ChangeFacialExpression(StringsNPC.Angry);
+			_npcInState.ChangeFacialExpression(StringsNPC.Angry);
 			_allChoiceReactions.Remove(StoriesSillyChoice);
 			_allChoiceReactions.Remove(StoriesFunChoice);
 			_allChoiceReactions.Remove(StoriesHelpRelateChoice);
@@ -298,7 +298,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 				_allChoiceReactions.Add(TellOnDaughterChoice, new DispositionDependentReaction(TellOnDaughterReaction));
 			}
 			GUIManager.Instance.RefreshInteraction();
-			SetDefaultText("I reckon you were right bout those stories.");
+			SetDefaultText("I reckon you were right 'bout those stories.");
 			//_npcInState.PlayAnimation("Hoe");
 			FinishedStoriesConversation = true;
 		}
@@ -315,11 +315,9 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 			//Setflag here
 		}
 		
-		
-		
 		public void UpdateStoriesFun(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
-_npcInState.ChangeFacialExpression(StringsNPC.Default);
+			_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			_allChoiceReactions.Remove(StoriesFunChoice);
 			_allChoiceReactions.Remove(StoriesSillyChoice);
 			_allChoiceReactions.Add(StoriesUsefulChoice, new DispositionDependentReaction(StoriesUsefulReaction));
@@ -328,7 +326,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 		}
 		public void UpdateStoriesSilly(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
-_npcInState.ChangeFacialExpression(StringsNPC.Happy);
+			_npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			_allChoiceReactions.Remove(StoriesFunChoice);
 			_allChoiceReactions.Remove(StoriesSillyChoice);
 			_allChoiceReactions.Add(StoriesArentHorribleChoice, new DispositionDependentReaction(StoriesArentHorribleReaction));
@@ -338,7 +336,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Happy);
 		}
 		public void UpdateStoriesUseful(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
-_npcInState.ChangeFacialExpression(StringsNPC.Default);
+			_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			_allChoiceReactions.Remove(StoriesUsefulChoice);
 			_allChoiceReactions.Remove(GuessSoChoice);
 			_allChoiceReactions.Add(CanReadAndWorkChoice, new DispositionDependentReaction(CanReadAndWorkReaction));
@@ -347,7 +345,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 		}
 		public void UpdateGuessSo(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
-_npcInState.ChangeFacialExpression(StringsNPC.Default);
+			_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			_allChoiceReactions.Remove(StoriesUsefulChoice);
 			_allChoiceReactions.Remove(GuessSoChoice);
 			_allChoiceReactions.Add(DaughterFarmerChoice, new DispositionDependentReaction(DaughterFarmerReaction));
@@ -356,7 +354,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 		}
 		public void UpdateStoriesArentHorrible(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
-_npcInState.ChangeFacialExpression(StringsNPC.Default);
+			_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			_allChoiceReactions.Remove(StoriesArentHorribleChoice);
 			_allChoiceReactions.Remove(IllConvinceChoice);
 			_allChoiceReactions.Add(DaughterFarmerChoice, new DispositionDependentReaction(DaughterFarmerReaction));
@@ -365,7 +363,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 		}
 		public void UpdateIllConvince(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
-_npcInState.ChangeFacialExpression(StringsNPC.Default);
+			_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			_allChoiceReactions.Remove(StoriesArentHorribleChoice);
 			_allChoiceReactions.Remove(IllConvinceChoice);
 			if(setTellOn == true && FinishedTellOnConversation == false){
@@ -377,7 +375,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 		}
 		public void UpdateCanReadAndWork(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
-_npcInState.ChangeFacialExpression(StringsNPC.Default);
+			_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			_allChoiceReactions.Remove(CanReadAndWorkChoice);
 			_allChoiceReactions.Remove(SheShouldDecideChoice);
 			if(setTellOn == true && FinishedTellOnConversation == false){
@@ -390,7 +388,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 		}
 		public void UpdateSheShouldDecide(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
-_npcInState.ChangeFacialExpression(StringsNPC.Default);
+			_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			_allChoiceReactions.Remove(SheShouldDecideChoice);
 			if(_allChoiceReactions.ContainsKey(CanReadAndWorkChoice)){
 				_allChoiceReactions.Remove(CanReadAndWorkChoice);	
@@ -404,7 +402,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 		}
 		public void UpdateDaughterFarmer(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
-_npcInState.ChangeFacialExpression(StringsNPC.Default);
+			_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			_allChoiceReactions.Remove(SheShouldDecideChoice);
 			_allChoiceReactions.Remove(DaughterFarmerChoice);
 			_allChoiceReactions.Add(YouAreRightChoice, new DispositionDependentReaction(YouAreRightReaction));
@@ -412,7 +410,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 		}
 		public void UpdateNotSilly(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
-_npcInState.ChangeFacialExpression(StringsNPC.Default);
+			_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			_allChoiceReactions.Remove(NotSillyChoice);
 			_allChoiceReactions.Remove(YouAreRightChoice);
 			if(setTellOn == true && FinishedTellOnConversation == false){
@@ -425,7 +423,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 		}
 		public void UpdateYouAreRight(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
-_npcInState.ChangeFacialExpression(StringsNPC.Happy);
+			_npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			_allChoiceReactions.Remove(YouAreRightChoice);
 			if(_allChoiceReactions.ContainsKey(NotSillyChoice)){
 				_allChoiceReactions.Remove(NotSillyChoice);	
@@ -440,23 +438,9 @@ _npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			FlagManager.instance.SetFlag(FlagStrings.YourRight);
 		}
 		
-		
-		
-		
-		
-		
-		public override void UpdateEmotionState(){
-			/*if(updateConversationFarmerMotherYoungFlag == false){
-				if(_allChoiceReactions.ContainsKey(StoriesFunChoice)){
-					_allChoiceReactions.Add(StoriesHelpRelateChoice, new DispositionDependentReaction(StoriesHelpRelateReaction));
-				}
-				updateConversationFarmerMotherYoungFlag = true;
-			}*/
-		}
-			
 		private void askedWhatAbout(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
-_npcInState.ChangeFacialExpression(StringsNPC.Default);
+			_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			_allChoiceReactions.Remove(whatAboutChoice);
 			if (_allChoiceReactions.ContainsKey(TellOnDaughterChoice)){
 				_allChoiceReactions.Remove(TellOnDaughterChoice);
@@ -471,7 +455,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 		
 		private void tellOnDaughter(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Angry);
-_npcInState.ChangeFacialExpression(StringsNPC.Angry);
+			_npcInState.ChangeFacialExpression(StringsNPC.Angry);
 			farmerMotherYoung.AddSchedule(new NPCConvoSchedule(farmerMotherYoung, NPCManager.instance.getNPC(StringsNPC.LighthouseGirlYoung), 
 				new YoungFarmerMotherToLighthouseGirlToldOn(),Schedule.priorityEnum.DoNow));
 				
@@ -479,7 +463,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Angry);
 
 		private void givePendant(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
-_npcInState.ChangeFacialExpression(StringsNPC.Default);
+			_npcInState.ChangeFacialExpression(StringsNPC.Default);
 			_allChoiceReactions.Remove(whatAboutChoice);
 			Reaction reactionToGiveSunflowerSeeds = new Reaction(new NPCCallbackAction(dropSunflowerSeeds));
 			

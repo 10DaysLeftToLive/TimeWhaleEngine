@@ -279,8 +279,8 @@ public class FarmerMotherMiddle : NPC {
 		bool WhyNotFlag = false;
 		bool daughterOnBoard = false;
 		Choice MarriageChoice = new Choice("What's this about marriage?", "That silly girl needs to settle herself down.");
-		Choice WhyNotChoice = new Choice("Why are stories silly?", "Hmmph.  In my days you did what your parents toldja, worked however long they wanted and didn't stick your heads in the clouds.  Ya got to know and love your parents through their work!");
-		Choice HowsFarmingChoice = new Choice ("How's farming?", "Poor.  That fool husband of mine can't sell anythin right.  Always undercharges.  We're lucky we still have a house.  I dun know what my girl will do when she grows up.");
+		Choice WhyNotChoice = new Choice("Why are stories silly?", "Hmmph. In my days you did what your parents told ja, worked however long they wanted and didn't stick your heads in the clouds. Ya got to know and love your parents through their work!");
+		Choice HowsFarmingChoice = new Choice ("How's farming?", "Poor.  That fool husband of mine can't sell anythin right. Always undercharges. We're lucky we still have a house. I dun know what my girl will do when she grows up.");
 		Choice MarriageIdeaChoice = new Choice("I have an idea about the marriage.", "Go on");
 		Choice ConvinceDaughterChoice = new Choice("Convince daughter to marry", "That's a waste of time, stop bothering me!");
 		
@@ -307,15 +307,15 @@ public class FarmerMotherMiddle : NPC {
 		
 		public void SetupReactions(){
 			NoteReaction.AddAction(new NPCTakeItemAction(control));
-			NoteReaction.AddAction(new UpdateCurrentTextAction(control, "Hmm...thanks for givin this to me.  If my fool girl had seen this there's no tellin what she would have done."));
+			NoteReaction.AddAction(new UpdateCurrentTextAction(control, "Hmm... thanks for givin this to me. If my fool girl had seen this there's no tellin what she would have done."));
 			AppleReaction.AddAction(new NPCTakeItemAction(control));
-			AppleReaction.AddAction(new UpdateCurrentTextAction(control, "Mmm...that there was delicious!"));
+			AppleReaction.AddAction(new UpdateCurrentTextAction(control, "Mmm... that there was delicious!"));
 			ApplePieReaction.AddAction(new NPCTakeItemAction(control));
-			ApplePieReaction.AddAction(new UpdateCurrentTextAction(control, "Mmm...that there was delicious!"));
+			ApplePieReaction.AddAction(new UpdateCurrentTextAction(control, "Mmm... that there was delicious!"));
 			ShovelReaction.AddAction(new NPCTakeItemAction(control));
-			ShovelReaction.AddAction(new UpdateCurrentTextAction(control, "I been needing a shovel.  Thanks!"));
+			ShovelReaction.AddAction(new UpdateCurrentTextAction(control, "I been needing a shovel. Thanks!"));
 			CaptainsLogReaction.AddAction(new NPCCallbackAction(UpdateCaptainsLog));
-			CaptainsLogReaction.AddAction(new UpdateCurrentTextAction(control, "No thanks!  I dun need  your silly stories!"));
+			CaptainsLogReaction.AddAction(new UpdateCurrentTextAction(control, "No thanks! I dun need your silly stories!"));
 			
 			MarriageReaction.AddAction(new NPCCallbackAction(UpdateMarriage));
 			WhyNotReaction.AddAction(new NPCCallbackAction(UpdateWhysNot));
@@ -375,13 +375,13 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 			}
 			if (text == "husband"){
 				farmerOnBoard = true;
-				MarriageIdeaChoice = new Choice("Convince daughter to marry", "Well...My husband has convinced me in to allowing you to give it a shot.");
+				MarriageIdeaChoice = new Choice("Convince daughter to marry.", "Well... my husband has convinced me in to allowing you to give it a shot.");
 			}
 			if (text == "carpenterSuccess"){
 				SetDefaultText("I've heard what you did for my daughter. Bout time she listens to me.");
 			}
 			if (text == "daughterOnBoard"){ //successful date with carpenter, farmers unaware
-				SetDefaultText("Hello there!  How's it going?");
+				SetDefaultText("Hello there! How's it going?");
 				daughterOnBoard = true;
 				MarriageChoice = new Choice("What's this about marriage?", "My daughter finally got her head on straight and is on board for the marriage");
 			}
