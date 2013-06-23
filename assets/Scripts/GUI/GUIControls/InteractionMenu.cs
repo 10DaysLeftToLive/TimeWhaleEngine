@@ -181,7 +181,17 @@ public class InteractionMenu : GUIControl {
 	#endregion
 
 	public void OpenChatForNPC(NPC _newNpcChatting){
-		StartFadeIn();
+		Debug.Log("isFadingOut = " + isFadingOut);
+		Debug.Log("isFadingIn = " + isFadingIn);
+		Debug.Log("currentFadeTime = " + currentFadeTime);
+		Debug.Log("currentAlpha = " + currentAlpha);
+		
+		if (isFadingOut){
+			isFadingOut = false;
+			isFadingIn = true;
+		} else if (!isFadingIn){
+			StartFadeIn();
+		}
 		npcChattingWith = _newNpcChatting;
 		Refresh();
 	}

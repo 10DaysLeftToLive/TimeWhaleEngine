@@ -123,7 +123,7 @@ public class CarpenterYoung : NPC
 
 			stringList[0] = "Hopefully my son can find his tools without your help this time.";
 			stringList[1] = "Maybe you could help my son find his tools like last time?";
-			stringList[2] = "I wish my son would take better care of his tools, they're a carpenter's most valuable asset after all.  Just like how important an oven is for a baker like your mother.";
+			stringList[2] = "Can't believe he lost a carpenter's most valuable asset. Can't imagine a baker like your mother without an oven.";
 			stringCounter = 3;
 		}
 

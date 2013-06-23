@@ -37,8 +37,6 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	void Start () {
-		
-		
 		parallaxManager = GameObject.Find(Strings.PARALLAXMANAGER).GetComponent<ParallaxManager>();
 		cloudManager = GameObject.Find(Strings.CLOUDMANAGER).GetComponent<CloudManager>();
 		ScreenSetup.CalculateSettings();

@@ -5,10 +5,6 @@ using System.Linq;
 public class NPCManager : ManagerSingleton<NPCManager> {
 	private Dictionary<string, NPC> dictNPC = new Dictionary<string, NPC>();
 	
-	public void Init(){
-		dictNPC.Clear();
-	}
-	
 	public void Add(GameObject npc) {
 		if (dictNPC.ContainsKey(npc.name)){
 			dictNPC.Remove(npc.name);

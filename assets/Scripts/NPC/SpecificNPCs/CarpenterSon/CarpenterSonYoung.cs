@@ -16,7 +16,7 @@ public class CarpenterSonYoung : NPC {
 	public static Schedule whittleSchedule;
 	public static Schedule whittleDoneSchedule;
 	public bool madeFishingRod = false;
-	internal static string encourageString = "...and there. Done.";
+	internal static string encourageString = "... and there. Done.";
 	public string itemCarpenterMakes = "None";
 	Schedule BeginDayWithDad;
 	NPCConvoSchedule BeginDayChat;
@@ -33,14 +33,8 @@ public class CarpenterSonYoung : NPC {
 		CreatedFishingRod = new Reaction();
 		//flagReactions.Add(FlagStrings.carpenterSonMakesFishingRod, CreatedFishingRod);
 		//CreatedFishingRod.Add
-		BeginDayChat = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterYoung), new YoungCarpenterSonToCarpenterConvo());
-		BeginDayChat.SetCanInteract(false);
-		BeginDayWithDad = new Schedule(this, Schedule.priorityEnum.DoNow);
-		TimeTask BeginDayTimeTask = new TimeTask(10, new WaitTillPlayerCloseState(this, ref player));
-  		BeginDayTimeTask.AddFlagToSet(FlagStrings.carpenterSonYoungConvoWithDadFinished);
-		BeginDayWithDad.Add(BeginDayTimeTask);
-  		this.AddSchedule(BeginDayWithDad);
-		this.AddSchedule(BeginDayChat);
+		
+		
 	
 	
 		Reaction ReactToMeetingCSON = new Reaction();
@@ -63,6 +57,15 @@ public class CarpenterSonYoung : NPC {
 	}
 
 	protected override void SetUpSchedules(){
+		BeginDayChat = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.CarpenterYoung), new YoungCarpenterSonToCarpenterConvo());
+		BeginDayChat.SetCanInteract(false);
+		BeginDayWithDad = new Schedule(this, Schedule.priorityEnum.DoNow);
+		TimeTask BeginDayTimeTask = new TimeTask(10, new WaitTillPlayerCloseState(this, ref player));
+  		BeginDayTimeTask.AddFlagToSet(FlagStrings.carpenterSonYoungConvoWithDadFinished);
+		BeginDayWithDad.Add(BeginDayTimeTask);
+  		this.AddSchedule(BeginDayWithDad);
+		this.AddSchedule(BeginDayChat);
+		
 		TalkWithCastleman = new Schedule (this, Schedule.priorityEnum.High);
 		TalkWithCastleman.Add(new TimeTask(300, new WaitTillPlayerCloseState(this, ref player)));
 		Task setFlag = (new TimeTask(2f, new IdleState(this)));
@@ -90,6 +93,8 @@ public class CarpenterSonYoung : NPC {
 		whittleDoneSchedule = new Schedule(this, Schedule.priorityEnum.Medium);
 		whittleDoneSchedule.SetCanInteract(true);
 		whittleDoneSchedule.Add(whittleDoneTask);
+		
+		
 	}
 	
 	
