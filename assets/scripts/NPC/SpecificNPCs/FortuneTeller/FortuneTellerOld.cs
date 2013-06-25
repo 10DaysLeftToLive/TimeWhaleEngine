@@ -202,11 +202,11 @@ public class FortuneTellerOld : NPC {
 		Reaction Path_F10 = new Reaction();
 		#endregion
 		
-		Choice beginFortuneChoice = new Choice("I Have", "Hmm...Your life... it seems like it's missing something. Are there troubles from your past?");
+		Choice beginFortuneChoice = new Choice("I have", "Hmm... Your life... it seems like it's missing something. Are there troubles from your past?");
 		Choice stallFortuneChoice = new Choice("No", "Patience is perhaps the path we all should take. Take your time, but remember that your time is limited in this world.");
-		Choice stallFortuneChoiceA = new Choice("Not Now", "Time is ticking and the sun is slowly setting. Come back soon or it may be too late.");
+		Choice stallFortuneChoiceA = new Choice("Not now", "Time is ticking and the sun is slowly setting. Come back soon or it may be too late.");
 		
-		Choice stallFortuneChoiceB = new Choice("I'll Pass", "Good bye till we meet again.");
+		Choice stallFortuneChoiceB = new Choice("I'll pass", "Goodbye till we meet again.");
 		/*
 		Choice secretFortuneChoice = new Choice(".", "..");
 		Choice secretFortuneChoiceA = new Choice("..", "...");
@@ -491,7 +491,7 @@ public class FortuneTellerOld : NPC {
 			}
 		
 			public void methodA() {
-				SetDefaultText("For now... let me be..");
+				SetDefaultText("For now... let me be...");
 				GUIManager.Instance.RefreshInteraction();
 			}
 			

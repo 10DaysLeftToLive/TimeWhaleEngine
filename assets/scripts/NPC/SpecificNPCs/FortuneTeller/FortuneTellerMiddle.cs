@@ -62,11 +62,11 @@ public class FortuneTellerMiddle : NPC {
 			//items sorted alphabetically
 			
 			//Apple
-			giveAppleReaction.AddAction(new UpdateCurrentTextAction(toControl, "I predict this apple is important to one of your family members~"));
+			giveAppleReaction.AddAction(new UpdateCurrentTextAction(toControl, "I predict this apple is important to one of your family members."));
 			_allItemReactions.Add(StringsItem.Apple,  new DispositionDependentReaction(giveAppleReaction));
 			
 			//Apple Pie
-			giveApplePieReaction.AddAction(new UpdateCurrentTextAction(toControl, "Mmm. I sense a new beginning, a celebration bittersweet~"));
+			giveApplePieReaction.AddAction(new UpdateCurrentTextAction(toControl, "Mmm... I sense a new beginning, a bittersweet celebration."));
 			_allItemReactions.Add(StringsItem.ApplePie,  new DispositionDependentReaction(giveApplePieReaction));
 			
 			//Captain Log
@@ -74,7 +74,7 @@ public class FortuneTellerMiddle : NPC {
 			_allItemReactions.Add(StringsItem.CaptainLog,  new DispositionDependentReaction(giveCaptainLogReaction));
 			
 			//Fishing Rod
-			giveFishingRodReaction.AddAction(new UpdateCurrentTextAction(toControl, "The lake catches the biggest fish. But only by he who has passion and gives up his legacy~"));
+			giveFishingRodReaction.AddAction(new UpdateCurrentTextAction(toControl, "The lake's home to the biggest fish. But only by he who has passion and gives up his legacy~"));
 			_allItemReactions.Add(StringsItem.FishingRod,  new DispositionDependentReaction(giveFishingRodReaction));
 			
 			//Flute
@@ -134,7 +134,7 @@ public class FortuneTellerMiddle : NPC {
 			giveVegetableReaction.AddAction(new UpdateCurrentTextAction(toControl, "Some sort of animal awaits its prize."));
 			_allItemReactions.Add(StringsItem.Vegetable,  new DispositionDependentReaction(giveVegetableReaction));
 		
-			giveWhittleReaction.AddAction(new UpdateCurrentTextAction(toControl, "A skilled craftsman needs just a simple tool to create a masterpiece"));
+			giveWhittleReaction.AddAction(new UpdateCurrentTextAction(toControl, "A skilled craftsman needs just a simple tool to create a masterpiece."));
 			_allItemReactions.Add(StringsItem.Whittle,  new DispositionDependentReaction(giveWhittleReaction));
 		}
 		
