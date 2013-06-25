@@ -14,7 +14,7 @@ public class FortuneTellerYoung : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		return (new InitialEmotionState(this, "Hey there stranger~" + "\n" + "Care for your fortune?"));
+		return (new InitialEmotionState(this, "Hey there stranger. Care for your fortune?"));
 	}
 	
 	protected override Schedule GetSchedule(){
@@ -61,9 +61,9 @@ public class FortuneTellerYoung : NPC {
 #region EmotionStates
 	#region Initial Emotion State
 	private class InitialEmotionState : EmotionState{
-		Choice acceptFortuneChoice = new Choice("Sure.", "Let's begin~" + "\n\n" + "Given two paths, should you take the left one or the right one?");
-		Choice declineFortuneChoice = new Choice("No thanks.", "C'mon, it'll be fun!");
-		Choice acceptReluctantChoice = new Choice ("Ok..", "That's the spirit! Let's begin~" + "\n\n" + "Given two paths, should you take the left path or the right path");
+		Choice acceptFortuneChoice = new Choice("Sure", "Let's begin. Given two paths, should you take the left one or the right one?");
+		Choice declineFortuneChoice = new Choice("No thanks", "C'mon, it'll be fun!");
+		Choice acceptReluctantChoice = new Choice ("Ok", "That's the spirit! Let's begin. Given two paths, should you take the left path or the right path");
 		 
 		Reaction acceptFortuneState = new Reaction();
 		Reaction acceptReluctantState = new Reaction();
@@ -97,7 +97,7 @@ public class FortuneTellerYoung : NPC {
 		public void UpdateDeclinedChoices() {
 			_allChoiceReactions.Remove(declineFortuneChoice);
 			_allChoiceReactions.Remove(acceptFortuneChoice);
-			declineFortuneChoice = new Choice ("Maybe later..", "Come back later then, k?");
+			declineFortuneChoice = new Choice ("Maybe later...", "Come back later then, k?");
 			_allChoiceReactions.Add(acceptReluctantChoice, new DispositionDependentReaction(acceptReluctantState)); 
 			_allChoiceReactions.Add(declineFortuneChoice, new DispositionDependentReaction(fullDeclineState));
 			GUIManager.Instance.RefreshInteraction();
@@ -114,43 +114,43 @@ public class FortuneTellerYoung : NPC {
 	private class BeginFortuneState : EmotionState {
 //Leaving chat goes to the default text: Your path lay with several important decisions. Take a moment to reflect~
 //Even before you're done with the conversation
-		Choice leftChoice = new Choice("Left", "Interesting.." + "\n\n" + "Do you prefer being left alone or being with others?");//
-			Choice aloneChoice = new Choice ("Alone", "Mm.. alone, but wise.." + "\n\n" + "A stranger looks distressed. What do you do?");//
-				Choice aidChoice = new Choice ("Lend them aid", "Mmm.. a noble helper." + "\n" + "They lash out at you, how do you respond?");//
-					Choice helpChoice = new Choice ("Continue Helping", "..Seeing the good in everyone." + "\n\n" + "If such a person asked you to keep a secret, would you?");//
-						Choice keepSecretChoice = new Choice ("Always","Truly a genuine person ... Your fate is in good hands~");//
-						Choice tellSecretChoice = new Choice ("Depends","Hesistent, but with good intentions? .." + "\n\n" + "They seem troubled. Do you stay or leave?");//
-							Choice leaveSecretChoice = new Choice ("I leave", "To begin alone, to stay alone. A rational path~");//
-							Choice dontLeaveSecretChoice = new Choice ("I'd stay", "Beginning alone and ending together." + "\n\n" + "A supportive path~");//
-					Choice leaveChoice = new Choice ("Leave.", "Mm.. Safety is important.." + "\n\n" + "What if you had the opportunity to save a life. Would you take it?");//
-						Choice saveLifeChoice = new Choice ("I would", "Interesting.. What if it put your life at risk, would you still try?");//
-							Choice stillSaveLifeChoice = new Choice ("I would", "You are a selfless and humble soul.." +"\n\n" + "Don't forget your own worth as well!~");//
-							Choice changeSaveLifeChoice = new Choice ("No", "A valid choice.. Why sacrifice for a stranger when you already know yourself?" +"\n\n" + "Stay well and healthy~");//
-						Choice maybeSaveLifeChoice = new Choice ("Depends", "Questioning.. What if your own life was at risk?");
+		Choice leftChoice = new Choice("Left", "Interesting... Do you prefer being left alone or being with others?");//
+			Choice aloneChoice = new Choice ("Alone", "Mm... alone, but wise. A stranger looks distressed. What do you do?");//
+				Choice aidChoice = new Choice ("Lend them aid", "Mmm... a noble helper. They lash out at you, how do you respond?");//
+					Choice helpChoice = new Choice ("Continue Helping", "Seeing the good in everyone. If such a person asked you to keep a secret, would you?");//
+						Choice keepSecretChoice = new Choice ("Always","Truly a genuine person... Your fate is in good hands.");//
+						Choice tellSecretChoice = new Choice ("Depends","Hesistent, but with good intentions? They seem troubled. Do you stay or leave?");//
+							Choice leaveSecretChoice = new Choice ("I leave", "To begin alone, to stay alone. A rational path.");//
+							Choice dontLeaveSecretChoice = new Choice ("I'd stay", "Beginning alone and ending together. A supportive path.");//
+					Choice leaveChoice = new Choice ("Leave.", "Mm... Safety is important... What if you had the opportunity to save a life? Would you take it?");//
+						Choice saveLifeChoice = new Choice ("I would", "Interesting... What if it put your life at risk, would you still try?");//
+							Choice stillSaveLifeChoice = new Choice ("I would", "You are a selfless and humble soul... Don't forget your own worth as well!");//
+							Choice changeSaveLifeChoice = new Choice ("No", "A valid choice... Why sacrifice for a stranger when you already know yourself. Stay well and healthy.");//
+						Choice maybeSaveLifeChoice = new Choice ("Depends", "Questioning... What if your own life was at risk?");
 							//stillSaveLifeChoice //
 							//changeSaveLifeChoice //
-						Choice dontSaveLifeChoice = new Choice ("Never", "I see.. You are your utmost priority." +"\n\n" + "Stay well and healthy~");//
-				Choice questionChoice = new Choice ("Question their motive", "Mm. Seeking clarity." + "\n\n" + "They want a friend, do you allow them to follow?");//
+						Choice dontSaveLifeChoice = new Choice ("Never", "I see... You are your utmost priority. Stay well and healthy.");//
+				Choice questionChoice = new Choice ("Question their motive", "Mm... Seeking clarity. They want a friend, do you allow them to follow?");//
 						//keepSecretChoice //
 						//tellSecretChoice //
 							//leaveSecretChoice //
 							//dontLeaveSecretChoice //
-				Choice nothingChoice = new Choice ("Do nothing", "Mm. More important endeavors to attend?" + "\n\n" + "What if they were in tears?"); //
-					Choice yesToTearsChoice = new Choice ("I'd help", "You carry sympathy.. " + "\n\n" + "They ask you to share their burden, do you share it?"); //
-						Choice shareBurdenChoice = new Choice ("I'd help", "You carry sympathy.. " + "\n\n" + "They ask you to share their burden, do you share it?"); //
-						Choice dontShareBurdenChoice = new Choice ("I'd help", "Burden for a stranger" + "\n\n" + "They ask you to share their burden, do you share it?"); //
-					Choice noToTearsChoice = new Choice ("No", "True to your intentions.." + "\n\n" + "You are strong willed~"); //
+				Choice nothingChoice = new Choice ("Do nothing", "Mm... More important endeavors to attend? What if they were in tears?"); //
+					Choice yesToTearsChoice = new Choice ("I'd help", "You carry sympathy... They ask you to share their burden, do you share it?"); //
+						Choice shareBurdenChoice = new Choice ("I'd help", "You carry sympathy... They ask you to share their burden, do you share it?"); //
+						Choice dontShareBurdenChoice = new Choice ("I'd help", "Burden for a stranger. They ask you to share their burden, do you share it?"); //
+					Choice noToTearsChoice = new Choice ("No", "True to your intentions... You are strong willed."); //
 		
-			Choice togetherChoice = new Choice ("With Others", "Mm, friendships are important." + "\n\n" + "If you could only save one person, who would it be?"); //
-				Choice saveLoverChoice = new Choice ("A Lover", "The one true love... worth more than anything in world." + "\n\n" + "Would you risk your life for them?"); //
-					Choice loverRiskLifeChoice = new Choice ("Always","Mmm..." + "\n\n" + "But what if it would cause them grief knowing you gave your own life to save them?"); //
-						Choice yesRiskLifeChoice = new Choice ("I Still Would", "True love prevails over the odds." + "\n\n" + "May they be a lucky one~");
-						Choice noRiskLifeChoice = new Choice ("I don't know.", "It's ok not to know now ..." + "\n\n" +"but what would happen if such an event were to occur?~");
-					Choice loverUnsureLifeChoice = new Choice ("Depends","It's ok not to know... Perhaps they wouldn't want that either~");
-					Choice loverNeverLifeChoice = new Choice ("No","You trust in yourself first.. Perhaps that is the right answer~");
+			Choice togetherChoice = new Choice ("With Others", "Mm... Friendships are important. If you could only save one person, who would it be?"); //
+				Choice saveLoverChoice = new Choice ("A Lover", "The one true love... worth more than anything in world. Would you risk your life for them?"); //
+					Choice loverRiskLifeChoice = new Choice ("Always","Mmm... But what if it would cause them grief knowing you gave your own life to save them?"); //
+						Choice yesRiskLifeChoice = new Choice ("I Still Would", "True love prevails over the odds. May they be a lucky one.");
+						Choice noRiskLifeChoice = new Choice ("I don't know.", "It's ok not to know now... But what would happen if such an event were to occur?");
+					Choice loverUnsureLifeChoice = new Choice ("Depends","It's ok not to know... Perhaps they wouldn't want that either.");
+					Choice loverNeverLifeChoice = new Choice ("No","You trust in yourself first.. Perhaps that is the right answer.");
 				Choice saveFamilyChoice = new Choice ("A Sibling", "Family first... an unwritten trust.");
 					Choice FamilyQuestion = new Choice ("","");
-				Choice saveMentorChoice = new Choice ("A Mentor","Noble...a stranger with potential.");
+				Choice saveMentorChoice = new Choice ("A Mentor","Noble... a stranger with potential.");
 					Choice MentorQuestion = new Choice ("","");
 		
 			//Choice itemOne = new Choice ("itemOne","");
@@ -160,7 +160,7 @@ public class FortuneTellerYoung : NPC {
 			//Choice itemFive = new Choice ("itemFive","");
 			//Choice itemSix =  new Choice ("itemSix","");
 				
-		Choice rightChoice = new Choice("Right", "Interesting.." + "\n\n" + "Do you prefer being left alone or being with others?");
+		Choice rightChoice = new Choice("Right", "Interesting... Do you prefer being left alone or being with others?");
 			
 		
 //Add more choices 
@@ -496,8 +496,8 @@ public class FortuneTellerYoung : NPC {
 	#region Initial Emotion State
 	private class StillConvincingState : EmotionState {
 		bool choicesActivated = false;
-		Choice readyChoice = new Choice("I'm ready!", "Excellent choice! Given two path, do you take the left path or the right path?");
-		Choice NotYetChoice = new Choice("Not yet.", "We aren't getting any younger!");
+		Choice readyChoice = new Choice("I'm ready!", "Excellent choice! Given two paths, do you take the left path or the right path?");
+		Choice NotYetChoice = new Choice("Not yet", "We aren't getting any younger!");
 		Reaction activateChoices = new Reaction();
 		Reaction acceptFortuneState = new Reaction();
 		Reaction declineFortuneState = new Reaction();
@@ -510,7 +510,7 @@ public class FortuneTellerYoung : NPC {
 		SetOnOpenInteractionReaction(new DispositionDependentReaction(activateChoices));
 //
 		acceptFortuneState.AddAction(new NPCCallbackOnNPCAction(updateCurrentText, toControl));
-		acceptFortuneState.AddAction(new NPCEmotionUpdateAction(toControl, new BeginFortuneState(toControl, "Let's begin~" + "\n\n" + "Given two paths, should you take the left one or the right one?")));
+		acceptFortuneState.AddAction(new NPCEmotionUpdateAction(toControl, new BeginFortuneState(toControl, "Let's begin. Given two paths, should you take the left one or the right one?")));
 //
 		declineFortuneState.AddAction(new NPCCallbackOnNPCAction(updateDecline, toControl));		
 //
@@ -537,7 +537,7 @@ public class FortuneTellerYoung : NPC {
 				_allChoiceReactions.Remove(readyChoice);
 				_allChoiceReactions.Remove(NotYetChoice);
 				GUIManager.Instance.RefreshInteraction();
-				NotYetChoice = new Choice ("Not yet.", "Please!! I need practice!");
+				NotYetChoice = new Choice ("Not yet", "Please!! I need practice!");
 				
 				_allChoiceReactions.Add(NotYetChoice, new DispositionDependentReaction(declineFortuneState));
 				_allChoiceReactions.Add(readyChoice, new DispositionDependentReaction(acceptFortuneState));
@@ -548,7 +548,7 @@ public class FortuneTellerYoung : NPC {
 				_allChoiceReactions.Remove(NotYetChoice);
 				toControl.UpdateDefaultText("You're back! Ready for your fortune?");
 				GUIManager.Instance.RefreshInteraction();
-				NotYetChoice = new Choice ("Not yet.", "Ok, come back soon! Predictions come and go you know!");
+				NotYetChoice = new Choice ("Not yet", "Ok, come back soon! Predictions come and go you know!");
 				
 				_allChoiceReactions.Add(NotYetChoice, new DispositionDependentReaction(declineFortuneState));
 				_allChoiceReactions.Add(readyChoice, new DispositionDependentReaction(acceptFortuneState));
@@ -559,7 +559,7 @@ public class FortuneTellerYoung : NPC {
 				_allChoiceReactions.Remove(NotYetChoice);
 				toControl.UpdateDefaultText("I promise it won't be scary!");
 				GUIManager.Instance.RefreshInteraction();
-				NotYetChoice = new Choice ("Not yet.", "Ok... You win.");
+				NotYetChoice = new Choice ("Not yet", "Ok... You win.");
 				
 				_allChoiceReactions.Add(NotYetChoice, new DispositionDependentReaction(declineFortuneState));
 				_allChoiceReactions.Add(readyChoice, new DispositionDependentReaction(acceptFortuneState));
@@ -570,8 +570,8 @@ public class FortuneTellerYoung : NPC {
 				_allChoiceReactions.Remove(NotYetChoice);
 				toControl.UpdateDefaultText("Please...?");
 				GUIManager.Instance.RefreshInteraction();
-				readyChoice = new Choice ("I'm ready!", "I'm glad you finally decided to join me~");
-				NotYetChoice = new Choice ("Not yet.", "Good catch. I thought that trick would work.");
+				readyChoice = new Choice ("I'm ready!", "I'm glad you finally decided to join me.");
+				NotYetChoice = new Choice ("Not yet", "Good catch. I thought that trick would work.");
 				
 				_allChoiceReactions.Add(readyChoice, new DispositionDependentReaction(acceptFortuneState));
 				_allChoiceReactions.Add(NotYetChoice, new DispositionDependentReaction(declineFortuneState));
@@ -581,7 +581,7 @@ public class FortuneTellerYoung : NPC {
 				//FlagManager.instance.SetFlag(FlagStrings.MeanToFortuneteller);
 				_allChoiceReactions.Remove(readyChoice);
 				_allChoiceReactions.Remove(NotYetChoice);
-				toControl.UpdateDefaultText("Ok... I'll find someone else do their fortune then..");
+				toControl.UpdateDefaultText("Ok... I'll find someone else do their fortune then.");
 				GUIManager.Instance.RefreshInteraction();
 				SetOnCloseInteractionReaction(new DispositionDependentReaction(changeToGiveUpState));
 			}
