@@ -274,14 +274,6 @@ public abstract class NPC : Character {
 		return (flags);
 	}
 	
-	public int GetHighDisposition(){
-		return (11);	
-	}
-	
-	public int GetLowDisposition(){
-		return (-5);	
-	}
-	
 	public int ID{
 		get {return id;}
 	}

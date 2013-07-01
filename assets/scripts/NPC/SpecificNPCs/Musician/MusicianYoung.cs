@@ -30,10 +30,10 @@ public class MusicianYoung : NPC {
 		this.SetCharacterPortrait(StringsNPC.Smile);	
 	}
 	protected override void SetFlagReactions(){
-		Choice MuteResponseChoice = new Choice("Is your son mute?", "Oh no!  He's just very shy!");
+		Choice MuteResponseChoice = new Choice("Is your son mute?", "Oh no! He's just very shy!");
 		Reaction MuteResponseReaction = new Reaction();
 		MuteResponseReaction.AddAction(new NPCRemoveChoiceAction(this, MuteResponseChoice));
-		MuteResponseReaction.AddAction(new UpdateCurrentTextAction(this, "Oh no!  He's  just very shy!"));
+		MuteResponseReaction.AddAction(new UpdateCurrentTextAction(this, "Oh no! He's just very shy!"));
 		Reaction IsHeMuteReaction = new Reaction();
 		IsHeMuteReaction.AddAction(new NPCAddChoiceAction(this, MuteResponseChoice, new DispositionDependentReaction(MuteResponseReaction)));
 		flagReactions.Add(FlagStrings.MusicianCommentOnSon, IsHeMuteReaction);
@@ -103,7 +103,7 @@ public class MusicianYoung : NPC {
 		Choice CanIHelpChoice;
 		Reaction CanIHelpReaction;
 	
-		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, "Hi!  I'm the musician and that's my son over there.  \nWe're new to the island."){
+		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, "Hi! I'm the musician and that's my son over there. We're new to the island."){
 			
 			WhatKindOfMusicChoice = new Choice("What kind of music do you play?", "All sorts, I've tried to learn as many instruments as I can.");
 			WhatKindOfMusicReaction = new Reaction();
@@ -116,10 +116,10 @@ public class MusicianYoung : NPC {
 			PlayForMeReaction.AddAction(new NPCCallbackAction(UpdatePlayForMe));
 			PlayForMeReaction.AddAction(new UpdateCurrentTextAction(toControl, "I would play for you when I'm not tired from moving in."));
 			
-			IsThereAnyYouLikeChoice = new Choice("What kind of musical instrument do you like?", "I like all of them, although the flute always has a special place in my heart.\nBut I lost it at my old town.");
+			IsThereAnyYouLikeChoice = new Choice("What kind of musical instrument do you like?", "I like all of them, although the flute always has a special place in my heart, but I lost it at my old town.");
 			IsThereAnyYouLikeReaction = new Reaction();
 			IsThereAnyYouLikeReaction.AddAction(new NPCCallbackAction(UpdateIsThereAnyYouLike));
-			IsThereAnyYouLikeReaction.AddAction(new UpdateCurrentTextAction(toControl, "I like all of them, although the flute always has a special place in my heart.\nBut I lost it at my old town."));
+			IsThereAnyYouLikeReaction.AddAction(new UpdateCurrentTextAction(toControl, "I like all of them, although the flute always has a special place in my heart.But I lost it at my old town."));
 			
 			WhereDoYouComeFromChoice = new Choice("Where did you move from?", "A small town on the mainland.");
 			WhereDoYouComeFromReaction = new Reaction();
@@ -132,25 +132,25 @@ public class MusicianYoung : NPC {
 			WhyDidYouComeReaction.AddAction(new NPCCallbackAction(UpdateWhyDidYouCome));
 			WhyDidYouComeReaction.AddAction(new UpdateCurrentTextAction(toControl, "I figured after my husbands death, a change in scenery was needed."));
 			
-			WhatWasTheTripLikeChoice = new Choice("What was the trip like?", "It wasn't too bad.  It was actually pretty pleasant!");
+			WhatWasTheTripLikeChoice = new Choice("What was the trip like?", "It wasn't too bad. It was actually pretty pleasant!");
 			WhatWasTheTripLikeReaction = new Reaction();
 			WhatWasTheTripLikeReaction.AddAction(new NPCCallbackAction(UpdateWhatWasTheTripLike));
-			WhatWasTheTripLikeReaction.AddAction(new UpdateCurrentTextAction(toControl, "It wasn't too bad.  It was actually pretty pleasant!"));
+			WhatWasTheTripLikeReaction.AddAction(new UpdateCurrentTextAction(toControl, "It wasn't too bad. It was actually pretty pleasant!"));
 			
-			WasYourSonCloseToHisFatherChoice = new Choice("How is your son taking it?", "He's been very sad, he and his father were close.  \nI think he just needs a friend though.");
+			WasYourSonCloseToHisFatherChoice = new Choice("How is your son taking it?", "He's been very sad, he and his father were close. I think he just needs a friend though.");
 			WasYourSonCloseToHisFatherReaction = new Reaction();
 			WasYourSonCloseToHisFatherReaction.AddAction(new NPCCallbackAction(UpdateWasYourSonCloseToHisFatherReaction));
-			WasYourSonCloseToHisFatherReaction.AddAction(new UpdateCurrentTextAction(toControl, "He's been very sad, he and his father were close.  \nI think he just needs a friend though."));
+			WasYourSonCloseToHisFatherReaction.AddAction(new UpdateCurrentTextAction(toControl, "He's been very sad, he and his father were close. I think he just needs a friend though."));
 			
-			HowAreYouDoingChoice = new Choice("That's horrible, how are you doing?", "I...I could be better, but I think moving will help.  \nI'm excited to meet my new neighbors!");
+			HowAreYouDoingChoice = new Choice("That's horrible, how are you doing?", "I... I could be better, but I think moving will help. I'm excited to meet my new neighbors!");
 			HowAreYouDoingReaction = new Reaction();
 			HowAreYouDoingReaction.AddAction(new NPCCallbackAction(UpdateHowAreYouDoing));
-			HowAreYouDoingReaction.AddAction(new UpdateCurrentTextAction(toControl, "I...I could be better, but I think moving will help.  \nI'm excited to meet my new neighbors!"));
+			HowAreYouDoingReaction.AddAction(new UpdateCurrentTextAction(toControl, "I... I could be better, but I think moving will help. I'm excited to meet my new neighbors!"));
 			
-			CanIHelpChoice = new Choice("Can I help you?", "Ha ha!  I think my son and I are okay for now, you've been such a kind neighbor.\nI hope that we can become friends in the future!");
+			CanIHelpChoice = new Choice("Can I help you?", "Ha ha! I think my son and I are okay for now, you've been such a kind neighbor.I hope that we can become friends in the future!");
 			CanIHelpReaction = new Reaction ();
 			CanIHelpReaction.AddAction(new NPCCallbackAction(UpdateCanIHelp));
-			CanIHelpReaction.AddAction(new UpdateCurrentTextAction(toControl, "Ha ha!  I think we are okay, you've been such a kind neighbor.\nI hope that we can become friends in the future!"));
+			CanIHelpReaction.AddAction(new UpdateCurrentTextAction(toControl, "Ha ha! I think we are okay, you've been such a kind neighbor.I hope that we can become friends in the future!"));
 			CanIHelpReaction.AddAction(new SetOffFlagAction(FlagStrings.MusicianFriendsWithPlayer));
 			
 		}

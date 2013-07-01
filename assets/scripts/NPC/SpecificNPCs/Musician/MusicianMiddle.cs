@@ -5,7 +5,7 @@ using System.Collections;
 /// MusicianMiddle specific scripting values
 /// The Musician in middle starts out sad and unfriendly if you do not choose to interact with her in young age.
 /// If you choose to do, she enters a neutral state in which the player has an easier time making her happy
-/// so that she can play musical instruments.  Her reactions are based on the mood of her son, the castleman.
+/// so that she can play musical instruments. Her reactions are based on the mood of her son, the castleman.
 /// </summary>
 public class MusicianMiddle : NPC {
 	
@@ -71,12 +71,12 @@ public class MusicianMiddle : NPC {
 		
 		Task detectPlayer = new Task(new WaitTillPlayerCloseState(this, ref player));
 		
-		TimeTask moveToForest = new TimeTask(50f, new MoveState(this,  MapLocations.MiddleOfHauntedForestMiddle));
+		TimeTask moveToForest = new TimeTask(50f, new MoveState(this, MapLocations.MiddleOfHauntedForestMiddle));
 		TimeTask moveToBridge = new TimeTask(50f, new MoveState(this, MapLocations.BridgeMiddle));
 		TimeTask moveToLightHouse = new TimeTask(50f, new MoveState(this, MapLocations.LightHouseMiddle));
 		TimeTask moveToReflectionTree = new TimeTask(50f, new MoveState(this, MapLocations.ReflectionTreeMiddle));
 		TimeTask moveToCliff = new TimeTask(50f, new MoveState(this, MapLocations.TopOfFirstFloorStairsRightMiddle));
-		TimeTask moveToWindmill =  new TimeTask(50f, new MoveState(this, MapLocations.WindmillMiddle));
+		TimeTask moveToWindmill = new TimeTask(50f, new MoveState(this, MapLocations.WindmillMiddle));
 
 		runAway = new ScheduleLoop(this);
 		runAway.Add (moveToForest);
@@ -122,9 +122,9 @@ public class MusicianMiddle : NPC {
 		const int FREAKOUTBYPLAYER_MAX = 2;
 		int freakedOutByPlayer;
 		
-		Choice reassureMusician = new Choice("Sure, I will look after him.", "Thanks!  I appreciate your consideration.");
-		Choice distressMusician = new Choice("Watch over him yourself.", "How Rude!  how can you even say that?");
-		Choice ambivalent = new Choice("...", "Hello..? Do you speak English?");
+		Choice reassureMusician = new Choice("Sure, I will look after him.", "Thanks! I appreciate your consideration.");
+		Choice distressMusician = new Choice("Watch over him yourself.", "How Rude! How can you even say that?");
+		Choice ambivalent = new Choice("...", "Hello...? Do you speak English?");
 		
 		Choice makeFunOfMusician = new Choice("You are his mother, take responsibility", "He is a grown man and should not intrude on his personal affairs.");
 		Choice apologizeToMusician = new Choice("I'm sorry if I sounded mean", "It's ok, I am just concerned about his behavior.");
@@ -172,7 +172,7 @@ public class MusicianMiddle : NPC {
 				DispositionDependentReaction insultedByPlayerEffect = new DispositionDependentReaction(insultedByPlayer);
 				DispositionDependentReaction apologizeToPlayerEffect = new DispositionDependentReaction(apologizesToPlayer);
 				
-				shunsPlayer.AddAction(new UpdateDefaultTextAction(toControl, "Oh.. why hello there!"));
+				shunsPlayer.AddAction(new UpdateDefaultTextAction(toControl, "Oh... why hello there!"));
 				shunsPlayer.AddAction(new NPCCallbackAction(AngeredByPlayer));
 			
 				insultedByPlayer.AddAction(new SetOffFlagAction("Scared By Player"));
@@ -244,7 +244,7 @@ public class MusicianMiddle : NPC {
 	
 	private class HappyForCastleMan : EmotionState {
 		
-		Choice askAboutSon = new Choice("How is your son doing?", "He is doing great!  He is right over there, you should go talk to him.");
+		Choice askAboutSon = new Choice("How is your son doing?", "He is doing great! He is right over there, you should go talk to him.");
 		Choice playMusicialInstrument = new Choice("Could you play me a tune?", "That would lovely, if only I had something to play with.");
 		
 		Reaction curiousAboutSon = new Reaction();

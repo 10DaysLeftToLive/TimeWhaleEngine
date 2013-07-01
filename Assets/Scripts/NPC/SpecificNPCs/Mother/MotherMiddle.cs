@@ -52,7 +52,7 @@ public class MotherMiddle : NPC {
 		Reaction randomMessage;
 		bool rose = false, pendant = false, seashell = false;
 		
-		Choice TempFarmerReturnChoice = new Choice("Please mother, bring back the farmers!", "Fine...with a twirl of my wrist..poof, the farmers have returned!");
+		Choice TempFarmerReturnChoice = new Choice("Please bring back the farmers!", "Fine... with a twirl of my wrist... poof! the farmers have returned!");
 		Reaction TempFarmerReturnReaction = new Reaction();
 	
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
