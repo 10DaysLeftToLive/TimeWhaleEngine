@@ -5,10 +5,6 @@ using System.Collections;
 /// Carpenter Son young specific scripting values
 /// </summary>
 public class CarpenterSonYoung : NPC {
-	protected override void Init() {
-		id = NPCIDs.CARPENTER_SON;
-		base.Init();
-	}
 	Schedule TalkWithCastleman;
 	Schedule TalkWithCastlemanNotFriend;
 	Schedule Woodworking;
@@ -260,11 +256,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 			//_allChoiceReactions.Clear();
 			//_allChoiceReactions.Add(, new DispositionDependentReaction(makeFishingRodReaction));
 		}
-		
-		public override void UpdateEmotionState(){
 			
-		}
-		
 		private void RecieveItemResult(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Smile);
             _npcInState.ChangeFacialExpression(StringsNPC.Smile);
@@ -299,10 +291,6 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 		public GaveFishingRodEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
 			
 		}
-		
-		public override void UpdateEmotionState(){
-			
-		}
 	}
 	#endregion
 	#region GivenDoll
@@ -322,10 +310,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 			RecieveItemReaction.AddAction(new NPCGiveItemAction(toControl, StringsItem.TimeWhale));
 			_allChoiceReactions.Add(RecieveItemChoice, new DispositionDependentReaction(RecieveItemReaction));
 		}
-		public override void UpdateEmotionState(){
-			
-		}
-		
+
 		private void RecieveItemResult(){
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
 			_npcInState.ChangeFacialExpression(StringsNPC.Default);

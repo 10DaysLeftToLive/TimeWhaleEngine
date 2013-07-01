@@ -5,11 +5,6 @@ using System.Collections;
 /// FortuneTellerYoung specific scripting values
 /// </summary>
 public class FortuneTellerYoung : NPC {
-	protected override void Init() {
-		id = NPCIDs.FORTUNE_TELLER;
-		base.Init();
-	}
-	
 	protected override void SetFlagReactions(){
 	}
 	

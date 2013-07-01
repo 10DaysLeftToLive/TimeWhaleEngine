@@ -5,11 +5,6 @@ using System.Collections;
 /// SiblingMiddle specific scripting values
 /// </summary>
 public class SiblingMiddle : Sibling {
-	protected override void Init() {
-		id = NPCIDs.SIBLING;
-		base.Init();
-	}
-	
 	protected override void SetFlagReactions(){
 		
 	}
@@ -49,11 +44,6 @@ public class SiblingMiddle : Sibling {
 			_allItemReactions.Add("apple",  new DispositionDependentReaction(gaveRose)); // change item to rose
 		
 		}
-		
-		public override void UpdateEmotionState(){
-			
-		}
-	
 	}
 	#endregion
 	#endregion

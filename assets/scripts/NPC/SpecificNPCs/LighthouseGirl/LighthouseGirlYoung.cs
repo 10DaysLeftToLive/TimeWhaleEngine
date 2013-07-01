@@ -13,10 +13,6 @@ public class LighthouseGirlYoung : NPC {
 	Schedule GaveNothingSchedule;
 
 	NPCConvoSchedule LighthouseGoingToBeach;
-	protected override void Init() {
-		id = NPCIDs.LIGHTHOUSE_GIRL;
-		base.Init();
-	}
 	public void setAngry(){
 		this.SetCharacterPortrait(StringsNPC.Angry);
 	}
@@ -552,10 +548,6 @@ public class LighthouseGirlYoung : NPC {
 			GUIManager.Instance.CloseInteractionMenu();
 			FlagManager.instance.SetFlag(FlagStrings.CounterTellOn);
 			SetDefaultText("My dad told you to leave me alone!");
-			//22222222222222222222222222222222222222222
-		}
-		public override void UpdateEmotionState(){
-			
 		}
 	}
 	#endregion

@@ -4,12 +4,7 @@ using System.Collections;
 /// <summary>
 /// LighthouseGirl Old specific scripting values
 /// </summary>
-public class LighthouseGirlOld : NPC {
-	protected override void Init() {
-		id = NPCIDs.LIGHTHOUSE_GIRL;
-		base.Init();
-	}
-	
+public class LighthouseGirlOld : NPC {	
 	protected override void SetFlagReactions(){
 		Reaction castleMarriage = new Reaction();
 		castleMarriage.AddAction(new NPCCallbackSetStringAction(MoveForMarriage, this, "castle"));
@@ -54,11 +49,6 @@ public class LighthouseGirlOld : NPC {
 			
 		
 		}
-		
-		public override void UpdateEmotionState(){
-			
-		}
-	
 	}
 	#endregion
 	#endregion

@@ -12,11 +12,7 @@ public class FarmerMotherYoung : NPC {
 	bool TellOnLighthouseSet = false;
 	
 	NPCConvoSchedule InitialConversation;
-	
-	protected override void Init() {
-		id = NPCIDs.FARMER_MOTHER;
-		base.Init();
-	}
+
 	protected void setAngry(){
 		this.SetCharacterPortrait(StringsNPC.Angry);
 	}
@@ -100,11 +96,6 @@ public class FarmerMotherYoung : NPC {
 			
 		
 		}
-		
-		public override void UpdateEmotionState(){
-
-		}
-	
 	}
 	#endregion
 	

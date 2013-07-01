@@ -5,11 +5,6 @@ using System.Collections;
 /// Sibling young specific scripting values
 /// </summary>
 public class SiblingYoung : Sibling {
-	protected override void Init() {
-		id = NPCIDs.SIBLING;
-		base.Init();
-	}
-	
 	#region Set Flag Reactions
 	public string currentPassiveText;
 	

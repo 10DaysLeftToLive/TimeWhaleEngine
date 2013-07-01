@@ -5,11 +5,6 @@ using System.Collections;
 /// CastlemanOld specific scripting values
 /// </summary>
 public class CastlemanOld : NPC {
-	protected override void Init() {
-		id = NPCIDs.CASTLE_MAN;
-		base.Init();
-		//this.SetCharacterPortrait(StringsNPC.Crazy);
-	}
 	/*
 	 * THE PLAN
 	 * CASTLEMAN EMOTION STATES
@@ -89,11 +84,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 			_allChoiceReactions.Add(noThanksChoice, new DispositionDependentReaction(noThanksReaction));
 			_allChoiceReactions.Add(sureChoice, new DispositionDependentReaction(sureReaction));
 		}
-		
-		public override void UpdateEmotionState(){
-			
-		}
-		
+
 		private void noThanksResult()
 		{
 			_npcInState.SetCharacterPortrait(StringsNPC.Sad);

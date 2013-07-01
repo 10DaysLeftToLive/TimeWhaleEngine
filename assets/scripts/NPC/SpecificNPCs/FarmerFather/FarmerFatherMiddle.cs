@@ -13,7 +13,6 @@ public class FarmerFatherMiddle : NPC {
 	bool flagSet = false;
 	bool carpenterDate = true;
 	protected override void Init() {
-		id = NPCIDs.FARMER_FATHER;
 		base.Init();
 	}
 	
@@ -529,10 +528,6 @@ _npcInState.ChangeFacialExpression(StringsNPC.Happy);
 				_allChoiceReactions.Add(MarriageChoice, new DispositionDependentReaction(MarriageReaction));
 				_allChoiceReactions.Add(BusinessChoice, new DispositionDependentReaction(BusinessReaction));
 			}
-		}
-		
-		public override void UpdateEmotionState(){
-			
 		}
 		
 		public override void PassStringToEmotionState(string text){

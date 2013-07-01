@@ -5,10 +5,6 @@ using System.Collections;
 /// Carpenter son old specific scripting values
 /// </summary>
 public class CarpenterSonOld : NPC {
-	protected override void Init() {
-		id = NPCIDs.CARPENTER_SON;
-		base.Init();
-	}
 	internal static bool ateBool = false;
 	protected string currentIdlePose = "Idle";
 	protected string currentWalkPose = "Walk";
@@ -205,10 +201,6 @@ public class CarpenterSonOld : NPC {
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){		
 			//_allChoiceReactions.Add(aChoice, new DispositionDependentReaction(aReaction));
 			//_allChoiceReactions.Add(bChoice, new DispositionDependentReaction(bReaction));
-		}
-		
-		public override void UpdateEmotionState(){
-			
 		}
 	}
 	#endregion

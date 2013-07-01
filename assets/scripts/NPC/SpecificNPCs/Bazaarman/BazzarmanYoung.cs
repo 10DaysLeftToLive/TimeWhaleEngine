@@ -7,10 +7,6 @@ using System.Collections.Generic;
 /// </summary>
 public class BazzarmanYoung : NPC {
 	InitialEmotionState state;
-	protected override void Init() {
-		id = NPCIDs.BAZAAR_MAN;
-		base.Init();
-	}
 	
 	protected override EmotionState GetInitEmotionState(){
 		state  = new InitialEmotionState(this, "Hello there!");

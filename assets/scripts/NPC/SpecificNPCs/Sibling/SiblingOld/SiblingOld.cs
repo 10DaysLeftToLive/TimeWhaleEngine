@@ -8,12 +8,7 @@ using System.Collections;
 /// </summary>
 public class SiblingOld : Sibling {
 	private static readonly float Y_COORDINATE = -1.735313f + (LevelManager.levelYOffSetFromCenter*2);
-	
-	protected override void Init() {
-		id = NPCIDs.SIBLING;
-		base.Init();
-	}
-	
+
 	protected override void SetFlagReactions(){
 		#region FirstPassiveChat
 		Reaction gameStartPassiveChat = new Reaction();
@@ -364,10 +359,6 @@ gameStartPassiveChat.AddAction(new NPCAddScheduleAction(this, oldSiblingIntroduc
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
 			
 		}
-		
-		public override void UpdateEmotionState(){
-			
-		}
 	}
 		#endregion
 	#endregion
@@ -397,10 +388,6 @@ gameStartPassiveChat.AddAction(new NPCAddScheduleAction(this, oldSiblingIntroduc
 	private class AtReflectionTreeState : EmotionState {			
 		public AtReflectionTreeState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue) {		
 
-		}
-		
-		public override void UpdateEmotionState(){
-			
 		}
 	}	
 }

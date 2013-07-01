@@ -12,7 +12,6 @@ public class MusicianMiddle : NPC {
 	Vector3 originalLocation; //Original location if the player actions change the mood of the musician in the past.
 	
 	protected override void Init() {
-		id = NPCIDs.MUSICIAN;
 		base.Init();
 		originalLocation = transform.position;
 	}
@@ -236,10 +235,6 @@ public class MusicianMiddle : NPC {
 			_npcInState.SetCharacterPortrait(StringsNPC.Happy);
 			_npcInState.ChangeFacialExpression(StringsNPC.Happy);
 		}
-		
-		public override void UpdateEmotionState() {
-			
-		}
 	}
 	
 	private class HappyForCastleMan : EmotionState {
@@ -301,10 +296,6 @@ public class MusicianMiddle : NPC {
 			_npcInState.ChangeFacialExpression(StringsNPC.Smile);
 			_allChoiceReactions.Add(askAboutSon, new DispositionDependentReaction(curiousAboutSon));
 		}
-
-		public override void UpdateEmotionState(){
-			
-		}
 	}
 	
 	private class NeturalTowardsPlayer : EmotionState {
@@ -338,10 +329,6 @@ public class MusicianMiddle : NPC {
 		void ClearAllChoices() {
 			_allChoiceReactions.Clear();
 			GUIManager.Instance.RefreshInteraction();
-		}
-		
-		public override void UpdateEmotionState(){
-			
 		}
 	}
 

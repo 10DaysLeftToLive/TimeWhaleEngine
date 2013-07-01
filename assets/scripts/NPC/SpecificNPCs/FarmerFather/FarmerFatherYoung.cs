@@ -11,10 +11,6 @@ public class FarmerFatherYoung : NPC {
 	
 	Schedule beALazyFarmer;
 	
-	protected override void Init() {
-		id = NPCIDs.FARMER_FATHER;
-		base.Init();
-	}	
 	protected void setAngry(){
 		this.SetCharacterPortrait(StringsNPC.Angry);
 	}
@@ -70,11 +66,6 @@ public class FarmerFatherYoung : NPC {
 			
 		
 		}
-		
-		public override void UpdateEmotionState(){
-			
-		}
-	
 	}
 	private class StoryEmotionState : EmotionState{
 		bool startedConversation = false;
@@ -314,9 +305,6 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 			FlagManager.instance.SetFlag(FlagStrings.BusinessTimer);
 		}
 		#endregion
-		public override void UpdateEmotionState(){
-			
-		}
 		public override void PassStringToEmotionState(string text){
 			if(text == FlagStrings.ConversationInMiddleFather){
 				if (startedConversation == false){

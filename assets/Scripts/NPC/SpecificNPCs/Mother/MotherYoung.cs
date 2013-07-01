@@ -5,10 +5,6 @@ using System.Collections;
 /// Mother young specific scripting values
 /// </summary>
 public class MotherYoung : NPC {
-	protected override void Init() {
-		id = NPCIDs.MOTHER;
-		base.Init();
-	}
 	#region SetFlagReactions	
 	protected override void SetFlagReactions() {	
 		/*Reaction enterHappy = new Reaction();

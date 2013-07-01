@@ -11,7 +11,6 @@ using System.Collections.Generic;
 public abstract class NPC : Character {
 	#region Fields
 	protected string initialPortrait = "";
-	protected int id = -1;
 	private int npcDisposition;
 	public string textureAtlasName;
 	private string currentFaceTexture = "Default";
@@ -272,10 +271,6 @@ public abstract class NPC : Character {
 			flags.Add(flag);	
 		}
 		return (flags);
-	}
-	
-	public int ID{
-		get {return id;}
 	}
 	#endregion
 	

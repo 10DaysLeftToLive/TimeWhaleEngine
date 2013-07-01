@@ -7,7 +7,6 @@ using System.Collections;
 public class CastlemanYoung : NPC {
 	MeetFamily BecomingFriends;
 	protected override void Init() {
-		id = NPCIDs.CASTLE_MAN;
 		SetCharacterPortrait(StringsNPC.Sad);
 		base.Init();
 	}
@@ -560,12 +559,6 @@ public class CastlemanYoung : NPC {
 			FlagManager.instance.SetFlag(FlagStrings.MusicianCommentOnSon);
 			//FlagManager.instance.SetFlag(FlagStrings.PlayerAndCastleNOTFriends);
 		}
-		
-		
-		public override void UpdateEmotionState(){
-			
-		}
-	
 	}
 	#endregion
 	#region EmptyEmotion
@@ -573,22 +566,8 @@ public class CastlemanYoung : NPC {
 		Reaction CloseChatReaction;
 		
 		public EmptyEmotion(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
-			//toControl.CanTalk();
-			//toControl.
-			CloseChatReaction = new Reaction();
-			CloseChatReaction.AddAction(new NPCCallbackAction(TestClose));
-			SetOnOpenInteractionReaction(new DispositionDependentReaction(CloseChatReaction));
+			//SetOnOpenInteractionReaction(new DispositionDependentReaction(CloseChatReaction));
 		}
-		public void TestClose(){
-			//GUIManager.Instance.CloseInteractionMenu();
-			//GUIManager.Instance.
-			
-
-		}
-		public override void UpdateEmotionState(){
-			
-		}
-	
 	}
 	#endregion
 	private class CastleManTraveling : EmotionState{
@@ -857,11 +836,7 @@ public class CastlemanYoung : NPC {
 			GUIManager.Instance.CloseInteractionMenu();
 			SetDefaultText("I hate you!");
 			FlagManager.instance.SetFlag(FlagStrings.PlayerAndCastleNOTFriends);
-		}
-		public override void UpdateEmotionState(){
-			
-		}
-	
+		}	
 	}
 	#endregion
 	#region Visit Carpenter Son with you and CastleMan Friends		
@@ -1279,15 +1254,9 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 					_allChoiceReactions.Remove(JustTrustMeChoice);
 			}
 			GUIManager.Instance.CloseInteractionMenu();
-			//Set flags here
 			FlagManager.instance.SetFlag(FlagStrings.FinishedCSONConversation);
 			SetDefaultText("Let's go.");
 		}
-		
-		public override void UpdateEmotionState(){
-			
-		}
-	
 	}
 	private class TalkWithCarpenterSonNotAsFriendRoundTwo : EmotionState{
 		Choice StopBeingParanoidChoice;

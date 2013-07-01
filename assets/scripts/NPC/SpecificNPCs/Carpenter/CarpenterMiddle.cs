@@ -5,10 +5,6 @@ using System.Collections;
 /// CarpenterMiddle specific scripting values
 /// </summary>
 public class CarpenterMiddle : NPC {	
-	protected override void Init() {
-		id = NPCIDs.CARPENTER;
-		base.Init();
-	}
 	bool builtChair = false;
 	
 	//private bool followDefaultSchedule = true;
@@ -222,10 +218,6 @@ public class CarpenterMiddle : NPC {
 	
 		public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
 
-		}
-		
-		public override void UpdateEmotionState(){
-			
 		}
 	
 	}

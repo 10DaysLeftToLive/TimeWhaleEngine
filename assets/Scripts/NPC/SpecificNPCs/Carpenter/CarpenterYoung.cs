@@ -15,12 +15,6 @@ public class CarpenterYoung : NPC
     Reaction toolboxGotten;
     Reaction toolboxGivenToSonDone;
 
-	protected override void Init()
-	{
-		id = NPCIDs.CARPENTER;
-		base.Init();
-	}
-
 	protected override void SetFlagReactions()
 	{
 		conversationWithSonDone = new Reaction();

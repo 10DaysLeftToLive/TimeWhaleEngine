@@ -11,7 +11,6 @@ public class ManagerLoader {
 		
 		LoadBuildingManager();
 		LoadLockedDoorManager();
-		LoadNPCDispositionManager();
 	}
 	
 	private static void LoadBuildingManager(){
@@ -24,11 +23,5 @@ public class ManagerLoader {
 		LockedDoorManager.instance.LoadInObjectsToManage(_youngRoot, CharacterAgeState.YOUNG);
 		LockedDoorManager.instance.LoadInObjectsToManage(_middleRoot, CharacterAgeState.MIDDLE);
 		LockedDoorManager.instance.LoadInObjectsToManage(_oldRoot, CharacterAgeState.OLD);
-	}
-	
-	private static void LoadNPCDispositionManager(){
-		NPCDispositionManager.instance.LoadInObjectsToManage(_youngRoot, CharacterAgeState.YOUNG);
-		NPCDispositionManager.instance.LoadInObjectsToManage(_middleRoot, CharacterAgeState.MIDDLE);
-		NPCDispositionManager.instance.LoadInObjectsToManage(_oldRoot, CharacterAgeState.OLD);
 	}
 }

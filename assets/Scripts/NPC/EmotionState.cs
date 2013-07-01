@@ -4,6 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 
 [System.Serializable]
+/// <summary>
+/// Emotion state. Holds the list of choices and items that the NPC will be able to react to. 
+///   NPCs should move between emotion states with little updating of a single emotion state.
+/// </summary>
 public class EmotionState {
 	private string className; // For debuging only so you know the current emotion state's name
 	
@@ -138,10 +142,5 @@ public class EmotionState {
 	private void PerformReactionBasedOnDisposition(DispositionDependentReaction reaction){
 		reaction.PerformReaction();
 	}
-	public virtual void ReactToItemInteraction(string npc, GameObject item){}
-	public virtual void ReactToChoiceInteraction(string npc, string choice){}
-	public virtual void ReactToEnviromentInteraction(string npc, string enviromentAction){}
-	public virtual void ReactToItemPickedUp(GameObject item){}
-	public virtual void UpdateEmotionState(){}
 	public virtual void PassStringToEmotionState(string text){}
 }

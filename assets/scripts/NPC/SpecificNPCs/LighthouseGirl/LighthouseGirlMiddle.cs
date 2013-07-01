@@ -14,10 +14,6 @@ public class LighthouseGirlMiddle : NPC {
 	bool waitingOnDateTimer = false;
 	bool dateOver = false;
 	float time;
-	protected override void Init() {
-		id = NPCIDs.LIGHTHOUSE_GIRL;
-		base.Init();
-	}
 	
 	protected void setAngry(){
 		this.SetCharacterPortrait(StringsNPC.Angry);
@@ -739,10 +735,6 @@ _npcInState.ChangeFacialExpression(StringsNPC.Sad);
 			GUIManager.Instance.RefreshInteraction();
 			_allChoiceReactions.Add(YesChoice, new DispositionDependentReaction(YesReaction));
 			_allChoiceReactions.Add(AnotherTimeChoice, new DispositionDependentReaction(AnotherTimeReaction));
-		}
-		
-		public override void UpdateEmotionState(){
-			
 		}
 		#endregion
 	

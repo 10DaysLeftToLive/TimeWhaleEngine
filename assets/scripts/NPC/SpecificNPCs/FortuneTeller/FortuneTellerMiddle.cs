@@ -5,11 +5,6 @@ using System.Collections;
 /// FortuneTellerMiddle specific scripting values
 /// </summary>
 public class FortuneTellerMiddle : NPC {
-	protected override void Init() {
-		id = NPCIDs.FORTUNE_TELLER;
-		base.Init();
-	}
-	
 	protected override void SetFlagReactions(){
 		//appleReaction.AddAction()
 			
@@ -137,11 +132,6 @@ public class FortuneTellerMiddle : NPC {
 			giveWhittleReaction.AddAction(new UpdateCurrentTextAction(toControl, "A skilled craftsman needs just a simple tool to create a masterpiece."));
 			_allItemReactions.Add(StringsItem.Whittle,  new DispositionDependentReaction(giveWhittleReaction));
 		}
-		
-		public override void UpdateEmotionState(){
-			
-		}
-	
 	}
 	#endregion
 	#endregion

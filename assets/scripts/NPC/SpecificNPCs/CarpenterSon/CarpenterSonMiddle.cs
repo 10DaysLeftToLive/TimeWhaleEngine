@@ -23,10 +23,6 @@ public class CarpenterSonMiddle : NPC {
 	Schedule DoNothingSchedule;
 	Schedule AfterConversationCarpentery;
 	Schedule WhittleStuff;
-	protected override void Init() {
-		id = NPCIDs.CARPENTER_SON;
-		base.Init();
-	}
 	
 	protected override void SetFlagReactions(){
 ////		Reaction stoodUpLG = new Reaction();
@@ -294,12 +290,6 @@ public class CarpenterSonMiddle : NPC {
 		public BlankEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
 			
 		}
-				
-		
-		
-		public override void UpdateEmotionState(){
-			
-		}
 	
 	}
 	#endregion
@@ -324,9 +314,7 @@ public class CarpenterSonMiddle : NPC {
 			_allChoiceReactions.Add(youDontNeedHim, new DispositionDependentReaction(youDontNeedHimReaction));
 		}
 		
-		public override void UpdateEmotionState(){
-			
-		}
+		
 			
 		void removeChoices() {
 			_allChoiceReactions.Clear();
@@ -386,10 +374,6 @@ public class CarpenterSonMiddle : NPC {
 			_allChoiceReactions.Add(askAboutToolBox, new DispositionDependentReaction(searchForToolBox));
 			_allItemReactions.Add(StringsItem.Toolbox, new DispositionDependentReaction(toolsFound));
 		}
-		
-		public override void UpdateEmotionState(){
-			
-		}
 			
 		void removeChoices() {
 			_allChoiceReactions.Clear();
@@ -431,9 +415,7 @@ public class CarpenterSonMiddle : NPC {
 			_allItemReactions.Add(StringsItem.Whittle, new DispositionDependentReaction(helpAppreciated));
 		}
 		
-		public override void UpdateEmotionState(){
-			
-		}
+		
 			
 		void selectCuriousMoodChoice() {
 			_npcInState.SetCharacterPortrait(StringsNPC.Default);
@@ -478,9 +460,6 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 	
 	private class OtherCarpentryTasks : EmotionState {
 		public OtherCarpentryTasks(NPC toControl, string currentDialogue) : base(toControl, currentDialogue) {
-		}
-		
-		public override void UpdateEmotionState() {
 		}
 		
 		void removeChoices() {

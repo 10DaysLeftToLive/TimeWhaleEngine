@@ -5,11 +5,6 @@ using System.Collections;
 /// FortuneTellerOld specific scripting values
 /// </summary>
 public class FortuneTellerOld : NPC {
-	protected override void Init() {
-		id = NPCIDs.FORTUNE_TELLER;
-		base.Init();
-	}
-	
 	protected override void SetFlagReactions(){
 		Reaction speakWithSiblingReactionPartOne = new Reaction();
 		ShowMultipartChatAction speakWithSiblingChatPartOne = new ShowMultipartChatAction(this);
@@ -105,10 +100,6 @@ public class FortuneTellerOld : NPC {
 		#region Initial Emotion State
 		private class InitialEmotionState : EmotionState{
 			public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue){
-			
-			}
-		
-			public override void UpdateEmotionState() {
 			
 			}
 		}
@@ -493,10 +484,6 @@ public class FortuneTellerOld : NPC {
 			public void methodA() {
 				SetDefaultText("For now... let me be...");
 				GUIManager.Instance.RefreshInteraction();
-			}
-			
-			public override void UpdateEmotionState() {
-			
 			}
 		}
 		

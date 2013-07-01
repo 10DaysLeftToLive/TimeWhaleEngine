@@ -18,7 +18,6 @@ public class SeaCaptainMiddle : NPC {
 	NPCConvoSchedule TalktoCarpenterSon;
 	Schedule AfterTalkToCarpenterSon;
 	protected override void Init() {
-		id = NPCIDs.SEA_CAPTAIN;
 		base.Init();
 		startingPos = this.transform.position;
 		this.SetCharacterPortrait(StringsNPC.Happy);
@@ -146,10 +145,6 @@ public class SeaCaptainMiddle : NPC {
 			_allChoiceReactions.Add(whereShipChoice, new DispositionDependentReaction(whereShipReaction));
 			#endregion
 			
-		}
-		
-		public override void UpdateEmotionState(){
-
 		}
 		
 		#region update methods

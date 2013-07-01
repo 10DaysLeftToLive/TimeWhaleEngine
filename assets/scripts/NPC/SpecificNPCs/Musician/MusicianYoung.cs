@@ -6,7 +6,6 @@ using System.Collections;
 /// </summary>
 public class MusicianYoung : NPC {
 	protected override void Init() {
-		id = NPCIDs.MUSICIAN;
 		base.Init();
 		this.SetCharacterPortrait(StringsNPC.Happy);
 	}
@@ -253,11 +252,6 @@ _npcInState.ChangeFacialExpression(StringsNPC.Happy);
 			SetDefaultText("I hope to see you around in the coming years!");
 			//END STATE FOR MOVING TALK
 		}
-		
-		public override void UpdateEmotionState(){
-			
-		}
-	
 	}
 	#endregion
 	#endregion

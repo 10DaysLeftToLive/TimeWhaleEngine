@@ -6,10 +6,6 @@ using System.Collections;
 /// </summary>
 public class MotherMiddle : NPC {
 	InitialEmotionState state;
-	protected override void Init() {
-		id = NPCIDs.MOTHER;
-		base.Init();
-	}
 	
 	protected override void SetFlagReactions(){
 		Reaction gaveItems = new Reaction();
@@ -121,10 +117,6 @@ public class MotherMiddle : NPC {
 		
 		public void RandomMessage(){
 			SetDefaultText(stringList[(int)Random.Range(0,stringCounter)]);
-		}
-		
-		public override void UpdateEmotionState(){
-			
 		}
 		
 		public override void PassStringToEmotionState(string text){

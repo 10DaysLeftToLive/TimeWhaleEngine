@@ -12,10 +12,6 @@ public class FarmerMotherMiddle : NPC {
 	bool husbandReady = false;
 	bool carpenterDate = true;
 	bool farmersOnBoard = false;
-	protected override void Init() {
-		id = NPCIDs.FARMER_MOTHER;
-		base.Init();
-	}
 	
 	protected void setAngry(){
 		this.SetCharacterPortrait(StringsNPC.Angry);
@@ -363,10 +359,6 @@ _npcInState.ChangeFacialExpression(StringsNPC.Default);
 				
 			}
 			WhyNotFlag = true;
-		}
-		
-		public override void UpdateEmotionState(){
-			
 		}
 		
 		public override void PassStringToEmotionState(string text){

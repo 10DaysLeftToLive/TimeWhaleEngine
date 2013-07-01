@@ -16,10 +16,6 @@ public class CastlemanMiddle : NPC {
 	bool carpenterDateSuccess = false;
 	bool dateForMe = false;
 	bool successfulDate = false;
-	protected override void Init() {
-		id = NPCIDs.CASTLE_MAN;
-		base.Init();
-	}
 	
 	#region ReactionInstantiate
 	Reaction notInsane = new Reaction();
@@ -263,11 +259,7 @@ public class CastlemanMiddle : NPC {
 		public void LastSeenResponse(){
 			FlagManager.instance.SetFlag(FlagStrings.NotInsane);
 
-		}
-		public override void UpdateEmotionState(){
-			
-		}
-	
+		}	
 	}
 	//This is the basic path for the CastleMan if the LG is still open to marriage.
 	private class SaneState: EmotionState{
