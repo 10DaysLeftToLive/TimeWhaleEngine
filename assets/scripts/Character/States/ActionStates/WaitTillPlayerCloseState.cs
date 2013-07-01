@@ -5,6 +5,10 @@ public class WaitTillPlayerCloseState : WaitState {
 	private Player _player;
 	private float _distance = 4f;
 	
+	public WaitTillPlayerCloseState(NPC toControl) : base (toControl){
+		_player = (Player) Utils.FindObject(Strings.Player).GetComponent<Player>();
+	}
+	
 	public WaitTillPlayerCloseState(NPC toControl, ref Player player) : base (toControl){
 		_player = player;
 	}

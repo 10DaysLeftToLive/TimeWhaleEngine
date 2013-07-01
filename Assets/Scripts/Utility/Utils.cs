@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 
 public static class Utils{
@@ -61,5 +62,14 @@ public static class Utils{
 	// returns the amount of time in ms
 	public static float CalcTimeToDisplayText(string text){
 		return (text.Length * .09f);
+	}
+	
+	public static GameObject FindObject(string objectName){
+		GameObject toFind = GameObject.Find (objectName);
+		if (toFind == null){
+			Debug.LogError("Could not find " + objectName);
+			throw new NullReferenceException();
+		}
+		return (toFind);
 	}
 }

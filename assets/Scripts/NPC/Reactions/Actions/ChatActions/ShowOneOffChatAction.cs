@@ -1,6 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Show one off chat action.
+/// Will display the given chat information and will close the interaction menu if that npc is interacting
+/// </summary>
 public class ShowOneOffChatAction : Action {
 	private ChatInfo chatInfo;
 	
@@ -15,6 +19,9 @@ public class ShowOneOffChatAction : Action {
 	}
 	
 	public override void Perform(){
+		if (chatInfo.npcTalking.IsInteracting()){ // if we want to disaplay a chat we should close the interaction menu
+			GUIManager.Instance.CloseInteractionMenu();
+		}
 		GUIManager.Instance.AddNPCChat(new NPCOneOffChat(chatInfo));
 	}
 }

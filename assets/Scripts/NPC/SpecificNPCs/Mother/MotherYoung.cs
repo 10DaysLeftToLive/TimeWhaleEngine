@@ -19,9 +19,8 @@ public class MotherYoung : NPC {
 		*/
 		//Add states for apple
 		Reaction gaveApple = new Reaction();
-		gaveApple.AddAction(new ShowOneOffChatAction(this, "What a delicious looking apple!"));
 		gaveApple.AddAction(new NPCAddScheduleAction(this, gaveAppleSchedule));
-		flagReactions.Add (FlagStrings.GaveApple, gaveApple);
+		flagReactions.Add(FlagStrings.GaveAppleToMother, gaveApple);
 		/*
 		Reaction giveSeeds = new Reaction();
 		giveSeeds.AddAction(new ShowOneOffChatAction(this, "Here are the leftover seeds.",4f));
@@ -68,7 +67,7 @@ public class MotherYoung : NPC {
 		return (schedule);
 	}
 	
-	private Schedule gaveAppleSchedule;
+	public static Schedule gaveAppleSchedule;
 	private Schedule giveSeedsSchedule;
 	private Schedule enterMadSchedule;
 	private Schedule exitMadSchedule;
@@ -130,33 +129,28 @@ public class MotherYoung : NPC {
 	#endregion
 	#region EmotionStates
 		#region Initial Emotion State
-		private class InitialEmotionState : EmotionState {
-			Reaction GaveAppleReaction = new Reaction(); 
-	
-			public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, "Have you found an apple yet? Remember once you find one, you'll get a slice of apple pie!") {
-				GaveAppleReaction = new Reaction();
-				GaveAppleReaction.AddAction(new NPCEmotionUpdateAction(toControl, new GaveAppleState(toControl," ")));
-				GaveAppleReaction.AddAction(new NPCCallbackAction(UpdateApple));
-				GaveAppleReaction.AddAction(new NPCTakeItemAction(toControl));
-				GaveAppleReaction.AddAction(new ShowOneOffChatAction(toControl, "Thank you! Come back in a bit to get some pie!"));	
-			_allItemReactions.Add(StringsItem.Apple, new DispositionDependentReaction(GaveAppleReaction));
-			}	
-		public void UpdateApple(){
-			FlagManager.instance.SetFlag(FlagStrings.GaveApple);
-			GUIManager.Instance.CloseInteractionMenu();
+		/// <summary>
+		/// Initial emotion state for mother young will wait for the player to give an apple then she will move to the
+		///   gaveAppleSchedule
+		/// </summary>
+		public class InitialEmotionState : EmotionState {
+			public InitialEmotionState(NPC toControl, string currentDialogue) 
+						: base(toControl, "Have you found an apple yet? Remember once you find one, you'll get a slice of apple pie!") {
+				Reaction gaveAppleReaction = new Reaction();
+				gaveAppleReaction.AddAction(new SetOffFlagAction(FlagStrings.GaveAppleToMother));
+				gaveAppleReaction.AddAction(new NPCTakeItemAction(toControl));
+				gaveAppleReaction.AddAction(new ShowOneOffChatAction(toControl, "Thank you! Come back in a bit to get some pie!"));	
+				_allItemReactions.Add(StringsItem.Apple, new DispositionDependentReaction(gaveAppleReaction));
+			}
 		}
-		public void UpdateText() {
-			//FlagManager.instance.SetFlag(FlagStrings.GaveApple);
-		}
-	}
-	
 		#endregion
+	
 	#region Gave Emotion State
-		private class GaveAppleState : EmotionState {
+		private class GaveAppleEmotionState : EmotionState {
 			Reaction AskToGardenReaction = new Reaction(); 
 			Reaction otherState;
 		
-			public GaveAppleState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue) {
+			public GaveAppleEmotionState(NPC toControl, string currentDialogue) : base(toControl, currentDialogue) {
 				SetDefaultText("Thanks so much! Now I can start baking!");
 				//tOnCloseInteractionReaction(new DispositionDependentReaction(AskToGardenReaction));
 				//AskToGardenReaction.AddAction(new NPCGiveItemAction(toControl, StringsItem.LilySeeds)); // supposed to drop apple seeds (brown baggy?)

@@ -9,7 +9,7 @@ public static class FlagStrings {
 	public static string EnterMadState = "Enter Mad State";
 	public static string ExitMadState = "exit Mad State";
 	public static string MoveHome = "Move Home";
-	public static string GaveApple = "Gave Apple";
+	public static string GaveAppleToMother = "Mother-Gave Apple To Mother";
 	public static string GiveSeeds = "Give Seeds";
 	
 	public static string MoveToMusician = "Move To Musician";
