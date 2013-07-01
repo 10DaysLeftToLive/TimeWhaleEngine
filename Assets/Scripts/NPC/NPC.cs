@@ -309,12 +309,15 @@ public abstract class NPC : Character {
 	}
 	
 	public void UpdateEmotionState(EmotionState newEmotionState){
+		if (newEmotionState.GetWhatToSay() == null){ // if the current emotion state was not set with a default text carry over the old emotionstate's
+			newEmotionState.SetDefaultText(currentEmotion.GetWhatToSay());
+		}
 		currentEmotion = newEmotionState;	
 		if (IsInteracting()){
 			GUIManager.Instance.RefreshInteraction();
 		}
 	}
-	#endregion
 	
 	public virtual void SendStringToNPC(string text){}
+	#endregion
 }

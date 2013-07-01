@@ -16,16 +16,20 @@ public class EmotionState {
 	protected DispositionDependentReaction interactionOpeningReaction;
 	protected DispositionDependentReaction interactionClosingReaction;
 	
-	public EmotionState(NPC npcInState, string textToSay){
+	public EmotionState(NPC npcInState){
 		className = this.GetType().FullName;
 		_npcInState = npcInState;
-		_defaultTextToSay = textToSay;
+		_defaultTextToSay = null;
 		_allChoiceReactions = new Dictionary<Choice, DispositionDependentReaction>();
 		_allItemReactions = new Dictionary<string, DispositionDependentReaction>();
 		Reaction defaultItemReact = new Reaction();
 		defaultItemReact.AddAction(new UpdateCurrentTextAction(npcInState, "No thank you."));
 		defaultItemReaction = new DispositionDependentReaction(defaultItemReact);
 		interactionOpeningReaction = null;
+	}
+	
+	public EmotionState(NPC npcInState, string textToSay) : this (npcInState){
+		_defaultTextToSay = textToSay;
 	}
 	
 	public string GetWhatToSay(){

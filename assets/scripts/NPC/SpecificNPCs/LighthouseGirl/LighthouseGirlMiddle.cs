@@ -185,7 +185,7 @@ public class LighthouseGirlMiddle : NPC {
 	}
 	
 	protected override EmotionState GetInitEmotionState(){
-		initialState = new InitialEmotionState(this, "Hi!  Would you mind helping me out?  I need to get out of my arranged marriage, but need help with distracting my mom to make it work!");
+		initialState = new InitialEmotionState(this, "Hi! Would you mind helping me out? I need to get out of my arranged marriage, but need help with distracting my mom to make it work!");
 		marriageState = new ProMarriageEmotionState(this, "");
 		noMarriageState = new AntiMarriageEmotionState(this, "");
 		stoodUpState = new StoodUpEmotionState(this, "");
@@ -230,7 +230,7 @@ public class LighthouseGirlMiddle : NPC {
 		turnAround.AddFlagGroup("b");
 		
 		
-		/*postOpenningSchedule =  new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerMotherMiddle),
+		/*postOpenningSchedule = new NPCConvoSchedule(this, NPCManager.instance.getNPC(StringsNPC.FarmerMotherMiddle),
 			new MiddleFarmerMotherToLighthouseGirl(), Schedule.priorityEnum.DoConvo); 
 		postOpenningSchedule.SetCanNotInteractWithPlayer();*/
 		
@@ -356,7 +356,7 @@ public class LighthouseGirlMiddle : NPC {
 			castleMarriageOne.Clear();
 			ShowMultipartChatAction castleMarriageOneDialogue = new ShowMultipartChatAction(this);
 			castleMarriageOneDialogue.AddChat("Everything's finished! Time to put this plan into effect!", 5f);
-			castleMarriageOneDialogue.AddChat("I'm marrying the CastleMan and there's nothing you can do about it!", 5f);
+			castleMarriageOneDialogue.AddChat("I'm marrying the Castle Man and there's nothing you can do about it!", 5f);
 			castleMarriageOne.AddAction(castleMarriageOneDialogue);
 			Debug.Log("castle success");
 			FlagManager.instance.SetFlag(FlagStrings.PostCastleDate);
@@ -382,7 +382,7 @@ public class LighthouseGirlMiddle : NPC {
 	
 	protected void SetupReactions(){
 		ShowMultipartChatAction introConvoOneDialogue = new ShowMultipartChatAction(this);
-		introConvoOneDialogue.AddChat("...Look mom! I'm not going to marry the Carpenter's Son!", 4f);
+		introConvoOneDialogue.AddChat("... Look mom! I'm not going to marry the Carpenter's Son!", 4f);
 		introConvoOne.AddAction(introConvoOneDialogue);
 		
 		ShowMultipartChatAction introConvoTwoDialogue = new ShowMultipartChatAction(this);
@@ -394,7 +394,7 @@ public class LighthouseGirlMiddle : NPC {
 		introConvoThree.AddAction(introConvoThreeDialogue);
 		
 		ShowMultipartChatAction introConvoFourDialogue = new ShowMultipartChatAction(this);
-		introConvoFourDialogue.AddChat("...Fine...this isn't over...", 3f);
+		introConvoFourDialogue.AddChat("... Fine... this isn't over...", 3f);
 		introConvoFour.AddAction(introConvoFourDialogue);
 		
 		
@@ -403,7 +403,7 @@ public class LighthouseGirlMiddle : NPC {
 		castleDateOne.AddAction(castleDateOneDialogue);
 		
 		ShowMultipartChatAction castleDateTwoDialogue = new ShowMultipartChatAction(this);
-		castleDateTwoDialogue.AddChat("Wait...I remember you! You were the one I used to play with on the beach and build sand castles!", 6f);
+		castleDateTwoDialogue.AddChat("Wait... I remember you! You were the one I used to play with on the beach and build sand castles!", 6f);
 		castleDateTwo.AddAction(castleDateTwoDialogue);
 		
 		ShowMultipartChatAction castleDateThreeDialogue = new ShowMultipartChatAction(this);
@@ -416,7 +416,7 @@ public class LighthouseGirlMiddle : NPC {
 		carpenterDateOne.AddAction(carpenterDateOneDialogue);
 		
 		ShowMultipartChatAction carpenterDateTwoDialogue = new ShowMultipartChatAction(this);
-		carpenterDateTwoDialogue.AddChat("Wait...I remember you! You were the one I used to play with on the beach and build sand castles!", 6f);
+		carpenterDateTwoDialogue.AddChat("Wait... I remember you! You were the one I used to play with on the beach and build sand castles!", 6f);
 		carpenterDateTwo.AddAction(carpenterDateTwoDialogue);
 		
 		ShowMultipartChatAction carpenterDateThreeDialogue = new ShowMultipartChatAction(this);
@@ -426,11 +426,11 @@ public class LighthouseGirlMiddle : NPC {
 		
 		ShowMultipartChatAction castleMarriageOneDialogue = new ShowMultipartChatAction(this);
 		castleMarriageOneDialogue.AddChat("Everything's finished! Time to put this plan into effect!", 5f);
-		castleMarriageOneDialogue.AddChat("So mom! I'd really like to talk about never marrying again.", 5f);
+		castleMarriageOneDialogue.AddChat("So Mom! I'd really like to talk about never marrying again.", 5f);
 		castleMarriageOne.AddAction(castleMarriageOneDialogue);
 		
 		ShowMultipartChatAction castleMarriageTwoDialogue = new ShowMultipartChatAction(this);
-		castleMarriageTwoDialogue.AddChat("What..uh...yes..I mean NO!", 2f);
+		castleMarriageTwoDialogue.AddChat("What.. uh... yes... I mean NO!", 2f);
 		castleMarriageTwo.AddAction(castleMarriageTwoDialogue);
 		
 		ShowMultipartChatAction castleMarriageThreeDialogue = new ShowMultipartChatAction(this);
@@ -438,7 +438,7 @@ public class LighthouseGirlMiddle : NPC {
 		castleMarriageThree.AddAction(castleMarriageThreeDialogue);
 		
 		ShowMultipartChatAction castleMarriageFourDialogue = new ShowMultipartChatAction(this);
-		castleMarriageFourDialogue.AddChat("...and you wonder why I ran away...", 3f);
+		castleMarriageFourDialogue.AddChat("... and you wonder why I ran away...", 3f);
 		castleMarriageFour.AddAction(castleMarriageFourDialogue);
 		
 		
@@ -473,7 +473,7 @@ public class LighthouseGirlMiddle : NPC {
 		Choice OkChoice = new Choice("Ok", "I want to try and find ways to get the carpenter and my mom upset with each other.");
 		Choice ContinueChoice = new Choice("Continue", "Then hopefully my mom will call things off...You on board with this plan?");
 		Choice PlanChoice = new Choice("What's the Plan?", "Promise you won't tell anyone?");
-		Choice MarriageChoice = new Choice("What marriage?", "My mother wants me to marry the carpenter's son, so that i can 'settle down'. But i would rather die than marry someone I don't love!  Well dying might be a bit extreme...");
+		Choice MarriageChoice = new Choice("What marriage?", "My mother wants me to marry the carpenter's son, so that i can 'settle down'. But i would rather die than marry someone I don't love! Well dying might be a bit extreme...");
 		Choice YesChoice = new Choice("Yes", "Alright! So see if you can get him to cut down my mother's favorite tree, or steal his tools and give them to me...");
 		Choice AnotherTimeChoice = new Choice("Maybe \nanother time", "Another time...");
 		Choice CarpenterChoice = new Choice("Carpenter's Son", "Oh. Him...I'm shocked he could even muster up the ability to write two words, much less this letter.");
@@ -748,10 +748,10 @@ _npcInState.ChangeFacialExpression(StringsNPC.Sad);
 	
 	}
 	private class AntiMarriageEmotionState : EmotionState{
-		Choice GiveUpChoice = new Choice ("Why give up now?", "I'm not!  It just never works.  I wish there was someone who was willing to help me with this...");
-		Choice NotSoBadChoice  = new Choice("Maybe its not so bad?", "Yeah Right!  There is no way  that's happening!  Anyways I'm out of ideas, so I need time to think of more ways to sabotage this marriage.");
-		Choice AnyoneNiceChoice = new Choice("Isn't there anyone who is nice to you?","That's it!  My dad!  He's always been kind to me! But he's too afraid to stand up to my mom...");
-		Choice NiceToMomChoice = new Choice("Have you tried being nice to your mom", "It wouldn't work.  Once she has an idea in mind, she won't change it!");
+		Choice GiveUpChoice = new Choice ("Why give up now?", "I'm not! It just never works. I wish there was someone who was willing to help me with this...");
+		Choice NotSoBadChoice = new Choice("Maybe its not so bad?", "Yeah Right! There is no way that's happening! Anyways I'm out of ideas, so I need time to think of more ways to sabotage this marriage.");
+		Choice AnyoneNiceChoice = new Choice("Someone must be nice?","That's it! My dad! He's always been kind to me! But he's too afraid to stand up to my mom...");
+		Choice NiceToMomChoice = new Choice("Be nice to your mom", "It wouldn't work. Once she has an idea in mind, she won't change it!");
 		
 		Reaction GiveUpReaction = new Reaction();
 		Reaction NotSoBadReaction = new Reaction();
@@ -762,7 +762,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Sad);
 		Reaction CaptainsLogReaction = new Reaction();
 		
 		NPC control;
-		public 	AntiMarriageEmotionState(NPC toControl, string currentDialogue): base (toControl, "ARRGGHH.  I can't believe that didn't work.  I've tried everything to get out of this!  Why can't it just be like in the stories where the hero always wins!"){
+		public 	AntiMarriageEmotionState(NPC toControl, string currentDialogue): base (toControl, "ARRGGHH. I can't believe that didn't work. I've tried everything to get out of this! Why can't it just be like in the stories where the hero always wins!"){
 			control = toControl;
 			
 			SetupReactions();
@@ -782,11 +782,11 @@ _npcInState.ChangeFacialExpression(StringsNPC.Sad);
 			NiceToMomReaction.AddAction(new NPCCallbackAction(NiceToMomResponse));
 			
 			ToySwordReaction.AddAction(new NPCCallbackAction(ToySwordResponse));
-			ToySwordReaction.AddAction(new UpdateCurrentTextAction(control, "A toy sword?  You know I wished I could play with a toy sword when I was a kid so that I could be like the heroes in my dad's stories..."));
+			ToySwordReaction.AddAction(new UpdateCurrentTextAction(control, "A toy sword? You know I wished I could play with a toy sword when I was a kid so that I could be like the heroes in my dad's stories..."));
 			ToySwordReaction.AddAction(new NPCTakeItemAction(control));
 			
 			CaptainsLogReaction.AddAction(new NPCCallbackAction(CaptainsLogResponse));
-			CaptainsLogReaction.AddAction(new UpdateCurrentTextAction(control, "A captain's log....and then stranded on an island I managed to become friendly with the natives... You know this reminds me of the stories my dad would tell me as a kid..."));
+			CaptainsLogReaction.AddAction(new UpdateCurrentTextAction(control, "A captain's log... and then stranded on an island I managed to become friendly with the natives... You know this reminds me of the stories my dad would tell me as a kid..."));
 			CaptainsLogReaction.AddAction(new NPCTakeItemAction(control));
 			
 		}
@@ -840,7 +840,7 @@ _npcInState.ChangeFacialExpression(StringsNPC.Angry);
 		bool gaveTools = false;
 		
 		Reaction ToolsReaction = new Reaction();
-		public ProMarriageEmotionState( NPC toControl, string currentDialogue): base (toControl, "That was amazing! True love like in the stories! All I have to do is convince my parents that this is a good idea...Hmm...well time to sabotage the marriage!"){
+		public ProMarriageEmotionState( NPC toControl, string currentDialogue): base (toControl, "That was amazing! True love like in the stories! All I have to do is convince my parents that this is a good idea... Hmm... well time to sabotage the marriage!"){
 			
 			ToolsReaction.AddAction(new NPCCallbackAction(ToolsResponse));
 			ToolsReaction.AddAction(new UpdateCurrentTextAction(toControl, "Everything's finished! Time to put this plan into effect!"));

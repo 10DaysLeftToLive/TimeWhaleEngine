@@ -137,13 +137,13 @@ public class MotherYoung : NPC {
 		private class InitialEmotionState : EmotionState {
 			Reaction GaveAppleReaction = new Reaction(); 
 	
-			public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, "Have you found an apple yet?  Remember once you find one, you'll get a slice of apple pie!") {
+			public InitialEmotionState(NPC toControl, string currentDialogue) : base(toControl, "Have you found an apple yet? Remember once you find one, you'll get a slice of apple pie!") {
 				GaveAppleReaction = new Reaction();
 				GaveAppleReaction.AddAction(new NPCEmotionUpdateAction(toControl, new GaveAppleState(toControl," ")));
 				GaveAppleReaction.AddAction(new NPCCallbackAction(UpdateApple));
 				GaveAppleReaction.AddAction(new NPCTakeItemAction(toControl));
-				GaveAppleReaction.AddAction(new ShowOneOffChatAction(toControl, "Thank you!  Come back in a bit to get some pie!"));	
-			_allItemReactions.Add(StringsItem.Apple,  new DispositionDependentReaction(GaveAppleReaction));
+				GaveAppleReaction.AddAction(new ShowOneOffChatAction(toControl, "Thank you! Come back in a bit to get some pie!"));	
+			_allItemReactions.Add(StringsItem.Apple, new DispositionDependentReaction(GaveAppleReaction));
 			}	
 		public void UpdateApple(){
 			FlagManager.instance.SetFlag(FlagStrings.GaveApple);
@@ -217,7 +217,7 @@ public class MotherYoung : NPC {
 					_allChoiceReactions.Remove(firstTimeBusy);
 					SetDefaultText("This isn't a game, I really do need help.");
 					GUIManager.Instance.RefreshInteraction();	
-					firstTimeBusy = new Choice ("Busy mom!!", "There isn't much time, I need your help soon.");
+					firstTimeBusy = new Choice ("Busy mom!", "There isn't much time, I need your help soon.");
 					_allChoiceReactions.Add((firstTimeBusy), new DispositionDependentReaction(changeDefaultText));
 					_allChoiceReactions.Add(okChoice, new DispositionDependentReaction(enterHappyReaction));
 				}
@@ -230,14 +230,14 @@ public class MotherYoung : NPC {
 					GUIManager.Instance.RefreshInteraction();	
 					
 					//_allChoiceReactions.Remove(firstTimeBusy);
-					firstTimeBusy = new Choice ("I'm Busy!!", "If you're busy, stop bugging me.");
+					firstTimeBusy = new Choice ("I'm Busy!", "If you're busy, stop bugging me.");
 					_allChoiceReactions.Add((firstTimeBusy), new DispositionDependentReaction(changeDefaultText));
 					_allChoiceReactions.Add(okChoice, new DispositionDependentReaction(enterHappyReaction));
 				}	
 				if (numberOfTimesBuggedMother == 4) {
 					_allChoiceReactions.Remove(okChoice);
 					_allChoiceReactions.Remove(firstTimeBusy);
-					SetDefaultText("If you don't want to help ... Just go away please.");
+					SetDefaultText("If you don't want to help... Just go away please.");
 					GUIManager.Instance.RefreshInteraction();	
 					
 					//_allChoiceReactions.Remove(firstTimeBusy);
