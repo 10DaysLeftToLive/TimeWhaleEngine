@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 
 [System.Serializable]
-public class Flag : IEquatable<Flag>{ // needs to implement IEquatable to play nice with list operations 
+public class Flag : IEquatable<Flag>, IComparable<Flag>{ // needs to implement IEquatable and IComparable to play nice with list operations 
 	public string _name;
 	private List<NPC> npcsThatCareAboutFlag;
 	public bool _isSetOff;
@@ -87,4 +87,22 @@ public class Flag : IEquatable<Flag>{ // needs to implement IEquatable to play n
 	public override int GetHashCode(){
 		return this._name.GetHashCode();
 	}
+	
+	public int CompareTo(Flag other) {
+       if (other == null) 
+			return -1;
+		
+		Flag flagObj = other as Flag; // check if it is of type flag
+		if (flagObj == null)
+			return -1;
+		else    
+			return _name.CompareTo(other._name);
+    }
+	
+	public int Compare(Flag first, Flag second) {
+        if (System.Object.ReferenceEquals(first, null))
+            return (System.Object.ReferenceEquals(second, null) ? 0 : -1);
+
+        return first.CompareTo(second);
+    }
 }
