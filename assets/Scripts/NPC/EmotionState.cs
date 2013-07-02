@@ -120,6 +120,10 @@ public class EmotionState {
 		_allChoiceReactions.Add(newChoice, reaction);
 	}
 	
+	public void AddItemReaction(string item, Reaction itemReaction){
+		_allItemReactions.Add(item, new DispositionDependentReaction(itemReaction));
+	}
+	
 	public void RemoveChoice(Choice choiceToRemove){
 		if (_allChoiceReactions.ContainsKey(choiceToRemove)){
 			_allChoiceReactions.Remove(choiceToRemove);

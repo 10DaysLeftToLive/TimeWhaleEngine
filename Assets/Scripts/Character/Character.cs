@@ -83,8 +83,8 @@ public abstract class Character : PauseObject {
 	}
 	
 	public void ForceChangeToState(State newState) {
-		// TODO need to enter the correct idle state the change to the new one.
-		EnterState(newState);
+		currentState = newState; // Update the current state
+		newState.OnEnter(); // Enter the new state
 	}
 	
 	public void PlayAnimation(string animation){

@@ -79,7 +79,7 @@ public class MotherYoung : NPC {
 	#region Set Up Sechedules
 	protected override void SetUpSchedules(){
 		gaveAppleSchedule = new Schedule(this, Schedule.priorityEnum.DoNow);
-		gaveAppleSchedule.Add (new TimeTask(1f, new IdleState(this)));
+		gaveAppleSchedule.Add(new TimeTask(10f, new IdleState(this)));
 		gaveAppleSchedule.Add(new Task(new WaitTillPlayerCloseState(this, ref player)));
 		Task SetMusicianConvoFlag = new TimeTask(45f, new IdleState(this));
 		SetMusicianConvoFlag.AddFlagToSet(FlagStrings.MoveToMusician);
@@ -137,10 +137,11 @@ public class MotherYoung : NPC {
 			public InitialEmotionState(NPC toControl, string currentDialogue) 
 						: base(toControl, "Have you found an apple yet? Remember once you find one, you'll get a slice of apple pie!") {
 				Reaction gaveAppleReaction = new Reaction();
-				gaveAppleReaction.AddAction(new SetOffFlagAction(FlagStrings.GaveAppleToMother));
+				
 				gaveAppleReaction.AddAction(new NPCTakeItemAction(toControl));
 				gaveAppleReaction.AddAction(new ShowOneOffChatAction(toControl, "Thank you! Come back in a bit to get some pie!"));	
-				_allItemReactions.Add(StringsItem.Apple, new DispositionDependentReaction(gaveAppleReaction));
+				gaveAppleReaction.AddAction(new SetOffFlagAction(FlagStrings.GaveAppleToMother));
+				AddItemReaction(StringsItem.Apple, gaveAppleReaction);
 			}
 		}
 		#endregion
